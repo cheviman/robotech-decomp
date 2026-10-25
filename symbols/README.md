@@ -21,7 +21,17 @@ reads and the functions it calls (`"how": "reloc"`). Measured on 25-10-2026: 607
 332 functions and variables by relocations; of the 123 addresses XbSymbolDatabase also names, all 123
 agree.
 
-- What changed between 4721 and 5849 does not match; 18 patterns found at several places are left out.
+What changed between 4721 and 5849 does not match by bytes; two more steps name most of it:
+
+- **Calls in order** (`"how": "calls"`): a named function whose `.lib` version calls X, Y, Z, and whose
+  code in the XBE makes as many calls, calls X, Y, Z there too; round after round, as each function
+  named lends its own calls. 850 functions lent names; 24 whose calls landed on a name that said
+  otherwise (their 4721 version calls in another order) lent none. 83 functions.
+- **Likeness** (`"how": "likeness"`): an unnamed function among a library's code whose instructions,
+  every number hidden, read at least 85 % as one `.lib` function not yet placed, 8 points ahead of the
+  next. Measured first on 151 functions named by bytes, as if they were not (`--check`): it named 137,
+  all right. 74 functions, then 16 more by calls from them.
+- 18 patterns found at several places are left out.
 - A thin wrapper (one call, its target a wildcard) fits several functions: `IDirectSoundBuffer_Play`
   matched as `PauseEx`. A match is kept only when its own address and where its calls land do not
   contradict another name; that dropped 15.

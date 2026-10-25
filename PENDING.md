@@ -31,10 +31,11 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
    drawn as a big flat additive quad). Next: trace those draws' blend states and texture formats
    (`ROBOTECH_D3D11_TRACE=1`).
 2. **The Valkyrie comes out broken, in the menu and in the mission** (Sebas, 25-10-2026): in the mission
-   its parts float apart (legs above the body, the gun aside). In the menu it looked wrongly posed next to
-   the pushbuffer executor's (a standing Battloid there). Its draws are FVF 0x112/0x142 with no vertex
-   blending, 25 world matrices a frame for 124 draws; `SetModelView` is not used. Fixed on the way: the layer's `DrawIndexedPrimitiveUP` ignores
-   `MinVertexIndex` (the bridge now passes ranges from 0). Not settled which picture is right.
+   its parts float apart (legs above the body, the gun aside); in the menu it is incomplete and seen from
+   above, as if the camera looked down on it (the pushbuffer executor showed a standing Battloid). Its
+   draws are FVF 0x112/0x142 with no vertex blending, 25 world matrices a frame for 124 draws;
+   `SetModelView` is not used. Fixed on the way: the layer's `DrawIndexedPrimitiveUP` ignores
+   `MinVertexIndex` (the bridge now passes ranges from 0).
 3. **Vertex programs** (none measured yet: every draw so far is FVF) and **pixel shaders** (none
    measured either: `SetPixelShader` is counted, 0 draws with one).
 4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
@@ -60,11 +61,11 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (25-10-2026): 1,114 of the 6,646 functions have one: the XDK's libraries almost whole (D3D
-  195 of 251, DSOUND 231 of 360, XPP 195 of 233), the C runtime and XAPI in `.text`, and the engine's 30
+- **Names** (25-10-2026): 1,271 of the 6,646 functions have one: the XDK's libraries almost whole (D3D
+  234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, and the engine's 30
   object classes (registering functions and callbacks); `symbols/README.md` says from where. Left: the
-  rest of the game's own code (about 5,100 functions), the 4721 library code that differs from 5849, and
-  Bink (244, no symbols). Next sources: the engine's generic functions the callbacks call (streams,
+  rest of the game's own code (about 5,000 functions; a retail build, its strings name nothing), the
+  library code that changed most from 4721 to 5849, and Bink (244, no symbols). Next sources: the engine's generic functions the callbacks call (streams,
   handles), its strings (asserts, file names), and its vtables (32 in `.rdata`).
 
 - Functions the disassembler missed are found when the game calls them through a pointer

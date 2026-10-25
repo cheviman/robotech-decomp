@@ -33,6 +33,8 @@ import re
 import struct
 import sys
 
+import capstone
+
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 XBE = os.path.join(REPO, "analysis", "default.xbe")
 ANALYSIS_JSON = os.path.join(REPO, "analysis", "default_analysis.json")
@@ -252,7 +254,8 @@ def lib_functions(path, library, defs):
                         addend = struct.unpack_from("<i", code, va - start)[0] if va - start + 4 <= len(code) else 0
                         relocs.append((va - start, rtype, target, addend))
                 yield {"member": member, "library": library, "symbol": fn["name"],
-                       "bytes": code, "mask": bytes(mask), "relocs": relocs, "obj": obj}
+                       "bytes": code, "mask": bytes(mask), "relocs": relocs, "obj": obj,
+                       "secnum": secnum, "start": start}
 
 
 def fixed_runs(code, mask):
@@ -295,6 +298,230 @@ def same_name(a, b):
     return bool(x) and bool(y) and (x.endswith(y) or y.endswith(x))
 
 
+# ── Calls in order ──────────────────────────────────────────
+
+def starts_of():
+    """{start: end} of the disassembly's functions."""
+    funcs = json.load(open(os.path.join(REPO, "analysis", "disasm", "functions.json")))
+    return {int(f["start"], 16): int(f["end"], 16) for f in funcs}
+
+
+def lib_calls(fn, md):
+    """The symbols a .lib function calls or tail-jumps to, in order (None
+    where it cannot be told): a relocated rel32 names its target; one with no
+    relocation lands in the same section, on a static of the same object."""
+    rel = {off: (target, addend) for off, rtype, target, addend in fn["relocs"] if rtype == REL_I386_REL32}
+    syms = fn["obj"]["symbols"]
+    out = []
+    for ins in md.disasm(fn["bytes"], 0):
+        if ins.size != 5 or ins.bytes[0] not in (0xE8, 0xE9):
+            continue
+        if ins.address + 1 in rel:
+            target, addend = rel[ins.address + 1]
+            if target["class"] == 3 and target["name"].startswith("."):
+                inner = [s for s in syms.values() if s["section"] == target["section"]
+                         and s["value"] == addend + 4 and s["type"] == 0x20]
+                out.append(inner[0]["name"] if inner else None)
+            else:
+                out.append(target["name"])
+            continue
+        dest = ins.address + 5 + struct.unpack_from("<i", fn["bytes"], ins.address + 1)[0]
+        if 0 <= dest < len(fn["bytes"]):
+            if ins.bytes[0] == 0xE8:
+                out.append(None)        # a call inside itself: keeps the count
+            continue
+        inner = [s for s in syms.values() if s["section"] == fn["secnum"]
+                 and s["value"] == fn["start"] + dest and s["type"] == 0x20]
+        out.append(inner[0]["name"] if inner else None)
+    return out
+
+
+def xbe_calls(va, end, raw_img, sections, md):
+    """The targets a function of the XBE calls or tail-jumps to, in order."""
+    sec = section_of(sections, va)
+    if sec is None:
+        return []
+    base, data = raw_img[sec]
+    out = []
+    for ins in md.disasm(data[va - base:end - base], va):
+        if ins.size != 5 or ins.bytes[0] not in (0xE8, 0xE9):
+            continue
+        dest = (ins.address + 5 + struct.unpack_from("<i", bytes(ins.bytes), 1)[0]) & 0xFFFFFFFF
+        if va <= dest < end:
+            if ins.bytes[0] == 0xE8:
+                out.append(dest)
+            continue
+        out.append(dest)
+    return out
+
+
+def name_by_calls(by_addr, known, by_symbol, raw_img, sections, starts, defs):
+    """Step 7 of main: names callees by their place in a named caller's calls.
+    Adds to by_addr; returns (named, rounds, callers that lent, disagreed)."""
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    lib_norm = [(sym, c_name(sym)) for sym in by_symbol]
+
+    def symbols_at(va):
+        out = {n[1] for n in by_addr.get(va, ()) if n[5] == "function"}
+        if va in known:
+            out.add(known[va])
+        return out
+
+    def counterpart(va):
+        """The .lib functions a named address is, when one name fits."""
+        names = symbols_at(va)
+        for sym in names:
+            if sym in by_symbol:
+                return by_symbol[sym]
+        for n in names:
+            cands = {sym for sym, cn in lib_norm if same_name(n, cn)}
+            if len({c_name(c) for c in cands}) == 1:
+                return [fn for c in cands for fn in by_symbol[c]]
+        return None
+
+    calls_of = {}
+    lent, disagreed, named, rounds = set(), set(), 0, 0
+    done = set()
+    while True:
+        rounds += 1
+        votes = collections.defaultdict(set)
+        for va in [a for a in set(by_addr) | set(known) if a in starts and a not in done]:
+            fns = counterpart(va)
+            if not fns:
+                continue
+            done.add(va)
+            mine = xbe_calls(va, starts[va], raw_img, sections, md)
+            for fn in fns:
+                if id(fn) not in calls_of:
+                    calls_of[id(fn)] = lib_calls(fn, md)
+                theirs = calls_of[id(fn)]
+                if len(theirs) != len(mine):
+                    continue
+                pairs = list(zip(mine, theirs))
+                if any(sym and symbols_at(t) and not any(same_name(n, sym) for n in symbols_at(t))
+                       for t, sym in pairs):
+                    disagreed.add(va)
+                    break
+                for t, sym in pairs:
+                    if sym and not symbols_at(t) and t in starts:
+                        votes[t].add(sym)
+                lent.add(va)
+                break
+        fresh = 0
+        for t, syms in votes.items():
+            if len({c_name(x) for x in syms}) != 1:
+                continue
+            sym = sorted(syms)[0]
+            by_addr[t].add((emit_name(sym, defs), sym, defs.get(sym, "?"), "calls", 0, "function"))
+            fresh += 1
+        named += fresh
+        if not fresh:
+            break
+    return named, rounds, len(lent), len(disagreed)
+
+
+# ── Likeness ────────────────────────────────────────────────
+
+# Where each library's code is: an unnamed function there is compared with
+# that library's functions only. In .text the C runtime and XAPI sit among the
+# game's code, so a function there counts only between library functions.
+SECTION_LIBS = {"D3D": ("D3D8",), "DSOUND": ("DSOUND",), "XPP": ("XAPILIB",),
+                ".text": ("LIBCMT", "LIBCPMT", "XAPILIB")}
+LIKE_MIN = 0.85         # the best likeness has to reach this
+LIKE_GAP = 0.08         # and beat the second best by this much
+NUMBER = re.compile(r"0x[0-9a-f]+|\b\d+\b")
+
+
+def shape(code, md):
+    """A function's instructions with every number hidden."""
+    return [ins.mnemonic + " " + NUMBER.sub("N", ins.op_str) for ins in md.disasm(code, 0)]
+
+
+def name_by_likeness(by_addr, known, by_symbol, raw_img, sections, starts, defs, check):
+    """Step 8 of main. Adds to by_addr (unless check); returns how many."""
+    import difflib
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    named = {va for va in starts if va in known or any(n[5] == "function" for n in by_addr.get(va, ()))}
+    used = {n[1] for va in by_addr for n in by_addr[va]} | set(known.values())
+    order = sorted(starts)
+
+    def lib_named(va):
+        return va in named and (va in known or any(n[3] in ("bytes", "reloc", "calls") for n in by_addr[va]))
+
+    def in_library(i):
+        """Whether the i-th function sits among library functions."""
+        sec = section_of(sections, order[i])
+        if sec in ("D3D", "DSOUND", "XPP"):
+            return True
+        if sec != ".text":
+            return False
+        before = any(lib_named(order[j]) for j in range(max(0, i - 4), i))
+        after = any(lib_named(order[j]) for j in range(i + 1, min(len(order), i + 5)))
+        return before and after
+
+    def xbe_shape(va):
+        sec = section_of(sections, va)
+        base, data = raw_img[sec]
+        return shape(data[va - base:starts[va] - base], md)
+
+    if check:
+        # functions named by bytes, each one's own .lib function among the
+        # candidates: does likeness alone find it?
+        targets = [va for va in order if va in by_addr and any(n[3] == "bytes" for n in by_addr[va])][::4]
+        truth = {va: next(n[1] for n in by_addr[va] if n[3] == "bytes") for va in targets}
+        pool_used = used - set(truth.values())
+    else:
+        targets = [order[i] for i in range(len(order)) if order[i] not in named and in_library(i)]
+        truth = {}
+        pool_used = used
+
+    pools = {}
+    for sym, fns in by_symbol.items():
+        if sym in pool_used:
+            continue
+        fn = fns[0]
+        pools.setdefault(fn["library"], []).append((sym, fn))
+    shapes = {}
+
+    best_of = {}
+    for va in targets:
+        sec = section_of(sections, va)
+        mine = xbe_shape(va)
+        if len(mine) < 6:
+            continue
+        cands = []
+        for library in SECTION_LIBS.get(sec, ()):
+            for sym, fn in pools.get(library, ()):
+                n = len(fn["bytes"])
+                if not 0.6 * (starts[va] - va) <= n <= 1.6 * (starts[va] - va):
+                    continue
+                if sym not in shapes:
+                    shapes[sym] = shape(fn["bytes"], md)
+                sm = difflib.SequenceMatcher(None, mine, shapes[sym], autojunk=False)
+                if sm.real_quick_ratio() < LIKE_MIN or sm.quick_ratio() < LIKE_MIN:
+                    continue
+                cands.append((sm.ratio(), sym))
+        cands.sort(reverse=True)
+        if cands and cands[0][0] >= LIKE_MIN and (len(cands) == 1 or cands[0][0] - cands[1][0] >= LIKE_GAP):
+            best_of[va] = cands[0]
+
+    # one address per symbol: a symbol two addresses want names neither
+    wanted = collections.Counter(sym for _, sym in best_of.values())
+    found = {va: sym for va, (r, sym) in best_of.items() if wanted[sym] == 1}
+
+    if check:
+        right = sum(1 for va, sym in found.items() if c_name(sym) == c_name(truth[va]))
+        print("likeness check: %d functions named by bytes; it names %d, %d of them right, %d wrong"
+              % (len(targets), len(found), right, len(found) - right))
+        for va, sym in found.items():
+            if c_name(sym) != c_name(truth[va]):
+                print("  0x%08X is %s, likeness says %s" % (va, truth[va], sym))
+        return 0
+    for va, sym in found.items():
+        by_addr[va].add((emit_name(sym, defs), sym, defs.get(sym, "?"), "likeness", 0, "function"))
+    return len(found)
+
+
 # ── The XBE ─────────────────────────────────────────────────
 
 def xbe_image(analysis):
@@ -318,6 +545,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--libs", default="D:/xdk/extracted/lib", help="folder with the XDK's .lib files")
     ap.add_argument("-o", "--out", default=OUT)
+    ap.add_argument("--check", action="store_true",
+                    help="measure the likeness step on named functions and write nothing")
     args = ap.parse_args()
 
     analysis = json.load(open(ANALYSIS_JSON))
@@ -329,12 +558,14 @@ def main():
     #    names (aliases) keep every name.
     patterns = {}
     defs = {}
+    by_symbol = collections.defaultdict(list)
     for fname, library in LIBS.items():
         path = os.path.join(args.libs, fname)
         if not os.path.exists(path):
             print("missing %s, skipped" % path)
             continue
         for fn in lib_functions(path, library, defs):
+            by_symbol[fn["symbol"]].append(fn)
             fixed = sum(fn["mask"])
             if len(fn["bytes"]) < MIN_SIZE or fixed < MIN_FIXED:
                 continue
@@ -494,7 +725,27 @@ def main():
                           "function" if is_func else "variable"))
         reloc_named += 1
 
-    # 6. One entry per address; several names for one address are aliases,
+    # 7. Calls in order. A named function's version in the .lib calls X, Y, Z
+    #    in that order; where its code in the XBE makes as many calls, its
+    #    calls are X, Y, Z too, matched or not. Functions named this way lend
+    #    their calls the same way, round after round. A function whose calls
+    #    land on a name that says otherwise lends nothing (its 4721 version
+    #    calls in another order), and a callee two callers name differently
+    #    stays unnamed.
+    starts = starts_of()
+    called = name_by_calls(by_addr, known, by_symbol, raw_img, sections, starts, defs)
+
+    # 8. Likeness, for what changed between 4721 and 5849: an unnamed function
+    #    inside a library's code whose instructions, with every number
+    #    hidden, read almost as one .lib function's not yet placed, and no
+    #    other comes close. Measured first on functions already named, as if
+    #    they were not (args.check).
+    similar = name_by_likeness(by_addr, known, by_symbol, raw_img, sections, starts, defs, args.check)
+    if args.check:
+        return
+    called = (called[0] + name_by_calls(by_addr, known, by_symbol, raw_img, sections, starts, defs)[0],) + called[1:]
+
+    # 8. One entry per address; several names for one address are aliases,
     #    the first (sorted) is kept as the name and the rest listed.
     out = []
     for va in sorted(by_addr):
@@ -522,6 +773,9 @@ def main():
     print("matched by bytes: %d patterns at one place (%d dropped as incoherent), %d at several (left out)"
           % (len(matched), dropped, ambiguous))
     print("named by relocations: %d" % reloc_named)
+    print("named by calls in order: %d in %d rounds (%d callers lent names, %d disagreed and lent none)"
+          % called)
+    print("named by likeness: %d" % similar)
     for k in sorted(kinds):
         print("  %-8s %-8s %-5s %5d" % (k + (kinds[k],)))
     print("wrote %s (%d entries)" % (os.path.relpath(args.out, REPO), len(out)))
