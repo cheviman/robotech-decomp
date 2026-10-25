@@ -1,4 +1,5 @@
 [
  {"start": "0x0001FF70", "why": "called through a pointer from the menu (ICALL failed to resolve, run 25-10-2026); sits in the gap after sub_0001FEF0's nop padding"},
- {"start": "0x00011080", "why": "called through a pointer once, as the first mission loads (ICALL failed to resolve, run 25-10-2026); follows sub_00011000's jmp and one nop"}
+ {"start": "0x00011080", "why": "called through a pointer once, as the first mission loads (ICALL failed to resolve, run 25-10-2026); follows sub_00011000's jmp and one nop"},
+ {"start": "0x0001166C", "why": "the shared epilogue (cmp [0x1BC410], edi; pop edi; je/jmp 0x12440; ret) of the mission tick at 0x00011370, which the disassembler split into pieces; jumps to it were recompiled as calls to an unresolved stub (RECOMP_STUB_LOG: reached every tick), so the epilogue never ran, the stack lost bytes and the mission's logic stopped. As a function of its own, every jump to it is a tail call into real code"}
 ]

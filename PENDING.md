@@ -12,7 +12,7 @@ them goes deep; the easy entries go in batches; what the game asks for that the 
 
 | Subsystem | State | How |
 |---|---|---|
-| Boot | legal screen, the TDK, Harmony Gold and Vicious Cycle logos, the intro, the menu, and the first mission (`m101_f.lvl`) loads and runs | |
+| Boot | legal screen, the TDK, Harmony Gold and Vicious Cycle logos, the intro, the menu, and the first mission (`m101_f.lvl`) loads and plays: the Valkyrie flies over the coast with the HUD and the radar | |
 | Video | Direct3D 11 bridge: the movies, the menu (backdrop, logo, boxes, text, prompts, the Valkyrie) and the first mission's scene and HUD; see below for what is wrong | `ROBOTECH_D3D11=1`, the default |
 | Sound | works: xboxrecomp's emulated APU through XAudio2; movies, menu and mission music play | `RECOMP_AC97_READY=1`, the default |
 | Controls | the game's `XInputGetState` answered from the host (XInput pads, the keyboard on port 0: arrows d-pad, Enter START, Z X C V = A B X Y, W A S D left stick); the menu takes the presses | `src/input_bridge.c`; `RECOMP_USB=1` still enumerates the pad |
@@ -26,19 +26,16 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Video (`docs/d3d.md` has the map)
 
-1. **The first mission's opening scene stays dark.** A full-screen black quad the engine pushes
-   itself (`FB000000`, alpha 98 %) stays on top for over a minute: a fade-in that does not progress. With
-   pushed draws left out (`ROBOTECH_D3D11_NOPUSH=1`) the scene underneath is drawn: the Valkyrie over the
-   coast and a base. Next: find who writes the fade's alpha and what it waits on.
-2. **Big cyan-white shapes over the mission scene**: clouds or sky drawn as if additive with full alpha.
-   Next: trace those draws' blend states and texture formats (`ROBOTECH_D3D11_TRACE=1`).
-3. **The menu's Valkyrie looks wrongly posed** next to the pushbuffer executor's (a standing Battloid
+1. **Big cyan-white shapes over the mission scene**: clouds or sky drawn as if additive with full alpha.
+   Seen while the mission's logic was stopped (see Recompilation); not in the frames since. To recheck
+   over a longer run before tracing them (`ROBOTECH_D3D11_TRACE=1`).
+2. **The menu's Valkyrie looks wrongly posed** next to the pushbuffer executor's (a standing Battloid
    there). Its draws are FVF 0x112/0x142 with no vertex blending, 25 world matrices a frame for 124 draws;
    `SetModelView` is not used. Fixed on the way: the layer's `DrawIndexedPrimitiveUP` ignores
    `MinVertexIndex` (the bridge now passes ranges from 0). Not settled which picture is right.
-4. **Vertex programs** (none measured yet: every draw so far is FVF) and **pixel shaders** (none
+3. **Vertex programs** (none measured yet: every draw so far is FVF) and **pixel shaders** (none
    measured either: `SetPixelShader` is counted, 0 draws with one).
-5. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
+4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
    `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
    (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`).
 
@@ -64,6 +61,11 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 - Functions the disassembler missed are found when the game calls them through a pointer
   (`[ICALL] Failed to resolve`); `symbols/seed_functions.json` lists the ones seeded by hand, and the
   build records every target (`analysis/icall_targets.dump`, merged by the pipeline's `feedback` step).
+- A function the disassembler splits in pieces works only if every jump between the pieces lands on a
+  function start; a jump into the middle of a piece becomes a call to an unresolved stub, which returns
+  without running anything. `RECOMP_STUB_LOG=1` shows them (`[STUB] unresolved 0x... reached`); each one
+  found gets a seed. The mission tick's epilogue was one (`symbols/README.md`): the fade over the first
+  mission never cleared and the guest stack lost bytes every tick.
 
 ## Dead hypotheses
 

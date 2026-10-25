@@ -63,6 +63,8 @@ def steps():
                  "--output-dir", abi]),
         ("recomp", ["tools.recomp", XBE, "--all", "--split", "250", "--gen-dir", GEN_DIR,
                     "-o", os.path.join(ANALYSIS, "recomp"),
+                    # functions the disassembler split at a false entry, made whole
+                    "--coalesce-functions", COALESCE,
                     "--game-name", "Robotech: Battlecry",
                     "--disasm-dir", disasm, "--func-id-dir", func_id, "--abi-dir", abi,
                     "--icall-sites", os.path.join(ANALYSIS, "icall_sites.json"),

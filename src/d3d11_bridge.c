@@ -91,6 +91,7 @@ static unsigned s_push_draws;          /* drawn from the game's own pushbuffer w
 static uint32_t s_pixel_shader;        /* the game's, not routed yet */
 static unsigned s_ps_draws;            /* draws made while one was set */
 static unsigned s_xforms[10];          /* SetTransform calls, by XDK state */
+static uint32_t s_push_caller;         /* EndPush's return address, for the trace */
 
 static uint32_t guest32(uint32_t va)
 {
@@ -1025,20 +1026,49 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
         const char *e = getenv("ROBOTECH_D3D11_TRACE");
         on = e && *e == '1';
     }
-    if (!on || nseen >= 64)
+    if (!on)
         return;
-    for (i = 0; i < nseen; i++)
-        if (seen[i] == va && va)
-            return;
-    seen[nseen++] = va;
     if (!va) {
-        /* Untextured: the colour is the point (a fade, a letterbox bar). */
-        uint32_t c;
-        memcpy(&c, v + 16, 4);
-        fprintf(stderr, "[TRACE] %s untextured prim %u, %u vertices, FVF 0x%X, first diffuse %08X\n",
-                what, prim, vertices, s_fvf, c);
+        /* Untextured: the colour is the point (a fade, a letterbox bar), and
+         * for a pushed draw, who pushed it (EndPush's return address). Each
+         * (caller, colour) once. */
+        static uint32_t pairs[256][2];
+        static int npairs;
+        static const UINT pos_bytes[8] = { 0, 12, 16, 16, 20, 24, 28, 0 };
+        UINT off = pos_bytes[(s_fvf >> 1) & 7u] + ((s_fvf & D3DFVF_NORMAL) ? 12 : 0) + ((s_fvf & 0x20u) ? 4 : 0);
+        uint32_t c = 0;
+        if (s_fvf & D3DFVF_DIFFUSE)
+            memcpy(&c, v + off, 4);
+        for (i = 0; i < npairs; i++)
+            if (pairs[i][0] == s_push_caller && pairs[i][1] == c)
+                return;
+        if (npairs == 256)
+            return;
+        pairs[npairs][0] = s_push_caller;
+        pairs[npairs++][1] = c;
+        fprintf(stderr, "[TRACE] %s untextured prim %u, %u vertices, FVF 0x%X, diffuse %08X, from 0x%08X\n  stack:",
+                what, prim, vertices, s_fvf, c, s_push_caller);
+        {
+            /* Return addresses into the game's code, innermost first: a
+             * scan, not a frame walk (the code is frame-pointer-less). */
+            uint32_t sp, shown = 0;
+            for (sp = g_esp; sp < g_esp + 0x400 && shown < 12; sp += 4) {
+                uint32_t w = guest32(sp);
+                if (w >= 0x00011000u && w < 0x00155400u) {
+                    fprintf(stderr, " %08X", w);
+                    shown++;
+                }
+            }
+            fprintf(stderr, "\n");
+        }
         return;
     }
+    if (nseen >= 64)
+        return;
+    for (i = 0; i < nseen; i++)
+        if (seen[i] == va)
+            return;
+    seen[nseen++] = va;
     fprintf(stderr, "[TRACE] %s prim %u, %u vertices of %u bytes, FVF 0x%X; stage 0 texture 0x%08X",
             what, prim, vertices, stride, s_fvf, va);
     if (s_stage[0])
@@ -1125,6 +1155,7 @@ void d3d11_EndPush(void)
         s_push_start = 0;
         return;
     }
+    s_push_caller = guest32(g_esp);
     for (p = s_push_start; p < end; ) {
         uint32_t h = guest32(p), n = (h >> 18) & 0x7FFu, m = h & 0x1FFCu, i;
 
