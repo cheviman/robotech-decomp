@@ -7,6 +7,7 @@ Every entry was measured; this file says where each came from.
 |---|---|---|
 | `lib_matches.json` | `tools/apply_names.py` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
 | `classes.json` | `tools/apply_names.py` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
+| `registries.json` | `tools/apply_names.py` | the game's object types (Entity, Effect, Weapon, Screen...), their registering functions and callbacks, from the registries the game fills at start (`tools/find_registries.py` makes it) |
 | `xdk_symbols.json` | `tools/apply_names.py` | the XDK library symbols XbSymbolDatabase finds (`tools/xdk_symbols.py` makes it) |
 | `names.json` | `tools/apply_names.py` | function names given by hand |
 | `seed_functions.json` | `tools.disasm --seed-functions` | function starts the disassembler missed; each entry says why in its `why` field |
@@ -52,6 +53,19 @@ what for is not known yet), +0x40 `Load` (`vcObjectLoad`, by file version), +0x4
 +0x4C `Copy` (`vcObjectClone`), +0x50 `Cb50`, +0x54 `GetSize`. Measured on 25-10-2026: 30 classes (29
 `vc*` of the engine, `gcComponent` of the game), 175 callbacks named; the 5 several classes share
 (the defaults below) are left unnamed.
+
+## `registries.json`
+
+The game keeps registries of its own object types, besides the engine's classes: Entity (74 types),
+Effect (87), Weapon (43), Screen (36), Action (35), ScreenElement (27), Node (26), Steering (16), Trigger
+(16), Item (6). Each is a static block: a pointer to its name, two words, 128 type descriptors from
++0x0C, a count. One function per family writes the name and calls a registering function per type with
+the block; each fills a static descriptor (the object's size, then the type's functions) and stores it
+at `block[0x0C + 4 * type]`. Measured on 25-10-2026: 366 types, 1,188 names: `<Family><type>_Register`,
+`<Family><type>_Cb<slot>` (785) and `<Family>_Default<slot>` for a function several types share in one
+slot (37). The slots are not understood yet, so they are named by offset. Each type also lists the
+strings its functions use (Entity01 `VF-1DX`, Entity02 `rdf_heavy_missile`, Item01 `spy_capsule`,
+Trigger01 `Boolean AND`): hints for a name of its own, not used as one.
 
 ## `names.json`
 

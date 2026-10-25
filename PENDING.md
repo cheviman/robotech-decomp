@@ -63,11 +63,14 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (25-10-2026): 1,271 of the 6,646 functions have one: the XDK's libraries almost whole (D3D
-  234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, and the engine's 30
-  object classes (registering functions and callbacks); `symbols/README.md` says from where. Left: the
-  rest of the game's own code (about 5,000 functions; a retail build, its strings name nothing), the
-  library code that changed most from 4721 to 5849, and Bink (244, no symbols). Next sources: the engine's generic functions the callbacks call (streams,
+- **Names** (25-10-2026): 2,458 of the 6,646 functions have one: the XDK's libraries almost whole (D3D
+  234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, the engine's 30
+  object classes and the game's 366 object types in 10 registries (registering functions and callbacks
+  by slot); `symbols/README.md` says from where. Left: the rest of the game's own code (about 3,900
+  functions; a retail build, its strings name nothing), the library code that changed most from 4721 to
+  5849, and Bink (244, no symbols). Next: what each registry slot is (the generic function that calls
+  it, as with the classes), the types' own names from their string hints, and the 224 families of
+  look-alike functions (1,062 functions of one shape each). Next sources: the engine's generic functions the callbacks call (streams,
   handles), its strings (asserts, file names), and its vtables (32 in `.rdata`).
 
 - Functions the disassembler missed are found when the game calls them through a pointer

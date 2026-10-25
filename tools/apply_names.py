@@ -14,6 +14,8 @@ Sources, later ones winning:
                             the XDK's .lib files (tools/match_libs.py)
   symbols/classes.json      the engine's class callbacks, from the descriptors the
                             game registers (tools/find_classes.py)
+  symbols/registries.json   the game's object types and their functions, from the
+                            registries it fills at start (tools/find_registries.py)
   symbols/xdk_symbols.json  XDK library functions found by XbSymbolDatabase
                             (tools/xdk_symbols.py)
   symbols/names.json        names given by hand, {"0x00157AC0": "name", ...}
@@ -37,6 +39,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FUNCS = os.path.join(REPO, "analysis", "disasm", "functions.json")
 LIB = os.path.join(REPO, "symbols", "lib_matches.json")
 CLASSES = os.path.join(REPO, "symbols", "classes.json")
+REGISTRIES = os.path.join(REPO, "symbols", "registries.json")
 XDK = os.path.join(REPO, "symbols", "xdk_symbols.json")
 MANUAL = os.path.join(REPO, "symbols", "names.json")
 IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -72,6 +75,12 @@ def main():
             a = int(s["address"], 16)
             wanted[a] = s["name"]
             source[a] = "classes"
+    if os.path.exists(REGISTRIES):
+        for s in json.load(open(REGISTRIES))["names"]:
+            a = int(s["address"], 16)
+            if a not in wanted:
+                wanted[a] = s["name"]
+                source[a] = "registries"
     for s in json.load(open(XDK)):
         if s["kind"] == "function":
             a = int(s["address"], 16)
@@ -93,7 +102,7 @@ def main():
 
     funcs = json.load(open(FUNCS))
     by_start = {int(f["start"], 16): f for f in funcs}
-    applied, missing = {"lib": 0, "classes": 0, "xdk": 0, "manual": 0}, []
+    applied, missing = {"lib": 0, "classes": 0, "registries": 0, "xdk": 0, "manual": 0}, []
     for a, name in sorted(wanted.items()):
         f = by_start.get(a)
         if not f:
@@ -112,8 +121,10 @@ def main():
 
     with open(FUNCS, "w", newline="\n") as fh:
         json.dump(funcs, fh, indent=2)
-    print("named %d functions (%d lib, %d classes, %d xdk, %d manual); %d renamed for clashing with the toolkit: %s"
-          % (sum(applied.values()), applied["lib"], applied["classes"], applied["xdk"], applied["manual"], len(clash),
+    print("named %d functions (%d lib, %d classes, %d registries, %d xdk, %d manual); %d renamed for clashing"
+          " with the toolkit: %s"
+          % (sum(applied.values()), applied["lib"], applied["classes"], applied["registries"], applied["xdk"],
+             applied["manual"], len(clash),
              ", ".join(sorted(clash))))
     for a, name in missing:
         print("  not a disasm entry, skipped: 0x%08X %s" % (a, name))

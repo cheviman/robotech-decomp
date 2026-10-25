@@ -27,7 +27,9 @@ is committed.
       calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
       with the libraries' variables); the engine's 30 object classes and their callbacks come from the
-      descriptors the game registers (`symbols/classes.json`): 1,271 functions named in all
+      descriptors the game registers (`symbols/classes.json`), the game's 366 object types (Entity,
+      Effect, Weapon, Screen...) from the registries it fills at start (`symbols/registries.json`): 2,458
+      functions named in all
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)
@@ -127,12 +129,14 @@ src/recomp/gen/         the recompiled C (ignored by git; tools/pipeline.py writ
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
 symbols/lib_matches.json  the XDK library functions and variables matched against the XDK's .lib files
 symbols/classes.json    the engine's object classes and their callbacks
+symbols/registries.json the game's object types and their functions, by family
 symbols/names.json      function names given by hand
 tools/pipeline.py       xboxrecomp's pipeline, with every output inside this repository
 tools/apply_names.py    writes the names above into the disassembly before recompiling
 tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's scan
 tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
+tools/find_registries.py  makes symbols/registries.json from the game's object type registries
 docs/d3d.md             how the game uses Direct3D: the map for the Direct3D 11 path
 analysis/               the pipeline's data: a copy of the XBE, disassembly, function and ABI databases
                         (ignored by git)
