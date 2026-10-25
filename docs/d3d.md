@@ -23,9 +23,10 @@ has a name (one, `Direct3DCreate8`, given by hand: `mov eax, 1; ret 4`).
 
 ## The device
 
-- `D3D_g_pDevice` at `0x00166B48` holds the device. Its GPU-time fence is the
-  pair at +0x30 (time submitted) and +0x34 (address of the word the GPU writes
-  back); see `src/main.c`.
+- `D3D_g_pDevice` at `0x00166B48` holds the device, which is a static object at
+  `0x00163EF0`. Its GPU-time fence is the pair at +0x30 (time submitted) and
+  +0x34 (address of the word the GPU writes back). That word is the program's
+  first contiguous allocation, `0x80001000`; see `src/main.c`.
 - Created once, in `sub_00115DE0`, from presentation parameters the game builds
   at `0x002BE060`: 640x480, `D3DFMT_X8R8G8B8` (7), `MultiSampleType` 0x1121
   (2 samples, horizontal supersample: a 1280x480 back buffer), auto depth

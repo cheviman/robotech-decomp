@@ -106,6 +106,19 @@ recomp_func_t recomp_lookup_manual(uint32_t xbox_va)
     return (recomp_func_t)0;
 }
 
+/* ── Direct3D ──────────────────────────────────────────────── */
+
+/* Direct3D_CreateDevice (0x00155D10), wrapped: the generated body creates the
+ * device, then main.c checks where its GPU-time word ended up. */
+extern void sub_00155D10_gen(void);
+extern void robotech_D3DDeviceCreated(void);
+
+void sub_00155D10(void)
+{
+    sub_00155D10_gen();
+    robotech_D3DDeviceCreated();
+}
+
 /* ── ICALL failure logging ─────────────────────────────────── */
 
 /*

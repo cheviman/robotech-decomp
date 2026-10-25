@@ -35,8 +35,9 @@ is committed.
 Requirements: Python 3.10 or newer with `capstone` (`pip install capstone`), CMake 3.20 or newer, and
 Visual Studio Build Tools (MSVC, x64).
 
-1. The toolkit: clone xboxrecomp next to this repository (`../xboxrecomp`). This project needs two changes
-   to it that are not in xboxrecomp's main branch yet, on the branch `robotech`.
+1. The toolkit: clone xboxrecomp next to this repository (`../xboxrecomp`), as it is released; this
+   project uses it unchanged (built and run with v0.16.0, `f0f8a46`). What the game needs from it is
+   set up from here: `src/main.c` and `src/recomp_manual.c`.
 
 2. Your game: the game's folder (`default.xbe`, `dsstdfx.bin` and `Media/`), from the Xbox disc or from
    the Xbox 360 "Xbox Originals" package, at `game/`: a copy, or a link to where you keep it:
@@ -86,7 +87,7 @@ py -3 tools/xdk_symbols.py analysis/xbsymbols.txt
 game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
-src/recomp_manual.c     hand-written overrides of recompiled functions
+src/recomp_manual.c     hand-written overrides and wrappers of recompiled functions
 src/recomp/gen/         the recompiled C (ignored by git; tools/pipeline.py writes it)
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
 symbols/names.json      function names given by hand
