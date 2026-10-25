@@ -3,8 +3,13 @@
 A native port of Vicious Cycle's 2002 Xbox game *Robotech: Battlecry* — not an emulator. The original
 Xbox executable is statically recompiled into C with [xboxrecomp](https://github.com/sp00nznet/xboxrecomp)
 and linked against a runtime that stands in for the Xbox kernel, its GPU, its sound and its controllers.
-The goal is a modern PC version (Direct3D 11) and an Xbox One version first, Vulkan for the other
-platforms after, with the game brought up to date: higher resolutions, widescreen, frame rate.
+
+Where it is going:
+
+- **Windows, Xbox Series, Linux and Mac.** Direct3D 11 first, for Windows and Xbox Series; Vulkan after,
+  for Linux and Mac.
+- **The game brought up to date**: higher resolutions, widescreen, frame rate, and DLSS.
+- **New to it**: multiplayer and mods.
 
 **This repository contains no game data and no game code.** The C the game runs on is generated on your
 machine from your own copy of the game, which the build reads and never changes; nothing generated from it
@@ -34,7 +39,11 @@ is committed.
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
       programs, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
-- [ ] Xbox One (UWP, Direct3D 11), then Vulkan
+- [ ] Xbox Series (UWP, Direct3D 11)
+- [ ] Vulkan, for Linux and Mac
+- [ ] DLSS
+- [ ] Multiplayer
+- [ ] Mods
 - [ ] The game's code decompiled into readable C, and its formats (the `VC2` resource containers of
       levels, packs and textures, the Xbox ADPCM sound and music) as editable files
 
