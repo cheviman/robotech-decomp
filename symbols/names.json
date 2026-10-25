@@ -3,7 +3,6 @@
  "0x001103C0": "vcObjectCreate",
  "0x00110510": "vcObjectRelease",
  "0x00110780": "vcObjectClone",
- "0x00110810": "vcObjectCall3C",
  "0x00110E90": "vcObjectLoad",
  "0x0013FDD0": "vcDefault_ReturnArg3",
  "0x00147480": "vcDefault_ReturnZero",

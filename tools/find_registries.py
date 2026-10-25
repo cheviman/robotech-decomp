@@ -19,10 +19,10 @@ This finds the set-up functions (a block address pushed before five or more
 calls, its first word a name string), replays each registering function's
 stores, and writes symbols/registries.json: per family its block and types,
 per type its descriptor, size, functions by slot and the strings its
-functions use (hints for a name of its own, not used as one), and the names:
-<Family><type>_Register and <Family><type>_Cb<slot>. A function several
-types of a family share in one slot is <Family>_Default<slot>; one shared
-any other way stays unnamed.
+functions use (hints for a name of its own). No names yet: a type's number
+and a slot's offset are not names, and what each slot is and what each
+type is called come from measuring them (the generic functions that call
+the slots, the types' strings and behaviour).
 
     py -3 tools/find_registries.py
 """
@@ -158,53 +158,19 @@ def main():
                 found |= strings_in(fn)
             t["strings"] = sorted(found)[:12]
 
-    # 4. Names.
-    names = []
-    taken = set()
-    for fam in families:
-        uses = collections.defaultdict(set)
-        for t in fam["types"]:
-            for off, fn in t["slots"].items():
-                uses[fn].add(off)
-        users = collections.Counter(fn for t in fam["types"] for fn in set(t["slots"].values()))
-        width = 2 if len(fam["types"]) <= 100 else 3
-        for t in fam["types"]:
-            label = "%s%0*d" % (fam["name"], width, t["type"])
-            names.append({"address": "0x%08X" % t["register"], "name": label + "_Register",
-                          "family": fam["name"], "type": t["type"]})
-            taken.add(t["register"])
-            for off, fn in t["slots"].items():
-                if users[fn] == 1 and fn not in taken:
-                    names.append({"address": "0x%08X" % fn, "name": "%s_Cb%02X" % (label, off),
-                                  "family": fam["name"], "type": t["type"], "slot": "0x%02X" % off})
-                    taken.add(fn)
-        for fn, offs in uses.items():
-            if users[fn] > 1 and len(offs) == 1 and fn not in taken:
-                names.append({"address": "0x%08X" % fn, "name": "%s_Default%02X" % (fam["name"], next(iter(offs))),
-                              "family": fam["name"], "slot": "0x%02X" % next(iter(offs))})
-                taken.add(fn)
-    # an address two families name (a default shared across families) is left out
-    count = collections.Counter(n["address"] for n in names)
-    names = [n for n in names if count[n["address"]] == 1]
-
     out = {"families": [{"name": f["name"], "block": "0x%08X" % f["block"], "setup": "0x%08X" % f["setup"],
                          "types": [{"type": t["type"], "register": "0x%08X" % t["register"],
                                     "desc": "0x%08X" % t["desc"], "size": t["size"],
                                     "slots": {"0x%02X" % o: "0x%08X" % v for o, v in t["slots"].items()},
                                     "strings": t["strings"]}
                                    for t in sorted(f["types"], key=lambda t: t["type"])]}
-                        for f in families],
-           "names": sorted(names, key=lambda n: n["address"])}
+                        for f in families]}
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1)
         f.write("\n")
     for fam in families:
         print("%-14s block 0x%08X, %3d of %3d registering functions read" %
               (fam["name"], fam["block"], len(fam["types"]), len(fam["registers"])))
-    kinds = collections.Counter("Register" if n["name"].endswith("_Register") else
-                                "Default" if "_Default" in n["name"] else "Cb" for n in names)
-    print("names: %d (%d registering functions, %d callbacks, %d shared defaults)"
-          % (len(names), kinds["Register"], kinds["Cb"], kinds["Default"]))
     print("wrote %s" % os.path.relpath(OUT, REPO))
 
 

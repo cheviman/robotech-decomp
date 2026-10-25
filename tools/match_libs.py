@@ -18,6 +18,11 @@ The XDK here is 5849 and the game was built with 4721: what changed between
 the two does not match, and is left for the other sources (XbSymbolDatabase,
 names given by hand).
 
+xboxrecomp's way to these names is tools/ghidra_naming (Ghidra's Function ID
+databases), which needs Ghidra and recognises the C runtime and XDK helpers
+by signature; this reads the XDK's own .lib files, byte for byte, and also
+names the libraries' variables and the functions they call.
+
     py -3 tools/match_libs.py                     # writes symbols/lib_matches.json
     py -3 tools/match_libs.py --libs D:/xdk/extracted/lib
 
@@ -203,7 +208,11 @@ def emit_name(sym, defs):
     if library is None:
         return "xdk_" + name
     prefix, marks = PREFIX[library]
-    return name if marks and name.startswith(marks) else prefix + name
+    if marks and name.startswith(marks):
+        return name
+    if name.startswith("x_") and name[2:3].isdigit():
+        name = name[2:]                 # the prefix makes it an identifier already
+    return prefix + name
 
 
 # ── Patterns ────────────────────────────────────────────────
@@ -760,12 +769,30 @@ def main():
             entry["aliases"] = aliases
         out.append(entry)
 
-    # A C name used at two addresses (overloads, statics of the same name in
-    # two objects) gets the address appended.
+    # A C name used at two addresses is a static of the same name in two
+    # objects (write_char in output.obj and in woutput.obj): each takes its
+    # object's name after the library prefix, crt_output_write_char.
+    # The object is the matched one's; for a name placed otherwise, of the
+    # objects defining that symbol the one whose function is closest in size.
+    for e in out:
+        va = int(e["address"], 16)
+        fns = [fn for fn in matched[va][1] if fn["symbol"] == e["symbol"]] if va in matched else []
+        if not fns and by_symbol.get(e["symbol"]):
+            size = starts.get(va, va) - va
+            fns = sorted(by_symbol[e["symbol"]], key=lambda fn: abs(len(fn["bytes"]) - size))
+        if fns:
+            e["object"] = os.path.splitext(fns[0]["member"].replace("\\", "/").split("/")[-1])[0]
     count = collections.Counter(e["name"] for e in out)
     for e in out:
-        if count[e["name"]] > 1:
-            e["name"] = "%s_%s" % (e["name"], e["address"][2:])
+        if count[e["name"]] > 1 and e.get("object"):
+            prefix = PREFIX.get(e["library"], ("", ()))[0]
+            rest = e["name"][len(prefix):] if prefix and e["name"].startswith(prefix) else e["name"]
+            e["name"] = prefix + e["object"] + "_" + rest
+    count = collections.Counter(e["name"] for e in out)
+    left = sorted(e["name"] for e in out if count[e["name"]] > 1)
+    if left:
+        print("still at two addresses, left out: %s" % ", ".join(sorted(set(left))))
+        out = [e for e in out if count[e["name"]] == 1]
 
     with open(args.out, "w", encoding="utf-8") as f:
         f.write("[\n" + ",\n".join(" " + json.dumps(e) for e in out) + "\n]\n")

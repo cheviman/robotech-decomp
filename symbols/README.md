@@ -1,7 +1,10 @@
 # symbols/
 
 What this project knows about the XBE that the disassembler and the recompiler cannot find out alone.
-Every entry was measured; this file says where each came from.
+Every entry was measured; this file says where each came from. A name is real -- it says what the thing
+is -- or there is none: a type's number, a slot's offset or an address is not a name, and what is known
+of a thing without its name stays as data in these files (`tools/noise_report.py` counts any that
+reaches the C).
 
 | File | Read by | What |
 |---|---|---|
@@ -48,11 +51,11 @@ The engine's objects are handles, `(type << 16) | index`. Each type registers a 
 built on the stack by a function of its own) with `vcRegisterClass`: its type, its name (`vcTexture`),
 a file tag (`txr`) and callbacks at fixed offsets. Each slot is called from one generic function, which
 says what it is: +0x34 `Create` (`vcObjectCreate`; every one allocates), +0x38 `Destroy`
-(`vcObjectRelease`; every one frees), +0x3C `Cb3C` (`vcObjectCall3C`, walks the children ORing flags;
-what for is not known yet), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Save`, +0x48 `Cb48`,
-+0x4C `Copy` (`vcObjectClone`), +0x50 `Cb50`, +0x54 `GetSize`. Measured on 25-10-2026: 30 classes (29
-`vc*` of the engine, `gcComponent` of the game), 175 callbacks named; the 5 several classes share
-(the defaults below) are left unnamed.
+(`vcObjectRelease`; every one frees), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Save`,
++0x4C `Copy` (`vcObjectClone`), +0x54 `GetSize`. +0x3C (called from `0x00110810`, which walks the
+children ORing flags), +0x48 and +0x50 are read but not named until it is known what they are.
+Measured on 25-10-2026: 30 classes (29 `vc*` of the engine, `gcComponent` of the game), 151 callbacks
+named; the 5 several classes share (the defaults below) are left unnamed.
 
 ## `registries.json`
 
@@ -61,11 +64,11 @@ Effect (87), Weapon (43), Screen (36), Action (35), ScreenElement (27), Node (26
 (16), Item (6). Each is a static block: a pointer to its name, two words, 128 type descriptors from
 +0x0C, a count. One function per family writes the name and calls a registering function per type with
 the block; each fills a static descriptor (the object's size, then the type's functions) and stores it
-at `block[0x0C + 4 * type]`. Measured on 25-10-2026: 366 types, 1,188 names: `<Family><type>_Register`,
-`<Family><type>_Cb<slot>` (785) and `<Family>_Default<slot>` for a function several types share in one
-slot (37). The slots are not understood yet, so they are named by offset. Each type also lists the
-strings its functions use (Entity01 `VF-1DX`, Entity02 `rdf_heavy_missile`, Item01 `spy_capsule`,
-Trigger01 `Boolean AND`): hints for a name of its own, not used as one.
+at `block[0x0C + 4 * type]`. Measured on 25-10-2026: 366 types and 1,151 functions by type and slot.
+No names yet: what each slot is will come from the generic function that calls it (as with the
+classes), what each type is called from its strings and behaviour. Each type lists the strings its
+functions use (type 1 of Entity `VF-1DX`, type 2 `rdf_heavy_missile`, Item's type 1 `spy_capsule`,
+Trigger's type 1 `Boolean AND`), as hints.
 
 ## `names.json`
 
@@ -73,8 +76,8 @@ Trigger01 `Boolean AND`): hints for a name of its own, not used as one.
 - The object system (`classes.json` above): `0x00110370` `vcRegisterClass` (copies the descriptor to the
   class table at `0x0023B4E8`, 0x70 bytes a class, and points `0x002BF1E0[type]` at it; allocates the
   instance table, 0x4C bytes an instance), `0x001103C0` `vcObjectCreate`, `0x00110510`
-  `vcObjectRelease`, `0x00110780` `vcObjectClone`, `0x00110810` `vcObjectCall3C`, `0x00110E90`
-  `vcObjectLoad`: the one function that calls each slot.
+  `vcObjectRelease`, `0x00110780` `vcObjectClone`, `0x00110E90` `vcObjectLoad`: the one function that
+  calls each slot.
 - The default callbacks: `0x00147480` `vcDefault_ReturnZero` (`xor eax, eax; ret`), `0x00147490`
   `vcDefault_ReturnOne`, `0x0013FDD0` `vcDefault_ReturnArg3` (the default +0x3C).
 

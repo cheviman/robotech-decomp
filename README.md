@@ -27,9 +27,9 @@ is committed.
       calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
       with the libraries' variables); the engine's 30 object classes and their callbacks come from the
-      descriptors the game registers (`symbols/classes.json`), the game's 366 object types (Entity,
-      Effect, Weapon, Screen...) from the registries it fills at start (`symbols/registries.json`): 2,458
-      functions named in all
+      descriptors the game registers (`symbols/classes.json`): 1,246 functions with a real name; the
+      game's 366 object types (Entity, Effect, Weapon, Screen...) found in the registries it fills at
+      start (`symbols/registries.json`), not named yet
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)

@@ -15,12 +15,12 @@ function, which says what the slot is:
 
     +0x34  Create    vcObjectCreate (0x001103C0): calloc of the object
     +0x38  Destroy   vcObjectRelease (0x00110510): frees the children and the object
-    +0x3C  Cb3C      vcObjectCall3C (0x00110810): walks the children, ORing flags
+    +0x3C  (unnamed) called from 0x00110810: walks the children, ORing flags
     +0x40  Load      vcObjectLoad (0x00110E90): reads it, by file version
     +0x44  Save      writes it, by file version
-    +0x48  Cb48
+    +0x48  (unnamed)
     +0x4C  Copy      vcObjectClone (0x00110780): fills a new object from another
-    +0x50  Cb50
+    +0x50  (unnamed)
     +0x54  GetSize   returns the object's size in bytes
 
 This reads every registering function (the ones that reference a vc*/gc*
@@ -48,8 +48,10 @@ OUT = os.path.join(REPO, "symbols", "classes.json")
 
 REGISTER_CLASS = 0x00110370
 DESCRIPTOR_SIZE = 0x5C
-SLOTS = {0x34: "Create", 0x38: "Destroy", 0x3C: "Cb3C", 0x40: "Load", 0x44: "Save",
-         0x48: "Cb48", 0x4C: "Copy", 0x50: "Cb50", 0x54: "GetSize"}
+# The slots whose meaning is measured; +0x3C, +0x48 and +0x50 are read into
+# classes.json but get no name until it is known what they are.
+SLOTS = {0x34: "Create", 0x38: "Destroy", 0x40: "Load", 0x44: "Save", 0x4C: "Copy", 0x54: "GetSize"}
+SLOT_RANGE = range(0x34, 0x58, 4)
 TAG = 0x24
 CLASS_NAME = re.compile(r"^(vc|gc)[A-Z][A-Za-z0-9_]+$")
 
@@ -97,7 +99,7 @@ def main():
             desc = replay(md, fn, read(fn, starts[fn] - fn))
             if desc is None:
                 continue
-            slots = {off: va for off, va in desc["writes"].items() if off in SLOTS and va in starts}
+            slots = {off: va for off, va in desc["writes"].items() if off in SLOT_RANGE and va in starts}
             tag = desc["writes"].get(TAG)
             classes.append({"class": s["string"], "register": fn, "registers_with": desc["call"],
                             "tag": struct.pack("<I", tag).rstrip(b"\0").decode("latin-1") if tag else None,
@@ -110,7 +112,7 @@ def main():
         names.append({"address": "0x%08X" % c["register"], "name": c["class"] + "_Register",
                       "class": c["class"]})
         for off, va in sorted(c["slots"].items()):
-            if users[va] == 1:
+            if users[va] == 1 and off in SLOTS:
                 names.append({"address": "0x%08X" % va, "name": "%s_%s" % (c["class"], SLOTS[off]),
                               "class": c["class"], "slot": "0x%02X" % off})
 

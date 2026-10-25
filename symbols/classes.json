@@ -464,12 +464,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x000D7080",
-   "name": "gcComponent_Cb3C",
-   "class": "gcComponent",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x000D70A0",
    "name": "gcComponent_Load",
    "class": "gcComponent",
@@ -479,12 +473,6 @@
    "address": "0x000D70D0",
    "name": "gcComponent_Register",
    "class": "gcComponent"
-  },
-  {
-   "address": "0x0010CAA0",
-   "name": "vcSnd_Cb48",
-   "class": "vcSnd",
-   "slot": "0x48"
   },
   {
    "address": "0x0010DFD0",
@@ -511,12 +499,6 @@
    "slot": "0x40"
   },
   {
-   "address": "0x0010E060",
-   "name": "vcSnd_Cb50",
-   "class": "vcSnd",
-   "slot": "0x50"
-  },
-  {
    "address": "0x0010E080",
    "name": "vcSnd_Register",
    "class": "vcSnd"
@@ -538,12 +520,6 @@
    "name": "vcSound_GetSize",
    "class": "vcSound",
    "slot": "0x54"
-  },
-  {
-   "address": "0x0010E190",
-   "name": "vcSound_Cb50",
-   "class": "vcSound",
-   "slot": "0x50"
   },
   {
    "address": "0x0010F4B0",
@@ -610,12 +586,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x00112B80",
-   "name": "vcPak_Cb3C",
-   "class": "vcPak",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x00112BC0",
    "name": "vcPak_GetSize",
    "class": "vcPak",
@@ -649,12 +619,6 @@
    "name": "vcTexture_Destroy",
    "class": "vcTexture",
    "slot": "0x38"
-  },
-  {
-   "address": "0x00117FB0",
-   "name": "vcTexture_Cb3C",
-   "class": "vcTexture",
-   "slot": "0x3C"
   },
   {
    "address": "0x00118000",
@@ -725,12 +689,6 @@
    "name": "vcMultiSubObject_Destroy",
    "class": "vcMultiSubObject",
    "slot": "0x38"
-  },
-  {
-   "address": "0x0011D390",
-   "name": "vcMultiSubObject_Cb3C",
-   "class": "vcMultiSubObject",
-   "slot": "0x3C"
   },
   {
    "address": "0x0011D440",
@@ -815,12 +773,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x00122F30",
-   "name": "vcTerrain_Cb3C",
-   "class": "vcTerrain",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x00122FD0",
    "name": "vcTerrain_GetSize",
    "class": "vcTerrain",
@@ -845,12 +797,6 @@
    "slot": "0x40"
   },
   {
-   "address": "0x00125BC0",
-   "name": "vcTerrain_Cb50",
-   "class": "vcTerrain",
-   "slot": "0x50"
-  },
-  {
    "address": "0x00125C20",
    "name": "vcTerrain_Register",
    "class": "vcTerrain"
@@ -866,12 +812,6 @@
    "name": "vcLensFlare_Destroy",
    "class": "vcLensFlare",
    "slot": "0x38"
-  },
-  {
-   "address": "0x00125F40",
-   "name": "vcLensFlare_Cb3C",
-   "class": "vcLensFlare",
-   "slot": "0x3C"
   },
   {
    "address": "0x00125F80",
@@ -1090,12 +1030,6 @@
    "slot": "0x54"
   },
   {
-   "address": "0x001322B0",
-   "name": "vcParticleSystem_Cb50",
-   "class": "vcParticleSystem",
-   "slot": "0x50"
-  },
-  {
    "address": "0x001336E0",
    "name": "vcParticleSystem_Copy",
    "class": "vcParticleSystem",
@@ -1129,12 +1063,6 @@
    "name": "vcSceneExport_Destroy",
    "class": "vcSceneExport",
    "slot": "0x38"
-  },
-  {
-   "address": "0x00133B50",
-   "name": "vcSceneExport_Cb3C",
-   "class": "vcSceneExport",
-   "slot": "0x3C"
   },
   {
    "address": "0x00133BA0",
@@ -1201,12 +1129,6 @@
    "class": "vcSpaceScene"
   },
   {
-   "address": "0x00135630",
-   "name": "vcRefObject_Cb50",
-   "class": "vcRefObject",
-   "slot": "0x50"
-  },
-  {
    "address": "0x00136070",
    "name": "vcRefObject_Create",
    "class": "vcRefObject",
@@ -1217,12 +1139,6 @@
    "name": "vcRefObject_Destroy",
    "class": "vcRefObject",
    "slot": "0x38"
-  },
-  {
-   "address": "0x001360E0",
-   "name": "vcRefObject_Cb3C",
-   "class": "vcRefObject",
-   "slot": "0x3C"
   },
   {
    "address": "0x00136140",
@@ -1266,12 +1182,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x001366D0",
-   "name": "vcSkybox_Cb3C",
-   "class": "vcSkybox",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x00136720",
    "name": "vcSkybox_GetSize",
    "class": "vcSkybox",
@@ -1301,12 +1211,6 @@
    "class": "vcSkybox"
   },
   {
-   "address": "0x00137BF0",
-   "name": "vcParticleSystem_Cb3C",
-   "class": "vcParticleSystem",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x00139E40",
    "name": "vcPhysiqueManager_Create",
    "class": "vcPhysiqueManager",
@@ -1317,12 +1221,6 @@
    "name": "vcPhysiqueManager_Destroy",
    "class": "vcPhysiqueManager",
    "slot": "0x38"
-  },
-  {
-   "address": "0x00139F00",
-   "name": "vcPhysiqueManager_Cb3C",
-   "class": "vcPhysiqueManager",
-   "slot": "0x3C"
   },
   {
    "address": "0x00139FA0",
@@ -1346,12 +1244,6 @@
    "name": "vcObject_Destroy",
    "class": "vcObject",
    "slot": "0x38"
-  },
-  {
-   "address": "0x0013A7E0",
-   "name": "vcObject_Cb3C",
-   "class": "vcObject",
-   "slot": "0x3C"
   },
   {
    "address": "0x0013A8D0",
@@ -1401,12 +1293,6 @@
    "slot": "0x54"
   },
   {
-   "address": "0x0013BF50",
-   "name": "vcGeometryTrail_Cb50",
-   "class": "vcGeometryTrail",
-   "slot": "0x50"
-  },
-  {
    "address": "0x0013C570",
    "name": "vcGeometryTrail_Copy",
    "class": "vcGeometryTrail",
@@ -1445,12 +1331,6 @@
    "address": "0x0013D0E0",
    "name": "vcSFXBank_Register",
    "class": "vcSFXBank"
-  },
-  {
-   "address": "0x0013EB90",
-   "name": "vcTexture_Cb48",
-   "class": "vcTexture",
-   "slot": "0x48"
   },
   {
    "address": "0x0013EDA0",
@@ -1500,12 +1380,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x0013F210",
-   "name": "vcLineEffect_Cb3C",
-   "class": "vcLineEffect",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x0013F230",
    "name": "vcLineEffect_GetSize",
    "class": "vcLineEffect",
@@ -1539,12 +1413,6 @@
    "name": "vcMultiSub_Destroy",
    "class": "vcMultiSub",
    "slot": "0x38"
-  },
-  {
-   "address": "0x0013F580",
-   "name": "vcMultiSub_Cb3C",
-   "class": "vcMultiSub",
-   "slot": "0x3C"
   },
   {
    "address": "0x0013F610",
@@ -1611,12 +1479,6 @@
    "slot": "0x38"
   },
   {
-   "address": "0x001400C0",
-   "name": "vcMaterial_Cb3C",
-   "class": "vcMaterial",
-   "slot": "0x3C"
-  },
-  {
    "address": "0x00140100",
    "name": "vcMaterial_GetSize",
    "class": "vcMaterial",
@@ -1644,12 +1506,6 @@
    "address": "0x00140560",
    "name": "vcMaterial_Register",
    "class": "vcMaterial"
-  },
-  {
-   "address": "0x00145B90",
-   "name": "vcMesh_Cb48",
-   "class": "vcMesh",
-   "slot": "0x48"
   }
  ]
 }
