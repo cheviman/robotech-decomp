@@ -6,6 +6,7 @@ Every entry was measured; this file says where each came from.
 | File | Read by | What |
 |---|---|---|
 | `lib_matches.json` | `tools/apply_names.py` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
+| `classes.json` | `tools/apply_names.py` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
 | `xdk_symbols.json` | `tools/apply_names.py` | the XDK library symbols XbSymbolDatabase finds (`tools/xdk_symbols.py` makes it) |
 | `names.json` | `tools/apply_names.py` | function names given by hand |
 | `seed_functions.json` | `tools.disasm --seed-functions` | function starts the disassembler missed; each entry says why in its `why` field |
@@ -30,9 +31,28 @@ agree.
 - 4 functions it names are not entries of the disassembly (`crt_strchr` and three more of the C
   runtime's assembly); `apply_names.py` skips them.
 
+## `classes.json`
+
+The engine's objects are handles, `(type << 16) | index`. Each type registers a descriptor (0x5C bytes,
+built on the stack by a function of its own) with `vcRegisterClass`: its type, its name (`vcTexture`),
+a file tag (`txr`) and callbacks at fixed offsets. Each slot is called from one generic function, which
+says what it is: +0x34 `Create` (`vcObjectCreate`; every one allocates), +0x38 `Destroy`
+(`vcObjectRelease`; every one frees), +0x3C `Cb3C` (`vcObjectCall3C`, walks the children ORing flags;
+what for is not known yet), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Save`, +0x48 `Cb48`,
++0x4C `Copy` (`vcObjectClone`), +0x50 `Cb50`, +0x54 `GetSize`. Measured on 25-10-2026: 30 classes (29
+`vc*` of the engine, `gcComponent` of the game), 175 callbacks named; the 5 several classes share
+(the defaults below) are left unnamed.
+
 ## `names.json`
 
 - `0x00157AC0` `Direct3DCreate8`: `mov eax, 1; ret 4`, called once before `Direct3D_CreateDevice`.
+- The object system (`classes.json` above): `0x00110370` `vcRegisterClass` (copies the descriptor to the
+  class table at `0x0023B4E8`, 0x70 bytes a class, and points `0x002BF1E0[type]` at it; allocates the
+  instance table, 0x4C bytes an instance), `0x001103C0` `vcObjectCreate`, `0x00110510`
+  `vcObjectRelease`, `0x00110780` `vcObjectClone`, `0x00110810` `vcObjectCall3C`, `0x00110E90`
+  `vcObjectLoad`: the one function that calls each slot.
+- The default callbacks: `0x00147480` `vcDefault_ReturnZero` (`xor eax, eax; ret`), `0x00147490`
+  `vcDefault_ReturnOne`, `0x0013FDD0` `vcDefault_ReturnArg3` (the default +0x3C).
 
 ## `coalesce.json`
 

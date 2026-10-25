@@ -27,8 +27,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 ### Video (`docs/d3d.md` has the map)
 
 1. **Big cyan-white shapes over the mission scene**: clouds or sky drawn as if additive with full alpha.
-   Seen while the mission's logic was stopped (see Recompilation); not in the frames since. To recheck
-   over a longer run before tracing them (`ROBOTECH_D3D11_TRACE=1`).
+   Seen again with the mission running (40 s in, over the Valkyrie: an effect, a trail or particles,
+   drawn as a big flat additive quad). Next: trace those draws' blend states and texture formats
+   (`ROBOTECH_D3D11_TRACE=1`).
 2. **The Valkyrie comes out broken, in the menu and in the mission** (Sebas, 25-10-2026): in the mission
    its parts float apart (legs above the body, the gun aside). In the menu it looked wrongly posed next to
    the pushbuffer executor's (a standing Battloid there). Its draws are FVF 0x112/0x142 with no vertex
@@ -59,11 +60,12 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (25-10-2026): 900 of the 6,646 functions have one: the XDK's libraries almost whole (D3D 195
-  of 251, DSOUND 231 of 360, XPP 195 of 233) and the C runtime and XAPI in `.text` (283 of 5,556);
-  `symbols/README.md` says from where. Left: the game's own code (about 5,300 functions, no RTTI, but
-  `vc*`/`gc*` class name strings), the 4721 library code that differs from 5849, and Bink (244, no
-  symbols).
+- **Names** (25-10-2026): 1,114 of the 6,646 functions have one: the XDK's libraries almost whole (D3D
+  195 of 251, DSOUND 231 of 360, XPP 195 of 233), the C runtime and XAPI in `.text`, and the engine's 30
+  object classes (registering functions and callbacks); `symbols/README.md` says from where. Left: the
+  rest of the game's own code (about 5,100 functions), the 4721 library code that differs from 5849, and
+  Bink (244, no symbols). Next sources: the engine's generic functions the callbacks call (streams,
+  handles), its strings (asserts, file names), and its vtables (32 in `.rdata`).
 
 - Functions the disassembler missed are found when the game calls them through a pointer
   (`[ICALL] Failed to resolve`); `symbols/seed_functions.json` lists the ones seeded by hand, and the

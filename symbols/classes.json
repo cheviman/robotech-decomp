@@ -1,0 +1,1655 @@
+{
+ "classes": [
+  {
+   "class": "gcComponent",
+   "register": "0x000D70D0",
+   "registers_with": "0x00110370",
+   "tag": "cmp",
+   "slots": {
+    "0x34": "0x000D6F70",
+    "0x38": "0x000D6F90",
+    "0x3C": "0x000D7080",
+    "0x40": "0x000D70A0",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147480",
+    "0x54": "0x00129340"
+   }
+  },
+  {
+   "class": "vcSnd",
+   "register": "0x0010E080",
+   "registers_with": "0x00110370",
+   "tag": "snd",
+   "slots": {
+    "0x34": "0x0010DFD0",
+    "0x38": "0x0010DFE0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0010E010",
+    "0x48": "0x0010CAA0",
+    "0x4C": "0x00147480",
+    "0x50": "0x0010E060",
+    "0x54": "0x0010E000"
+   }
+  },
+  {
+   "class": "vcSound",
+   "register": "0x0010F5A0",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x0010E120",
+    "0x38": "0x0010E130",
+    "0x3C": "0x0013EE00",
+    "0x40": "0x0010F530",
+    "0x4C": "0x0010F4B0",
+    "0x50": "0x0010E190",
+    "0x54": "0x0010E160"
+   }
+  },
+  {
+   "class": "vcStringManager",
+   "register": "0x00112330",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00111930",
+    "0x38": "0x00111B70",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x001121C0",
+    "0x4C": "0x00111BD0",
+    "0x54": "0x00111BA0"
+   }
+  },
+  {
+   "class": "vcPak",
+   "register": "0x00112CD0",
+   "registers_with": "0x00110370",
+   "tag": "pak",
+   "slots": {
+    "0x34": "0x00112B30",
+    "0x38": "0x00112B40",
+    "0x3C": "0x00112B80",
+    "0x40": "0x00112C00",
+    "0x44": "0x00112C70",
+    "0x4C": "0x00147480",
+    "0x54": "0x00112BC0"
+   }
+  },
+  {
+   "class": "vcTexture",
+   "register": "0x00118450",
+   "registers_with": "0x00110370",
+   "tag": "txr",
+   "slots": {
+    "0x34": "0x00117F30",
+    "0x38": "0x00117F50",
+    "0x3C": "0x00117FB0",
+    "0x40": "0x00118360",
+    "0x44": "0x00118010",
+    "0x48": "0x0013EB90",
+    "0x4C": "0x00147480",
+    "0x54": "0x00118000"
+   }
+  },
+  {
+   "class": "vcMotionFiles",
+   "register": "0x0011D1B0",
+   "registers_with": "0x00110370",
+   "tag": "vmf",
+   "slots": {
+    "0x34": "0x0011CBE0",
+    "0x38": "0x0011CBF0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0011D100",
+    "0x4C": "0x0011CC20",
+    "0x54": "0x0011CC80"
+   }
+  },
+  {
+   "class": "vcMultiSubObject",
+   "register": "0x00121CD0",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x0011D250",
+    "0x38": "0x0011D280",
+    "0x3C": "0x0011D390",
+    "0x40": "0x00121B40",
+    "0x44": "0x0011D440",
+    "0x4C": "0x001219E0",
+    "0x54": "0x0011D7B0"
+   }
+  },
+  {
+   "class": "vcWater",
+   "register": "0x00122B90",
+   "registers_with": "0x00110370",
+   "tag": "wat",
+   "slots": {
+    "0x34": "0x00121EA0",
+    "0x38": "0x00121EE0",
+    "0x3C": "0x00121FC0",
+    "0x40": "0x00122930",
+    "0x44": "0x00121F40",
+    "0x4C": "0x00122AB0",
+    "0x54": "0x00121FE0"
+   }
+  },
+  {
+   "class": "vcTerrain",
+   "register": "0x00125C20",
+   "registers_with": "0x00110370",
+   "tag": "vhm",
+   "slots": {
+    "0x34": "0x00122D40",
+    "0x38": "0x00122E60",
+    "0x3C": "0x00122F30",
+    "0x40": "0x001258D0",
+    "0x44": "0x00123090",
+    "0x4C": "0x00123E50",
+    "0x50": "0x00125BC0",
+    "0x54": "0x00122FD0"
+   }
+  },
+  {
+   "class": "vcLensFlare",
+   "register": "0x001267E0",
+   "registers_with": "0x00110370",
+   "tag": "lnf",
+   "slots": {
+    "0x34": "0x00125EE0",
+    "0x38": "0x00125F00",
+    "0x3C": "0x00125F40",
+    "0x40": "0x00126760",
+    "0x44": "0x00125FC0",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147480",
+    "0x54": "0x00125F80"
+   }
+  },
+  {
+   "class": "vcVolumeObject",
+   "register": "0x00127DD0",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00127C70",
+    "0x38": "0x00127CA0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x00127CD0",
+    "0x4C": "0x00127D10",
+    "0x54": "0x00127CC0"
+   }
+  },
+  {
+   "class": "vcLight",
+   "register": "0x00129250",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00127FD0",
+    "0x38": "0x00128020",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x00129130",
+    "0x4C": "0x00128500",
+    "0x54": "0x00128040"
+   }
+  },
+  {
+   "class": "vcSplineObject",
+   "register": "0x0012F2A0",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x0012E950",
+    "0x38": "0x0012E9A0",
+    "0x3C": "0x00121FC0",
+    "0x40": "0x0012F210",
+    "0x44": "0x0012EA00",
+    "0x4C": "0x0012EA40",
+    "0x54": "0x0012E9D0"
+   }
+  },
+  {
+   "class": "vcSpline",
+   "register": "0x0012F550",
+   "registers_with": "0x00110370",
+   "tag": "spl",
+   "slots": {
+    "0x34": "0x0012F410",
+    "0x38": "0x0012F380",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0012F4E0",
+    "0x4C": "0x0012F440",
+    "0x54": "0x0012F3A0"
+   }
+  },
+  {
+   "class": "vcShadow",
+   "register": "0x0012FA70",
+   "registers_with": "0x00110370",
+   "tag": "ssh",
+   "slots": {
+    "0x34": "0x0012F690",
+    "0x38": "0x0012F6D0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x00147490",
+    "0x4C": "0x00147480",
+    "0x54": "0x0012F700"
+   }
+  },
+  {
+   "class": "vcParticleSystem",
+   "register": "0x001339E0",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00131F60",
+    "0x38": "0x00132000",
+    "0x3C": "0x00137BF0",
+    "0x40": "0x001337A0",
+    "0x44": "0x00133940",
+    "0x4C": "0x001336E0",
+    "0x50": "0x001322B0",
+    "0x54": "0x00132040"
+   }
+  },
+  {
+   "class": "vcSceneExport",
+   "register": "0x00133F00",
+   "registers_with": "0x00110370",
+   "tag": "vxo",
+   "slots": {
+    "0x34": "0x00133AF0",
+    "0x38": "0x00133B00",
+    "0x3C": "0x00133B50",
+    "0x40": "0x00133E80",
+    "0x44": "0x00133BF0",
+    "0x4C": "0x00133D90",
+    "0x54": "0x00133BA0"
+   }
+  },
+  {
+   "class": "vcSpaceScene",
+   "register": "0x00135030",
+   "registers_with": "0x00110370",
+   "tag": "spc",
+   "slots": {
+    "0x34": "0x00134EC0",
+    "0x38": "0x00134EE0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x00134FD0",
+    "0x44": "0x00134F10",
+    "0x4C": "0x00147480",
+    "0x54": "0x00134F00"
+   }
+  },
+  {
+   "class": "vcRefObject",
+   "register": "0x00136520",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00136070",
+    "0x38": "0x00136090",
+    "0x3C": "0x001360E0",
+    "0x40": "0x001364B0",
+    "0x44": "0x001361A0",
+    "0x4C": "0x00136410",
+    "0x50": "0x00135630",
+    "0x54": "0x00136140"
+   }
+  },
+  {
+   "class": "vcSkybox",
+   "register": "0x00136AE0",
+   "registers_with": "0x00110370",
+   "tag": "sky",
+   "slots": {
+    "0x34": "0x00136680",
+    "0x38": "0x00136690",
+    "0x3C": "0x001366D0",
+    "0x40": "0x00136A70",
+    "0x44": "0x00136770",
+    "0x4C": "0x001369F0",
+    "0x54": "0x00136720"
+   }
+  },
+  {
+   "class": "vcPhysiqueManager",
+   "register": "0x0013A060",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x00139E40",
+    "0x38": "0x00139E70",
+    "0x3C": "0x00139F00",
+    "0x40": "0x00147490",
+    "0x4C": "0x00147480",
+    "0x54": "0x00139FA0"
+   }
+  },
+  {
+   "class": "vcObject",
+   "register": "0x0013BD80",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x0013A710",
+    "0x38": "0x0013A740",
+    "0x3C": "0x0013A7E0",
+    "0x40": "0x0013B8B0",
+    "0x44": "0x0013A990",
+    "0x4C": "0x0013B790",
+    "0x54": "0x0013A8D0"
+   }
+  },
+  {
+   "class": "vcGeometryTrail",
+   "register": "0x0013C620",
+   "registers_with": "0x00110370",
+   "tag": null,
+   "slots": {
+    "0x34": "0x0013BE80",
+    "0x38": "0x0013BED0",
+    "0x3C": "0x00121FC0",
+    "0x40": "0x00147490",
+    "0x4C": "0x0013C570",
+    "0x50": "0x0013BF50",
+    "0x54": "0x0013BF10"
+   }
+  },
+  {
+   "class": "vcSFXBank",
+   "register": "0x0013D0E0",
+   "registers_with": "0x00110370",
+   "tag": "sfb",
+   "slots": {
+    "0x34": "0x0013CFB0",
+    "0x38": "0x0013CD50",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0013CD90",
+    "0x48": "0x00147490",
+    "0x4C": "0x00147480",
+    "0x54": "0x0013CE20"
+   }
+  },
+  {
+   "class": "vcSkyScene",
+   "register": "0x0013F0F0",
+   "registers_with": "0x00110370",
+   "tag": "skc",
+   "slots": {
+    "0x34": "0x0013EDA0",
+    "0x38": "0x0013EDE0",
+    "0x3C": "0x0013EE00",
+    "0x40": "0x0013F040",
+    "0x44": "0x0013EE30",
+    "0x4C": "0x00147480",
+    "0x54": "0x0013EE20"
+   }
+  },
+  {
+   "class": "vcLineEffect",
+   "register": "0x0013F440",
+   "registers_with": "0x00110370",
+   "tag": "lne",
+   "slots": {
+    "0x34": "0x0013F1A0",
+    "0x38": "0x0013F1E0",
+    "0x3C": "0x0013F210",
+    "0x40": "0x0013F380",
+    "0x44": "0x0013F410",
+    "0x4C": "0x00147480",
+    "0x54": "0x0013F230"
+   }
+  },
+  {
+   "class": "vcMultiSub",
+   "register": "0x0013FCF0",
+   "registers_with": "0x00110370",
+   "tag": "vmo",
+   "slots": {
+    "0x34": "0x0013F4F0",
+    "0x38": "0x0013F500",
+    "0x3C": "0x0013F580",
+    "0x40": "0x0013FA20",
+    "0x44": "0x0013F6C0",
+    "0x4C": "0x00147480",
+    "0x54": "0x0013F610"
+   }
+  },
+  {
+   "class": "vcMesh",
+   "register": "0x0013FFA0",
+   "registers_with": "0x00110370",
+   "tag": "msh",
+   "slots": {
+    "0x34": "0x0013FF60",
+    "0x38": "0x0013FDA0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0013FE80",
+    "0x48": "0x00145B90",
+    "0x4C": "0x00147480",
+    "0x54": "0x0013FDE0"
+   }
+  },
+  {
+   "class": "vcMaterial",
+   "register": "0x00140560",
+   "registers_with": "0x00110370",
+   "tag": "mtl",
+   "slots": {
+    "0x34": "0x00140050",
+    "0x38": "0x00140090",
+    "0x3C": "0x001400C0",
+    "0x40": "0x00140150",
+    "0x44": "0x00140420",
+    "0x4C": "0x001404E0",
+    "0x54": "0x00140100"
+   }
+  }
+ ],
+ "names": [
+  {
+   "address": "0x000D6F70",
+   "name": "gcComponent_Create",
+   "class": "gcComponent",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x000D6F90",
+   "name": "gcComponent_Destroy",
+   "class": "gcComponent",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x000D7080",
+   "name": "gcComponent_Cb3C",
+   "class": "gcComponent",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x000D70A0",
+   "name": "gcComponent_Load",
+   "class": "gcComponent",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x000D70D0",
+   "name": "gcComponent_Register",
+   "class": "gcComponent"
+  },
+  {
+   "address": "0x0010CAA0",
+   "name": "vcSnd_Cb48",
+   "class": "vcSnd",
+   "slot": "0x48"
+  },
+  {
+   "address": "0x0010DFD0",
+   "name": "vcSnd_Create",
+   "class": "vcSnd",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0010DFE0",
+   "name": "vcSnd_Destroy",
+   "class": "vcSnd",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0010E000",
+   "name": "vcSnd_GetSize",
+   "class": "vcSnd",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0010E010",
+   "name": "vcSnd_Load",
+   "class": "vcSnd",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0010E060",
+   "name": "vcSnd_Cb50",
+   "class": "vcSnd",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x0010E080",
+   "name": "vcSnd_Register",
+   "class": "vcSnd"
+  },
+  {
+   "address": "0x0010E120",
+   "name": "vcSound_Create",
+   "class": "vcSound",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0010E130",
+   "name": "vcSound_Destroy",
+   "class": "vcSound",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0010E160",
+   "name": "vcSound_GetSize",
+   "class": "vcSound",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0010E190",
+   "name": "vcSound_Cb50",
+   "class": "vcSound",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x0010F4B0",
+   "name": "vcSound_Copy",
+   "class": "vcSound",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0010F530",
+   "name": "vcSound_Load",
+   "class": "vcSound",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0010F5A0",
+   "name": "vcSound_Register",
+   "class": "vcSound"
+  },
+  {
+   "address": "0x00111930",
+   "name": "vcStringManager_Create",
+   "class": "vcStringManager",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00111B70",
+   "name": "vcStringManager_Destroy",
+   "class": "vcStringManager",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00111BA0",
+   "name": "vcStringManager_GetSize",
+   "class": "vcStringManager",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00111BD0",
+   "name": "vcStringManager_Copy",
+   "class": "vcStringManager",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x001121C0",
+   "name": "vcStringManager_Load",
+   "class": "vcStringManager",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00112330",
+   "name": "vcStringManager_Register",
+   "class": "vcStringManager"
+  },
+  {
+   "address": "0x00112B30",
+   "name": "vcPak_Create",
+   "class": "vcPak",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00112B40",
+   "name": "vcPak_Destroy",
+   "class": "vcPak",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00112B80",
+   "name": "vcPak_Cb3C",
+   "class": "vcPak",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00112BC0",
+   "name": "vcPak_GetSize",
+   "class": "vcPak",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00112C00",
+   "name": "vcPak_Load",
+   "class": "vcPak",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00112C70",
+   "name": "vcPak_Save",
+   "class": "vcPak",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00112CD0",
+   "name": "vcPak_Register",
+   "class": "vcPak"
+  },
+  {
+   "address": "0x00117F30",
+   "name": "vcTexture_Create",
+   "class": "vcTexture",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00117F50",
+   "name": "vcTexture_Destroy",
+   "class": "vcTexture",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00117FB0",
+   "name": "vcTexture_Cb3C",
+   "class": "vcTexture",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00118000",
+   "name": "vcTexture_GetSize",
+   "class": "vcTexture",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00118010",
+   "name": "vcTexture_Save",
+   "class": "vcTexture",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00118360",
+   "name": "vcTexture_Load",
+   "class": "vcTexture",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00118450",
+   "name": "vcTexture_Register",
+   "class": "vcTexture"
+  },
+  {
+   "address": "0x0011CBE0",
+   "name": "vcMotionFiles_Create",
+   "class": "vcMotionFiles",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0011CBF0",
+   "name": "vcMotionFiles_Destroy",
+   "class": "vcMotionFiles",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0011CC20",
+   "name": "vcMotionFiles_Copy",
+   "class": "vcMotionFiles",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0011CC80",
+   "name": "vcMotionFiles_GetSize",
+   "class": "vcMotionFiles",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0011D100",
+   "name": "vcMotionFiles_Load",
+   "class": "vcMotionFiles",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0011D1B0",
+   "name": "vcMotionFiles_Register",
+   "class": "vcMotionFiles"
+  },
+  {
+   "address": "0x0011D250",
+   "name": "vcMultiSubObject_Create",
+   "class": "vcMultiSubObject",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0011D280",
+   "name": "vcMultiSubObject_Destroy",
+   "class": "vcMultiSubObject",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0011D390",
+   "name": "vcMultiSubObject_Cb3C",
+   "class": "vcMultiSubObject",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x0011D440",
+   "name": "vcMultiSubObject_Save",
+   "class": "vcMultiSubObject",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0011D7B0",
+   "name": "vcMultiSubObject_GetSize",
+   "class": "vcMultiSubObject",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x001219E0",
+   "name": "vcMultiSubObject_Copy",
+   "class": "vcMultiSubObject",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00121B40",
+   "name": "vcMultiSubObject_Load",
+   "class": "vcMultiSubObject",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00121CD0",
+   "name": "vcMultiSubObject_Register",
+   "class": "vcMultiSubObject"
+  },
+  {
+   "address": "0x00121EA0",
+   "name": "vcWater_Create",
+   "class": "vcWater",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00121EE0",
+   "name": "vcWater_Destroy",
+   "class": "vcWater",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00121F40",
+   "name": "vcWater_Save",
+   "class": "vcWater",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00121FE0",
+   "name": "vcWater_GetSize",
+   "class": "vcWater",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00122930",
+   "name": "vcWater_Load",
+   "class": "vcWater",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00122AB0",
+   "name": "vcWater_Copy",
+   "class": "vcWater",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00122B90",
+   "name": "vcWater_Register",
+   "class": "vcWater"
+  },
+  {
+   "address": "0x00122D40",
+   "name": "vcTerrain_Create",
+   "class": "vcTerrain",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00122E60",
+   "name": "vcTerrain_Destroy",
+   "class": "vcTerrain",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00122F30",
+   "name": "vcTerrain_Cb3C",
+   "class": "vcTerrain",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00122FD0",
+   "name": "vcTerrain_GetSize",
+   "class": "vcTerrain",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00123090",
+   "name": "vcTerrain_Save",
+   "class": "vcTerrain",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00123E50",
+   "name": "vcTerrain_Copy",
+   "class": "vcTerrain",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x001258D0",
+   "name": "vcTerrain_Load",
+   "class": "vcTerrain",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00125BC0",
+   "name": "vcTerrain_Cb50",
+   "class": "vcTerrain",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x00125C20",
+   "name": "vcTerrain_Register",
+   "class": "vcTerrain"
+  },
+  {
+   "address": "0x00125EE0",
+   "name": "vcLensFlare_Create",
+   "class": "vcLensFlare",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00125F00",
+   "name": "vcLensFlare_Destroy",
+   "class": "vcLensFlare",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00125F40",
+   "name": "vcLensFlare_Cb3C",
+   "class": "vcLensFlare",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00125F80",
+   "name": "vcLensFlare_GetSize",
+   "class": "vcLensFlare",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00125FC0",
+   "name": "vcLensFlare_Save",
+   "class": "vcLensFlare",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00126760",
+   "name": "vcLensFlare_Load",
+   "class": "vcLensFlare",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x001267E0",
+   "name": "vcLensFlare_Register",
+   "class": "vcLensFlare"
+  },
+  {
+   "address": "0x00127C70",
+   "name": "vcVolumeObject_Create",
+   "class": "vcVolumeObject",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00127CA0",
+   "name": "vcVolumeObject_Destroy",
+   "class": "vcVolumeObject",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00127CC0",
+   "name": "vcVolumeObject_GetSize",
+   "class": "vcVolumeObject",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00127CD0",
+   "name": "vcVolumeObject_Load",
+   "class": "vcVolumeObject",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00127D10",
+   "name": "vcVolumeObject_Copy",
+   "class": "vcVolumeObject",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00127DD0",
+   "name": "vcVolumeObject_Register",
+   "class": "vcVolumeObject"
+  },
+  {
+   "address": "0x00127FD0",
+   "name": "vcLight_Create",
+   "class": "vcLight",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00128020",
+   "name": "vcLight_Destroy",
+   "class": "vcLight",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00128040",
+   "name": "vcLight_GetSize",
+   "class": "vcLight",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00128500",
+   "name": "vcLight_Copy",
+   "class": "vcLight",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00129130",
+   "name": "vcLight_Load",
+   "class": "vcLight",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00129250",
+   "name": "vcLight_Register",
+   "class": "vcLight"
+  },
+  {
+   "address": "0x00129340",
+   "name": "gcComponent_GetSize",
+   "class": "gcComponent",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0012E950",
+   "name": "vcSplineObject_Create",
+   "class": "vcSplineObject",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0012E9A0",
+   "name": "vcSplineObject_Destroy",
+   "class": "vcSplineObject",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0012E9D0",
+   "name": "vcSplineObject_GetSize",
+   "class": "vcSplineObject",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0012EA00",
+   "name": "vcSplineObject_Save",
+   "class": "vcSplineObject",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0012EA40",
+   "name": "vcSplineObject_Copy",
+   "class": "vcSplineObject",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0012F210",
+   "name": "vcSplineObject_Load",
+   "class": "vcSplineObject",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0012F2A0",
+   "name": "vcSplineObject_Register",
+   "class": "vcSplineObject"
+  },
+  {
+   "address": "0x0012F380",
+   "name": "vcSpline_Destroy",
+   "class": "vcSpline",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0012F3A0",
+   "name": "vcSpline_GetSize",
+   "class": "vcSpline",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0012F410",
+   "name": "vcSpline_Create",
+   "class": "vcSpline",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0012F440",
+   "name": "vcSpline_Copy",
+   "class": "vcSpline",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0012F4E0",
+   "name": "vcSpline_Load",
+   "class": "vcSpline",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0012F550",
+   "name": "vcSpline_Register",
+   "class": "vcSpline"
+  },
+  {
+   "address": "0x0012F690",
+   "name": "vcShadow_Create",
+   "class": "vcShadow",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0012F6D0",
+   "name": "vcShadow_Destroy",
+   "class": "vcShadow",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0012F700",
+   "name": "vcShadow_GetSize",
+   "class": "vcShadow",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0012FA70",
+   "name": "vcShadow_Register",
+   "class": "vcShadow"
+  },
+  {
+   "address": "0x00131F60",
+   "name": "vcParticleSystem_Create",
+   "class": "vcParticleSystem",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00132000",
+   "name": "vcParticleSystem_Destroy",
+   "class": "vcParticleSystem",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00132040",
+   "name": "vcParticleSystem_GetSize",
+   "class": "vcParticleSystem",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x001322B0",
+   "name": "vcParticleSystem_Cb50",
+   "class": "vcParticleSystem",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x001336E0",
+   "name": "vcParticleSystem_Copy",
+   "class": "vcParticleSystem",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x001337A0",
+   "name": "vcParticleSystem_Load",
+   "class": "vcParticleSystem",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00133940",
+   "name": "vcParticleSystem_Save",
+   "class": "vcParticleSystem",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x001339E0",
+   "name": "vcParticleSystem_Register",
+   "class": "vcParticleSystem"
+  },
+  {
+   "address": "0x00133AF0",
+   "name": "vcSceneExport_Create",
+   "class": "vcSceneExport",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00133B00",
+   "name": "vcSceneExport_Destroy",
+   "class": "vcSceneExport",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00133B50",
+   "name": "vcSceneExport_Cb3C",
+   "class": "vcSceneExport",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00133BA0",
+   "name": "vcSceneExport_GetSize",
+   "class": "vcSceneExport",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00133BF0",
+   "name": "vcSceneExport_Save",
+   "class": "vcSceneExport",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00133D90",
+   "name": "vcSceneExport_Copy",
+   "class": "vcSceneExport",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00133E80",
+   "name": "vcSceneExport_Load",
+   "class": "vcSceneExport",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00133F00",
+   "name": "vcSceneExport_Register",
+   "class": "vcSceneExport"
+  },
+  {
+   "address": "0x00134EC0",
+   "name": "vcSpaceScene_Create",
+   "class": "vcSpaceScene",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00134EE0",
+   "name": "vcSpaceScene_Destroy",
+   "class": "vcSpaceScene",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00134F00",
+   "name": "vcSpaceScene_GetSize",
+   "class": "vcSpaceScene",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00134F10",
+   "name": "vcSpaceScene_Save",
+   "class": "vcSpaceScene",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00134FD0",
+   "name": "vcSpaceScene_Load",
+   "class": "vcSpaceScene",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00135030",
+   "name": "vcSpaceScene_Register",
+   "class": "vcSpaceScene"
+  },
+  {
+   "address": "0x00135630",
+   "name": "vcRefObject_Cb50",
+   "class": "vcRefObject",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x00136070",
+   "name": "vcRefObject_Create",
+   "class": "vcRefObject",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00136090",
+   "name": "vcRefObject_Destroy",
+   "class": "vcRefObject",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x001360E0",
+   "name": "vcRefObject_Cb3C",
+   "class": "vcRefObject",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00136140",
+   "name": "vcRefObject_GetSize",
+   "class": "vcRefObject",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x001361A0",
+   "name": "vcRefObject_Save",
+   "class": "vcRefObject",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00136410",
+   "name": "vcRefObject_Copy",
+   "class": "vcRefObject",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x001364B0",
+   "name": "vcRefObject_Load",
+   "class": "vcRefObject",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00136520",
+   "name": "vcRefObject_Register",
+   "class": "vcRefObject"
+  },
+  {
+   "address": "0x00136680",
+   "name": "vcSkybox_Create",
+   "class": "vcSkybox",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00136690",
+   "name": "vcSkybox_Destroy",
+   "class": "vcSkybox",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x001366D0",
+   "name": "vcSkybox_Cb3C",
+   "class": "vcSkybox",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00136720",
+   "name": "vcSkybox_GetSize",
+   "class": "vcSkybox",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00136770",
+   "name": "vcSkybox_Save",
+   "class": "vcSkybox",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x001369F0",
+   "name": "vcSkybox_Copy",
+   "class": "vcSkybox",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00136A70",
+   "name": "vcSkybox_Load",
+   "class": "vcSkybox",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00136AE0",
+   "name": "vcSkybox_Register",
+   "class": "vcSkybox"
+  },
+  {
+   "address": "0x00137BF0",
+   "name": "vcParticleSystem_Cb3C",
+   "class": "vcParticleSystem",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00139E40",
+   "name": "vcPhysiqueManager_Create",
+   "class": "vcPhysiqueManager",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00139E70",
+   "name": "vcPhysiqueManager_Destroy",
+   "class": "vcPhysiqueManager",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00139F00",
+   "name": "vcPhysiqueManager_Cb3C",
+   "class": "vcPhysiqueManager",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00139FA0",
+   "name": "vcPhysiqueManager_GetSize",
+   "class": "vcPhysiqueManager",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013A060",
+   "name": "vcPhysiqueManager_Register",
+   "class": "vcPhysiqueManager"
+  },
+  {
+   "address": "0x0013A710",
+   "name": "vcObject_Create",
+   "class": "vcObject",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013A740",
+   "name": "vcObject_Destroy",
+   "class": "vcObject",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013A7E0",
+   "name": "vcObject_Cb3C",
+   "class": "vcObject",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x0013A8D0",
+   "name": "vcObject_GetSize",
+   "class": "vcObject",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013A990",
+   "name": "vcObject_Save",
+   "class": "vcObject",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0013B790",
+   "name": "vcObject_Copy",
+   "class": "vcObject",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0013B8B0",
+   "name": "vcObject_Load",
+   "class": "vcObject",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013BD80",
+   "name": "vcObject_Register",
+   "class": "vcObject"
+  },
+  {
+   "address": "0x0013BE80",
+   "name": "vcGeometryTrail_Create",
+   "class": "vcGeometryTrail",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013BED0",
+   "name": "vcGeometryTrail_Destroy",
+   "class": "vcGeometryTrail",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013BF10",
+   "name": "vcGeometryTrail_GetSize",
+   "class": "vcGeometryTrail",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013BF50",
+   "name": "vcGeometryTrail_Cb50",
+   "class": "vcGeometryTrail",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x0013C570",
+   "name": "vcGeometryTrail_Copy",
+   "class": "vcGeometryTrail",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x0013C620",
+   "name": "vcGeometryTrail_Register",
+   "class": "vcGeometryTrail"
+  },
+  {
+   "address": "0x0013CD50",
+   "name": "vcSFXBank_Destroy",
+   "class": "vcSFXBank",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013CD90",
+   "name": "vcSFXBank_Load",
+   "class": "vcSFXBank",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013CE20",
+   "name": "vcSFXBank_GetSize",
+   "class": "vcSFXBank",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013CFB0",
+   "name": "vcSFXBank_Create",
+   "class": "vcSFXBank",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013D0E0",
+   "name": "vcSFXBank_Register",
+   "class": "vcSFXBank"
+  },
+  {
+   "address": "0x0013EB90",
+   "name": "vcTexture_Cb48",
+   "class": "vcTexture",
+   "slot": "0x48"
+  },
+  {
+   "address": "0x0013EDA0",
+   "name": "vcSkyScene_Create",
+   "class": "vcSkyScene",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013EDE0",
+   "name": "vcSkyScene_Destroy",
+   "class": "vcSkyScene",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013EE20",
+   "name": "vcSkyScene_GetSize",
+   "class": "vcSkyScene",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013EE30",
+   "name": "vcSkyScene_Save",
+   "class": "vcSkyScene",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0013F040",
+   "name": "vcSkyScene_Load",
+   "class": "vcSkyScene",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013F0F0",
+   "name": "vcSkyScene_Register",
+   "class": "vcSkyScene"
+  },
+  {
+   "address": "0x0013F1A0",
+   "name": "vcLineEffect_Create",
+   "class": "vcLineEffect",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013F1E0",
+   "name": "vcLineEffect_Destroy",
+   "class": "vcLineEffect",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013F210",
+   "name": "vcLineEffect_Cb3C",
+   "class": "vcLineEffect",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x0013F230",
+   "name": "vcLineEffect_GetSize",
+   "class": "vcLineEffect",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013F380",
+   "name": "vcLineEffect_Load",
+   "class": "vcLineEffect",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013F410",
+   "name": "vcLineEffect_Save",
+   "class": "vcLineEffect",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0013F440",
+   "name": "vcLineEffect_Register",
+   "class": "vcLineEffect"
+  },
+  {
+   "address": "0x0013F4F0",
+   "name": "vcMultiSub_Create",
+   "class": "vcMultiSub",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013F500",
+   "name": "vcMultiSub_Destroy",
+   "class": "vcMultiSub",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013F580",
+   "name": "vcMultiSub_Cb3C",
+   "class": "vcMultiSub",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x0013F610",
+   "name": "vcMultiSub_GetSize",
+   "class": "vcMultiSub",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013F6C0",
+   "name": "vcMultiSub_Save",
+   "class": "vcMultiSub",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x0013FA20",
+   "name": "vcMultiSub_Load",
+   "class": "vcMultiSub",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013FCF0",
+   "name": "vcMultiSub_Register",
+   "class": "vcMultiSub"
+  },
+  {
+   "address": "0x0013FDA0",
+   "name": "vcMesh_Destroy",
+   "class": "vcMesh",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013FDE0",
+   "name": "vcMesh_GetSize",
+   "class": "vcMesh",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013FE80",
+   "name": "vcMesh_Load",
+   "class": "vcMesh",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013FF60",
+   "name": "vcMesh_Create",
+   "class": "vcMesh",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013FFA0",
+   "name": "vcMesh_Register",
+   "class": "vcMesh"
+  },
+  {
+   "address": "0x00140050",
+   "name": "vcMaterial_Create",
+   "class": "vcMaterial",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00140090",
+   "name": "vcMaterial_Destroy",
+   "class": "vcMaterial",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x001400C0",
+   "name": "vcMaterial_Cb3C",
+   "class": "vcMaterial",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00140100",
+   "name": "vcMaterial_GetSize",
+   "class": "vcMaterial",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00140150",
+   "name": "vcMaterial_Load",
+   "class": "vcMaterial",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00140420",
+   "name": "vcMaterial_Save",
+   "class": "vcMaterial",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x001404E0",
+   "name": "vcMaterial_Copy",
+   "class": "vcMaterial",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00140560",
+   "name": "vcMaterial_Register",
+   "class": "vcMaterial"
+  },
+  {
+   "address": "0x00145B90",
+   "name": "vcMesh_Cb48",
+   "class": "vcMesh",
+   "slot": "0x48"
+  }
+ ]
+}
