@@ -188,6 +188,15 @@ void sub_00157B00(void)
     sub_00157B00_gen();
 }
 
+/* D3DDevice_SetPixelShader (0x0015ADE0) */
+extern void sub_0015ADE0_gen(void);
+
+void sub_0015ADE0(void)
+{
+    d3d11_SetPixelShader();
+    sub_0015ADE0_gen();
+}
+
 /* D3DDevice_SetTextureState_TexCoordIndex (0x00158360) */
 extern void sub_00158360_gen(void);
 
@@ -295,6 +304,41 @@ void sub_0015A5B0(void)
 {
     d3d11_DrawIndexedVertices();
     sub_0015A5B0_gen();
+}
+
+/* ── XInput ────────────────────────────────────────────────── */
+
+#include "input_bridge.h"
+
+/* XInputOpen (0x00187F4F): input_bridge.c learns which port a handle is. */
+extern void sub_00187F4F_gen(void);
+
+void sub_00187F4F(void)
+{
+    input_XInputOpenArgs();
+    sub_00187F4F_gen();
+    input_XInputOpenDone();
+}
+
+/* XInputGetState (0x0018818E), replaced: answered from the host's pads and
+ * keyboard (input_bridge.c says why). */
+void sub_0018818E(void)
+{
+    input_XInputGetState();
+}
+
+/* ── DirectSound ───────────────────────────────────────────── */
+
+#include "dsound_bridge.h"
+
+/* IDirectSoundBuffer_GetStatus (0x00167E1D) */
+extern void sub_00167E1D_gen(void);
+
+void sub_00167E1D(void)
+{
+    dsound_GetStatusArgs();
+    sub_00167E1D_gen();
+    dsound_GetStatusDone();
 }
 
 /* ── ICALL failure logging ─────────────────────────────────── */

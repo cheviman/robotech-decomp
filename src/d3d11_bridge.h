@@ -22,6 +22,7 @@ void d3d11_TextureLockRect(void);
 void d3d11_SetVertexShader(void);
 void d3d11_SetTexCoordIndex(void);
 void d3d11_SetRenderStateSimple(void);
+void d3d11_SetPixelShader(void);
 void d3d11_SetTransform(void);
 void d3d11_SetViewport(void);
 void d3d11_SetMaterial(void);

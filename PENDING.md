@@ -6,58 +6,72 @@ missing work: the **dead hypotheses with their measurement**, so nobody tries th
 
 The method: across first. Video, sound, controls and saves each work in their basics before any one of
 them goes deep; the easy entries go in batches; what the game asks for that the port lacks is measured
-(call counters, what the runtime logs as unimplemented), not guessed.
+(call counters, traces, what the runtime logs as unimplemented), not guessed.
 
 ## State
 
 | Subsystem | State | How |
 |---|---|---|
-| Boot | legal screen, the TDK, Harmony Gold and Vicious Cycle logos, the intro movie, then the menu loads (`menu_f.lvl`, the main theme, the pilots' skins) | |
-| Video | Direct3D 11 bridge: the movies play whole, at their speed; the menu: see below | `ROBOTECH_D3D11=1`, the default |
-| Sound | works: xboxrecomp's emulated APU through XAudio2 (the logos' and the intro's sound measured in a WAV) | `RECOMP_AC97_READY=1`, the default |
-| Controls | the USB pad: a host controller through XInput, the keyboard on top (arrows the d-pad, Enter START, Z X C V for A B X Y, W A S D the left stick); the game enumerates it and reads it | `RECOMP_USB=1`, `RECOMP_KEYBOARD=1`, the defaults |
-| Saves | the hard disk (UDATA, TDATA) in `%LOCALAPPDATA%\RobotechBattlecry`; the game writes its title metadata and images there | `ROBOTECH_SAVE_DIR` moves it |
-| Pacing | `Swap` held to 60 Hz; with nothing executing the pushbuffer nothing waited for the vertical blank, and the menu ran at the monitor's 144 Hz | `ROBOTECH_FPS` |
+| Boot | legal screen, the TDK, Harmony Gold and Vicious Cycle logos, the intro, the menu, and the first mission (`m101_f.lvl`) loads and runs | |
+| Video | Direct3D 11 bridge: the movies, the menu (backdrop, logo, boxes, text, prompts, the Valkyrie) and the first mission's scene and HUD; see below for what is wrong | `ROBOTECH_D3D11=1`, the default |
+| Sound | works: xboxrecomp's emulated APU through XAudio2; movies, menu and mission music play | `RECOMP_AC97_READY=1`, the default |
+| Controls | the game's `XInputGetState` answered from the host (XInput pads, the keyboard on port 0: arrows d-pad, Enter START, Z X C V = A B X Y, W A S D left stick); the menu takes the presses | `src/input_bridge.c`; `RECOMP_USB=1` still enumerates the pad |
+| Saves | the hard disk (UDATA, TDATA) in `%LOCALAPPDATA%\RobotechBattlecry`; title metadata and images written | `ROBOTECH_SAVE_DIR` |
+| Pacing | `Swap` held to 60 Hz | `ROBOTECH_FPS` |
+
+For testing: `ROBOTECH_GAME_DIR` pointing at a copy of the game without `vcMovie` boots to the menu in
+seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<button>,..."` presses buttons.
 
 ## Missing
 
 ### Video (`docs/d3d.md` has the map)
 
-1. **Vertex programs.** `CreateVertexShader`, `LoadVertexShader`, `SelectVertexShader`, `SetVertexShader`
-   with a program handle, the constants (`SetVertexShaderConstant1/4/NotInline`). Draws made with one are
-   left out and counted (`left out (vertex program)` in the bridge's log). xboxrecomp's layer translates
-   NV2A vertex microcode to HLSL (`src/d3d/d3d8_vsh.c`).
-2. **Pixel shaders.** `CreatePixelShader`, `SetPixelShader`, `SetPixelShaderConstant`: register
-   combiners, which the layer has (`d3d8_combiners.c`).
-3. **Render targets.** `SetRenderTarget`, `GetRenderTarget2`, `GetDepthStencilSurface2`,
-   `D3DTexture_GetSurfaceLevel2`.
-4. **The game's own pushbuffer**: the three `BeginPush`/`EndPush` sites, and the NV2A methods behind
-   `SetRenderState_Simple` for the states the game sends only that way.
-5. **Resources released**: `D3DResource_Release` is not followed; host textures stay until their address
-   is reused.
-6. States with no layer state: `BLENDCOLOR`, `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, the
-   multisample ones; texture ops `BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*` approximated.
+1. **The first mission's opening scene stays dark.** A full-screen black quad the engine pushes
+   itself (`FB000000`, alpha 98 %) stays on top for over a minute: a fade-in that does not progress. With
+   pushed draws left out (`ROBOTECH_D3D11_NOPUSH=1`) the scene underneath is drawn: the Valkyrie over the
+   coast and a base. Next: find who writes the fade's alpha and what it waits on.
+2. **Big cyan-white shapes over the mission scene**: clouds or sky drawn as if additive with full alpha.
+   Next: trace those draws' blend states and texture formats (`ROBOTECH_D3D11_TRACE=1`).
+3. **The menu's Valkyrie looks wrongly posed** next to the pushbuffer executor's (a standing Battloid
+   there). Its draws are FVF 0x112/0x142 with no vertex blending, 25 world matrices a frame for 124 draws;
+   `SetModelView` is not used. Fixed on the way: the layer's `DrawIndexedPrimitiveUP` ignores
+   `MinVertexIndex` (the bridge now passes ranges from 0). Not settled which picture is right.
+4. **Vertex programs** (none measured yet: every draw so far is FVF) and **pixel shaders** (none
+   measured either: `SetPixelShader` is counted, 0 draws with one).
+5. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
+   `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
+   (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`).
 
 ### Sound
 
-- Quality not checked by ear beyond "it plays": the APU's DSP runs in passthrough (`[APU] DSP GP/EP
-  initialized (STUBBED - passthrough mode)`), so the DSP effects (reverb, Dolby) are missing.
+- The mission voice `079.WAV.vo` lasts 10-30 s, but the buffer that starts with it reports stopped after
+  656 ms (`ROBOTECH_TRACE_DSOUND=1`). Unclear whether that is the voice or a short effect.
+- The APU's DSP runs in passthrough: no DSP effects (reverb, Dolby).
 
 ### Controls
 
-- Logos and intro cannot be skipped (measured: A and START pressed every 1.5 s, delivered to the game,
-  and every movie played whole). Not a port bug; see dead hypotheses.
+- The emulated USB path stalls: after a few dozen reports the game's driver stops queueing the pad's
+  transfer (its USB code guards itself with `cli`/`sti`, no-ops here, while the controller's interrupt
+  runs on another host thread). Bypassed by answering `XInputGetState` from the host; rumble
+  (`XInputSetState`) still goes the USB way.
 
 ### Saves
 
-- Memory units are not modelled: saves go to the hard disk only.
+- Memory units are not modelled: saves go to the hard disk only. Saving in a mission not tried yet.
 
-### Testing
+### Recompilation
 
-- Every run waits about 2.5 minutes of movies before the menu.
+- Functions the disassembler missed are found when the game calls them through a pointer
+  (`[ICALL] Failed to resolve`); `symbols/seed_functions.json` lists the ones seeded by hand, and the
+  build records every target (`analysis/icall_targets.dump`, merged by the pipeline's `feedback` step).
 
 ## Dead hypotheses
 
-- **"The logos and the intro do not skip because the pad does not reach the game."** Measured with
-  `RECOMP_PAD_SCRIPT` and the OHCI trace: the pad is enumerated, the periodic list is read and every
-  scripted press is delivered; the movies still play whole. They are not skippable.
+- **"The logos and the intro do not skip because the pad does not reach the game."** Measured: the pad
+  is enumerated and every scripted press is delivered; the movies play whole. They are not skippable.
+- **"The menu's text draws as rectangles because its texture is sampled wrong."** The trace showed
+  swizzled textures with normalised coordinates; the cause was the simple render states (blending, alpha
+  test), which the pure-device build never stores in its array.
+- **"The mission's opening scene waits for a sound to finish."** Traced every buffer's status: none stays
+  playing; the scene is drawn and moves under a fade quad that stays at 98 %.
+- **"The menu's Valkyrie is skinned."** `VERTEXBLEND` is 0 for all its draws.

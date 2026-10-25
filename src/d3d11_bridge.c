@@ -88,6 +88,9 @@ static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
 static uint32_t s_stream_va, s_stream_stride, s_base_vertex;
 static unsigned s_skipped_vp;          /* draws left out: vertex program set */
 static unsigned s_push_draws;          /* drawn from the game's own pushbuffer writes */
+static uint32_t s_pixel_shader;        /* the game's, not routed yet */
+static unsigned s_ps_draws;            /* draws made while one was set */
+static unsigned s_xforms[10];          /* SetTransform calls, by XDK state */
 
 static uint32_t guest32(uint32_t va)
 {
@@ -373,9 +376,16 @@ void d3d11_Swap(void)
     if (!last)
         last = now;
     if (now - last >= 2000) {
-        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws + %u pushed, %u left out (vertex program), %d textures\n",
-                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_push_draws, s_skipped_vp, s_tex_count);
-        s_presents = s_clears = s_draws = s_push_draws = s_skipped_vp = 0;
+        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws + %u pushed (%u with a pixel shader), "
+                "%u left out (vertex program), %d textures\n",
+                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_push_draws, s_ps_draws,
+                s_skipped_vp, s_tex_count);
+        if (getenv("ROBOTECH_D3D11_TRACE")) {
+            fprintf(stderr, "[D3D11] transforms: view %u proj %u world %u world1-3 %u/%u/%u tex0 %u\n",
+                    s_xforms[0], s_xforms[1], s_xforms[6], s_xforms[7], s_xforms[8], s_xforms[9], s_xforms[2]);
+            memset(s_xforms, 0, sizeof s_xforms);
+        }
+        s_presents = s_clears = s_draws = s_push_draws = s_ps_draws = s_skipped_vp = 0;
         last = now;
     }
 }
@@ -645,6 +655,7 @@ void d3d11_SetTransform(void)
 
     if (!s_dev || !m || state > 9)
         return;
+    s_xforms[state]++;
     if (state == 0)
         pc = D3DTS_VIEW;
     else if (state == 1)
@@ -932,6 +943,8 @@ static int bridge_before_draw(void)
         s_skipped_vp++;
         return 0;
     }
+    if (s_pixel_shader)
+        s_ps_draws++;
     bridge_sync_states();
     for (s = 0; s < BRIDGE_STAGES; s++)
         if (s_stage[s] && s_stage[s]->dirty)
@@ -955,6 +968,13 @@ void d3d11_DrawVerticesUP(void)
                                    bridge_vertices((const uint8_t *)guest_ptr(data), vertices, stride),
                                    stride);
     s_draws++;
+}
+
+/* D3DDevice_SetPixelShader(Handle): not routed yet, only noted, so the
+ * bridge's log says how many draws are made with one. */
+void d3d11_SetPixelShader(void)
+{
+    s_pixel_shader = arg(0);
 }
 
 /* ── The game's own pushbuffer writes ──────────────────────── */
@@ -1008,9 +1028,17 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     if (!on || nseen >= 64)
         return;
     for (i = 0; i < nseen; i++)
-        if (seen[i] == va)
+        if (seen[i] == va && va)
             return;
     seen[nseen++] = va;
+    if (!va) {
+        /* Untextured: the colour is the point (a fade, a letterbox bar). */
+        uint32_t c;
+        memcpy(&c, v + 16, 4);
+        fprintf(stderr, "[TRACE] %s untextured prim %u, %u vertices, FVF 0x%X, first diffuse %08X\n",
+                what, prim, vertices, s_fvf, c);
+        return;
+    }
     fprintf(stderr, "[TRACE] %s prim %u, %u vertices of %u bytes, FVF 0x%X; stage 0 texture 0x%08X",
             what, prim, vertices, stride, s_fvf, va);
     if (s_stage[0])
@@ -1020,8 +1048,9 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     {
         const uint32_t *rs = s_rs_sent;      /* as last sent, simple states included */
         fprintf(stderr, "  sent: ZFUNC %X ALPHABLEND %u SRC %X DEST %X ALPHATEST %u ALPHAFUNC %X REF %u"
-                " ZWRITE %u ZENABLE %u CULL %X LIGHTING %u\n", rs[57], rs[59], rs[62], rs[63], rs[60],
-                rs[58], rs[61], rs[64], rs[143], rs[147], rs[102]);
+                " ZWRITE %u ZENABLE %u CULL %X LIGHTING %u VERTEXBLEND %u\n", rs[57], rs[59], rs[62], rs[63],
+                rs[60], rs[58], rs[61], rs[64], rs[143], rs[147], rs[102],
+                ((const uint32_t *)guest_ptr(XB_RENDER_STATE_VA))[137]);
     }
     fprintf(stderr, "  first vertex:");
     for (i = 0; i < (int)(stride / 4) && i < 10; i++) {
@@ -1034,10 +1063,15 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
 
 static void push_draw(uint32_t prim, const uint32_t *words, size_t n)
 {
+    static int skip = -1;
     UINT stride, vertices, count;
     D3DPRIMITIVETYPE pt;
 
-    if (!s_fvf || !n)
+    if (skip < 0) {
+        const char *e = getenv("ROBOTECH_D3D11_NOPUSH");     /* debugging: leave them out */
+        skip = e && *e == '1';
+    }
+    if (skip || !s_fvf || !n)
         return;
     stride = fvf_size(s_fvf);
     vertices = (UINT)(n * 4 / stride);
@@ -1164,6 +1198,7 @@ void d3d11_DrawVertices(void)
     if (!bridge_before_draw())
         return;
     vb += (size_t)start * s_stream_stride;
+    trace_draw("vertices", xbtype, vertices, s_stream_stride, vb);
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count, bridge_vertices(vb, vertices, s_stream_stride),
                                    s_stream_stride);
     s_draws++;
@@ -1189,7 +1224,14 @@ void d3d11_DrawIndexedVertices(void)
         if (idx[i] > hi) hi = idx[i];
     }
     vb += (size_t)s_base_vertex * s_stream_stride;
-    s_dev->lpVtbl->DrawIndexedPrimitiveUP(s_dev, pt, lo, hi - lo + 1, count, idx, D3DFMT_INDEX16,
+    trace_draw("indexed", xbtype, hi + 1, s_stream_stride, vb + (size_t)lo * s_stream_stride);
+    /* The range starts at vertex 0, not at the lowest index: the layer's
+     * DrawIndexedPrimitiveUP copies NumVertices vertices from the start of
+     * the data whatever MinVertexIndex says, so a range from `lo` left the
+     * top of the indices pointing past what it copied, and every part of
+     * the menu's Valkyrie that did not start at index 0 came out mangled. */
+    (void)lo;
+    s_dev->lpVtbl->DrawIndexedPrimitiveUP(s_dev, pt, 0, hi + 1, count, idx, D3DFMT_INDEX16,
                                           bridge_vertices(vb, hi + 1, s_stream_stride), s_stream_stride);
     s_draws++;
 }
