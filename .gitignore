@@ -1,37 +1,4 @@
-# Build artifacts
-build/
-out/
-bin/
-*.obj
-*.o
-*.lib
-*.a
-*.exe
-*.dll
-*.pdb
-*.ilk
-*.exp
-
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-Makefile
-
-# Visual Studio
-.vs/
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-*.sln
-Debug/
-Release/
-x64/
-
-# Generated recompiled code (regenerate from XBE with the recomp pipeline)
-src/recomp/gen/
-
-# Game files (user must provide their own legally-owned copies)
+# Bring your own game: its files never go into the repository
 game/
 RB-XBE/
 *.rar
@@ -39,22 +6,18 @@ RB-XBE/
 *.iso
 *.xiso
 
-# Pipeline outputs (regenerate with tools/pipeline.py)
+# Everything generated from the game: the pipeline's analysis (a copy of the XBE, disassembly, function and
+# ABI databases, run logs and frame dumps) and the recompiled C
 analysis/
+src/recomp/gen/
 
-# Runtime logs written to the working directory
+# Build output
+build/
+__pycache__/
+
+# What the runtime writes to the working directory
 *.log
 
 # Local Claude Code settings
 .claude/settings.local.json
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-Thumbs.db
-.DS_Store
+.claude/scheduled_tasks.lock

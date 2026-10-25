@@ -1,5 +1,13 @@
 /**
- * Robotech: Battlecry - Recompiled Game Entry Point
+ *    Name:        main.c
+ *    Description: host entry of the recompiled game: loads the XBE, brings up xboxrecomp's runtime and calls
+ *                 the recompiled entry point
+ *    Version:     0.1.0
+ *    Created:     25-10-2026
+ *    Modified:    25-10-2026
+ *    Author:      Sebastian Toyos
+ *
+ *    Started from xboxrecomp's templates/new-game/src/main.c (MIT, see licenses/xboxrecomp.txt).
  *
  * This is the Windows executable that hosts the recompiled game code.
  * It performs the following initialization sequence:

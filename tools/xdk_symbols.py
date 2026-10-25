@@ -1,4 +1,11 @@
-"""Turn XbSymbolDatabase's scan of the XBE into symbols/xdk_symbols.json.
+"""
+Name:        xdk_symbols.py
+Description: turns XbSymbolDatabase's scan of the XBE into symbols/xdk_symbols.json, and reports how its
+             functions line up with the disassembly
+Version:     0.1.0
+Created:     25-10-2026
+Modified:    25-10-2026
+Author:      Sebastian Toyos
 
     XbSymbolDatabaseCLI analysis/default.xbe -e > analysis/xbsymbols.txt
     py -3 tools/xdk_symbols.py analysis/xbsymbols.txt

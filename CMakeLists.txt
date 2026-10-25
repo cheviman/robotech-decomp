@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.20)
-
-# ============================================================================
-# Robotech: Battlecry (Xbox, TM-002) - Static Recompilation
+# Name:        CMakeLists.txt
+# Description: build of Robotech: Battlecry recompiled with xboxrecomp (the game's executable and the
+#              toolkit's runtime libraries)
+# Version:     0.1.0
+# Created:     25-10-2026
+# Modified:    25-10-2026
+# Author:      Sebastian Toyos
 #
-# Built from the xboxrecomp templates/new-game project. The toolkit is expected
-# next to this repo (../xboxrecomp); override XBOXRECOMP_DIR otherwise.
-# ============================================================================
+# Started from xboxrecomp's templates/new-game/CMakeLists.txt (MIT, see licenses/xboxrecomp.txt). The
+# toolkit is expected next to this repo (../xboxrecomp); override XBOXRECOMP_DIR otherwise.
+cmake_minimum_required(VERSION 3.20)
 
 project(robotech_battlecry C)
 

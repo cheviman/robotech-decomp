@@ -1,4 +1,10 @@
-"""Run the xboxrecomp pipeline for Robotech: Battlecry.
+"""
+Name:        pipeline.py
+Description: runs xboxrecomp's pipeline on the game's XBE, from parsing it to the generated C
+Version:     0.1.0
+Created:     25-10-2026
+Modified:    25-10-2026
+Author:      Sebastian Toyos
 
 Every output lands in this repo: analysis data under analysis/, generated C under
 src/recomp/gen/. The toolkit clone and the extracted game folder are never

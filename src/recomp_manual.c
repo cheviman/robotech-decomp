@@ -1,5 +1,12 @@
 /**
- * Manual function overrides and ICALL diagnostics
+ *    Name:        recomp_manual.c
+ *    Description: hand-written overrides of recompiled functions, and the indirect-call diagnostics
+ *    Version:     0.1.0
+ *    Created:     25-10-2026
+ *    Modified:    25-10-2026
+ *    Author:      Sebastian Toyos
+ *
+ *    Started from xboxrecomp's templates/new-game/src/recomp_manual.c (MIT, see licenses/xboxrecomp.txt).
  *
  * This file provides:
  *   - recomp_lookup_manual()  : intercept specific Xbox VAs with hand-written code

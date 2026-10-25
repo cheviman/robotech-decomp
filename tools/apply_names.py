@@ -1,4 +1,11 @@
-"""Write real names into analysis/disasm/functions.json before recompiling.
+"""
+Name:        apply_names.py
+Description: writes real function names into the disassembly (analysis/disasm/functions.json) before
+             recompiling
+Version:     0.1.0
+Created:     25-10-2026
+Modified:    25-10-2026
+Author:      Sebastian Toyos
 
     py -3 tools/apply_names.py [--toolkit ../xboxrecomp]
 
