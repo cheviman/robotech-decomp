@@ -1,0 +1,3665 @@
+[
+ {
+  "address": "0x00000004",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "_tls_array",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x00000004",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "XapiLastErrorCode_OFFSET",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x00000380",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DDevice__m_VertexShader_OFFSET",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x0000254C",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DDevice__m_SwapCallback_OFFSET",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x00002550",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DDevice__m_VBlankCallback_OFFSET",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x00002554",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DDevice__m_VerticalBlankEvent_OFFSET",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x00012F4A",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XGetLaunchInfo",
+  "params": [
+   "psh pdwLaunchDataType",
+   "psh pLaunchData"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00012FF3",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XLaunchNewImageA",
+  "params": [
+   "psh lpTitlePath",
+   "psh pLaunchData"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013130",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "mainXapiStartup",
+  "params": [
+   "psh lpParameter"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001319F",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "cdecl",
+  "name": "mainCRTStartup",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001346D",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiMapLetterToDirectory",
+  "params": [
+   "psh pDriveString",
+   "psh pDeviceString",
+   "psh pszTitleId",
+   "psh bCreateDirectory",
+   "psh pwszTitleName",
+   "psh bUpdateTimestamp"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000137F6",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiBootToDash",
+  "params": [
+   "psh dwReason",
+   "psh dwParameter1",
+   "psh dwParameter2"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001394A",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiInitProcess",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013A76",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "_cinit",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013ACE",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "_rtinit",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013AF7",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "GetLastError",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013B1F",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "SetLastError",
+  "params": [
+   "psh ErrorCode"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013B4D",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiSetLastNTError",
+  "params": [
+   "psh Status"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013B64",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "GetOverlappedResult",
+  "params": [
+   "psh hFile",
+   "psh lpOverlapped",
+   "psh lpNumberOfBytesTransferred",
+   "psh bWait"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013BE8",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiCallThreadNotifyRoutines",
+  "params": [
+   "psh Create"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013C20",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "UnhandledExceptionFilter",
+  "params": [
+   "psh ExceptionPointers"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013C63",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "RaiseException",
+  "params": [
+   "psh dwExceptionCode",
+   "psh dwExceptionFlags",
+   "psh nNumberOfArguments",
+   "psh lpArguments"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013CB9",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XRegisterThreadNotifyRoutine",
+  "params": [
+   "psh pThreadNotification",
+   "psh bRegister"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013D02",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiThreadStartup",
+  "params": [
+   "psh StartRoutine",
+   "psh StartContext"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013D9A",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CreateThread",
+  "params": [
+   "psh lpThreadAttributes",
+   "psh dwStackSize",
+   "psh lpStartAddress",
+   "psh lpParameter",
+   "psh dwCreationFlags",
+   "psh lpThreadId"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00013EBB",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XGetSectionSize",
+  "params": [
+   "psh hSection"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000140B6",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiSelectCachePartition",
+  "params": [
+   "psh bAlwaysFormat",
+   "psh pnCachePartition",
+   "psh pbForceFormat"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000142E1",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XMountUtilityDrive",
+  "params": [
+   "psh bFormatClean"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000143E6",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XUnmountAlternateTitleA",
+  "params": [
+   "psh chDrive"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000144E2",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XMUNameFromDriveLetter",
+  "params": [
+   "psh chDrive",
+   "psh pwszName",
+   "psh chName"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00016031",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XAutoPowerDownResetTimer",
+  "params": [],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x000160C8",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XapiFormatObjectAttributes",
+  "params": [
+   "psh pObjectAttributes",
+   "psh pObjectName",
+   "psh pName"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001611E",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CreateEventA",
+  "params": [
+   "psh lpEventAttributes",
+   "psh bManualReset",
+   "psh bInitialState",
+   "psh lpName"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001617F",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "SetEvent",
+  "params": [
+   "psh hEvent"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0001619F",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CreateMutexA",
+  "params": [
+   "psh lpMutexAttributes",
+   "psh bInitialOwner",
+   "psh lpName"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0014E530",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "OutputDebugStringA",
+  "params": [
+   "psh lpOutputString"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0014E5BE",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "QueryPerformanceCounter",
+  "params": [
+   "psh lpPerformanceCount"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0014E9D8",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "GetTimeZoneInformation",
+  "params": [
+   "psh lpTimeZoneInformation"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0014EE35",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XCalculateSignatureBegin",
+  "params": [
+   "psh dwFlags",
+   "psh dwAltTitleId"
+  ],
+  "section": ".text",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155720",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_EndPush",
+  "params": [
+   "psh pPush"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155730",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDevice_KickOff",
+  "params": [
+   "ecx this"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155820",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_SetFence",
+  "params": [
+   "psh Flags"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001558D0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_BlockOnTime",
+  "params": [
+   "psh unknown1",
+   "psh unknown2"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155A10",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_MakeRequestedSpace_8",
+  "params": [
+   "psh MinimumSpace",
+   "psh RequestedSpace"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155B90",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_MakeSpace",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155BE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_KickOffAndWaitForIdle",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155C00",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_BlockOnResource",
+  "params": [
+   "psh pResource"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155CC0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_BeginPush_4",
+  "params": [
+   "psh Count"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155D10",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "Direct3D_CreateDevice",
+  "params": [
+   "psh Adapter",
+   "psh DeviceType",
+   "psh hFocusWindow",
+   "psh BehaviorFlags",
+   "psh pPresentationParameters",
+   "psh ppReturnedDeviceInterface"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155DC0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderTarget",
+  "params": [
+   "psh pRenderTarget",
+   "psh pNewZStencil"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155DE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetGammaRamp",
+  "params": [
+   "psh dwFlags",
+   "psh pRamp"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155E70",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetGammaRamp",
+  "params": [
+   "psh pRamp"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155EA0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTransform",
+  "params": [
+   "psh State",
+   "psh pMatrix"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155FB0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetMaterial",
+  "params": [
+   "psh pMaterial"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00155FE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_Release",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156030",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_BlockUntilVerticalBlank",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156060",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetFlickerFilter",
+  "params": [
+   "psh Filter"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001560B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetSoftDisplayFilter",
+  "params": [
+   "psh Enable"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156170",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetBackBuffer2",
+  "params": [
+   "psh BackBuffer"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001561C0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetRenderTarget2",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001561E0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetDepthStencilSurface2",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156200",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetViewport",
+  "params": [
+   "psh pViewport"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156360",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetLight",
+  "params": [
+   "psh Index",
+   "psh pLight"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156540",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_LightEnable",
+  "params": [
+   "psh Index",
+   "psh bEnable"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156630",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTexture",
+  "params": [
+   "psh Stage",
+   "psh pTexture"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001567B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetIndices",
+  "params": [
+   "psh pIndexData",
+   "psh BaseVertexIndex"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156840",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_IsBusy",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156880",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_SetTileNoWait",
+  "params": [
+   "psh Index",
+   "psh pTile"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156940",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetScissors",
+  "params": [
+   "psh Count",
+   "psh Exclusive",
+   "psh pRects"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00156AE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetScreenSpaceOffset",
+  "params": [
+   "psh x",
+   "psh y"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157530",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_Swap",
+  "params": [
+   "psh Flags"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001576D0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_Clear",
+  "params": [
+   "psh Count",
+   "psh pRects",
+   "psh Flags",
+   "psh Color",
+   "psh Z",
+   "psh Stencil"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157AD0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_PSTextureModes",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157B00",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "D3DDevice_SetRenderState_Simple",
+  "params": [
+   "ecx Method",
+   "edx Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157B30",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderStateNotInline",
+  "params": [
+   "psh State",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157B90",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetViewportOffsetAndScale",
+  "params": [
+   "psh pOffset",
+   "psh pScale"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157CC0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_UpdateProjectionViewportTransform",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157E00",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_EdgeAntiAlias",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157E40",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_ShadowFunc",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157E80",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_FogColor",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157ED0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_CullMode",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157F40",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_FrontFace",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157F80",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_NormalizeNormals",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00157FC0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_TextureFactor",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158020",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_LineWidth",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158090",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_Dxt1NoiseEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158110",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_ZBias",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158190",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_LogicOp",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001581F0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_FillMode",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158240",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_BackFillMode",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001582A0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_TwoSidedLighting",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158310",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_VertexBlend",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158360",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTextureState_TexCoordIndex",
+  "params": [
+   "psh Stage",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158470",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTextureState_BumpEnv",
+  "params": [
+   "psh Stage",
+   "psh Type",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001584E0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTextureState_BorderColor",
+  "params": [
+   "psh Stage",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158520",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTextureState_ColorKeyColor",
+  "params": [
+   "psh Stage",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158560",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetTextureStageStateNotInline",
+  "params": [
+   "psh Stage",
+   "psh Type",
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001588F0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_CommonSetDebugRegisters",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001589C0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_CommonSetRenderTarget",
+  "params": [
+   "psh pRenderTarget",
+   "psh pNewZStencil",
+   "psh pUnknown3"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158F10",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_ZEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00158FA0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_StencilEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159030",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_StencilFail",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001590A0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_YuvEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001590D0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_OcclusionCullEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159140",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_StencilCullEnable",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001591B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_RopZCmpAlwaysRead",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001591D0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_RopZRead",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001591F0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_DoNotCullUncompressed",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159210",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_MultiSampleMode",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159250",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_MultiSampleRenderTargetMode",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159290",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_MultiSampleAntiAlias",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159310",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_MultiSampleMask",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159360",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetRenderState_SampleAlpha",
+  "params": [
+   "psh Value"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001598B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_CreateVertexShader",
+  "params": [
+   "psh pDeclaration",
+   "psh pFunction",
+   "psh pHandle",
+   "psh Usage"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001599F0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "D3DDevice_SetVertexShaderConstant1",
+  "params": [
+   "ecx Register",
+   "edx pConstantData"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159A50",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "D3DDevice_SetVertexShaderConstant4",
+  "params": [
+   "ecx Register",
+   "edx pConstantData"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159B00",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "D3DDevice_SetVertexShaderConstantNotInlineFast",
+  "params": [
+   "ecx Register",
+   "edx pConstantData",
+   "psh ConstantCount"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159BE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "D3DDevice_SetVertexShaderConstantNotInline",
+  "params": [
+   "ecx Register",
+   "edx pConstantData",
+   "psh ConstantCount"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159C20",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetStreamSource",
+  "params": [
+   "psh StreamNumber",
+   "psh pStreamData",
+   "psh Stride"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159CB0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_LoadVertexShader",
+  "params": [
+   "psh Handle",
+   "psh Address"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159D10",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SelectVertexShader",
+  "params": [
+   "psh Handle",
+   "psh Address"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159D90",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_GetVertexShaderSize",
+  "params": [
+   "psh Handle",
+   "psh pSize"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159DB0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetShaderConstantMode",
+  "params": [
+   "psh Mode"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00159EF0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_DeleteVertexShader",
+  "params": [
+   "psh Handle"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A010",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetVertexShader",
+  "params": [
+   "psh Handle"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A170",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetVertexShaderInput",
+  "params": [
+   "psh Handle",
+   "psh StreamCount",
+   "psh pStreamInputs"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A3B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_DrawVerticesUP",
+  "params": [
+   "psh PrimitiveType",
+   "psh VertexCount",
+   "psh pVertexStreamZeroData",
+   "psh VertexStreamZeroStride"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A510",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_DrawVertices",
+  "params": [
+   "psh PrimitiveType",
+   "psh StartVertex",
+   "psh VertexCount"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A5B0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_DrawIndexedVertices",
+  "params": [
+   "psh PrimitiveType",
+   "psh VertexCount",
+   "psh pIndexData"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A820",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetVertexData2f",
+  "params": [
+   "psh Register",
+   "psh a",
+   "psh b"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A860",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetVertexData4f",
+  "params": [
+   "psh Register",
+   "psh a",
+   "psh b",
+   "psh c",
+   "psh d"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A8C0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_Begin",
+  "params": [
+   "psh PrimitiveType"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A900",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_End",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A940",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DTexture_GetSurfaceLevel2",
+  "params": [
+   "psh pThis",
+   "psh Level"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A990",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DTexture_LockRect",
+  "params": [
+   "psh pThis",
+   "psh Level",
+   "psh pLockedRect",
+   "psh pRect",
+   "psh Flags"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015A9C0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_CreateTexture2",
+  "params": [
+   "psh Width",
+   "psh Height",
+   "psh Depth",
+   "psh Levels",
+   "psh Usage",
+   "psh Format",
+   "psh D3DResource"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015AAD0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_DestroyResource",
+  "params": [
+   "psh pResource"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015ABF0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DResource_AddRef",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015AC30",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DResource_Release",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015ACF0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_CreateVertexBuffer2",
+  "params": [
+   "psh Length"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015AD40",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DVertexBuffer_Lock2",
+  "params": [
+   "psh pVertexBuffer",
+   "psh Flags"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015AD90",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_CreatePixelShader",
+  "params": [
+   "psh pPSDef",
+   "psh pHandle"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015ADE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetPixelShader",
+  "params": [
+   "psh Handle"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015AFE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3DDevice_SetPixelShaderConstant",
+  "params": [
+   "psh Register",
+   "psh pConstantData",
+   "psh ConstantCount"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015B510",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDevice_FreeFrameBuffers",
+  "params": [
+   "ecx this"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015B630",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDevice_InitializeFrameBuffers",
+  "params": [
+   "ecx this",
+   "psh pPresentationParams"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015C2E0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "D3D_LazySetPointParams",
+  "params": [
+   "psh Device"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015D700",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDevice_SetStateVB",
+  "params": [
+   "ecx this",
+   "psh unknown2"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015D8A0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDevice_SetStateUP",
+  "params": [
+   "ecx this"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015E960",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "Lock2DSurface",
+  "params": [
+   "psh pPixelContainer",
+   "psh FaceType",
+   "psh Level",
+   "psh pLockedRect",
+   "psh pRect",
+   "psh Flags"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015EC00",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CMiniport_GetDisplayCapabilities",
+  "params": [],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015EEE0",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMiniport_IsFlipPending",
+  "params": [
+   "ecx this"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015FC6B",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMiniport_CreateCtxDmaObject",
+  "params": [
+   "ecx this",
+   "psh unknown1",
+   "psh unknown2",
+   "psh unknown3",
+   "psh unknown4",
+   "psh unknown5"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0015FF36",
+  "library": "D3D8",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMiniport_InitHardware",
+  "params": [
+   "ecx this"
+  ],
+  "section": "D3D",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00166B48",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_pDevice",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166B58",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_DeferredTextureState",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166D58",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_RenderState",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166EC8",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_FogEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166EC8",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_DeferredRenderState",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F78",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_PSTextureModes",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F78",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_ComplexRenderState",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F84",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_FillMode",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F88",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_BackFillMode",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F8C",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_TwoSidedLighting",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F98",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_StencilEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166F9C",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_StencilFail",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FA0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_FrontFace",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FA4",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_CullMode",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FAC",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_ZBias",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FB0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_LogicOp",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FB8",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_MultiSampleAntiAlias",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FBC",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_MultiSampleMask",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FC0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_MultiSampleMode",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FC4",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_MultiSampleRenderTargetMode",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FD0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_SampleAlpha",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FD4",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_Dxt1NoiseEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FD8",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_YuvEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FDC",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_OcclusionCullEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FE0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_StencilCullEnable",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FE4",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_RopZCmpAlwaysRead",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FE8",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_RopZRead",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FEC",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3DRS_DoNotCullUncompressed",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x00166FF0",
+  "library": "D3D8",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "D3D_g_Stream",
+  "params": [],
+  "section": "D3D"
+ },
+ {
+  "address": "0x001673B3",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DSound_CRefCount_AddRef",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001673C0",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DSound_CRefCount_Release",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001673E7",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CHrtfSource_SetAlgorithm_LightHrtf",
+  "params": [],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167406",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DirectSoundEnterCriticalSection",
+  "params": [],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167453",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_Release",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167469",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_Unlock",
+  "params": [
+   "psh pThis",
+   "psh ppvAudioPtr1",
+   "psh pdwAudioBytes1",
+   "psh ppvAudioPtr2",
+   "psh pdwAudioBytes2"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016746E",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_Release",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167484",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DirectSoundUseLightHRTF",
+  "params": [],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001674AC",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XAudioCalculatePitch",
+  "params": [
+   "psh dwFrequency"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167570",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_DownloadEffectsImage",
+  "params": [
+   "psh this",
+   "psh pvImageBuffer",
+   "psh dwImageSize",
+   "psh pImageLoc",
+   "psh ppImageDesc"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001675D4",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_DoWork",
+  "params": [],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167605",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDirectSoundVoiceSettings_SetMixBinVolumes",
+  "params": [
+   "ecx this",
+   "psh pMixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016772C",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetPitch",
+  "params": [
+   "psh pThis",
+   "psh lPitch"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167745",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetVolume",
+  "params": [
+   "psh pThis",
+   "psh lVolume"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167761",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetHeadroom",
+  "params": [
+   "psh pThis",
+   "psh dwHeadroom"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167784",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetMixBins",
+  "params": [
+   "psh pThis",
+   "psh pMixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001677A1",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetMixBinVolumes_8",
+  "params": [
+   "psh pThis",
+   "psh pMixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001677BE",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_CommitDeferredSettings",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167990",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_Play",
+  "params": [
+   "psh this",
+   "psh dwReserved1",
+   "psh dwReserved2",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001679E1",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_Stop",
+  "params": [
+   "psh this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167A30",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_GetStatus",
+  "params": [
+   "psh this",
+   "psh pdwStatus"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167A81",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_GetCurrentPosition",
+  "params": [
+   "psh this",
+   "psh pdwCurrentPlayCursor",
+   "psh pdwCurrentWriteCursor"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167AD6",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_Lock",
+  "params": [
+   "psh this",
+   "psh dwOffset",
+   "psh dwBytes",
+   "psh ppvAudioPtr1",
+   "psh pdwAudioBytes1",
+   "psh ppvAudioPtr2",
+   "psh pdwAudioBytes2",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167BAC",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetCurrentPosition",
+  "params": [
+   "psh this",
+   "psh dwNewPosition"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167C12",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetVolume",
+  "params": [
+   "psh this",
+   "psh lVolume"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167C60",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetHeadroom",
+  "params": [
+   "psh this",
+   "psh dwHeadroom"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167CAE",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetMixBins",
+  "params": [
+   "psh this",
+   "psh mixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167CFC",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetMixBinVolumes_8",
+  "params": [
+   "psh this",
+   "psh pMixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167D4A",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_DownloadEffectsImage",
+  "params": [
+   "psh pThis",
+   "psh pvImageBuffer",
+   "psh dwImageSize",
+   "psh pImageLoc",
+   "psh ppImageDesc"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167D71",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetVolume",
+  "params": [
+   "psh pThis",
+   "psh lVolume"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167D8D",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetHeadroom",
+  "params": [
+   "psh pThis",
+   "psh dwHeadroom"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167DA9",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetMixBins",
+  "params": [
+   "psh pThis",
+   "psh mixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167DC5",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetMixBinVolumes_8",
+  "params": [
+   "psh pThis",
+   "psh pMixBins"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167DE1",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_Play",
+  "params": [
+   "psh pThis",
+   "psh dwReserved1",
+   "psh dwReserved2",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167E05",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_Stop",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167E1D",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_GetStatus",
+  "params": [
+   "psh pThis",
+   "psh pdwStatus"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167E39",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_GetCurrentPosition",
+  "params": [
+   "psh pThis",
+   "psh pdwCurrentPlayCursor",
+   "psh pdwCurrentWriteCursor"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167E59",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetCurrentPosition",
+  "params": [
+   "psh pThis",
+   "psh dwNewPosition"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167E75",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_Lock",
+  "params": [
+   "psh pThis",
+   "psh dwOffset",
+   "psh dwBytes",
+   "psh ppvAudioPtr1",
+   "psh pdwAudioBytes1",
+   "psh ppvAudioPtr2",
+   "psh pdwAudioBytes2",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167EA5",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DirectSoundDoWork",
+  "params": [],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00167EE9",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_CommitDeferredSettings",
+  "params": [
+   "psh this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001680B3",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetFrequency",
+  "params": [
+   "psh pThis",
+   "psh dwFrequency"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001680D7",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetMaxDistance",
+  "params": [
+   "psh pThis",
+   "psh fMaxDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016810A",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetMinDistance",
+  "params": [
+   "psh pThis",
+   "psh fMinDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016813D",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetPosition",
+  "params": [
+   "psh pThis",
+   "psh x",
+   "psh y",
+   "psh z",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168191",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundVoice_SetI3DL2Source",
+  "params": [
+   "psh pThis",
+   "psh pds3db",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168297",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetPlayRegion",
+  "params": [
+   "psh this",
+   "psh dwPlayStart",
+   "psh dwPlayLength"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168317",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetFrequency",
+  "params": [
+   "psh this",
+   "psh dwFrequency"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168365",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetMaxDistance",
+  "params": [
+   "psh this",
+   "psh flMaxDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001683BB",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetMinDistance",
+  "params": [
+   "psh this",
+   "psh flMinDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168411",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetPosition",
+  "params": [
+   "psh this",
+   "psh x",
+   "psh y",
+   "psh z",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168478",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetI3DL2Source",
+  "params": [
+   "psh this",
+   "psh pds3db",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001684CA",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_CommitDeferredSettings",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001684E2",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetFrequency",
+  "params": [
+   "psh pThis",
+   "psh dwFrequency"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001684FE",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetMaxDistance",
+  "params": [
+   "psh pThis",
+   "psh flMaxDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168522",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetMinDistance",
+  "params": [
+   "psh pThis",
+   "psh flMinDistance",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168546",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetPosition",
+  "params": [
+   "psh pThis",
+   "psh x",
+   "psh y",
+   "psh z",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016857B",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetI3DL2Source",
+  "params": [
+   "psh pThis",
+   "psh pds3db",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016859B",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetPlayRegion",
+  "params": [
+   "psh pThis",
+   "psh dwPlayStart",
+   "psh dwPlayLength"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001686FD",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_SetOrientation",
+  "params": [
+   "psh this",
+   "psh xFront",
+   "psh yFront",
+   "psh zFront",
+   "psh xTop",
+   "psh yTop",
+   "psh zTop",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016878F",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_SetPosition",
+  "params": [
+   "psh this",
+   "psh x",
+   "psh y",
+   "psh z",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001688FA",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CDirectSoundBufferSettings_SetBufferData",
+  "params": [
+   "ecx this",
+   "psh pvBufferData",
+   "psh dwBufferBytes"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168986",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSoundBuffer_SetBufferData",
+  "params": [
+   "psh this",
+   "psh pvBufferData",
+   "psh dwBufferBytes"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168A34",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_SetOrientation",
+  "params": [
+   "psh pThis",
+   "psh xFront",
+   "psh yFront",
+   "psh zFront",
+   "psh xTop",
+   "psh yTop",
+   "psh zTop",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168A7E",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_SetPosition",
+  "params": [
+   "psh pThis",
+   "psh x",
+   "psh y",
+   "psh z",
+   "psh dwApply"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168AB3",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSoundBuffer_SetBufferData",
+  "params": [
+   "psh pThis",
+   "psh pvBufferData",
+   "psh dwBufferBytes"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168C60",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CDirectSound_CreateSoundBuffer",
+  "params": [
+   "psh this",
+   "psh pdsbd",
+   "psh ppBuffer",
+   "psh pUnused4"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168D17",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "IDirectSound_CreateSoundBuffer",
+  "params": [
+   "psh pThis",
+   "psh pdsbd",
+   "psh ppBuffer",
+   "psh pUnused4"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168ED1",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DirectSoundCreate",
+  "params": [
+   "psh pguidDeviceId",
+   "psh ppDirectSound",
+   "psh pUnused3"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168F18",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DirectSoundCreateBuffer",
+  "params": [
+   "psh pdsbd",
+   "psh ppBuffer"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00168F6F",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "DSound_CMemoryManager_PoolAlloc",
+  "params": [
+   "psh PoolTag",
+   "psh Size",
+   "psh ZeroInitialize"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001697DF",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "CLightHrtfSource_GetHrtfFilterPair",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016A471",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxAPU_ServiceDeferredCommandsLow",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016A53D",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxAPU_SetMixBinHeadroom_4",
+  "params": [
+   "ecx this",
+   "psh dwMixBinMask"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016B7F7",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxVoiceClient_SetFilter",
+  "params": [
+   "ecx this",
+   "psh pFilterDesc"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016BCD0",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxVoiceClient_SetMixBins",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016BD91",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxVoiceClient_SetVolume",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016BE29",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxVoiceClient_SetPitch",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016C0CB",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxVoiceClient_Commit3dSettings_0",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016C705",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_Pause",
+  "params": [
+   "ecx this",
+   "psh dwPause"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016C74A",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_GetStatus",
+  "params": [
+   "ecx this",
+   "psh pdwStatus"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016C78A",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_GetCurrentPosition",
+  "params": [
+   "ecx this",
+   "psh pdwCurrentPlayCursor",
+   "psh pdwCurrentWriteCursor"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016CB91",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_Play",
+  "params": [
+   "ecx this",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016CC6F",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_Stop",
+  "params": [
+   "ecx this",
+   "psh dwFlags"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016CCFF",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_SetCurrentPosition",
+  "params": [
+   "ecx this",
+   "psh dwNewPosition"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0016CE19",
+  "library": "DSOUND",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "CMcpxBuffer_SetBufferData",
+  "params": [
+   "ecx this"
+  ],
+  "section": "DSOUND",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001870E4",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceTypeInfoTableBegin",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x001870F0",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceTypeInfoTableEnd",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x00187114",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_Gamepad",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x00187114",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_Gamepad",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x00187168",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_Keyboard",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x00187168",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_Keyboard",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x001871AC",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_IRDongle",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x001871AC",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_IRDongle",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x001871E8",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_DeviceType_MU",
+  "params": [],
+  "section": "XPP"
+ },
+ {
+  "address": "0x001872E4",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "MU_Init",
+  "params": [
+   "psh pThis"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00187543",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInitDevices",
+  "params": [
+   "psh dwPreallocTypeCount",
+   "psh PreallocTypes"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018764A",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "IUsbInit_GetMaxDeviceTypeCount",
+  "params": [
+   "ecx this",
+   "psh DeviceType"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00187F4F",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInputOpen",
+  "params": [
+   "psh DeviceType",
+   "psh dwPort",
+   "psh dwSlot",
+   "psh pPollingParameters"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00187FA5",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInputClose",
+  "params": [
+   "psh hDevice"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00187FB1",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInputGetCapabilities",
+  "params": [
+   "psh hDevice",
+   "psh pCapabilities"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018818E",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInputGetState",
+  "params": [
+   "psh hDevice",
+   "psh pState"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001881FD",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XInputSetState",
+  "params": [
+   "psh hDevice",
+   "psh pFeedback"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018825A",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XGetDevices",
+  "params": [
+   "psh DeviceType"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018827C",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XGetDeviceChanges",
+  "params": [
+   "psh DeviceType",
+   "psh pdwInsertions",
+   "psh pdwRemovals"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001882E9",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "GetTypeInformation2",
+  "params": [
+   "cl XidType",
+   "edx pTypeIndex"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x00188320",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "fastcall",
+  "name": "GetTypeInformation",
+  "params": [
+   "ecx XppType"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018879E",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XMountMUA",
+  "params": [
+   "psh dwPort",
+   "psh dwSlot",
+   "psh pchDrive"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001888D0",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "stdcall",
+  "name": "XUnmountMU",
+  "params": [
+   "psh dwPort",
+   "psh dwSlot"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x0018902D",
+  "library": "XAPILIB",
+  "kind": "function",
+  "calling_convention": "thiscall",
+  "name": "XID_fCloseDevice",
+  "params": [
+   "ecx this"
+  ],
+  "section": "XPP",
+  "disasm_entry": true
+ },
+ {
+  "address": "0x001AE7E8",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "XapiThreadNotifyRoutineList",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x001BC458",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "_tls_index",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x001BC45C",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_XapiAltLett_MU",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x001BC460",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_XapiMountedMUs",
+  "params": [],
+  "section": "?"
+ },
+ {
+  "address": "0x0024EB78",
+  "library": "XAPILIB",
+  "kind": "variable",
+  "calling_convention": null,
+  "name": "g_XapiCurrentTopLevelFilter",
+  "params": [],
+  "section": "?"
+ }
+]

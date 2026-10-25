@@ -14,6 +14,9 @@ No game code or data is in this repo. You need your own copy of the game.
 | `src/recomp_manual.c` | hand-written overrides of recompiled functions |
 | `src/recomp/gen/` | generated C (not committed; `tools/pipeline.py` writes it) |
 | `tools/pipeline.py` | runs the xboxrecomp pipeline with every output inside this repo |
+| `symbols/xdk_symbols.json` | XDK library symbols (D3D8, DSOUND, XAPILIB) found by XbSymbolDatabase; `tools/xdk_symbols.py` builds it |
+| `symbols/names.json` | function names given by hand; `tools/apply_names.py` writes both into the disassembly |
+| `docs/d3d.md` | how the title uses Direct3D, the map for the D3D11 path |
 | `analysis/` | pipeline data: a copy of the XBE, disassembly, function and ABI databases (not committed) |
 | `game/` | the extracted game folder (`default.xbe`, `Media/`); a junction or a copy, not committed |
 
@@ -32,6 +35,14 @@ build\Release\robotech_battlecry.exe 2> stderr.txt
 ```
 
 Run it from the repo root, so `game\default.xbe` resolves.
+
+`symbols/xdk_symbols.json` is committed, so the pipeline does not need XbSymbolDatabase. To rebuild it, scan the
+XBE with its CLI ([XbSymbolDatabase](https://github.com/Cxbx-Reloaded/XbSymbolDatabase), MIT):
+
+```
+XbSymbolDatabaseCLI analysis\default.xbe -e > analysis\xbsymbols.txt
+py -3 tools/xdk_symbols.py analysis/xbsymbols.txt
+```
 
 ## The game
 

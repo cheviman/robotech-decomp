@@ -23,12 +23,15 @@ GEN_DIR = os.path.join(REPO, "src", "recomp", "gen")
 
 
 def steps():
+    """(name, argv) pairs. An argv starting with "tools." is a toolkit module,
+    run from the toolkit clone; anything else is a script of this repo."""
     disasm = os.path.join(ANALYSIS, "disasm")
     func_id = os.path.join(ANALYSIS, "func_id")
     abi = os.path.join(ANALYSIS, "abi")
     return [
         ("parse", ["tools.xbe_parser", XBE, "--json", os.path.join(ANALYSIS, "default_analysis.json")]),
         ("disasm", ["tools.disasm", XBE, "-o", disasm]),
+        ("names", [os.path.join(REPO, "tools", "apply_names.py")]),
         ("func_id", ["tools.func_id", XBE,
                      "--functions", os.path.join(disasm, "functions.json"),
                      "--strings", os.path.join(disasm, "strings.json"),
@@ -66,7 +69,10 @@ def main():
     for name, cmd in todo:
         print("== %s" % name, flush=True)
         t0 = time.time()
-        rc = subprocess.call([sys.executable, "-m"] + cmd, cwd=args.toolkit)
+        if cmd[0].startswith("tools."):
+            rc = subprocess.call([sys.executable, "-m"] + cmd, cwd=args.toolkit)
+        else:
+            rc = subprocess.call([sys.executable] + cmd + ["--toolkit", args.toolkit], cwd=REPO)
         print("== %s: exit %d in %.0fs" % (name, rc, time.time() - t0), flush=True)
         if rc:
             sys.exit(rc)
