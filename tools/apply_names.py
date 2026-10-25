@@ -10,6 +10,8 @@ Author:      Sebastian Toyos
     py -3 tools/apply_names.py [--toolkit ../xboxrecomp]
 
 Sources, later ones winning:
+  symbols/lib_matches.json  XDK library functions matched byte for byte against
+                            the XDK's .lib files (tools/match_libs.py)
   symbols/xdk_symbols.json  XDK library functions found by XbSymbolDatabase
                             (tools/xdk_symbols.py)
   symbols/names.json        names given by hand, {"0x00157AC0": "name", ...}
@@ -31,6 +33,7 @@ import re
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FUNCS = os.path.join(REPO, "analysis", "disasm", "functions.json")
+LIB = os.path.join(REPO, "symbols", "lib_matches.json")
 XDK = os.path.join(REPO, "symbols", "xdk_symbols.json")
 MANUAL = os.path.join(REPO, "symbols", "names.json")
 IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -55,6 +58,12 @@ def main():
 
     wanted = {}
     source = {}
+    if os.path.exists(LIB):
+        for s in json.load(open(LIB)):
+            if s["kind"] == "function":
+                a = int(s["address"], 16)
+                wanted[a] = s["name"]
+                source[a] = "lib"
     for s in json.load(open(XDK)):
         if s["kind"] == "function":
             a = int(s["address"], 16)
@@ -76,7 +85,7 @@ def main():
 
     funcs = json.load(open(FUNCS))
     by_start = {int(f["start"], 16): f for f in funcs}
-    applied, missing = {"xdk": 0, "manual": 0}, []
+    applied, missing = {"lib": 0, "xdk": 0, "manual": 0}, []
     for a, name in sorted(wanted.items()):
         f = by_start.get(a)
         if not f:
@@ -95,8 +104,9 @@ def main():
 
     with open(FUNCS, "w", newline="\n") as fh:
         json.dump(funcs, fh, indent=2)
-    print("named %d functions (%d xdk, %d manual); %d renamed for clashing with the toolkit: %s"
-          % (sum(applied.values()), applied["xdk"], applied["manual"], len(clash), ", ".join(sorted(clash))))
+    print("named %d functions (%d lib, %d xdk, %d manual); %d renamed for clashing with the toolkit: %s"
+          % (sum(applied.values()), applied["lib"], applied["xdk"], applied["manual"], len(clash),
+             ", ".join(sorted(clash))))
     for a, name in missing:
         print("  not a disasm entry, skipped: 0x%08X %s" % (a, name))
 

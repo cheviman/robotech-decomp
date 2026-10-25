@@ -18,16 +18,20 @@ is committed.
       (Vicious Cycle's own, `vc*` engine classes and `gc*` game classes, no RTTI), the rest the XDK's D3D8,
       DirectSound and peripheral libraries and Bink
 - [x] Native build with MSVC (x64)
-- [x] The XDK library functions named (XbSymbolDatabase): all 77 Direct3D entry points the game calls,
-      DirectSound and XAPI (`symbols/xdk_symbols.json`)
+- [x] The XDK library code named: XbSymbolDatabase finds the entry points (all 77 Direct3D ones the game
+      calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
+      `.lib` files names the rest that did not change from 4721 to 5849: 900 functions named in all, and
+      the libraries' variables (`symbols/lib_matches.json`)
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)
 - [x] The logo movies through Direct3D 11 (`ROBOTECH_D3D11=1`): the device, `Clear`, `Swap`, textures and
       `DrawVerticesUP` routed, at the movies' speed
-- [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): render
-      states, vertex and index buffers, vertex programs and pixel shaders
-- [ ] Menus and the missions; sound, controllers, saves
+- [x] The menu and the first mission through Direct3D 11: render states, vertex and index buffers, the
+      engine's own 2D draws; sound, the pad and the keyboard, saves on the hard disk (`PENDING.md` has
+      what is wrong and what is missing)
+- [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
+      programs, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
 - [ ] Xbox One (UWP, Direct3D 11), then Vulkan
 - [ ] The game's code decompiled into readable C, and its formats (the `VC2` resource containers of
@@ -91,6 +95,14 @@ XbSymbolDatabaseCLI analysis\default.xbe -e > analysis\xbsymbols.txt
 py -3 tools/xdk_symbols.py analysis/xbsymbols.txt
 ```
 
+`symbols/lib_matches.json` comes from matching the XBE against the static libraries of an XDK (5849
+here: `d3d8.lib`, `dsound.lib`, `xapilib.lib`, `libcmt.lib`, `libcpmt.lib`, `xboxkrnl.lib`, in one folder);
+to make it again:
+
+```
+py -3 tools/match_libs.py --libs D:/xdk/lib
+```
+
 ## Layout
 
 ```
@@ -102,10 +114,12 @@ src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, 
                         D3D8 layer
 src/recomp/gen/         the recompiled C (ignored by git; tools/pipeline.py writes it)
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
+symbols/lib_matches.json  the XDK library functions and variables matched against the XDK's .lib files
 symbols/names.json      function names given by hand
 tools/pipeline.py       xboxrecomp's pipeline, with every output inside this repository
 tools/apply_names.py    writes the names above into the disassembly before recompiling
 tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's scan
+tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 docs/d3d.md             how the game uses Direct3D: the map for the Direct3D 11 path
 analysis/               the pipeline's data: a copy of the XBE, disassembly, function and ABI databases
                         (ignored by git)
@@ -132,6 +146,8 @@ licenses/               licenses of the code this project starts from
   `templates/new-game` (MIT); see `licenses/xboxrecomp.txt`. xboxrecomp itself is not part of this
   repository.
 - `symbols/xdk_symbols.json` is the output of XbSymbolDatabase (MIT): names and addresses, no code.
+- `symbols/lib_matches.json` holds names and addresses only: the XDK's libraries are read on your
+  machine, and no XDK code or file is part of this repository.
 - No game data and no game code is distributed by this project: the recompiled C is generated from your
   own copy of the game and stays on your machine.
 - Robotech is a trademark of Harmony Gold USA, Inc. Robotech: Battlecry was developed by Vicious Cycle
