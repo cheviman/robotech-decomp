@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include <xbox/xboxrecomp.h>
+#include <nv2a_vsh_interp.h>
 
 #include "d3d11_bridge.h"
 
@@ -86,11 +87,22 @@ static uint32_t s_rs_sent[XB_RS_MAX], s_ts_sent[BRIDGE_STAGES][XB_TSS_MAX];
 static int s_states_sent;              /* the arrays above hold what was sent */
 static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
 static uint32_t s_stream_va, s_stream_stride, s_base_vertex;
+static struct {
+    uint32_t va, stride;
+} s_streams[16];                       /* SetStreamSource's, every stream */
+static D3DVIEWPORT8 s_viewport;        /* SetViewport's, for vertex programs */
+static struct Vprog *s_vprog;          /* the vertex program selected; NULL: the FVF */
+static unsigned s_vp_draws, s_vp_failed;
+static struct Vprog *vprog_find(uint32_t handle);
+static void vprog_load(struct Vprog *p, uint32_t at);
+static int vprog_transform(uint32_t first, uint32_t count, uint32_t base, uint32_t up_data, uint32_t up_stride);
+static void vprog_draw(D3DPRIMITIVETYPE pt, UINT count, UINT vertices, const uint16_t *idx);
 static unsigned s_skipped_vp;          /* draws left out: vertex program set */
 static unsigned s_push_draws;          /* drawn from the game's own pushbuffer writes */
 static uint32_t s_pixel_shader;        /* the game's, not routed yet */
 static unsigned s_ps_draws;            /* draws made while one was set */
 static unsigned s_xforms[10];          /* SetTransform calls, by XDK state */
+static unsigned s_frame;               /* Swaps so far */
 static uint32_t s_push_caller;         /* EndPush's return address, for the trace */
 
 static uint32_t guest32(uint32_t va)
@@ -373,20 +385,22 @@ void d3d11_Swap(void)
     bridge_pace();
     s_dev->lpVtbl->Swap(s_dev, arg(0));
     s_presents++;
+    s_frame++;
     now = GetTickCount();
     if (!last)
         last = now;
     if (now - last >= 2000) {
         fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws + %u pushed (%u with a pixel shader), "
-                "%u left out (vertex program), %d textures\n",
+                "%u by vertex program (%u could not run), %u left out, %d textures\n",
                 s_presents * 1000.0 / (now - last), s_clears, s_draws, s_push_draws, s_ps_draws,
-                s_skipped_vp, s_tex_count);
+                s_vp_draws, s_vp_failed, s_skipped_vp, s_tex_count);
         if (getenv("ROBOTECH_D3D11_TRACE")) {
             fprintf(stderr, "[D3D11] transforms: view %u proj %u world %u world1-3 %u/%u/%u tex0 %u\n",
                     s_xforms[0], s_xforms[1], s_xforms[6], s_xforms[7], s_xforms[8], s_xforms[9], s_xforms[2]);
             memset(s_xforms, 0, sizeof s_xforms);
         }
         s_presents = s_clears = s_draws = s_push_draws = s_ps_draws = s_skipped_vp = 0;
+        s_vp_draws = s_vp_failed = 0;
         last = now;
     }
 }
@@ -647,6 +661,19 @@ void d3d11_SetTexCoordIndex(void)
 
 /* ── Transforms, viewport, material, lights ────────────────── */
 
+/* ROBOTECH_D3D11_XFORM_FRAME=<n>: every transform and draw of frame n, the
+ * matrices whole, for checking what the game's models are drawn with. */
+static int xform_frame(void)
+{
+    static long want = -2;
+
+    if (want == -2) {
+        const char *e = getenv("ROBOTECH_D3D11_XFORM_FRAME");
+        want = e ? atol(e) : -1;
+    }
+    return want >= 0 && s_frame == (unsigned)want;
+}
+
 /* D3DDevice_SetTransform(State, pMatrix): the XDK numbers the transforms
  * VIEW 0, PROJECTION 1, TEXTURE0-3 2-5, WORLD 6, WORLD1-3 7-9. */
 void d3d11_SetTransform(void)
@@ -657,6 +684,15 @@ void d3d11_SetTransform(void)
     if (!s_dev || !m || state > 9)
         return;
     s_xforms[state]++;
+    if (xform_frame()) {
+        const float *f = (const float *)guest_ptr(m);
+        int k;
+
+        fprintf(stderr, "[XFORM] state %u from 0x%08X:", state, guest32(g_esp));
+        for (k = 0; k < 16; k++)
+            fprintf(stderr, "%s%.3f", k % 4 ? " " : " | ", f[k]);
+        fprintf(stderr, "\n");
+    }
     if (state == 0)
         pc = D3DTS_VIEW;
     else if (state == 1)
@@ -673,8 +709,10 @@ void d3d11_SetViewport(void)
 {
     uint32_t vp = arg(0);
 
-    if (s_dev && vp)
-        s_dev->lpVtbl->SetViewport(s_dev, (const D3DVIEWPORT8 *)guest_ptr(vp));
+    if (s_dev && vp) {
+        memcpy(&s_viewport, guest_ptr(vp), sizeof s_viewport);
+        s_dev->lpVtbl->SetViewport(s_dev, &s_viewport);
+    }
 }
 
 /* D3DDevice_SetMaterial(pMaterial): 17 floats on both sides. */
@@ -840,12 +878,14 @@ void d3d11_SetVertexShader(void)
     if (!s_dev)
         return;
     if (handle & 1u) {
-        static int said;
-        if (!said++)
-            fprintf(stderr, "[D3D11] vertex program 0x%08X not routed\n", handle);
+        /* a program: loaded at 0 and run from there (vertex programs below) */
+        s_vprog = vprog_find(handle);
+        vprog_load(s_vprog, 0);
+        nv2a_vsh_set_start_slot(0);
         s_fvf = 0;
         return;
     }
+    s_vprog = NULL;
     s_fvf = handle;
     s_dev->lpVtbl->SetVertexShader(s_dev, handle);
 }
@@ -940,7 +980,7 @@ static int bridge_before_draw(void)
 {
     int s;
 
-    if (!s_fvf) {
+    if (!s_fvf && !s_vprog) {
         s_skipped_vp++;
         return 0;
     }
@@ -965,6 +1005,13 @@ void d3d11_DrawVerticesUP(void)
         return;
     if (!bridge_before_draw())
         return;
+    if (s_vprog) {
+        if (vprog_transform(0, vertices, 0, data, stride))
+            vprog_draw(pt, count, vertices, NULL);
+        else
+            s_vp_failed++;
+        return;
+    }
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count,
                                    bridge_vertices((const uint8_t *)guest_ptr(data), vertices, stride),
                                    stride);
@@ -978,6 +1025,405 @@ void d3d11_SetPixelShader(void)
     s_pixel_shader = arg(0);
 }
 
+/* ── Vertex programs ───────────────────────────────────────── */
+
+/* The game's models are drawn with vertex programs, not the fixed pipeline:
+ * measured on the menu's Valkyrie, a program per pass (the cel-shaded body
+ * and its outline) reads position, normal and texture coordinates, and takes
+ * each part's world-view-projection matrix in c0-c3 (SetVertexShaderConstant4
+ * between parts: no SetTransform at all). The layer's own translator lays
+ * the inputs out in a fixed order and writes oPos as clip space, while this
+ * game's declarations put the normal in v1 and its programs end, as every
+ * XDK program does, in the screen-space epilogue (oPos * c-38, times 1/w,
+ * plus c-37). So the bridge runs the programs itself, on the CPU, with
+ * xboxrecomp's NV2A interpreter -- the one that draws the Valkyrie right
+ * through the pushbuffer executor -- and hands the layer the vertices
+ * transformed: XYZRHW, the two colours, four texture coordinate sets.
+ *
+ * c-38 and c-37 (c[58], c[59]) are the viewport scale and offset, which the
+ * XDK's own code loads, never the game: they are set here to 1 and 0, so the
+ * epilogue leaves x, y, z divided by w, and the viewport maps them. Vertices
+ * behind the eye are not clipped (pre-transformed vertices never are); the
+ * menu has none. ROBOTECH_D3D11_VSH_DUMP=<prefix> writes each program as
+ * created, <prefix><handle>.bin. */
+
+#define VPROG_MAX       32
+#define VPROG_ATTRS     16
+/* Two floats a texture coordinate set: the layer reads the FVF's size field
+ * as the count of floats (0 being 2), not as the XDK and the PC encode it, so
+ * two is the one size both read alike. Cube-map and projective coordinates
+ * (z, w) are not carried yet. */
+#define VPROG_FVF       (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX4)
+
+typedef struct {
+    uint8_t reg, type, stream, offset;
+} VprogAttr;
+
+typedef struct Vprog {
+    uint32_t handle;
+    VprogAttr attr[VPROG_ATTRS];
+    int nattr;
+    uint32_t words[NV2A_VSH_SLOTS * 4];
+    int insns;
+} Vprog;
+
+typedef struct {
+    float x, y, z, rhw;
+    DWORD diffuse, specular;
+    float t[4][2];
+} VprogVertex;
+
+static Vprog s_vprogs[VPROG_MAX];
+static int s_nvprogs;
+static uint32_t s_vsh_args[3];
+static struct {
+    uint32_t vb, stride, offset;
+} s_vsi[16];                            /* SetVertexShaderInput's streams */
+static uint32_t s_vsi_count;
+static VprogVertex *s_vout;
+static UINT s_vout_cap;
+
+static struct Vprog *vprog_find(uint32_t handle)
+{
+    int i;
+
+    for (i = 0; i < s_nvprogs; i++)
+        if (s_vprogs[i].handle == handle)
+            return &s_vprogs[i];
+    return NULL;
+}
+
+/* The bytes an attribute of a D3DVSDT_* type takes in its stream. */
+static UINT vsdt_size(uint32_t type)
+{
+    UINT n = (type >> 4) & 0xFu;
+
+    switch (type & 0xFu) {
+    case 0x2: return type == 0x72 ? 12 : (type == 0x02 ? 0 : 4 * n);   /* FLOATn, FLOAT2H, NONE */
+    case 0x0: return 4;                                                 /* D3DCOLOR */
+    case 0x5:                                                           /* SHORTn */
+    case 0x1: return 2 * n;                                             /* NORMSHORTn */
+    case 0x6: return 4;                                                 /* NORMPACKED3 */
+    case 0x4: return n;                                                 /* PBYTEn */
+    }
+    return 0;
+}
+
+/* D3DDevice_CreateVertexShader(pDeclaration, pFunction, pHandle, Usage):
+ * the declaration becomes a list of (register, type, stream, offset) and
+ * the program's instructions are kept for LoadVertexShader. pFunction is the
+ * XDK's compiled form: a header, instructions << 16 | 0x2078, then four
+ * DWORDs an instruction. */
+void d3d11_CreateVertexShaderArgs(void)
+{
+    s_vsh_args[0] = arg(0);
+    s_vsh_args[1] = arg(1);
+    s_vsh_args[2] = arg(2);
+}
+
+void d3d11_CreateVertexShaderDone(void)
+{
+    uint32_t handle = s_vsh_args[2] ? guest32(s_vsh_args[2]) : 0, decl = s_vsh_args[0];
+    uint32_t func = s_vsh_args[1], header, stream = 0, offset = 0, i;
+    const char *dump = getenv("ROBOTECH_D3D11_VSH_DUMP");
+    Vprog *p;
+
+    if (!s_dev || !handle || !func)
+        return;
+    p = vprog_find(handle);
+    if (!p) {
+        if (s_nvprogs == VPROG_MAX)
+            return;
+        p = &s_vprogs[s_nvprogs++];
+    }
+    memset(p, 0, sizeof *p);
+    p->handle = handle;
+    header = guest32(func);
+    p->insns = (int)(header >> 16);
+    if (p->insns > NV2A_VSH_SLOTS)
+        p->insns = NV2A_VSH_SLOTS;
+    for (i = 0; i < (uint32_t)p->insns * 4; i++)
+        p->words[i] = guest32(func + 4 + 4 * i);
+    for (i = 0; decl && i < 64; i++) {
+        uint32_t t = guest32(decl + 4 * i);
+
+        if (t == 0xFFFFFFFFu)
+            break;
+        switch (t >> 29) {
+        case 1:                                         /* STREAM(n) */
+            stream = t & 0xFu;
+            offset = 0;
+            break;
+        case 2:                                         /* REG(reg, type), SKIP, SKIPBYTES */
+            if (t & 0x10000000u)
+                offset += ((t >> 16) & 0xFu) * ((t & 0x08000000u) ? 1u : 4u);
+            else if (p->nattr < VPROG_ATTRS) {
+                VprogAttr *a = &p->attr[p->nattr++];
+
+                a->reg = (uint8_t)(t & 0x1Fu);
+                a->type = (uint8_t)((t >> 16) & 0xFFu);
+                a->stream = (uint8_t)stream;
+                a->offset = (uint8_t)offset;
+                offset += vsdt_size(a->type);
+            }
+            break;
+        case 4:                                         /* CONST(address, count): its data follows */
+            i += ((t >> 25) & 0xFu) * 4;
+            break;
+        case 5:                                         /* extension: its data follows */
+            i += (t >> 24) & 0x1Fu;
+            break;
+        }
+    }
+    fprintf(stderr, "[D3D11] vertex program 0x%08X: %d instructions, %d inputs\n",
+            handle, p->insns, p->nattr);
+    if (dump) {
+        char path[512];
+        FILE *f;
+
+        snprintf(path, sizeof path, "%s%08X.bin", dump, handle);
+        f = fopen(path, "wb");
+        if (f) {
+            fwrite(guest_ptr(func), 4, 1 + (size_t)p->insns * 4, f);
+            fclose(f);
+        }
+    }
+}
+
+static void vprog_load(struct Vprog *p, uint32_t at)
+{
+    int i;
+
+    for (i = 0; p && i < p->insns && at + (uint32_t)i < NV2A_VSH_SLOTS; i++)
+        nv2a_vsh_set_instruction(at + (uint32_t)i, &p->words[4 * i]);
+}
+
+/* D3DDevice_LoadVertexShader(Handle, Address): the program into program
+ * memory at Address. */
+void d3d11_LoadVertexShader(void)
+{
+    vprog_load(vprog_find(arg(0)), arg(1));
+}
+
+/* D3DDevice_SelectVertexShader(Handle, Address): run from Address, reading
+ * the inputs Handle's declaration names (a null Handle keeps the current). */
+void d3d11_SelectVertexShader(void)
+{
+    if (!s_dev)
+        return;
+    if (arg(0))
+        s_vprog = vprog_find(arg(0));
+    nv2a_vsh_set_start_slot(arg(1));
+}
+
+/* D3DDevice_SetVertexShaderInput(Handle, StreamCount, pStreamInputs): the
+ * streams a program reads, instead of SetStreamSource's, until it is called
+ * with none. Each D3DSTREAM_INPUT is VertexBuffer, Stride, Offset. */
+void d3d11_SetVertexShaderInput(void)
+{
+    uint32_t count = arg(1), in = arg(2), i;
+
+    s_vsi_count = in && count <= 16 ? count : 0;
+    for (i = 0; i < s_vsi_count; i++) {
+        s_vsi[i].vb = guest32(in + 12 * i);
+        s_vsi[i].stride = guest32(in + 12 * i + 4);
+        s_vsi[i].offset = guest32(in + 12 * i + 8);
+    }
+    if (arg(0) & 1u)
+        s_vprog = vprog_find(arg(0));
+}
+
+/* D3DDevice_SetVertexShaderConstant1/4/NotInline, fastcall: ecx the
+ * register already biased by 96 (c[0..191]), edx the data. */
+void d3d11_SetVertexShaderConstant(int count)
+{
+    uint32_t reg = g_ecx, data = g_edx, n = count ? (uint32_t)count : arg(0) / 4, i;
+
+    for (i = 0; i < n && reg + i < NV2A_VSH_CONSTANTS; i++)
+        nv2a_vsh_set_constant(reg + i, (const float *)guest_ptr(data + 16 * i));
+    if (xform_frame()) {
+        fprintf(stderr, "[XFORM] constants c%u..c%u:", reg, reg + n - 1);
+        for (i = 0; i < n * 4 && i < 16; i++)
+            fprintf(stderr, " %.3f", ((const float *)guest_ptr(data))[i]);
+        fprintf(stderr, "%s\n", n > 4 ? " ..." : "");
+    }
+}
+
+/* Where vertex 0 of a program's stream is, and its stride: SetVertexShaderInput's
+ * streams when set, else SetStreamSource's; for DrawVerticesUP stream 0 is the
+ * game's own pointer. */
+static const uint8_t *vprog_stream(uint32_t stream, uint32_t up_data, uint32_t up_stride, uint32_t *stride)
+{
+    uint32_t vb, extra = 0;
+
+    if (up_data && stream == 0) {
+        *stride = up_stride;
+        return (const uint8_t *)guest_ptr(up_data);
+    }
+    if (s_vsi_count) {
+        if (stream >= s_vsi_count)
+            return NULL;
+        vb = s_vsi[stream].vb;
+        *stride = s_vsi[stream].stride;
+        extra = s_vsi[stream].offset;
+    } else {
+        vb = s_streams[stream].va;
+        *stride = s_streams[stream].stride;
+    }
+    if (!vb)
+        return NULL;
+    return (const uint8_t *)guest_ptr(phys_va(guest32(vb + XB_RES_DATA)) + extra);
+}
+
+/* One attribute, as the vertex unit expands it into four floats. */
+static void vprog_fetch(uint32_t type, const uint8_t *src, float v[4])
+{
+    UINT n = (type >> 4) & 0xFu, k;
+
+    v[0] = v[1] = v[2] = 0.0f;
+    v[3] = 1.0f;
+    switch (type & 0xFu) {
+    case 0x2:
+        if (type == 0x72) {                     /* FLOAT2H: x, y, w */
+            memcpy(&v[0], src, 8);
+            memcpy(&v[3], src + 8, 4);
+        } else if (type != 0x02)
+            memcpy(v, src, 4 * (n > 4 ? 4 : n));
+        break;
+    case 0x0: {                                 /* D3DCOLOR: ARGB to r, g, b, a */
+        uint32_t c;
+
+        memcpy(&c, src, 4);
+        v[0] = ((c >> 16) & 0xFFu) / 255.0f;
+        v[1] = ((c >> 8) & 0xFFu) / 255.0f;
+        v[2] = (c & 0xFFu) / 255.0f;
+        v[3] = (c >> 24) / 255.0f;
+        break;
+    }
+    case 0x5:                                   /* SHORTn */
+    case 0x1:                                   /* NORMSHORTn */
+        for (k = 0; k < n && k < 4; k++) {
+            int16_t x;
+
+            memcpy(&x, src + 2 * k, 2);
+            v[k] = (type & 0xFu) == 0x1 ? x / 32767.0f : (float)x;
+        }
+        break;
+    case 0x6: {                                 /* NORMPACKED3: 11, 11, 10 bits */
+        uint32_t c;
+
+        memcpy(&c, src, 4);
+        v[0] = (float)((int32_t)(c << 21) >> 21) / 1023.0f;
+        v[1] = (float)((int32_t)(c << 10) >> 21) / 1023.0f;
+        v[2] = (float)((int32_t)c >> 22) / 511.0f;
+        break;
+    }
+    case 0x4:                                   /* PBYTEn */
+        for (k = 0; k < n && k < 4; k++)
+            v[k] = src[k] / 255.0f;
+        break;
+    }
+}
+
+static DWORD vprog_color(const float c[4])
+{
+    DWORD out = 0;
+    int k;
+
+    for (k = 0; k < 4; k++) {
+        float x = c[k] < 0.0f ? 0.0f : c[k] > 1.0f ? 1.0f : c[k];
+        static const int shift[4] = { 16, 8, 0, 24 };
+
+        out |= (DWORD)(x * 255.0f + 0.5f) << shift[k];
+    }
+    return out;
+}
+
+/* Runs the selected program on vertices [first, first + count) of its
+ * streams, offset by base, into s_vout[first..]. Returns 0 when it cannot
+ * (no program, no stream data, nothing to run), and the draw is left out. */
+static int vprog_transform(uint32_t first, uint32_t count, uint32_t base, uint32_t up_data, uint32_t up_stride)
+{
+    static const float scale[4] = { 1.0f, 1.0f, 1.0f, 1.0f }, zero[4] = { 0 };
+    const uint8_t *src[16] = { 0 };
+    uint32_t stride[16] = { 0 }, v;
+    float in[NV2A_VSH_INPUTS][4];
+    Nv2aVshOutput out;
+    int a;
+
+    if (!s_vprog)
+        return 0;
+    if (first + count > s_vout_cap) {
+        UINT cap = first + count + 1024;
+        VprogVertex *grown = (VprogVertex *)realloc(s_vout, cap * sizeof *grown);
+
+        if (!grown)
+            return 0;
+        s_vout = grown;
+        s_vout_cap = cap;
+    }
+    for (a = 0; a < s_vprog->nattr; a++) {
+        uint32_t st = s_vprog->attr[a].stream;
+
+        if (!src[st] && !(src[st] = vprog_stream(st, up_data, up_stride, &stride[st])))
+            return 0;
+    }
+    nv2a_vsh_set_constant(58, scale);           /* c-38: the viewport scale */
+    nv2a_vsh_set_constant(59, zero);            /* c-37: its offset */
+    for (v = first; v < first + count; v++) {
+        VprogVertex *o = &s_vout[v];
+        float w;
+        int k;
+
+        for (k = 0; k < NV2A_VSH_INPUTS; k++) {
+            in[k][0] = in[k][1] = in[k][2] = 0.0f;
+            in[k][3] = 1.0f;
+        }
+        for (a = 0; a < s_vprog->nattr; a++) {
+            const VprogAttr *at = &s_vprog->attr[a];
+
+            if (at->reg < NV2A_VSH_INPUTS)
+                vprog_fetch(at->type, src[at->stream] + (size_t)(v + base) * stride[at->stream] + at->offset,
+                            in[at->reg]);
+        }
+        if (!nv2a_vsh_run((const float (*)[4])in, &out))
+            return 0;
+        w = out.pos[3];
+        o->x = s_viewport.X + (out.pos[0] + 1.0f) * 0.5f * s_viewport.Width;
+        o->y = s_viewport.Y + (1.0f - out.pos[1]) * 0.5f * s_viewport.Height;
+        o->z = s_viewport.MinZ + out.pos[2] * (s_viewport.MaxZ - s_viewport.MinZ);
+        o->rhw = w != 0.0f ? 1.0f / w : 1.0f;
+        o->diffuse = vprog_color(out.d0);
+        out.d1[3] = out.fog[0];                 /* a pre-transformed vertex's fog is specular alpha */
+        o->specular = vprog_color(out.d1);
+        for (k = 0; k < 4; k++) {
+            o->t[k][0] = out.tex[k][0];
+            o->t[k][1] = out.tex[k][1];
+        }
+    }
+    return 1;
+}
+
+/* Draws s_vout[0..vertices) (indexed when idx is set) with the layer's FVF
+ * set to the transformed layout for the draw, and the game's put back. */
+static void vprog_draw(D3DPRIMITIVETYPE pt, UINT count, UINT vertices, const uint16_t *idx)
+{
+    uint32_t game_fvf = s_fvf;
+    const void *v;
+
+    s_fvf = VPROG_FVF;
+    v = bridge_vertices((const uint8_t *)s_vout, vertices, sizeof(VprogVertex));
+    s_dev->lpVtbl->SetVertexShader(s_dev, VPROG_FVF);
+    if (idx)
+        s_dev->lpVtbl->DrawIndexedPrimitiveUP(s_dev, pt, 0, vertices, count, idx, D3DFMT_INDEX16, v,
+                                              sizeof(VprogVertex));
+    else
+        s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count, v, sizeof(VprogVertex));
+    s_fvf = game_fvf;
+    if (s_fvf)
+        s_dev->lpVtbl->SetVertexShader(s_dev, s_fvf);
+    s_vp_draws++;
+}
 /* ── The game's own pushbuffer writes ──────────────────────── */
 
 /* D3DDevice_BeginPush_4(Count) hands the game a pointer into the pushbuffer
@@ -1022,6 +1468,11 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     uint32_t va = s_stage[0] ? s_stage[0]->va : 0;
     int i;
 
+    if (xform_frame())
+        fprintf(stderr, "[XFORM] draw %s prim %u, %u vertices, FVF 0x%X, texture 0x%08X, from 0x%08X\n",
+                what, prim, vertices, s_fvf, va, guest32(g_esp));
+    if (!v)
+        return;                         /* a vertex program's draw: no FVF vertices to show */
     if (on < 0) {
         const char *e = getenv("ROBOTECH_D3D11_TRACE");
         on = e && *e == '1';
@@ -1193,6 +1644,10 @@ void d3d11_EndPush(void)
  * the one an FVF draw reads; the others only serve vertex programs. */
 void d3d11_SetStreamSource(void)
 {
+    if (s_dev && arg(0) < 16) {
+        s_streams[arg(0)].va = arg(1);
+        s_streams[arg(0)].stride = arg(2);
+    }
     if (s_dev && arg(0) == 0) {
         s_stream_va = arg(1);
         s_stream_stride = arg(2);
@@ -1224,9 +1679,19 @@ void d3d11_DrawVertices(void)
     D3DPRIMITIVETYPE pt;
     UINT count;
 
-    if (!s_dev || !vb || !s_stream_stride || !bridge_primitive(xbtype, vertices, &pt, &count) || !count)
+    if (!s_dev || !bridge_primitive(xbtype, vertices, &pt, &count) || !count)
         return;
-    if (!bridge_before_draw())
+    if (s_vprog) {
+        if (!bridge_before_draw())
+            return;
+        trace_draw("vertices (program)", xbtype, vertices, 0, NULL);
+        if (vprog_transform(0, vertices, start, 0, 0))
+            vprog_draw(pt, count, vertices, NULL);
+        else
+            s_vp_failed++;
+        return;
+    }
+    if (!vb || !s_stream_stride || !bridge_before_draw())
         return;
     vb += (size_t)start * s_stream_stride;
     trace_draw("vertices", xbtype, vertices, s_stream_stride, vb);
@@ -1246,13 +1711,23 @@ void d3d11_DrawIndexedVertices(void)
     D3DPRIMITIVETYPE pt;
     UINT count, i, lo = 0xFFFF, hi = 0;
 
-    if (!s_dev || !vb || !idx || !s_stream_stride || !bridge_primitive(xbtype, indices, &pt, &count) || !count)
+    if (!s_dev || !idx || !bridge_primitive(xbtype, indices, &pt, &count) || !count)
+        return;
+    if (!s_vprog && (!vb || !s_stream_stride))
         return;
     if (!bridge_before_draw())
         return;
     for (i = 0; i < indices; i++) {
         if (idx[i] < lo) lo = idx[i];
         if (idx[i] > hi) hi = idx[i];
+    }
+    if (s_vprog) {
+        trace_draw("indexed (program)", xbtype, hi + 1, 0, NULL);
+        if (vprog_transform(lo, hi - lo + 1, s_base_vertex, 0, 0))
+            vprog_draw(pt, count, hi + 1, idx);
+        else
+            s_vp_failed++;
+        return;
     }
     vb += (size_t)s_base_vertex * s_stream_stride;
     trace_draw("indexed", xbtype, hi + 1, s_stream_stride, vb + (size_t)lo * s_stream_stride);

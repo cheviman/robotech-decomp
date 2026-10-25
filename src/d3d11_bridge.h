@@ -35,5 +35,11 @@ void d3d11_DrawVertices(void);
 void d3d11_DrawIndexedVertices(void);
 void d3d11_BeginPushDone(void);     /* after the generated body: its return value */
 void d3d11_EndPush(void);
+void d3d11_CreateVertexShaderArgs(void);
+void d3d11_CreateVertexShaderDone(void);     /* after the generated body: the handle */
+void d3d11_LoadVertexShader(void);
+void d3d11_SelectVertexShader(void);
+void d3d11_SetVertexShaderInput(void);
+void d3d11_SetVertexShaderConstant(int count);  /* 1 or 4 constants; 0: the DWORD count on the stack */
 
 #endif

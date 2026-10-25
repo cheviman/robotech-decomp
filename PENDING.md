@@ -26,18 +26,18 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Video (`docs/d3d.md` has the map)
 
-1. **Big cyan-white shapes over the mission scene**: clouds or sky drawn as if additive with full alpha.
-   Seen again with the mission running (40 s in, over the Valkyrie: an effect, a trail or particles,
-   drawn as a big flat additive quad). Next: trace those draws' blend states and texture formats
-   (`ROBOTECH_D3D11_TRACE=1`).
-2. **The Valkyrie comes out broken, in the menu and in the mission** (Sebas, 25-10-2026): in the mission
-   its parts float apart (legs above the body, the gun aside); in the menu it is incomplete and seen from
-   above, as if the camera looked down on it (the pushbuffer executor showed a standing Battloid). Its
-   draws are FVF 0x112/0x142 with no vertex blending, 25 world matrices a frame for 124 draws;
-   `SetModelView` is not used. Fixed on the way: the layer's `DrawIndexedPrimitiveUP` ignores
-   `MinVertexIndex` (the bridge now passes ranges from 0).
-3. **Vertex programs** (none measured yet: every draw so far is FVF) and **pixel shaders** (none
-   measured either: `SetPixelShader` is counted, 0 draws with one).
+1. **Big cyan-white shapes over the mission scene**: not seen since vertex programs run (25-10-2026,
+   a minute of the first mission); they were most likely effects drawn by a program through the fixed
+   pipeline. To confirm over a longer run.
+2. **Vertex programs run on the CPU** (the bridge, with xboxrecomp's NV2A interpreter), which drew the
+   Valkyrie whole in the menu and in the mission. Left: on the GPU instead (the layer's translator lays
+   the inputs out in a fixed order instead of by the declaration, and takes oPos as clip space while XDK
+   programs end in screen space); vertices behind the eye are not clipped (pre-transformed); the
+   coordinates' z and w are dropped (two floats a set: the layer reads the FVF's texture size field
+   otherwise than the XDK, 1 = 3 floats, 2 = 4, 3 = 1). **Pixel shaders**: `SetPixelShader` is counted,
+   0 draws with one so far.
+3. **The training's opening scene** draws the fighter as a white silhouette on black (seen once,
+   25-10-2026; no draw there uses a vertex program).
 4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
    `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
    (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`).
@@ -57,7 +57,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Saves
 
-- Memory units are not modelled: saves go to the hard disk only. Saving in a mission not tried yet.
+- Memory units are not modelled: saves go to the hard disk only. The menu's Save Game works there
+  (25-10-2026: a profile saved with its name, date and screenshot thumbnail, and overwritten after the
+  game's own prompt). Saving in a mission not tried yet.
 
 ### Recompilation
 
@@ -86,4 +88,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   test), which the pure-device build never stores in its array.
 - **"The mission's opening scene waits for a sound to finish."** Traced every buffer's status: none stays
   playing; the scene is drawn and moves under a fade quad that stays at 98 %.
-- **"The menu's Valkyrie is skinned."** `VERTEXBLEND` is 0 for all its draws.
+- **"The menu's Valkyrie is skinned by the fixed pipeline's vertex blending."** `VERTEXBLEND` is 0 for
+  all its draws: each part's matrix goes to a vertex program, in c0-c3.
+- **"The layer combines the world matrix wrongly"** (the Valkyrie's parts floated apart while the
+  terrain, drawn with an identity world, was right). The layer multiplies world, view and projection in
+  the right order; the parts had no world matrix of their own: the bridge drew vertex-program draws
+  through the fixed pipeline, with the last `SetTransform`.

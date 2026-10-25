@@ -306,6 +306,72 @@ void sub_0015A5B0(void)
     sub_0015A5B0_gen();
 }
 
+/* D3DDevice_CreateVertexShader (0x001598B0): the handle exists once the
+ * generated body has written it. */
+extern void sub_001598B0_gen(void);
+
+void sub_001598B0(void)
+{
+    d3d11_CreateVertexShaderArgs();
+    sub_001598B0_gen();
+    d3d11_CreateVertexShaderDone();
+}
+
+/* D3DDevice_LoadVertexShader (0x00159CB0) */
+extern void sub_00159CB0_gen(void);
+
+void sub_00159CB0(void)
+{
+    d3d11_LoadVertexShader();
+    sub_00159CB0_gen();
+}
+
+/* D3DDevice_SelectVertexShader (0x00159D10) */
+extern void sub_00159D10_gen(void);
+
+void sub_00159D10(void)
+{
+    d3d11_SelectVertexShader();
+    sub_00159D10_gen();
+}
+
+/* D3DDevice_SetVertexShaderInput (0x0015A170) */
+extern void sub_0015A170_gen(void);
+
+void sub_0015A170(void)
+{
+    d3d11_SetVertexShaderInput();
+    sub_0015A170_gen();
+}
+
+/* D3DDevice_SetVertexShaderConstant1 (0x001599F0), fastcall: one constant */
+extern void sub_001599F0_gen(void);
+
+void sub_001599F0(void)
+{
+    d3d11_SetVertexShaderConstant(1);
+    sub_001599F0_gen();
+}
+
+/* D3DDevice_SetVertexShaderConstant4 (0x00159A50), fastcall: four constants */
+extern void sub_00159A50_gen(void);
+
+void sub_00159A50(void)
+{
+    d3d11_SetVertexShaderConstant(4);
+    sub_00159A50_gen();
+}
+
+/* D3DDevice_SetVertexShaderConstantNotInline (0x00159BE0), fastcall: the
+ * count, in DWORDs, on the stack */
+extern void sub_00159BE0_gen(void);
+
+void sub_00159BE0(void)
+{
+    d3d11_SetVertexShaderConstant(0);
+    sub_00159BE0_gen();
+}
+
 /* ── XInput ────────────────────────────────────────────────── */
 
 #include "input_bridge.h"

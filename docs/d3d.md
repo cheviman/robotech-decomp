@@ -161,9 +161,10 @@ So entries move over one at a time and the rest keep working.
 | `D3DDevice_Swap` | yes | presents and pumps the window's messages; `ROBOTECH_D3D11_DUMP=<prefix>` writes the back buffer to BMPs (one in `ROBOTECH_D3D11_DUMP_EVERY`, 30 by default) |
 | `D3DDevice_SetTexture` | yes | the guest texture (a D3DPixelContainer: Data, Format, Size) mirrored by a host texture of the same format and size, remade if the game reuses the address |
 | `D3DTexture_LockRect` | yes | marks the texture for upload before its next draw: the game writes the texels after the lock (Bink decodes every movie frame so) |
-| `D3DDevice_SetVertexShader` | FVF only | a vertex program (handle with bit 0 set) is not routed yet; draws made with one are left out and counted |
+| `D3DDevice_SetVertexShader` | yes | an FVF to the layer; a vertex program (handle with bit 0 set) loaded at 0 and run from there, as below |
+| `D3DDevice_CreateVertexShader`, `LoadVertexShader`, `SelectVertexShader`, `SetVertexShaderInput`, `SetVertexShaderConstant1/4/NotInline` | yes | vertex programs, run on the CPU with xboxrecomp's NV2A interpreter (`src/kernel/nv2a_vsh_interp.c`): the declaration says which stream, offset and type each `v` register reads; the program goes into program memory where `LoadVertexShader` puts it; the constants are the game's, plus `c-38`/`c-37` (the viewport scale and offset the XDK loads itself) set to 1 and 0 so the screen-space epilogue every XDK program ends in leaves x, y, z divided by w; the bridge maps them through the viewport and draws them as `XYZRHW` vertices with two colours and four coordinate sets |
 | `D3DDevice_DrawVerticesUP` | yes | Xbox primitive types (TRIANGLELIST 5 ... QUADSTRIP 9, POLYGON 10) translated to the layer's PC ones; a linear texture's coordinates, in texels on the Xbox, divided by its size |
-| `D3DDevice_SetStreamSource` | stream 0 | the vertex buffer's Data is a physical address, like a texture's |
+| `D3DDevice_SetStreamSource` | yes | the vertex buffer's Data is a physical address, like a texture's; an FVF draw reads stream 0, a vertex program the streams its declaration names |
 | `D3DDevice_SetIndices` | yes | the base vertex; the XDK's indexed draw takes its indices as a pointer |
 | `D3DDevice_DrawVertices` | yes | from stream 0, as `DrawPrimitiveUP` |
 | `D3DDevice_DrawIndexedVertices` | yes | 16-bit indices from the game's pointer, as `DrawIndexedPrimitiveUP` |

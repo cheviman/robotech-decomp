@@ -34,10 +34,11 @@ is committed.
 - [x] The logo movies through Direct3D 11 (`ROBOTECH_D3D11=1`): the device, `Clear`, `Swap`, textures and
       `DrawVerticesUP` routed, at the movies' speed
 - [x] The menu and the first mission through Direct3D 11: render states, vertex and index buffers, the
-      engine's own 2D draws; sound, the pad and the keyboard, saves on the hard disk (`PENDING.md` has
+      engine's own 2D draws, vertex programs (run on the CPU for now); sound, the pad and the keyboard,
+      saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
-      programs, pixel shaders, render targets
+      programs on the GPU, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
 - [ ] Xbox Series (UWP, Direct3D 11)
 - [ ] Vulkan, for Linux and Mac
