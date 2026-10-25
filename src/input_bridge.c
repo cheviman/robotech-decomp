@@ -1,6 +1,7 @@
 /**
  *    Name:        input_bridge.c
- *    Description: answers the game's XInputGetState from the host's controllers and keyboard
+ *    Description: answers the game's XInputGetState from the host's controllers and keyboard, and
+ *                 sends its rumble to them
  *    Version:     0.1.0
  *    Created:     25-10-2026
  *    Modified:    25-10-2026
@@ -12,7 +13,8 @@
  *    guards itself with cli/sti, which are no-ops here, while the controller's interrupt runs on another
  *    host thread. So the state the game asks for is answered from the host instead: XInputOpen is
  *    wrapped to learn which port a handle is, and XInputGetState is replaced (recomp_manual.c), filled
- *    from xboxrecomp's input layer -- the host's XInput pads, and the keyboard on port 0.
+ *    from xboxrecomp's input layer -- the host's XInput pads, and the keyboard on port 0. XInputSetState,
+ *    the rumble, went the same USB way and is replaced the same way.
  *
  *    ROBOTECH_PAD_SCRIPT="<ms>:<button>[+<button>...][:<hold ms>],..." presses buttons on port 0 at times
  *    counted from the game's first read, for runs nobody plays: a b x y black white lt rt up down left
@@ -182,4 +184,38 @@ void input_XInputGetState(void)
     }
     g_eax = ERROR_SUCCESS;
     g_esp += 4 + 8;                       /* the return address, and two arguments */
+}
+
+/* XInputSetState(hDevice, pFeedback), replacing the game's: stdcall, two
+ * arguments. XINPUT_FEEDBACK is packed to 1: dwStatus at 0, hEvent at 4, 58
+ * reserved bytes, then the two motor speeds at 66 and 68. On the console
+ * the request completes later (dwStatus ERROR_IO_PENDING until then, and the
+ * game sends no other while it is); here it completes at once. The game
+ * passes no event. ROBOTECH_TRACE_RUMBLE=1 logs each change of speeds. */
+void input_XInputSetState(void)
+{
+    static XBOX_VIBRATION last[4];
+    uint32_t handle = arg(0), fb = arg(1), port = 0;
+    XBOX_VIBRATION vib;
+    uint8_t *p;
+    int i;
+
+    for (i = 0; i < s_handle_count; i++)
+        if (s_handles[i].handle == handle)
+            port = s_handles[i].port;
+    if (port > 3)
+        port = 0;
+    if (fb) {
+        p = (uint8_t *)((uintptr_t)fb + g_xbox_mem_offset);
+        memcpy(&vib.wLeftMotorSpeed, p + 66, 2);
+        memcpy(&vib.wRightMotorSpeed, p + 68, 2);
+        xbox_InputSetState(port, &vib);
+        if (memcmp(&vib, &last[port], sizeof vib) && getenv("ROBOTECH_TRACE_RUMBLE"))
+            fprintf(stderr, "[RUMBLE] port %u: left %u, right %u\n", port, vib.wLeftMotorSpeed,
+                    vib.wRightMotorSpeed);
+        last[port] = vib;
+        memset(p, 0, 4);                  /* dwStatus: ERROR_SUCCESS, done */
+    }
+    g_eax = ERROR_SUCCESS;
+    g_esp += 4 + 8;
 }

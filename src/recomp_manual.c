@@ -393,6 +393,12 @@ void sub_0018818E(void)
     input_XInputGetState();
 }
 
+/* XInputSetState (0x001881FD), replaced: the rumble to the host's pads. */
+void sub_001881FD(void)
+{
+    input_XInputSetState();
+}
+
 /* ── DirectSound ───────────────────────────────────────────── */
 
 #include "dsound_bridge.h"

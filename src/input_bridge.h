@@ -12,5 +12,6 @@
 void input_XInputOpenArgs(void);    /* before the generated XInputOpen */
 void input_XInputOpenDone(void);    /* after it: its return value */
 void input_XInputGetState(void);    /* replaces the game's */
+void input_XInputSetState(void);    /* replaces the game's: rumble */
 
 #endif
