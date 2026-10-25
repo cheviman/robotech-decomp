@@ -143,6 +143,42 @@ void sub_00157530(void)
     sub_00157530_gen();
 }
 
+/* D3DDevice_SetTexture (0x00156630) */
+extern void sub_00156630_gen(void);
+
+void sub_00156630(void)
+{
+    d3d11_SetTexture();
+    sub_00156630_gen();
+}
+
+/* D3DTexture_LockRect (0x0015A990) */
+extern void sub_0015A990_gen(void);
+
+void sub_0015A990(void)
+{
+    d3d11_TextureLockRect();
+    sub_0015A990_gen();
+}
+
+/* D3DDevice_SetVertexShader (0x0015A010) */
+extern void sub_0015A010_gen(void);
+
+void sub_0015A010(void)
+{
+    d3d11_SetVertexShader();
+    sub_0015A010_gen();
+}
+
+/* D3DDevice_DrawVerticesUP (0x0015A3B0) */
+extern void sub_0015A3B0_gen(void);
+
+void sub_0015A3B0(void)
+{
+    d3d11_DrawVerticesUP();
+    sub_0015A3B0_gen();
+}
+
 /* ── ICALL failure logging ─────────────────────────────────── */
 
 /*

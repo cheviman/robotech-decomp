@@ -23,8 +23,10 @@ is committed.
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)
-- [ ] Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses Direct3D): the device,
-      `Clear` and `Swap` so far (`ROBOTECH_D3D11=1`), presenting at the game's rate; drawing is next
+- [x] The logo movies through Direct3D 11 (`ROBOTECH_D3D11=1`): the device, `Clear`, `Swap`, textures and
+      `DrawVerticesUP` routed, at the movies' speed
+- [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): render
+      states, vertex and index buffers, vertex programs and pixel shaders
 - [ ] Menus and the missions; sound, controllers, saves
 - [ ] Higher resolutions, widescreen, frame rate
 - [ ] Xbox One (UWP, Direct3D 11), then Vulkan

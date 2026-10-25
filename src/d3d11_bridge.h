@@ -17,5 +17,9 @@ int d3d11_BridgeOn(void);
 void d3d11_CreateDevice(void);
 void d3d11_Clear(void);
 void d3d11_Swap(void);
+void d3d11_SetTexture(void);
+void d3d11_TextureLockRect(void);
+void d3d11_SetVertexShader(void);
+void d3d11_DrawVerticesUP(void);
 
 #endif

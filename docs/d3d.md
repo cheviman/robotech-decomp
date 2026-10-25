@@ -158,11 +158,18 @@ So entries move over one at a time and the rest keep working.
 |---|---|---|
 | `Direct3D_CreateDevice` | yes | the guest's presentation parameters copied field by field (its `HWND` is 32 bits); the host device is windowed |
 | `D3DDevice_Clear` | yes | Xbox clear flags (target 0xF0, Z 0x01, stencil 0x02) translated to the layer's PC values |
-| `D3DDevice_Swap` | yes | presents and pumps the window's messages |
+| `D3DDevice_Swap` | yes | presents and pumps the window's messages; `ROBOTECH_D3D11_DUMP=<prefix>` writes the back buffer to BMPs (one in `ROBOTECH_D3D11_DUMP_EVERY`, 30 by default) |
+| `D3DDevice_SetTexture` | yes | the guest texture (a D3DPixelContainer: Data, Format, Size) mirrored by a host texture of the same format and size, remade if the game reuses the address |
+| `D3DTexture_LockRect` | yes | marks the texture for upload before its next draw: the game writes the texels after the lock (Bink decodes every movie frame so) |
+| `D3DDevice_SetVertexShader` | FVF only | a vertex program (handle with bit 0 set) is not routed yet |
+| `D3DDevice_DrawVerticesUP` | yes | Xbox primitive types (TRIANGLELIST 5 ... QUADSTRIP 9, POLYGON 10) translated to the layer's PC ones; a linear texture's coordinates, in texels on the Xbox, divided by its size |
 | everything else | no | |
 
-With those three the window presents at the game's rate (about 30 fps during
-the logo movies) and shows black: nothing is drawn through the bridge yet.
+The engine's movie player (`0x00118740` opens, `0x00118980` draws a frame,
+`0x00118940` closes; Bink itself calls no D3D) needs just those: the legal
+screen and the TDK and Harmony Gold logos play through D3D11 at their speed,
+30 fps, the movies' textures being 640x448 `LIN_X8R8G8B8` (0x1E). Render states
+are not routed yet; the layer's defaults happen to suit a full-screen quad.
 
 ## Consequences for the D3D11 path
 
