@@ -77,7 +77,12 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   that reads as written is xboxrecomp's decompilation path (`docs/DECOMP.md`): `tools.split` gives a
   function per file with its original bytes and signature, `tools.conformance` runs the original and
   the C side by side, and the recompiler's `--exclude-manual` lets each function written by hand take
-  the generated one's place while the game keeps running.
+  the generated one's place while the game keeps running. Both run here: `tools.split` wrote the 6,646
+  functions to `analysis/split/` (with the manifest), and `tools/conformance.py` runs the toolkit's
+  oracle with this machine's 32-bit MSVC (it looks only under Visual Studio 2022). First measure, 12
+  functions of the game, 29 vectors: 4 differ, all in `sub_00011A80`, which hands back the x87 status
+  word: the original has the precision bit (0x20) set and the recompiled C does not, the lifter not
+  modelling the x87 exception flags. A finding for xboxrecomp, kept apart.
 - Functions the disassembler missed are found when the game calls them through a pointer
   (`[ICALL] Failed to resolve`); `symbols/seed_functions.json` lists the ones seeded by hand, and the
   build records every target (`analysis/icall_targets.dump`, merged by the pipeline's `feedback` step).
