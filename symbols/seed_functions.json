@@ -1,0 +1,3 @@
+[
+ {"start": "0x0001FF70", "why": "called through a pointer from the menu (ICALL failed to resolve, run 25-10-2026); sits in the gap after sub_0001FEF0's nop padding"}
+]

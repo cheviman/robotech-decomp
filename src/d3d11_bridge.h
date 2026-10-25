@@ -21,6 +21,7 @@ void d3d11_SetTexture(void);
 void d3d11_TextureLockRect(void);
 void d3d11_SetVertexShader(void);
 void d3d11_SetTexCoordIndex(void);
+void d3d11_SetRenderStateSimple(void);
 void d3d11_SetTransform(void);
 void d3d11_SetViewport(void);
 void d3d11_SetMaterial(void);
@@ -31,5 +32,7 @@ void d3d11_SetIndices(void);
 void d3d11_DrawVerticesUP(void);
 void d3d11_DrawVertices(void);
 void d3d11_DrawIndexedVertices(void);
+void d3d11_BeginPushDone(void);     /* after the generated body: its return value */
+void d3d11_EndPush(void);
 
 #endif

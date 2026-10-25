@@ -28,6 +28,8 @@ GAME_XBE = os.path.join(REPO, "game", "default.xbe")
 GEN_DIR = os.path.join(REPO, "src", "recomp", "gen")
 ICALL_DUMP = os.path.join(ANALYSIS, "icall_targets.dump")
 ICALL_DB = os.path.join(ANALYSIS, "icall_targets.json")
+SEEDS = os.path.join(REPO, "symbols", "seed_functions.json")
+COALESCE = os.path.join(REPO, "symbols", "coalesce.json")
 
 
 def steps():
@@ -36,9 +38,13 @@ def steps():
     disasm = os.path.join(ANALYSIS, "disasm")
     func_id = os.path.join(ANALYSIS, "func_id")
     abi = os.path.join(ANALYSIS, "abi")
-    disasm_cmd = ["tools.disasm", XBE, "-o", disasm]
-    if os.path.exists(ICALL_DB):
-        disasm_cmd += ["--seed-functions", ICALL_DB, "--force"]
+    # Function starts the disassembler cannot find alone: the ones measured by
+    # hand (symbols/seed_functions.json, each with why) and the ones the icall
+    # feedback collects. Separate files, as the toolkit asks.
+    disasm_cmd = ["tools.disasm", XBE, "-o", disasm, "--force"]
+    for seeds in (SEEDS, ICALL_DB):
+        if os.path.exists(seeds):
+            disasm_cmd += ["--seed-functions", seeds]
     return [
         ("parse", ["tools.xbe_parser", XBE, "--json", os.path.join(ANALYSIS, "default_analysis.json")]),
         # The indirect-call targets the game reached in its runs (the build

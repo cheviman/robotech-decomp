@@ -116,6 +116,21 @@ static char s_game_dir[MAX_PATH], s_xbe_path[MAX_PATH];
 /* xboxrecomp's pushbuffer executor (src/kernel/nv2a_backend.h). */
 extern void nv2a_pb_set_semaphore_target(uint32_t guest_va);
 
+#ifdef RECOMP_ICALL_FEEDBACK
+/* The indirect-call targets, written every five seconds: a run can end in
+ * ways that skip atexit (the window's ExitProcess, the watchdog's _exit) or
+ * the crash handler (a heap corruption), and the targets it reached are the
+ * point of the run. The dump can be written any number of times. */
+static DWORD WINAPI feedback_writer(LPVOID unused)
+{
+    (void)unused;
+    for (;;) {
+        Sleep(5000);
+        RECOMP_ICALL_FEEDBACK_DUMP();
+    }
+}
+#endif
+
 /* Called by the Direct3D_CreateDevice wrapper in recomp_manual.c once the
  * device exists: the GPU-time word has to be where the executor was told it
  * would be. If it is not, the executor is pointed at the real one, late:
@@ -422,6 +437,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     g_xbox_mem_offset = xbox_GetMemoryOffset();
     printf("Xbox memory mapped. Offset: 0x%llX\n", (unsigned long long)g_xbox_mem_offset);
     RECOMP_ICALL_FEEDBACK_INIT();
+#ifdef RECOMP_ICALL_FEEDBACK
+    CloseHandle(CreateThread(NULL, 0, feedback_writer, NULL, 0, NULL));
+#endif
 
     /* Who writes D3D's GPU-time word. With the pushbuffer executor it is the
      * executor, from the title's own BACK_END_WRITE_SEMAPHORE_RELEASE, once it

@@ -179,6 +179,15 @@ void sub_0015A3B0(void)
     sub_0015A3B0_gen();
 }
 
+/* D3DDevice_SetRenderState_Simple (0x00157B00), fastcall: Method, Value */
+extern void sub_00157B00_gen(void);
+
+void sub_00157B00(void)
+{
+    d3d11_SetRenderStateSimple();
+    sub_00157B00_gen();
+}
+
 /* D3DDevice_SetTextureState_TexCoordIndex (0x00158360) */
 extern void sub_00158360_gen(void);
 
@@ -258,6 +267,25 @@ void sub_0015A510(void)
 {
     d3d11_DrawVertices();
     sub_0015A510_gen();
+}
+
+/* D3DDevice_BeginPush_4 (0x00155CC0): the bridge wants the pointer it
+ * returns, so it runs after the generated body. */
+extern void sub_00155CC0_gen(void);
+
+void sub_00155CC0(void)
+{
+    sub_00155CC0_gen();
+    d3d11_BeginPushDone();
+}
+
+/* D3DDevice_EndPush (0x00155720) */
+extern void sub_00155720_gen(void);
+
+void sub_00155720(void)
+{
+    d3d11_EndPush();
+    sub_00155720_gen();
 }
 
 /* D3DDevice_DrawIndexedVertices (0x0015A5B0) */

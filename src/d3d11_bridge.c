@@ -27,7 +27,7 @@
 
 #include "d3d11_bridge.h"
 
-extern RECOMP_TLS uint32_t g_esp;
+extern RECOMP_TLS uint32_t g_esp, g_eax, g_ecx, g_edx;
 extern ptrdiff_t g_xbox_mem_offset;
 
 /* xboxrecomp's D3D8 layer, internal accessors (src/d3d/d3d8_internal.h). */
@@ -87,6 +87,7 @@ static int s_states_sent;              /* the arrays above hold what was sent */
 static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
 static uint32_t s_stream_va, s_stream_stride, s_base_vertex;
 static unsigned s_skipped_vp;          /* draws left out: vertex program set */
+static unsigned s_push_draws;          /* drawn from the game's own pushbuffer writes */
 
 static uint32_t guest32(uint32_t va)
 {
@@ -372,9 +373,9 @@ void d3d11_Swap(void)
     if (!last)
         last = now;
     if (now - last >= 2000) {
-        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws, %u left out (vertex program), %d textures\n",
-                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_skipped_vp, s_tex_count);
-        s_presents = s_clears = s_draws = s_skipped_vp = 0;
+        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws + %u pushed, %u left out (vertex program), %d textures\n",
+                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_push_draws, s_skipped_vp, s_tex_count);
+        s_presents = s_clears = s_draws = s_push_draws = s_skipped_vp = 0;
         last = now;
     }
 }
@@ -543,6 +544,46 @@ static DWORD ts_value(int kind, uint32_t v)
     return v;
 }
 
+/* The simple states (index < D3DRS_SIMPLE_MAX, 92) are the exception: the
+ * game is built as a pure device, so the inlined SetRenderState sends them
+ * through D3DDevice_SetRenderState_Simple and does not store them -- its
+ * array kept D3D's defaults while the menu's text was drawn with blending.
+ * SetRenderState_Simple takes the NV2A method the state is (the XDK's
+ * D3DSIMPLERENDERSTATEENCODE, in D3D8.h) and the value as the XDK has it, so
+ * the method says which state and the bridge keeps its own copy. */
+#define XB_RS_SIMPLE_MAX 92
+
+static const uint16_t s_simple_method[XB_RS_SIMPLE_MAX] = {
+    0x0260, 0x0264, 0x0268, 0x026C, 0x0270, 0x0274, 0x0278, 0x027C,    /*  0 PSALPHAINPUTS */
+    0x0288, 0x028C, 0x0A60, 0x0A64, 0x0A68, 0x0A6C, 0x0A70, 0x0A74,    /*  8 */
+    0x0A78, 0x0A7C, 0x0A80, 0x0A84, 0x0A88, 0x0A8C, 0x0A90, 0x0A94,    /* 16 */
+    0x0A98, 0x0A9C, 0x0AA0, 0x0AA4, 0x0AA8, 0x0AAC, 0x0AB0, 0x0AB4,    /* 24 */
+    0x0AB8, 0x0ABC, 0x0AC0, 0x0AC4, 0x0AC8, 0x0ACC, 0x0AD0, 0x0AD4,    /* 32 */
+    0x0AD8, 0x0ADC, 0x17F8, 0x1E20, 0x1E24, 0x1E40, 0x1E44, 0x1E48,    /* 40 */
+    0x1E4C, 0x1E50, 0x1E54, 0x1E58, 0x1E5C, 0x1E60, 0,      0x1E74,    /* 48; 54 reserved */
+    0x1E78, 0x0354, 0x033C, 0x0304, 0x0300, 0x0340, 0x0344, 0x0348,    /* 56; 57 ZFUNC */
+    0x035C, 0x0310, 0x037C, 0x0358, 0x0374, 0x0378, 0x0364, 0x0368,    /* 64 */
+    0x036C, 0x0360, 0x0350, 0x034C, 0x09F8, 0x0384, 0x0388, 0x0330,    /* 72 */
+    0x0334, 0x0338, 0x1D78, 0x147C, 0, 0, 0, 0,                        /* 80; 84.. unused */
+    0, 0, 0, 0,
+};
+static uint32_t s_simple[XB_RS_SIMPLE_MAX];
+static uint8_t s_simple_set[XB_RS_SIMPLE_MAX];
+
+/* D3DDevice_SetRenderState_Simple(Method, Value), fastcall: ecx, edx. */
+void d3d11_SetRenderStateSimple(void)
+{
+    uint32_t method = g_ecx & 0x1FFCu;
+    int i;
+
+    for (i = 0; i < XB_RS_SIMPLE_MAX; i++)
+        if (s_simple_method[i] == method) {
+            s_simple[i] = g_edx;
+            s_simple_set[i] = 1;
+            return;
+        }
+}
+
 /* Send what changed in the game's state arrays since the last draw. */
 static void bridge_sync_states(void)
 {
@@ -552,6 +593,9 @@ static void bridge_sync_states(void)
 
     memcpy(rs, guest_ptr(XB_RENDER_STATE_VA), sizeof rs);
     memcpy(ts, guest_ptr(XB_TEXTURE_STATE_VA), sizeof ts);
+    for (s = 0; s < XB_RS_SIMPLE_MAX; s++)
+        if (s_simple_set[s])
+            rs[s] = s_simple[s];
     for (i = 0; i < sizeof s_rs_map / sizeof s_rs_map[0]; i++) {
         uint8_t x = s_rs_map[i].xb;
         if (s_states_sent && rs[x] == s_rs_sent[x])
@@ -911,6 +955,173 @@ void d3d11_DrawVerticesUP(void)
                                    bridge_vertices((const uint8_t *)guest_ptr(data), vertices, stride),
                                    stride);
     s_draws++;
+}
+
+/* ── The game's own pushbuffer writes ──────────────────────── */
+
+/* D3DDevice_BeginPush_4(Count) hands the game a pointer into the pushbuffer
+ * (its return value) and D3DDevice_EndPush(pPush) takes back where it
+ * stopped: in between the game wrote NV2A commands itself, which no D3D entry
+ * shows. Measured on the menu: 19 a frame, every one SET_BEGIN_END(primitive),
+ * INLINE_ARRAY(vertices), SET_BEGIN_END(0) -- an immediate-mode draw, which
+ * is how the engine draws everything 2D (the backdrop, the boxes, the text).
+ * The vertices are laid out as the FVF in force, and NV2A numbers its
+ * primitives as the XDK does, so each becomes a DrawPrimitiveUP.
+ * ROBOTECH_D3D11_PUSH=1 also counts what was pushed, by method, every two
+ * seconds: what a fuller decoder would have to cover. */
+#define NV097_SET_BEGIN_END  0x17FCu
+#define NV097_INLINE_ARRAY   0x1818u
+
+static uint32_t s_push_start;
+static uint32_t *s_inline;              /* one Begin/End's inline vertices */
+static size_t s_inline_cap;
+
+void d3d11_BeginPushDone(void)
+{
+    s_push_start = g_eax;
+}
+
+static UINT fvf_size(uint32_t fvf)
+{
+    UINT floats[8], size = fvf_texcoords(fvf, floats), k;
+
+    for (k = 0; k < 8; k++)
+        size += floats[k] * 4;
+    return size;
+}
+
+/* ROBOTECH_D3D11_TRACE=1: what the first draws with each texture look like,
+ * for telling a sampling problem from a state one without guessing. */
+static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stride, const uint8_t *v)
+{
+    static int on = -1;
+    static uint32_t seen[64];
+    static int nseen;
+    const uint32_t *ts = (const uint32_t *)guest_ptr(XB_TEXTURE_STATE_VA);
+    uint32_t va = s_stage[0] ? s_stage[0]->va : 0;
+    int i;
+
+    if (on < 0) {
+        const char *e = getenv("ROBOTECH_D3D11_TRACE");
+        on = e && *e == '1';
+    }
+    if (!on || nseen >= 64)
+        return;
+    for (i = 0; i < nseen; i++)
+        if (seen[i] == va)
+            return;
+    seen[nseen++] = va;
+    fprintf(stderr, "[TRACE] %s prim %u, %u vertices of %u bytes, FVF 0x%X; stage 0 texture 0x%08X",
+            what, prim, vertices, stride, s_fvf, va);
+    if (s_stage[0])
+        fprintf(stderr, " %ux%u fmt 0x%02X%s", s_stage[0]->width, s_stage[0]->height,
+                (unsigned)s_stage[0]->format, s_stage[0]->pitch ? " linear" : "");
+    fprintf(stderr, "; COLOROP %u ARG1 %u ARG2 %u, ALPHAOP %u; TCI %u\n", ts[12], ts[14], ts[15], ts[16], s_tci[0]);
+    {
+        const uint32_t *rs = s_rs_sent;      /* as last sent, simple states included */
+        fprintf(stderr, "  sent: ZFUNC %X ALPHABLEND %u SRC %X DEST %X ALPHATEST %u ALPHAFUNC %X REF %u"
+                " ZWRITE %u ZENABLE %u CULL %X LIGHTING %u\n", rs[57], rs[59], rs[62], rs[63], rs[60],
+                rs[58], rs[61], rs[64], rs[143], rs[147], rs[102]);
+    }
+    fprintf(stderr, "  first vertex:");
+    for (i = 0; i < (int)(stride / 4) && i < 10; i++) {
+        float f;
+        memcpy(&f, v + 4 * i, 4);
+        fprintf(stderr, " %g", f);
+    }
+    fprintf(stderr, "\n");
+}
+
+static void push_draw(uint32_t prim, const uint32_t *words, size_t n)
+{
+    UINT stride, vertices, count;
+    D3DPRIMITIVETYPE pt;
+
+    if (!s_fvf || !n)
+        return;
+    stride = fvf_size(s_fvf);
+    vertices = (UINT)(n * 4 / stride);
+    if (!stride || !bridge_primitive(prim, vertices, &pt, &count) || !count)
+        return;
+    if (!bridge_before_draw())
+        return;
+    trace_draw("pushed", prim, vertices, stride, (const uint8_t *)words);
+    s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count,
+                                   bridge_vertices((const uint8_t *)words, vertices, stride), stride);
+    s_push_draws++;
+}
+
+static void push_count(uint32_t method)
+{
+    static int on = -1;
+    static unsigned counts[0x800];
+    static DWORD last;
+    DWORD now;
+
+    if (on < 0) {
+        const char *e = getenv("ROBOTECH_D3D11_PUSH");
+        on = e && *e == '1';
+    }
+    if (!on)
+        return;
+    counts[(method >> 2) & 0x7FF]++;
+    now = GetTickCount();
+    if (!last)
+        last = now;
+    if (now - last >= 2000) {
+        unsigned i, shown = 0;
+        fprintf(stderr, "[PUSH] methods:");
+        for (i = 0; i < 0x800 && shown < 24; i++)
+            if (counts[i]) {
+                fprintf(stderr, " %03X x%u", i << 2, counts[i]);
+                shown++;
+            }
+        fprintf(stderr, "\n");
+        memset(counts, 0, sizeof counts);
+        last = now;
+    }
+}
+
+void d3d11_EndPush(void)
+{
+    uint32_t p, end = arg(0), prim = 0;
+    size_t have = 0;
+
+    if (!s_dev || !s_push_start || end <= s_push_start || end - s_push_start > 0x100000) {
+        s_push_start = 0;
+        return;
+    }
+    for (p = s_push_start; p < end; ) {
+        uint32_t h = guest32(p), n = (h >> 18) & 0x7FFu, m = h & 0x1FFCu, i;
+
+        if (h & 0x20000000u || (h & 3u) == 1 || !n)       /* a jump or a call: not expected here */
+            break;
+        push_count(m);
+        if (m == NV097_SET_BEGIN_END) {
+            uint32_t v = guest32(p + 4);
+            if (v == 0) {
+                push_draw(prim, s_inline, have);
+                prim = 0;
+            } else {
+                prim = v;
+            }
+            have = 0;
+        } else if (m == NV097_INLINE_ARRAY && prim) {
+            if (have + n > s_inline_cap) {
+                size_t cap = (have + n) * 2;
+                uint32_t *grown = (uint32_t *)realloc(s_inline, cap * 4);
+                if (!grown)
+                    break;
+                s_inline = grown;
+                s_inline_cap = cap;
+            }
+            for (i = 0; i < n; i++)
+                s_inline[have + i] = guest32(p + 4 + 4 * i);
+            have += n;
+        }
+        p += 4 + 4 * n;
+    }
+    s_push_start = 0;
 }
 
 /* D3DDevice_SetStreamSource(StreamNumber, pStreamData, Stride). Stream 0 is
