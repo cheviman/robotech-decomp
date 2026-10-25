@@ -21,6 +21,18 @@ add_compile_definitions(
     NOMINMAX
 )
 
+# Record every indirect-call target the game reaches, and dump them on exit or
+# on a crash: tools/pipeline.py feeds them back to the disassembler as function
+# starts it could not find on its own (xboxrecomp's icall feedback). Set before
+# the toolkit is added, because its kernel library records them too.
+option(ROBOTECH_ICALL_FEEDBACK "Record the game's indirect-call targets" ON)
+if(ROBOTECH_ICALL_FEEDBACK)
+    add_compile_definitions(
+        RECOMP_ICALL_FEEDBACK
+        RECOMP_ICALL_FEEDBACK_PATH="analysis/icall_targets.dump"
+    )
+endif()
+
 # ── xboxrecomp toolkit ──────────────────────────────────────────
 #
 # Option A: xboxrecomp as a subdirectory (simplest)

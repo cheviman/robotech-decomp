@@ -26,6 +26,8 @@ ANALYSIS = os.path.join(REPO, "analysis")
 XBE = os.path.join(ANALYSIS, "default.xbe")
 GAME_XBE = os.path.join(REPO, "game", "default.xbe")
 GEN_DIR = os.path.join(REPO, "src", "recomp", "gen")
+ICALL_DUMP = os.path.join(ANALYSIS, "icall_targets.dump")
+ICALL_DB = os.path.join(ANALYSIS, "icall_targets.json")
 
 
 def steps():
@@ -34,9 +36,17 @@ def steps():
     disasm = os.path.join(ANALYSIS, "disasm")
     func_id = os.path.join(ANALYSIS, "func_id")
     abi = os.path.join(ANALYSIS, "abi")
+    disasm_cmd = ["tools.disasm", XBE, "-o", disasm]
+    if os.path.exists(ICALL_DB):
+        disasm_cmd += ["--seed-functions", ICALL_DB, "--force"]
     return [
         ("parse", ["tools.xbe_parser", XBE, "--json", os.path.join(ANALYSIS, "default_analysis.json")]),
-        ("disasm", ["tools.disasm", XBE, "-o", disasm]),
+        # The indirect-call targets the game reached in its runs (the build
+        # records them; main.c dumps them) join the database the disassembler
+        # takes as function starts it cannot find by itself.
+        ("feedback", ["tools.recomp.icall_feedback", "--db", ICALL_DB, "merge", ICALL_DUMP,
+                      "--sites-db", os.path.join(ANALYSIS, "icall_sites.json")]),
+        ("disasm", disasm_cmd),
         ("names", [os.path.join(REPO, "tools", "apply_names.py")]),
         ("func_id", ["tools.func_id", XBE,
                      "--functions", os.path.join(disasm, "functions.json"),
@@ -73,6 +83,9 @@ def main():
         shutil.copyfile(GAME_XBE, XBE)
 
     for name, cmd in todo:
+        if name == "feedback" and not os.path.exists(ICALL_DUMP):
+            print("== feedback: no dump yet, skipped", flush=True)
+            continue
         print("== %s" % name, flush=True)
         t0 = time.time()
         if cmd[0].startswith("tools."):

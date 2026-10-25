@@ -52,6 +52,7 @@
 
 /* xboxrecomp runtime headers */
 #include <xbox/xboxrecomp.h>
+#include "recomp_icall_feedback.h"
 
 /*
  * If xboxrecomp.h is not an umbrella header in your setup, include
@@ -110,6 +111,7 @@ extern ptrdiff_t g_xbox_mem_offset;
 /* ── Forward declarations ──────────────────────────────────── */
 
 static BOOL load_xbe(const char *path, void **out_data, size_t *out_size);
+static char s_game_dir[MAX_PATH], s_xbe_path[MAX_PATH];
 
 /* xboxrecomp's pushbuffer executor (src/kernel/nv2a_backend.h). */
 extern void nv2a_pb_set_semaphore_target(uint32_t guest_va);
@@ -291,6 +293,9 @@ static LONG CALLBACK veh_handler(PEXCEPTION_POINTERS ep)
         if (xbox_VehMmioFault(ep))
             return EXCEPTION_CONTINUE_EXECUTION;
 
+        /* The targets reached so far: a run that dies is the one whose
+         * targets are wanted (tools/pipeline.py, step feedback). */
+        RECOMP_ICALL_FEEDBACK_DUMP();
         fprintf(stderr, "[CRASH] Access violation at RIP=0x%llX, fault addr=0x%llX (%s)\n",
             (unsigned long long)ep->ContextRecord->Rip,
             (unsigned long long)fault_addr,
@@ -348,6 +353,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 
+    /* Playable by default: the Direct3D 11 bridge, the emulated APU's sound,
+     * the USB pad (a host controller through XInput) with the keyboard on top,
+     * and a 60 Hz vertical blank. The runtime reads these switches as it comes
+     * up, so they are set before anything else; one already set is left alone.
+     * ROBOTECH_PUSHBUFFER=1 takes the other path instead: the game's own D3D
+     * drawn by xboxrecomp's pushbuffer executor. */
+    {
+        static const char *const defaults[][2] = {
+            { "RECOMP_AC97_READY", "1" },
+            { "RECOMP_USB", "1" },
+            { "RECOMP_KEYBOARD", "1" },
+            { "RECOMP_VBLANK", "paced" },
+        };
+        size_t i;
+
+        for (i = 0; i < sizeof defaults / sizeof defaults[0]; i++)
+            if (!getenv(defaults[i][0]))
+                _putenv_s(defaults[i][0], defaults[i][1]);
+        if (getenv("ROBOTECH_PUSHBUFFER")) {
+            if (!getenv("RECOMP_PB_EXEC"))
+                _putenv_s("RECOMP_PB_EXEC", "1");
+            if (!getenv("RECOMP_FB_WINDOW"))
+                _putenv_s("RECOMP_FB_WINDOW", "1");
+        } else if (!getenv("ROBOTECH_D3D11")) {
+            _putenv_s("ROBOTECH_D3D11", "1");
+        }
+    }
+
     printf("=== Robotech: Battlecry - Static Recompilation ===\n");
     printf("Loading XBE...\n");
 
@@ -359,8 +392,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     SymInitialize(GetCurrentProcess(), NULL, TRUE);
     AddVectoredExceptionHandler(1, veh_handler);
 
+    /* The game's folder: game\ beside where the program runs, or
+     * ROBOTECH_GAME_DIR (a test copy, say, without the movies). */
+    {
+        const char *dir = getenv("ROBOTECH_GAME_DIR");
+        snprintf(s_game_dir, sizeof s_game_dir, "%s", dir ? dir : YOUR_GAME_DIR);
+        snprintf(s_xbe_path, sizeof s_xbe_path, "%s\\default.xbe", s_game_dir);
+    }
+
     /* Step 1: Load XBE */
-    if (!load_xbe(YOUR_GAME_XBE_PATH, &xbe_data, &xbe_size)) {
+    if (!load_xbe(s_xbe_path, &xbe_data, &xbe_size)) {
         MessageBoxA(NULL, "Failed to load default.xbe.\n"
                     "Place the game files in the 'game' subdirectory.",
                     "Recomp", MB_ICONERROR);
@@ -380,6 +421,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     g_xbox_mem_offset = xbox_GetMemoryOffset();
     printf("Xbox memory mapped. Offset: 0x%llX\n", (unsigned long long)g_xbox_mem_offset);
+    RECOMP_ICALL_FEEDBACK_INIT();
 
     /* Who writes D3D's GPU-time word. With the pushbuffer executor it is the
      * executor, from the title's own BACK_END_WRITE_SEMAPHORE_RELEASE, once it
@@ -414,14 +456,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 g_apu_state ? "up" : "FAILED to initialise");
     }
 
+    /* The USB host controllers. The game's XAPI is statically linked and
+     * finds its pad by driving their registers, so with no controller there
+     * is no pad at all. Nothing in the runtime brings them up; the model
+     * stays off unless RECOMP_USB is set, and its registers are answered
+     * through the same fault handler as the APU's (xbox_VehMmioFault). */
+    {
+        extern void xbox_OhciInit(void);
+        xbox_OhciInit();
+    }
+
     /* Step 3: Initialize Xbox kernel */
     printf("Initializing Xbox kernel replacement...\n");
     xbox_kernel_init();
 
-    /* Step 4: Set game directory for file I/O path translation */
+    /* Step 4: Set game directory for file I/O path translation.
+     * The hard disk -- saves (UDATA), title data (TDATA), the cache
+     * partitions -- goes in a folder of the game's own, not in the toolkit's
+     * default one, which every title made with it shares:
+     * ROBOTECH_SAVE_DIR, or %LOCALAPPDATA%\RobotechBattlecry. */
     {
         extern void xbox_path_init(const char *game_dir, const char *save_dir);
-        xbox_path_init(YOUR_GAME_DIR, NULL);
+        static char save_dir[MAX_PATH];
+        const char *dir = getenv("ROBOTECH_SAVE_DIR");
+        const char *local = getenv("LOCALAPPDATA");
+
+        if (!dir && local) {
+            snprintf(save_dir, sizeof save_dir, "%s\\RobotechBattlecry", local);
+            dir = save_dir;
+        }
+        if (dir)
+            CreateDirectoryA(dir, NULL);
+        xbox_path_init(s_game_dir, dir);
+        fprintf(stderr, "[BOOT] hard disk in %s\n", dir ? dir : "(toolkit default)");
     }
 
     /* Step 5: Initialize kernel bridge (thunk table in Xbox memory) */

@@ -161,8 +161,16 @@ So entries move over one at a time and the rest keep working.
 | `D3DDevice_Swap` | yes | presents and pumps the window's messages; `ROBOTECH_D3D11_DUMP=<prefix>` writes the back buffer to BMPs (one in `ROBOTECH_D3D11_DUMP_EVERY`, 30 by default) |
 | `D3DDevice_SetTexture` | yes | the guest texture (a D3DPixelContainer: Data, Format, Size) mirrored by a host texture of the same format and size, remade if the game reuses the address |
 | `D3DTexture_LockRect` | yes | marks the texture for upload before its next draw: the game writes the texels after the lock (Bink decodes every movie frame so) |
-| `D3DDevice_SetVertexShader` | FVF only | a vertex program (handle with bit 0 set) is not routed yet |
+| `D3DDevice_SetVertexShader` | FVF only | a vertex program (handle with bit 0 set) is not routed yet; draws made with one are left out and counted |
 | `D3DDevice_DrawVerticesUP` | yes | Xbox primitive types (TRIANGLELIST 5 ... QUADSTRIP 9, POLYGON 10) translated to the layer's PC ones; a linear texture's coordinates, in texels on the Xbox, divided by its size |
+| `D3DDevice_SetStreamSource` | stream 0 | the vertex buffer's Data is a physical address, like a texture's |
+| `D3DDevice_SetIndices` | yes | the base vertex; the XDK's indexed draw takes its indices as a pointer |
+| `D3DDevice_DrawVertices` | yes | from stream 0, as `DrawPrimitiveUP` |
+| `D3DDevice_DrawIndexedVertices` | yes | 16-bit indices from the game's pointer, as `DrawIndexedPrimitiveUP` |
+| `D3DDevice_SetTransform` | yes | XDK numbering (VIEW 0, PROJECTION 1, TEXTURE0-3 2-5, WORLD 6-9) to the layer's |
+| `D3DDevice_SetViewport`, `SetMaterial`, `SetLight`, `LightEnable` | yes | same structures on both sides |
+| `D3DDevice_SetTextureState_TexCoordIndex` | yes | not kept in the game's state array; also tells the linear-texture fix-up which set a stage reads |
+| render states, texture-stage states | yes | not by entry: before each draw the bridge reads the game's own arrays (`D3D__RenderState` at `0x00166D58`, `D3D__TextureState[4][32]` at `0x00166B58`; the inlined `SetRenderState` stores every value there) and sends what changed, translated from the XDK's values (D3D8Types.h: `D3DCMP_*` 0x200.., `D3DBLEND_*` 0x300.., `D3DCULL_*` 0x900.. against `D3DRS_FRONTFACE`, write masks and wrap bits in other places, a different `D3DTOP_*` order) to the layer's |
 | everything else | no | |
 
 The engine's movie player (`0x00118740` opens, `0x00118980` draws a frame,

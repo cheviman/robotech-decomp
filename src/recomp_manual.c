@@ -179,6 +179,96 @@ void sub_0015A3B0(void)
     sub_0015A3B0_gen();
 }
 
+/* D3DDevice_SetTextureState_TexCoordIndex (0x00158360) */
+extern void sub_00158360_gen(void);
+
+void sub_00158360(void)
+{
+    d3d11_SetTexCoordIndex();
+    sub_00158360_gen();
+}
+
+/* D3DDevice_SetTransform (0x00155EA0) */
+extern void sub_00155EA0_gen(void);
+
+void sub_00155EA0(void)
+{
+    d3d11_SetTransform();
+    sub_00155EA0_gen();
+}
+
+/* D3DDevice_SetViewport (0x00156200) */
+extern void sub_00156200_gen(void);
+
+void sub_00156200(void)
+{
+    d3d11_SetViewport();
+    sub_00156200_gen();
+}
+
+/* D3DDevice_SetMaterial (0x00155FB0) */
+extern void sub_00155FB0_gen(void);
+
+void sub_00155FB0(void)
+{
+    d3d11_SetMaterial();
+    sub_00155FB0_gen();
+}
+
+/* D3DDevice_SetLight (0x00156360) */
+extern void sub_00156360_gen(void);
+
+void sub_00156360(void)
+{
+    d3d11_SetLight();
+    sub_00156360_gen();
+}
+
+/* D3DDevice_LightEnable (0x00156540) */
+extern void sub_00156540_gen(void);
+
+void sub_00156540(void)
+{
+    d3d11_LightEnable();
+    sub_00156540_gen();
+}
+
+/* D3DDevice_SetStreamSource (0x00159C20) */
+extern void sub_00159C20_gen(void);
+
+void sub_00159C20(void)
+{
+    d3d11_SetStreamSource();
+    sub_00159C20_gen();
+}
+
+/* D3DDevice_SetIndices (0x001567B0) */
+extern void sub_001567B0_gen(void);
+
+void sub_001567B0(void)
+{
+    d3d11_SetIndices();
+    sub_001567B0_gen();
+}
+
+/* D3DDevice_DrawVertices (0x0015A510) */
+extern void sub_0015A510_gen(void);
+
+void sub_0015A510(void)
+{
+    d3d11_DrawVertices();
+    sub_0015A510_gen();
+}
+
+/* D3DDevice_DrawIndexedVertices (0x0015A5B0) */
+extern void sub_0015A5B0_gen(void);
+
+void sub_0015A5B0(void)
+{
+    d3d11_DrawIndexedVertices();
+    sub_0015A5B0_gen();
+}
+
 /* ── ICALL failure logging ─────────────────────────────────── */
 
 /*

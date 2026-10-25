@@ -54,6 +54,16 @@ extern IDXGISwapChain *d3d8_GetSwapChain(void);
 #define BRIDGE_MAX_TEXTURES 256
 #define BRIDGE_STAGES       4
 
+/* The game's D3D keeps every render state and texture-stage state in arrays
+ * of its own, indexed by the XDK's enums (D3D8Types.h): D3DDevice_SetRenderState
+ * is inlined into the game and stores the value there as well as sending it,
+ * and the texture-stage states are only stored, for D3D to send at the next
+ * draw. The bridge reads them before each draw. */
+#define XB_RENDER_STATE_VA  0x00166D58u     /* D3D__RenderState[D3DRS_MAX] */
+#define XB_TEXTURE_STATE_VA 0x00166B58u     /* D3D__TextureState[4][D3DTSS_MAX] */
+#define XB_RS_MAX           166
+#define XB_TSS_MAX          32
+
 typedef struct {
     uint32_t va;               /* the guest D3DTexture */
     uint32_t format_word, size_word;
@@ -72,6 +82,11 @@ static BridgeTexture *s_stage[BRIDGE_STAGES];
 static uint32_t s_fvf;                 /* 0 while a vertex program is set */
 static uint8_t *s_scratch;             /* vertices rewritten for the host */
 static size_t s_scratch_size;
+static uint32_t s_rs_sent[XB_RS_MAX], s_ts_sent[BRIDGE_STAGES][XB_TSS_MAX];
+static int s_states_sent;              /* the arrays above hold what was sent */
+static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
+static uint32_t s_stream_va, s_stream_stride, s_base_vertex;
+static unsigned s_skipped_vp;          /* draws left out: vertex program set */
 
 static uint32_t guest32(uint32_t va)
 {
@@ -100,11 +115,45 @@ int d3d11_BridgeOn(void)
     return on;
 }
 
+/* xboxrecomp's key table (src/input/keyboard.c). With RECOMP_KEYBOARD=1 the
+ * emulated pad reads it: arrows the d-pad, Enter START, Z X C V for A B X Y,
+ * W A S D the left stick (the table's comments have the rest). */
+extern void xbox_InputKeySet(int vk, int down);
+extern void xbox_InputKeysClear(void);
+extern int xbox_InputWin32SideVk(int vk, uint32_t lparam);
+
+static void bridge_key(WPARAM w, LPARAM l, int down)
+{
+    int side = xbox_InputWin32SideVk((int)w, (uint32_t)l);
+
+    xbox_InputKeySet((int)w, down);
+    if (side)
+        xbox_InputKeySet(side, down);
+    /* With both Shifts held Windows sends one key-up, for the last. */
+    if (!down && w == VK_SHIFT) {
+        xbox_InputKeySet(VK_LSHIFT, 0);
+        xbox_InputKeySet(VK_RSHIFT, 0);
+    }
+}
+
 static LRESULT CALLBACK bridge_wndproc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
-    if (m == WM_CLOSE || m == WM_DESTROY) {
+    switch (m) {
+    case WM_CLOSE:
+    case WM_DESTROY:
         /* The layer's message pump (Swap) ends the process on WM_QUIT. */
         PostQuitMessage(0);
+        return 0;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+        bridge_key(w, l, 1);
+        return m == WM_SYSKEYDOWN ? DefWindowProcA(h, m, w, l) : 0;
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        bridge_key(w, l, 0);
+        return m == WM_SYSKEYUP ? DefWindowProcA(h, m, w, l) : 0;
+    case WM_KILLFOCUS:
+        xbox_InputKeysClear();
         return 0;
     }
     return DefWindowProcA(h, m, w, l);
@@ -274,6 +323,39 @@ static void bridge_dump(void)
     ID3D11Texture2D_Release(back);
 }
 
+/* The console's Swap waits for the vertical blank; with the game's
+ * pushbuffer never executed nothing makes it wait here, and the host's own
+ * vsync is the monitor's (144 Hz on the dev machine): the menu ran that fast.
+ * Swaps are held to 60 Hz (ROBOTECH_FPS overrides). */
+static void bridge_pace(void)
+{
+    static LARGE_INTEGER freq, next;
+    static double period = 0;
+    LARGE_INTEGER now;
+
+    if (period == 0) {
+        const char *e = getenv("ROBOTECH_FPS");
+        double fps = e ? atof(e) : 60.0;
+        QueryPerformanceFrequency(&freq);
+        period = fps > 0 ? (double)freq.QuadPart / fps : -1;
+        timeBeginPeriod(1);
+    }
+    if (period < 0)
+        return;
+    QueryPerformanceCounter(&now);
+    if (next.QuadPart == 0 || now.QuadPart - next.QuadPart > (LONGLONG)(period * 4)) {
+        next.QuadPart = now.QuadPart + (LONGLONG)period;     /* first, or fell far behind */
+        return;
+    }
+    while (now.QuadPart < next.QuadPart) {
+        LONGLONG left_ms = (next.QuadPart - now.QuadPart) * 1000 / freq.QuadPart;
+        if (left_ms > 1)
+            Sleep((DWORD)(left_ms - 1));
+        QueryPerformanceCounter(&now);
+    }
+    next.QuadPart += (LONGLONG)period;
+}
+
 /* D3DDevice_Swap(Flags): present, and pump the window's messages. */
 void d3d11_Swap(void)
 {
@@ -283,24 +365,292 @@ void d3d11_Swap(void)
     if (!s_dev)
         return;
     bridge_dump();
+    bridge_pace();
     s_dev->lpVtbl->Swap(s_dev, arg(0));
     s_presents++;
     now = GetTickCount();
     if (!last)
         last = now;
     if (now - last >= 2000) {
-        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws, %d textures\n",
-                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_tex_count);
-        s_presents = s_clears = s_draws = 0;
+        fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws, %u left out (vertex program), %d textures\n",
+                s_presents * 1000.0 / (now - last), s_clears, s_draws, s_skipped_vp, s_tex_count);
+        s_presents = s_clears = s_draws = s_skipped_vp = 0;
         last = now;
     }
 }
 
+/* ── Render and texture-stage states ───────────────────────── */
+
+/* The XDK's values, as D3D8Types.h has them, to the layer's (PC) ones. */
+static DWORD xb_cmp(uint32_t v)
+{
+    return v >= 0x200 && v <= 0x207 ? D3DCMP_NEVER + (v - 0x200) : D3DCMP_ALWAYS;
+}
+
+static DWORD xb_blend(uint32_t v)
+{
+    switch (v) {
+    case 0:     return D3DBLEND_ZERO;
+    case 1:     return D3DBLEND_ONE;
+    case 0x300: return D3DBLEND_SRCCOLOR;
+    case 0x301: return D3DBLEND_INVSRCCOLOR;
+    case 0x302: return D3DBLEND_SRCALPHA;
+    case 0x303: return D3DBLEND_INVSRCALPHA;
+    case 0x304: return D3DBLEND_DESTALPHA;
+    case 0x305: return D3DBLEND_INVDESTALPHA;
+    case 0x306: return D3DBLEND_DESTCOLOR;
+    case 0x307: return D3DBLEND_INVDESTCOLOR;
+    case 0x308: return D3DBLEND_SRCALPHASAT;
+    }
+    return D3DBLEND_ONE;      /* the constant-colour factors have no D3D8 state */
+}
+
+static DWORD xb_blendop(uint32_t v)
+{
+    switch (v) {
+    case 0x800A: return 2;    /* SUBTRACT */
+    case 0x800B: return 3;    /* REVSUBTRACT */
+    case 0x8007: return 4;    /* MIN */
+    case 0x8008: return 5;    /* MAX */
+    }
+    return 1;                 /* ADD, and the signed ones */
+}
+
+static DWORD xb_stencilop(uint32_t v)
+{
+    switch (v) {
+    case 0:      return 2;    /* ZERO */
+    case 0x1E01: return 3;    /* REPLACE */
+    case 0x1E02: return 4;    /* INCRSAT */
+    case 0x1E03: return 5;    /* DECRSAT */
+    case 0x150A: return 6;    /* INVERT */
+    case 0x8507: return 7;    /* INCR */
+    case 0x8508: return 8;    /* DECR */
+    }
+    return 1;                 /* KEEP */
+}
+
+static DWORD xb_colorwrite(uint32_t v)
+{
+    return ((v & 0x00010000u) ? 1u : 0) | ((v & 0x00000100u) ? 2u : 0)
+         | ((v & 0x00000001u) ? 4u : 0) | ((v & 0x01000000u) ? 8u : 0);
+}
+
+static DWORD xb_wrap(uint32_t v)
+{
+    return ((v & 0x10u) ? 1u : 0) | ((v & 0x1000u) ? 2u : 0) | ((v & 0x100000u) ? 4u : 0);
+}
+
+static DWORD xb_top(uint32_t v)
+{
+    switch (v) {
+    case 13: return D3DTOP_BLENDCURRENTALPHA;
+    case 14: return D3DTOP_BLENDTEXTUREALPHA;
+    case 15: return D3DTOP_BLENDFACTORALPHA;
+    case 16: return D3DTOP_BLENDTEXTUREALPHA;       /* ...PM: no layer op */
+    case 17: return D3DTOP_PREMODULATE;
+    case 18: case 19: case 20: case 21:
+        return D3DTOP_MODULATE;                     /* MODULATE*_ADD*: no layer op */
+    case 22: return D3DTOP_DOTPRODUCT3;
+    case 23: return D3DTOP_MULTIPLYADD;
+    case 24: return D3DTOP_LERP;
+    case 25: case 26:
+        return D3DTOP_SELECTARG1;                   /* BUMPENVMAP*: not modelled */
+    }
+    return v >= 1 && v <= 12 ? v : D3DTOP_DISABLE;  /* DISABLE..BLENDDIFFUSEALPHA match */
+}
+
+enum { RS_RAW, RS_CMP, RS_BLEND, RS_BLENDOP, RS_STENCILOP, RS_FILL, RS_SHADE, RS_COLORWRITE, RS_WRAP };
+
+static const struct { uint8_t xb; uint16_t pc; uint8_t kind; } s_rs_map[] = {
+    { 57, D3DRS_ZFUNC, RS_CMP },             { 58, D3DRS_ALPHAFUNC, RS_CMP },
+    { 59, D3DRS_ALPHABLENDENABLE, RS_RAW },  { 60, D3DRS_ALPHATESTENABLE, RS_RAW },
+    { 61, D3DRS_ALPHAREF, RS_RAW },          { 62, D3DRS_SRCBLEND, RS_BLEND },
+    { 63, D3DRS_DESTBLEND, RS_BLEND },       { 64, D3DRS_ZWRITEENABLE, RS_RAW },
+    { 65, D3DRS_DITHERENABLE, RS_RAW },      { 66, D3DRS_SHADEMODE, RS_SHADE },
+    { 67, D3DRS_COLORWRITEENABLE, RS_COLORWRITE },
+    { 68, D3DRS_STENCILZFAIL, RS_STENCILOP }, { 69, D3DRS_STENCILPASS, RS_STENCILOP },
+    { 70, D3DRS_STENCILFUNC, RS_CMP },       { 71, D3DRS_STENCILREF, RS_RAW },
+    { 72, D3DRS_STENCILMASK, RS_RAW },       { 73, D3DRS_STENCILWRITEMASK, RS_RAW },
+    { 74, D3DRS_BLENDOP, RS_BLENDOP },
+    { 92, D3DRS_FOGENABLE, RS_RAW },         { 93, D3DRS_FOGTABLEMODE, RS_RAW },
+    { 94, D3DRS_FOGSTART, RS_RAW },          { 95, D3DRS_FOGEND, RS_RAW },
+    { 96, D3DRS_FOGDENSITY, RS_RAW },        { 97, D3DRS_RANGEFOGENABLE, RS_RAW },
+    { 98, D3DRS_WRAP0, RS_WRAP },            { 99, D3DRS_WRAP1, RS_WRAP },
+    { 100, D3DRS_WRAP2, RS_WRAP },           { 101, D3DRS_WRAP3, RS_WRAP },
+    { 102, D3DRS_LIGHTING, RS_RAW },         { 103, D3DRS_SPECULARENABLE, RS_RAW },
+    { 104, D3DRS_LOCALVIEWER, RS_RAW },      { 105, D3DRS_COLORVERTEX, RS_RAW },
+    { 110, D3DRS_SPECULARMATERIALSOURCE, RS_RAW }, { 111, D3DRS_DIFFUSEMATERIALSOURCE, RS_RAW },
+    { 112, D3DRS_AMBIENTMATERIALSOURCE, RS_RAW },  { 113, D3DRS_EMISSIVEMATERIALSOURCE, RS_RAW },
+    { 115, D3DRS_AMBIENT, RS_RAW },          { 116, D3DRS_POINTSIZE, RS_RAW },
+    { 117, D3DRS_POINTSIZE_MIN, RS_RAW },    { 118, D3DRS_POINTSPRITEENABLE, RS_RAW },
+    { 119, D3DRS_POINTSCALEENABLE, RS_RAW },
+    { 138, D3DRS_FOGCOLOR, RS_RAW },         { 139, D3DRS_FILLMODE, RS_FILL },
+    { 142, D3DRS_NORMALIZENORMALS, RS_RAW }, { 143, D3DRS_ZENABLE, RS_RAW },
+    { 144, D3DRS_STENCILENABLE, RS_RAW },    { 145, D3DRS_STENCILFAIL, RS_STENCILOP },
+    { 148, D3DRS_TEXTUREFACTOR, RS_RAW },    { 151, D3DRS_EDGEANTIALIAS, RS_RAW },
+};
+
+#define XB_RS_FRONTFACE 146
+#define XB_RS_CULLMODE  147
+
+static DWORD rs_value(int kind, uint32_t v)
+{
+    switch (kind) {
+    case RS_CMP:        return xb_cmp(v);
+    case RS_BLEND:      return xb_blend(v);
+    case RS_BLENDOP:    return xb_blendop(v);
+    case RS_STENCILOP:  return xb_stencilop(v);
+    case RS_FILL:       return v == 0x1B00 ? D3DFILL_POINT : v == 0x1B01 ? D3DFILL_WIREFRAME : D3DFILL_SOLID;
+    case RS_SHADE:      return v == 0x1D00 ? 1u : 2u;             /* FLAT, GOURAUD */
+    case RS_COLORWRITE: return xb_colorwrite(v);
+    case RS_WRAP:       return xb_wrap(v);
+    }
+    return v;
+}
+
+/* Xbox culls by winding against D3DRS_FRONTFACE; the layer culls by winding
+ * alone, with clockwise as the front. A counter-clockwise front face swaps
+ * which winding the cull mode names. */
+static DWORD xb_cull(uint32_t cull, uint32_t front)
+{
+    int cw;
+
+    if (cull == 0)
+        return D3DCULL_NONE;
+    cw = (cull == 0x900);
+    if (front == 0x901)
+        cw = !cw;
+    return cw ? D3DCULL_CW : D3DCULL_CCW;
+}
+
+static const struct { uint8_t xb; uint16_t pc; uint8_t kind; } s_ts_map[] = {
+    { 0, D3DTSS_ADDRESSU, 1 },      { 1, D3DTSS_ADDRESSV, 1 },
+    { 3, D3DTSS_MAGFILTER, 2 },     { 4, D3DTSS_MINFILTER, 2 },     { 5, D3DTSS_MIPFILTER, 2 },
+    { 6, D3DTSS_MIPMAPLODBIAS, 0 }, { 7, D3DTSS_MAXMIPLEVEL, 0 },   { 8, D3DTSS_MAXANISOTROPY, 0 },
+    { 12, D3DTSS_COLOROP, 3 },      { 14, D3DTSS_COLORARG1, 0 },    { 15, D3DTSS_COLORARG2, 0 },
+    { 16, D3DTSS_ALPHAOP, 3 },      { 18, D3DTSS_ALPHAARG1, 0 },    { 19, D3DTSS_ALPHAARG2, 0 },
+    { 20, D3DTSS_RESULTARG, 0 },
+};
+
+static DWORD ts_value(int kind, uint32_t v)
+{
+    switch (kind) {
+    case 1: return v == 5 ? D3DTADDRESS_CLAMP : v;                 /* CLAMPTOEDGE */
+    case 2: return v > D3DTEXF_ANISOTROPIC ? D3DTEXF_LINEAR : v;    /* QUINCUNX, GAUSSIANCUBIC */
+    case 3: return xb_top(v);
+    }
+    return v;
+}
+
+/* Send what changed in the game's state arrays since the last draw. */
+static void bridge_sync_states(void)
+{
+    uint32_t rs[XB_RS_MAX], ts[BRIDGE_STAGES][XB_TSS_MAX];
+    size_t i;
+    int s;
+
+    memcpy(rs, guest_ptr(XB_RENDER_STATE_VA), sizeof rs);
+    memcpy(ts, guest_ptr(XB_TEXTURE_STATE_VA), sizeof ts);
+    for (i = 0; i < sizeof s_rs_map / sizeof s_rs_map[0]; i++) {
+        uint8_t x = s_rs_map[i].xb;
+        if (s_states_sent && rs[x] == s_rs_sent[x])
+            continue;
+        s_dev->lpVtbl->SetRenderState(s_dev, (D3DRENDERSTATETYPE)s_rs_map[i].pc,
+                                      rs_value(s_rs_map[i].kind, rs[x]));
+    }
+    if (!s_states_sent || rs[XB_RS_CULLMODE] != s_rs_sent[XB_RS_CULLMODE]
+            || rs[XB_RS_FRONTFACE] != s_rs_sent[XB_RS_FRONTFACE])
+        s_dev->lpVtbl->SetRenderState(s_dev, D3DRS_CULLMODE,
+                                      xb_cull(rs[XB_RS_CULLMODE], rs[XB_RS_FRONTFACE]));
+    for (s = 0; s < BRIDGE_STAGES; s++) {
+        for (i = 0; i < sizeof s_ts_map / sizeof s_ts_map[0]; i++) {
+            uint8_t x = s_ts_map[i].xb;
+            if (s_states_sent && ts[s][x] == s_ts_sent[s][x])
+                continue;
+            s_dev->lpVtbl->SetTextureStageState(s_dev, (DWORD)s, (D3DTEXTURESTAGESTATETYPE)s_ts_map[i].pc,
+                                                ts_value(s_ts_map[i].kind, ts[s][x]));
+        }
+    }
+    memcpy(s_rs_sent, rs, sizeof rs);
+    memcpy(s_ts_sent, ts, sizeof ts);
+    s_states_sent = 1;
+}
+
+/* D3DDevice_SetTextureState_TexCoordIndex(Stage, Value): not kept in the
+ * game's array, so it is taken here. Also says which coordinate set a stage
+ * reads, which the linear-texture fix-up needs. */
+void d3d11_SetTexCoordIndex(void)
+{
+    uint32_t stage = arg(0), value = arg(1);
+
+    if (!s_dev || stage >= BRIDGE_STAGES)
+        return;
+    s_tci[stage] = value & 0xFFFFu;
+    s_dev->lpVtbl->SetTextureStageState(s_dev, stage, D3DTSS_TEXCOORDINDEX, value);
+}
+
+/* ── Transforms, viewport, material, lights ────────────────── */
+
+/* D3DDevice_SetTransform(State, pMatrix): the XDK numbers the transforms
+ * VIEW 0, PROJECTION 1, TEXTURE0-3 2-5, WORLD 6, WORLD1-3 7-9. */
+void d3d11_SetTransform(void)
+{
+    uint32_t state = arg(0), m = arg(1);
+    D3DTRANSFORMSTATETYPE pc;
+
+    if (!s_dev || !m || state > 9)
+        return;
+    if (state == 0)
+        pc = D3DTS_VIEW;
+    else if (state == 1)
+        pc = D3DTS_PROJECTION;
+    else if (state <= 5)
+        pc = (D3DTRANSFORMSTATETYPE)(D3DTS_TEXTURE0 + (state - 2));
+    else
+        pc = (D3DTRANSFORMSTATETYPE)(D3DTS_WORLD + (state - 6));
+    s_dev->lpVtbl->SetTransform(s_dev, pc, (const D3DMATRIX *)guest_ptr(m));
+}
+
+/* D3DDevice_SetViewport(pViewport): the same six fields on both sides. */
+void d3d11_SetViewport(void)
+{
+    uint32_t vp = arg(0);
+
+    if (s_dev && vp)
+        s_dev->lpVtbl->SetViewport(s_dev, (const D3DVIEWPORT8 *)guest_ptr(vp));
+}
+
+/* D3DDevice_SetMaterial(pMaterial): 17 floats on both sides. */
+void d3d11_SetMaterial(void)
+{
+    uint32_t m = arg(0);
+
+    if (s_dev && m)
+        s_dev->lpVtbl->SetMaterial(s_dev, (const D3DMATERIAL8 *)guest_ptr(m));
+}
+
+/* D3DDevice_SetLight(Index, pLight): the same layout and light types. */
+void d3d11_SetLight(void)
+{
+    uint32_t i = arg(0), l = arg(1);
+
+    if (s_dev && l)
+        s_dev->lpVtbl->SetLight(s_dev, i, (const D3DLIGHT8 *)guest_ptr(l));
+}
+
+/* D3DDevice_LightEnable(Index, bEnable). */
+void d3d11_LightEnable(void)
+{
+    if (s_dev)
+        s_dev->lpVtbl->LightEnable(s_dev, arg(0), (BOOL)arg(1));
+}
+
 /* ── Textures ──────────────────────────────────────────────── */
 
-/* Where the texels are, as the CPU sees them: Data is a physical address, and
- * physical memory shows through the contiguous window. */
-static uint32_t texel_va(uint32_t data)
+/* Where a resource's data is, as the CPU sees it: Data is a physical address,
+ * and physical memory shows through the contiguous window. */
+static uint32_t phys_va(uint32_t data)
 {
     return data < XB_CONTIG_SIZE ? XB_CONTIG_BASE + data : data;
 }
@@ -359,17 +709,23 @@ static BridgeTexture *bridge_texture(uint32_t va)
 /* Copy the guest's texels into the host texture, level by level. The layer
  * takes the bytes as the Xbox keeps them (swizzled formats are unswizzled on
  * upload); only a linear texture's rows need repacking, its guest pitch
- * being a multiple of 64. */
+ * being a multiple of 64. A block-compressed level has a row per four lines
+ * of texels: copying a row per line wrote four times past the layer's
+ * buffer, and the heap corruption ended the process with no report. */
+extern BOOL d3d8_format_is_compressed(D3DFORMAT fmt);
+
 static void bridge_upload(BridgeTexture *t)
 {
-    const uint8_t *src = (const uint8_t *)guest_ptr(texel_va(guest32(t->va + XB_RES_DATA)));
+    const uint8_t *src = (const uint8_t *)guest_ptr(phys_va(guest32(t->va + XB_RES_DATA)));
+    BOOL blocks = d3d8_format_is_compressed(t->format);
     UINT level;
 
     if (!t->host || !src)
         return;
     for (level = 0; level < t->levels; level++) {
         D3DLOCKED_RECT lr;
-        UINT rows = t->height >> level ? t->height >> level : 1;
+        UINT h = t->height >> level ? t->height >> level : 1;
+        UINT rows = blocks ? (h + 3) / 4 : h;
         UINT row_bytes, y;
 
         if (FAILED(t->host->lpVtbl->LockRect(t->host, level, &lr, NULL, 0)))
@@ -458,9 +814,9 @@ static UINT fvf_texcoords(uint32_t fvf, UINT floats[8])
 
 /* A linear texture is sampled with coordinates in texels on the Xbox, and in
  * 0..1 on the host: the game's vertices go to the host with those sets
- * divided by the texture's size. Stage k reads set k (D3DTSS_TEXCOORDINDEX's
- * default). Returns the vertices to draw, the game's own when nothing needs
- * rewriting. */
+ * divided by the texture's size. Stage k reads the set its TEXCOORDINDEX
+ * names (k by default). Returns the vertices to draw, the game's own when
+ * nothing needs rewriting. */
 static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT stride)
 {
     UINT floats[8], off, k, v;
@@ -471,7 +827,7 @@ static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT strid
         return src;
     off = fvf_texcoords(s_fvf, floats);
     for (k = 0; k < BRIDGE_STAGES; k++)
-        if (floats[k] && s_stage[k] && s_stage[k]->pitch)
+        if (s_tci[k] < 8 && floats[s_tci[k]] && s_stage[k] && s_stage[k]->pitch)
             any = 1;
     if (!any)
         return src;
@@ -485,16 +841,16 @@ static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT strid
     memcpy(s_scratch, src, bytes);
     for (k = 0; k < BRIDGE_STAGES; k++) {
         BridgeTexture *t = s_stage[k];
-        UINT set_off = off, j;
+        UINT set = s_tci[k], set_off = off, j;
 
-        for (j = 0; j < k; j++)
-            set_off += floats[j] * 4;
-        if (!floats[k] || !t || !t->pitch)
+        if (set >= 8 || !floats[set] || !t || !t->pitch)
             continue;
+        for (j = 0; j < set; j++)
+            set_off += floats[j] * 4;
         for (v = 0; v < vertices; v++) {
             float *uv = (float *)(s_scratch + (size_t)v * stride + set_off);
             uv[0] /= (float)t->width;
-            if (floats[k] > 1)
+            if (floats[set] > 1)
                 uv[1] /= (float)t->height;
         }
     }
@@ -521,15 +877,22 @@ static int bridge_primitive(uint32_t xb, uint32_t vertices, D3DPRIMITIVETYPE *pt
     return 0;
 }
 
-/* Textures the game wrote since they were last uploaded go up before a draw
- * that samples them. */
-static void bridge_flush_textures(void)
+/* What every draw needs first: the states the game set since the last one,
+ * and the textures it wrote. Returns 0 when the draw cannot be routed yet: a
+ * vertex program is set, and the bridge has no translation for those. */
+static int bridge_before_draw(void)
 {
     int s;
 
+    if (!s_fvf) {
+        s_skipped_vp++;
+        return 0;
+    }
+    bridge_sync_states();
     for (s = 0; s < BRIDGE_STAGES; s++)
         if (s_stage[s] && s_stage[s]->dirty)
             bridge_upload(s_stage[s]);
+    return 1;
 }
 
 /* D3DDevice_DrawVerticesUP(PrimitiveType, VertexCount, pVertexStreamZeroData,
@@ -542,9 +905,80 @@ void d3d11_DrawVerticesUP(void)
 
     if (!s_dev || !data || !bridge_primitive(xbtype, vertices, &pt, &count) || !count)
         return;
-    bridge_flush_textures();
+    if (!bridge_before_draw())
+        return;
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count,
                                    bridge_vertices((const uint8_t *)guest_ptr(data), vertices, stride),
                                    stride);
+    s_draws++;
+}
+
+/* D3DDevice_SetStreamSource(StreamNumber, pStreamData, Stride). Stream 0 is
+ * the one an FVF draw reads; the others only serve vertex programs. */
+void d3d11_SetStreamSource(void)
+{
+    if (s_dev && arg(0) == 0) {
+        s_stream_va = arg(1);
+        s_stream_stride = arg(2);
+    }
+}
+
+/* D3DDevice_SetIndices(pIndexData, BaseVertexIndex): the XDK's indexed draw
+ * takes its indices as a pointer, so only the base vertex matters here. */
+void d3d11_SetIndices(void)
+{
+    if (s_dev)
+        s_base_vertex = arg(1);
+}
+
+/* The vertices stream 0 points at: a D3DVertexBuffer, whose Data is the
+ * physical address of the vertices, like a texture's. */
+static const uint8_t *stream_vertices(void)
+{
+    if (!s_stream_va)
+        return NULL;
+    return (const uint8_t *)guest_ptr(phys_va(guest32(s_stream_va + XB_RES_DATA)));
+}
+
+/* D3DDevice_DrawVertices(PrimitiveType, StartVertex, VertexCount). */
+void d3d11_DrawVertices(void)
+{
+    uint32_t xbtype = arg(0), start = arg(1), vertices = arg(2);
+    const uint8_t *vb = stream_vertices();
+    D3DPRIMITIVETYPE pt;
+    UINT count;
+
+    if (!s_dev || !vb || !s_stream_stride || !bridge_primitive(xbtype, vertices, &pt, &count) || !count)
+        return;
+    if (!bridge_before_draw())
+        return;
+    vb += (size_t)start * s_stream_stride;
+    s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count, bridge_vertices(vb, vertices, s_stream_stride),
+                                   s_stream_stride);
+    s_draws++;
+}
+
+/* D3DDevice_DrawIndexedVertices(PrimitiveType, VertexCount, pIndexData):
+ * VertexCount is the number of 16-bit indices, which index from the base
+ * vertex SetIndices gave. */
+void d3d11_DrawIndexedVertices(void)
+{
+    uint32_t xbtype = arg(0), indices = arg(1), ib = arg(2);
+    const uint8_t *vb = stream_vertices();
+    const uint16_t *idx = (const uint16_t *)guest_ptr(ib);
+    D3DPRIMITIVETYPE pt;
+    UINT count, i, lo = 0xFFFF, hi = 0;
+
+    if (!s_dev || !vb || !idx || !s_stream_stride || !bridge_primitive(xbtype, indices, &pt, &count) || !count)
+        return;
+    if (!bridge_before_draw())
+        return;
+    for (i = 0; i < indices; i++) {
+        if (idx[i] < lo) lo = idx[i];
+        if (idx[i] > hi) hi = idx[i];
+    }
+    vb += (size_t)s_base_vertex * s_stream_stride;
+    s_dev->lpVtbl->DrawIndexedPrimitiveUP(s_dev, pt, lo, hi - lo + 1, count, idx, D3DFMT_INDEX16,
+                                          bridge_vertices(vb, hi + 1, s_stream_stride), s_stream_stride);
     s_draws++;
 }
