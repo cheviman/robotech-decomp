@@ -52,6 +52,7 @@ file(GLOB RECOMP_GEN_SOURCES CONFIGURE_DEPENDS "src/recomp/gen/*.c")
 set(GAME_SOURCES
     src/main.c
     src/recomp_manual.c
+    src/d3d11_bridge.c
     # Add game-specific sources here, e.g.:
     # src/asset_loader.c
     # src/custom_renderer.c

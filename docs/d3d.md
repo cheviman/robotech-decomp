@@ -144,6 +144,26 @@ draw time.
 writes NV2A methods itself, which only an executor (or a bridge that decodes
 those methods) sees.
 
+## The bridge
+
+`src/d3d11_bridge.c`, on with `ROBOTECH_D3D11=1`. The game's D3D keeps running
+as its own bookkeeping -- it creates its objects in guest memory and keeps
+their state -- but its pushbuffer is not executed (no `RECOMP_PB_EXEC`, the GPU
+fence mirrored). Each routed entry is wrapped in `src/recomp_manual.c`
+(`sub_X` calling the generated `sub_X_gen`): the bridge sees the call first,
+with the arguments still on the guest stack, and draws it through `src/d3d`.
+So entries move over one at a time and the rest keep working.
+
+| Entry | Routed | Notes |
+|---|---|---|
+| `Direct3D_CreateDevice` | yes | the guest's presentation parameters copied field by field (its `HWND` is 32 bits); the host device is windowed |
+| `D3DDevice_Clear` | yes | Xbox clear flags (target 0xF0, Z 0x01, stencil 0x02) translated to the layer's PC values |
+| `D3DDevice_Swap` | yes | presents and pumps the window's messages |
+| everything else | no | |
+
+With those three the window presents at the game's rate (about 30 fps during
+the logo movies) and shows black: nothing is drawn through the bridge yet.
+
 ## Consequences for the D3D11 path
 
 `src/d3d` is a native D3D8: host pointers, COM-style interfaces, its own

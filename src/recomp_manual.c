@@ -108,15 +108,39 @@ recomp_func_t recomp_lookup_manual(uint32_t xbox_va)
 
 /* ── Direct3D ──────────────────────────────────────────────── */
 
-/* Direct3D_CreateDevice (0x00155D10), wrapped: the generated body creates the
- * device, then main.c checks where its GPU-time word ended up. */
+/* The game's D3D entries, wrapped: the Direct3D 11 bridge (d3d11_bridge.c)
+ * sees each call first, while the guest stack still holds its arguments, and
+ * the generated body then runs as before. The names are XbSymbolDatabase's. */
+#include "d3d11_bridge.h"
+
+/* Direct3D_CreateDevice (0x00155D10): after the generated body has created
+ * the device, main.c checks where its GPU-time word ended up. */
 extern void sub_00155D10_gen(void);
 extern void robotech_D3DDeviceCreated(void);
 
 void sub_00155D10(void)
 {
+    d3d11_CreateDevice();
     sub_00155D10_gen();
     robotech_D3DDeviceCreated();
+}
+
+/* D3DDevice_Clear (0x001576D0) */
+extern void sub_001576D0_gen(void);
+
+void sub_001576D0(void)
+{
+    d3d11_Clear();
+    sub_001576D0_gen();
+}
+
+/* D3DDevice_Swap (0x00157530) */
+extern void sub_00157530_gen(void);
+
+void sub_00157530(void)
+{
+    d3d11_Swap();
+    sub_00157530_gen();
 }
 
 /* ── ICALL failure logging ─────────────────────────────────── */

@@ -23,7 +23,8 @@ is committed.
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)
-- [ ] Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses Direct3D)
+- [ ] Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses Direct3D): the device,
+      `Clear` and `Swap` so far (`ROBOTECH_D3D11=1`), presenting at the game's rate; drawing is next
 - [ ] Menus and the missions; sound, controllers, saves
 - [ ] Higher resolutions, widescreen, frame rate
 - [ ] Xbox One (UWP, Direct3D 11), then Vulkan
@@ -72,6 +73,13 @@ Visual Studio Build Tools (MSVC, x64).
    blank and `RECOMP_FB_WINDOW` shows what it draws in a window. The runtime's other switches are in
    xboxrecomp's documentation.
 
+   Or through the Direct3D 11 bridge, which is where the port is going (`src/d3d11_bridge.c`; not with
+   `RECOMP_PB_EXEC`). `ROBOTECH_WINDOW_SCALE` sizes its window, 2 by default:
+
+   ```bash
+   ROBOTECH_D3D11=1 RECOMP_VBLANK=paced build/Release/robotech_battlecry.exe
+   ```
+
 `symbols/xdk_symbols.json` comes from scanning the XBE with
 [XbSymbolDatabase](https://github.com/Cxbx-Reloaded/XbSymbolDatabase)'s command-line tool; to make it
 again:
@@ -88,6 +96,8 @@ game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
 src/recomp_manual.c     hand-written overrides and wrappers of recompiled functions
+src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
+                        D3D8 layer
 src/recomp/gen/         the recompiled C (ignored by git; tools/pipeline.py writes it)
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
 symbols/names.json      function names given by hand

@@ -1,0 +1,21 @@
+/**
+ *    Name:        d3d11_bridge.h
+ *    Description: the entries of the Direct3D 11 bridge that recomp_manual.c's wrappers call
+ *    Version:     0.1.0
+ *    Created:     25-10-2026
+ *    Modified:    25-10-2026
+ *    Author:      Sebastian Toyos
+ *
+ *    Each one is called by the wrapper of the D3D function it is named after, before the generated body,
+ *    so the guest stack still holds the arguments (d3d11_bridge.c).
+ */
+#ifndef D3D11_BRIDGE_H
+#define D3D11_BRIDGE_H
+
+int d3d11_BridgeOn(void);
+
+void d3d11_CreateDevice(void);
+void d3d11_Clear(void);
+void d3d11_Swap(void);
+
+#endif
