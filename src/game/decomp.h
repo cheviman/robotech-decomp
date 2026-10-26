@@ -1,7 +1,7 @@
 /**
  *    Name:        decomp.h
  *    Description: what the C written by hand needs to sit among the recompiled C
- *    Version:     0.2.0
+ *    Version:     0.3.0
  *    Created:     25-10-2026
  *    Modified:    26-10-2026
  *    Author:      Sebastian Toyos
@@ -78,6 +78,15 @@ static inline float float_from_bits(uint32_t bits)
     return f;
 }
 
+/* A float's bits, for a float argument pushed on the guest stack. */
+static inline uint32_t float_to_bits(float f)
+{
+    uint32_t bits;
+
+    memcpy(&bits, &f, 4);
+    return bits;
+}
+
 /* What a function that hands back nothing on some path leaves in eax there: what the caller had in it,
  * as the original, when a caller is known to read eax after it. */
 #define EAX_AS_CALLER_LEFT      ((uint32_t)g_eax)
@@ -101,17 +110,29 @@ static inline float float_from_bits(uint32_t bits)
  * its entry, CALL(name_entry, ...), so that its arguments are on the guest stack too. */
 #define ENTRY_VARARGS1(name)  void name##_entry(void) { g_eax = (uint32_t)name(ARG32(0), g_esp + 8u); g_esp += 4u; }
 
-/* cdecl, n arguments, no result: no caller of the original reads eax after it (measured, objects.c) */
+/* cdecl, n arguments, no result: no caller of the original reads eax after it (measured for each) */
 #define ENTRY_CDECL0_VOID(name)  void name##_entry(void) { name(); g_esp += 4u; }
 #define ENTRY_CDECL1_VOID(name)  void name##_entry(void) { name(ARG32(0)); g_esp += 4u; }
 #define ENTRY_CDECL2_VOID(name)  void name##_entry(void) { name(ARG32(0), ARG32(1)); g_esp += 4u; }
+#define ENTRY_CDECL3_VOID(name)  void name##_entry(void) { name(ARG32(0), ARG32(1), ARG32(2)); g_esp += 4u; }
+#define ENTRY_CDECL4_VOID(name)  void name##_entry(void) \
+    { name(ARG32(0), ARG32(1), ARG32(2), ARG32(3)); g_esp += 4u; }
+#define ENTRY_CDECL5_VOID(name)  void name##_entry(void) \
+    { name(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4)); g_esp += 4u; }
 
 /* cdecl, n arguments, the result a float in st(0): pushed on the emulated x87 stack, as the original's
  * fld leaves it */
 #define ENTRY_CDECL0_FLOAT(name)  void name##_entry(void) { decomp_FpPush(name()); g_esp += 4u; }
+#define ENTRY_CDECL1_FLOAT(name)  void name##_entry(void) { decomp_FpPush(name(ARG32(0))); g_esp += 4u; }
+#define ENTRY_CDECL2_FLOAT(name)  void name##_entry(void) \
+    { decomp_FpPush(name(ARG32(0), ARG32(1))); g_esp += 4u; }
 
 /* thiscall, the object in ecx and no other argument, no result */
 #define ENTRY_THISCALL0_VOID(name)  void name##_entry(void) { name(g_ecx); g_esp += 4u; }
+
+/* Arguments in registers, the rest on the stack (cdecl), as the compiler passed them to some functions
+ * it could see all the callers of; the arguments are listed, g_eax, g_esi, ARG32(0)... No result. */
+#define ENTRY_REGISTERS_VOID(name, ...)  void name##_entry(void) { name(__VA_ARGS__); g_esp += 4u; }
 
 /* ── Calls into the recompiled code ──────────────────────────────────────────────────────────────── */
 
@@ -136,6 +157,8 @@ uint32_t decomp_CallAt(uint32_t va, unsigned count, const uint32_t *args);
 #define CALL(function, ...)     decomp_Call(function, DECOMP_COUNT(__VA_ARGS__), DECOMP_ARGS(__VA_ARGS__))
 #define CALL0(function)         decomp_Call(function, 0, 0)
 #define CALL_AT(va, ...)        decomp_CallAt(va, DECOMP_COUNT(__VA_ARGS__), DECOMP_ARGS(__VA_ARGS__))
+/* fastcall, two arguments in ecx and edx (the XDK's D3DDevice_SetRenderState_Simple) */
+#define CALL_FASTCALL2(function, first, second)  (g_ecx = (first), g_edx = (second), CALL0(function))
 
 #include "recomp_funcs.h"   /* the recompiled functions, by name, and the entries of the ones written by hand */
 

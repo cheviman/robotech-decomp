@@ -1,15 +1,53 @@
 {
  "families": [
   {
-   "name": "Entity",
-   "block": "0x001BC998",
-   "setup": "0x00018530",
+   "name": "Player",
+   "number": 1,
+   "block": "0x001BC768",
+   "setup": "0x00017700",
+   "version": 0,
+   "type_count": 1,
+   "startup": null,
+   "shutdown": null,
    "types": [
     {
-     "type": 1,
+     "type": 0,
+     "register": "0x00041020",
+     "desc": "0x001EB2F0",
+     "size": 1036,
+     "version": 3,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x0003E770",
+      "0x08": "0x0003E810",
+      "0x0C": "0x00040EE0",
+      "0x10": "0x0003E6B0",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "camera.wav",
+      "click.wav"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Entity",
+   "number": 2,
+   "block": "0x001BC998",
+   "setup": "0x00018530",
+   "version": 10,
+   "type_count": 78,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
      "register": "0x00065C90",
      "desc": "0x00200A00",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00063E30",
       "0x08": "0x00063E60",
@@ -22,10 +60,12 @@
      ]
     },
     {
-     "type": 2,
+     "type": 1,
      "register": "0x0009B1B0",
      "desc": "0x0020DAD0",
      "size": 620,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0009B180",
       "0x08": "0x0009B1A0",
@@ -38,10 +78,12 @@
      ]
     },
     {
-     "type": 3,
+     "type": 2,
      "register": "0x0007B140",
      "desc": "0x00207430",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0007A760",
       "0x08": "0x0007AE90",
@@ -65,10 +107,12 @@
      ]
     },
     {
-     "type": 4,
+     "type": 3,
      "register": "0x0009AC00",
      "desc": "0x0020D630",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0009A690",
       "0x08": "0x0009AAE0",
@@ -92,10 +136,12 @@
      ]
     },
     {
-     "type": 5,
+     "type": 4,
      "register": "0x00099B90",
      "desc": "0x0020D280",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000990D0",
       "0x08": "0x000998E0",
@@ -119,10 +165,12 @@
      ]
     },
     {
-     "type": 6,
+     "type": 5,
      "register": "0x00098410",
      "desc": "0x0020CE90",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00097BD0",
       "0x08": "0x00098170",
@@ -146,10 +194,12 @@
      ]
     },
     {
-     "type": 7,
+     "type": 6,
      "register": "0x000972D0",
      "desc": "0x0020CC70",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00096EB0",
       "0x08": "0x000971B0",
@@ -171,10 +221,12 @@
      ]
     },
     {
-     "type": 8,
+     "type": 7,
      "register": "0x00096750",
      "desc": "0x0020C648",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00095C20",
       "0x08": "0x000964A0",
@@ -198,10 +250,12 @@
      ]
     },
     {
-     "type": 9,
+     "type": 8,
      "register": "0x00095210",
      "desc": "0x0020C2F0",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00094460",
       "0x08": "0x00094910",
@@ -225,10 +279,12 @@
      ]
     },
     {
-     "type": 10,
+     "type": 9,
      "register": "0x00094010",
      "desc": "0x0020C0B8",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000938E0",
       "0x08": "0x00093EC0",
@@ -252,10 +308,12 @@
      ]
     },
     {
-     "type": 11,
+     "type": 10,
      "register": "0x00092D70",
      "desc": "0x0020BBA0",
      "size": 656,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00091F00",
       "0x08": "0x00092400",
@@ -279,10 +337,12 @@
      ]
     },
     {
-     "type": 12,
+     "type": 11,
      "register": "0x000915D0",
      "desc": "0x0020B998",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00091280",
       "0x08": "0x000914F0",
@@ -301,10 +361,12 @@
      ]
     },
     {
-     "type": 13,
+     "type": 12,
      "register": "0x00069720",
      "desc": "0x00203AB8",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00068AF0",
       "0x08": "0x00069470",
@@ -328,10 +390,12 @@
      ]
     },
     {
-     "type": 14,
+     "type": 13,
      "register": "0x0008F830",
      "desc": "0x0020B538",
      "size": 656,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0008EB00",
       "0x08": "0x0008EED0",
@@ -352,10 +416,12 @@
      ]
     },
     {
-     "type": 15,
+     "type": 14,
      "register": "0x0008B6C0",
      "desc": "0x0020A938",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0008A910",
       "0x08": "0x0008ADC0",
@@ -379,10 +445,12 @@
      ]
     },
     {
-     "type": 16,
+     "type": 15,
      "register": "0x0008E360",
      "desc": "0x0020B340",
      "size": 784,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0008E280",
       "0x08": "0x0008DE80",
@@ -395,10 +463,12 @@
      ]
     },
     {
-     "type": 17,
+     "type": 16,
      "register": "0x0008DAC0",
      "desc": "0x0020AFE8",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0008CD10",
       "0x08": "0x0008D1C0",
@@ -422,10 +492,12 @@
      ]
     },
     {
-     "type": 18,
+     "type": 17,
      "register": "0x0008C8C0",
      "desc": "0x0020AC90",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0008BB10",
       "0x08": "0x0008BFC0",
@@ -449,10 +521,12 @@
      ]
     },
     {
-     "type": 19,
+     "type": 18,
      "register": "0x0008A4C0",
      "desc": "0x0020A308",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000899A0",
       "0x08": "0x0008A210",
@@ -476,10 +550,12 @@
      ]
     },
     {
-     "type": 20,
+     "type": 19,
      "register": "0x00088DD0",
      "desc": "0x00209E88",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00088A00",
       "0x08": "0x00088CF0",
@@ -496,10 +572,12 @@
      ]
     },
     {
-     "type": 21,
+     "type": 20,
      "register": "0x00087F30",
      "desc": "0x002099D8",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00087780",
       "0x08": "0x00087DE0",
@@ -523,10 +601,12 @@
      ]
     },
     {
-     "type": 22,
+     "type": 21,
      "register": "0x00086C60",
      "desc": "0x00209520",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000864D0",
       "0x08": "0x00086B10",
@@ -550,10 +630,12 @@
      ]
     },
     {
-     "type": 23,
+     "type": 22,
      "register": "0x00085A20",
      "desc": "0x00208F48",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00084FE0",
       "0x08": "0x00085780",
@@ -577,10 +659,12 @@
      ]
     },
     {
-     "type": 24,
+     "type": 23,
      "register": "0x00084460",
      "desc": "0x00208CD0",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00083FA0",
       "0x08": "0x00084320",
@@ -604,10 +688,12 @@
      ]
     },
     {
-     "type": 25,
+     "type": 24,
      "register": "0x0006D720",
      "desc": "0x00204850",
      "size": 696,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006C810",
       "0x08": "0x0006D310",
@@ -631,10 +717,12 @@
      ]
     },
     {
-     "type": 26,
+     "type": 25,
      "register": "0x00082B60",
      "desc": "0x00208728",
      "size": 700,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00081930",
       "0x08": "0x00082040",
@@ -658,10 +746,12 @@
      ]
     },
     {
-     "type": 27,
+     "type": 26,
      "register": "0x00063DB0",
      "desc": "0x001FF250",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00061F50",
       "0x08": "0x00061F80",
@@ -674,10 +764,12 @@
      ]
     },
     {
-     "type": 28,
+     "type": 27,
      "register": "0x00061ED0",
      "desc": "0x001FDAA0",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00060070",
       "0x08": "0x000600A0",
@@ -690,10 +782,12 @@
      ]
     },
     {
-     "type": 29,
+     "type": 28,
      "register": "0x0005FFF0",
      "desc": "0x001FC2F0",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005E190",
       "0x08": "0x0005E1C0",
@@ -706,10 +800,12 @@
      ]
     },
     {
-     "type": 30,
+     "type": 29,
      "register": "0x0005E110",
      "desc": "0x001FAB40",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005C2B0",
       "0x08": "0x0005C2E0",
@@ -722,10 +818,12 @@
      ]
     },
     {
-     "type": 31,
+     "type": 30,
      "register": "0x000907E0",
      "desc": "0x0020B790",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00090490",
       "0x08": "0x00090700",
@@ -744,10 +842,12 @@
      ]
     },
     {
-     "type": 32,
+     "type": 31,
      "register": "0x00067880",
      "desc": "0x00202A08",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00066C50",
       "0x08": "0x000675D0",
@@ -771,10 +871,12 @@
      ]
     },
     {
-     "type": 33,
+     "type": 32,
      "register": "0x0007C800",
      "desc": "0x00207818",
      "size": 660,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0007BA70",
       "0x08": "0x0007BE10",
@@ -798,10 +900,12 @@
      ]
     },
     {
-     "type": 34,
+     "type": 33,
      "register": "0x00052650",
      "desc": "0x001EC3B0",
      "size": 640,
+     "version": 2,
+     "flags": 1,
      "slots": {
       "0x04": "0x00052420",
       "0x08": "0x000525A0",
@@ -816,10 +920,12 @@
      ]
     },
     {
-     "type": 35,
+     "type": 34,
      "register": "0x0006C510",
      "desc": "0x00204700",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006C470",
       "0x08": "0x0006C100",
@@ -832,10 +938,12 @@
      ]
     },
     {
-     "type": 36,
+     "type": 35,
      "register": "0x0006EEE0",
      "desc": "0x002051D0",
      "size": 696,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006DF50",
       "0x08": "0x0006EB60",
@@ -859,10 +967,12 @@
      ]
     },
     {
-     "type": 37,
+     "type": 36,
      "register": "0x000520F0",
      "desc": "0x001EC058",
      "size": 640,
+     "version": 2,
+     "flags": 1,
      "slots": {
       "0x04": "0x00051EA0",
       "0x08": "0x00052030",
@@ -877,10 +987,12 @@
      ]
     },
     {
-     "type": 38,
+     "type": 37,
      "register": "0x00051B70",
      "desc": "0x001EBD00",
      "size": 640,
+     "version": 2,
+     "flags": 1,
      "slots": {
       "0x04": "0x00051940",
       "0x08": "0x00051AC0",
@@ -895,10 +1007,12 @@
      ]
     },
     {
-     "type": 39,
+     "type": 38,
      "register": "0x00080A20",
      "desc": "0x00208390",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0007F5B0",
       "0x08": "0x0007FD30",
@@ -922,10 +1036,12 @@
      ]
     },
     {
-     "type": 40,
+     "type": 39,
      "register": "0x0007EFA0",
      "desc": "0x00208038",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0007E670",
       "0x08": "0x0007ED10",
@@ -949,10 +1065,12 @@
      ]
     },
     {
-     "type": 41,
+     "type": 40,
      "register": "0x0007DCD0",
      "desc": "0x00207A68",
      "size": 624,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0007D210",
       "0x08": "0x0007DA40",
@@ -976,10 +1094,12 @@
      ]
     },
     {
-     "type": 42,
+     "type": 41,
      "register": "0x00073D80",
      "desc": "0x002061F8",
      "size": 700,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00072F20",
       "0x08": "0x000739F0",
@@ -1003,10 +1123,12 @@
      ]
     },
     {
-     "type": 43,
+     "type": 42,
      "register": "0x00057B50",
      "desc": "0x001ED790",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00056FD0",
       "0x08": "0x00057460",
@@ -1030,10 +1152,12 @@
      ]
     },
     {
-     "type": 44,
+     "type": 43,
      "register": "0x00056AE0",
      "desc": "0x001ED2F0",
      "size": 648,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00055F60",
       "0x08": "0x000563F0",
@@ -1057,10 +1181,12 @@
      ]
     },
     {
-     "type": 45,
+     "type": 44,
      "register": "0x000559A0",
      "desc": "0x001ED0E8",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00055630",
       "0x08": "0x000558B0",
@@ -1077,10 +1203,12 @@
      ]
     },
     {
-     "type": 46,
+     "type": 45,
      "register": "0x00054B80",
      "desc": "0x001ECBF8",
      "size": 632,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00054100",
       "0x08": "0x000543F0",
@@ -1095,10 +1223,12 @@
      ]
     },
     {
-     "type": 47,
+     "type": 46,
      "register": "0x00053CC0",
      "desc": "0x001EC708",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000531C0",
       "0x08": "0x000534B0",
@@ -1113,10 +1243,12 @@
      ]
     },
     {
-     "type": 48,
+     "type": 47,
      "register": "0x00077700",
      "desc": "0x002068D0",
      "size": 656,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00076FB0",
       "0x08": "0x000775D0",
@@ -1139,10 +1271,12 @@
      ]
     },
     {
-     "type": 49,
+     "type": 48,
      "register": "0x00051610",
      "desc": "0x001EB9A8",
      "size": 640,
+     "version": 2,
+     "flags": 1,
      "slots": {
       "0x04": "0x000513C0",
       "0x08": "0x00051550",
@@ -1157,10 +1291,12 @@
      ]
     },
     {
-     "type": 50,
+     "type": 49,
      "register": "0x0006BC50",
      "desc": "0x002045B0",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006BBB0",
       "0x08": "0x0006B840",
@@ -1173,10 +1309,12 @@
      ]
     },
     {
-     "type": 51,
+     "type": 50,
      "register": "0x0006B420",
      "desc": "0x00204460",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006B380",
       "0x08": "0x0006B010",
@@ -1189,10 +1327,12 @@
      ]
     },
     {
-     "type": 52,
+     "type": 51,
      "register": "0x0006ABF0",
      "desc": "0x00204310",
      "size": 636,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0006AB50",
       "0x08": "0x0006A7E0",
@@ -1205,10 +1345,12 @@
      ]
     },
     {
-     "type": 53,
+     "type": 52,
      "register": "0x00079D40",
      "desc": "0x002070D8",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000793B0",
       "0x08": "0x00079AB0",
@@ -1232,10 +1374,12 @@
      ]
     },
     {
-     "type": 54,
+     "type": 53,
      "register": "0x00078A70",
      "desc": "0x00206D80",
      "size": 628,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x000780E0",
       "0x08": "0x000787E0",
@@ -1259,10 +1403,12 @@
      ]
     },
     {
-     "type": 55,
+     "type": 54,
      "register": "0x000687E0",
      "desc": "0x00203260",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00067BA0",
       "0x08": "0x00068530",
@@ -1286,10 +1432,12 @@
      ]
     },
     {
-     "type": 56,
+     "type": 55,
      "register": "0x000726F0",
      "desc": "0x00205B20",
      "size": 700,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00071890",
       "0x08": "0x00072360",
@@ -1313,10 +1461,12 @@
      ]
     },
     {
-     "type": 57,
+     "type": 56,
      "register": "0x0005C230",
      "desc": "0x001F9390",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005C1E0",
       "0x08": "0x0005C210",
@@ -1329,10 +1479,12 @@
      ]
     },
     {
-     "type": 58,
+     "type": 57,
      "register": "0x0005C160",
      "desc": "0x001F7BE0",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005C110",
       "0x08": "0x0005C140",
@@ -1345,10 +1497,12 @@
      ]
     },
     {
-     "type": 59,
+     "type": 58,
      "register": "0x0005C090",
      "desc": "0x001F6430",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005C030",
       "0x08": "0x0005C070",
@@ -1359,10 +1513,12 @@
      "strings": []
     },
     {
-     "type": 60,
+     "type": 59,
      "register": "0x0005BF60",
      "desc": "0x001F4C80",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005BF10",
       "0x08": "0x0005BF40",
@@ -1373,10 +1529,12 @@
      "strings": []
     },
     {
-     "type": 61,
+     "type": 60,
      "register": "0x0005BE50",
      "desc": "0x001F34D0",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005BE00",
       "0x08": "0x0005BE30",
@@ -1387,10 +1545,12 @@
      "strings": []
     },
     {
-     "type": 62,
+     "type": 61,
      "register": "0x0005BD40",
      "desc": "0x001F1D20",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005BCF0",
       "0x08": "0x0005BD20",
@@ -1401,10 +1561,12 @@
      "strings": []
     },
     {
-     "type": 63,
+     "type": 62,
      "register": "0x0005BC30",
      "desc": "0x001F0570",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005BBE0",
       "0x08": "0x0005BC10",
@@ -1415,10 +1577,12 @@
      "strings": []
     },
     {
-     "type": 64,
+     "type": 63,
      "register": "0x0005BB20",
      "desc": "0x001EEDC0",
      "size": 776,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x0005BAD0",
       "0x08": "0x0005BB00",
@@ -1429,10 +1593,12 @@
      "strings": []
     },
     {
-     "type": 65,
+     "type": 64,
      "register": "0x00066940",
      "desc": "0x002021B0",
      "size": 640,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00065D10",
       "0x08": "0x00066690",
@@ -1456,10 +1622,12 @@
      ]
     },
     {
-     "type": 70,
+     "type": 69,
      "register": "0x000839F0",
      "desc": "0x00208C20",
      "size": 676,
+     "version": 0,
+     "flags": 1,
      "slots": {
       "0x04": "0x00083140",
       "0x08": "0x000831E0",
@@ -1475,10 +1643,12 @@
      ]
     },
     {
-     "type": 71,
+     "type": 70,
      "register": "0x00059400",
      "desc": "0x001EEB80",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059300",
       "0x08": "0x00059290",
@@ -1491,10 +1661,12 @@
      ]
     },
     {
-     "type": 72,
+     "type": 71,
      "register": "0x00059120",
      "desc": "0x001EE950",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059020",
       "0x08": "0x00058FA0",
@@ -1507,10 +1679,12 @@
      ]
     },
     {
-     "type": 73,
+     "type": 72,
      "register": "0x00058870",
      "desc": "0x001EE2C0",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00058770",
       "0x08": "0x00058700",
@@ -1523,10 +1697,12 @@
      ]
     },
     {
-     "type": 74,
+     "type": 73,
      "register": "0x00058590",
      "desc": "0x001EE090",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00058490",
       "0x08": "0x00058420",
@@ -1539,10 +1715,12 @@
      ]
     },
     {
-     "type": 75,
+     "type": 74,
      "register": "0x00058E30",
      "desc": "0x001EE720",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00058D30",
       "0x08": "0x00058CC0",
@@ -1555,10 +1733,12 @@
      ]
     },
     {
-     "type": 76,
+     "type": 75,
      "register": "0x00058B50",
      "desc": "0x001EE4F0",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00058A50",
       "0x08": "0x000589E0",
@@ -1571,10 +1751,12 @@
      ]
     },
     {
-     "type": 77,
+     "type": 76,
      "register": "0x000582B0",
      "desc": "0x001EDE60",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000581B0",
       "0x08": "0x00058140",
@@ -1587,10 +1769,12 @@
      ]
     },
     {
-     "type": 78,
+     "type": 77,
      "register": "0x00057FD0",
      "desc": "0x001EDC30",
      "size": 972,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00057ED0",
       "0x08": "0x00057E60",
@@ -1605,502 +1789,22 @@
    ]
   },
   {
-   "name": "Screen",
-   "block": "0x001E5FC8",
-   "setup": "0x00020320",
-   "types": [
-    {
-     "type": 1,
-     "register": "0x00037BF0",
-     "desc": "0x001EAAD0",
-     "size": 320,
-     "slots": {
-      "0x04": "0x00035630",
-      "0x08": "0x000356C0",
-      "0x0C": "0x00037A90"
-     },
-     "strings": [
-      "Cancel_Back_S.wav",
-      "Confirm_S.wav",
-      "cursor.wav"
-     ]
-    },
-    {
-     "type": 2,
-     "register": "0x000C61C0",
-     "desc": "0x0021CCC8",
-     "size": 320,
-     "slots": {
-      "0x04": "0x000C60F0",
-      "0x08": "0x000C61A0",
-      "0x0C": "0x000C5FA0"
-     },
-     "strings": []
-    },
-    {
-     "type": 3,
-     "register": "0x000A35E0",
-     "desc": "0x0020DFA0",
-     "size": 560,
-     "slots": {
-      "0x04": "0x000A2450",
-      "0x08": "0x000A2500",
-      "0x0C": "0x000A34D0"
-     },
-     "strings": [
-      "toggle.wav"
-     ]
-    },
-    {
-     "type": 4,
-     "register": "0x000C5770",
-     "desc": "0x0021CBC0",
-     "size": 300,
-     "slots": {
-      "0x04": "0x000C5600",
-      "0x08": "0x000C5710",
-      "0x0C": "0x000C54F0"
-     },
-     "strings": [
-      "sniper_center.tga",
-      "sniper_rotate.tga",
-      "sniper_side_bottom.tga",
-      "sniper_side_middle.tga",
-      "sniper_side_top.tga"
-     ]
-    },
-    {
-     "type": 5,
-     "register": "0x000C4C30",
-     "desc": "0x0021CAF0",
-     "size": 376,
-     "slots": {
-      "0x04": "0x000C4AC0",
-      "0x08": "0x000C4BD0",
-      "0x0C": "0x000C49A0"
-     },
-     "strings": [
-      "Cancel_Back_S.wav",
-      "Confirm_S.wav",
-      "cursor.wav"
-     ]
-    },
-    {
-     "type": 6,
-     "register": "0x000C3750",
-     "desc": "0x0021CAA8",
-     "size": 308,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000C3650"
-     },
-     "strings": []
-    },
-    {
-     "type": 7,
-     "register": "0x0001C5F0",
-     "desc": "0x001BCBB8",
-     "size": 312,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x0001C510"
-     },
-     "strings": []
-    },
-    {
-     "type": 8,
-     "register": "0x000C31A0",
-     "desc": "0x0021CA60",
-     "size": 312,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000C30C0"
-     },
-     "strings": []
-    },
-    {
-     "type": 9,
-     "register": "0x0004C530",
-     "desc": "0x001EB890",
-     "size": 444,
-     "slots": {
-      "0x04": "0x0004AD60",
-      "0x08": "0x0004ADB0",
-      "0x0C": "0x0004C420"
-     },
-     "strings": []
-    },
-    {
-     "type": 11,
-     "register": "0x000299D0",
-     "desc": "0x001E6A58",
-     "size": 448,
-     "slots": {
-      "0x04": "0x00029750",
-      "0x08": "0x00029950",
-      "0x0C": "0x000296A0"
-     },
-     "strings": [
-      "HUD_pieces.tga",
-      "TargetAcquired_M.wav",
-      "TargetSwitch.wav"
-     ]
-    },
-    {
-     "type": 12,
-     "register": "0x000C3030",
-     "desc": "0x0021C9E0",
-     "size": 324,
-     "slots": {
-      "0x04": "0x000C2FD0",
-      "0x08": "0x000C3020",
-      "0x0C": "0x000C2EB0"
-     },
-     "strings": []
-    },
-    {
-     "type": 13,
-     "register": "0x000C2550",
-     "desc": "0x0021C7B0",
-     "size": 384,
-     "slots": {
-      "0x04": "0x000C2460",
-      "0x08": "0x000C2510",
-      "0x0C": "0x000C2380"
-     },
-     "strings": []
-    },
-    {
-     "type": 14,
-     "register": "0x00034660",
-     "desc": "0x001EA810",
-     "size": 408,
-     "slots": {
-      "0x04": "0x00033E00",
-      "0x08": "0x00033F90",
-      "0x0C": "0x00034540"
-     },
-     "strings": []
-    },
-    {
-     "type": 15,
-     "register": "0x000C20D0",
-     "desc": "0x0021C728",
-     "size": 312,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000C1FD0"
-     },
-     "strings": []
-    },
-    {
-     "type": 16,
-     "register": "0x000C1DF0",
-     "desc": "0x0021C628",
-     "size": 860,
-     "slots": {
-      "0x04": "0x000C1CE0",
-      "0x08": "0x000C1DC0",
-      "0x0C": "0x000C1BD0"
-     },
-     "strings": [
-      "GUI_mission_menu.tga"
-     ]
-    },
-    {
-     "type": 17,
-     "register": "0x00023D60",
-     "desc": "0x001E6230",
-     "size": 368,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00023AF0"
-     },
-     "strings": []
-    },
-    {
-     "type": 18,
-     "register": "0x000C0610",
-     "desc": "0x0021C5D8",
-     "size": 960,
-     "slots": {
-      "0x04": "0x000BF360",
-      "0x08": "0x000BF380",
-      "0x0C": "0x000C0510"
-     },
-     "strings": []
-    },
-    {
-     "type": 19,
-     "register": "0x000BEF30",
-     "desc": "0x0021B1C0",
-     "size": 532,
-     "slots": {
-      "0x04": "0x000BDD00",
-      "0x08": "0x000BDF80",
-      "0x0C": "0x000BEE20"
-     },
-     "strings": [
-      "GUI_mission_menu.tga",
-      "chapterswitch.wav"
-     ]
-    },
-    {
-     "type": 20,
-     "register": "0x000BCC30",
-     "desc": "0x00219DB8",
-     "size": 516,
-     "slots": {
-      "0x04": "0x000BC930",
-      "0x08": "0x000BCBB0",
-      "0x0C": "0x000BC810"
-     },
-     "strings": [
-      "GUI_mission_menu.tga",
-      "chapterswitch.wav"
-     ]
-    },
-    {
-     "type": 21,
-     "register": "0x000A5620",
-     "desc": "0x0020F798",
-     "size": 428,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000A54E0"
-     },
-     "strings": []
-    },
-    {
-     "type": 22,
-     "register": "0x000BB3F0",
-     "desc": "0x00219D28",
-     "size": 396,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000BB2E0"
-     },
-     "strings": []
-    },
-    {
-     "type": 23,
-     "register": "0x00033630",
-     "desc": "0x001EA648",
-     "size": 336,
-     "slots": {
-      "0x04": "0x00032EC0",
-      "0x08": "0x00032F50",
-      "0x0C": "0x000334C0"
-     },
-     "strings": [
-      "Cancel_Back_S.wav",
-      "GUI_headings_missioncomplete.tga"
-     ]
-    },
-    {
-     "type": 24,
-     "register": "0x000BA2E0",
-     "desc": "0x00219CD0",
-     "size": 360,
-     "slots": {
-      "0x04": "0x000BA270",
-      "0x08": "0x000BA2B0",
-      "0x0C": "0x000BA190"
-     },
-     "strings": [
-      "Cancel_Back_S.wav",
-      "Confirm_S.wav"
-     ]
-    },
-    {
-     "type": 25,
-     "register": "0x000B95D0",
-     "desc": "0x00219A60",
-     "size": 348,
-     "slots": {
-      "0x04": "0x000B93A0",
-      "0x08": "0x000B9570",
-      "0x0C": "0x000B92C0"
-     },
-     "strings": [
-      "GUI_mission_menu.tga",
-      "chapterswitch.wav"
-     ]
-    },
-    {
-     "type": 26,
-     "register": "0x000B8BF0",
-     "desc": "0x00219A18",
-     "size": 316,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000B8B10"
-     },
-     "strings": []
-    },
-    {
-     "type": 27,
-     "register": "0x000C2BC0",
-     "desc": "0x0021C960",
-     "size": 324,
-     "slots": {
-      "0x04": "0x000C2B60",
-      "0x08": "0x000C2BB0",
-      "0x0C": "0x000C2A40"
-     },
-     "strings": []
-    },
-    {
-     "type": 28,
-     "register": "0x00026970",
-     "desc": "0x001E63A0",
-     "size": 360,
-     "slots": {
-      "0x04": "0x00026820",
-      "0x08": "0x00026920",
-      "0x0C": "0x00026700"
-     },
-     "strings": [
-      "Confirm_S.wav",
-      "GUI_headings_missionfailed.tga",
-      "cursor.wav"
-     ]
-    },
-    {
-     "type": 29,
-     "register": "0x000B8350",
-     "desc": "0x00210348",
-     "size": 324,
-     "slots": {
-      "0x04": "0x000B8220",
-      "0x08": "0x000B8310",
-      "0x0C": "0x000B8120"
-     },
-     "strings": [
-      "GUI_headings_credits.tga",
-      "icon_texover.tga",
-      "rdf_tp_test"
-     ]
-    },
-    {
-     "type": 30,
-     "register": "0x000B68E0",
-     "desc": "0x0020FE50",
-     "size": 324,
-     "slots": {
-      "0x04": "0x000B6060",
-      "0x08": "0x000B6170",
-      "0x0C": "0x000B67B0"
-     },
-     "strings": [
-      "GUI_headings_awards.tga",
-      "GUI_mission_menu.tga"
-     ]
-    },
-    {
-     "type": 31,
-     "register": "0x000B5F50",
-     "desc": "0x0020FD88",
-     "size": 380,
-     "slots": {
-      "0x04": "0x000B5690",
-      "0x08": "0x000B5710",
-      "0x0C": "0x000B5E70"
-     },
-     "strings": []
-    },
-    {
-     "type": 32,
-     "register": "0x000B5290",
-     "desc": "0x0020FD30",
-     "size": 364,
-     "slots": {
-      "0x04": "0x000B5260",
-      "0x08": "0x000B5280",
-      "0x0C": "0x000B5190"
-     },
-     "strings": []
-    },
-    {
-     "type": 33,
-     "register": "0x000B1AE0",
-     "desc": "0x0020FB98",
-     "size": 340,
-     "slots": {
-      "0x04": "0x000B1AB0",
-      "0x08": "0x000B1AD0",
-      "0x0C": "0x000B19E0"
-     },
-     "strings": []
-    },
-    {
-     "type": 34,
-     "register": "0x000B3620",
-     "desc": "0x0020FBE8",
-     "size": 336,
-     "slots": {
-      "0x04": "0x000B34B0",
-      "0x08": "0x000B35E0",
-      "0x0C": "0x000B33D0"
-     },
-     "strings": []
-    },
-    {
-     "type": 35,
-     "register": "0x000B0820",
-     "desc": "0x0020FB50",
-     "size": 304,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000B0720"
-     },
-     "strings": []
-    },
-    {
-     "type": 36,
-     "register": "0x000AFF30",
-     "desc": "0x0020FAC0",
-     "size": 404,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000AFE50"
-     },
-     "strings": []
-    },
-    {
-     "type": 37,
-     "register": "0x000B03E0",
-     "desc": "0x0020FB08",
-     "size": 300,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000B02E0"
-     },
-     "strings": []
-    }
-   ]
-  },
-  {
    "name": "Weapon",
+   "number": 3,
    "block": "0x001E6840",
    "setup": "0x00027E30",
+   "version": 0,
+   "type_count": 46,
+   "startup": "0x00027E10",
+   "shutdown": "0x00027E20",
    "types": [
     {
-     "type": 1,
+     "type": 0,
      "register": "0x000D0B60",
      "desc": "0x00220970",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D0AB0",
       "0x08": "0x000D0B10",
@@ -2111,10 +1815,12 @@
      ]
     },
     {
-     "type": 2,
+     "type": 1,
      "register": "0x000D0970",
      "desc": "0x00220890",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D08C0",
       "0x08": "0x000D0920",
@@ -2125,10 +1831,12 @@
      ]
     },
     {
-     "type": 3,
+     "type": 2,
      "register": "0x000D0780",
      "desc": "0x002207B0",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D06D0",
       "0x08": "0x000D0730",
@@ -2139,10 +1847,12 @@
      ]
     },
     {
-     "type": 5,
+     "type": 4,
      "register": "0x000CF850",
      "desc": "0x002200F0",
      "size": 28,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF830",
       "0x08": "0x000CF840",
@@ -2151,10 +1861,12 @@
      "strings": []
     },
     {
-     "type": 6,
+     "type": 5,
      "register": "0x000CF5F0",
      "desc": "0x00220090",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF5D0",
       "0x08": "0x000CF5E0",
@@ -2163,10 +1875,12 @@
      "strings": []
     },
     {
-     "type": 7,
+     "type": 6,
      "register": "0x000CF520",
      "desc": "0x00220030",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF500",
       "0x08": "0x000CF510",
@@ -2175,10 +1889,12 @@
      "strings": []
     },
     {
-     "type": 8,
+     "type": 7,
      "register": "0x000CF450",
      "desc": "0x0021FFD0",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF430",
       "0x08": "0x000CF440",
@@ -2187,10 +1903,12 @@
      "strings": []
     },
     {
-     "type": 9,
+     "type": 8,
      "register": "0x000CF380",
      "desc": "0x0021FF70",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF360",
       "0x08": "0x000CF370",
@@ -2199,10 +1917,12 @@
      "strings": []
     },
     {
-     "type": 10,
+     "type": 9,
      "register": "0x000CF2B0",
      "desc": "0x0021FF10",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF290",
       "0x08": "0x000CF2A0",
@@ -2211,10 +1931,12 @@
      "strings": []
     },
     {
-     "type": 11,
+     "type": 10,
      "register": "0x000CF1E0",
      "desc": "0x0021FEB0",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF1C0",
       "0x08": "0x000CF1D0",
@@ -2223,10 +1945,12 @@
      "strings": []
     },
     {
-     "type": 12,
+     "type": 11,
      "register": "0x000CF110",
      "desc": "0x0021FE50",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF0F0",
       "0x08": "0x000CF100",
@@ -2235,10 +1959,12 @@
      "strings": []
     },
     {
-     "type": 13,
+     "type": 12,
      "register": "0x000CB0F0",
      "desc": "0x0021E270",
      "size": 680,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CA630",
       "0x08": "0x000CA540",
@@ -2260,10 +1986,12 @@
      ]
     },
     {
-     "type": 14,
+     "type": 13,
      "register": "0x000CA4A0",
      "desc": "0x0021D770",
      "size": 680,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C9A40",
       "0x08": "0x000C9900",
@@ -2285,10 +2013,12 @@
      ]
     },
     {
-     "type": 15,
+     "type": 14,
      "register": "0x000CF040",
      "desc": "0x0021FDF0",
      "size": 732,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF020",
       "0x08": "0x000CF030",
@@ -2297,10 +2027,12 @@
      "strings": []
     },
     {
-     "type": 16,
+     "type": 15,
      "register": "0x000CEE90",
      "desc": "0x0021FCE8",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CEDD0",
       "0x08": "0x000CEE40",
@@ -2311,10 +2043,12 @@
      ]
     },
     {
-     "type": 17,
+     "type": 16,
      "register": "0x000CEC40",
      "desc": "0x0021FBE0",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CEB80",
       "0x08": "0x000CEBF0",
@@ -2325,10 +2059,12 @@
      ]
     },
     {
-     "type": 18,
+     "type": 17,
      "register": "0x000CE9F0",
      "desc": "0x0021FAD8",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CE930",
       "0x08": "0x000CE9A0",
@@ -2339,10 +2075,12 @@
      ]
     },
     {
-     "type": 19,
+     "type": 18,
      "register": "0x000CE7A0",
      "desc": "0x0021F9D0",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CE6E0",
       "0x08": "0x000CE750",
@@ -2353,10 +2091,12 @@
      ]
     },
     {
-     "type": 20,
+     "type": 19,
      "register": "0x000CE550",
      "desc": "0x0021F8C8",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CE490",
       "0x08": "0x000CE500",
@@ -2367,10 +2107,12 @@
      ]
     },
     {
-     "type": 21,
+     "type": 20,
      "register": "0x000CE300",
      "desc": "0x0021F7C0",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CE240",
       "0x08": "0x000CE2B0",
@@ -2381,10 +2123,12 @@
      ]
     },
     {
-     "type": 22,
+     "type": 21,
      "register": "0x000CE0B0",
      "desc": "0x0021F6B8",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CDFF0",
       "0x08": "0x000CE060",
@@ -2395,10 +2139,12 @@
      ]
     },
     {
-     "type": 23,
+     "type": 22,
      "register": "0x000CDE60",
      "desc": "0x0021F5B0",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CDDA0",
       "0x08": "0x000CDE10",
@@ -2409,10 +2155,12 @@
      ]
     },
     {
-     "type": 24,
+     "type": 23,
      "register": "0x000D03A0",
      "desc": "0x002205F0",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D02F0",
       "0x08": "0x000D0350",
@@ -2423,10 +2171,12 @@
      ]
     },
     {
-     "type": 25,
+     "type": 24,
      "register": "0x000D01B0",
      "desc": "0x00220510",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D0100",
       "0x08": "0x000D0160",
@@ -2437,10 +2187,12 @@
      ]
     },
     {
-     "type": 26,
+     "type": 25,
      "register": "0x000CD9C0",
      "desc": "0x0021F3A0",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CD900",
       "0x08": "0x000CD970",
@@ -2451,10 +2203,12 @@
      ]
     },
     {
-     "type": 27,
+     "type": 26,
      "register": "0x000CD770",
      "desc": "0x0021F298",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CD6B0",
       "0x08": "0x000CD720",
@@ -2465,10 +2219,12 @@
      ]
     },
     {
-     "type": 28,
+     "type": 27,
      "register": "0x000CD520",
      "desc": "0x0021F190",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CD460",
       "0x08": "0x000CD4D0",
@@ -2479,10 +2235,12 @@
      ]
     },
     {
-     "type": 29,
+     "type": 28,
      "register": "0x000CD2D0",
      "desc": "0x0021F088",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CD210",
       "0x08": "0x000CD280",
@@ -2493,10 +2251,12 @@
      ]
     },
     {
-     "type": 30,
+     "type": 29,
      "register": "0x000CD080",
      "desc": "0x0021EF80",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CCFC0",
       "0x08": "0x000CD030",
@@ -2507,10 +2267,12 @@
      ]
     },
     {
-     "type": 31,
+     "type": 30,
      "register": "0x000CCE30",
      "desc": "0x0021EE78",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CCD70",
       "0x08": "0x000CCDE0",
@@ -2521,10 +2283,12 @@
      ]
     },
     {
-     "type": 32,
+     "type": 31,
      "register": "0x000CCBE0",
      "desc": "0x0021ED70",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CCB20",
       "0x08": "0x000CCB90",
@@ -2535,10 +2299,12 @@
      ]
     },
     {
-     "type": 34,
+     "type": 33,
      "register": "0x000C9840",
      "desc": "0x0021D6C0",
      "size": 32,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C9300",
       "0x08": "0x000C9360",
@@ -2549,10 +2315,12 @@
      ]
     },
     {
-     "type": 35,
+     "type": 34,
      "register": "0x000D0590",
      "desc": "0x002206D0",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D04E0",
       "0x08": "0x000D0540",
@@ -2563,10 +2331,12 @@
      ]
     },
     {
-     "type": 36,
+     "type": 35,
      "register": "0x000CDC10",
      "desc": "0x0021F4A8",
      "size": 168,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CDB50",
       "0x08": "0x000CDBC0",
@@ -2577,10 +2347,12 @@
      ]
     },
     {
-     "type": 37,
+     "type": 36,
      "register": "0x000CFFC0",
      "desc": "0x00220420",
      "size": 60,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CFF00",
       "0x08": "0x000CFF70",
@@ -2592,10 +2364,12 @@
      ]
     },
     {
-     "type": 38,
+     "type": 37,
      "register": "0x000CFDC0",
      "desc": "0x00220330",
      "size": 60,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CFD00",
       "0x08": "0x000CFD70",
@@ -2607,10 +2381,12 @@
      ]
     },
     {
-     "type": 39,
+     "type": 38,
      "register": "0x000CFBC0",
      "desc": "0x00220240",
      "size": 60,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CFB00",
       "0x08": "0x000CFB70",
@@ -2622,10 +2398,12 @@
      ]
     },
     {
-     "type": 40,
+     "type": 39,
      "register": "0x000C8FF0",
      "desc": "0x0021D5D8",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C8F30",
       "0x08": "0x000C8FA0",
@@ -2637,10 +2415,12 @@
      ]
     },
     {
-     "type": 41,
+     "type": 40,
      "register": "0x000C8DF0",
      "desc": "0x0021D4F0",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C8D30",
       "0x08": "0x000C8DA0",
@@ -2651,10 +2431,12 @@
      ]
     },
     {
-     "type": 43,
+     "type": 42,
      "register": "0x000C8BF0",
      "desc": "0x0021D408",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C8B30",
       "0x08": "0x000C8BA0",
@@ -2666,10 +2448,12 @@
      ]
     },
     {
-     "type": 44,
+     "type": 43,
      "register": "0x000C89F0",
      "desc": "0x0021D320",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C8930",
       "0x08": "0x000C89A0",
@@ -2680,10 +2464,12 @@
      ]
     },
     {
-     "type": 45,
+     "type": 44,
      "register": "0x000C87F0",
      "desc": "0x0021D238",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C8730",
       "0x08": "0x000C87A0",
@@ -2694,10 +2480,12 @@
      ]
     },
     {
-     "type": 46,
+     "type": 45,
      "register": "0x000CF9C0",
      "desc": "0x00220150",
      "size": 60,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000CF900",
       "0x08": "0x000CF970",
@@ -2711,15 +2499,2672 @@
    ]
   },
   {
-   "name": "Node",
-   "block": "0x001EAB48",
-   "setup": "0x00037CD0",
+   "name": "Effect",
+   "number": 4,
+   "block": "0x0020DD88",
+   "setup": "0x000A0FE0",
+   "version": 0,
+   "type_count": 88,
+   "startup": null,
+   "shutdown": null,
    "types": [
     {
+     "type": 0,
+     "register": "0x000FDF70",
+     "desc": "0x00226B88",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FDED0",
+      "0x08": "0x000FDF40",
+      "0x0C": "0x0010C5E0"
+     },
+     "strings": [
+      "explosion4.wav"
+     ]
+    },
+    {
      "type": 1,
+     "register": "0x000FDE70",
+     "desc": "0x00226AA8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FDDD0",
+      "0x08": "0x000FDE40",
+      "0x0C": "0x0010C5E0"
+     },
+     "strings": [
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 2,
+     "register": "0x000FDD70",
+     "desc": "0x002269C8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FDCD0",
+      "0x08": "0x000FDD40",
+      "0x0C": "0x0010C5E0"
+     },
+     "strings": [
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 3,
+     "register": "0x000FDC70",
+     "desc": "0x002268E8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FDBD0",
+      "0x08": "0x000FDC40",
+      "0x0C": "0x0010C5E0"
+     },
+     "strings": [
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 4,
+     "register": "0x000FDB70",
+     "desc": "0x00226808",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FDAD0",
+      "0x08": "0x000FDB40",
+      "0x0C": "0x0010C5E0"
+     },
+     "strings": [
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 5,
+     "register": "0x000F71D0",
+     "desc": "0x002247D0",
+     "size": 128,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F6F90",
+      "0x08": "0x000F6FA0",
+      "0x0C": "0x000F7150"
+     },
+     "strings": []
+    },
+    {
+     "type": 6,
+     "register": "0x000F6DC0",
+     "desc": "0x00224788",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F69F0",
+      "0x08": "0x000F6A10",
+      "0x0C": "0x000F6CD0"
+     },
+     "strings": [
+      "fx_smoke_light02"
+     ]
+    },
+    {
+     "type": 7,
+     "register": "0x000F8E30",
+     "desc": "0x00224F98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8D80",
+      "0x08": "0x000F8D50",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 8,
+     "register": "0x000F8C60",
+     "desc": "0x00224F18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8BB0",
+      "0x08": "0x000F8B80",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 9,
+     "register": "0x000F8A90",
+     "desc": "0x00224E98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F89E0",
+      "0x08": "0x000F89B0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 10,
+     "register": "0x000F88C0",
+     "desc": "0x00224E18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8810",
+      "0x08": "0x000F87E0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 11,
+     "register": "0x000F86F0",
+     "desc": "0x00224D98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8640",
+      "0x08": "0x000F8610",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 12,
+     "register": "0x000F8520",
+     "desc": "0x00224D18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8470",
+      "0x08": "0x000F8440",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 13,
+     "register": "0x000F8350",
+     "desc": "0x00224C98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F82A0",
+      "0x08": "0x000F8270",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 14,
+     "register": "0x000F8180",
+     "desc": "0x00224C18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F80D0",
+      "0x08": "0x000F80A0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 15,
+     "register": "0x000F7FB0",
+     "desc": "0x00224B98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7F00",
+      "0x08": "0x000F7ED0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 16,
+     "register": "0x000F7DE0",
+     "desc": "0x00224B18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7D30",
+      "0x08": "0x000F7D00",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 17,
+     "register": "0x000F7C10",
+     "desc": "0x00224A98",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7B60",
+      "0x08": "0x000F7B30",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 18,
+     "register": "0x000F7A40",
+     "desc": "0x00224A18",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7990",
+      "0x08": "0x000F7960",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 19,
+     "register": "0x000F7870",
+     "desc": "0x00224998",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F77C0",
+      "0x08": "0x000F7790",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 20,
+     "register": "0x000F76A0",
+     "desc": "0x00224918",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F75F0",
+      "0x08": "0x000F75C0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 21,
+     "register": "0x000F74D0",
+     "desc": "0x00224898",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7420",
+      "0x08": "0x000F73F0",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 22,
+     "register": "0x000F7300",
+     "desc": "0x00224818",
+     "size": 3436,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F7250",
+      "0x08": "0x000F7220",
+      "0x0C": "0x0010B4E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 23,
+     "register": "0x000FD7E0",
+     "desc": "0x002266B8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD7A0",
+      "0x08": "0x000FD7C0",
+      "0x0C": "0x0010C340"
+     },
+     "strings": [
+      "FX_Missile_contrail_anim"
+     ]
+    },
+    {
+     "type": 24,
+     "register": "0x000FDA00",
+     "desc": "0x00226798",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD9C0",
+      "0x08": "0x000FD9E0",
+      "0x0C": "0x0010C340"
+     },
+     "strings": [
+      "FX_Missile_contrail_anim"
+     ]
+    },
+    {
+     "type": 25,
+     "register": "0x000FD8F0",
+     "desc": "0x00226728",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD8B0",
+      "0x08": "0x000FD8D0",
+      "0x0C": "0x0010C340"
+     },
+     "strings": [
+      "FX_Missile_contrail_anim"
+     ]
+    },
+    {
+     "type": 26,
+     "register": "0x000FD6D0",
+     "desc": "0x00226648",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD690",
+      "0x08": "0x000FD6B0",
+      "0x0C": "0x0010C340"
+     },
+     "strings": [
+      "fx_motion_trail"
+     ]
+    },
+    {
+     "type": 27,
+     "register": "0x000FD630",
+     "desc": "0x00226600",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD590",
+      "0x08": "0x000FD560",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "FX_thrust_blue_anim"
+     ]
+    },
+    {
+     "type": 28,
+     "register": "0x000FD500",
+     "desc": "0x002265B8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD460",
+      "0x08": "0x000FD430",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "FX_thrust_blue_anim"
+     ]
+    },
+    {
+     "type": 29,
+     "register": "0x000FD3D0",
+     "desc": "0x00226570",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD330",
+      "0x08": "0x000FD300",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "FX_thrust_bpblue_anim01"
+     ]
+    },
+    {
+     "type": 30,
+     "register": "0x000FD2A0",
+     "desc": "0x00226528",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD200",
+      "0x08": "0x000FD1D0",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "FX_thrust_blue_anim"
+     ]
+    },
+    {
+     "type": 31,
+     "register": "0x000FD170",
+     "desc": "0x002264E0",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FD0D0",
+      "0x08": "0x000FD0A0",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_thrust_red01"
+     ]
+    },
+    {
+     "type": 32,
+     "register": "0x000FD040",
+     "desc": "0x00226498",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FCFA0",
+      "0x08": "0x000FCF70",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_thrust_red01_big"
+     ]
+    },
+    {
+     "type": 33,
+     "register": "0x000FCF10",
+     "desc": "0x00226450",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FCE70",
+      "0x08": "0x000FCE40",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "FX_zen_shuttle_new"
+     ]
+    },
+    {
+     "type": 34,
+     "register": "0x000FCDE0",
+     "desc": "0x00226408",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FCD40",
+      "0x08": "0x000FCD10",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_cyclops_thrust"
+     ]
+    },
+    {
+     "type": 35,
+     "register": "0x000FCCB0",
+     "desc": "0x002263C0",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FCC10",
+      "0x08": "0x000FCBE0",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_fpa_thrusters02"
+     ]
+    },
+    {
+     "type": 36,
+     "register": "0x000FCB80",
+     "desc": "0x00226378",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FCAE0",
+      "0x08": "0x000FCAB0",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_zen_mpa_backthrust01"
+     ]
+    },
+    {
+     "type": 37,
+     "register": "0x000FCA50",
+     "desc": "0x00226330",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC9B0",
+      "0x08": "0x000FC980",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_zen_mpa_legthrust01"
+     ]
+    },
+    {
+     "type": 38,
+     "register": "0x000FC920",
+     "desc": "0x002262E8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC880",
+      "0x08": "0x000FC850",
+      "0x0C": "0x000EF220"
+     },
+     "strings": [
+      "fx_catseye_thrust"
+     ]
+    },
+    {
+     "type": 39,
+     "register": "0x000FC7E0",
+     "desc": "0x00226288",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC700",
+      "0x08": "0x000FC6D0",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_Veritech Muzzle Flash 00"
+     ]
+    },
+    {
+     "type": 40,
+     "register": "0x000FC650",
+     "desc": "0x00226228",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC570",
+      "0x08": "0x000FC540",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "fx_rdf_destriod_m_flash"
+     ]
+    },
+    {
+     "type": 41,
+     "register": "0x000FC4C0",
+     "desc": "0x002261C8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC3E0",
+      "0x08": "0x000FC3B0",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_muzzle_flash_blue01"
+     ]
+    },
+    {
+     "type": 42,
+     "register": "0x000FC330",
+     "desc": "0x00226168",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC250",
+      "0x08": "0x000FC220",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_zenturretmuzzle01"
+     ]
+    },
+    {
+     "type": 43,
+     "register": "0x000FC1A0",
+     "desc": "0x00226108",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FC0C0",
+      "0x08": "0x000FC090",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_Makk_Cannon"
+     ]
+    },
+    {
+     "type": 44,
+     "register": "0x000FC010",
+     "desc": "0x002260A8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FBF30",
+      "0x08": "0x000FBF00",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_makk_arm_laser"
+     ]
+    },
+    {
+     "type": 45,
+     "register": "0x000FBE80",
+     "desc": "0x00226048",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FBDA0",
+      "0x08": "0x000FBD70",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_Spartan_Cannon"
+     ]
+    },
+    {
+     "type": 46,
+     "register": "0x000FBCF0",
+     "desc": "0x00225FE8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FBC10",
+      "0x08": "0x000FBBE0",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_fpa_muzzle flash"
+     ]
+    },
+    {
+     "type": 47,
+     "register": "0x000FBB60",
+     "desc": "0x00225F88",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FBA80",
+      "0x08": "0x000FBA50",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "fx_mpa_sniper"
+     ]
+    },
+    {
+     "type": 48,
+     "register": "0x000FB9D0",
+     "desc": "0x00225F28",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB8F0",
+      "0x08": "0x000FB8C0",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "fx_rdfturretmuzzle"
+     ]
+    },
+    {
+     "type": 49,
+     "register": "0x000FB840",
+     "desc": "0x00225EC8",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB760",
+      "0x08": "0x000FB730",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "fx_cyclopsturretmuzzle"
+     ]
+    },
+    {
+     "type": 50,
+     "register": "0x000FB6B0",
+     "desc": "0x00225E68",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB5D0",
+      "0x08": "0x000FB5A0",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "fx_zen_destriod_muzzle"
+     ]
+    },
+    {
+     "type": 51,
+     "register": "0x000FB520",
+     "desc": "0x00225E08",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB440",
+      "0x08": "0x000FB410",
+      "0x0C": "0x0010C020"
+     },
+     "strings": [
+      "FX_zenturretmuzzle01"
+     ]
+    },
+    {
+     "type": 52,
+     "register": "0x000FB3A0",
+     "desc": "0x00225D70",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB2D0",
+      "0x08": "0x000FB2A0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_HitSpot_red",
+      "laserhit.wav"
+     ]
+    },
+    {
+     "type": 53,
+     "register": "0x000FB230",
+     "desc": "0x00225CD8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FB160",
+      "0x08": "0x000FB130",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_HitSpot_blue",
+      "laserhit.wav"
+     ]
+    },
+    {
+     "type": 54,
+     "register": "0x000FB0C0",
+     "desc": "0x00225C40",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FAFF0",
+      "0x08": "0x000FAFC0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "fx_dust_laser_hit",
+      "laserhit.wav"
+     ]
+    },
+    {
+     "type": 55,
+     "register": "0x000FAF50",
+     "desc": "0x00225BA8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FAE80",
+      "0x08": "0x000FAE50",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "fx_water_splash01",
+      "laserhit.wav"
+     ]
+    },
+    {
+     "type": 56,
+     "register": "0x000FADE0",
+     "desc": "0x00225B10",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FAD10",
+      "0x08": "0x000FACE0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "fx_rock_chunks",
+      "laserhit.wav"
+     ]
+    },
+    {
+     "type": 57,
+     "register": "0x000FAC70",
+     "desc": "0x00225A78",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FABB0",
+      "0x08": "0x000FAB90",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_Smoke light"
+     ]
+    },
+    {
+     "type": 58,
+     "register": "0x000FAB20",
+     "desc": "0x002259E0",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FAA60",
+      "0x08": "0x000FAA40",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "fx_foot_dust"
+     ]
+    },
+    {
+     "type": 59,
+     "register": "0x000FA9D0",
+     "desc": "0x00225948",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA900",
+      "0x08": "0x000FA8D0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_explosion_01",
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 60,
+     "register": "0x000FA860",
+     "desc": "0x002258B0",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA790",
+      "0x08": "0x000FA760",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_explosion_01_med",
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 61,
+     "register": "0x000FA6F0",
+     "desc": "0x00225818",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA620",
+      "0x08": "0x000FA5F0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "FX_explosion_01_large",
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 62,
+     "register": "0x000FA580",
+     "desc": "0x00225780",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA4B0",
+      "0x08": "0x000FA480",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "explosion4.wav",
+      "fx_explosion_cyclops"
+     ]
+    },
+    {
+     "type": 63,
+     "register": "0x000FA410",
+     "desc": "0x002256E8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA340",
+      "0x08": "0x000FA310",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "crate_explosion",
+      "explosion4.wav"
+     ]
+    },
+    {
+     "type": 64,
+     "register": "0x000FA2A0",
+     "desc": "0x00225650",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA1E0",
+      "0x08": "0x000FA1C0",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "veritech_bullets"
+     ]
+    },
+    {
+     "type": 65,
+     "register": "0x000FA150",
+     "desc": "0x002255B8",
+     "size": 92,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000FA090",
+      "0x08": "0x000FA070",
+      "0x0C": "0x0010BD30"
+     },
+     "strings": [
+      "fx_dust_flyby"
+     ]
+    },
+    {
+     "type": 66,
+     "register": "0x000FA000",
+     "desc": "0x00225568",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9FB0",
+      "0x08": "0x000F9FE0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "FX_sparks"
+     ]
+    },
+    {
+     "type": 67,
+     "register": "0x000F9F40",
+     "desc": "0x00225518",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9EF0",
+      "0x08": "0x000F9F20",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "FX_damagefire"
+     ]
+    },
+    {
+     "type": 68,
+     "register": "0x000F9E80",
+     "desc": "0x002254C8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9E30",
+      "0x08": "0x000F9E60",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "damagesmoke_zen_small"
+     ]
+    },
+    {
+     "type": 69,
+     "register": "0x000F9DC0",
+     "desc": "0x00225478",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9D70",
+      "0x08": "0x000F9DA0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "damagesmoke"
+     ]
+    },
+    {
+     "type": 70,
+     "register": "0x000F9D00",
+     "desc": "0x00225428",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9CB0",
+      "0x08": "0x000F9CE0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "damagesmoke_zen_large"
+     ]
+    },
+    {
+     "type": 71,
+     "register": "0x000F9C40",
+     "desc": "0x002253D8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9BF0",
+      "0x08": "0x000F9C20",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "damagesmoke_fast_small"
+     ]
+    },
+    {
+     "type": 72,
+     "register": "0x000F9B80",
+     "desc": "0x00225388",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9B30",
+      "0x08": "0x000F9B60",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "damagesmoke_fast_medium"
+     ]
+    },
+    {
+     "type": 73,
+     "register": "0x000F9AC0",
+     "desc": "0x00225338",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9A30",
+      "0x08": "0x000F9A10",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_smoke01"
+     ]
+    },
+    {
+     "type": 74,
+     "register": "0x000F99A0",
+     "desc": "0x002252E8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9910",
+      "0x08": "0x000F98F0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_smoke02"
+     ]
+    },
+    {
+     "type": 75,
+     "register": "0x000F9880",
+     "desc": "0x00225298",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F97F0",
+      "0x08": "0x000F97D0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_smoke03"
+     ]
+    },
+    {
+     "type": 76,
+     "register": "0x000F9760",
+     "desc": "0x00225248",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F96D0",
+      "0x08": "0x000F96B0",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_glass01"
+     ]
+    },
+    {
+     "type": 77,
+     "register": "0x000F9640",
+     "desc": "0x002251F8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F95B0",
+      "0x08": "0x000F9590",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_glass02"
+     ]
+    },
+    {
+     "type": 78,
+     "register": "0x000F9520",
+     "desc": "0x002251A8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9490",
+      "0x08": "0x000F9470",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_glass03"
+     ]
+    },
+    {
+     "type": 79,
+     "register": "0x000F9400",
+     "desc": "0x00225158",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9370",
+      "0x08": "0x000F9350",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_explosion01"
+     ]
+    },
+    {
+     "type": 80,
+     "register": "0x000F92E0",
+     "desc": "0x00225108",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9250",
+      "0x08": "0x000F9230",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_explosion02"
+     ]
+    },
+    {
+     "type": 81,
+     "register": "0x000F91C0",
+     "desc": "0x002250B8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9130",
+      "0x08": "0x000F9110",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "building_explosion03"
+     ]
+    },
+    {
+     "type": 82,
+     "register": "0x000F90A0",
+     "desc": "0x00225068",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F9050",
+      "0x08": "0x000F9080",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": [
+      "fx_scoutpod_radar"
+     ]
+    },
+    {
+     "type": 83,
+     "register": "0x000F8FE0",
+     "desc": "0x00225018",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F8F50",
+      "0x08": "0x000F8F30",
+      "0x0C": "0x0010B8E0"
+     },
+     "strings": []
+    },
+    {
+     "type": 84,
+     "register": "0x000F6910",
+     "desc": "0x00224740",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F6870",
+      "0x08": "0x000F6840",
+      "0x0C": "0x0010AAF0"
+     },
+     "strings": [
+      "fx_light_recon"
+     ]
+    },
+    {
+     "type": 86,
+     "register": "0x000F67F0",
+     "desc": "0x002246B0",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F67B0",
+      "0x08": "0x000F67E0",
+      "0x0C": "0x0010A7C0"
+     },
+     "strings": [
+      "sparksloop_m.wav"
+     ]
+    },
+    {
+     "type": 87,
+     "register": "0x000F6750",
+     "desc": "0x00224620",
+     "size": 112,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000F6710",
+      "0x08": "0x000F6740",
+      "0x0C": "0x0010A7C0"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Structure",
+   "number": 5,
+   "block": "0x00221518",
+   "setup": "0x000D8090",
+   "version": 1,
+   "type_count": 2,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x0010A4C0",
+     "desc": "0x002275D0",
+     "size": 1172,
+     "version": 6,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00107CC0",
+      "0x08": "0x00107D80",
+      "0x0C": "0x0010A0F0",
+      "0x10": "0x0010A320",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "building_explosion.wav"
+     ]
+    },
+    {
+     "type": 1,
+     "register": "0x00107A50",
+     "desc": "0x00227498",
+     "size": 352,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001077A0",
+      "0x10": "0x00107970",
+      "0x18": "0x00147480"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Item",
+   "number": 6,
+   "block": "0x00221300",
+   "setup": "0x000D76A0",
+   "version": 0,
+   "type_count": 6,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x00106E10",
+     "desc": "0x00227440",
+     "size": 92,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00106DD0",
+      "0x08": "0x00106DF0",
+      "0x0C": "0x00106BC0",
+      "0x10": "0x000D7910",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "spy_capsule"
+     ]
+    },
+    {
+     "type": 1,
+     "register": "0x00106AE0",
+     "desc": "0x002273E8",
+     "size": 92,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00106AA0",
+      "0x08": "0x00106AC0",
+      "0x0C": "0x00106880",
+      "0x10": "0x000D7910",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "nosecone_pickup"
+     ]
+    },
+    {
+     "type": 2,
+     "register": "0x00106720",
+     "desc": "0x00227388",
+     "size": 92,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00106400",
+      "0x08": "0x00106440",
+      "0x0C": "0x00106510",
+      "0x10": "0x000D7910",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "zen_crates_pickup"
+     ]
+    },
+    {
+     "type": 3,
+     "register": "0x00106330",
+     "desc": "0x00227320",
+     "size": 92,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00105F90",
+      "0x08": "0x00105FD0",
+      "0x0C": "0x001060C0",
+      "0x10": "0x000D7910",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "zen_crates_munitions_pickup"
+     ]
+    },
+    {
+     "type": 4,
+     "register": "0x00105EE0",
+     "desc": "0x002272A8",
+     "size": 156,
+     "version": 1,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00105D40",
+      "0x08": "0x00105DA0",
+      "0x0C": "0x00105B20",
+      "0x10": "0x00105E80",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "male01 pilot3",
+      "ph cheer",
+      "ph idle",
+      "ph scare"
+     ]
+    },
+    {
+     "type": 5,
+     "register": "0x001059F0",
+     "desc": "0x00227250",
+     "size": 92,
+     "version": 0,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x001059B0",
+      "0x08": "0x001059D0",
+      "0x0C": "0x00105780",
+      "0x10": "0x000D7910",
+      "0x18": "0x00147480"
+     },
+     "strings": [
+      "training beacon"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Component",
+   "number": 7,
+   "block": "0x002210E8",
+   "setup": "0x000D7220",
+   "version": 3,
+   "type_count": 1,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x00105720",
+     "desc": "0x00227208",
+     "size": 2632,
+     "version": 1,
+     "flags": 1,
+     "slots": {
+      "0x04": "0x00105710",
+      "0x08": "0x00105710",
+      "0x0C": "0x00105600",
+      "0x10": "0x000D7330",
+      "0x18": "0x000D7530"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Trigger",
+   "number": 8,
+   "block": "0x00220CC8",
+   "setup": "0x000D2FD0",
+   "version": 0,
+   "type_count": 16,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x00104D20",
+     "desc": "0x002271C0",
+     "size": 64,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00104C60",
+      "0x10": "0x000D3240",
+      "0x18": "0x000D3330"
+     },
+     "strings": [
+      "Boolean AND"
+     ]
+    },
+    {
+     "type": 1,
+     "register": "0x0002C200",
+     "desc": "0x001E6CD0",
+     "size": 136,
+     "version": 4,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x0002C170",
+      "0x10": "0x0002BBE0",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 2,
+     "register": "0x00104B30",
+     "desc": "0x00227178",
+     "size": 76,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00104A00",
+      "0x10": "0x00104AA0",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 3,
+     "register": "0x0002CB90",
+     "desc": "0x001E6D18",
+     "size": 132,
+     "version": 3,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x0002CAD0",
+      "0x10": "0x0002C260",
+      "0x18": "0x0002C360"
+     },
+     "strings": []
+    },
+    {
+     "type": 4,
+     "register": "0x001048D0",
+     "desc": "0x00227130",
+     "size": 80,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001047A0",
+      "0x10": "0x00104840",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 5,
+     "register": "0x00104630",
+     "desc": "0x002270E8",
+     "size": 76,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x10": "0x001045B0",
+      "0x18": "0x0002C360"
+     },
+     "strings": []
+    },
+    {
+     "type": 6,
+     "register": "0x00104380",
+     "desc": "0x002270A0",
+     "size": 76,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001041A0",
+      "0x10": "0x00104270",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 7,
+     "register": "0x00103DF0",
+     "desc": "0x00227058",
+     "size": 64,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00103D50",
+      "0x10": "0x000D3240",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 8,
+     "register": "0x00103BE0",
+     "desc": "0x00227010",
+     "size": 68,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00103AD0",
+      "0x10": "0x00103B70",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 9,
+     "register": "0x00103950",
+     "desc": "0x00226FC8",
+     "size": 72,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00103850",
+      "0x10": "0x001038F0",
+      "0x18": "0x0002C360"
+     },
+     "strings": []
+    },
+    {
+     "type": 10,
+     "register": "0x00103700",
+     "desc": "0x00226F80",
+     "size": 80,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001035F0",
+      "0x10": "0x00103680",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 11,
+     "register": "0x00103440",
+     "desc": "0x00226F38",
+     "size": 80,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001032E0",
+      "0x10": "0x001033C0",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 12,
+     "register": "0x000A0EF0",
+     "desc": "0x0020DD40",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000A0D80",
+      "0x10": "0x000A0E70",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 13,
+     "register": "0x00102E20",
+     "desc": "0x00226EF0",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00102D80",
+      "0x10": "0x001028C0",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 14,
+     "register": "0x001025B0",
+     "desc": "0x00226EA8",
+     "size": 68,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x001024A0",
+      "0x10": "0x00102540",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    },
+    {
+     "type": 15,
+     "register": "0x001023B0",
+     "desc": "0x00226E60",
+     "size": 76,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00102270",
+      "0x10": "0x00102350",
+      "0x18": "0x000D3330"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Action",
+   "number": 9,
+   "block": "0x001EAD60",
+   "setup": "0x000398B0",
+   "version": 0,
+   "type_count": 37,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x000E4990",
+     "desc": "0x00222558",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E4880",
+      "0x10": "0x000DF500",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 1,
+     "register": "0x000E4600",
+     "desc": "0x00222510",
+     "size": 80,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E4500",
+      "0x10": "0x00039B10",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "AI Enabled"
+     ]
+    },
+    {
+     "type": 2,
+     "register": "0x000E4330",
+     "desc": "0x002224C8",
+     "size": 144,
+     "version": 4,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E4170",
+      "0x10": "0x000E4220",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 3,
+     "register": "0x000E3DF0",
+     "desc": "0x00222480",
+     "size": 352,
+     "version": 3,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E3BD0",
+      "0x10": "0x000E3C90",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "IDS_%d"
+     ]
+    },
+    {
+     "type": 4,
+     "register": "0x000E38B0",
+     "desc": "0x00222438",
+     "size": 88,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E3810",
+      "0x10": "0x000E34C0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 5,
+     "register": "0x000E3410",
+     "desc": "0x002223F0",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E3310",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "%s (%s, %d pts)",
+      "Not Assigned"
+     ]
+    },
+    {
+     "type": 6,
+     "register": "0x000E31C0",
+     "desc": "0x002223A8",
+     "size": 368,
+     "version": 5,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E2EE0",
+      "0x10": "0x000E2FB0",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "IDS_%d"
+     ]
+    },
+    {
+     "type": 7,
+     "register": "0x000E2E10",
+     "desc": "0x00222360",
+     "size": 372,
+     "version": 4,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000E2DE0",
+      "0x08": "0x000E2E00",
+      "0x0C": "0x000E2B60",
+      "0x10": "0x000E2C40",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "IDS_%d",
+      "LoadSave_Complete_S.wav"
+     ]
+    },
+    {
+     "type": 8,
+     "register": "0x000E2990",
+     "desc": "0x00222318",
+     "size": 104,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E2820",
+      "0x10": "0x000E28E0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 9,
+     "register": "0x000E2690",
+     "desc": "0x002222D0",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E2570",
+      "0x10": "0x000E2630",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 10,
+     "register": "0x000E2290",
+     "desc": "0x00222288",
+     "size": 144,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E2180",
+      "0x10": "0x000E2220",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 11,
+     "register": "0x000E20E0",
+     "desc": "0x00222240",
+     "size": 80,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E2020",
+      "0x10": "0x000E1070",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 12,
+     "register": "0x000E1E20",
+     "desc": "0x002221F8",
+     "size": 96,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E1D10",
+      "0x10": "0x000E1DB0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 13,
+     "register": "0x000E1C50",
+     "desc": "0x002221B0",
+     "size": 88,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E1B10",
+      "0x10": "0x000E1BD0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 14,
+     "register": "0x000E1A50",
+     "desc": "0x00222168",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E1990",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 15,
+     "register": "0x000E1850",
+     "desc": "0x00222120",
+     "size": 92,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E1710",
+      "0x10": "0x000E17D0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 16,
+     "register": "0x000E1340",
+     "desc": "0x002220D8",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E1280",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 17,
+     "register": "0x000E10B0",
+     "desc": "0x00222090",
+     "size": 80,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E0FC0",
+      "0x10": "0x000E1070",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Spawn"
+     ]
+    },
+    {
+     "type": 18,
+     "register": "0x000E0EF0",
+     "desc": "0x00222048",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E0DA0",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "AI Set Immobile"
+     ]
+    },
+    {
+     "type": 19,
+     "register": "0x000E0C20",
+     "desc": "0x00222000",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E0B40",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "AI Set Theme"
+     ]
+    },
+    {
+     "type": 20,
+     "register": "0x000E09A0",
+     "desc": "0x00221FB8",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E08A0",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 21,
+     "register": "0x000E07F0",
+     "desc": "0x00221F70",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E06F0",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 22,
+     "register": "0x000E0370",
+     "desc": "0x00221EE0",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E02A0",
+      "0x10": "0x000DFFA0",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "AI Land"
+     ]
+    },
+    {
+     "type": 23,
+     "register": "0x000E0640",
+     "desc": "0x00221F28",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E0580",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 24,
+     "register": "0x000E01B0",
+     "desc": "0x00221E98",
+     "size": 80,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000E00E0",
+      "0x10": "0x000E01A0",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Reset Spawn"
+     ]
+    },
+    {
+     "type": 25,
+     "register": "0x000E0010",
+     "desc": "0x00221E50",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DFEE0",
+      "0x10": "0x000DFFA0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 26,
+     "register": "0x000DFDA0",
+     "desc": "0x00221E08",
+     "size": 112,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DFC20",
+      "0x10": "0x000DFCE0",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 28,
+     "register": "0x000DFA60",
+     "desc": "0x00221DC0",
+     "size": 84,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DF930",
+      "0x10": "0x000DFA00",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Queue I-Music"
+     ]
+    },
+    {
+     "type": 29,
+     "register": "0x000DF8D0",
+     "desc": "0x00221D78",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DF810",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 30,
+     "register": "0x000DF760",
+     "desc": "0x00221D30",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DF690",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "AI Activate Weapon Set"
+     ]
+    },
+    {
+     "type": 31,
+     "register": "0x000DF560",
+     "desc": "0x00221CE8",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DF440",
+      "0x10": "0x000DF500",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    },
+    {
+     "type": 32,
+     "register": "0x000DF200",
+     "desc": "0x00221CA0",
+     "size": 96,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DF0B0",
+      "0x10": "0x000DF190",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Move Player"
+     ]
+    },
+    {
+     "type": 34,
+     "register": "0x000DEEB0",
+     "desc": "0x00221C58",
+     "size": 96,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DED70",
+      "0x10": "0x000DEE40",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Rumble!"
+     ]
+    },
+    {
+     "type": 35,
+     "register": "0x000DEC50",
+     "desc": "0x00221C10",
+     "size": 84,
+     "version": 1,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DEB80",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": [
+      "Disable Controller Items"
+     ]
+    },
+    {
+     "type": 36,
+     "register": "0x000DE9B0",
+     "desc": "0x00221BC8",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000DE8D0",
+      "0x10": "0x000E0E80",
+      "0x18": "0x00039C00"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Steering",
+   "number": 10,
+   "block": "0x0020F808",
+   "setup": "0x000ABFD0",
+   "version": 0,
+   "type_count": 17,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
+     "register": "0x00100160",
+     "desc": "0x00226E18",
+     "size": 44,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x00100040"
+     },
+     "strings": []
+    },
+    {
+     "type": 1,
+     "register": "0x000FF860",
+     "desc": "0x00226DD0",
+     "size": 40,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FF740"
+     },
+     "strings": []
+    },
+    {
+     "type": 2,
+     "register": "0x000FEF40",
+     "desc": "0x00226D88",
+     "size": 20,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FEEA0"
+     },
+     "strings": []
+    },
+    {
+     "type": 3,
+     "register": "0x000FED10",
+     "desc": "0x00226D40",
+     "size": 12,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FEC70"
+     },
+     "strings": []
+    },
+    {
+     "type": 4,
+     "register": "0x000FEAC0",
+     "desc": "0x00226CF8",
+     "size": 44,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FE9F0"
+     },
+     "strings": []
+    },
+    {
+     "type": 5,
+     "register": "0x000D5330",
+     "desc": "0x00220F30",
+     "size": 28,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D50C0"
+     },
+     "strings": []
+    },
+    {
+     "type": 6,
+     "register": "0x000D5BD0",
+     "desc": "0x00220F78",
+     "size": 16,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D5960"
+     },
+     "strings": []
+    },
+    {
+     "type": 7,
+     "register": "0x000D5E00",
+     "desc": "0x00220FC8",
+     "size": 24,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D5D40"
+     },
+     "strings": []
+    },
+    {
+     "type": 8,
+     "register": "0x000FE7A0",
+     "desc": "0x00226CB0",
+     "size": 32,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FE6D0"
+     },
+     "strings": []
+    },
+    {
+     "type": 9,
+     "register": "0x000D6F30",
+     "desc": "0x002210A0",
+     "size": 32,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D6E80"
+     },
+     "strings": []
+    },
+    {
+     "type": 10,
+     "register": "0x000D4BA0",
+     "desc": "0x00220EE8",
+     "size": 1328,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D4AE0"
+     },
+     "strings": []
+    },
+    {
+     "type": 11,
+     "register": "0x000D62F0",
+     "desc": "0x00221010",
+     "size": 52,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D6230"
+     },
+     "strings": []
+    },
+    {
+     "type": 13,
+     "register": "0x000D67E0",
+     "desc": "0x00221058",
+     "size": 32,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000D6720"
+     },
+     "strings": []
+    },
+    {
+     "type": 14,
+     "register": "0x000F3CD0",
+     "desc": "0x00224588",
+     "size": 84,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000F3C20"
+     },
+     "strings": []
+    },
+    {
+     "type": 15,
+     "register": "0x000FE470",
+     "desc": "0x00226C68",
+     "size": 32,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000FE3B0"
+     },
+     "strings": []
+    },
+    {
+     "type": 16,
+     "register": "0x000F5A90",
+     "desc": "0x002245D8",
+     "size": 36,
+     "version": 0,
+     "flags": 0,
+     "slots": {
+      "0x0C": "0x000F5A10"
+     },
+     "strings": []
+    }
+   ]
+  },
+  {
+   "name": "Node",
+   "number": 11,
+   "block": "0x001EAB48",
+   "setup": "0x00037CD0",
+   "version": 0,
+   "type_count": 26,
+   "startup": null,
+   "shutdown": null,
+   "types": [
+    {
+     "type": 0,
      "register": "0x000DE770",
      "desc": "0x00221B80",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000DE740",
       "0x08": "0x00059010",
@@ -2730,10 +5175,12 @@
      "strings": []
     },
     {
-     "type": 2,
+     "type": 1,
      "register": "0x0004DB70",
      "desc": "0x001EB958",
      "size": 232,
+     "version": 1,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2744,10 +5191,12 @@
      "strings": []
     },
     {
-     "type": 3,
+     "type": 2,
      "register": "0x000C86C0",
      "desc": "0x0021D1F0",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2758,10 +5207,12 @@
      "strings": []
     },
     {
-     "type": 4,
+     "type": 3,
      "register": "0x000DE470",
      "desc": "0x00221B38",
      "size": 260,
+     "version": 4,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2772,10 +5223,12 @@
      "strings": []
     },
     {
-     "type": 5,
+     "type": 4,
      "register": "0x000DD5F0",
      "desc": "0x00221AF0",
      "size": 216,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2786,10 +5239,12 @@
      "strings": []
     },
     {
-     "type": 6,
+     "type": 5,
      "register": "0x000DD300",
      "desc": "0x00221AA8",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2800,10 +5255,12 @@
      "strings": []
     },
     {
-     "type": 7,
+     "type": 6,
      "register": "0x000D8A80",
      "desc": "0x00221730",
      "size": 280,
+     "version": 2,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2814,10 +5271,12 @@
      "strings": []
     },
     {
-     "type": 8,
+     "type": 7,
      "register": "0x000DD0A0",
      "desc": "0x00221A60",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2828,10 +5287,12 @@
      "strings": []
     },
     {
-     "type": 9,
+     "type": 8,
      "register": "0x000AD480",
      "desc": "0x0020FA70",
      "size": 232,
+     "version": 2,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2842,10 +5303,12 @@
      "strings": []
     },
     {
-     "type": 10,
+     "type": 9,
      "register": "0x0003ADF0",
      "desc": "0x001EAFC0",
      "size": 248,
+     "version": 2,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2858,10 +5321,12 @@
      ]
     },
     {
-     "type": 11,
+     "type": 10,
      "register": "0x000DCE40",
      "desc": "0x00221A18",
      "size": 220,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2872,10 +5337,12 @@
      "strings": []
     },
     {
-     "type": 12,
+     "type": 11,
      "register": "0x0002E030",
      "desc": "0x001EA230",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2886,10 +5353,12 @@
      "strings": []
     },
     {
-     "type": 13,
+     "type": 12,
      "register": "0x000DBFF0",
      "desc": "0x002219D0",
      "size": 212,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2900,10 +5369,12 @@
      "strings": []
     },
     {
-     "type": 14,
+     "type": 13,
      "register": "0x000ACD10",
      "desc": "0x0020FA28",
      "size": 232,
+     "version": 2,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2914,10 +5385,12 @@
      "strings": []
     },
     {
-     "type": 15,
+     "type": 14,
      "register": "0x0003C490",
      "desc": "0x001EB008",
      "size": 268,
+     "version": 4,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2928,10 +5401,12 @@
      "strings": []
     },
     {
-     "type": 16,
+     "type": 15,
      "register": "0x000A0A40",
      "desc": "0x0020DCF8",
      "size": 1248,
+     "version": 14,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2942,10 +5417,12 @@
      "strings": []
     },
     {
-     "type": 17,
+     "type": 16,
      "register": "0x000A41D0",
      "desc": "0x0020F200",
      "size": 216,
+     "version": 1,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x000A3770",
@@ -2958,10 +5435,12 @@
      ]
     },
     {
-     "type": 18,
+     "type": 17,
      "register": "0x000176A0",
      "desc": "0x001BC718",
      "size": 248,
+     "version": 5,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2972,10 +5451,12 @@
      "strings": []
     },
     {
-     "type": 19,
+     "type": 18,
      "register": "0x0003A290",
      "desc": "0x001EAF78",
      "size": 240,
+     "version": 3,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -2986,10 +5467,12 @@
      "strings": []
     },
     {
-     "type": 20,
+     "type": 19,
      "register": "0x000DBAA0",
      "desc": "0x00221988",
      "size": 220,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3000,10 +5483,12 @@
      "strings": []
     },
     {
-     "type": 21,
+     "type": 20,
      "register": "0x000DB3F0",
      "desc": "0x00221940",
      "size": 268,
+     "version": 1,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3013,10 +5498,12 @@
      "strings": []
     },
     {
-     "type": 22,
+     "type": 21,
      "register": "0x000DAF90",
      "desc": "0x002218F8",
      "size": 216,
+     "version": 5,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3027,10 +5514,12 @@
      "strings": []
     },
     {
-     "type": 23,
+     "type": 22,
      "register": "0x000DAC10",
      "desc": "0x002218B0",
      "size": 264,
+     "version": 1,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3041,10 +5530,12 @@
      "strings": []
     },
     {
-     "type": 24,
+     "type": 23,
      "register": "0x000DA720",
      "desc": "0x00221868",
      "size": 464,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3055,10 +5546,12 @@
      "strings": []
     },
     {
-     "type": 25,
+     "type": 24,
      "register": "0x000DA500",
      "desc": "0x002217C0",
      "size": 1448,
+     "version": 7,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D91F0",
       "0x08": "0x000D9300",
@@ -3082,10 +5575,12 @@
      ]
     },
     {
-     "type": 26,
+     "type": 25,
      "register": "0x000D8D00",
      "desc": "0x00221778",
      "size": 252,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3098,544 +5593,22 @@
    ]
   },
   {
-   "name": "Action",
-   "block": "0x001EAD60",
-   "setup": "0x000398B0",
-   "types": [
-    {
-     "type": 1,
-     "register": "0x000E4990",
-     "desc": "0x00222558",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E4880",
-      "0x10": "0x000DF500",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 2,
-     "register": "0x000E4600",
-     "desc": "0x00222510",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E4500",
-      "0x10": "0x00039B10",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "AI Enabled"
-     ]
-    },
-    {
-     "type": 3,
-     "register": "0x000E4330",
-     "desc": "0x002224C8",
-     "size": 144,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E4170",
-      "0x10": "0x000E4220",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 4,
-     "register": "0x000E3DF0",
-     "desc": "0x00222480",
-     "size": 352,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E3BD0",
-      "0x10": "0x000E3C90",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "IDS_%d"
-     ]
-    },
-    {
-     "type": 5,
-     "register": "0x000E38B0",
-     "desc": "0x00222438",
-     "size": 88,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E3810",
-      "0x10": "0x000E34C0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 6,
-     "register": "0x000E3410",
-     "desc": "0x002223F0",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E3310",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "%s (%s, %d pts)",
-      "Not Assigned"
-     ]
-    },
-    {
-     "type": 7,
-     "register": "0x000E31C0",
-     "desc": "0x002223A8",
-     "size": 368,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E2EE0",
-      "0x10": "0x000E2FB0",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "IDS_%d"
-     ]
-    },
-    {
-     "type": 8,
-     "register": "0x000E2E10",
-     "desc": "0x00222360",
-     "size": 372,
-     "slots": {
-      "0x04": "0x000E2DE0",
-      "0x08": "0x000E2E00",
-      "0x0C": "0x000E2B60",
-      "0x10": "0x000E2C40",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "IDS_%d",
-      "LoadSave_Complete_S.wav"
-     ]
-    },
-    {
-     "type": 9,
-     "register": "0x000E2990",
-     "desc": "0x00222318",
-     "size": 104,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E2820",
-      "0x10": "0x000E28E0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 10,
-     "register": "0x000E2690",
-     "desc": "0x002222D0",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E2570",
-      "0x10": "0x000E2630",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 11,
-     "register": "0x000E2290",
-     "desc": "0x00222288",
-     "size": 144,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E2180",
-      "0x10": "0x000E2220",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 12,
-     "register": "0x000E20E0",
-     "desc": "0x00222240",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E2020",
-      "0x10": "0x000E1070",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 13,
-     "register": "0x000E1E20",
-     "desc": "0x002221F8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E1D10",
-      "0x10": "0x000E1DB0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 14,
-     "register": "0x000E1C50",
-     "desc": "0x002221B0",
-     "size": 88,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E1B10",
-      "0x10": "0x000E1BD0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 15,
-     "register": "0x000E1A50",
-     "desc": "0x00222168",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E1990",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 16,
-     "register": "0x000E1850",
-     "desc": "0x00222120",
-     "size": 92,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E1710",
-      "0x10": "0x000E17D0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 17,
-     "register": "0x000E1340",
-     "desc": "0x002220D8",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E1280",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 18,
-     "register": "0x000E10B0",
-     "desc": "0x00222090",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E0FC0",
-      "0x10": "0x000E1070",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Spawn"
-     ]
-    },
-    {
-     "type": 19,
-     "register": "0x000E0EF0",
-     "desc": "0x00222048",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E0DA0",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "AI Set Immobile"
-     ]
-    },
-    {
-     "type": 20,
-     "register": "0x000E0C20",
-     "desc": "0x00222000",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E0B40",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "AI Set Theme"
-     ]
-    },
-    {
-     "type": 21,
-     "register": "0x000E09A0",
-     "desc": "0x00221FB8",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E08A0",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 22,
-     "register": "0x000E07F0",
-     "desc": "0x00221F70",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E06F0",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 23,
-     "register": "0x000E0370",
-     "desc": "0x00221EE0",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E02A0",
-      "0x10": "0x000DFFA0",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "AI Land"
-     ]
-    },
-    {
-     "type": 24,
-     "register": "0x000E0640",
-     "desc": "0x00221F28",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E0580",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 25,
-     "register": "0x000E01B0",
-     "desc": "0x00221E98",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000E00E0",
-      "0x10": "0x000E01A0",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Reset Spawn"
-     ]
-    },
-    {
-     "type": 26,
-     "register": "0x000E0010",
-     "desc": "0x00221E50",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DFEE0",
-      "0x10": "0x000DFFA0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 27,
-     "register": "0x000DFDA0",
-     "desc": "0x00221E08",
-     "size": 112,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DFC20",
-      "0x10": "0x000DFCE0",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 29,
-     "register": "0x000DFA60",
-     "desc": "0x00221DC0",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DF930",
-      "0x10": "0x000DFA00",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Queue I-Music"
-     ]
-    },
-    {
-     "type": 30,
-     "register": "0x000DF8D0",
-     "desc": "0x00221D78",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DF810",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 31,
-     "register": "0x000DF760",
-     "desc": "0x00221D30",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DF690",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "AI Activate Weapon Set"
-     ]
-    },
-    {
-     "type": 32,
-     "register": "0x000DF560",
-     "desc": "0x00221CE8",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DF440",
-      "0x10": "0x000DF500",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    },
-    {
-     "type": 33,
-     "register": "0x000DF200",
-     "desc": "0x00221CA0",
-     "size": 96,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DF0B0",
-      "0x10": "0x000DF190",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Move Player"
-     ]
-    },
-    {
-     "type": 35,
-     "register": "0x000DEEB0",
-     "desc": "0x00221C58",
-     "size": 96,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DED70",
-      "0x10": "0x000DEE40",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Rumble!"
-     ]
-    },
-    {
-     "type": 36,
-     "register": "0x000DEC50",
-     "desc": "0x00221C10",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DEB80",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": [
-      "Disable Controller Items"
-     ]
-    },
-    {
-     "type": 37,
-     "register": "0x000DE9B0",
-     "desc": "0x00221BC8",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000DE8D0",
-      "0x10": "0x000E0E80",
-      "0x18": "0x00039C00"
-     },
-     "strings": []
-    }
-   ]
-  },
-  {
    "name": "ScreenElement",
+   "number": 12,
    "block": "0x001EB050",
    "setup": "0x0003C8D0",
+   "version": 0,
+   "type_count": 28,
+   "startup": null,
+   "shutdown": null,
    "types": [
     {
-     "type": 1,
+     "type": 0,
      "register": "0x000EF060",
      "desc": "0x00224500",
      "size": 88,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000EEF50",
       "0x08": "0x000ED8A0",
@@ -3651,10 +5624,12 @@
      ]
     },
     {
-     "type": 2,
+     "type": 1,
      "register": "0x000C72E0",
      "desc": "0x0021D130",
      "size": 76,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C7230",
       "0x08": "0x000C72C0",
@@ -3663,10 +5638,12 @@
      "strings": []
     },
     {
-     "type": 3,
+     "type": 2,
      "register": "0x000A5000",
      "desc": "0x0020F380",
      "size": 88,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000A4B10",
       "0x08": "0x000A4F40",
@@ -3677,10 +5654,12 @@
      ]
     },
     {
-     "type": 4,
+     "type": 3,
      "register": "0x000ED830",
      "desc": "0x002243C8",
      "size": 52,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000ED760",
       "0x08": "0x000ED800",
@@ -3689,10 +5668,12 @@
      "strings": []
     },
     {
-     "type": 5,
+     "type": 4,
      "register": "0x000ED500",
      "desc": "0x00224308",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000ED450",
       "0x08": "0x000ED4E0",
@@ -3703,10 +5684,12 @@
      ]
     },
     {
-     "type": 6,
+     "type": 5,
      "register": "0x000ED190",
      "desc": "0x00224190",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000ECE80",
       "0x08": "0x000ED150",
@@ -3717,10 +5700,12 @@
      ]
     },
     {
-     "type": 7,
+     "type": 6,
      "register": "0x000ECA60",
      "desc": "0x00223FA0",
      "size": 48,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000EC680",
       "0x08": "0x000ECA10",
@@ -3731,10 +5716,12 @@
      ]
     },
     {
-     "type": 8,
+     "type": 7,
      "register": "0x000EC0C0",
      "desc": "0x00223D98",
      "size": 56,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000EBD00",
       "0x08": "0x000EC070",
@@ -3745,10 +5732,12 @@
      ]
     },
     {
-     "type": 9,
+     "type": 8,
      "register": "0x000EB6B0",
      "desc": "0x002234C8",
      "size": 56,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000EAE10",
       "0x08": "0x000EB630",
@@ -3770,10 +5759,12 @@
      ]
     },
     {
-     "type": 10,
+     "type": 9,
      "register": "0x000EA670",
      "desc": "0x00223448",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000EA610",
       "0x08": "0x000EA660",
@@ -3784,10 +5775,12 @@
      ]
     },
     {
-     "type": 11,
+     "type": 10,
      "register": "0x000EA480",
      "desc": "0x00223400",
      "size": 56,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3796,10 +5789,12 @@
      "strings": []
     },
     {
-     "type": 12,
+     "type": 11,
      "register": "0x000D1B30",
      "desc": "0x00220A50",
      "size": 136,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3808,10 +5803,12 @@
      "strings": []
     },
     {
-     "type": 14,
+     "type": 13,
      "register": "0x000EA230",
      "desc": "0x00222F68",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E96E0",
       "0x08": "0x000E9860",
@@ -3826,10 +5823,12 @@
      ]
     },
     {
-     "type": 15,
+     "type": 14,
      "register": "0x000E94C0",
      "desc": "0x00222EA8",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E9190",
       "0x08": "0x000E9220",
@@ -3838,10 +5837,12 @@
      "strings": []
     },
     {
-     "type": 16,
+     "type": 15,
      "register": "0x000E9140",
      "desc": "0x00222C00",
      "size": 68,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E8350",
       "0x08": "0x000E85A0",
@@ -3859,10 +5860,12 @@
      ]
     },
     {
-     "type": 17,
+     "type": 16,
      "register": "0x000E8200",
      "desc": "0x00222BB8",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3871,10 +5874,12 @@
      "strings": []
     },
     {
-     "type": 18,
+     "type": 17,
      "register": "0x000E8020",
      "desc": "0x00222B38",
      "size": 408,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E7AE0",
       "0x08": "0x000E7B30",
@@ -3885,10 +5890,12 @@
      ]
     },
     {
-     "type": 19,
+     "type": 18,
      "register": "0x000E77F0",
      "desc": "0x00222A30",
      "size": 132,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E7660",
       "0x08": "0x000E77C0",
@@ -3900,10 +5907,12 @@
      ]
     },
     {
-     "type": 20,
+     "type": 19,
      "register": "0x000E6A80",
      "desc": "0x002229A8",
      "size": 64,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E6630",
       "0x08": "0x000E6680",
@@ -3912,10 +5921,12 @@
      "strings": []
     },
     {
-     "type": 21,
+     "type": 20,
      "register": "0x000E6510",
      "desc": "0x002227F0",
      "size": 164,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E58D0",
       "0x08": "0x000E5A10",
@@ -3929,10 +5940,12 @@
      ]
     },
     {
-     "type": 22,
+     "type": 21,
      "register": "0x000C6350",
      "desc": "0x0021CD90",
      "size": 44,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3941,10 +5954,12 @@
      "strings": []
     },
     {
-     "type": 23,
+     "type": 22,
      "register": "0x000C6A90",
      "desc": "0x0021CE18",
      "size": 84,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000C68A0",
       "0x08": "0x000C6A60",
@@ -3953,10 +5968,12 @@
      "strings": []
     },
     {
-     "type": 24,
+     "type": 23,
      "register": "0x000D24A0",
      "desc": "0x00220A98",
      "size": 216,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D1FF0",
       "0x08": "0x000D2120",
@@ -3967,10 +5984,12 @@
      ]
     },
     {
-     "type": 25,
+     "type": 24,
      "register": "0x0003D0B0",
      "desc": "0x001EB268",
      "size": 60,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -3979,10 +5998,12 @@
      "strings": []
     },
     {
-     "type": 26,
+     "type": 25,
      "register": "0x000D2C30",
      "desc": "0x00220BD0",
      "size": 88,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000D25C0",
       "0x08": "0x000D2690",
@@ -3991,10 +6012,12 @@
      "strings": []
     },
     {
-     "type": 27,
+     "type": 26,
      "register": "0x000E5580",
      "desc": "0x002225E8",
      "size": 56,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x000E51C0",
       "0x08": "0x000E5530",
@@ -4005,10 +6028,12 @@
      ]
     },
     {
-     "type": 28,
+     "type": 27,
      "register": "0x000E4B80",
      "desc": "0x002225A0",
      "size": 112,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
@@ -4019,1704 +6044,566 @@
    ]
   },
   {
-   "name": "Effect",
-   "block": "0x0020DD88",
-   "setup": "0x000A0FE0",
+   "name": "Screen",
+   "number": 13,
+   "block": "0x001E5FC8",
+   "setup": "0x00020320",
+   "version": 0,
+   "type_count": 37,
+   "startup": null,
+   "shutdown": null,
    "types": [
     {
-     "type": 1,
-     "register": "0x000FDF70",
-     "desc": "0x00226B88",
-     "size": 92,
+     "type": 0,
+     "register": "0x00037BF0",
+     "desc": "0x001EAAD0",
+     "size": 320,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FDED0",
-      "0x08": "0x000FDF40",
-      "0x0C": "0x0010C5E0"
+      "0x04": "0x00035630",
+      "0x08": "0x000356C0",
+      "0x0C": "0x00037A90"
      },
      "strings": [
-      "explosion4.wav"
+      "Cancel_Back_S.wav",
+      "Confirm_S.wav",
+      "cursor.wav"
      ]
     },
     {
-     "type": 2,
-     "register": "0x000FDE70",
-     "desc": "0x00226AA8",
-     "size": 92,
+     "type": 1,
+     "register": "0x000C61C0",
+     "desc": "0x0021CCC8",
+     "size": 320,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FDDD0",
-      "0x08": "0x000FDE40",
-      "0x0C": "0x0010C5E0"
+      "0x04": "0x000C60F0",
+      "0x08": "0x000C61A0",
+      "0x0C": "0x000C5FA0"
+     },
+     "strings": []
+    },
+    {
+     "type": 2,
+     "register": "0x000A35E0",
+     "desc": "0x0020DFA0",
+     "size": 560,
+     "version": 2,
+     "flags": 0,
+     "slots": {
+      "0x04": "0x000A2450",
+      "0x08": "0x000A2500",
+      "0x0C": "0x000A34D0"
      },
      "strings": [
-      "explosion4.wav"
+      "toggle.wav"
      ]
     },
     {
      "type": 3,
-     "register": "0x000FDD70",
-     "desc": "0x002269C8",
-     "size": 92,
+     "register": "0x000C5770",
+     "desc": "0x0021CBC0",
+     "size": 300,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FDCD0",
-      "0x08": "0x000FDD40",
-      "0x0C": "0x0010C5E0"
+      "0x04": "0x000C5600",
+      "0x08": "0x000C5710",
+      "0x0C": "0x000C54F0"
      },
      "strings": [
-      "explosion4.wav"
+      "sniper_center.tga",
+      "sniper_rotate.tga",
+      "sniper_side_bottom.tga",
+      "sniper_side_middle.tga",
+      "sniper_side_top.tga"
      ]
     },
     {
      "type": 4,
-     "register": "0x000FDC70",
-     "desc": "0x002268E8",
-     "size": 92,
+     "register": "0x000C4C30",
+     "desc": "0x0021CAF0",
+     "size": 376,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FDBD0",
-      "0x08": "0x000FDC40",
-      "0x0C": "0x0010C5E0"
+      "0x04": "0x000C4AC0",
+      "0x08": "0x000C4BD0",
+      "0x0C": "0x000C49A0"
      },
      "strings": [
-      "explosion4.wav"
+      "Cancel_Back_S.wav",
+      "Confirm_S.wav",
+      "cursor.wav"
      ]
     },
     {
      "type": 5,
-     "register": "0x000FDB70",
-     "desc": "0x00226808",
-     "size": 92,
+     "register": "0x000C3750",
+     "desc": "0x0021CAA8",
+     "size": 308,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FDAD0",
-      "0x08": "0x000FDB40",
-      "0x0C": "0x0010C5E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000C3650"
      },
-     "strings": [
-      "explosion4.wav"
-     ]
+     "strings": []
     },
     {
      "type": 6,
-     "register": "0x000F71D0",
-     "desc": "0x002247D0",
-     "size": 128,
+     "register": "0x0001C5F0",
+     "desc": "0x001BCBB8",
+     "size": 312,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F6F90",
-      "0x08": "0x000F6FA0",
-      "0x0C": "0x000F7150"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x0001C510"
      },
      "strings": []
     },
     {
      "type": 7,
-     "register": "0x000F6DC0",
-     "desc": "0x00224788",
-     "size": 92,
+     "register": "0x000C31A0",
+     "desc": "0x0021CA60",
+     "size": 312,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F69F0",
-      "0x08": "0x000F6A10",
-      "0x0C": "0x000F6CD0"
-     },
-     "strings": [
-      "fx_smoke_light02"
-     ]
-    },
-    {
-     "type": 8,
-     "register": "0x000F8E30",
-     "desc": "0x00224F98",
-     "size": 3436,
-     "slots": {
-      "0x04": "0x000F8D80",
-      "0x08": "0x000F8D50",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000C30C0"
      },
      "strings": []
     },
     {
-     "type": 9,
-     "register": "0x000F8C60",
-     "desc": "0x00224F18",
-     "size": 3436,
+     "type": 8,
+     "register": "0x0004C530",
+     "desc": "0x001EB890",
+     "size": 444,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F8BB0",
-      "0x08": "0x000F8B80",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x0004AD60",
+      "0x08": "0x0004ADB0",
+      "0x0C": "0x0004C420"
      },
      "strings": []
     },
     {
      "type": 10,
-     "register": "0x000F8A90",
-     "desc": "0x00224E98",
-     "size": 3436,
+     "register": "0x000299D0",
+     "desc": "0x001E6A58",
+     "size": 448,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F89E0",
-      "0x08": "0x000F89B0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00029750",
+      "0x08": "0x00029950",
+      "0x0C": "0x000296A0"
      },
-     "strings": []
+     "strings": [
+      "HUD_pieces.tga",
+      "TargetAcquired_M.wav",
+      "TargetSwitch.wav"
+     ]
     },
     {
      "type": 11,
-     "register": "0x000F88C0",
-     "desc": "0x00224E18",
-     "size": 3436,
+     "register": "0x000C3030",
+     "desc": "0x0021C9E0",
+     "size": 324,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F8810",
-      "0x08": "0x000F87E0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000C2FD0",
+      "0x08": "0x000C3020",
+      "0x0C": "0x000C2EB0"
      },
      "strings": []
     },
     {
      "type": 12,
-     "register": "0x000F86F0",
-     "desc": "0x00224D98",
-     "size": 3436,
+     "register": "0x000C2550",
+     "desc": "0x0021C7B0",
+     "size": 384,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F8640",
-      "0x08": "0x000F8610",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000C2460",
+      "0x08": "0x000C2510",
+      "0x0C": "0x000C2380"
      },
      "strings": []
     },
     {
      "type": 13,
-     "register": "0x000F8520",
-     "desc": "0x00224D18",
-     "size": 3436,
+     "register": "0x00034660",
+     "desc": "0x001EA810",
+     "size": 408,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F8470",
-      "0x08": "0x000F8440",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00033E00",
+      "0x08": "0x00033F90",
+      "0x0C": "0x00034540"
      },
      "strings": []
     },
     {
      "type": 14,
-     "register": "0x000F8350",
-     "desc": "0x00224C98",
-     "size": 3436,
+     "register": "0x000C20D0",
+     "desc": "0x0021C728",
+     "size": 312,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F82A0",
-      "0x08": "0x000F8270",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000C1FD0"
      },
      "strings": []
     },
     {
      "type": 15,
-     "register": "0x000F8180",
-     "desc": "0x00224C18",
-     "size": 3436,
+     "register": "0x000C1DF0",
+     "desc": "0x0021C628",
+     "size": 860,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F80D0",
-      "0x08": "0x000F80A0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000C1CE0",
+      "0x08": "0x000C1DC0",
+      "0x0C": "0x000C1BD0"
      },
-     "strings": []
+     "strings": [
+      "GUI_mission_menu.tga"
+     ]
     },
     {
      "type": 16,
-     "register": "0x000F7FB0",
-     "desc": "0x00224B98",
-     "size": 3436,
+     "register": "0x00023D60",
+     "desc": "0x001E6230",
+     "size": 368,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7F00",
-      "0x08": "0x000F7ED0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x00023AF0"
      },
      "strings": []
     },
     {
      "type": 17,
-     "register": "0x000F7DE0",
-     "desc": "0x00224B18",
-     "size": 3436,
+     "register": "0x000C0610",
+     "desc": "0x0021C5D8",
+     "size": 960,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7D30",
-      "0x08": "0x000F7D00",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000BF360",
+      "0x08": "0x000BF380",
+      "0x0C": "0x000C0510"
      },
      "strings": []
     },
     {
      "type": 18,
-     "register": "0x000F7C10",
-     "desc": "0x00224A98",
-     "size": 3436,
+     "register": "0x000BEF30",
+     "desc": "0x0021B1C0",
+     "size": 532,
+     "version": 1,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7B60",
-      "0x08": "0x000F7B30",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000BDD00",
+      "0x08": "0x000BDF80",
+      "0x0C": "0x000BEE20"
      },
-     "strings": []
+     "strings": [
+      "GUI_mission_menu.tga",
+      "chapterswitch.wav"
+     ]
     },
     {
      "type": 19,
-     "register": "0x000F7A40",
-     "desc": "0x00224A18",
-     "size": 3436,
+     "register": "0x000BCC30",
+     "desc": "0x00219DB8",
+     "size": 516,
+     "version": 1,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7990",
-      "0x08": "0x000F7960",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000BC930",
+      "0x08": "0x000BCBB0",
+      "0x0C": "0x000BC810"
      },
-     "strings": []
+     "strings": [
+      "GUI_mission_menu.tga",
+      "chapterswitch.wav"
+     ]
     },
     {
      "type": 20,
-     "register": "0x000F7870",
-     "desc": "0x00224998",
-     "size": 3436,
+     "register": "0x000A5620",
+     "desc": "0x0020F798",
+     "size": 428,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F77C0",
-      "0x08": "0x000F7790",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000A54E0"
      },
      "strings": []
     },
     {
      "type": 21,
-     "register": "0x000F76A0",
-     "desc": "0x00224918",
-     "size": 3436,
+     "register": "0x000BB3F0",
+     "desc": "0x00219D28",
+     "size": 396,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F75F0",
-      "0x08": "0x000F75C0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000BB2E0"
      },
      "strings": []
     },
     {
      "type": 22,
-     "register": "0x000F74D0",
-     "desc": "0x00224898",
-     "size": 3436,
+     "register": "0x00033630",
+     "desc": "0x001EA648",
+     "size": 336,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7420",
-      "0x08": "0x000F73F0",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x00032EC0",
+      "0x08": "0x00032F50",
+      "0x0C": "0x000334C0"
      },
-     "strings": []
+     "strings": [
+      "Cancel_Back_S.wav",
+      "GUI_headings_missioncomplete.tga"
+     ]
     },
     {
      "type": 23,
-     "register": "0x000F7300",
-     "desc": "0x00224818",
-     "size": 3436,
+     "register": "0x000BA2E0",
+     "desc": "0x00219CD0",
+     "size": 360,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000F7250",
-      "0x08": "0x000F7220",
-      "0x0C": "0x0010B4E0"
+      "0x04": "0x000BA270",
+      "0x08": "0x000BA2B0",
+      "0x0C": "0x000BA190"
      },
-     "strings": []
+     "strings": [
+      "Cancel_Back_S.wav",
+      "Confirm_S.wav"
+     ]
     },
     {
      "type": 24,
-     "register": "0x000FD7E0",
-     "desc": "0x002266B8",
-     "size": 96,
+     "register": "0x000B95D0",
+     "desc": "0x00219A60",
+     "size": 348,
+     "version": 1,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD7A0",
-      "0x08": "0x000FD7C0",
-      "0x0C": "0x0010C340"
+      "0x04": "0x000B93A0",
+      "0x08": "0x000B9570",
+      "0x0C": "0x000B92C0"
      },
      "strings": [
-      "FX_Missile_contrail_anim"
+      "GUI_mission_menu.tga",
+      "chapterswitch.wav"
      ]
     },
     {
      "type": 25,
-     "register": "0x000FDA00",
-     "desc": "0x00226798",
-     "size": 96,
+     "register": "0x000B8BF0",
+     "desc": "0x00219A18",
+     "size": 316,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD9C0",
-      "0x08": "0x000FD9E0",
-      "0x0C": "0x0010C340"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000B8B10"
      },
-     "strings": [
-      "FX_Missile_contrail_anim"
-     ]
+     "strings": []
     },
     {
      "type": 26,
-     "register": "0x000FD8F0",
-     "desc": "0x00226728",
-     "size": 96,
+     "register": "0x000C2BC0",
+     "desc": "0x0021C960",
+     "size": 324,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD8B0",
-      "0x08": "0x000FD8D0",
-      "0x0C": "0x0010C340"
+      "0x04": "0x000C2B60",
+      "0x08": "0x000C2BB0",
+      "0x0C": "0x000C2A40"
      },
-     "strings": [
-      "FX_Missile_contrail_anim"
-     ]
+     "strings": []
     },
     {
      "type": 27,
-     "register": "0x000FD6D0",
-     "desc": "0x00226648",
-     "size": 96,
+     "register": "0x00026970",
+     "desc": "0x001E63A0",
+     "size": 360,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD690",
-      "0x08": "0x000FD6B0",
-      "0x0C": "0x0010C340"
+      "0x04": "0x00026820",
+      "0x08": "0x00026920",
+      "0x0C": "0x00026700"
      },
      "strings": [
-      "fx_motion_trail"
+      "Confirm_S.wav",
+      "GUI_headings_missionfailed.tga",
+      "cursor.wav"
      ]
     },
     {
      "type": 28,
-     "register": "0x000FD630",
-     "desc": "0x00226600",
-     "size": 112,
+     "register": "0x000B8350",
+     "desc": "0x00210348",
+     "size": 324,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD590",
-      "0x08": "0x000FD560",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B8220",
+      "0x08": "0x000B8310",
+      "0x0C": "0x000B8120"
      },
      "strings": [
-      "FX_thrust_blue_anim"
+      "GUI_headings_credits.tga",
+      "icon_texover.tga",
+      "rdf_tp_test"
      ]
     },
     {
      "type": 29,
-     "register": "0x000FD500",
-     "desc": "0x002265B8",
-     "size": 112,
+     "register": "0x000B68E0",
+     "desc": "0x0020FE50",
+     "size": 324,
+     "version": 1,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD460",
-      "0x08": "0x000FD430",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B6060",
+      "0x08": "0x000B6170",
+      "0x0C": "0x000B67B0"
      },
      "strings": [
-      "FX_thrust_blue_anim"
+      "GUI_headings_awards.tga",
+      "GUI_mission_menu.tga"
      ]
     },
     {
      "type": 30,
-     "register": "0x000FD3D0",
-     "desc": "0x00226570",
-     "size": 112,
+     "register": "0x000B5F50",
+     "desc": "0x0020FD88",
+     "size": 380,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD330",
-      "0x08": "0x000FD300",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B5690",
+      "0x08": "0x000B5710",
+      "0x0C": "0x000B5E70"
      },
-     "strings": [
-      "FX_thrust_bpblue_anim01"
-     ]
+     "strings": []
     },
     {
      "type": 31,
-     "register": "0x000FD2A0",
-     "desc": "0x00226528",
-     "size": 112,
+     "register": "0x000B5290",
+     "desc": "0x0020FD30",
+     "size": 364,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD200",
-      "0x08": "0x000FD1D0",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B5260",
+      "0x08": "0x000B5280",
+      "0x0C": "0x000B5190"
      },
-     "strings": [
-      "FX_thrust_blue_anim"
-     ]
+     "strings": []
     },
     {
      "type": 32,
-     "register": "0x000FD170",
-     "desc": "0x002264E0",
-     "size": 112,
+     "register": "0x000B1AE0",
+     "desc": "0x0020FB98",
+     "size": 340,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FD0D0",
-      "0x08": "0x000FD0A0",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B1AB0",
+      "0x08": "0x000B1AD0",
+      "0x0C": "0x000B19E0"
      },
-     "strings": [
-      "fx_thrust_red01"
-     ]
+     "strings": []
     },
     {
      "type": 33,
-     "register": "0x000FD040",
-     "desc": "0x00226498",
-     "size": 112,
+     "register": "0x000B3620",
+     "desc": "0x0020FBE8",
+     "size": 336,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FCFA0",
-      "0x08": "0x000FCF70",
-      "0x0C": "0x000EF220"
+      "0x04": "0x000B34B0",
+      "0x08": "0x000B35E0",
+      "0x0C": "0x000B33D0"
      },
-     "strings": [
-      "fx_thrust_red01_big"
-     ]
+     "strings": []
     },
     {
      "type": 34,
-     "register": "0x000FCF10",
-     "desc": "0x00226450",
-     "size": 112,
+     "register": "0x000B0820",
+     "desc": "0x0020FB50",
+     "size": 304,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FCE70",
-      "0x08": "0x000FCE40",
-      "0x0C": "0x000EF220"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000B0720"
      },
-     "strings": [
-      "FX_zen_shuttle_new"
-     ]
+     "strings": []
     },
     {
      "type": 35,
-     "register": "0x000FCDE0",
-     "desc": "0x00226408",
-     "size": 112,
+     "register": "0x000AFF30",
+     "desc": "0x0020FAC0",
+     "size": 404,
+     "version": 0,
+     "flags": 0,
      "slots": {
-      "0x04": "0x000FCD40",
-      "0x08": "0x000FCD10",
-      "0x0C": "0x000EF220"
+      "0x04": "0x00059010",
+      "0x08": "0x00059010",
+      "0x0C": "0x000AFE50"
      },
-     "strings": [
-      "fx_cyclops_thrust"
-     ]
+     "strings": []
     },
     {
      "type": 36,
-     "register": "0x000FCCB0",
-     "desc": "0x002263C0",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FCC10",
-      "0x08": "0x000FCBE0",
-      "0x0C": "0x000EF220"
-     },
-     "strings": [
-      "fx_fpa_thrusters02"
-     ]
-    },
-    {
-     "type": 37,
-     "register": "0x000FCB80",
-     "desc": "0x00226378",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FCAE0",
-      "0x08": "0x000FCAB0",
-      "0x0C": "0x000EF220"
-     },
-     "strings": [
-      "fx_zen_mpa_backthrust01"
-     ]
-    },
-    {
-     "type": 38,
-     "register": "0x000FCA50",
-     "desc": "0x00226330",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC9B0",
-      "0x08": "0x000FC980",
-      "0x0C": "0x000EF220"
-     },
-     "strings": [
-      "fx_zen_mpa_legthrust01"
-     ]
-    },
-    {
-     "type": 39,
-     "register": "0x000FC920",
-     "desc": "0x002262E8",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC880",
-      "0x08": "0x000FC850",
-      "0x0C": "0x000EF220"
-     },
-     "strings": [
-      "fx_catseye_thrust"
-     ]
-    },
-    {
-     "type": 40,
-     "register": "0x000FC7E0",
-     "desc": "0x00226288",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC700",
-      "0x08": "0x000FC6D0",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_Veritech Muzzle Flash 00"
-     ]
-    },
-    {
-     "type": 41,
-     "register": "0x000FC650",
-     "desc": "0x00226228",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC570",
-      "0x08": "0x000FC540",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "fx_rdf_destriod_m_flash"
-     ]
-    },
-    {
-     "type": 42,
-     "register": "0x000FC4C0",
-     "desc": "0x002261C8",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC3E0",
-      "0x08": "0x000FC3B0",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_muzzle_flash_blue01"
-     ]
-    },
-    {
-     "type": 43,
-     "register": "0x000FC330",
-     "desc": "0x00226168",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC250",
-      "0x08": "0x000FC220",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_zenturretmuzzle01"
-     ]
-    },
-    {
-     "type": 44,
-     "register": "0x000FC1A0",
-     "desc": "0x00226108",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FC0C0",
-      "0x08": "0x000FC090",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_Makk_Cannon"
-     ]
-    },
-    {
-     "type": 45,
-     "register": "0x000FC010",
-     "desc": "0x002260A8",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FBF30",
-      "0x08": "0x000FBF00",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_makk_arm_laser"
-     ]
-    },
-    {
-     "type": 46,
-     "register": "0x000FBE80",
-     "desc": "0x00226048",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FBDA0",
-      "0x08": "0x000FBD70",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_Spartan_Cannon"
-     ]
-    },
-    {
-     "type": 47,
-     "register": "0x000FBCF0",
-     "desc": "0x00225FE8",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FBC10",
-      "0x08": "0x000FBBE0",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_fpa_muzzle flash"
-     ]
-    },
-    {
-     "type": 48,
-     "register": "0x000FBB60",
-     "desc": "0x00225F88",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FBA80",
-      "0x08": "0x000FBA50",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "fx_mpa_sniper"
-     ]
-    },
-    {
-     "type": 49,
-     "register": "0x000FB9D0",
-     "desc": "0x00225F28",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FB8F0",
-      "0x08": "0x000FB8C0",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "fx_rdfturretmuzzle"
-     ]
-    },
-    {
-     "type": 50,
-     "register": "0x000FB840",
-     "desc": "0x00225EC8",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FB760",
-      "0x08": "0x000FB730",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "fx_cyclopsturretmuzzle"
-     ]
-    },
-    {
-     "type": 51,
-     "register": "0x000FB6B0",
-     "desc": "0x00225E68",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FB5D0",
-      "0x08": "0x000FB5A0",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "fx_zen_destriod_muzzle"
-     ]
-    },
-    {
-     "type": 52,
-     "register": "0x000FB520",
-     "desc": "0x00225E08",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000FB440",
-      "0x08": "0x000FB410",
-      "0x0C": "0x0010C020"
-     },
-     "strings": [
-      "FX_zenturretmuzzle01"
-     ]
-    },
-    {
-     "type": 53,
-     "register": "0x000FB3A0",
-     "desc": "0x00225D70",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FB2D0",
-      "0x08": "0x000FB2A0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_HitSpot_red",
-      "laserhit.wav"
-     ]
-    },
-    {
-     "type": 54,
-     "register": "0x000FB230",
-     "desc": "0x00225CD8",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FB160",
-      "0x08": "0x000FB130",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_HitSpot_blue",
-      "laserhit.wav"
-     ]
-    },
-    {
-     "type": 55,
-     "register": "0x000FB0C0",
-     "desc": "0x00225C40",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FAFF0",
-      "0x08": "0x000FAFC0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "fx_dust_laser_hit",
-      "laserhit.wav"
-     ]
-    },
-    {
-     "type": 56,
-     "register": "0x000FAF50",
-     "desc": "0x00225BA8",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FAE80",
-      "0x08": "0x000FAE50",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "fx_water_splash01",
-      "laserhit.wav"
-     ]
-    },
-    {
-     "type": 57,
-     "register": "0x000FADE0",
-     "desc": "0x00225B10",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FAD10",
-      "0x08": "0x000FACE0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "fx_rock_chunks",
-      "laserhit.wav"
-     ]
-    },
-    {
-     "type": 58,
-     "register": "0x000FAC70",
-     "desc": "0x00225A78",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FABB0",
-      "0x08": "0x000FAB90",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_Smoke light"
-     ]
-    },
-    {
-     "type": 59,
-     "register": "0x000FAB20",
-     "desc": "0x002259E0",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FAA60",
-      "0x08": "0x000FAA40",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "fx_foot_dust"
-     ]
-    },
-    {
-     "type": 60,
-     "register": "0x000FA9D0",
-     "desc": "0x00225948",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA900",
-      "0x08": "0x000FA8D0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_explosion_01",
-      "explosion4.wav"
-     ]
-    },
-    {
-     "type": 61,
-     "register": "0x000FA860",
-     "desc": "0x002258B0",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA790",
-      "0x08": "0x000FA760",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_explosion_01_med",
-      "explosion4.wav"
-     ]
-    },
-    {
-     "type": 62,
-     "register": "0x000FA6F0",
-     "desc": "0x00225818",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA620",
-      "0x08": "0x000FA5F0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "FX_explosion_01_large",
-      "explosion4.wav"
-     ]
-    },
-    {
-     "type": 63,
-     "register": "0x000FA580",
-     "desc": "0x00225780",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA4B0",
-      "0x08": "0x000FA480",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "explosion4.wav",
-      "fx_explosion_cyclops"
-     ]
-    },
-    {
-     "type": 64,
-     "register": "0x000FA410",
-     "desc": "0x002256E8",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA340",
-      "0x08": "0x000FA310",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "crate_explosion",
-      "explosion4.wav"
-     ]
-    },
-    {
-     "type": 65,
-     "register": "0x000FA2A0",
-     "desc": "0x00225650",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA1E0",
-      "0x08": "0x000FA1C0",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "veritech_bullets"
-     ]
-    },
-    {
-     "type": 66,
-     "register": "0x000FA150",
-     "desc": "0x002255B8",
-     "size": 92,
-     "slots": {
-      "0x04": "0x000FA090",
-      "0x08": "0x000FA070",
-      "0x0C": "0x0010BD30"
-     },
-     "strings": [
-      "fx_dust_flyby"
-     ]
-    },
-    {
-     "type": 67,
-     "register": "0x000FA000",
-     "desc": "0x00225568",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9FB0",
-      "0x08": "0x000F9FE0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "FX_sparks"
-     ]
-    },
-    {
-     "type": 68,
-     "register": "0x000F9F40",
-     "desc": "0x00225518",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9EF0",
-      "0x08": "0x000F9F20",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "FX_damagefire"
-     ]
-    },
-    {
-     "type": 69,
-     "register": "0x000F9E80",
-     "desc": "0x002254C8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9E30",
-      "0x08": "0x000F9E60",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "damagesmoke_zen_small"
-     ]
-    },
-    {
-     "type": 70,
-     "register": "0x000F9DC0",
-     "desc": "0x00225478",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9D70",
-      "0x08": "0x000F9DA0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "damagesmoke"
-     ]
-    },
-    {
-     "type": 71,
-     "register": "0x000F9D00",
-     "desc": "0x00225428",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9CB0",
-      "0x08": "0x000F9CE0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "damagesmoke_zen_large"
-     ]
-    },
-    {
-     "type": 72,
-     "register": "0x000F9C40",
-     "desc": "0x002253D8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9BF0",
-      "0x08": "0x000F9C20",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "damagesmoke_fast_small"
-     ]
-    },
-    {
-     "type": 73,
-     "register": "0x000F9B80",
-     "desc": "0x00225388",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9B30",
-      "0x08": "0x000F9B60",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "damagesmoke_fast_medium"
-     ]
-    },
-    {
-     "type": 74,
-     "register": "0x000F9AC0",
-     "desc": "0x00225338",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9A30",
-      "0x08": "0x000F9A10",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_smoke01"
-     ]
-    },
-    {
-     "type": 75,
-     "register": "0x000F99A0",
-     "desc": "0x002252E8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9910",
-      "0x08": "0x000F98F0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_smoke02"
-     ]
-    },
-    {
-     "type": 76,
-     "register": "0x000F9880",
-     "desc": "0x00225298",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F97F0",
-      "0x08": "0x000F97D0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_smoke03"
-     ]
-    },
-    {
-     "type": 77,
-     "register": "0x000F9760",
-     "desc": "0x00225248",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F96D0",
-      "0x08": "0x000F96B0",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_glass01"
-     ]
-    },
-    {
-     "type": 78,
-     "register": "0x000F9640",
-     "desc": "0x002251F8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F95B0",
-      "0x08": "0x000F9590",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_glass02"
-     ]
-    },
-    {
-     "type": 79,
-     "register": "0x000F9520",
-     "desc": "0x002251A8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9490",
-      "0x08": "0x000F9470",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_glass03"
-     ]
-    },
-    {
-     "type": 80,
-     "register": "0x000F9400",
-     "desc": "0x00225158",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9370",
-      "0x08": "0x000F9350",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_explosion01"
-     ]
-    },
-    {
-     "type": 81,
-     "register": "0x000F92E0",
-     "desc": "0x00225108",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9250",
-      "0x08": "0x000F9230",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_explosion02"
-     ]
-    },
-    {
-     "type": 82,
-     "register": "0x000F91C0",
-     "desc": "0x002250B8",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9130",
-      "0x08": "0x000F9110",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "building_explosion03"
-     ]
-    },
-    {
-     "type": 83,
-     "register": "0x000F90A0",
-     "desc": "0x00225068",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F9050",
-      "0x08": "0x000F9080",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": [
-      "fx_scoutpod_radar"
-     ]
-    },
-    {
-     "type": 84,
-     "register": "0x000F8FE0",
-     "desc": "0x00225018",
-     "size": 96,
-     "slots": {
-      "0x04": "0x000F8F50",
-      "0x08": "0x000F8F30",
-      "0x0C": "0x0010B8E0"
-     },
-     "strings": []
-    },
-    {
-     "type": 85,
-     "register": "0x000F6910",
-     "desc": "0x00224740",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000F6870",
-      "0x08": "0x000F6840",
-      "0x0C": "0x0010AAF0"
-     },
-     "strings": [
-      "fx_light_recon"
-     ]
-    },
-    {
-     "type": 87,
-     "register": "0x000F67F0",
-     "desc": "0x002246B0",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000F67B0",
-      "0x08": "0x000F67E0",
-      "0x0C": "0x0010A7C0"
-     },
-     "strings": [
-      "sparksloop_m.wav"
-     ]
-    },
-    {
-     "type": 88,
-     "register": "0x000F6750",
-     "desc": "0x00224620",
-     "size": 112,
-     "slots": {
-      "0x04": "0x000F6710",
-      "0x08": "0x000F6740",
-      "0x0C": "0x0010A7C0"
-     },
-     "strings": []
-    }
-   ]
-  },
-  {
-   "name": "Steering",
-   "block": "0x0020F808",
-   "setup": "0x000ABFD0",
-   "types": [
-    {
-     "type": 1,
-     "register": "0x00100160",
-     "desc": "0x00226E18",
-     "size": 44,
-     "slots": {
-      "0x0C": "0x00100040"
-     },
-     "strings": []
-    },
-    {
-     "type": 2,
-     "register": "0x000FF860",
-     "desc": "0x00226DD0",
-     "size": 40,
-     "slots": {
-      "0x0C": "0x000FF740"
-     },
-     "strings": []
-    },
-    {
-     "type": 3,
-     "register": "0x000FEF40",
-     "desc": "0x00226D88",
-     "size": 20,
-     "slots": {
-      "0x0C": "0x000FEEA0"
-     },
-     "strings": []
-    },
-    {
-     "type": 4,
-     "register": "0x000FED10",
-     "desc": "0x00226D40",
-     "size": 12,
-     "slots": {
-      "0x0C": "0x000FEC70"
-     },
-     "strings": []
-    },
-    {
-     "type": 5,
-     "register": "0x000FEAC0",
-     "desc": "0x00226CF8",
-     "size": 44,
-     "slots": {
-      "0x0C": "0x000FE9F0"
-     },
-     "strings": []
-    },
-    {
-     "type": 6,
-     "register": "0x000D5330",
-     "desc": "0x00220F30",
-     "size": 28,
-     "slots": {
-      "0x0C": "0x000D50C0"
-     },
-     "strings": []
-    },
-    {
-     "type": 7,
-     "register": "0x000D5BD0",
-     "desc": "0x00220F78",
-     "size": 16,
-     "slots": {
-      "0x0C": "0x000D5960"
-     },
-     "strings": []
-    },
-    {
-     "type": 8,
-     "register": "0x000D5E00",
-     "desc": "0x00220FC8",
-     "size": 24,
-     "slots": {
-      "0x0C": "0x000D5D40"
-     },
-     "strings": []
-    },
-    {
-     "type": 9,
-     "register": "0x000FE7A0",
-     "desc": "0x00226CB0",
-     "size": 32,
-     "slots": {
-      "0x0C": "0x000FE6D0"
-     },
-     "strings": []
-    },
-    {
-     "type": 10,
-     "register": "0x000D6F30",
-     "desc": "0x002210A0",
-     "size": 32,
-     "slots": {
-      "0x0C": "0x000D6E80"
-     },
-     "strings": []
-    },
-    {
-     "type": 11,
-     "register": "0x000D4BA0",
-     "desc": "0x00220EE8",
-     "size": 1328,
-     "slots": {
-      "0x0C": "0x000D4AE0"
-     },
-     "strings": []
-    },
-    {
-     "type": 12,
-     "register": "0x000D62F0",
-     "desc": "0x00221010",
-     "size": 52,
-     "slots": {
-      "0x0C": "0x000D6230"
-     },
-     "strings": []
-    },
-    {
-     "type": 14,
-     "register": "0x000D67E0",
-     "desc": "0x00221058",
-     "size": 32,
-     "slots": {
-      "0x0C": "0x000D6720"
-     },
-     "strings": []
-    },
-    {
-     "type": 15,
-     "register": "0x000F3CD0",
-     "desc": "0x00224588",
-     "size": 84,
-     "slots": {
-      "0x0C": "0x000F3C20"
-     },
-     "strings": []
-    },
-    {
-     "type": 16,
-     "register": "0x000FE470",
-     "desc": "0x00226C68",
-     "size": 32,
-     "slots": {
-      "0x0C": "0x000FE3B0"
-     },
-     "strings": []
-    },
-    {
-     "type": 17,
-     "register": "0x000F5A90",
-     "desc": "0x002245D8",
-     "size": 36,
-     "slots": {
-      "0x0C": "0x000F5A10"
-     },
-     "strings": []
-    }
-   ]
-  },
-  {
-   "name": "Trigger",
-   "block": "0x00220CC8",
-   "setup": "0x000D2FD0",
-   "types": [
-    {
-     "type": 1,
-     "register": "0x00104D20",
-     "desc": "0x002271C0",
-     "size": 64,
+     "register": "0x000B03E0",
+     "desc": "0x0020FB08",
+     "size": 300,
+     "version": 0,
+     "flags": 0,
      "slots": {
       "0x04": "0x00059010",
       "0x08": "0x00059010",
-      "0x0C": "0x00104C60",
-      "0x10": "0x000D3240",
-      "0x18": "0x000D3330"
-     },
-     "strings": [
-      "Boolean AND"
-     ]
-    },
-    {
-     "type": 2,
-     "register": "0x0002C200",
-     "desc": "0x001E6CD0",
-     "size": 136,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x0002C170",
-      "0x10": "0x0002BBE0",
-      "0x18": "0x000D3330"
+      "0x0C": "0x000B02E0"
      },
      "strings": []
-    },
-    {
-     "type": 3,
-     "register": "0x00104B30",
-     "desc": "0x00227178",
-     "size": 76,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00104A00",
-      "0x10": "0x00104AA0",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 4,
-     "register": "0x0002CB90",
-     "desc": "0x001E6D18",
-     "size": 132,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x0002CAD0",
-      "0x10": "0x0002C260",
-      "0x18": "0x0002C360"
-     },
-     "strings": []
-    },
-    {
-     "type": 5,
-     "register": "0x001048D0",
-     "desc": "0x00227130",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x001047A0",
-      "0x10": "0x00104840",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 6,
-     "register": "0x00104630",
-     "desc": "0x002270E8",
-     "size": 76,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x10": "0x001045B0",
-      "0x18": "0x0002C360"
-     },
-     "strings": []
-    },
-    {
-     "type": 7,
-     "register": "0x00104380",
-     "desc": "0x002270A0",
-     "size": 76,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x001041A0",
-      "0x10": "0x00104270",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 8,
-     "register": "0x00103DF0",
-     "desc": "0x00227058",
-     "size": 64,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00103D50",
-      "0x10": "0x000D3240",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 9,
-     "register": "0x00103BE0",
-     "desc": "0x00227010",
-     "size": 68,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00103AD0",
-      "0x10": "0x00103B70",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 10,
-     "register": "0x00103950",
-     "desc": "0x00226FC8",
-     "size": 72,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00103850",
-      "0x10": "0x001038F0",
-      "0x18": "0x0002C360"
-     },
-     "strings": []
-    },
-    {
-     "type": 11,
-     "register": "0x00103700",
-     "desc": "0x00226F80",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x001035F0",
-      "0x10": "0x00103680",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 12,
-     "register": "0x00103440",
-     "desc": "0x00226F38",
-     "size": 80,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x001032E0",
-      "0x10": "0x001033C0",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 13,
-     "register": "0x000A0EF0",
-     "desc": "0x0020DD40",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x000A0D80",
-      "0x10": "0x000A0E70",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 14,
-     "register": "0x00102E20",
-     "desc": "0x00226EF0",
-     "size": 84,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00102D80",
-      "0x10": "0x001028C0",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 15,
-     "register": "0x001025B0",
-     "desc": "0x00226EA8",
-     "size": 68,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x001024A0",
-      "0x10": "0x00102540",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    },
-    {
-     "type": 16,
-     "register": "0x001023B0",
-     "desc": "0x00226E60",
-     "size": 76,
-     "slots": {
-      "0x04": "0x00059010",
-      "0x08": "0x00059010",
-      "0x0C": "0x00102270",
-      "0x10": "0x00102350",
-      "0x18": "0x000D3330"
-     },
-     "strings": []
-    }
-   ]
-  },
-  {
-   "name": "Item",
-   "block": "0x00221300",
-   "setup": "0x000D76A0",
-   "types": [
-    {
-     "type": 1,
-     "register": "0x00106E10",
-     "desc": "0x00227440",
-     "size": 92,
-     "slots": {
-      "0x04": "0x00106DD0",
-      "0x08": "0x00106DF0",
-      "0x0C": "0x00106BC0",
-      "0x10": "0x000D7910",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "spy_capsule"
-     ]
-    },
-    {
-     "type": 2,
-     "register": "0x00106AE0",
-     "desc": "0x002273E8",
-     "size": 92,
-     "slots": {
-      "0x04": "0x00106AA0",
-      "0x08": "0x00106AC0",
-      "0x0C": "0x00106880",
-      "0x10": "0x000D7910",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "nosecone_pickup"
-     ]
-    },
-    {
-     "type": 3,
-     "register": "0x00106720",
-     "desc": "0x00227388",
-     "size": 92,
-     "slots": {
-      "0x04": "0x00106400",
-      "0x08": "0x00106440",
-      "0x0C": "0x00106510",
-      "0x10": "0x000D7910",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "zen_crates_pickup"
-     ]
-    },
-    {
-     "type": 4,
-     "register": "0x00106330",
-     "desc": "0x00227320",
-     "size": 92,
-     "slots": {
-      "0x04": "0x00105F90",
-      "0x08": "0x00105FD0",
-      "0x0C": "0x001060C0",
-      "0x10": "0x000D7910",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "zen_crates_munitions_pickup"
-     ]
-    },
-    {
-     "type": 5,
-     "register": "0x00105EE0",
-     "desc": "0x002272A8",
-     "size": 156,
-     "slots": {
-      "0x04": "0x00105D40",
-      "0x08": "0x00105DA0",
-      "0x0C": "0x00105B20",
-      "0x10": "0x00105E80",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "male01 pilot3",
-      "ph cheer",
-      "ph idle",
-      "ph scare"
-     ]
-    },
-    {
-     "type": 6,
-     "register": "0x001059F0",
-     "desc": "0x00227250",
-     "size": 92,
-     "slots": {
-      "0x04": "0x001059B0",
-      "0x08": "0x001059D0",
-      "0x0C": "0x00105780",
-      "0x10": "0x000D7910",
-      "0x18": "0x00147480"
-     },
-     "strings": [
-      "training beacon"
-     ]
     }
    ]
   }

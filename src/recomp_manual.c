@@ -1,7 +1,7 @@
 /**
  *    Name:        recomp_manual.c
  *    Description: hand-written overrides of recompiled functions, and the indirect-call diagnostics
- *    Version:     0.1.0
+ *    Version:     0.2.0
  *    Created:     25-10-2026
  *    Modified:    26-10-2026
  *    Author:      Sebastian Toyos
@@ -118,7 +118,7 @@ recomp_func_t recomp_lookup_manual(uint32_t xbox_va)
 extern void Direct3D_CreateDevice_gen(void);
 extern void robotech_D3DDeviceCreated(void);
 
-void sub_00155D10(void)
+void Direct3D_CreateDevice(void)
 {
     d3d11_CreateDevice();
     Direct3D_CreateDevice_gen();
@@ -128,7 +128,7 @@ void sub_00155D10(void)
 /* D3DDevice_Clear (0x001576D0) */
 extern void D3DDevice_Clear_gen(void);
 
-void sub_001576D0(void)
+void D3DDevice_Clear(void)
 {
     d3d11_Clear();
     D3DDevice_Clear_gen();
@@ -137,7 +137,7 @@ void sub_001576D0(void)
 /* D3DDevice_Swap (0x00157530) */
 extern void D3DDevice_Swap_gen(void);
 
-void sub_00157530(void)
+void D3DDevice_Swap(void)
 {
     d3d11_Swap();
     D3DDevice_Swap_gen();
@@ -146,7 +146,7 @@ void sub_00157530(void)
 /* D3DDevice_SetTexture (0x00156630) */
 extern void D3DDevice_SetTexture_gen(void);
 
-void sub_00156630(void)
+void D3DDevice_SetTexture(void)
 {
     d3d11_SetTexture();
     D3DDevice_SetTexture_gen();
@@ -155,7 +155,7 @@ void sub_00156630(void)
 /* D3DTexture_LockRect (0x0015A990) */
 extern void D3DTexture_LockRect_gen(void);
 
-void sub_0015A990(void)
+void D3DTexture_LockRect(void)
 {
     d3d11_TextureLockRect();
     D3DTexture_LockRect_gen();
@@ -164,7 +164,7 @@ void sub_0015A990(void)
 /* D3DDevice_SetVertexShader (0x0015A010) */
 extern void D3DDevice_SetVertexShader_gen(void);
 
-void sub_0015A010(void)
+void D3DDevice_SetVertexShader(void)
 {
     d3d11_SetVertexShader();
     D3DDevice_SetVertexShader_gen();
@@ -173,7 +173,7 @@ void sub_0015A010(void)
 /* D3DDevice_DrawVerticesUP (0x0015A3B0) */
 extern void D3DDevice_DrawVerticesUP_gen(void);
 
-void sub_0015A3B0(void)
+void D3DDevice_DrawVerticesUP(void)
 {
     d3d11_DrawVerticesUP();
     D3DDevice_DrawVerticesUP_gen();
@@ -182,7 +182,7 @@ void sub_0015A3B0(void)
 /* D3DDevice_SetRenderState_Simple (0x00157B00), fastcall: Method, Value */
 extern void D3DDevice_SetRenderState_Simple_gen(void);
 
-void sub_00157B00(void)
+void D3DDevice_SetRenderState_Simple(void)
 {
     d3d11_SetRenderStateSimple();
     D3DDevice_SetRenderState_Simple_gen();
@@ -191,7 +191,7 @@ void sub_00157B00(void)
 /* D3DDevice_SetPixelShader (0x0015ADE0) */
 extern void D3DDevice_SetPixelShader_gen(void);
 
-void sub_0015ADE0(void)
+void D3DDevice_SetPixelShader(void)
 {
     d3d11_SetPixelShader();
     D3DDevice_SetPixelShader_gen();
@@ -200,7 +200,7 @@ void sub_0015ADE0(void)
 /* D3DDevice_SetTextureState_TexCoordIndex (0x00158360) */
 extern void D3DDevice_SetTextureState_TexCoordIndex_gen(void);
 
-void sub_00158360(void)
+void D3DDevice_SetTextureState_TexCoordIndex(void)
 {
     d3d11_SetTexCoordIndex();
     D3DDevice_SetTextureState_TexCoordIndex_gen();
@@ -209,7 +209,7 @@ void sub_00158360(void)
 /* D3DDevice_SetTransform (0x00155EA0) */
 extern void D3DDevice_SetTransform_gen(void);
 
-void sub_00155EA0(void)
+void D3DDevice_SetTransform(void)
 {
     d3d11_SetTransform();
     D3DDevice_SetTransform_gen();
@@ -218,7 +218,7 @@ void sub_00155EA0(void)
 /* D3DDevice_SetViewport (0x00156200) */
 extern void D3DDevice_SetViewport_gen(void);
 
-void sub_00156200(void)
+void D3DDevice_SetViewport(void)
 {
     d3d11_SetViewport();
     D3DDevice_SetViewport_gen();
@@ -227,7 +227,7 @@ void sub_00156200(void)
 /* D3DDevice_SetMaterial (0x00155FB0) */
 extern void D3DDevice_SetMaterial_gen(void);
 
-void sub_00155FB0(void)
+void D3DDevice_SetMaterial(void)
 {
     d3d11_SetMaterial();
     D3DDevice_SetMaterial_gen();
@@ -236,7 +236,7 @@ void sub_00155FB0(void)
 /* D3DDevice_SetLight (0x00156360) */
 extern void D3DDevice_SetLight_gen(void);
 
-void sub_00156360(void)
+void D3DDevice_SetLight(void)
 {
     d3d11_SetLight();
     D3DDevice_SetLight_gen();
@@ -245,7 +245,7 @@ void sub_00156360(void)
 /* D3DDevice_LightEnable (0x00156540) */
 extern void D3DDevice_LightEnable_gen(void);
 
-void sub_00156540(void)
+void D3DDevice_LightEnable(void)
 {
     d3d11_LightEnable();
     D3DDevice_LightEnable_gen();
@@ -254,7 +254,7 @@ void sub_00156540(void)
 /* D3DDevice_SetStreamSource (0x00159C20) */
 extern void D3DDevice_SetStreamSource_gen(void);
 
-void sub_00159C20(void)
+void D3DDevice_SetStreamSource(void)
 {
     d3d11_SetStreamSource();
     D3DDevice_SetStreamSource_gen();
@@ -263,7 +263,7 @@ void sub_00159C20(void)
 /* D3DDevice_SetIndices (0x001567B0) */
 extern void D3DDevice_SetIndices_gen(void);
 
-void sub_001567B0(void)
+void D3DDevice_SetIndices(void)
 {
     d3d11_SetIndices();
     D3DDevice_SetIndices_gen();
@@ -272,7 +272,7 @@ void sub_001567B0(void)
 /* D3DDevice_DrawVertices (0x0015A510) */
 extern void D3DDevice_DrawVertices_gen(void);
 
-void sub_0015A510(void)
+void D3DDevice_DrawVertices(void)
 {
     d3d11_DrawVertices();
     D3DDevice_DrawVertices_gen();
@@ -282,7 +282,7 @@ void sub_0015A510(void)
  * returns, so it runs after the generated body. */
 extern void D3DDevice_BeginPush_4_gen(void);
 
-void sub_00155CC0(void)
+void D3DDevice_BeginPush_4(void)
 {
     D3DDevice_BeginPush_4_gen();
     d3d11_BeginPushDone();
@@ -291,7 +291,7 @@ void sub_00155CC0(void)
 /* D3DDevice_EndPush (0x00155720) */
 extern void D3DDevice_EndPush_gen(void);
 
-void sub_00155720(void)
+void D3DDevice_EndPush(void)
 {
     d3d11_EndPush();
     D3DDevice_EndPush_gen();
@@ -300,7 +300,7 @@ void sub_00155720(void)
 /* D3DDevice_DrawIndexedVertices (0x0015A5B0) */
 extern void D3DDevice_DrawIndexedVertices_gen(void);
 
-void sub_0015A5B0(void)
+void D3DDevice_DrawIndexedVertices(void)
 {
     d3d11_DrawIndexedVertices();
     D3DDevice_DrawIndexedVertices_gen();
@@ -310,7 +310,7 @@ void sub_0015A5B0(void)
  * generated body has written it. */
 extern void D3DDevice_CreateVertexShader_gen(void);
 
-void sub_001598B0(void)
+void D3DDevice_CreateVertexShader(void)
 {
     d3d11_CreateVertexShaderArgs();
     D3DDevice_CreateVertexShader_gen();
@@ -320,7 +320,7 @@ void sub_001598B0(void)
 /* D3DDevice_LoadVertexShader (0x00159CB0) */
 extern void D3DDevice_LoadVertexShader_gen(void);
 
-void sub_00159CB0(void)
+void D3DDevice_LoadVertexShader(void)
 {
     d3d11_LoadVertexShader();
     D3DDevice_LoadVertexShader_gen();
@@ -329,7 +329,7 @@ void sub_00159CB0(void)
 /* D3DDevice_SelectVertexShader (0x00159D10) */
 extern void D3DDevice_SelectVertexShader_gen(void);
 
-void sub_00159D10(void)
+void D3DDevice_SelectVertexShader(void)
 {
     d3d11_SelectVertexShader();
     D3DDevice_SelectVertexShader_gen();
@@ -338,7 +338,7 @@ void sub_00159D10(void)
 /* D3DDevice_SetVertexShaderInput (0x0015A170) */
 extern void D3DDevice_SetVertexShaderInput_gen(void);
 
-void sub_0015A170(void)
+void D3DDevice_SetVertexShaderInput(void)
 {
     d3d11_SetVertexShaderInput();
     D3DDevice_SetVertexShaderInput_gen();
@@ -347,7 +347,7 @@ void sub_0015A170(void)
 /* D3DDevice_SetVertexShaderConstant1 (0x001599F0), fastcall: one constant */
 extern void D3DDevice_SetVertexShaderConstant1_gen(void);
 
-void sub_001599F0(void)
+void D3DDevice_SetVertexShaderConstant1(void)
 {
     d3d11_SetVertexShaderConstant(1);
     D3DDevice_SetVertexShaderConstant1_gen();
@@ -356,7 +356,7 @@ void sub_001599F0(void)
 /* D3DDevice_SetVertexShaderConstant4 (0x00159A50), fastcall: four constants */
 extern void D3DDevice_SetVertexShaderConstant4_gen(void);
 
-void sub_00159A50(void)
+void D3DDevice_SetVertexShaderConstant4(void)
 {
     d3d11_SetVertexShaderConstant(4);
     D3DDevice_SetVertexShaderConstant4_gen();
@@ -366,7 +366,7 @@ void sub_00159A50(void)
  * count, in DWORDs, on the stack */
 extern void D3DDevice_SetVertexShaderConstantNotInline_gen(void);
 
-void sub_00159BE0(void)
+void D3DDevice_SetVertexShaderConstantNotInline(void)
 {
     d3d11_SetVertexShaderConstant(0);
     D3DDevice_SetVertexShaderConstantNotInline_gen();
@@ -379,7 +379,7 @@ void sub_00159BE0(void)
 /* XInputOpen (0x00187F4F): input_bridge.c learns which port a handle is. */
 extern void XInputOpen_gen(void);
 
-void sub_00187F4F(void)
+void XInputOpen(void)
 {
     input_XInputOpenArgs();
     XInputOpen_gen();
@@ -388,13 +388,13 @@ void sub_00187F4F(void)
 
 /* XInputGetState (0x0018818E), replaced: answered from the host's pads and
  * keyboard (input_bridge.c says why). */
-void sub_0018818E(void)
+void xapi_XInputGetState(void)
 {
     input_XInputGetState();
 }
 
 /* XInputSetState (0x001881FD), replaced: the rumble to the host's pads. */
-void sub_001881FD(void)
+void XInputSetState(void)
 {
     input_XInputSetState();
 }
@@ -407,7 +407,7 @@ void sub_001881FD(void)
  * ROBOTECH_VIRTUAL_CLOCK=1 (clock_bridge.c), the game's own otherwise. */
 extern void xapi_QueryPerformanceCounter_gen(void);
 
-void sub_0014E5BE(void)
+void xapi_QueryPerformanceCounter(void)
 {
     if (clock_Virtual())
         clock_QueryPerformanceCounter();
@@ -419,7 +419,7 @@ void sub_0014E5BE(void)
  * stamps read, tied to the frames too while the clock is virtual. */
 extern void xapi_GetSystemTimeAsFileTime_gen(void);
 
-void sub_0014E562(void)
+void xapi_GetSystemTimeAsFileTime(void)
 {
     if (clock_Virtual())
         clock_GetSystemTimeAsFileTime();
@@ -431,7 +431,7 @@ void sub_0014E562(void)
  * is virtual. */
 extern void xapi_GetTickCount_gen(void);
 
-void sub_0014E6E6(void)
+void xapi_GetTickCount(void)
 {
     if (clock_Virtual())
         clock_GetTickCount();
@@ -450,7 +450,7 @@ void sub_0014E6E6(void)
 /* IDirectSound_Release (0x00167453) */
 extern void IDirectSound_Release_gen(void);
 
-void sub_00167453(void)
+void IDirectSound_Release(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_Release();
@@ -461,7 +461,7 @@ void sub_00167453(void)
 /* IDirectSoundBuffer_Unlock (0x00167469) */
 extern void IDirectSoundBuffer_Unlock_gen(void);
 
-void sub_00167469(void)
+void IDirectSoundBuffer_Unlock(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_Unlock();
@@ -472,7 +472,7 @@ void sub_00167469(void)
 /* IDirectSoundBuffer_Release (0x0016746E) */
 extern void IDirectSoundBuffer_Release_gen(void);
 
-void sub_0016746E(void)
+void IDirectSoundBuffer_Release(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_Release();
@@ -483,7 +483,7 @@ void sub_0016746E(void)
 /* DirectSoundUseLightHRTF (0x00167484) */
 extern void DirectSoundUseLightHRTF_gen(void);
 
-void sub_00167484(void)
+void DirectSoundUseLightHRTF(void)
 {
     if (dsound_Native())
         dsound_DirectSoundUseLightHRTF();
@@ -494,7 +494,7 @@ void sub_00167484(void)
 /* IDirectSound_DownloadEffectsImage (0x00167D4A) */
 extern void IDirectSound_DownloadEffectsImage_gen(void);
 
-void sub_00167D4A(void)
+void IDirectSound_DownloadEffectsImage(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_DownloadEffectsImage();
@@ -505,7 +505,7 @@ void sub_00167D4A(void)
 /* IDirectSoundBuffer_SetVolume (0x00167D71) */
 extern void IDirectSoundBuffer_SetVolume_gen(void);
 
-void sub_00167D71(void)
+void IDirectSoundBuffer_SetVolume(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetVolume();
@@ -516,7 +516,7 @@ void sub_00167D71(void)
 /* IDirectSoundBuffer_SetHeadroom (0x00167D8D) */
 extern void IDirectSoundBuffer_SetHeadroom_gen(void);
 
-void sub_00167D8D(void)
+void IDirectSoundBuffer_SetHeadroom(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetHeadroom();
@@ -527,7 +527,7 @@ void sub_00167D8D(void)
 /* IDirectSoundBuffer_SetMixBins (0x00167DA9) */
 extern void IDirectSoundBuffer_SetMixBins_gen(void);
 
-void sub_00167DA9(void)
+void IDirectSoundBuffer_SetMixBins(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetMixBins();
@@ -538,7 +538,7 @@ void sub_00167DA9(void)
 /* IDirectSoundBuffer_SetMixBinVolumes_8 (0x00167DC5) */
 extern void IDirectSoundBuffer_SetMixBinVolumes_8_gen(void);
 
-void sub_00167DC5(void)
+void IDirectSoundBuffer_SetMixBinVolumes_8(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetMixBinVolumes_8();
@@ -549,7 +549,7 @@ void sub_00167DC5(void)
 /* IDirectSoundBuffer_Play (0x00167DE1) */
 extern void IDirectSoundBuffer_Play_gen(void);
 
-void sub_00167DE1(void)
+void IDirectSoundBuffer_Play(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_Play();
@@ -560,7 +560,7 @@ void sub_00167DE1(void)
 /* IDirectSoundBuffer_Stop (0x00167E05) */
 extern void IDirectSoundBuffer_Stop_gen(void);
 
-void sub_00167E05(void)
+void IDirectSoundBuffer_Stop(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_Stop();
@@ -571,7 +571,7 @@ void sub_00167E05(void)
 /* IDirectSoundBuffer_GetStatus (0x00167E1D) */
 extern void IDirectSoundBuffer_GetStatus_gen(void);
 
-void sub_00167E1D(void)
+void IDirectSoundBuffer_GetStatus(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_GetStatus();
@@ -582,7 +582,7 @@ void sub_00167E1D(void)
 /* IDirectSoundBuffer_GetCurrentPosition (0x00167E39) */
 extern void IDirectSoundBuffer_GetCurrentPosition_gen(void);
 
-void sub_00167E39(void)
+void IDirectSoundBuffer_GetCurrentPosition(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_GetCurrentPosition();
@@ -593,7 +593,7 @@ void sub_00167E39(void)
 /* IDirectSoundBuffer_SetCurrentPosition (0x00167E59) */
 extern void IDirectSoundBuffer_SetCurrentPosition_gen(void);
 
-void sub_00167E59(void)
+void IDirectSoundBuffer_SetCurrentPosition(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetCurrentPosition();
@@ -604,7 +604,7 @@ void sub_00167E59(void)
 /* IDirectSoundBuffer_Lock (0x00167E75) */
 extern void IDirectSoundBuffer_Lock_gen(void);
 
-void sub_00167E75(void)
+void IDirectSoundBuffer_Lock(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_Lock();
@@ -615,7 +615,7 @@ void sub_00167E75(void)
 /* DirectSoundDoWork (0x00167EA5) */
 extern void DirectSoundDoWork_gen(void);
 
-void sub_00167EA5(void)
+void DirectSoundDoWork(void)
 {
     if (dsound_Native())
         dsound_DirectSoundDoWork();
@@ -626,7 +626,7 @@ void sub_00167EA5(void)
 /* IDirectSound_CommitDeferredSettings (0x001684CA) */
 extern void IDirectSound_CommitDeferredSettings_gen(void);
 
-void sub_001684CA(void)
+void IDirectSound_CommitDeferredSettings(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_CommitDeferredSettings();
@@ -637,7 +637,7 @@ void sub_001684CA(void)
 /* IDirectSoundBuffer_SetFrequency (0x001684E2) */
 extern void IDirectSoundBuffer_SetFrequency_gen(void);
 
-void sub_001684E2(void)
+void IDirectSoundBuffer_SetFrequency(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetFrequency();
@@ -648,7 +648,7 @@ void sub_001684E2(void)
 /* IDirectSoundBuffer_SetMaxDistance (0x001684FE) */
 extern void IDirectSoundBuffer_SetMaxDistance_gen(void);
 
-void sub_001684FE(void)
+void IDirectSoundBuffer_SetMaxDistance(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetMaxDistance();
@@ -659,7 +659,7 @@ void sub_001684FE(void)
 /* IDirectSoundBuffer_SetMinDistance (0x00168522) */
 extern void IDirectSoundBuffer_SetMinDistance_gen(void);
 
-void sub_00168522(void)
+void IDirectSoundBuffer_SetMinDistance(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetMinDistance();
@@ -670,7 +670,7 @@ void sub_00168522(void)
 /* IDirectSoundBuffer_SetPosition (0x00168546) */
 extern void IDirectSoundBuffer_SetPosition_gen(void);
 
-void sub_00168546(void)
+void IDirectSoundBuffer_SetPosition(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetPosition();
@@ -681,7 +681,7 @@ void sub_00168546(void)
 /* IDirectSoundBuffer_SetI3DL2Source (0x0016857B) */
 extern void IDirectSoundBuffer_SetI3DL2Source_gen(void);
 
-void sub_0016857B(void)
+void IDirectSoundBuffer_SetI3DL2Source(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetI3DL2Source();
@@ -692,7 +692,7 @@ void sub_0016857B(void)
 /* IDirectSoundBuffer_SetPlayRegion (0x0016859B) */
 extern void IDirectSoundBuffer_SetPlayRegion_gen(void);
 
-void sub_0016859B(void)
+void IDirectSoundBuffer_SetPlayRegion(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetPlayRegion();
@@ -703,7 +703,7 @@ void sub_0016859B(void)
 /* IDirectSound_SetOrientation (0x00168A34) */
 extern void IDirectSound_SetOrientation_gen(void);
 
-void sub_00168A34(void)
+void IDirectSound_SetOrientation(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_SetOrientation();
@@ -714,7 +714,7 @@ void sub_00168A34(void)
 /* IDirectSound_SetPosition (0x00168A7E) */
 extern void IDirectSound_SetPosition_gen(void);
 
-void sub_00168A7E(void)
+void IDirectSound_SetPosition(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_SetPosition();
@@ -725,7 +725,7 @@ void sub_00168A7E(void)
 /* IDirectSoundBuffer_SetBufferData (0x00168AB3) */
 extern void IDirectSoundBuffer_SetBufferData_gen(void);
 
-void sub_00168AB3(void)
+void IDirectSoundBuffer_SetBufferData(void)
 {
     if (dsound_Native())
         dsound_IDirectSoundBuffer_SetBufferData();
@@ -736,7 +736,7 @@ void sub_00168AB3(void)
 /* IDirectSound_CreateSoundBuffer (0x00168D17) */
 extern void IDirectSound_CreateSoundBuffer_gen(void);
 
-void sub_00168D17(void)
+void IDirectSound_CreateSoundBuffer(void)
 {
     if (dsound_Native())
         dsound_IDirectSound_CreateSoundBuffer();
@@ -747,7 +747,7 @@ void sub_00168D17(void)
 /* DirectSoundCreate (0x00168ED1) */
 extern void DirectSoundCreate_gen(void);
 
-void sub_00168ED1(void)
+void DirectSoundCreate(void)
 {
     if (dsound_Native())
         dsound_DirectSoundCreate();
@@ -758,7 +758,7 @@ void sub_00168ED1(void)
 /* DirectSoundCreateBuffer (0x00168F18) */
 extern void DirectSoundCreateBuffer_gen(void);
 
-void sub_00168F18(void)
+void DirectSoundCreateBuffer(void)
 {
     if (dsound_Native())
         dsound_DirectSoundCreateBuffer();

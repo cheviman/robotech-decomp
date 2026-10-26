@@ -15,7 +15,7 @@ sections, and `tools/symbols.py layout` its file lines; a line written by hand i
 | `symbols.txt` | `tools/apply_names.py`, `tools/apply_files.py`, `tools/organize_gen.py`, `tools/symbols.py header` | every name (`func`, `data`, `var`), each function's description (`comment`), the files the C is laid out in (`file`), the game's structures (`struct`, `field`); SegaSonic's format, its header says how to read it |
 | `lib_matches.json` | `tools/symbols.py merge` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
 | `classes.json` | `tools/symbols.py merge`, `layout` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
-| `registries.json` | `tools/symbols.py layout` | the game's object types (Entity, Effect, Weapon, Screen...), their registering functions and slots, from the registries the game fills at start (`tools/find_registries.py` makes it) |
+| `registries.json` | `tools/symbols.py merge`, `layout` | the game's object types (Entity, Effect, Weapon, Screen...), their families, registering functions and callbacks, from the families the game registers at start (`tools/find_registries.py` makes it); the type lines of `symbols.txt` name them |
 | `xdk_symbols.json` | `tools/symbols.py merge` | the XDK library symbols XbSymbolDatabase finds (`tools/xdk_symbols.py` makes it) |
 | `seed_functions.json` | `tools.disasm --seed-functions` | function starts the disassembler missed; each entry says why in its `why` field |
 | `coalesce.json` | `tools.recomp --coalesce-functions` | functions the disassembler split at a false entry, made whole; the loader takes no extra keys, so the reasons are below |
@@ -60,21 +60,44 @@ save), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Reload` (`vcObject
 `vcObjectReload`: reads an object that exists again), +0x48 `LoadChunk` (`vcObjectLoadChunk`), +0x4C
 `Copy` (`vcObjectClone`), +0x50 `InUse` (`vcObjectReleaseLater`: whether it is still in use at a time)
 and +0x54 `GetSize` (`vcObjectGetSize`). +0x44 was taken for `Save` until the object system was read
-(26-10-2026): it reads. 30 classes (29 `vc*` of the engine, `gcComponent` of the game), 175 callbacks
-named; the 5 several classes share (the defaults below) are left unnamed.
+(26-10-2026): it reads. 35 classes (32 `vc*` of the engine, `gcComponent`, `gcAIData` and `gcLevel` of
+the game), 193 callbacks named; the 9 several classes share are left unnamed here, and
+`symbols.txt` names by hand the ones that are not the defaults (`gcComponent_Create`, gcAIData's too).
+The registering functions are found from their calls to `vcRegisterClass`, the class's name from the
+string their code points at (26-10-2026): finding them from the disassembler's references to the
+names, as the tool did first, missed `vcBeamParticleSystem`, `vcMusic`, `vcDecalMgr`, `gcLevel` and
+`gcAIData`, whose names the code reads a word at a time.
 
 ## `registries.json`
 
-The game keeps registries of its own object types, besides the engine's classes: Entity (74 types),
-Effect (87), Weapon (43), Screen (36), Action (35), ScreenElement (27), Node (26), Steering (16), Trigger
-(16), Item (6). Each is a static block: a pointer to its name, two words, 128 type descriptors from
-+0x0C, a count. One function per family writes the name and calls a registering function per type with
-the block; each fills a static descriptor (the object's size, then the type's functions) and stores it
-at `block[0x0C + 4 * type]`. Measured on 25-10-2026: 366 types and 1,151 functions by type and slot.
-No names yet: what each slot is will come from the generic function that calls it (as with the
-classes), what each type is called from its strings and behaviour. Each type lists the strings its
-functions use (type 1 of Entity `VF-1DX`, type 2 `rdf_heavy_missile`, Item's type 1 `spy_capsule`,
-Trigger's type 1 `Boolean AND`), as hints.
+The game's own objects, besides the engine's classes (game/objects, the `GameObject` functions of
+`symbols.txt`): each is of a type, and the types are in 13 families, by number: Player (1 type), Entity
+(74), Weapon (43), Effect (87), Structure (2), Item (6), Component (1), Trigger (16), Action (35),
+Steering (16), Node (26), ScreenElement (27), Screen (36). A family is a static `GameObjectFamily`: its
+name, its startup and shutdown, its types from +0x10 by number from 0, how many numbers they take, the
+newest version of its objects in a file. A function of its own sets it up and registers it with
+`GameObjectRegisterFamily`, and `tools/find_registries.py` starts from that function's callers
+(26-10-2026; its first version looked for a block pushed before five calls or more, which missed Player,
+Structure and Component, and read the types' numbers one off). Each type's registering function fills a
+static `GameObjectType`: its object's size, its callbacks and the newest version its load reads. Each
+callback slot is said by the generic function that calls it: +0x04 the startup (the type's first use,
+`GameObjectTypeUse`), +0x08 the shutdown (its last release), +0x0C the state machine (how its objects
+answer a message in a state, `GameObjectDeliver`), +0x10 the load (`GameObjectLoad`), +0x18 the collect
+(`GameObjectCollect`); +0x14 is called by `GameObjectsDestroyAll`, and no type has one. Measured: 370
+types and 1,207 functions by type and slot. Each type lists the strings its functions use, as hints for
+its name.
+
+A type's name is a `type` line of `symbols.txt` (`type  Trigger  0  BooleanANDTrigger  # named "Boolean
+AND"`), written by hand from the type's own strings: the name a trigger or an action copies into its
+objects, the asset an entity, an effect or a screen loads. From it `tools/symbols.py merge` names the
+type's functions in bulk, `BooleanANDTrigger_Register`, `_Startup`, `_Shutdown`, `_StateMachine`,
+`_Load`, `_Collect`, each with its description; a function every type of a family with that slot
+shares is the family's (`Entity_Collect`), and one that only some share is named by hand
+(`Veritech_StateMachine`, every VF-1's). 203 of the 370 types have a line (26-10-2026), and 673 of the
+1,207 functions a name. The others have no string of their own that says what they are: the weapons
+(their strings are their sounds), the steering behaviours (none), most nodes and screen elements, and
+the types whose asset another type loads too (three VF-1SX, two VF-1AX, the missiles in pairs, the
+three Hiro Excaliburs); their names will come from reading what they do.
 
 ## `symbols.txt`
 
@@ -86,13 +109,29 @@ release queue, reading them from files) and the classes' three default callbacks
 (`vcClassDesc`, `vcClass`, `vcInstance`, `vcCollectList`, the part of `vcFile` it reads) and variables
 (`vcClassByType`, `vcDataDir`, the release queue, the lookup cache the game inlines, `vcGameTime`); and
 the engine's files (`vcFile`, read through a 64 KB buffer), formatted strings and rectangles
-(`vcRect`, `vcScreenRect`), in `files.c`, `format.c` and `rects.c` beside it.
+(`vcRect`, `vcScreenRect`), in `files.c`, `format.c` and `rects.c` beside it; its random numbers
+(`random.c`); and its screen (`screen.c`, 26-10-2026): the Direct3D device and the variables it keeps
+(`vcDirect3D`, `vcDevice`, the screen's size, the viewport's rectangle), the XDK's
+`D3DPRESENT_PARAMETERS` and `D3DVIEWPORT8` by their own field names, XAPI's `XGetVideoFlags`, and the
+two functions that start the renderer (`vcRenderInit`, `vcRenderBuffersInit`); and its text
+(`text.c`): the fonts (`vcFonts`, the default one's character widths), the characters' height and
+scale, the shadow's colour and offset, and `vcFontDrawString`, which draws a string with a font; and
+the renderer's state setters (`render.c`), with the records they keep and the XDK's own variables and
+tables they write and read (`D3D__DirtyFlags`, `D3D__RenderState`, `D3D__TextureState`,
+`D3DSIMPLERENDERSTATEENCODE`, `D3DDIRTYFROMRENDERSTATE`, `D3DDIRTYFROMTEXTURESTATE`), typed; and
+the scene objects (`scene.c`): `vcSceneObject` field by field, the table of functions each type
+registers for it (`vcSceneObjectTypes`, its `get` slot), the functions of its tree and flags, and the
+scene's two quadtrees (`vcSceneBoundsTree`, `vcSceneHitTree`, the `vcQuadtree` functions), and the
+engine's vector maths (`vcBoxCenter`, which the linker keeps with the scene, and `vcTransformPoint`).
 
-The file lines lay the 6,647 functions out in 61 files: `xdk/` (d3d8, dsound, xapi, xapi_usb, crt),
-`bink/`, `engine/` (`objects` and a file per class) and `game/` (a file per registry family). A function
-goes with its class, type or library, or with the functions around it when those on both sides share
-one (the linker lays out an object file's functions together); the rest, 1,782, is in `game/unsorted`
-until it is known what it is.
+The file lines lay the 6,590 functions out in 72 files: `xdk/` (d3d8, dsound, xapi, xapi_usb, crt),
+`bink/`, `engine/` (`objects`, `screen`, `render`, `text`, `scene`, `quadtree`, `vector` and a file per
+class) and `game/` (a file per
+registry family). A function goes with its class, type or library, or with the functions around it when
+those on both sides share one (the linker lays out an object file's functions together); a name says its
+subject by a whole word (`vcText` is the text's, `vcTexture_Load` the vcTexture class's), and a class's
+callback goes with its class (`vcObject_Create` is the vcObject class's, not the object system's); the
+rest, 1,688, is in `game/unsorted` until it is known what it is.
 
 ## `coalesce.json`
 

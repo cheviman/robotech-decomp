@@ -1,7 +1,7 @@
 """
 Name:        find_classes.py
 Description: names the engine's object classes and their callbacks from the descriptors the game registers
-Version:     0.1.0
+Version:     0.2.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
@@ -25,8 +25,8 @@ function, which says what the slot is:
 
 (src/game/engine/objects.c has the object system written in C, slot by slot.)
 
-This reads every registering function (the ones that reference a vc*/gc*
-class name string), replays its stack writes and writes symbols/classes.json:
+This reads every registering function (the ones that call vcRegisterClass),
+replays its stack writes and writes symbols/classes.json:
 per class its registering function, tag and callbacks, and the names they get
 (<Class>_Register, <Class>_Load...). A callback several classes share (the
 defaults: return 0, return 1, return the third argument) is left unnamed.
@@ -91,22 +91,41 @@ def main():
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     md.detail = True
 
+    def class_name_at(va):
+        """The class name a string at va spells, if it is one."""
+        text = read(va, 64).split(b"\0")[0].decode("latin-1")
+        return text if CLASS_NAME.match(text) else None
+
+    # Every function that calls vcRegisterClass. Its class's name is the one
+    # string of a class name its code points at: an immediate (mov esi, NAME
+    # for a rep movsd) or a memory operand (mov eax, [NAME], a dword of it at
+    # a time). The disassembler's cross references miss the second kind, so
+    # the instructions are read here: finding the registering functions by
+    # the references to the names, as this did first, missed five classes
+    # (vcBeamParticleSystem, vcMusic, vcDecalMgr, gcLevel, gcAIData).
+    registering = sorted({containing(src) for src in refs.get(REGISTER_CLASS, [])} - {None})
     classes = []
-    for s in strings:
-        if not CLASS_NAME.match(s["string"]):
+    for fn in registering:
+        code = read(fn, starts[fn] - fn)
+        desc = replay(md, fn, code)
+        if desc is None or desc["call"] != REGISTER_CLASS:
             continue
-        for ref in refs.get(int(s["address"], 16), []):
-            fn = containing(ref)
-            if fn is None:
-                continue
-            desc = replay(md, fn, read(fn, starts[fn] - fn))
-            if desc is None:
-                continue
-            slots = {off: va for off, va in desc["writes"].items() if off in SLOT_RANGE and va in starts}
-            tag = desc["writes"].get(TAG)
-            classes.append({"class": s["string"], "register": fn, "registers_with": desc["call"],
-                            "tag": struct.pack("<I", tag).rstrip(b"\0").decode("latin-1") if tag else None,
-                            "slots": slots})
+        named = []
+        for ins in md.disasm(code, fn):
+            for op in ins.operands:
+                va = op.imm if op.type == X86_OP_IMM else op.mem.disp if op.type == X86_OP_MEM else None
+                if va is not None and 0 < va < 0x80000000:
+                    name = class_name_at(va & 0xFFFFFFFF)
+                    if name and name not in named:
+                        named.append(name)
+        if len(named) != 1:
+            print("0x%08X registers a class whose name is not clear: %s" % (fn, named or "none"))
+            continue
+        slots = {off: va for off, va in desc["writes"].items() if off in SLOT_RANGE and va in starts}
+        tag = desc["writes"].get(TAG)
+        classes.append({"class": named[0], "register": fn, "registers_with": desc["call"],
+                        "tag": struct.pack("<I", tag).rstrip(b"\0").decode("latin-1") if tag else None,
+                        "slots": slots})
 
     # A callback more than one class uses is a shared default: no class name.
     users = collections.Counter(va for c in classes for va in set(c["slots"].values()))

@@ -31,9 +31,6 @@
 #define CHANGED_NAME        2u
 #define CHANGED_NEW         4u
 #define QUEUED              0x10u   /* vcInstance flags: in vcReleaseQueue */
-#define CLASS_OWN_FILES     1u      /* vcClassDesc flags */
-#define CLASS_CLONE_SHARED  4u
-#define CLASS_QUIET_MISSING 8u
 #define NAME_BYTES          64u     /* vcInstance name */
 #define FIRST_INSTANCES     4       /* a class's table when it first fills */
 #define FIRST_QUEUE         0x20    /* vcReleaseQueue's when it first fills */

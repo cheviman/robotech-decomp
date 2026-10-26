@@ -14,6 +14,12 @@
 
 #include <stdint.h>
 
+/* vcClassDesc flags: its objects are files of their own, with names unique in the class; vcObjectGetShared
+ * clones instead of sharing; no path is reported for a missing object */
+#define CLASS_OWN_FILES     1u
+#define CLASS_CLONE_SHARED  4u
+#define CLASS_QUIET_MISSING 8u
+
 /* classes */
 void vcObjectSystemInit(uint32_t data_dir);
 void vcObjectSystemShutdown(void);

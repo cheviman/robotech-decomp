@@ -85,15 +85,33 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (26-10-2026): 1,335 of the 6,646 functions have a real name: the XDK's libraries almost
+- **Names** (26-10-2026): 2,125 of the 6,590 functions have a real name: the XDK's libraries almost
   whole (D3D 234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, the
-  engine's 30 object classes and all their slots, the object system, the engine's files, formatted strings
-  and rectangles. No placeholders (Sebas: no name that is a number,
-  an offset or an address; `tools/noise_report.py` counts them, 0). Left: the game's own code (about
-  5,400 functions, a retail build whose strings name nothing; xboxrecomp's naming paths need RTTI, assert
-  strings, a map file or a Fusion package, and this title has none), and the 366 types of the game's
-  registries, found but not named: next, what each registry slot is (the generic function that calls
-  it) and each type's name (its strings and behaviour).
+  engine's 35 object classes and all their slots, the object system, the engine's files, formatted strings,
+  rectangles, random numbers, screen, text, the renderer's start and state setters, and the scene
+  objects; the game's own object system (game/objects: 27 `GameObject` functions, families of types,
+  handles with a serial, pools, messages delivered to state machines, the update every frame) and its
+  object types by family. The functions the bridges wrap are called by their names too
+  (`D3DDevice_Swap`, not the recompiler's `sub_00157530`). No placeholders (Sebas: no name that is a
+  number, an offset or an address; `tools/noise_report.py` counts them, 0).
+  - The object types: 13 families, 370 types, 1,207 functions by type and slot
+    (`tools/find_registries.py`). 203 types are named from their own strings, a `type` line each in
+    `symbols.txt` (the name a trigger or an action copies into its objects, the asset an entity, an
+    effect or a screen loads), and `tools/symbols.py merge` names their registering functions and
+    callbacks in bulk with a description each (655), with 16 callbacks several types share named by
+    hand: 673 of the 1,207. Left, 167 types whose strings do not say what they are: the 43 weapons
+    (only their sounds), the 16 steering behaviours (no strings), most nodes and screen elements, the
+    first screens (the main menu's, with the cheat codes, and the profile's), and the types whose asset
+    another type loads too (three VF-1SX, two VF-1AX, the eight missiles in pairs, the three Hiro
+    Excaliburs, two female power armours, effects 0 to 5, 23 to 25, 27, 28, 30, 42, 51). Their names
+    come from reading what each does.
+  - `game/unsorted` went up from 1,655 to 1,723 functions with this: the 179 between the screens'
+    functions from 0x0001C510 to 0x000269C0 were laid out in `game/screens` because screen functions
+    were on both sides, and the object system sits among them, so they were not the screens'.
+  - Left: the rest of the game's own code (about 4,400 functions, a retail build whose strings name
+    little; xboxrecomp's naming paths need RTTI, assert strings, a map file or a Fusion package, and
+    this title has none; nor do the PlayStation 2 and GameCube builds, both stripped, with no map file
+    on their discs).
 - **The base for the decompilation** (25-10-2026), done: `symbols/symbols.txt` is the one place of the
   names, descriptions, files and types (SegaSonic's format: `func`, `data`, `var`, `struct`, `field`,
   `file`, `comment`; `tools/symbols.py header` makes `symbols.h`, an accessor per field and variable for
@@ -121,23 +139,79 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   - the random numbers, `random.c`: the game's sequence (restarted by `vcRandomReset`) and the
     cosmetic one (the rumble, the string manager, line effects; never restarted), a hash of a seed and
     a count; the floats worked on the emulated x87 as the original rounds them, handed back in st(0)
-    (`ENTRY_CDECL0_FLOAT`).
+    (`ENTRY_CDECL0_FLOAT`);
+  - the screen, `screen.c`: 9 of the 12 functions from 0x00115CA0 to 0x001160B0, the device's
+    creation (640 x 480, its present parameters by the XDK's names), the title-safe part, the viewport,
+    the clears and the swap. Left recompiled: the gamma ramp's, `vcScreenSetGamma` (its floats go
+    through the C runtime's `pow`), and two whose purpose is not known yet (0x00115D00, 0x00115D20). 8
+    of the 9 run in the scenarios; `vcScreenShutdown` runs only when the game ends, which it never does;
+  - the text, `text.c`: the 13 functions from 0x001165B0 to 0x00116B60, the fonts (the default one
+    read from defaultfont.tga), the characters' height and scale, a string's width, and drawing one at
+    a point, aligned, shadowed, or laid out in lines within a rectangle; nearly all of it x87
+    arithmetic, each operation in the original's order and rounding. 8 run in the scenarios; the 5 that
+    do not are setters and `vcTextShutdown`. A width or a height is handed back in st(0)
+    (`ENTRY_CDECL1_FLOAT`, `ENTRY_CDECL2_FLOAT`), which `tools/verify_c.py` does not compare: those are
+    checked by the scenarios, where all but `vcTextSetScale` run. The text drawing itself,
+    `vcFontDrawString`, a quad per character pushed to the GPU, stays recompiled;
+  - the renderer's state setters, `render.c`: a render state and a texture stage's state set only when
+    they change (the engine keeps the last values), the XDK's `D3DDevice_SetRenderState` and
+    `D3DDevice_SetTextureStageState` inlined around that: simple, deferred and complex states, by the
+    XDK's tables (`D3DSIMPLERENDERSTATEENCODE`, `D3DDIRTYFROM*`) and its functions. Both run in the
+    scenarios. The renderer's start, `vcRenderInit` and `vcRenderBuffersInit`, stays recompiled for
+    now;
+  - the classes' registrations, `classes.c`: 19 of the 35, the ones that only build their
+    `vcClassDesc` and hand it to `vcRegisterClass`, each a table read from the descriptors the game
+    registers and checked against them byte for byte (all 35, capacities too, the same with these in
+    C). The other 16 do more (a scene object's table of functions, vcLight's and vcSound's own
+    globals, gcLevel's objects) and stay recompiled until that is read. The callbacks themselves
+    stay recompiled: each needs its class's object read and its fields named first;
+  - the scene objects, `scene.c`: 20 functions of the `vcSceneObject` every object placed in the
+    world has (its rotation and position in the world and in its parent's frame, a bounding box, the
+    box the queries test, flags, the game's entity it belongs to, its handle, and a tree of parent,
+    children and siblings by handles): the scene's start and end, finding an object's through its
+    type's table of functions, its flags (and a child taking its parent's), user, transform and
+    bounds, starting and copying one, attaching it to a parent and taking it off, removing it, and
+    what a change of flags does: putting it in the bounds quadtree (6 levels) or taking it out, as a
+    sphere around its box, and out of the hit quadtree (7 levels, which the queries go through). Five
+    take their arguments in registers as the compiler passed them (`ENTRY_REGISTERS_VOID`: eax, ecx,
+    edx, esi, edi, ebx and the stack); calling a recompiled one, the C keeps the caller's esi and ebx.
+    23 run in the scenarios (`vcSceneShutdown`, `vcSceneObjectReleaseChildren` and
+    `vcSceneObjectGetBounds` do not). Still recompiled: the quadtrees, placing an object in its
+    parent's frame, what entering and leaving the bounds quadtree does besides (the vcLight module),
+    and putting an object in the hit quadtree, `vcSceneObjectInsertHitBounds`: with a radius under a
+    ten-thousandth it moves the entry it has to a centre it never worked out, whatever its stack
+    held, which C cannot hold the same;
+  - the vector maths, `vector.c`: `vcTransformPoint`, a point turned by a rotation and moved.
 
   Their locals handed to other code by address live in the guest's stack, in a frame of the
-  original's size and at its offsets; a word the original keeps in its own argument's slot is in the
-  frame too (called from other C, that slot is the caller's). The menu, the first mission and the save
-  play as before, frame for frame and file for file (66 functions with the random numbers). Of the first 59, 45 run in them (36 called
-  from the recompiled code, 9 only from other C); `tools/verify_c.py` compares 14 with the machine code
-  (80 vectors, 0 different), 3 of them among the ones that do not run. The other 11 that do not run
-  are read against the machine code only: `vcObjectCollectChanged`, `vcObjectSystemShutdown`,
+  original's size and at its offsets (`vcTextDrawInRect` aligns its frame to 8 bytes, as the original
+  does); a word the original keeps in its own argument's slot is in the
+  frame too, or in a C variable when only the x87 reads it (called from other C, that slot is the caller's). The menu, the first mission and the save
+  play as before, frame for frame and file for file (134 functions); once in some ten runs, right
+  after a build, the first mission's frame 2280 differed and the eight runs after it did not: a race
+  between the game's threads that the clock tied to the frames does not cover, not looked into yet. Of the first 59, 45 run in them (36 called
+  from the recompiled code, 9 only from other C). `tools/verify_c.py` compares 26 with the machine code
+  (209 vectors, 0 different), the game's own memory too (26-10-2026: until then only the memory the
+  arguments point into, so a function that writes the game's variables passed whatever it wrote,
+  and the ones with no result were not checked; a constant broken on purpose fails now); until 26-10-2026 it compared 11 while it counted 16: the harness mapped
+  only the bytes the XBE's file holds, and a function that reads a variable in `.data`'s uninitialised
+  part (`vcRandomCount`, `vcScreenWidth`) faulted on the original with every vector. It maps them now
+  (zero, as the console's loader leaves them) and names a function compared with nothing:
+  `vcObjectGetName`, which reads the class table, empty there. The other 11 of the first 59 that do not
+  run are read against the machine code only: `vcObjectCollectChanged`, `vcObjectSystemShutdown`,
   `vcObjectGetSize`, `vcClassForEach`, `vcClassAddRefAll`, `vcClassDecRefAll`, `vcObjectClearChanged`,
-  `vcFileCreate`, `vcFileExists`, `vcFileReadRect`, `vcFormatAppend`. Next: the screen's functions in
-  front of the files (0x00115DE0 to 0x001160B0, the device's creation among them), the text's after
-  them (0x001165B0 to past 0x00116B60, the font's loading among them), then each class's callbacks.
+  `vcFileCreate`, `vcFileExists`, `vcFileReadRect`, `vcFormatAppend`. `vcSceneObjectGet` is counted
+  among the ones compared but faults with every vector: it jumps through the table of types, empty in
+  the harness. Next: the quadtrees themselves and the scene's queries, then the classes' objects
+  and their callbacks, the small ones first.
+- **The disassembly, run again from scratch** (26-10-2026): 6,590 functions where the one in use had
+  6,646. The 59 starts it no longer has are each inside a function it has (mostly ones the indirect
+  calls seeded, which now reach over them); the code is the same, lifted as part of its neighbour, and the scenarios play as before, with
+  no indirect call left unresolved. The function count of `tools/noise_report.py` moved with it.
 - **Noise that comes from xboxrecomp's conventions**, counted and explained: the recompiler calls a
   function written by hand through the replacement lookup (`RECOMP_ICALL_SAFE`, "manual call", so that
   a replacement in `recomp_lookup_manual` wins), and this project replaces none there:
-  `tools/organize_gen.py` turns each into a direct call to the entry. And `tools/verify_c.py`
+  `tools/organize_gen.py` turns each into a direct call to the entry, a tail jump too (26-10-2026). And `tools/verify_c.py`
   compares eax and the memory, not edx: the harness compares edx as its recompiled code keeps every
   register, but after a call to a function that hands back 32 bits or nothing no caller reads edx (the
   calling convention leaves it undefined), and the original leaves there whatever it loaded last. A function the bridges wrap keeps

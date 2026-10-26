@@ -126,6 +126,9 @@ if(MSVC)
     # /MP6: the generated chunks are one project, so MSBuild would compile them
     # one at a time; six at once is half of the 12-thread dev machine.
     target_compile_options(${PROJECT_NAME} PRIVATE /bigobj /MP6)
+    # C4113 as an error: CALL(name, ...) handed a function written by hand, which takes its arguments
+    # in C, would run it with none; a function becomes written by hand and its calls must change.
+    target_compile_options(${PROJECT_NAME} PRIVATE /we4113)
 endif()
 
 # ── Game-specific additions ─────────────────────────────────────

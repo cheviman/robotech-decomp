@@ -1,6 +1,36 @@
 {
  "classes": [
   {
+   "class": "gcLevel",
+   "register": "0x00027A40",
+   "registers_with": "0x00110370",
+   "tag": "lvl",
+   "slots": {
+    "0x34": "0x00026D60",
+    "0x38": "0x00026E80",
+    "0x3C": "0x00026EC0",
+    "0x40": "0x000273B0",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147480",
+    "0x54": "0x00026EF0"
+   }
+  },
+  {
+   "class": "gcAIData",
+   "register": "0x000D6FD0",
+   "registers_with": "0x00110370",
+   "tag": "spt",
+   "slots": {
+    "0x34": "0x000D6F70",
+    "0x38": "0x000D6F90",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x000D6FA0",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147480",
+    "0x54": "0x00129340"
+   }
+  },
+  {
    "class": "gcComponent",
    "register": "0x000D70D0",
    "registers_with": "0x00110370",
@@ -239,6 +269,21 @@
    }
   },
   {
+   "class": "vcDecalMgr",
+   "register": "0x00130220",
+   "registers_with": "0x00110370",
+   "tag": "dcm",
+   "slots": {
+    "0x34": "0x0012FF30",
+    "0x38": "0x001300C0",
+    "0x3C": "0x00130140",
+    "0x40": "0x00147490",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147490",
+    "0x54": "0x001301A0"
+   }
+  },
+  {
    "class": "vcParticleSystem",
    "register": "0x001339E0",
    "registers_with": "0x00110370",
@@ -316,6 +361,22 @@
    }
   },
   {
+   "class": "vcBeamParticleSystem",
+   "register": "0x00139D60",
+   "registers_with": "0x00110370",
+   "tag": "bps",
+   "slots": {
+    "0x34": "0x00137B20",
+    "0x38": "0x00137BB0",
+    "0x3C": "0x00137BF0",
+    "0x40": "0x00139B80",
+    "0x44": "0x00139CC0",
+    "0x4C": "0x00139AC0",
+    "0x50": "0x00138190",
+    "0x54": "0x00137C10"
+   }
+  },
+  {
    "class": "vcPhysiqueManager",
    "register": "0x0013A060",
    "registers_with": "0x00110370",
@@ -372,6 +433,22 @@
     "0x48": "0x00147490",
     "0x4C": "0x00147480",
     "0x54": "0x0013CE20"
+   }
+  },
+  {
+   "class": "vcMusic",
+   "register": "0x0013ECF0",
+   "registers_with": "0x00110370",
+   "tag": "mus",
+   "slots": {
+    "0x34": "0x0013EC90",
+    "0x38": "0x0013ECA0",
+    "0x3C": "0x0013FDD0",
+    "0x40": "0x0013ECD0",
+    "0x48": "0x00129C20",
+    "0x4C": "0x00147480",
+    "0x50": "0x00147480",
+    "0x54": "0x0013ECC0"
    }
   },
   {
@@ -452,16 +529,50 @@
  ],
  "names": [
   {
-   "address": "0x000D6F70",
-   "name": "gcComponent_Create",
-   "class": "gcComponent",
+   "address": "0x00026D60",
+   "name": "gcLevel_Create",
+   "class": "gcLevel",
    "slot": "0x34"
   },
   {
-   "address": "0x000D6F90",
-   "name": "gcComponent_Destroy",
-   "class": "gcComponent",
+   "address": "0x00026E80",
+   "name": "gcLevel_Destroy",
+   "class": "gcLevel",
    "slot": "0x38"
+  },
+  {
+   "address": "0x00026EC0",
+   "name": "gcLevel_Collect",
+   "class": "gcLevel",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x00026EF0",
+   "name": "gcLevel_GetSize",
+   "class": "gcLevel",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x000273B0",
+   "name": "gcLevel_Load",
+   "class": "gcLevel",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00027A40",
+   "name": "gcLevel_Register",
+   "class": "gcLevel"
+  },
+  {
+   "address": "0x000D6FA0",
+   "name": "gcAIData_Load",
+   "class": "gcAIData",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x000D6FD0",
+   "name": "gcAIData_Register",
+   "class": "gcAIData"
   },
   {
    "address": "0x000D7080",
@@ -967,10 +1078,10 @@
    "class": "vcLight"
   },
   {
-   "address": "0x00129340",
-   "name": "gcComponent_GetSize",
-   "class": "gcComponent",
-   "slot": "0x54"
+   "address": "0x00129C20",
+   "name": "vcMusic_LoadChunk",
+   "class": "vcMusic",
+   "slot": "0x48"
   },
   {
    "address": "0x0012E950",
@@ -1070,6 +1181,35 @@
    "address": "0x0012FA70",
    "name": "vcShadow_Register",
    "class": "vcShadow"
+  },
+  {
+   "address": "0x0012FF30",
+   "name": "vcDecalMgr_Create",
+   "class": "vcDecalMgr",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x001300C0",
+   "name": "vcDecalMgr_Destroy",
+   "class": "vcDecalMgr",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00130140",
+   "name": "vcDecalMgr_Collect",
+   "class": "vcDecalMgr",
+   "slot": "0x3C"
+  },
+  {
+   "address": "0x001301A0",
+   "name": "vcDecalMgr_GetSize",
+   "class": "vcDecalMgr",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00130220",
+   "name": "vcDecalMgr_Register",
+   "class": "vcDecalMgr"
   },
   {
    "address": "0x00131F60",
@@ -1301,10 +1441,51 @@
    "class": "vcSkybox"
   },
   {
-   "address": "0x00137BF0",
-   "name": "vcParticleSystem_Collect",
-   "class": "vcParticleSystem",
-   "slot": "0x3C"
+   "address": "0x00137B20",
+   "name": "vcBeamParticleSystem_Create",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x00137BB0",
+   "name": "vcBeamParticleSystem_Destroy",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x00137C10",
+   "name": "vcBeamParticleSystem_GetSize",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x00138190",
+   "name": "vcBeamParticleSystem_InUse",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x50"
+  },
+  {
+   "address": "0x00139AC0",
+   "name": "vcBeamParticleSystem_Copy",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x4C"
+  },
+  {
+   "address": "0x00139B80",
+   "name": "vcBeamParticleSystem_Load",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x00139CC0",
+   "name": "vcBeamParticleSystem_Reload",
+   "class": "vcBeamParticleSystem",
+   "slot": "0x44"
+  },
+  {
+   "address": "0x00139D60",
+   "name": "vcBeamParticleSystem_Register",
+   "class": "vcBeamParticleSystem"
   },
   {
    "address": "0x00139E40",
@@ -1451,6 +1632,35 @@
    "name": "vcTexture_LoadChunk",
    "class": "vcTexture",
    "slot": "0x48"
+  },
+  {
+   "address": "0x0013EC90",
+   "name": "vcMusic_Create",
+   "class": "vcMusic",
+   "slot": "0x34"
+  },
+  {
+   "address": "0x0013ECA0",
+   "name": "vcMusic_Destroy",
+   "class": "vcMusic",
+   "slot": "0x38"
+  },
+  {
+   "address": "0x0013ECC0",
+   "name": "vcMusic_GetSize",
+   "class": "vcMusic",
+   "slot": "0x54"
+  },
+  {
+   "address": "0x0013ECD0",
+   "name": "vcMusic_Load",
+   "class": "vcMusic",
+   "slot": "0x40"
+  },
+  {
+   "address": "0x0013ECF0",
+   "name": "vcMusic_Register",
+   "class": "vcMusic"
   },
   {
    "address": "0x0013EDA0",

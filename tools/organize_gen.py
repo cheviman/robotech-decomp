@@ -1,7 +1,7 @@
 """
 Name:        organize_gen.py
 Description: lays the recompiled C out in files by subject, each function with its description
-Version:     0.2.0
+Version:     0.3.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
@@ -18,11 +18,13 @@ and puts each function's description (its comment line in symbols.txt) into
 its header. Run again, it starts from whatever is there, cut by count or
 already laid out, so it never doubles a function.
 
-Two names on the way, in the generated C and recomp_funcs.h: the body of a
-function src/recomp_manual.c wraps, sub_X_gen to the recompiler, becomes
-NAME_gen; and a call to a function written by hand, which the recompiler
-looks up at run time, becomes a direct call to its entry (both explained at
-WRAPPED and MANUAL_CALL below).
+Three names on the way, in the generated C, recomp_funcs.h and the dispatch
+table: a function src/recomp_manual.c wraps or replaces, sub_X to the
+recompiler, becomes NAME, as recomp_manual.c defines it; the body of a
+wrapped one, sub_X_gen, becomes NAME_gen; and a call or a tail jump to a
+function written by hand, which the recompiler looks up at run time, becomes a
+direct call to its entry (explained at WRAPPER, WRAPPED, MANUAL_CALL and
+MANUAL_TAIL below).
 """
 import glob
 import json
@@ -39,7 +41,12 @@ import symbols  # noqa: E402
 
 KEEP = {"recomp_dispatch.c", "recomp_stubs_unresolved.c"}
 FUNCS_H = os.path.join(GEN, "recomp_funcs.h")
+DISPATCH = os.path.join(GEN, "recomp_dispatch.c")
 HAND = os.path.join(REPO, "analysis", "hand_functions.json")
+# recomp_manual.c as the recompiler read it (tools/hand_functions.py)
+MANUAL_FOR_TOOLKIT = os.path.join(REPO, "analysis", "recomp_manual.c")
+# a function src/recomp_manual.c wraps or replaces, as the recompiler calls it
+WRAPPER = re.compile(r"\bsub_([0-9A-F]{8})\b")
 # the body of a function src/recomp_manual.c wraps, as the recompiler names it
 WRAPPED = re.compile(r"\bsub_([0-9A-F]{8})_gen\b")
 # A call to a function written by hand. The recompiler looks it up at run
@@ -51,6 +58,8 @@ MANUAL_CALL = re.compile(r"\{ uint32_t _icall_esp = g_esp;\n"
                          r"([ \t]*)PUSH32\(esp, (0x[0-9A-Fa-f]+u)\); "
                          r"RECOMP_ICALL_SAFE(?:_CC)?\(0x([0-9A-F]{8})u, _icall_esp\); "
                          r"/\* manual call 0x[0-9A-F]{8} \*/\n")
+# A tail jump to a function written by hand, looked up at run time the same way.
+MANUAL_TAIL = re.compile(r"RECOMP_ITAIL\(0x([0-9A-F]{8})u\); return; /\* manual tail jmp 0x[0-9A-F]{8} \*/")
 # a function's header: its name, any description a run put there, its span
 BLOCK = re.compile(r"(?m)^/\*\*\n \* (\w+)\n(?: \*.*\n)*? \* Original: 0x([0-9A-F]{8})")
 WIDTH = 100
@@ -126,10 +135,23 @@ def main():
     # A function src/recomp_manual.c wraps keeps its generated body under
     # sub_X_gen, the recompiler's name for it whatever the function is
     # called; it gets the real name here, NAME_gen, and recomp_manual.c calls
-    # it so. The wrapper itself keeps sub_X: that is how the recompiler finds
-    # it (--exclude-manual).
+    # it so. The wrapper (or the replacement) is sub_X to the recompiler, which
+    # finds it so (--exclude-manual) and calls it so; recomp_manual.c defines
+    # it as NAME, and every call and declaration gets that name here.
+    wrappers = {}
+    if os.path.exists(MANUAL_FOR_TOOLKIT):
+        for a in re.findall(r"(?m)^void sub_([0-9A-F]{8})\(void\)$", open(MANUAL_FOR_TOOLKIT, encoding="utf-8").read()):
+            if int(a, 16) in sym["func"]:
+                wrappers[a] = sym["func"][int(a, 16)]
+
     def rename(match):
         return real_name(sym["func"], match)
+
+    def wrapper_name(match):
+        return wrappers.get(match.group(1), match.group(0))
+
+    def names(text):
+        return WRAPPER.sub(wrapper_name, WRAPPED.sub(rename, text))
 
     # each call to a function written by hand, straight to its entry
     entries = {int(a, 16): n for a, n in json.load(open(HAND)).items()} if os.path.exists(HAND) else {}
@@ -141,15 +163,23 @@ def main():
         return ("{\n%s%sPUSH32(esp, %s); RECOMP_ABI_CALL(0x%su, %s); /* call 0x%s, written by hand */\n"
                 % (match.group(1), match.group(2), match.group(3), match.group(4), entry, match.group(4)))
 
+    def direct_tail(match):
+        entry = entries.get(int(match.group(1), 16))
+        if not entry:
+            return match.group(0)
+        return "RECOMP_ABI_CALL(0x%su, %s); return; /* tail jmp 0x%s, written by hand */" % (
+            match.group(1), entry, match.group(1))
+
     for path in fresh or sources:
-        text = MANUAL_CALL.sub(direct, WRAPPED.sub(rename, open(path, encoding="utf-8").read()))
+        text = MANUAL_TAIL.sub(direct_tail, MANUAL_CALL.sub(direct, names(open(path, encoding="utf-8").read())))
         for addr, name, block in blocks_of(text):
             m = re.search(r"(?m)^ \* Source: (\S+)$", block)
             dest = m.group(1) if m else "game/unsorted.c"
             found[addr] = (dest, describe(block, name, sym["comments"]))
-    declarations = open(FUNCS_H, encoding="utf-8").read()
-    with open(FUNCS_H, "w", encoding="utf-8", newline="\n") as f:
-        f.write(WRAPPED.sub(rename, declarations))
+    for path in (FUNCS_H, DISPATCH):
+        text = open(path, encoding="utf-8").read()
+        with open(path, "w", encoding="utf-8", newline="\n") as f:
+            f.write(names(text))
     if not found:
         sys.exit("no generated functions under %s" % os.path.relpath(GEN, REPO))
     for path in sources:

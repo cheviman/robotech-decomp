@@ -2,10 +2,15 @@
 # the game's C written by hand, which does)
 /game/
 /RB-XBE/
+/Robotech_Battlecry_PS2_ISO_USA/
 *.rar
+*.zip
+*.7z
 *.xbe
 *.iso
 *.xiso
+*.rvz
+*.gcm
 
 # Everything generated from the game: the pipeline's analysis (a copy of the XBE, disassembly, function and
 # ABI databases, run logs and frame dumps) and the recompiled C

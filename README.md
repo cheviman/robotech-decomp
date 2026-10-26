@@ -20,17 +20,18 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 
 - [x] XBE analysis: title TM-002 (NTSC, linked 2002-08-05), XDK 4721 (XAPILIB, XBOXKRNL, LIBCMT, D3D8 not
       LTCG, DSOUND), Bink 1; 115 kernel imports, all of them covered by the runtime
-- [x] The whole executable recompiled into C: 6,646 functions, 5,556 of them the game and its engine
+- [x] The whole executable recompiled into C: 6,590 functions, 5,203 of them the game and its engine
       (Vicious Cycle's own, `vc*` engine classes and `gc*` game classes, no RTTI), the rest the XDK's D3D8,
       DirectSound and peripheral libraries and Bink
 - [x] Native build with MSVC (x64)
 - [x] The XDK library code named: XbSymbolDatabase finds the entry points (all 77 Direct3D ones the game
       calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
-      with the libraries' variables); the engine's 30 object classes and their callbacks come from the
-      descriptors the game registers (`symbols/classes.json`): 1,328 functions with a real name; the
-      game's 366 object types (Entity, Effect, Weapon, Screen...) found in the registries it fills at
-      start (`symbols/registries.json`), not named yet
+      with the libraries' variables); the engine's 35 object classes and their callbacks come from the
+      descriptors the game registers (`symbols/classes.json`); the game's own object system (families
+      of types, handles, messages and state machines) and 203 of its 370 object types, named from their
+      own strings, their functions in bulk (`symbols/registries.json` and the type lines); with the
+      engine named as it is decompiled, 2,125 functions with a real name
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)
@@ -41,9 +42,10 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
 - [x] The first of the engine decompiled into C (`src/game/engine/`): the object system (27 functions
-      and the classes' default callbacks), the files, the formatted strings and the rectangles, 59
-      functions, every name real; the menu, the first mission and a save as the recompiled ones played
-      them, frame for frame
+      and the classes' default callbacks), the files, the formatted strings, the rectangles, the random
+      numbers, the screen (the Direct3D device, the viewport, clearing and showing it), the text
+      (fonts, measuring and laying out strings), the render state setters, 19 classes'
+      registrations and the scene objects' tree, 134 functions, every name real; the menu, the first mission and a save as the recompiled ones played them, frame for frame
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -141,10 +143,13 @@ hand.
 - **A function written by hand**: C in `src/game/`, by its name in `symbols.txt` and with a signature
   of its own, the guest's memory read through `symbols.h`'s accessors. Beside it, its entry
   (`ENTRY_CDECL2(vcObjectFind)`, `src/game/decomp.h`) is the function as the recompiled code calls
-  it, its arguments on the guest stack and its result in eax; the pipeline's `hand` step hands the
+  it, its arguments on the guest stack (or in the registers the compiler used,
+  `ENTRY_REGISTERS_VOID(vcSceneObjectUnlink, g_eax, g_esi, g_ebx)`) and its result in eax; the pipeline's `hand` step hands the
   entries to the recompiler, which generates no body for them and calls the entries instead. It calls
   the functions still recompiled with `CALL(vcFileReadU32, file, at)` and a callback with
-  `CALL_AT(address, ...)`; a local it hands them by address lives in the guest's stack.
+  `CALL_AT(address, ...)`, and one written by hand directly (the build takes C4113 as an error, so a
+  `CALL` left on a function that has become C fails); a local it hands them by address lives in the
+  guest's stack.
 - **Checking that nothing changed**, after every change:
 
   ```bash
@@ -160,7 +165,9 @@ hand.
   ```
 
   `verify_c.py` runs each function written by hand against the game's own machine code with
-  xboxrecomp's conformance harness (it needs a 32-bit MSVC). `scenario.py` plays the scripted scenarios
+  xboxrecomp's conformance harness (it needs a 32-bit MSVC): eax and the memory, the game's variables
+  included, and names any function it compared with nothing.
+  `scenario.py` plays the scripted scenarios
   of `tests/scenarios/` (the menu, the first mission, a save) with every clock the game reads tied to the
   frames and an empty save folder of its own, so runs repeat frame for frame, and compares every dumped
   frame and saved file with the reference the build before wrote (`--save` records it). `noise_report.py`
@@ -174,9 +181,9 @@ game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
 src/game/               the game's C written by hand, by subject (engine/objects.c, files.c, format.c,
-                        rects.c...); decomp.h and
+                        rects.c, random.c, screen.c, text.c, render.c, classes.c, scene.c, vector.c); decomp.h and
                         decomp.c, what joins it to the recompiled C
-src/recomp_manual.c     the bridges' wrappers around recompiled functions
+src/recomp_manual.c     the bridges' wrappers around recompiled functions, by the functions' names
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
                         D3D8 layer
 src/input_bridge.c      the pad and the keyboard answered from the host's XInput, and the pad scripts

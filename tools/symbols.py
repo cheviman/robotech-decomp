@@ -1,7 +1,7 @@
 """
 Name:        symbols.py
 Description: symbols/symbols.txt, the one place the names, descriptions and files of the C live
-Version:     0.1.0
+Version:     0.2.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
@@ -34,9 +34,17 @@ writes, in SegaSonic's terms:
     struct  NAME  SIZE                      a structure (SIZE in hexadecimal)
     field   STRUCT  OFFSET  NAME  TYPE [STRUCT]   one of its fields (OFFSET in hexadecimal)
 
+and the game's object types by name, which name their functions:
+
+    type  FAMILY  NUMBER  NAME  [# what it is]   the type NUMBER of the family FAMILY
+                                            (symbols/registries.json) is NAME: its
+                                            registering function NAME_Register, its
+                                            callbacks NAME_Startup, NAME_StateMachine...
+
 The name sections come from symbols/lib_matches.json (tools/match_libs.py),
-symbols/xdk_symbols.json (XbSymbolDatabase) and symbols/classes.json
-(tools/find_classes.py). A name the host's toolchain also defines -- the
+symbols/xdk_symbols.json (XbSymbolDatabase), symbols/classes.json
+(tools/find_classes.py) and symbols/registries.json (tools/find_registries.py)
+with the type lines. A name the host's toolchain also defines -- the
 toolkit's runtime, or the names xboxrecomp's recompiler reserves (C keywords,
 the C runtime, Win32 exports; its lifter's _FUNC_RESERVED_IDENT) -- takes its
 library's prefix here (xapi_CreateThread), so the recompiler never adds an
@@ -63,10 +71,37 @@ IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 SECTION = re.compile(r"^# ======== (.*?) ========\s*$")
 # names whose subject is their prefix (the first that fits)
 NAME_SUBJECTS = [("vcRegisterClass", "engine/objects"), ("vcObject", "engine/objects"),
-                 ("vcDefault_", "engine/objects"), ("vcClass", "engine/objects")]
-FAMILY_FOLDER = {"Entity": "entities", "Effect": "effects", "Weapon": "weapons", "Screen": "screens",
-                 "Action": "actions", "ScreenElement": "screen_elements", "Node": "nodes",
-                 "Steering": "steering", "Trigger": "triggers", "Item": "items"}
+                 ("vcDefault_", "engine/objects"), ("vcClass", "engine/objects"),
+                 ("vcScreen", "engine/screen"), ("vcRender", "engine/render"),
+                 ("vcText", "engine/text"), ("vcFont", "engine/text"),
+                 ("vcSceneObject", "engine/scene"), ("vcSceneInit", "engine/scene"),
+                 ("vcSceneShutdown", "engine/scene"), ("vcQuadtree", "engine/quadtree"),
+                 ("vcBoxCenter", "engine/scene"), ("vcTransformPoint", "engine/vector"),
+                 ("GameObject", "game/objects")]
+FAMILY_FOLDER = {"Player": "players", "Entity": "entities", "Structure": "structures", "Effect": "effects",
+                 "Weapon": "weapons", "Screen": "screens", "Action": "actions", "Component": "components",
+                 "ScreenElement": "screen_elements", "Node": "nodes", "Steering": "steering",
+                 "Trigger": "triggers", "Item": "items"}
+# a type's callback slots, by the generic function that calls each (tools/find_registries.py)
+TYPE_SLOTS = {"0x04": "Startup", "0x08": "Shutdown", "0x0C": "StateMachine", "0x10": "Load", "0x18": "Collect"}
+TYPE_COMMENTS = {
+    "Register": "Registers the {name} type ({family} {number}){what}: fills its GameObjectType and stores it in its"
+                " family.",
+    "Startup": "The {name} type's first use (GameObjectTypeUse): gets what its objects share.",
+    "Shutdown": "The {name} type's last release (GameObjectTypeRelease): lets go of what its objects share.",
+    "StateMachine": "The {name} type's state machine: how its objects answer each message in each state"
+                    " (GameObjectDeliver). Hands back whether one was answered.",
+    "Load": "Reads an object of the {name} type from a file (GameObjectLoad). Hands back its handle.",
+    "Collect": "Collects what an object of the {name} type refers to that has to be saved (GameObjectCollect).",
+}
+FAMILY_COMMENTS = {
+    "Startup": "The first use of each {family} type (GameObjectTypeUse): gets what its objects share.",
+    "Shutdown": "The last release of each {family} type (GameObjectTypeRelease): lets go of what its objects share.",
+    "StateMachine": "The state machine of every {family} type: how their objects answer each message in each state"
+                    " (GameObjectDeliver). Hands back whether one was answered.",
+    "Load": "Reads an object of any {family} type from a file (GameObjectLoad). Hands back its handle.",
+    "Collect": "Collects what an object of any {family} type refers to that has to be saved (GameObjectCollect).",
+}
 LIB_PREFIX = {"XAPILIB": "xapi_", "D3D8": "d3d_", "DSOUND": "dsound_", "LIBCMT": "crt_",
               "LIBCPMT": "crt_", "XBOXKRNL": "krnl_"}
 
@@ -91,6 +126,9 @@ HEADER = """\
 #   struct  NAME  SIZE                     a structure of the game (SIZE in hexadecimal)
 #   field   STRUCT  OFFSET  NAME  TYPE [STRUCT]
 #            one of its fields (OFFSET in hexadecimal); a field nobody has named is not listed
+#   type  FAMILY  NUMBER  NAME  [# what it is]
+#            the game's object type NUMBER of the family FAMILY (symbols/registries.json) is NAME: its
+#            registering function is NAME_Register and its callbacks NAME_Startup, NAME_StateMachine...
 #
 # A name is real -- it says what the thing is -- or there is none: a type's number, a slot's offset or an
 # address is not a name (tools/noise_report.py counts any that reaches the C).
@@ -136,6 +174,8 @@ def entries(lines):
         note = note.strip()
         if len(f) >= 3 and f[0] == "comment":
             out.append({"kind": "comment", "name": f[1], "text": line.split(None, 2)[2].strip()})
+        elif len(f) == 4 and f[0] == "type" and f[2].isdigit():
+            out.append({"kind": "type", "family": f[1], "number": int(f[2]), "name": f[3], "note": note})
         elif len(f) == 3 and f[0] == "struct":
             out.append({"kind": "struct", "name": f[1], "size": int(f[2], 16), "note": note})
         elif len(f) in (5, 6) and f[0] == "field" and TYPE_RE.match(f[4]):
@@ -151,12 +191,20 @@ def entries(lines):
 
 def load(path=SYMBOLS):
     """{"func": {addr: name}, "data": {addr: name}, "files": [(addr, path, note)],
-    "comments": {name: text}, "hand": set of addresses named by hand}."""
-    out = {"func": {}, "data": {}, "files": [], "comments": {}, "hand": set(), "structs": {}, "vars": {}}
+    "comments": {name: text}, "hand": set of addresses named by hand, "hand_comments": names commented by
+    hand, "types": {(family, number): (name, note)}}."""
+    out = {"func": {}, "data": {}, "files": [], "comments": {}, "hand": set(), "structs": {}, "vars": {},
+           "hand_comments": set(), "types": {}}
     for title, lines in parse(path):
         for e in entries(lines):
             if e["kind"] == "comment":
-                out["comments"][e["name"]] = e["text"]
+                if not is_generated(title):
+                    out["hand_comments"].add(e["name"])
+                    out["comments"][e["name"]] = e["text"]
+                else:
+                    out["comments"].setdefault(e["name"], e["text"])
+            elif e["kind"] == "type":
+                out["types"][(e["family"], e["number"])] = (e["name"], e["note"])
             elif e["kind"] == "file":
                 out["files"].append((e["address"], e["name"], e["note"]))
             elif e["kind"] == "struct":
@@ -266,19 +314,84 @@ def merge(toolkit):
             continue
         (lib_lines if kind == "func" else data_lines).append(line(addr, kind, name, note))
     class_lines = [line(a, "func", n, note) for a, n, note in sorted(classes) if a not in hand]
+    type_lines, type_problems = object_type_lines(hand)
+    problems += type_problems
 
     replace_section(sections, "the engine's classes (generated by tools/symbols.py merge from "
                     "symbols/classes.json)", class_lines)
+    replace_section(sections, "the game's object types (generated by tools/symbols.py merge from "
+                    "symbols/registries.json and the type lines)", type_lines)
     replace_section(sections, "the XDK's functions (generated by tools/symbols.py merge from "
                     "symbols/lib_matches.json and symbols/xdk_symbols.json)", lib_lines)
     replace_section(sections, "the XDK's variables (generated by tools/symbols.py merge from "
                     "symbols/lib_matches.json)", data_lines)
     write(sections)
-    print("merged: %d engine class functions, %d XDK functions, %d XDK variables; %d given their library's"
-          " prefix for clashing with the toolkit" % (len(class_lines), len(lib_lines), len(data_lines),
-                                                       len(clash)))
+    print("merged: %d engine class functions, %d object type functions, %d XDK functions, %d XDK variables;"
+          " %d given their library's prefix for clashing with the toolkit" %
+          (len(class_lines), sum(1 for l in type_lines if not l.startswith("comment")), len(lib_lines),
+           len(data_lines), len(clash)))
     for p in problems:
         print("  left out (not an identifier, or the same name twice): %s" % p)
+
+
+def object_type_lines(hand):
+    """The func and comment lines of the game's object types (symbols/registries.json) that a type line
+    names: a function only one type has is NAME_Register or NAME_SLOT; one that every type of a family
+    with that slot shares, and no other, is FAMILY_SLOT; any other shared one is left to a hand name.
+    Hands back (lines, problems)."""
+    if not os.path.exists(REGISTRIES):
+        return [], []
+    sym = load()
+    names, problems = sym["types"], []
+    families = json.load(open(REGISTRIES))["families"]
+    known = {(f["name"], t["type"]) for f in families for t in f["types"]}
+    seen = collections.Counter(n for n, _ in names.values())
+    for (fam, num), (name, _) in sorted(names.items()):
+        if (fam, num) not in known:
+            problems.append("type %s %d %s: no such type" % (fam, num, name))
+        if seen[name] > 1:
+            problems.append("type %s %d %s: the same name for two types" % (fam, num, name))
+    users = collections.defaultdict(list)       # function: [(family, type, slot)]
+    for f in families:
+        for t in f["types"]:
+            users[int(t["register"], 16)].append((f["name"], t["type"], "Register"))
+            for off, va in t["slots"].items():
+                if off in TYPE_SLOTS:
+                    users[int(va, 16)].append((f["name"], t["type"], TYPE_SLOTS[off]))
+    with_slot = collections.Counter()           # (family, slot): how many of its types have one
+    for f in families:
+        for t in f["types"]:
+            for off in t["slots"]:
+                if off in TYPE_SLOTS:
+                    with_slot[(f["name"], TYPE_SLOTS[off])] += 1
+    taken = {n: a for a, n in sym["func"].items()}
+    out = []
+    for fn, us in sorted(users.items()):
+        if fn in hand:
+            continue
+        fams, slots = {u[0] for u in us}, {u[2] for u in us}
+        if len(us) == 1:
+            fam, num, slot = us[0]
+            if (fam, num) not in names:
+                continue
+            tname, what = names[(fam, num)]
+            name = "%s_%s" % (tname, slot)
+            text = TYPE_COMMENTS[slot].format(name=tname, family=fam, number=num,
+                                              what=(", " + what) if what else "")
+        elif len(fams) == 1 and len(slots) == 1 and len(us) == with_slot[(next(iter(fams)), next(iter(slots)))]                 and next(iter(slots)) != "Register":
+            fam, slot = next(iter(fams)), next(iter(slots))
+            name = "%s_%s" % (fam, slot)
+            text = FAMILY_COMMENTS[slot].format(family=fam)
+        else:
+            continue
+        if taken.get(name, fn) != fn:
+            problems.append("%08X %s: the name is taken" % (fn, name))
+            continue
+        taken[name] = fn
+        out.append(line(fn, "func", name))
+        if name not in sym["hand_comments"]:
+            out.append("comment %s %s" % (name, text))
+    return out, problems
 
 
 # ── layout: the files ───────────────────────────────────────
@@ -303,10 +416,13 @@ def subjects():
                 out[a] = "xdk/crt"
             elif n.startswith(("xapi_", "krnl_")) or n in ("xbe_entry_point",):
                 out[a] = "xdk/xapi"
-    # Names that say their subject.
+    # Names that say their subject: the prefix is a whole word of the name, so
+    # that vcText is not vcTexture; a class's callback (vcObject_Create, the
+    # vcObject class's) is its class's, below, not the subject of its prefix.
     for a, n in names.items():
         for prefix, path in NAME_SUBJECTS:
-            if n.startswith(prefix):
+            rest = n[len(prefix):]
+            if n.startswith(prefix) and (prefix.endswith("_") or not rest or rest[0].isupper()):
                 out.setdefault(a, path)
                 break
     # A function of a class or of a registry type belongs to it; one that two
@@ -365,8 +481,15 @@ def layout():
         "xdk/xapi": "the XDK's XAPI: files, threads, memory, saves, the title's start",
         "xdk/crt": "the C runtime (libcmt.lib)",
         "game/unsorted": "the game's code whose subject is not known yet",
+        "game/objects": "the game's objects: families of types, handles, pools, messages and states",
         "engine/objects": "the engine's object system: classes, handles, and creating, releasing, cloning and"
                           " loading objects through their classes' callbacks",
+        "engine/screen": "the engine's screen: the Direct3D device, its title-safe part, clearing and showing it",
+        "engine/render": "the engine's renderer: its default states, vertex shaders and vertex buffers",
+        "engine/text": "the engine's text: its fonts, and drawing strings aligned, shadowed or in lines",
+        "engine/scene": "the engine's scene objects: where each object is, its bounds and flags, its parent and children",
+        "engine/quadtree": "the engine's quadtrees: objects kept by the square their sphere falls in",
+        "engine/vector": "the engine's vector maths: points turned and moved",
     }
     lines = []
     seen = set()
