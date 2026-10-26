@@ -28,7 +28,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
       with the libraries' variables); the engine's 30 object classes and their callbacks come from the
-      descriptors the game registers (`symbols/classes.json`): 1,246 functions with a real name; the
+      descriptors the game registers (`symbols/classes.json`): 1,313 functions with a real name; the
       game's 366 object types (Entity, Effect, Weapon, Screen...) found in the registries it fills at
       start (`symbols/registries.json`), not named yet
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
@@ -40,6 +40,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       engine's own 2D draws, vertex programs (run on the CPU for now); sound, the pad and the keyboard,
       saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
+- [x] The engine's object system decompiled into C (`src/game/engine/objects.c`): its 27 functions and
+      the classes' default callbacks, every name real, the menu, the first mission and a save as the
+      recompiled ones played them, frame for frame
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -134,9 +137,13 @@ hand.
   how to read it); `struct`, `field` and `var` lines become `symbols.h`'s accessors for the C written by
   hand (`vcClassDesc_create(p)`, `vcClassByType(type)`). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
   a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C.
-- **A function written by hand**: defined in `src/game/` by its name in `symbols.txt`, with the
-  recompiled code's interface (`src/game/decomp.h`); the pipeline's `hand` step tells the recompiler to
-  leave it out.
+- **A function written by hand**: C in `src/game/`, by its name in `symbols.txt` and with a signature
+  of its own, the guest's memory read through `symbols.h`'s accessors. Beside it, its entry
+  (`ENTRY_CDECL2(vcObjectFind)`, `src/game/decomp.h`) is the function as the recompiled code calls
+  it, its arguments on the guest stack and its result in eax; the pipeline's `hand` step hands the
+  entries to the recompiler, which generates no body for them and calls the entries instead. It calls
+  the functions still recompiled with `CALL(vcFileReadU32, file, at)` and a callback with
+  `CALL_AT(address, ...)`; a local it hands them by address lives in the guest's stack.
 - **Checking that nothing changed**, after every change:
 
   ```bash
@@ -165,7 +172,8 @@ hand.
 game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
-src/game/               the game's C written by hand, by subject (engine/objects.c...), and decomp.h
+src/game/               the game's C written by hand, by subject (engine/objects.c...); decomp.h and
+                        decomp.c, what joins it to the recompiled C
 src/recomp_manual.c     the bridges' wrappers around recompiled functions
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
                         D3D8 layer

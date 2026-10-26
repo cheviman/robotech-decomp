@@ -78,9 +78,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (25-10-2026): 1,246 of the 6,646 functions have a real name: the XDK's libraries almost
+- **Names** (26-10-2026): 1,313 of the 6,646 functions have a real name: the XDK's libraries almost
   whole (D3D 234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, the
-  engine's 30 object classes and their measured slots. No placeholders (Sebas: no name that is a number,
+  engine's 30 object classes and all their slots, the object system and the engine's file functions. No placeholders (Sebas: no name that is a number,
   an offset or an address; `tools/noise_report.py` counts them, 0). Left: the game's own code (about
   5,400 functions, a retail build whose strings name nothing; xboxrecomp's naming paths need RTTI, assert
   strings, a map file or a Fusion package, and this title has none), and the 366 types of the game's
@@ -99,13 +99,24 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   (`ROBOTECH_VIRTUAL_CLOCK`: the engine's counter, the date time() seeds srand with and saves are
   stamped with, the tick count; the kernel thunk of KeQuerySystemTime points at it), so two runs
   repeat frame for frame and file for file (60 of 60), and compares them with saved references. The
-  save's list of saves shows the host's file times, so the scenario ends before it. First functions
-  written by hand: the object system's three default callbacks; first types: the object system's
-  `vcClassDesc`, `vcClass`, `vcInstance`.
-- **Noise that comes from xboxrecomp's conventions**, counted and explained: a direct call to a function
-  written by hand goes through the replacement lookup (`RECOMP_ICALL_SAFE`, "manual call": the toolkit
-  makes sure no caller bypasses a replacement; 21 of the "indirect calls" for the first three
-  functions); it goes away as the callers are written by hand too. A function the bridges wrap keeps
+  save's list of saves shows the host's file times, so the scenario ends before it.
+- **The engine's object system, in C** (26-10-2026): `src/game/engine/objects.c`, the 27 functions
+  from 0x001102C0 to 0x00111160 and the three default callbacks, each the original's in what it does
+  (read from its machine code; which callers read eax after it decided which hand nothing back). Its
+  locals handed to the recompiled code by address live in the guest's stack, in a frame of the
+  original's size and at its offsets. The menu, the first mission and the save play as before, frame
+  for frame and file for file; 21 of the 30 run in them, and of the 9 that do not (the save path's
+  `vcObjectCollectChanged`, `vcObjectSystemShutdown`, `vcObjectGetSize`, `vcClassForEach`,
+  `vcClassAddRefAll`, `vcClassDecRefAll`, `vcObjectClearChanged`, the defaults returning 0 and their
+  third argument) `tools/verify_c.py` checks the two defaults against the machine code (56 vectors with
+  the others it can run, 0 different); the other 7 are read against the machine code only. Next, with
+  the same method: the callers the object system has most (the engine's file functions, still
+  recompiled, then each class's callbacks), and the rectangle functions in front of it (0x00110060 to
+  0x00110230, unnamed yet).
+- **Noise that comes from xboxrecomp's conventions**, counted and explained: the recompiler calls a
+  function written by hand through the replacement lookup (`RECOMP_ICALL_SAFE`, "manual call", so that
+  a replacement in `recomp_lookup_manual` wins), and this project replaces none there:
+  `tools/organize_gen.py` turns each into a direct call to the entry (5,107 of them). A function the bridges wrap keeps
   its recompiled body under its real name, `NAME_gen` (26-10-2026; the toolkit names it
   `sub_<address>_gen` and finds the wrappers by that name, so the recompiler reads a copy of
   `src/recomp_manual.c` in its naming, `tools/hand_functions.py`, and `tools/organize_gen.py` names

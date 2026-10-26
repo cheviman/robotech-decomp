@@ -3,7 +3,7 @@ Name:        symbols.py
 Description: symbols/symbols.txt, the one place the names, descriptions and files of the C live
 Version:     0.1.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    26-10-2026
 Author:      Sebastian Toyos
 
 symbols/symbols.txt holds, by address, every name the C gets (functions and
@@ -406,7 +406,9 @@ def header():
     (pointers in the guest's structures are guest addresses: a u32 that
     points at a struct says which in a comment); for each variable its
     address and an accessor, NAME or NAME(i) for an array; for each data line
-    its address, NAME_VA. Structures are read in place in the guest's memory,
+    its address, NAME_VA; for each field its guest address too,
+    STRUCT_FIELD_VA(p), and for each function its address, NAME_VA, for C
+    written by hand that hands one to the game's code. Structures are read in place in the guest's memory,
     so no layout is invented for the bytes nobody has named."""
     sym = load()
     out = ["/**",
@@ -438,6 +440,8 @@ def header():
             else:
                 out.append("#define %s_%s(p) ((volatile %s *)XBOX_PTR((uint32_t)(p) + 0x%Xu))"
                            % (name, fld["name"], ctype, fld["offset"]))
+            # its guest address, for handing it to the game's code
+            out.append("#define %s_%s_VA(p) ((uint32_t)(p) + 0x%Xu)" % (name, fld["name"], fld["offset"]))
         out.append("")
     for addr, v in sorted(sym["vars"].items()):
         m = TYPE_RE.match(v["type"])
@@ -456,6 +460,11 @@ def header():
     for addr, name in sorted(sym["data"].items()):
         if addr not in sym["vars"]:
             out.append("#define %s_VA 0x%08Xu" % (name, addr))
+    # the functions' addresses, for C written by hand that hands one to the
+    # game (a callback) or compares one
+    out.append("")
+    for addr, name in sorted(sym["func"].items()):
+        out.append("#define %s_VA 0x%08Xu" % (name, addr))
     out += ["", "#endif", ""]
     os.makedirs(os.path.dirname(HEADER_OUT), exist_ok=True)
     with open(HEADER_OUT, "w", encoding="utf-8", newline="\n") as f:

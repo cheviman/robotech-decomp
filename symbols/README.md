@@ -55,10 +55,12 @@ The engine's objects are handles, `(type << 16) | index`. Each type registers a 
 built on the stack by a function of its own) with `vcRegisterClass`: its type, its name (`vcTexture`),
 a file tag (`txr`) and callbacks at fixed offsets. Each slot is called from one generic function, which
 says what it is: +0x34 `Create` (`vcObjectCreate`; every one allocates), +0x38 `Destroy`
-(`vcObjectRelease`; every one frees), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Save`,
-+0x4C `Copy` (`vcObjectClone`), +0x54 `GetSize`. +0x3C (called from `0x00110810`, which walks the
-children ORing flags), +0x48 and +0x50 are read but not named until it is known what they are.
-Measured on 25-10-2026: 30 classes (29 `vc*` of the engine, `gcComponent` of the game), 151 callbacks
+(`vcObjectRelease`; every one frees), +0x3C `Collect` (`vcObjectCollectChanged`: the children to
+save), +0x40 `Load` (`vcObjectLoad`, by file version), +0x44 `Reload` (`vcObjectLoad` and
+`vcObjectReload`: reads an object that exists again), +0x48 `LoadChunk` (`vcObjectLoadChunk`), +0x4C
+`Copy` (`vcObjectClone`), +0x50 `InUse` (`vcObjectReleaseLater`: whether it is still in use at a time)
+and +0x54 `GetSize` (`vcObjectGetSize`). +0x44 was taken for `Save` until the object system was read
+(26-10-2026): it reads. 30 classes (29 `vc*` of the engine, `gcComponent` of the game), 175 callbacks
 named; the 5 several classes share (the defaults below) are left unnamed.
 
 ## `registries.json`
@@ -77,11 +79,14 @@ Trigger's type 1 `Boolean AND`), as hints.
 ## `symbols.txt`
 
 The names given by hand so far (its section "names given by hand", each with its description): the
-XDK's `Direct3DCreate8`, which XbSymbolDatabase does not know; the engine's object system,
-`vcRegisterClass` (it copies a class's descriptor into `vcClassTable`, 0x70 bytes a class, and points
-`vcClassByType[type]` at it) and the one function that calls each class slot (`vcObjectCreate`,
-`vcObjectRelease`, `vcObjectClone`, `vcObjectLoad`); and the default callbacks (`vcDefault_ReturnZero`,
-`vcDefault_ReturnOne`, `vcDefault_ReturnArg3`).
+XDK's `Direct3DCreate8` and XAPI's `GetTickCount`, which XbSymbolDatabase does not know; and the
+engine's object system whole, written in C in `src/game/engine/objects.c` (26-10-2026): its 27
+functions (registering classes, creating, sharing, cloning and releasing objects, their names, the
+release queue, reading them from files) and the classes' three default callbacks; its structures
+(`vcClassDesc`, `vcClass`, `vcInstance`, `vcCollectList`, the part of `vcFile` it reads) and variables
+(`vcClassByType`, `vcDataDir`, the release queue, the lookup cache the game inlines, `vcGameTime`); and
+the engine's file and string functions it calls (`vcFileOpen`, `vcFileReadU32`, `vcFormat`...), still
+recompiled.
 
 The file lines lay the 6,647 functions out in 61 files: `xdk/` (d3d8, dsound, xapi, xapi_usb, crt),
 `bink/`, `engine/` (`objects` and a file per class) and `game/` (a file per registry family). A function

@@ -189,58 +189,172 @@ comment Direct3DCreate8 The XDK's Direct3DCreate8: hands back 1. The game calls 
 0014E6E6  func  xapi_GetTickCount                   # mov eax, [KeTickCount]; mov eax, [eax]; ret
 comment xapi_GetTickCount XAPI's GetTickCount: the milliseconds since the console started, the kernel's KeTickCount.
 
-# The engine's object system (symbols/classes.json has the classes)
+# The engine's object system (src/game/engine/objects.c; symbols/classes.json has the classes). An object is a
+# handle, (type << 16) | index: its class is vcClassByType[type], its instance the class's instances[index].
+001102C0  func  vcObjectSystemInit
+00110260  func  vcClassFindFreeInstance               # thiscall: the class in ecx
+00110350  func  vcGetDataDir
+00110360  func  vcGetPlatformName
 00110370  func  vcRegisterClass
 001103C0  func  vcObjectCreate
+00110490  func  vcObjectAddRef
+001104C0  func  vcClassAddRefAll
 00110510  func  vcObjectRelease
+00110590  func  vcClassDecRefAll
+001105E0  func  vcObjectGetName
+00110600  func  vcObjectMarkChanged
+00110620  func  vcObjectClearChanged
+00110640  func  vcObjectFind
+00110700  func  vcClassForEach
 00110780  func  vcObjectClone
+001107C0  func  vcObjectGetSize
+00110810  func  vcObjectCollectChanged
+001108B0  func  vcObjectReleaseLater
+001109A0  func  vcObjectReleaseQueued
+00110A80  func  vcObjectLoadChunk
+00110B50  func  vcObjectSystemShutdown
+00110BC0  func  vcObjectSetName
+00110C70  func  vcObjectGetShared
+00110D30  func  vcObjectGet
 00110E90  func  vcObjectLoad
-00147480  func  vcDefault_ReturnZero                # xor eax, eax; ret
-00147490  func  vcDefault_ReturnOne                 # mov eax, 1; ret
-0013FDD0  func  vcDefault_ReturnArg3                # mov eax, [esp + 0xC]; ret
-0023B4E8  data  vcClassTable                        # the classes, a vcClass (0x70 bytes) per type
-002BF1E0  var   vcClassByType  u32[]  vcClass       # each type's class in vcClassTable
+00111160  func  vcObjectReload
+00147480  func  vcDefault_ReturnZero                  # xor eax, eax; ret
+00147490  func  vcDefault_ReturnOne                   # mov eax, 1; ret
+0013FDD0  func  vcDefault_ReturnArg3                  # mov eax, [esp + 0xC]; ret
+0023B4E8  data  vcClassTable                          # the classes, a vcClass (0x70 bytes) per type
+002BF1E0  var   vcClassByType  u32[]  vcClass         # each type's class in vcClassTable, 64 types
+0023B4A0  data  vcObjectSystemFile                    # a vcFile vcObjectSystemShutdown closes; nothing in the game opens it
+0023D0E8  var   vcDataDir  char[260]                  # the folder the objects' files are under: vcObjectSystemInit's argument
+0023D1EC  var   vcPlatformNames  char[32]             # "pc", "xbox", "ps2", "gc", 8 bytes each; this build's is "xbox"
+0023D210  var   vcReleaseQueueCapacity  s32           # how many handles vcReleaseQueue has room for
+0023D214  var   vcReleaseQueueCount  s32              # the handles waiting in it
+0023D218  var   vcReleaseQueue  u32                   # the handles released later (vcObjectReleaseLater), a table of u32
+0023D21C  var   vcObjectReportMissing  u32            # when set, vcObjectGetShared formats the path of an object it cannot find
+002BF2E0  var   vcObjectCacheHandle  u32              # the handle the game last looked up (its own code does it inline)
+002BF1C0  var   vcObjectCacheData  u32                # that handle's object; both are cleared when an instance table moves or the handle is released
+0023A48C  var   vcGameTime  u32                       # the game's milliseconds since its current state started (0 while a level loads)
+001B9A40  data  vcFileMagicVC1                        # the first word of an object's file of the first version, 1A 31 43 56: refused
+001B9A44  data  vcFileMagicVC2                        # the first word of an object's file the game reads, 1A 32 43 56
+001B9A4C  data  vcFileChunkEnd                        # the word that ends an object's chunks, 1A 21 43 56
+001A8AA8  data  vcObjectPathFormat                    # "%s\%s\%s\%s.%s": vcDataDir, the platform, the class, the name, the tag
+001A8AB8  data  vcMissingObjectFormat                 # "%s\%s.%s": the class, the name, the tag
 
-# The object system's structures, as vcRegisterClass, vcObjectCreate, vcObjectClone and the walk over an
-# object's children (0x00110810) read them; a field nobody has seen used is not listed.
+# The object system's structures, as its functions read them; a field nobody has seen used is not listed.
 struct  vcClassDesc  5C                         # what a class registers: vcRegisterClass copies it into its vcClass
 field   vcClassDesc  00  type      u32          # the class's type: its index in vcClassTable and vcClassByType, a handle's high 16 bits
-field   vcClassDesc  04  name      char[32]     # the class's name: vcTexture
-field   vcClassDesc  24  file_tag  char[4]      # the tag of the class's files: txr
-field   vcClassDesc  30  flags     u32          # bit 0 tested by the walk over an object's children
-field   vcClassDesc  34  create    u32          # vcObjectCreate calls it: allocates the object
-field   vcClassDesc  38  destroy   u32          # vcObjectRelease calls it: frees the object and its children
-field   vcClassDesc  40  load      u32          # vcObjectLoad calls it: reads the object, by the file's version
-field   vcClassDesc  44  save      u32          # writes the object, by the file's version
-field   vcClassDesc  4C  copy      u32          # vcObjectClone calls it: fills a new object from another
-field   vcClassDesc  54  get_size  u32          # hands back the object's size in bytes
+field   vcClassDesc  04  name      char[32]     # the class's name: vcTexture; the folder of its files
+field   vcClassDesc  24  file_tag  char[4]      # the extension of its files: txr
+field   vcClassDesc  28  version   u32          # the newest version of the object its load callback reads
+field   vcClassDesc  2C  chunk_version  u32     # the newest version of a chunk its load_chunk callback reads
+field   vcClassDesc  30  flags     u32          # 1: its objects are files of their own, with names unique in the class, which vcObjectCollectChanged lists to be saved apart; 4: vcObjectGetShared clones instead of sharing; 8: no path is reported for a missing object
+field   vcClassDesc  34  create    u32          # create(handle): allocates the object, which it hands back
+field   vcClassDesc  38  destroy   u32          # destroy(handle, object): frees the object and lets go of its children
+field   vcClassDesc  3C  collect   u32          # collect(handle, object, changed, list): collects the children, hands back the changed bits with theirs
+field   vcClassDesc  40  load      u32          # load(handle, file, version, object): reads the object, by the version
+field   vcClassDesc  44  reload    u32          # reload(handle, file, version, object): reads an object that already exists again
+field   vcClassDesc  48  load_chunk  u32        # load_chunk(handle, file, version, object): reads one chunk of the object
+field   vcClassDesc  4C  copy      u32          # copy(handle, object): fills a new object from another
+field   vcClassDesc  50  in_use    u32          # in_use(handle, object, time): nonzero while the object is still in use at that time
+field   vcClassDesc  54  get_size  u32          # get_size(handle, object, what): the object's size in bytes
 struct  vcClass  70                             # a class in vcClassTable: its vcClassDesc (whose fields sit at the same offsets), then its instances
-field   vcClass  64  capacity   u32             # how many instances it may have: vcRegisterClass's second argument
-field   vcClass  6C  instances  u32  vcInstance # its table of instances, capacity x 0x4C bytes, which vcRegisterClass allocates
+field   vcClass  5C  free_index  s32            # where the next instance is taken from
+field   vcClass  60  count       s32            # the instances in use
+field   vcClass  64  capacity    s32            # the instances the table has room for: vcRegisterClass's second argument, doubled when it fills
+field   vcClass  68  peak        s32            # the most instances in use at once
+field   vcClass  6C  instances   u32  vcInstance # its table of instances, capacity x 0x4C bytes
 struct  vcInstance  4C                          # an object of a class: a handle's low 16 bits index it in the class's instances
-field   vcInstance  00  object  u32             # the object's own data, which the class's callbacks work on
-comment vcRegisterClass Registers an engine class: copies its descriptor (the type, its name, its file tag and the callbacks the object system calls) into vcClassTable, points vcClassByType at it and allocates the class's table of instances.
-comment vcObjectCreate Creates an object of a class: takes an instance and runs the class's Create callback.
-comment vcObjectRelease Releases an object: the class's Destroy callback frees it and its children.
-comment vcObjectClone Makes a new object of the same class as the given one and fills it from it with the class's Copy callback.
-comment vcObjectLoad Loads an object from a file through the class's Load callback, which reads it by the file's version.
+field   vcInstance  00  object  u32             # the object's own data, which the class's callbacks work on; 0 for a free instance
+field   vcInstance  04  refs    s32             # the references to it; at 0 it is destroyed
+field   vcInstance  08  flags   u32             # bit 0: its data changed; bit 1: its name; bit 2: it is new (the three set at creation, cleared once it is read from a file); bit 4: in vcReleaseQueue
+field   vcInstance  0C  name    char[64]        # its name, lower case, unique among its class's if the class says so
+struct  vcFile  24                              # a file the engine reads, through a 64 KB buffer
+field   vcFile  14  by_name   u32               # 1 when vcObjectGet opened it for an object asked for by name; vcFileOpen sets 0
+field   vcFile  18  object_count  s32           # the objects read from it so far, which later references to them name by their index
+field   vcFile  20  objects   u32               # their handles, a table of u32
+struct  vcCollectList  8                        # what vcObjectCollectChanged fills: the handles of the objects to save
+field   vcCollectList  00  whole   u32          # nonzero: every object goes in, changed or not
+field   vcCollectList  04  count   u32          # the handles in it, which follow from offset 8
+
+# The engine's files and strings, as the object system calls them (still recompiled)
+001162D0  func  vcFileOpen
+00116340  func  vcFileClose
+00116140  func  vcFileRead
+001164C0  func  vcFileReadU16
+001164E0  func  vcFileReadU32
+00116490  func  vcFileReadBytes
+00116530  func  vcFileReadU32s
+00116450  func  vcFileTell
+00116380  func  vcFileSeek
+001163E0  func  vcFileSkip
+00125D20  func  vcFileAddObject
+00125DA0  func  vcFileFreeObjects
+00125DD0  func  vcFormat
+00125E60  func  vcFormatLast
+00125E90  func  vcStrLower
+
+comment vcObjectSystemInit Starts the object system: no class registered, the folder the objects' files are read from, and the names of the platforms whose folders they may be in.
+comment vcClassFindFreeInstance Sets the class's free_index to a free instance: the first from free_index on, else the last before it, else the end of the table.
+comment vcGetDataDir The folder the objects' files are under (vcDataDir).
+comment vcGetPlatformName The folder of this platform's files under each class's: "xbox".
+comment vcRegisterClass Registers an engine class: copies its descriptor (the type, its name, its file tag and the callbacks the object system calls) into vcClassTable, points vcClassByType at it and allocates its table of instances.
+comment vcObjectCreate Creates an object of a class: takes a free instance (the table doubles when it is full), marks it changed with one reference and runs the class's create callback. Hands back the new handle.
+comment vcObjectAddRef Adds a reference to an object, if the handle is not 0. Hands the handle back.
+comment vcClassAddRefAll Adds a reference to every object of a class that has one.
+comment vcObjectRelease Takes a reference from an object; at none left, the class's destroy callback frees it and the instance is free again.
+comment vcClassDecRefAll Takes a reference from every object of a class that has one, destroying none.
+comment vcObjectGetName The object's name.
+comment vcObjectMarkChanged Marks the object's data changed.
+comment vcObjectClearChanged Marks the object as read from its file: nothing of it changed, nor new.
+comment vcObjectFind The object of a class with that name (no name: the first one in use), from the given handle's index on, or among those in use. 0 if there is none.
+comment vcClassForEach Calls a function over the objects of a class in use, at most the given number of them (any, if negative), until it hands back 0. Hands back 0 if it stopped so, 1 otherwise.
+comment vcObjectClone Makes a new object of the same class as the given one and fills it from it with the class's copy callback.
+comment vcObjectGetSize The object's size in bytes, from its class's get_size callback (0 if it has none).
+comment vcObjectCollectChanged Collects what has to be saved: an object of a class whose objects are files of their own goes in the list when it or one of its children changed (its class's collect callback goes over the children); the others are saved with whoever refers to them. Hands back whether that one changed with it.
+comment vcObjectReleaseLater Puts the object in the release queue while its class's in_use callback says it is still in use; it keeps a reference there.
+comment vcObjectReleaseQueued Goes over the release queue: lets go of the objects no longer in use, keeps the others.
+comment vcObjectLoadChunk Reads one chunk of an object from a file (the file first, then the handle) through its class's load_chunk callback. Hands back 0 at the end of the chunks, 1 for a chunk read.
+comment vcObjectSystemShutdown Ends the object system: the release queue, every class's table of instances and the classes go.
+comment vcObjectSetName Names an object (lower case, at most 64 bytes). Refused if its class wants names unique and one of its objects has that name.
+comment vcObjectGetShared The object of a class with that name, shared (one more reference) or cloned if the class wants copies. 0 if there is none.
+comment vcObjectGet The object of a class with that name: the one loaded already, or read from its file, vcDataDir\xbox\CLASS\NAME.TAG.
+comment vcObjectLoad Reads an object from a file: a reference to one read before in it, one the game has by name (shared, or read again), or a new one read through its class's load callback. Hands back its handle with a reference for the caller, 0 if none.
+comment vcObjectReload Reads an object from a file into one that exists (the given handle, or the one of that name) through its class's reload callback.
 comment vcDefault_ReturnZero What a class gives for a callback that has nothing to do: hands back 0.
 comment vcDefault_ReturnOne What a class gives for a callback that only has to succeed: hands back 1.
-comment vcDefault_ReturnArg3 The default of the callback the object system runs over an object's children: hands back the flags it was given.
+comment vcDefault_ReturnArg3 What a class with no children gives for its collect callback: hands back the changed bits it was given.
+comment vcFileOpen Opens a file of the game's disc and fills its buffer.
+comment vcFileClose Closes a file and frees its buffer.
+comment vcFileRead Reads bytes from a file through its buffer. Hands back how many.
+comment vcFileReadU16 Reads a 16-bit word. Hands back whether it was there.
+comment vcFileReadU32 Reads a 32-bit word. Hands back whether it was there.
+comment vcFileReadBytes Reads the given number of bytes. Hands back whether they were there.
+comment vcFileReadU32s Reads the given number of 32-bit words. Hands back whether they were there.
+comment vcFileTell Where in the file the next read is.
+comment vcFileSeek Moves the next read to a place in the file.
+comment vcFileSkip Moves the next read on by a number of bytes.
+comment vcFileAddObject Adds an object read from the file to its table. Hands back its index there.
+comment vcFileFreeObjects Frees the file's table of objects.
+comment vcFormat Formats a string into the one of two static buffers not used last time, which it hands back.
+comment vcFormatLast The buffer vcFormat wrote last.
+comment vcStrLower Turns a string lower case in place.
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 000D6F70  func  gcComponent_Create                  # gcComponent's slot +34
 000D6F90  func  gcComponent_Destroy                 # gcComponent's slot +38
+000D7080  func  gcComponent_Collect                 # gcComponent's slot +3C
 000D70A0  func  gcComponent_Load                    # gcComponent's slot +40
 000D70D0  func  gcComponent_Register                # gcComponent's registration
+0010CAA0  func  vcSnd_LoadChunk                     # vcSnd's slot +48
 0010DFD0  func  vcSnd_Create                        # vcSnd's slot +34
 0010DFE0  func  vcSnd_Destroy                       # vcSnd's slot +38
 0010E000  func  vcSnd_GetSize                       # vcSnd's slot +54
 0010E010  func  vcSnd_Load                          # vcSnd's slot +40
+0010E060  func  vcSnd_InUse                         # vcSnd's slot +50
 0010E080  func  vcSnd_Register                      # vcSnd's registration
 0010E120  func  vcSound_Create                      # vcSound's slot +34
 0010E130  func  vcSound_Destroy                     # vcSound's slot +38
 0010E160  func  vcSound_GetSize                     # vcSound's slot +54
+0010E190  func  vcSound_InUse                       # vcSound's slot +50
 0010F4B0  func  vcSound_Copy                        # vcSound's slot +4C
 0010F530  func  vcSound_Load                        # vcSound's slot +40
 0010F5A0  func  vcSound_Register                    # vcSound's registration
@@ -252,14 +366,16 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 00112330  func  vcStringManager_Register            # vcStringManager's registration
 00112B30  func  vcPak_Create                        # vcPak's slot +34
 00112B40  func  vcPak_Destroy                       # vcPak's slot +38
+00112B80  func  vcPak_Collect                       # vcPak's slot +3C
 00112BC0  func  vcPak_GetSize                       # vcPak's slot +54
 00112C00  func  vcPak_Load                          # vcPak's slot +40
-00112C70  func  vcPak_Save                          # vcPak's slot +44
+00112C70  func  vcPak_Reload                        # vcPak's slot +44
 00112CD0  func  vcPak_Register                      # vcPak's registration
 00117F30  func  vcTexture_Create                    # vcTexture's slot +34
 00117F50  func  vcTexture_Destroy                   # vcTexture's slot +38
+00117FB0  func  vcTexture_Collect                   # vcTexture's slot +3C
 00118000  func  vcTexture_GetSize                   # vcTexture's slot +54
-00118010  func  vcTexture_Save                      # vcTexture's slot +44
+00118010  func  vcTexture_Reload                    # vcTexture's slot +44
 00118360  func  vcTexture_Load                      # vcTexture's slot +40
 00118450  func  vcTexture_Register                  # vcTexture's registration
 0011CBE0  func  vcMotionFiles_Create                # vcMotionFiles's slot +34
@@ -270,29 +386,33 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 0011D1B0  func  vcMotionFiles_Register              # vcMotionFiles's registration
 0011D250  func  vcMultiSubObject_Create             # vcMultiSubObject's slot +34
 0011D280  func  vcMultiSubObject_Destroy            # vcMultiSubObject's slot +38
-0011D440  func  vcMultiSubObject_Save               # vcMultiSubObject's slot +44
+0011D390  func  vcMultiSubObject_Collect            # vcMultiSubObject's slot +3C
+0011D440  func  vcMultiSubObject_Reload             # vcMultiSubObject's slot +44
 0011D7B0  func  vcMultiSubObject_GetSize            # vcMultiSubObject's slot +54
 001219E0  func  vcMultiSubObject_Copy               # vcMultiSubObject's slot +4C
 00121B40  func  vcMultiSubObject_Load               # vcMultiSubObject's slot +40
 00121CD0  func  vcMultiSubObject_Register           # vcMultiSubObject's registration
 00121EA0  func  vcWater_Create                      # vcWater's slot +34
 00121EE0  func  vcWater_Destroy                     # vcWater's slot +38
-00121F40  func  vcWater_Save                        # vcWater's slot +44
+00121F40  func  vcWater_Reload                      # vcWater's slot +44
 00121FE0  func  vcWater_GetSize                     # vcWater's slot +54
 00122930  func  vcWater_Load                        # vcWater's slot +40
 00122AB0  func  vcWater_Copy                        # vcWater's slot +4C
 00122B90  func  vcWater_Register                    # vcWater's registration
 00122D40  func  vcTerrain_Create                    # vcTerrain's slot +34
 00122E60  func  vcTerrain_Destroy                   # vcTerrain's slot +38
+00122F30  func  vcTerrain_Collect                   # vcTerrain's slot +3C
 00122FD0  func  vcTerrain_GetSize                   # vcTerrain's slot +54
-00123090  func  vcTerrain_Save                      # vcTerrain's slot +44
+00123090  func  vcTerrain_Reload                    # vcTerrain's slot +44
 00123E50  func  vcTerrain_Copy                      # vcTerrain's slot +4C
 001258D0  func  vcTerrain_Load                      # vcTerrain's slot +40
+00125BC0  func  vcTerrain_InUse                     # vcTerrain's slot +50
 00125C20  func  vcTerrain_Register                  # vcTerrain's registration
 00125EE0  func  vcLensFlare_Create                  # vcLensFlare's slot +34
 00125F00  func  vcLensFlare_Destroy                 # vcLensFlare's slot +38
+00125F40  func  vcLensFlare_Collect                 # vcLensFlare's slot +3C
 00125F80  func  vcLensFlare_GetSize                 # vcLensFlare's slot +54
-00125FC0  func  vcLensFlare_Save                    # vcLensFlare's slot +44
+00125FC0  func  vcLensFlare_Reload                  # vcLensFlare's slot +44
 00126760  func  vcLensFlare_Load                    # vcLensFlare's slot +40
 001267E0  func  vcLensFlare_Register                # vcLensFlare's registration
 00127C70  func  vcVolumeObject_Create               # vcVolumeObject's slot +34
@@ -311,7 +431,7 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 0012E950  func  vcSplineObject_Create               # vcSplineObject's slot +34
 0012E9A0  func  vcSplineObject_Destroy              # vcSplineObject's slot +38
 0012E9D0  func  vcSplineObject_GetSize              # vcSplineObject's slot +54
-0012EA00  func  vcSplineObject_Save                 # vcSplineObject's slot +44
+0012EA00  func  vcSplineObject_Reload               # vcSplineObject's slot +44
 0012EA40  func  vcSplineObject_Copy                 # vcSplineObject's slot +4C
 0012F210  func  vcSplineObject_Load                 # vcSplineObject's slot +40
 0012F2A0  func  vcSplineObject_Register             # vcSplineObject's registration
@@ -328,51 +448,60 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 00131F60  func  vcParticleSystem_Create             # vcParticleSystem's slot +34
 00132000  func  vcParticleSystem_Destroy            # vcParticleSystem's slot +38
 00132040  func  vcParticleSystem_GetSize            # vcParticleSystem's slot +54
+001322B0  func  vcParticleSystem_InUse              # vcParticleSystem's slot +50
 001336E0  func  vcParticleSystem_Copy               # vcParticleSystem's slot +4C
 001337A0  func  vcParticleSystem_Load               # vcParticleSystem's slot +40
-00133940  func  vcParticleSystem_Save               # vcParticleSystem's slot +44
+00133940  func  vcParticleSystem_Reload             # vcParticleSystem's slot +44
 001339E0  func  vcParticleSystem_Register           # vcParticleSystem's registration
 00133AF0  func  vcSceneExport_Create                # vcSceneExport's slot +34
 00133B00  func  vcSceneExport_Destroy               # vcSceneExport's slot +38
+00133B50  func  vcSceneExport_Collect               # vcSceneExport's slot +3C
 00133BA0  func  vcSceneExport_GetSize               # vcSceneExport's slot +54
-00133BF0  func  vcSceneExport_Save                  # vcSceneExport's slot +44
+00133BF0  func  vcSceneExport_Reload                # vcSceneExport's slot +44
 00133D90  func  vcSceneExport_Copy                  # vcSceneExport's slot +4C
 00133E80  func  vcSceneExport_Load                  # vcSceneExport's slot +40
 00133F00  func  vcSceneExport_Register              # vcSceneExport's registration
 00134EC0  func  vcSpaceScene_Create                 # vcSpaceScene's slot +34
 00134EE0  func  vcSpaceScene_Destroy                # vcSpaceScene's slot +38
 00134F00  func  vcSpaceScene_GetSize                # vcSpaceScene's slot +54
-00134F10  func  vcSpaceScene_Save                   # vcSpaceScene's slot +44
+00134F10  func  vcSpaceScene_Reload                 # vcSpaceScene's slot +44
 00134FD0  func  vcSpaceScene_Load                   # vcSpaceScene's slot +40
 00135030  func  vcSpaceScene_Register               # vcSpaceScene's registration
+00135630  func  vcRefObject_InUse                   # vcRefObject's slot +50
 00136070  func  vcRefObject_Create                  # vcRefObject's slot +34
 00136090  func  vcRefObject_Destroy                 # vcRefObject's slot +38
+001360E0  func  vcRefObject_Collect                 # vcRefObject's slot +3C
 00136140  func  vcRefObject_GetSize                 # vcRefObject's slot +54
-001361A0  func  vcRefObject_Save                    # vcRefObject's slot +44
+001361A0  func  vcRefObject_Reload                  # vcRefObject's slot +44
 00136410  func  vcRefObject_Copy                    # vcRefObject's slot +4C
 001364B0  func  vcRefObject_Load                    # vcRefObject's slot +40
 00136520  func  vcRefObject_Register                # vcRefObject's registration
 00136680  func  vcSkybox_Create                     # vcSkybox's slot +34
 00136690  func  vcSkybox_Destroy                    # vcSkybox's slot +38
+001366D0  func  vcSkybox_Collect                    # vcSkybox's slot +3C
 00136720  func  vcSkybox_GetSize                    # vcSkybox's slot +54
-00136770  func  vcSkybox_Save                       # vcSkybox's slot +44
+00136770  func  vcSkybox_Reload                     # vcSkybox's slot +44
 001369F0  func  vcSkybox_Copy                       # vcSkybox's slot +4C
 00136A70  func  vcSkybox_Load                       # vcSkybox's slot +40
 00136AE0  func  vcSkybox_Register                   # vcSkybox's registration
+00137BF0  func  vcParticleSystem_Collect            # vcParticleSystem's slot +3C
 00139E40  func  vcPhysiqueManager_Create            # vcPhysiqueManager's slot +34
 00139E70  func  vcPhysiqueManager_Destroy           # vcPhysiqueManager's slot +38
+00139F00  func  vcPhysiqueManager_Collect           # vcPhysiqueManager's slot +3C
 00139FA0  func  vcPhysiqueManager_GetSize           # vcPhysiqueManager's slot +54
 0013A060  func  vcPhysiqueManager_Register          # vcPhysiqueManager's registration
 0013A710  func  vcObject_Create                     # vcObject's slot +34
 0013A740  func  vcObject_Destroy                    # vcObject's slot +38
+0013A7E0  func  vcObject_Collect                    # vcObject's slot +3C
 0013A8D0  func  vcObject_GetSize                    # vcObject's slot +54
-0013A990  func  vcObject_Save                       # vcObject's slot +44
+0013A990  func  vcObject_Reload                     # vcObject's slot +44
 0013B790  func  vcObject_Copy                       # vcObject's slot +4C
 0013B8B0  func  vcObject_Load                       # vcObject's slot +40
 0013BD80  func  vcObject_Register                   # vcObject's registration
 0013BE80  func  vcGeometryTrail_Create              # vcGeometryTrail's slot +34
 0013BED0  func  vcGeometryTrail_Destroy             # vcGeometryTrail's slot +38
 0013BF10  func  vcGeometryTrail_GetSize             # vcGeometryTrail's slot +54
+0013BF50  func  vcGeometryTrail_InUse               # vcGeometryTrail's slot +50
 0013C570  func  vcGeometryTrail_Copy                # vcGeometryTrail's slot +4C
 0013C620  func  vcGeometryTrail_Register            # vcGeometryTrail's registration
 0013CD50  func  vcSFXBank_Destroy                   # vcSFXBank's slot +38
@@ -380,22 +509,25 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 0013CE20  func  vcSFXBank_GetSize                   # vcSFXBank's slot +54
 0013CFB0  func  vcSFXBank_Create                    # vcSFXBank's slot +34
 0013D0E0  func  vcSFXBank_Register                  # vcSFXBank's registration
+0013EB90  func  vcTexture_LoadChunk                 # vcTexture's slot +48
 0013EDA0  func  vcSkyScene_Create                   # vcSkyScene's slot +34
 0013EDE0  func  vcSkyScene_Destroy                  # vcSkyScene's slot +38
 0013EE20  func  vcSkyScene_GetSize                  # vcSkyScene's slot +54
-0013EE30  func  vcSkyScene_Save                     # vcSkyScene's slot +44
+0013EE30  func  vcSkyScene_Reload                   # vcSkyScene's slot +44
 0013F040  func  vcSkyScene_Load                     # vcSkyScene's slot +40
 0013F0F0  func  vcSkyScene_Register                 # vcSkyScene's registration
 0013F1A0  func  vcLineEffect_Create                 # vcLineEffect's slot +34
 0013F1E0  func  vcLineEffect_Destroy                # vcLineEffect's slot +38
+0013F210  func  vcLineEffect_Collect                # vcLineEffect's slot +3C
 0013F230  func  vcLineEffect_GetSize                # vcLineEffect's slot +54
 0013F380  func  vcLineEffect_Load                   # vcLineEffect's slot +40
-0013F410  func  vcLineEffect_Save                   # vcLineEffect's slot +44
+0013F410  func  vcLineEffect_Reload                 # vcLineEffect's slot +44
 0013F440  func  vcLineEffect_Register               # vcLineEffect's registration
 0013F4F0  func  vcMultiSub_Create                   # vcMultiSub's slot +34
 0013F500  func  vcMultiSub_Destroy                  # vcMultiSub's slot +38
+0013F580  func  vcMultiSub_Collect                  # vcMultiSub's slot +3C
 0013F610  func  vcMultiSub_GetSize                  # vcMultiSub's slot +54
-0013F6C0  func  vcMultiSub_Save                     # vcMultiSub's slot +44
+0013F6C0  func  vcMultiSub_Reload                   # vcMultiSub's slot +44
 0013FA20  func  vcMultiSub_Load                     # vcMultiSub's slot +40
 0013FCF0  func  vcMultiSub_Register                 # vcMultiSub's registration
 0013FDA0  func  vcMesh_Destroy                      # vcMesh's slot +38
@@ -405,11 +537,13 @@ comment vcDefault_ReturnArg3 The default of the callback the object system runs 
 0013FFA0  func  vcMesh_Register                     # vcMesh's registration
 00140050  func  vcMaterial_Create                   # vcMaterial's slot +34
 00140090  func  vcMaterial_Destroy                  # vcMaterial's slot +38
+001400C0  func  vcMaterial_Collect                  # vcMaterial's slot +3C
 00140100  func  vcMaterial_GetSize                  # vcMaterial's slot +54
 00140150  func  vcMaterial_Load                     # vcMaterial's slot +40
-00140420  func  vcMaterial_Save                     # vcMaterial's slot +44
+00140420  func  vcMaterial_Reload                   # vcMaterial's slot +44
 001404E0  func  vcMaterial_Copy                     # vcMaterial's slot +4C
 00140560  func  vcMaterial_Register                 # vcMaterial's registration
+00145B90  func  vcMesh_LoadChunk                    # vcMesh's slot +48
 
 # ======== the XDK's functions (generated by tools/symbols.py merge from symbols/lib_matches.json and symbols/xdk_symbols.json) ========
 00012E70  func  xapi_XWriteTitleInfoNoReboot        # XAPILIB launch, by its place in a caller's calls

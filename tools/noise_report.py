@@ -4,7 +4,7 @@ Description: counts, in one pass over the generated C, every kind of noise that 
              as code a person wrote, and compares it with the baseline kept in the repo
 Version:     0.1.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    26-10-2026
 Author:      Sebastian Toyos
 
 The C under src/recomp/gen/ is a recompilation: xboxrecomp lifts each x86
@@ -28,6 +28,8 @@ import re
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(REPO, "tools"))
+import hand_functions  # noqa: E402  (the functions written by hand, by their entries)
 GEN = os.path.join(REPO, "src", "recomp", "gen")
 BASELINE = os.path.join(REPO, "tools", "noise_baseline.txt")
 
@@ -113,10 +115,8 @@ def main():
             if now > was:
                 worse.append(key)
         print("%-18s %10s %10d  %s%s" % (key, "-" if was is None else was, now, what, mark))
-    hand = 0
-    for path in glob.glob(os.path.join(REPO, "src", "game", "**", "*.c"), recursive=True):
-        hand += len(DEF.findall(open(path, encoding="utf-8").read()))
-    print("written by hand (src/game/): %d functions" % hand)
+    hand, _ = hand_functions.hand_functions()
+    print("written by hand (src/game/): %d functions" % len(hand))
     if args.save:
         with open(BASELINE, "w", encoding="utf-8", newline="\n") as f:
             f.write("# tools/noise_report.py --save; one kind a line: key count\n")

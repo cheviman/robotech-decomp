@@ -3,7 +3,7 @@ Name:        find_classes.py
 Description: names the engine's object classes and their callbacks from the descriptors the game registers
 Version:     0.1.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    26-10-2026
 Author:      Sebastian Toyos
 
 Vicious Cycle's engine has no C++ classes to speak of (no RTTI, few vtables):
@@ -13,15 +13,17 @@ of its own: the class name (vcTexture), a file tag (txr) and the callbacks the
 object system calls through it. Each callback slot is called from one generic
 function, which says what the slot is:
 
-    +0x34  Create    vcObjectCreate (0x001103C0): calloc of the object
-    +0x38  Destroy   vcObjectRelease (0x00110510): frees the children and the object
-    +0x3C  (unnamed) called from 0x00110810: walks the children, ORing flags
-    +0x40  Load      vcObjectLoad (0x00110E90): reads it, by file version
-    +0x44  Save      writes it, by file version
-    +0x48  (unnamed)
-    +0x4C  Copy      vcObjectClone (0x00110780): fills a new object from another
-    +0x50  (unnamed)
-    +0x54  GetSize   returns the object's size in bytes
+    +0x34  Create      vcObjectCreate (0x001103C0): calloc of the object
+    +0x38  Destroy     vcObjectRelease (0x00110510): frees the children and the object
+    +0x3C  Collect     vcObjectCollectChanged (0x00110810): goes over the children to save
+    +0x40  Load        vcObjectLoad (0x00110E90): reads it, by file version
+    +0x44  Reload      vcObjectLoad, vcObjectReload (0x00111160): reads one that exists again
+    +0x48  LoadChunk   vcObjectLoadChunk (0x00110A80): reads one chunk of it
+    +0x4C  Copy        vcObjectClone (0x00110780): fills a new object from another
+    +0x50  InUse       vcObjectReleaseLater (0x001108B0): whether it is still in use
+    +0x54  GetSize     vcObjectGetSize (0x001107C0): the object's size in bytes
+
+(src/game/engine/objects.c has the object system written in C, slot by slot.)
 
 This reads every registering function (the ones that reference a vc*/gc*
 class name string), replays its stack writes and writes symbols/classes.json:
@@ -48,9 +50,10 @@ OUT = os.path.join(REPO, "symbols", "classes.json")
 
 REGISTER_CLASS = 0x00110370
 DESCRIPTOR_SIZE = 0x5C
-# The slots whose meaning is measured; +0x3C, +0x48 and +0x50 are read into
-# classes.json but get no name until it is known what they are.
-SLOTS = {0x34: "Create", 0x38: "Destroy", 0x40: "Load", 0x44: "Save", 0x4C: "Copy", 0x54: "GetSize"}
+# Each slot's meaning, from the generic function that calls it. +0x44 was
+# taken for Save before the object system was read: it reads (26-10-2026).
+SLOTS = {0x34: "Create", 0x38: "Destroy", 0x3C: "Collect", 0x40: "Load", 0x44: "Reload", 0x48: "LoadChunk",
+         0x4C: "Copy", 0x50: "InUse", 0x54: "GetSize"}
 SLOT_RANGE = range(0x34, 0x58, 4)
 TAG = 0x24
 CLASS_NAME = re.compile(r"^(vc|gc)[A-Z][A-Za-z0-9_]+$")

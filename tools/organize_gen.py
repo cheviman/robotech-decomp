@@ -1,7 +1,7 @@
 """
 Name:        organize_gen.py
 Description: lays the recompiled C out in files by subject, each function with its description
-Version:     0.1.0
+Version:     0.2.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
@@ -17,8 +17,15 @@ describes the file (the comment of the file's first line in symbols.txt),
 and puts each function's description (its comment line in symbols.txt) into
 its header. Run again, it starts from whatever is there, cut by count or
 already laid out, so it never doubles a function.
+
+Two names on the way, in the generated C and recomp_funcs.h: the body of a
+function src/recomp_manual.c wraps, sub_X_gen to the recompiler, becomes
+NAME_gen; and a call to a function written by hand, which the recompiler
+looks up at run time, becomes a direct call to its entry (both explained at
+WRAPPED and MANUAL_CALL below).
 """
 import glob
+import json
 import os
 import re
 import sys
@@ -32,8 +39,18 @@ import symbols  # noqa: E402
 
 KEEP = {"recomp_dispatch.c", "recomp_stubs_unresolved.c"}
 FUNCS_H = os.path.join(GEN, "recomp_funcs.h")
+HAND = os.path.join(REPO, "analysis", "hand_functions.json")
 # the body of a function src/recomp_manual.c wraps, as the recompiler names it
 WRAPPED = re.compile(r"\bsub_([0-9A-F]{8})_gen\b")
+# A call to a function written by hand. The recompiler looks it up at run
+# time, so that a replacement in recomp_lookup_manual wins over it; this
+# project replaces functions by writing them, and recomp_lookup_manual
+# replaces none (src/recomp_manual.c), so the lookup always finds the entry.
+MANUAL_CALL = re.compile(r"\{ uint32_t _icall_esp = g_esp;\n"
+                         r"((?:(?![ \t]*\{ uint32_t _icall_esp)(?![ \t]*\}[ \t]*\n)[^\n]*\n)*?)"
+                         r"([ \t]*)PUSH32\(esp, (0x[0-9A-Fa-f]+u)\); "
+                         r"RECOMP_ICALL_SAFE(?:_CC)?\(0x([0-9A-F]{8})u, _icall_esp\); "
+                         r"/\* manual call 0x[0-9A-F]{8} \*/\n")
 # a function's header: its name, any description a run put there, its span
 BLOCK = re.compile(r"(?m)^/\*\*\n \* (\w+)\n(?: \*.*\n)*? \* Original: 0x([0-9A-F]{8})")
 WIDTH = 100
@@ -114,8 +131,18 @@ def main():
     def rename(match):
         return real_name(sym["func"], match)
 
+    # each call to a function written by hand, straight to its entry
+    entries = {int(a, 16): n for a, n in json.load(open(HAND)).items()} if os.path.exists(HAND) else {}
+
+    def direct(match):
+        entry = entries.get(int(match.group(4), 16))
+        if not entry:
+            return match.group(0)
+        return ("{\n%s%sPUSH32(esp, %s); RECOMP_ABI_CALL(0x%su, %s); /* call 0x%s, written by hand */\n"
+                % (match.group(1), match.group(2), match.group(3), match.group(4), entry, match.group(4)))
+
     for path in fresh or sources:
-        text = WRAPPED.sub(rename, open(path, encoding="utf-8").read())
+        text = MANUAL_CALL.sub(direct, WRAPPED.sub(rename, open(path, encoding="utf-8").read()))
         for addr, name, block in blocks_of(text):
             m = re.search(r"(?m)^ \* Source: (\S+)$", block)
             dest = m.group(1) if m else "game/unsorted.c"

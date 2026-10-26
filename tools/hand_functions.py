@@ -8,11 +8,13 @@ Author:      Sebastian Toyos
 
     py -3 tools/hand_functions.py
 
-Every `void NAME(void)` defined in src/game/**/*.c whose NAME is a function
-of symbols/symbols.txt is the game's function at that address, written by
-hand. This writes them as {address: name} to analysis/hand_functions.json,
-which xboxrecomp's recompiler takes as --manual-functions: it generates no
-body for them, and declares and calls them by that name.
+A function of symbols/symbols.txt that src/game/**/*.c writes by hand is C
+with its own signature, and beside it an entry, ENTRY_<convention>(NAME)
+(src/game/decomp.h), which defines NAME_entry: the function as the recompiled
+code calls it. This writes them as {address: NAME_entry} to
+analysis/hand_functions.json, which xboxrecomp's recompiler takes as
+--manual-functions: it generates no body for them, and declares and calls
+the entries in their place.
 
 src/recomp_manual.c wraps others: it defines sub_X and calls the generated
 body. The recompiler finds which ones by `extern void sub_X_gen(void);` there
@@ -35,17 +37,21 @@ MANUAL_FOR_TOOLKIT = os.path.join(REPO, "analysis", "recomp_manual.c")
 sys.path.insert(0, os.path.join(REPO, "tools"))
 import symbols  # noqa: E402
 
-DEF = re.compile(r"(?m)^void (\w+)\(void\)\s*$")
+# ENTRY_CDECL2(vcObjectFind), ENTRY_CDECL1_VOID(...), ENTRY_THISCALL0_VOID(...)
+ENTRY = re.compile(r"(?m)^ENTRY_([A-Z]+)(\d)(_VOID)?\((\w+)\)\s*$")
 
 
 def hand_functions():
-    """{address: (name, file)} of the functions src/game/ defines."""
+    """{address: (entry, file, convention, arguments, returns)} of the
+    functions src/game/ writes by hand: convention "CDECL" or "THISCALL",
+    returns False for one that hands back nothing."""
     by_name = {n: a for a, n in symbols.load()["func"].items()}
     out, unknown = {}, []
     for path in sorted(glob.glob(os.path.join(GAME, "**", "*.c"), recursive=True)):
-        for name in DEF.findall(open(path, encoding="utf-8").read()):
+        for convention, count, void, name in ENTRY.findall(open(path, encoding="utf-8").read()):
             if name in by_name:
-                out[by_name[name]] = (name, os.path.relpath(path, REPO).replace("\\", "/"))
+                out[by_name[name]] = (name + "_entry", os.path.relpath(path, REPO).replace("\\", "/"),
+                                      convention, int(count), not void)
             else:
                 unknown.append("%s (%s)" % (name, os.path.relpath(path, REPO)))
     return out, unknown
@@ -69,7 +75,7 @@ def main():
     found, unknown = hand_functions()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as f:
-        json.dump({"0x%08X" % a: n for a, (n, _) in sorted(found.items())}, f, indent=1)
+        json.dump({"0x%08X" % a: f_[0] for a, f_ in sorted(found.items())}, f, indent=1)
         f.write("\n")
     print("%d functions written by hand" % len(found))
     print("%d functions wrapped by src/recomp_manual.c" % manual_for_toolkit())
