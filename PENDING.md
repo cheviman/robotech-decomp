@@ -85,7 +85,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (26-10-2026): 2,125 of the 6,590 functions have a real name: the XDK's libraries almost
+- **Names** (26-10-2026): 2,239 of the 6,590 functions have a real name: the XDK's libraries almost
   whole (D3D 234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, the
   engine's 35 object classes and all their slots, the object system, the engine's files, formatted strings,
   rectangles, random numbers, screen, text, the renderer's start and state setters, and the scene
@@ -95,16 +95,21 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   (`D3DDevice_Swap`, not the recompiler's `sub_00157530`). No placeholders (Sebas: no name that is a
   number, an offset or an address; `tools/noise_report.py` counts them, 0).
   - The object types: 13 families, 370 types, 1,207 functions by type and slot
-    (`tools/find_registries.py`). 203 types are named from their own strings, a `type` line each in
-    `symbols.txt` (the name a trigger or an action copies into its objects, the asset an entity, an
-    effect or a screen loads), and `tools/symbols.py merge` names their registering functions and
-    callbacks in bulk with a description each (655), with 16 callbacks several types share named by
-    hand: 673 of the 1,207. Left, 167 types whose strings do not say what they are: the 43 weapons
-    (only their sounds), the 16 steering behaviours (no strings), most nodes and screen elements, the
-    first screens (the main menu's, with the cheat codes, and the profile's), and the types whose asset
-    another type loads too (three VF-1SX, two VF-1AX, the eight missiles in pairs, the three Hiro
-    Excaliburs, two female power armours, effects 0 to 5, 23 to 25, 27, 28, 30, 42, 51). Their names
-    come from reading what each does.
+    (`tools/find_registries.py`). 239 types have a `type` line in `symbols.txt`, named from their own
+    strings (the name a trigger or an action copies into its objects, the asset an entity, an effect or
+    a screen loads) or from what makes them (a weapon from the entity that creates it, with its sound;
+    a missile from the launcher that fires it, `MissileLauncherCreateMissile`; the HUD from the
+    elements it creates), and `tools/symbols.py merge` names their registering functions and callbacks
+    in bulk with a description each (767), with 16 callbacks several types share named by hand: 785 of
+    the 1,207. By family: Player 1 of 1, Entity 57 of 74, Weapon 30 of 43, Effect 71 of 87, Structure
+    1 of 2, Item 5 of 6, Component 0 of 1, Trigger 15 of 16, Action 35 of 35, Steering 0 of 16, Node 5
+    of 26, ScreenElement 6 of 27, Screen 13 of 36. Left, 131 types whose strings and makers do not say
+    what they are: the steering behaviours (no strings; the vehicles create three of them), most nodes,
+    screen elements and screens, and the types that differ from another only in their numbers (three
+    VF-1SX and two VF-1AX whose registrations hand the shared Veritech code different tables; the four
+    rdf_ missiles and their launchers, the VF-1s' guns, the female power armours' weapons at two sizes;
+    the three Hiro Excaliburs; effects 0 to 5, 23 to 25, 27, 28, 30, 42, 51). Their names come from
+    reading what each does.
   - `game/unsorted` went up from 1,655 to 1,723 functions with this: the 179 between the screens'
     functions from 0x0001C510 to 0x000269C0 were laid out in `game/screens` because screen functions
     were on both sides, and the object system sits among them, so they were not the screens'.

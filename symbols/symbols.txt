@@ -763,7 +763,41 @@ type  Entity         61  VF1BM                             # its asset VF-1BM
 type  Entity         62  VF1JM                             # its asset VF-1JM
 type  Entity         63  VF1SM                             # its asset VF-1SM
 type  Entity         69  Flare                             # its asset fx_flare
+type  Entity         74  ZenLightMissile                   # its asset zen_light_missile: what ZenLightMissileLauncherWeapon fires
+type  Entity         75  ZenHeavyMissile                   # its asset zen_heavy_missile: what ZenHeavyMissileLauncherWeapon fires
+type  Entity         76  FPAMissile                        # its asset zen_light_missile: what FPAMissileLauncherWeapon fires
+type  Entity         77  PodOfficerSledMissile             # its asset zen_heavy_missile: what PodOfficerSledMissileLauncherWeapon fires
 type  Structure       0  Building                          # its asset building_explosion.wav
+type  Weapon          4  FlareWeapon                       # it creates the Flare entities; the VF-1s'
+type  Weapon          7  ZenLightMissileLauncherWeapon     # it fires ZenLightMissile: the light artillery pods' and the light missile turrets'
+type  Weapon          8  ZenHeavyMissileLauncherWeapon     # it fires ZenHeavyMissile: the heavy artillery pods', the heavy missile turret's, the recon ship's, the fighter pod's
+type  Weapon         11  FPAMissileLauncherWeapon          # it fires FPAMissile: the female power armours'
+type  Weapon         12  SuperVeritechPackWeapon           # its assets SV_back_missile, sv_backboosters, sv_armbooster: a VF-1's, with missile launchers of its own
+type  Weapon         13  SumoPackWeapon                    # its assets sumo_chest, sumo_backpack, sumo shoulder: armour pieces of a VF-1, with missile launchers of their own
+type  Weapon         14  PodOfficerSledMissileLauncherWeapon  # it fires PodOfficerSledMissile: PodOfficerSled's
+type  Weapon         15  PodParticleCannonWeapon           # its sound Pod_Particle_Cannon_M.wav: every battle pod's
+type  Weapon         16  PodAutoCannonWeapon               # its sound AutoCannonLoop_M.wav: the standard battle pods'
+type  Weapon         17  ZenWarriorLitePulseRifleWeapon    # its sound pulserifle_m.wav: ZenWarriorLite's
+type  Weapon         18  ZenWarriorHeavyChaingunWeapon     # its sound firestormchaingunloop_m.wav: ZenWarriorHeavy's
+type  Weapon         19  ZenWarriorScavengerPulseRifleWeapon  # its sound pulserifle_m.wav: ZenWarriorScavenger's
+type  Weapon         20  ZenWarriorNoArmourPulseRifleWeapon  # its sound pulserifle_m.wav: ZenWarriorNoArmour's
+type  Weapon         21  FighterPodGunWeapon               # its sound fighterpodgun.wav: FighterPod's
+type  Weapon         22  MalePowerArmorImpactCannonWeapon  # its sound impactcannon_m.wav: the male power armours'
+type  Weapon         27  ExcaliburMachineGunWeapon         # its sound MachineGunLoop_M.wav: the Excaliburs'
+type  Weapon         28  GladiatorMachineGunWeapon         # its sound MachineGunLoop_M.wav: Gladiator's
+type  Weapon         29  MacIIArmWeapon                    # its sound MAC2_FireArmWeapon_M.wav: MacII's
+type  Weapon         30  RaiderXMachineGunWeapon           # its sound MachineGunBurst_M.wav: RaiderX's
+type  Weapon         31  PodOfficerArmCannonWeapon         # its sound OfficerPod_ArmCannon_M.wav: every Pod Officer's
+type  Weapon         33  MacIICannonWeapon                 # its sound MAC2_FireCannon_M.wav: MacII's
+type  Weapon         35  MalePowerArmorPulseRifleWeapon    # its sound pulserifle_m.wav: the male power armours'
+type  Weapon         36  ZenCruiserTurretCannonWeapon      # its sound turret_cannon1.wav: ZenCruiserTurret's
+type  Weapon         37  ZenCruiserTurret1CannonWeapon     # its sound turret_cannon1.wav: ZenCruiserTurret1's
+type  Weapon         38  ZenReconShipCannonWeapon          # its sound turret_cannon1.wav: ZenReconShip's
+type  Weapon         39  MalePowerArmorRailgunWeapon       # its sound railgun_m.wav: the male power armours'
+type  Weapon         40  PodOfficerHeavyCannonWeapon       # its sound OfficerPod_FireHeavyCannon_M.wav: PodOfficer's
+type  Weapon         43  PodOfficerSkarredHeavyCannonWeapon  # its sound OfficerPod_FireHeavyCannon_M.wav: the two PodOfficerSkarred's
+type  Weapon         44  PodOfficerSledHeavyCannonWeapon   # its sound OfficerPod_FireHeavyCannon_M.wav: PodOfficerSled's
+type  Weapon         45  ARMDTurretCannonWeapon            # its sound turret_cannon1.wav: ARMDTurret's
 type  Item            0  SpyCapsule                        # its asset spy_capsule
 type  Item            1  NoseconePickup                    # its asset nosecone_pickup
 type  Item            2  ZenCratesPickup                   # its asset zen_crates_pickup
@@ -830,9 +864,11 @@ type  ScreenElement  13  PickupReticleElement              # its textures pick_u
 type  ScreenElement  19  MissileLockElement                # its texture miss_lock01.tga
 type  ScreenElement  20  FriendlyReticleElement            # its textures ret_friendly_01 to 04
 type  ScreenElement  25  MessageBoxElement                 # its texture HUD_message_box.tga
+type  Screen          0  MainMenuScreen                    # what the game starts on: it opens the credits, the awards and the other menus; the cheat codes
 type  Screen          3  SniperScreen                      # its textures sniper_center.tga and the sniper sides
 type  Screen          4  PauseScreen                       # its texture GUI_pause_header.tga
 type  Screen          7  LoadingScreen                     # its text "LOADING"
+type  Screen         10  HUDScreen                         # its texture HUD_pieces.tga: it creates the HUD's screen elements
 type  Screen         14  SplashScreen                      # its texture GUI_splash_screen.tga
 type  Screen         21  ControllerScreen                  # its texture GUI_xbox_controller.tga
 type  Screen         22  MissionCompleteScreen             # its texture GUI_headings_missioncomplete.tga and the mission's figures
@@ -931,6 +967,10 @@ type  Effect         84  ReconLightEffect                  # its asset fx_light_
 0010B4E0  func  ChunksEffect_StateMachine             # the chunks', Effect 7 to 22
 0010C020  func  MuzzleFlashEffect_StateMachine        # the muzzle flashes', Effect 39 to 51
 0010C340  func  TrailEffect_StateMachine              # the missiles' contrails (Effect 23 to 25) and MotionTrailEffect's
+00028120  func  WeaponCreate
+000EF310  func  MissileLauncherCreateMissile          # the launcher's handle in eax, the missile's start data in ecx
+comment WeaponCreate Creates a weapon of a type (GameObjectCreate, the Weapon family) with five words of start data from its other arguments. Hands back its handle.
+comment MissileLauncherCreateMissile Creates the missile a launcher fires (GameObjectCreate, the Entity family): the missile's type goes with the launcher's weapon type (none for SuperVeritechPackWeapon and SumoPackWeapon, whose launchers are weapons of their own). Hands back its handle.
 comment Entity_Load Reads an object of an Entity type from a file (GameObjectLoad), for every Entity type but the vehicles (Vehicle_Load): creates it with the 0x5C bytes of start data it reads (GameObjectCreateInFile), then reads the rest by the version. Hands back its handle, 0 if the rest is not there.
 comment Veritech_StateMachine The state machine of every Veritech type, the VF-1s (VF1DX to VF1SM): how their objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
 comment Vehicle_StateMachine The state machine of the vehicles, MechHauler, MilitaryTransport, Centipede and ZenRetrieval: how their objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
@@ -2489,6 +2529,14 @@ comment MissionFailedScreen_Startup The MissionFailedScreen type's first use (Ga
 comment MissionFailedScreen_Shutdown The MissionFailedScreen type's last release (GameObjectTypeRelease): lets go of what its objects share.
 00026970  func  MissionFailedScreen_Register
 comment MissionFailedScreen_Register Registers the MissionFailedScreen type (Screen 27), its texture GUI_headings_missionfailed.tga: fills its GameObjectType and stores it in its family.
+000296A0  func  HUDScreen_StateMachine
+comment HUDScreen_StateMachine The HUDScreen type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
+00029750  func  HUDScreen_Startup
+comment HUDScreen_Startup The HUDScreen type's first use (GameObjectTypeUse): gets what its objects share.
+00029950  func  HUDScreen_Shutdown
+comment HUDScreen_Shutdown The HUDScreen type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000299D0  func  HUDScreen_Register
+comment HUDScreen_Register Registers the HUDScreen type (Screen 10), its texture HUD_pieces.tga: it creates the HUD's screen elements: fills its GameObjectType and stores it in its family.
 0002BBE0  func  PlayerProximityTrigger_Load
 comment PlayerProximityTrigger_Load Reads an object of the PlayerProximityTrigger type from a file (GameObjectLoad). Hands back its handle.
 0002C170  func  PlayerProximityTrigger_StateMachine
@@ -2509,6 +2557,14 @@ comment MissionCompleteScreen_Shutdown The MissionCompleteScreen type's last rel
 comment MissionCompleteScreen_StateMachine The MissionCompleteScreen type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
 00033630  func  MissionCompleteScreen_Register
 comment MissionCompleteScreen_Register Registers the MissionCompleteScreen type (Screen 22), its texture GUI_headings_missioncomplete.tga and the mission's figures: fills its GameObjectType and stores it in its family.
+00035630  func  MainMenuScreen_Startup
+comment MainMenuScreen_Startup The MainMenuScreen type's first use (GameObjectTypeUse): gets what its objects share.
+000356C0  func  MainMenuScreen_Shutdown
+comment MainMenuScreen_Shutdown The MainMenuScreen type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00037A90  func  MainMenuScreen_StateMachine
+comment MainMenuScreen_StateMachine The MainMenuScreen type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
+00037BF0  func  MainMenuScreen_Register
+comment MainMenuScreen_Register Registers the MainMenuScreen type (Screen 0), what the game starts on: it opens the credits, the awards and the other menus; the cheat codes: fills its GameObjectType and stores it in its family.
 00039B10  func  AIEnabledAction_Load
 comment AIEnabledAction_Load Reads an object of the AIEnabledAction type from a file (GameObjectLoad). Hands back its handle.
 00039C00  func  Action_Collect
@@ -2603,6 +2659,30 @@ comment VF1AXFighter_Shutdown The VF1AXFighter type's last release (GameObjectTy
 comment VF1AXFighter_StateMachine The VF1AXFighter type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
 00057B50  func  VF1AXFighter_Register
 comment VF1AXFighter_Register Registers the VF1AXFighter type (Entity 42), its asset VF-1AX_fighter: fills its GameObjectType and stores it in its family.
+00057E60  func  PodOfficerSledMissile_Shutdown
+comment PodOfficerSledMissile_Shutdown The PodOfficerSledMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00057ED0  func  PodOfficerSledMissile_Startup
+comment PodOfficerSledMissile_Startup The PodOfficerSledMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00057FD0  func  PodOfficerSledMissile_Register
+comment PodOfficerSledMissile_Register Registers the PodOfficerSledMissile type (Entity 77), its asset zen_heavy_missile: what PodOfficerSledMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00058140  func  FPAMissile_Shutdown
+comment FPAMissile_Shutdown The FPAMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000581B0  func  FPAMissile_Startup
+comment FPAMissile_Startup The FPAMissile type's first use (GameObjectTypeUse): gets what its objects share.
+000582B0  func  FPAMissile_Register
+comment FPAMissile_Register Registers the FPAMissile type (Entity 76), its asset zen_light_missile: what FPAMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+000589E0  func  ZenHeavyMissile_Shutdown
+comment ZenHeavyMissile_Shutdown The ZenHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00058A50  func  ZenHeavyMissile_Startup
+comment ZenHeavyMissile_Startup The ZenHeavyMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00058B50  func  ZenHeavyMissile_Register
+comment ZenHeavyMissile_Register Registers the ZenHeavyMissile type (Entity 75), its asset zen_heavy_missile: what ZenHeavyMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00058CC0  func  ZenLightMissile_Shutdown
+comment ZenLightMissile_Shutdown The ZenLightMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00058D30  func  ZenLightMissile_Startup
+comment ZenLightMissile_Startup The ZenLightMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00058E30  func  ZenLightMissile_Register
+comment ZenLightMissile_Register Registers the ZenLightMissile type (Entity 74), its asset zen_light_missile: what ZenLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
 0005BAD0  func  VF1SM_Startup
 comment VF1SM_Startup The VF1SM type's first use (GameObjectTypeUse): gets what its objects share.
 0005BB00  func  VF1SM_Shutdown
@@ -3005,6 +3085,190 @@ comment SniperScreen_Startup The SniperScreen type's first use (GameObjectTypeUs
 comment SniperScreen_Shutdown The SniperScreen type's last release (GameObjectTypeRelease): lets go of what its objects share.
 000C5770  func  SniperScreen_Register
 comment SniperScreen_Register Registers the SniperScreen type (Screen 3), its textures sniper_center.tga and the sniper sides: fills its GameObjectType and stores it in its family.
+000C8730  func  PodOfficerSledHeavyCannonWeapon_Startup
+comment PodOfficerSledHeavyCannonWeapon_Startup The PodOfficerSledHeavyCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000C87A0  func  PodOfficerSledHeavyCannonWeapon_Shutdown
+comment PodOfficerSledHeavyCannonWeapon_Shutdown The PodOfficerSledHeavyCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C87F0  func  PodOfficerSledHeavyCannonWeapon_Register
+comment PodOfficerSledHeavyCannonWeapon_Register Registers the PodOfficerSledHeavyCannonWeapon type (Weapon 44), its sound OfficerPod_FireHeavyCannon_M.wav: PodOfficerSled's: fills its GameObjectType and stores it in its family.
+000C8930  func  PodOfficerSkarredHeavyCannonWeapon_Startup
+comment PodOfficerSkarredHeavyCannonWeapon_Startup The PodOfficerSkarredHeavyCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000C89A0  func  PodOfficerSkarredHeavyCannonWeapon_Shutdown
+comment PodOfficerSkarredHeavyCannonWeapon_Shutdown The PodOfficerSkarredHeavyCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C89F0  func  PodOfficerSkarredHeavyCannonWeapon_Register
+comment PodOfficerSkarredHeavyCannonWeapon_Register Registers the PodOfficerSkarredHeavyCannonWeapon type (Weapon 43), its sound OfficerPod_FireHeavyCannon_M.wav: the two PodOfficerSkarred's: fills its GameObjectType and stores it in its family.
+000C8D30  func  PodOfficerHeavyCannonWeapon_Startup
+comment PodOfficerHeavyCannonWeapon_Startup The PodOfficerHeavyCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000C8DA0  func  PodOfficerHeavyCannonWeapon_Shutdown
+comment PodOfficerHeavyCannonWeapon_Shutdown The PodOfficerHeavyCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C8DF0  func  PodOfficerHeavyCannonWeapon_Register
+comment PodOfficerHeavyCannonWeapon_Register Registers the PodOfficerHeavyCannonWeapon type (Weapon 40), its sound OfficerPod_FireHeavyCannon_M.wav: PodOfficer's: fills its GameObjectType and stores it in its family.
+000C8F30  func  MalePowerArmorRailgunWeapon_Startup
+comment MalePowerArmorRailgunWeapon_Startup The MalePowerArmorRailgunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000C8FA0  func  MalePowerArmorRailgunWeapon_Shutdown
+comment MalePowerArmorRailgunWeapon_Shutdown The MalePowerArmorRailgunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C8FF0  func  MalePowerArmorRailgunWeapon_Register
+comment MalePowerArmorRailgunWeapon_Register Registers the MalePowerArmorRailgunWeapon type (Weapon 39), its sound railgun_m.wav: the male power armours': fills its GameObjectType and stores it in its family.
+000C9300  func  MacIICannonWeapon_Startup
+comment MacIICannonWeapon_Startup The MacIICannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000C9360  func  MacIICannonWeapon_Shutdown
+comment MacIICannonWeapon_Shutdown The MacIICannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C9760  func  MacIICannonWeapon_StateMachine
+comment MacIICannonWeapon_StateMachine The MacIICannonWeapon type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
+000C9840  func  MacIICannonWeapon_Register
+comment MacIICannonWeapon_Register Registers the MacIICannonWeapon type (Weapon 33), its sound MAC2_FireCannon_M.wav: MacII's: fills its GameObjectType and stores it in its family.
+000C9900  func  SumoPackWeapon_Shutdown
+comment SumoPackWeapon_Shutdown The SumoPackWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000C9A40  func  SumoPackWeapon_Startup
+comment SumoPackWeapon_Startup The SumoPackWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CA4A0  func  SumoPackWeapon_Register
+comment SumoPackWeapon_Register Registers the SumoPackWeapon type (Weapon 13), its assets sumo_chest, sumo_backpack, sumo shoulder: armour pieces of a VF-1, with missile launchers of their own: fills its GameObjectType and stores it in its family.
+000CA540  func  SuperVeritechPackWeapon_Shutdown
+comment SuperVeritechPackWeapon_Shutdown The SuperVeritechPackWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CA630  func  SuperVeritechPackWeapon_Startup
+comment SuperVeritechPackWeapon_Startup The SuperVeritechPackWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CB0F0  func  SuperVeritechPackWeapon_Register
+comment SuperVeritechPackWeapon_Register Registers the SuperVeritechPackWeapon type (Weapon 12), its assets SV_back_missile, sv_backboosters, sv_armbooster: a VF-1's, with missile launchers of its own: fills its GameObjectType and stores it in its family.
+000CCB20  func  PodOfficerArmCannonWeapon_Startup
+comment PodOfficerArmCannonWeapon_Startup The PodOfficerArmCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CCB90  func  PodOfficerArmCannonWeapon_Shutdown
+comment PodOfficerArmCannonWeapon_Shutdown The PodOfficerArmCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CCBE0  func  PodOfficerArmCannonWeapon_Register
+comment PodOfficerArmCannonWeapon_Register Registers the PodOfficerArmCannonWeapon type (Weapon 31), its sound OfficerPod_ArmCannon_M.wav: every Pod Officer's: fills its GameObjectType and stores it in its family.
+000CCD70  func  RaiderXMachineGunWeapon_Startup
+comment RaiderXMachineGunWeapon_Startup The RaiderXMachineGunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CCDE0  func  RaiderXMachineGunWeapon_Shutdown
+comment RaiderXMachineGunWeapon_Shutdown The RaiderXMachineGunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CCE30  func  RaiderXMachineGunWeapon_Register
+comment RaiderXMachineGunWeapon_Register Registers the RaiderXMachineGunWeapon type (Weapon 30), its sound MachineGunBurst_M.wav: RaiderX's: fills its GameObjectType and stores it in its family.
+000CCFC0  func  MacIIArmWeapon_Startup
+comment MacIIArmWeapon_Startup The MacIIArmWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CD030  func  MacIIArmWeapon_Shutdown
+comment MacIIArmWeapon_Shutdown The MacIIArmWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CD080  func  MacIIArmWeapon_Register
+comment MacIIArmWeapon_Register Registers the MacIIArmWeapon type (Weapon 29), its sound MAC2_FireArmWeapon_M.wav: MacII's: fills its GameObjectType and stores it in its family.
+000CD210  func  GladiatorMachineGunWeapon_Startup
+comment GladiatorMachineGunWeapon_Startup The GladiatorMachineGunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CD280  func  GladiatorMachineGunWeapon_Shutdown
+comment GladiatorMachineGunWeapon_Shutdown The GladiatorMachineGunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CD2D0  func  GladiatorMachineGunWeapon_Register
+comment GladiatorMachineGunWeapon_Register Registers the GladiatorMachineGunWeapon type (Weapon 28), its sound MachineGunLoop_M.wav: Gladiator's: fills its GameObjectType and stores it in its family.
+000CD460  func  ExcaliburMachineGunWeapon_Startup
+comment ExcaliburMachineGunWeapon_Startup The ExcaliburMachineGunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CD4D0  func  ExcaliburMachineGunWeapon_Shutdown
+comment ExcaliburMachineGunWeapon_Shutdown The ExcaliburMachineGunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CD520  func  ExcaliburMachineGunWeapon_Register
+comment ExcaliburMachineGunWeapon_Register Registers the ExcaliburMachineGunWeapon type (Weapon 27), its sound MachineGunLoop_M.wav: the Excaliburs': fills its GameObjectType and stores it in its family.
+000CDB50  func  MalePowerArmorPulseRifleWeapon_Startup
+comment MalePowerArmorPulseRifleWeapon_Startup The MalePowerArmorPulseRifleWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CDBC0  func  MalePowerArmorPulseRifleWeapon_Shutdown
+comment MalePowerArmorPulseRifleWeapon_Shutdown The MalePowerArmorPulseRifleWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CDC10  func  MalePowerArmorPulseRifleWeapon_Register
+comment MalePowerArmorPulseRifleWeapon_Register Registers the MalePowerArmorPulseRifleWeapon type (Weapon 35), its sound pulserifle_m.wav: the male power armours': fills its GameObjectType and stores it in its family.
+000CDDA0  func  MalePowerArmorImpactCannonWeapon_Startup
+comment MalePowerArmorImpactCannonWeapon_Startup The MalePowerArmorImpactCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CDE10  func  MalePowerArmorImpactCannonWeapon_Shutdown
+comment MalePowerArmorImpactCannonWeapon_Shutdown The MalePowerArmorImpactCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CDE60  func  MalePowerArmorImpactCannonWeapon_Register
+comment MalePowerArmorImpactCannonWeapon_Register Registers the MalePowerArmorImpactCannonWeapon type (Weapon 22), its sound impactcannon_m.wav: the male power armours': fills its GameObjectType and stores it in its family.
+000CDFF0  func  FighterPodGunWeapon_Startup
+comment FighterPodGunWeapon_Startup The FighterPodGunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CE060  func  FighterPodGunWeapon_Shutdown
+comment FighterPodGunWeapon_Shutdown The FighterPodGunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CE0B0  func  FighterPodGunWeapon_Register
+comment FighterPodGunWeapon_Register Registers the FighterPodGunWeapon type (Weapon 21), its sound fighterpodgun.wav: FighterPod's: fills its GameObjectType and stores it in its family.
+000CE240  func  ZenWarriorNoArmourPulseRifleWeapon_Startup
+comment ZenWarriorNoArmourPulseRifleWeapon_Startup The ZenWarriorNoArmourPulseRifleWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CE2B0  func  ZenWarriorNoArmourPulseRifleWeapon_Shutdown
+comment ZenWarriorNoArmourPulseRifleWeapon_Shutdown The ZenWarriorNoArmourPulseRifleWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CE300  func  ZenWarriorNoArmourPulseRifleWeapon_Register
+comment ZenWarriorNoArmourPulseRifleWeapon_Register Registers the ZenWarriorNoArmourPulseRifleWeapon type (Weapon 20), its sound pulserifle_m.wav: ZenWarriorNoArmour's: fills its GameObjectType and stores it in its family.
+000CE490  func  ZenWarriorScavengerPulseRifleWeapon_Startup
+comment ZenWarriorScavengerPulseRifleWeapon_Startup The ZenWarriorScavengerPulseRifleWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CE500  func  ZenWarriorScavengerPulseRifleWeapon_Shutdown
+comment ZenWarriorScavengerPulseRifleWeapon_Shutdown The ZenWarriorScavengerPulseRifleWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CE550  func  ZenWarriorScavengerPulseRifleWeapon_Register
+comment ZenWarriorScavengerPulseRifleWeapon_Register Registers the ZenWarriorScavengerPulseRifleWeapon type (Weapon 19), its sound pulserifle_m.wav: ZenWarriorScavenger's: fills its GameObjectType and stores it in its family.
+000CE6E0  func  ZenWarriorHeavyChaingunWeapon_Startup
+comment ZenWarriorHeavyChaingunWeapon_Startup The ZenWarriorHeavyChaingunWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CE750  func  ZenWarriorHeavyChaingunWeapon_Shutdown
+comment ZenWarriorHeavyChaingunWeapon_Shutdown The ZenWarriorHeavyChaingunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CE7A0  func  ZenWarriorHeavyChaingunWeapon_Register
+comment ZenWarriorHeavyChaingunWeapon_Register Registers the ZenWarriorHeavyChaingunWeapon type (Weapon 18), its sound firestormchaingunloop_m.wav: ZenWarriorHeavy's: fills its GameObjectType and stores it in its family.
+000CE930  func  ZenWarriorLitePulseRifleWeapon_Startup
+comment ZenWarriorLitePulseRifleWeapon_Startup The ZenWarriorLitePulseRifleWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CE9A0  func  ZenWarriorLitePulseRifleWeapon_Shutdown
+comment ZenWarriorLitePulseRifleWeapon_Shutdown The ZenWarriorLitePulseRifleWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CE9F0  func  ZenWarriorLitePulseRifleWeapon_Register
+comment ZenWarriorLitePulseRifleWeapon_Register Registers the ZenWarriorLitePulseRifleWeapon type (Weapon 17), its sound pulserifle_m.wav: ZenWarriorLite's: fills its GameObjectType and stores it in its family.
+000CEB80  func  PodAutoCannonWeapon_Startup
+comment PodAutoCannonWeapon_Startup The PodAutoCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CEBF0  func  PodAutoCannonWeapon_Shutdown
+comment PodAutoCannonWeapon_Shutdown The PodAutoCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CEC40  func  PodAutoCannonWeapon_Register
+comment PodAutoCannonWeapon_Register Registers the PodAutoCannonWeapon type (Weapon 16), its sound AutoCannonLoop_M.wav: the standard battle pods': fills its GameObjectType and stores it in its family.
+000CEDD0  func  PodParticleCannonWeapon_Startup
+comment PodParticleCannonWeapon_Startup The PodParticleCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CEE40  func  PodParticleCannonWeapon_Shutdown
+comment PodParticleCannonWeapon_Shutdown The PodParticleCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CEE90  func  PodParticleCannonWeapon_Register
+comment PodParticleCannonWeapon_Register Registers the PodParticleCannonWeapon type (Weapon 15), its sound Pod_Particle_Cannon_M.wav: every battle pod's: fills its GameObjectType and stores it in its family.
+000CF020  func  PodOfficerSledMissileLauncherWeapon_Startup
+comment PodOfficerSledMissileLauncherWeapon_Startup The PodOfficerSledMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF030  func  PodOfficerSledMissileLauncherWeapon_Shutdown
+comment PodOfficerSledMissileLauncherWeapon_Shutdown The PodOfficerSledMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF040  func  PodOfficerSledMissileLauncherWeapon_Register
+comment PodOfficerSledMissileLauncherWeapon_Register Registers the PodOfficerSledMissileLauncherWeapon type (Weapon 14), it fires PodOfficerSledMissile: PodOfficerSled's: fills its GameObjectType and stores it in its family.
+000CF0F0  func  FPAMissileLauncherWeapon_Startup
+comment FPAMissileLauncherWeapon_Startup The FPAMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF100  func  FPAMissileLauncherWeapon_Shutdown
+comment FPAMissileLauncherWeapon_Shutdown The FPAMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF110  func  FPAMissileLauncherWeapon_Register
+comment FPAMissileLauncherWeapon_Register Registers the FPAMissileLauncherWeapon type (Weapon 11), it fires FPAMissile: the female power armours': fills its GameObjectType and stores it in its family.
+000CF360  func  ZenHeavyMissileLauncherWeapon_Startup
+comment ZenHeavyMissileLauncherWeapon_Startup The ZenHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF370  func  ZenHeavyMissileLauncherWeapon_Shutdown
+comment ZenHeavyMissileLauncherWeapon_Shutdown The ZenHeavyMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF380  func  ZenHeavyMissileLauncherWeapon_Register
+comment ZenHeavyMissileLauncherWeapon_Register Registers the ZenHeavyMissileLauncherWeapon type (Weapon 8), it fires ZenHeavyMissile: the heavy artillery pods', the heavy missile turret's, the recon ship's, the fighter pod's: fills its GameObjectType and stores it in its family.
+000CF430  func  ZenLightMissileLauncherWeapon_Startup
+comment ZenLightMissileLauncherWeapon_Startup The ZenLightMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF440  func  ZenLightMissileLauncherWeapon_Shutdown
+comment ZenLightMissileLauncherWeapon_Shutdown The ZenLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF450  func  ZenLightMissileLauncherWeapon_Register
+comment ZenLightMissileLauncherWeapon_Register Registers the ZenLightMissileLauncherWeapon type (Weapon 7), it fires ZenLightMissile: the light artillery pods' and the light missile turrets': fills its GameObjectType and stores it in its family.
+000CF790  func  FlareWeapon_StateMachine
+comment FlareWeapon_StateMachine The FlareWeapon type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
+000CF830  func  FlareWeapon_Startup
+comment FlareWeapon_Startup The FlareWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF840  func  FlareWeapon_Shutdown
+comment FlareWeapon_Shutdown The FlareWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF850  func  FlareWeapon_Register
+comment FlareWeapon_Register Registers the FlareWeapon type (Weapon 4), it creates the Flare entities; the VF-1s': fills its GameObjectType and stores it in its family.
+000CF900  func  ARMDTurretCannonWeapon_Startup
+comment ARMDTurretCannonWeapon_Startup The ARMDTurretCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF970  func  ARMDTurretCannonWeapon_Shutdown
+comment ARMDTurretCannonWeapon_Shutdown The ARMDTurretCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF9C0  func  ARMDTurretCannonWeapon_Register
+comment ARMDTurretCannonWeapon_Register Registers the ARMDTurretCannonWeapon type (Weapon 45), its sound turret_cannon1.wav: ARMDTurret's: fills its GameObjectType and stores it in its family.
+000CFB00  func  ZenReconShipCannonWeapon_Startup
+comment ZenReconShipCannonWeapon_Startup The ZenReconShipCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CFB70  func  ZenReconShipCannonWeapon_Shutdown
+comment ZenReconShipCannonWeapon_Shutdown The ZenReconShipCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CFBC0  func  ZenReconShipCannonWeapon_Register
+comment ZenReconShipCannonWeapon_Register Registers the ZenReconShipCannonWeapon type (Weapon 38), its sound turret_cannon1.wav: ZenReconShip's: fills its GameObjectType and stores it in its family.
+000CFD00  func  ZenCruiserTurret1CannonWeapon_Startup
+comment ZenCruiserTurret1CannonWeapon_Startup The ZenCruiserTurret1CannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CFD70  func  ZenCruiserTurret1CannonWeapon_Shutdown
+comment ZenCruiserTurret1CannonWeapon_Shutdown The ZenCruiserTurret1CannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CFDC0  func  ZenCruiserTurret1CannonWeapon_Register
+comment ZenCruiserTurret1CannonWeapon_Register Registers the ZenCruiserTurret1CannonWeapon type (Weapon 37), its sound turret_cannon1.wav: ZenCruiserTurret1's: fills its GameObjectType and stores it in its family.
+000CFF00  func  ZenCruiserTurretCannonWeapon_Startup
+comment ZenCruiserTurretCannonWeapon_Startup The ZenCruiserTurretCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CFF70  func  ZenCruiserTurretCannonWeapon_Shutdown
+comment ZenCruiserTurretCannonWeapon_Shutdown The ZenCruiserTurretCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CFFC0  func  ZenCruiserTurretCannonWeapon_Register
+comment ZenCruiserTurretCannonWeapon_Register Registers the ZenCruiserTurretCannonWeapon type (Weapon 36), its sound turret_cannon1.wav: ZenCruiserTurret's: fills its GameObjectType and stores it in its family.
 000D25C0  func  MessageBoxElement_Startup
 comment MessageBoxElement_Startup The MessageBoxElement type's first use (GameObjectTypeUse): gets what its objects share.
 000D2690  func  MessageBoxElement_Shutdown

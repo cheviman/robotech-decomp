@@ -29,9 +29,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
       with the libraries' variables); the engine's 35 object classes and their callbacks come from the
       descriptors the game registers (`symbols/classes.json`); the game's own object system (families
-      of types, handles, messages and state machines) and 203 of its 370 object types, named from their
-      own strings, their functions in bulk (`symbols/registries.json` and the type lines); with the
-      engine named as it is decompiled, 2,125 functions with a real name
+      of types, handles, messages and state machines) and 239 of its 370 object types, named from their
+      own strings or from what makes them, their functions in bulk (`symbols/registries.json` and the
+      type lines); with the engine named as it is decompiled, 2,239 functions with a real name
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
       Vicious Cycle logo movies, whole frames, through xboxrecomp's pushbuffer executor (slowly: the GPU
       is drawn in software)

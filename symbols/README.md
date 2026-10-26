@@ -93,11 +93,13 @@ objects, the asset an entity, an effect or a screen loads. From it `tools/symbol
 type's functions in bulk, `BooleanANDTrigger_Register`, `_Startup`, `_Shutdown`, `_StateMachine`,
 `_Load`, `_Collect`, each with its description; a function every type of a family with that slot
 shares is the family's (`Entity_Collect`), and one that only some share is named by hand
-(`Veritech_StateMachine`, every VF-1's). 203 of the 370 types have a line (26-10-2026), and 673 of the
-1,207 functions a name. The others have no string of their own that says what they are: the weapons
-(their strings are their sounds), the steering behaviours (none), most nodes and screen elements, and
-the types whose asset another type loads too (three VF-1SX, two VF-1AX, the missiles in pairs, the
-three Hiro Excaliburs); their names will come from reading what they do.
+(`Veritech_StateMachine`, every VF-1's). A type with no string of its own that says what it is takes
+its name from what makes it: a weapon from the entities that create it (`WeaponCreate`) with its sound,
+a missile from the launcher that fires it (`MissileLauncherCreateMissile`). 239 of the 370 types have a
+line (26-10-2026), and 785 of the 1,207 functions a name. The others: the steering behaviours (no
+strings), most nodes, screen elements and screens, and the types that differ from another only in their
+numbers (the VF-1SX three times, the rdf_ missiles in pairs, the three Hiro Excaliburs); their names
+will come from reading what they do.
 
 ## `symbols.txt`
 
