@@ -121,6 +121,11 @@ static uint32_t arg(int i)
     return guest32(g_esp + 4u + 4u * (uint32_t)i);
 }
 
+unsigned d3d11_FrameCount(void)
+{
+    return s_frame;
+}
+
 int d3d11_BridgeOn(void)
 {
     static int on = -1;
@@ -277,7 +282,7 @@ void d3d11_Clear(void)
 static void bridge_dump(void)
 {
     static const char *prefix = (const char *)-1;
-    static unsigned every, n, seq;
+    static unsigned every, n;
     ID3D11Texture2D *back = NULL, *staging = NULL;
     D3D11_TEXTURE2D_DESC td;
     D3D11_MAPPED_SUBRESOURCE map;
@@ -308,7 +313,7 @@ static void bridge_dump(void)
             uint32_t row = (td.Width * 3 + 3) & ~3u, size = 54 + row * td.Height;
             uint8_t hdr[54], *line = (uint8_t *)calloc(1, row);
 
-            snprintf(path, sizeof path, "%s%05u.bmp", prefix, seq++);
+            snprintf(path, sizeof path, "%s%05u.bmp", prefix, n - 1);   /* the frame's number */
             f = fopen(path, "wb");
             if (f && line) {
                 memset(hdr, 0, sizeof hdr);
@@ -386,6 +391,20 @@ void d3d11_Swap(void)
     s_dev->lpVtbl->Swap(s_dev, arg(0));
     s_presents++;
     s_frame++;
+    {
+        /* ROBOTECH_EXIT_FRAME=<n>: leave once frame n is presented, so a run
+         * compared with another ends on the same frame (tools/scenario.py) */
+        static long exit_at = -2;
+        if (exit_at == -2) {
+            const char *e = getenv("ROBOTECH_EXIT_FRAME");
+            exit_at = e ? atol(e) : -1;
+        }
+        if (exit_at > 0 && (long)s_frame >= exit_at) {
+            fprintf(stderr, "[D3D11] frame %u presented: leaving (ROBOTECH_EXIT_FRAME)\n", s_frame);
+            fflush(stderr);
+            ExitProcess(0);
+        }
+    }
     now = GetTickCount();
     if (!last)
         last = now;

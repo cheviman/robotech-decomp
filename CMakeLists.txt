@@ -61,13 +61,19 @@ add_subdirectory(${XBOXRECOMP_DIR} ${CMAKE_BINARY_DIR}/xboxrecomp)
 # is silently left out of the build and shows up as unresolved externals.
 file(GLOB_RECURSE RECOMP_GEN_SOURCES CONFIGURE_DEPENDS "src/recomp/gen/*.c")
 
+# The game's functions written by hand (src/game/, by subject), each in its
+# recompiled version's place
+file(GLOB_RECURSE GAME_HAND_SOURCES CONFIGURE_DEPENDS "src/game/*.c")
+
 # Core game sources
 set(GAME_SOURCES
+    ${GAME_HAND_SOURCES}
     src/main.c
     src/recomp_manual.c
     src/d3d11_bridge.c
     src/input_bridge.c
     src/dsound_bridge.c
+    src/clock_bridge.c
     # Add game-specific sources here, e.g.:
     # src/asset_loader.c
     # src/custom_renderer.c
@@ -93,6 +99,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/recomp
     # recomp_funcs.h, for the generated files laid out in folders below it
     ${CMAKE_CURRENT_SOURCE_DIR}/src/recomp/gen
+    # decomp.h, for the C written by hand
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/game
     ${XBOXRECOMP_DIR}/include
 )
 

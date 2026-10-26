@@ -399,6 +399,22 @@ void sub_001881FD(void)
     input_XInputSetState();
 }
 
+/* ── The clock ─────────────────────────────────────────────── */
+
+#include "clock_bridge.h"
+
+/* QueryPerformanceCounter (0x0014E5BE): tied to the frames while
+ * ROBOTECH_VIRTUAL_CLOCK=1 (clock_bridge.c), the game's own otherwise. */
+extern void sub_0014E5BE_gen(void);
+
+void sub_0014E5BE(void)
+{
+    if (clock_Virtual())
+        clock_QueryPerformanceCounter();
+    else
+        sub_0014E5BE_gen();
+}
+
 /* ── DirectSound ───────────────────────────────────────────── */
 
 #include "dsound_bridge.h"

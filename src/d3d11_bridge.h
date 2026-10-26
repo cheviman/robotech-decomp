@@ -13,6 +13,7 @@
 #define D3D11_BRIDGE_H
 
 int d3d11_BridgeOn(void);
+unsigned d3d11_FrameCount(void);    /* the frames presented so far */
 
 void d3d11_CreateDevice(void);
 void d3d11_Clear(void);

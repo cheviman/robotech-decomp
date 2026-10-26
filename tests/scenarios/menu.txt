@@ -1,0 +1,5 @@
+# The boot to the title menu, New Game, and the game menu with Story Mode highlighted.
+script  f360:a
+frames  900
+dump    60
+movies  no

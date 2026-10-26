@@ -72,17 +72,22 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   strings, a map file or a Fusion package, and this title has none), and the 366 types of the game's
   registries, found but not named: next, what each registry slot is (the generic function that calls
   it) and each type's name (its strings and behaviour).
-- **The base for the decompilation** (25-10-2026): `symbols/symbols.txt` is the one place of the names,
-  descriptions and files (SegaSonic's format); the recompiled C is laid out in 61 files by subject
-  (`xdk/`, `bink/`, `engine/`, `game/`) with each function's description in its header. Left: the
-  verification by function for C written by hand (xboxrecomp's oracle maps the XBE in a 32-bit process,
-  calls the original and a `lifted_X` with the same arguments and compares eax, edx and memory: ours goes
-  in as that `lifted_X`, testable with the first function written by hand) and by scenario. Measured
-  run against run (25-10-2026): the menu repeats frame for frame (14 dumps of 14), the mission does not
-  (11 of 22 equal, all before it starts). Two causes to remove: the pad script counts milliseconds, not
-  frames, so a press lands on another frame when loading took longer; and the game reads the real clock.
-  xboxrecomp's runtime has no deterministic time; the way is frame-numbered scripts and a clock tied to
-  frames, from this repository.
+- **The base for the decompilation** (25-10-2026), done: `symbols/symbols.txt` is the one place of the
+  names, descriptions and files (SegaSonic's format); the recompiled C is laid out in 61 files by
+  subject with each function's description in its header; C written by hand goes in `src/game/` and
+  takes its recompiled version's place (`tools/hand_functions.py`, the recompiler's
+  `--manual-functions`); and two checks: `tools/verify_c.py` runs each function written by hand against
+  the game's own machine code with xboxrecomp's conformance harness (it caught a function returning 2
+  for 1 on purpose: 11 of 33 vectors), and `tools/scenario.py` plays scripted scenarios with a pad
+  script by frame and a clock tied to the frames (`ROBOTECH_VIRTUAL_CLOCK`), so two runs repeat frame
+  for frame (35 of 35 dumps; the mission diverged before), and compares them with saved references.
+  First functions written by hand: the object system's three default callbacks, 33 vectors and 35
+  frames as before.
+- **Noise that comes from xboxrecomp's conventions**, counted and explained: a function the bridges wrap
+  keeps its recompiled body as `sub_<address>_gen` (the toolkit's wrapper scheme, 32 of the "unnamed"),
+  and a direct call to a function written by hand goes through the replacement lookup
+  (`RECOMP_ICALL_SAFE`, "manual call": the toolkit makes sure no caller bypasses a replacement; 21 of the
+  "indirect calls" for the first three functions). Both go away as the callers are written by hand too.
 - **Noise** (`tools/noise_report.py`, baseline in `tools/noise_baseline.txt`): the generated C is a
   recompilation, every register a variable, every flag a temporary, every jump a label. The way to C
   that reads as written is xboxrecomp's decompilation path (`docs/DECOMP.md`): `tools.split` gives a

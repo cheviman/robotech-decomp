@@ -1,6 +1,7 @@
-# Bring your own game: its files never go into the repository
-game/
-RB-XBE/
+# Bring your own game: its files never go into the repository (the folder at the root; src/game/ is
+# the game's C written by hand, which does)
+/game/
+/RB-XBE/
 *.rar
 *.xbe
 *.iso
@@ -8,8 +9,8 @@ RB-XBE/
 
 # Everything generated from the game: the pipeline's analysis (a copy of the XBE, disassembly, function and
 # ABI databases, run logs and frame dumps) and the recompiled C
-analysis/
-src/recomp/gen/
+/analysis/
+/src/recomp/gen/
 
 # Build output
 build/

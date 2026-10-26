@@ -11,9 +11,10 @@ Where it is going:
 - **The game brought up to date**: higher resolutions, widescreen, frame rate, and DLSS.
 - **New to it**: multiplayer and mods.
 
-**This repository contains no game data and no game code.** The C the game runs on is generated on your
-machine from your own copy of the game, which the build reads and never changes; nothing generated from it
-is committed.
+**This repository contains no game data and none of the game's machine code.** The recompiled C the game
+runs on is generated on your machine from your own copy of the game, which the build reads and never
+changes; nothing generated from it is committed. What the repository holds of the game is the C written by
+hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 
 ## Status
 
@@ -116,15 +117,51 @@ to make it again:
 py -3 tools/match_libs.py --libs D:/xdk/lib
 ```
 
+## Changing the decompilation
+
+The game's C is written by hand, a function at a time, into `src/game/` by subject; each takes its
+recompiled version's place. Everything else under `src/recomp/gen/` is generated and never edited by
+hand.
+
+- **Names, descriptions, files**: `symbols/symbols.txt`, the one place they live (its header says how to
+  read it). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
+  a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C.
+- **A function written by hand**: defined in `src/game/` by its name in `symbols.txt`, with the
+  recompiled code's interface (`src/game/decomp.h`); the pipeline's `hand` step tells the recompiler to
+  leave it out.
+- **Checking that nothing changed**, after every change:
+
+  ```bash
+  py -3 tools/verify_c.py
+  ```
+
+  ```bash
+  py -3 tools/scenario.py
+  ```
+
+  ```bash
+  py -3 tools/noise_report.py
+  ```
+
+  `verify_c.py` runs each function written by hand against the game's own machine code with
+  xboxrecomp's conformance harness (it needs a 32-bit MSVC). `scenario.py` plays the scripted scenarios
+  of `tests/scenarios/` with the clock tied to the frames, so runs repeat frame for frame, and compares
+  every dumped frame with the reference the build before wrote (`--save` records it). `noise_report.py`
+  counts what keeps the generated C from reading as written and fails if a count went up
+  (`--save` after a round that brought some down).
+
 ## Layout
 
 ```
 game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
-src/recomp_manual.c     hand-written overrides and wrappers of recompiled functions
+src/game/               the game's C written by hand, by subject (engine/objects.c...), and decomp.h
+src/recomp_manual.c     the bridges' wrappers around recompiled functions
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
                         D3D8 layer
+src/clock_bridge.c      the clock tied to the frames, for runs compared frame for frame
+tests/scenarios/        the scripted scenarios and their reference frames (tools/scenario.py)
 src/recomp/gen/         the recompiled C, laid out by subject: xdk/, bink/, engine/, game/ (ignored by git;
                         tools/pipeline.py writes it)
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
@@ -139,6 +176,9 @@ tools/apply_files.py    tells the recompiler each function's file, from symbols.
 tools/organize_gen.py   lays the recompiled C out in its files, each function with its description
 tools/noise_report.py   counts what keeps the generated C from reading as written (baseline beside it)
 tools/conformance.py    runs xboxrecomp's oracle: the game's machine code and the C side by side
+tools/hand_functions.py lists the functions src/game/ writes by hand, for the recompiler to leave out
+tools/verify_c.py       checks each function written by hand against the game's machine code
+tools/scenario.py       plays the scenarios and compares their frames with the references
 tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's scan
 tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
@@ -171,8 +211,9 @@ licenses/               licenses of the code this project starts from
 - `symbols/xdk_symbols.json` is the output of XbSymbolDatabase (MIT): names and addresses, no code.
 - `symbols/lib_matches.json` holds names and addresses only: the XDK's libraries are read on your
   machine, and no XDK code or file is part of this repository.
-- No game data and no game code is distributed by this project: the recompiled C is generated from your
-  own copy of the game and stays on your machine.
+- No game data and none of the game's machine code is distributed by this project: the recompiled C is
+  generated from your own copy of the game and stays on your machine. The decompiled C in `src/game/` is
+  written by hand for this project.
 - Robotech is a trademark of Harmony Gold USA, Inc. Robotech: Battlecry was developed by Vicious Cycle
   Software and published by TDK Mediactive. This project is not affiliated with or endorsed by them or by
   Microsoft.

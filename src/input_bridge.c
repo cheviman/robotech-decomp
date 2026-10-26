@@ -18,7 +18,9 @@
  *
  *    ROBOTECH_PAD_SCRIPT="<ms>:<button>[+<button>...][:<hold ms>],..." presses buttons on port 0 at times
  *    counted from the game's first read, for runs nobody plays: a b x y black white lt rt up down left
- *    right start back, 150 ms held by default.
+ *    right start back, 150 ms held by default. A time written f<n> is the n-th frame the game presents
+ *    instead, its hold in frames too (9 by default): a press then lands on the same frame however long
+ *    the loading took, which runs compared frame for frame need (tools/scenario.py).
  */
 #include <windows.h>
 #include <stdio.h>
@@ -28,6 +30,7 @@
 #include <xbox/xboxrecomp.h>
 
 #include "input_bridge.h"
+#include "d3d11_bridge.h"
 
 extern RECOMP_TLS uint32_t g_esp, g_eax;
 extern ptrdiff_t g_xbox_mem_offset;
@@ -39,7 +42,7 @@ static struct { uint32_t handle, port; } s_handles[INPUT_HANDLES];
 static int s_handle_count;
 static uint32_t s_open_port;
 
-static struct { DWORD at, hold; WORD buttons; BYTE analog[8]; } s_script[SCRIPT_MAX];
+static struct { DWORD at, hold; int frames; WORD buttons; BYTE analog[8]; } s_script[SCRIPT_MAX];
 static int s_script_len = -1;
 static DWORD s_script_t0;
 
@@ -102,10 +105,12 @@ static void script_load(void)
         if (!colon)
             continue;
         memset(&s_script[s_script_len], 0, sizeof s_script[0]);
-        s_script[s_script_len].at = (DWORD)strtoul(entry, NULL, 10);
+        s_script[s_script_len].frames = entry[0] == 'f';
+        s_script[s_script_len].at = (DWORD)strtoul(entry + s_script[s_script_len].frames, NULL, 10);
         btn = colon + 1;
         hold = strchr(btn, ':');
-        s_script[s_script_len].hold = hold ? (DWORD)strtoul(hold + 1, NULL, 10) : 150;
+        s_script[s_script_len].hold = hold ? (DWORD)strtoul(hold + 1, NULL, 10)
+                                           : (s_script[s_script_len].frames ? 9 : 150);
         if (hold)
             *hold = 0;
         for (; btn && *btn; btn = plus ? plus + 1 : NULL) {
@@ -128,7 +133,7 @@ static void script_load(void)
 
 static void script_apply(XBOX_GAMEPAD *pad)
 {
-    DWORD t;
+    DWORD t, frame, now;
     int i, k;
 
     if (s_script_len < 0)
@@ -138,13 +143,16 @@ static void script_apply(XBOX_GAMEPAD *pad)
     if (!s_script_t0)
         s_script_t0 = GetTickCount();
     t = GetTickCount() - s_script_t0;
-    for (i = 0; i < s_script_len; i++)
-        if (t >= s_script[i].at && t < s_script[i].at + s_script[i].hold) {
+    frame = d3d11_FrameCount();
+    for (i = 0; i < s_script_len; i++) {
+        now = s_script[i].frames ? frame : t;
+        if (now >= s_script[i].at && now < s_script[i].at + s_script[i].hold) {
             pad->wButtons |= s_script[i].buttons;
             for (k = 0; k < 8; k++)
                 if (s_script[i].analog[k])
                     pad->bAnalogButtons[k] = s_script[i].analog[k];
         }
+    }
 }
 
 /* XInputGetState(hDevice, pState), replacing the game's: stdcall, two

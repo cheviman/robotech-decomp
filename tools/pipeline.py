@@ -64,6 +64,8 @@ def steps():
         # each function's file, from symbols/symbols.txt, where the recompiler
         # writes it into the function's header
         ("files", [os.path.join(REPO, "tools", "apply_files.py")]),
+        # the functions written by hand in src/game/, which the recompiler leaves out
+        ("hand", [os.path.join(REPO, "tools", "hand_functions.py")]),
         ("recomp", ["tools.recomp", XBE, "--all", "--split", "250", "--gen-dir", GEN_DIR,
                     "-o", os.path.join(ANALYSIS, "recomp"),
                     # functions the disassembler split at a false entry, made whole
@@ -71,7 +73,8 @@ def steps():
                     "--game-name", "Robotech: Battlecry",
                     "--disasm-dir", disasm, "--func-id-dir", func_id, "--abi-dir", abi,
                     "--icall-sites", os.path.join(ANALYSIS, "icall_sites.json"),
-                    "--exclude-manual", os.path.join(REPO, "src", "recomp_manual.c")]),
+                    "--exclude-manual", os.path.join(REPO, "src", "recomp_manual.c"),
+                    "--manual-functions", os.path.join(ANALYSIS, "hand_functions.json")]),
         # the recompiler cuts by count: the C goes to its files, with descriptions
         ("organize", [os.path.join(REPO, "tools", "organize_gen.py")]),
     ]
