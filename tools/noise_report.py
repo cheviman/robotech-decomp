@@ -51,7 +51,10 @@ KINDS = [
     ("labels", "labels of the original's jumps (loc_<address>:)", re.compile(r"^\s*loc_[0-9A-F]{8}:", re.M)),
     ("gotos", "goto", re.compile(r"\bgoto\b")),
     ("stack_returns", "returns that pop the emulated stack (esp += n; return;)", re.compile(r"esp \+= \d+; return;")),
-    ("indirect_calls", "calls through a guest address looked up at run time", re.compile(r"\bRECOMP_ICALL\w*\(")),
+    # the sites that look their target up; not the guarded direct arms the
+    # recompiler adds for targets the runs have seen (RECOMP_ICALL_GUARD_*)
+    ("indirect_calls", "calls through a guest address looked up at run time",
+     re.compile(r"\bRECOMP_ICALL_SAFE(?:_AT)?(?:_CC)?\(")),
 ]
 
 

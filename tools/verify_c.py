@@ -69,6 +69,12 @@ def main():
     runtime_inc = os.path.join(TOOLKIT, "templates", "runtime")
     game_inc = os.path.join(REPO, "src", "game")
     gen_inc = os.path.join(REPO, "src", "recomp", "gen")        # symbols.h
+    # The harness maps the XBE where it was linked, low in the address space,
+    # and what Windows randomises there (ASLR) takes some of it now and then:
+    # one run in three found the code's sections taken ("mapped nothing", or a
+    # section skipped and no vector run). Linking the harness fixed and high
+    # made it worse (its stack and heap then always land there), so a run that
+    # could not map the code is started again instead.
     r = conf._cl(vcvars, WORK, '/W3 /EHa /I"%s" /I"%s" /I"%s" xbe_harness.c /Fexbe_harness.exe'
                  % (runtime_inc, game_inc, gen_inc))
     if r.returncode != 0:
@@ -77,12 +83,27 @@ def main():
     # As the toolkit does: a function that brings the harness down is left
     # out and the run starts again.
     exe = os.path.join(WORK, "xbe_harness.exe")
-    skips, run = [], None
+    skips, run, unmapped = [], None, 0
     for _ in range(40):
         cmd = [exe, os.path.abspath(XBE)]
         if skips:
             cmd.append(",".join("%08X" % va for va in skips))
         run = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        # the code and its data (up to .data's end) have to be mapped; the
+        # sections above (DOLBY, BINKDATA, the title images) never are
+        skipped = [int(a, 16) for a in re.findall(r"note: ([0-9A-Fa-f]{8})\.\.", run.stdout)]
+        # and a run where every call of the original faulted compared nothing,
+        # or one that went down before its summary without naming a function:
+        # the same collision, further in
+        summary = re.search(r"(\d+) function vectors from the title", run.stdout)
+        started = re.findall(r"@RUN ([0-9A-Fa-f]{8})", run.stdout)
+        lost = (summary and summary.group(1) == "0") or (not summary and run.returncode not in (0, 1)
+                                                          and not started)
+        if "mapped nothing" in run.stdout or any(a < 0x002C0000 for a in skipped) or lost:
+            unmapped += 1
+            if unmapped < 12:
+                continue
+            sys.exit("the harness could not map the XBE's code in 12 runs:\n" + run.stdout)
         started = re.findall(r"@RUN ([0-9A-Fa-f]{8})", run.stdout)
         if run.returncode in (0, 1) or not started:
             break
@@ -90,6 +111,7 @@ def main():
         if casualty in skips:
             break
         skips.append(casualty)
+    vectors = re.search(r"(\d+) function vectors from the title", run.stdout)
     names = {va: name for va, name, _ in lifted}
     out = run.stdout
     for va, name in names.items():
@@ -98,6 +120,10 @@ def main():
     if skips:
         print("not checked, they brought the harness down: %s"
               % ", ".join(names.get(va, "0x%08X" % va) for va in skips))
+    if not vectors or int(vectors.group(1)) == 0:
+        # nothing compared is not a pass
+        print("no vector was compared")
+        sys.exit(1)
     sys.exit(0 if run.returncode == 0 and not skips else 1)
 
 
