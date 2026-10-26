@@ -125,14 +125,20 @@ src/main.c              host entry: loads the XBE, brings up the runtime, calls 
 src/recomp_manual.c     hand-written overrides and wrappers of recompiled functions
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
                         D3D8 layer
-src/recomp/gen/         the recompiled C (ignored by git; tools/pipeline.py writes it)
+src/recomp/gen/         the recompiled C, laid out by subject: xdk/, bink/, engine/, game/ (ignored by git;
+                        tools/pipeline.py writes it)
 symbols/xdk_symbols.json  the XDK library symbols XbSymbolDatabase finds in the XBE (names and addresses)
 symbols/lib_matches.json  the XDK library functions and variables matched against the XDK's .lib files
 symbols/classes.json    the engine's object classes and their callbacks
 symbols/registries.json the game's object types and their functions, by family
-symbols/names.json      function names given by hand
+symbols/symbols.txt     the one place of the names, descriptions and files of the C
 tools/pipeline.py       xboxrecomp's pipeline, with every output inside this repository
-tools/apply_names.py    writes the names above into the disassembly before recompiling
+tools/symbols.py        writes the tools' names and the file lines into symbols/symbols.txt
+tools/apply_names.py    writes the names of symbols.txt into the disassembly before recompiling
+tools/apply_files.py    tells the recompiler each function's file, from symbols.txt
+tools/organize_gen.py   lays the recompiled C out in its files, each function with its description
+tools/noise_report.py   counts what keeps the generated C from reading as written (baseline beside it)
+tools/conformance.py    runs xboxrecomp's oracle: the game's machine code and the C side by side
 tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's scan
 tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers

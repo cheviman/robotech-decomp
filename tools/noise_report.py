@@ -42,6 +42,7 @@ KINDS = [
     ("placeholder", "names that are a number or a position (type numbers, slot offsets, addresses)", None),
     ("uncommented", "functions without a description of what they do", None),
     ("numbered_files", "files cut by count, not by subject (recomp_NNNN.c)", None),
+    ("unsorted", "functions in no subject's file yet (game/unsorted.c)", None),
     ("registers", "CPU registers as variables (eax, esp...)", re.compile(r"\b(?:eax|ebx|ecx|edx|esi|edi|ebp|esp)\b")),
     ("flags", "CPU flags as temporaries (_fa, _fb, _flags...)", re.compile(r"\b_(?:fa|fb|fas|fbs|flags)\b")),
     ("fpu_stack", "the x87 register stack (fp_top, fp_st...)", re.compile(r"\bfp_(?:top|st\d?)\b")),
@@ -68,11 +69,13 @@ def measure():
         # a description is any line besides those
         for m in re.finditer(r"/\*\*\n((?: \*.*\n)+?) \*/\nvoid \w+\(void\)", text):
             lines = [l[3:].strip() for l in m.group(1).splitlines()]
-            told = [l for l in lines if l and not re.match(r"(\w+$|Original:|Category:|CC:|Frame:)", l)]
+            told = [l for l in lines if l and not re.match(r"(\w+$|Original:|Category:|Source:|CC:|Frame:)", l)]
             if not told:
                 counts["uncommented"] += 1
         if re.match(r"recomp_\d{4}\.c$", os.path.basename(path)):
             counts["numbered_files"] += 1
+        if path.replace("\\", "/").endswith("game/unsorted.c"):
+            counts["unsorted"] += len(names)
         for key, _, pattern in KINDS:
             if pattern is not None:
                 counts[key] += len(pattern.findall(text))

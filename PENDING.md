@@ -72,6 +72,11 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   strings, a map file or a Fusion package, and this title has none), and the 366 types of the game's
   registries, found but not named: next, what each registry slot is (the generic function that calls
   it) and each type's name (its strings and behaviour).
+- **The base for the decompilation** (25-10-2026): `symbols/symbols.txt` is the one place of the names,
+  descriptions and files (SegaSonic's format); the recompiled C is laid out in 61 files by subject
+  (`xdk/`, `bink/`, `engine/`, `game/`) with each function's description in its header. Left: the
+  verification by function for C written by hand (xboxrecomp's oracle compares its own lifted C; ours
+  has to take its place) and by scenario (scripts of controls compared run to run).
 - **Noise** (`tools/noise_report.py`, baseline in `tools/noise_baseline.txt`): the generated C is a
   recompilation, every register a variable, every flag a temporary, every jump a label. The way to C
   that reads as written is xboxrecomp's decompilation path (`docs/DECOMP.md`): `tools.split` gives a

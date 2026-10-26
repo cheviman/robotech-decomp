@@ -6,13 +6,17 @@ is -- or there is none: a type's number, a slot's offset or an address is not a 
 of a thing without its name stays as data in these files (`tools/noise_report.py` counts any that
 reaches the C).
 
+`symbols.txt` is the one place the names, the descriptions and the files of the C live. The JSON files
+are what the tools found: `tools/symbols.py merge` writes their names into `symbols.txt`'s generated
+sections, and `tools/symbols.py layout` its file lines; a line written by hand in `symbols.txt` wins.
+
 | File | Read by | What |
 |---|---|---|
-| `lib_matches.json` | `tools/apply_names.py` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
-| `classes.json` | `tools/apply_names.py` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
-| `registries.json` | `tools/apply_names.py` | the game's object types (Entity, Effect, Weapon, Screen...), their registering functions and callbacks, from the registries the game fills at start (`tools/find_registries.py` makes it) |
-| `xdk_symbols.json` | `tools/apply_names.py` | the XDK library symbols XbSymbolDatabase finds (`tools/xdk_symbols.py` makes it) |
-| `names.json` | `tools/apply_names.py` | function names given by hand |
+| `symbols.txt` | `tools/apply_names.py`, `tools/apply_files.py`, `tools/organize_gen.py` | every name (`func`, `data`), each function's description (`comment`), the files the C is laid out in (`file`); SegaSonic's format, its header says how to read it |
+| `lib_matches.json` | `tools/symbols.py merge` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
+| `classes.json` | `tools/symbols.py merge`, `layout` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
+| `registries.json` | `tools/symbols.py layout` | the game's object types (Entity, Effect, Weapon, Screen...), their registering functions and slots, from the registries the game fills at start (`tools/find_registries.py` makes it) |
+| `xdk_symbols.json` | `tools/symbols.py merge` | the XDK library symbols XbSymbolDatabase finds (`tools/xdk_symbols.py` makes it) |
 | `seed_functions.json` | `tools.disasm --seed-functions` | function starts the disassembler missed; each entry says why in its `why` field |
 | `coalesce.json` | `tools.recomp --coalesce-functions` | functions the disassembler split at a false entry, made whole; the loader takes no extra keys, so the reasons are below |
 
@@ -70,16 +74,20 @@ classes), what each type is called from its strings and behaviour. Each type lis
 functions use (type 1 of Entity `VF-1DX`, type 2 `rdf_heavy_missile`, Item's type 1 `spy_capsule`,
 Trigger's type 1 `Boolean AND`), as hints.
 
-## `names.json`
+## `symbols.txt`
 
-- `0x00157AC0` `Direct3DCreate8`: `mov eax, 1; ret 4`, called once before `Direct3D_CreateDevice`.
-- The object system (`classes.json` above): `0x00110370` `vcRegisterClass` (copies the descriptor to the
-  class table at `0x0023B4E8`, 0x70 bytes a class, and points `0x002BF1E0[type]` at it; allocates the
-  instance table, 0x4C bytes an instance), `0x001103C0` `vcObjectCreate`, `0x00110510`
-  `vcObjectRelease`, `0x00110780` `vcObjectClone`, `0x00110E90` `vcObjectLoad`: the one function that
-  calls each slot.
-- The default callbacks: `0x00147480` `vcDefault_ReturnZero` (`xor eax, eax; ret`), `0x00147490`
-  `vcDefault_ReturnOne`, `0x0013FDD0` `vcDefault_ReturnArg3` (the default +0x3C).
+The names given by hand so far (its section "names given by hand", each with its description): the
+XDK's `Direct3DCreate8`, which XbSymbolDatabase does not know; the engine's object system,
+`vcRegisterClass` (it copies a class's descriptor into `vcClassTable`, 0x70 bytes a class, and points
+`vcClassByType[type]` at it) and the one function that calls each class slot (`vcObjectCreate`,
+`vcObjectRelease`, `vcObjectClone`, `vcObjectLoad`); and the default callbacks (`vcDefault_ReturnZero`,
+`vcDefault_ReturnOne`, `vcDefault_ReturnArg3`).
+
+The file lines lay the 6,647 functions out in 61 files: `xdk/` (d3d8, dsound, xapi, xapi_usb, crt),
+`bink/`, `engine/` (`objects` and a file per class) and `game/` (a file per registry family). A function
+goes with its class, type or library, or with the functions around it when those on both sides share
+one (the linker lays out an object file's functions together); the rest, 1,782, is in `game/unsorted`
+until it is known what it is.
 
 ## `coalesce.json`
 

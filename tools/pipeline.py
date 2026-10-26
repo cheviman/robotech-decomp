@@ -61,6 +61,9 @@ def steps():
                      "-o", func_id]),
         ("abi", ["tools.abi_analysis", XBE, "--disasm-dir", disasm, "--func-id-dir", func_id,
                  "--output-dir", abi]),
+        # each function's file, from symbols/symbols.txt, where the recompiler
+        # writes it into the function's header
+        ("files", [os.path.join(REPO, "tools", "apply_files.py")]),
         ("recomp", ["tools.recomp", XBE, "--all", "--split", "250", "--gen-dir", GEN_DIR,
                     "-o", os.path.join(ANALYSIS, "recomp"),
                     # functions the disassembler split at a false entry, made whole
@@ -69,6 +72,8 @@ def steps():
                     "--disasm-dir", disasm, "--func-id-dir", func_id, "--abi-dir", abi,
                     "--icall-sites", os.path.join(ANALYSIS, "icall_sites.json"),
                     "--exclude-manual", os.path.join(REPO, "src", "recomp_manual.c")]),
+        # the recompiler cuts by count: the C goes to its files, with descriptions
+        ("organize", [os.path.join(REPO, "tools", "organize_gen.py")]),
     ]
 
 

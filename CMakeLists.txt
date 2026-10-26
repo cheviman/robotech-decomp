@@ -52,13 +52,14 @@ add_subdirectory(${XBOXRECOMP_DIR} ${CMAKE_BINARY_DIR}/xboxrecomp)
 # ── Recompiled game executable ──────────────────────────────────
 
 # Collect generated recompiled code.
-# The recomp pipeline outputs files into src/recomp/gen/.
-# With --split 1000, you get gen_0000.c, gen_0001.c, etc.
+# The recomp pipeline outputs files into src/recomp/gen/, laid out by subject in
+# folders (tools/organize_gen.py: engine/vcTexture.c, xdk/d3d8.c...), hence
+# GLOB_RECURSE.
 # CONFIGURE_DEPENDS so re-running the recompiler picks up added/removed files
 # without a manual re-configure. A plain GLOB is evaluated once at configure
 # time, so a newly generated file (an extra chunk, recomp_stubs_unresolved.c)
 # is silently left out of the build and shows up as unresolved externals.
-file(GLOB RECOMP_GEN_SOURCES CONFIGURE_DEPENDS "src/recomp/gen/*.c")
+file(GLOB_RECURSE RECOMP_GEN_SOURCES CONFIGURE_DEPENDS "src/recomp/gen/*.c")
 
 # Core game sources
 set(GAME_SOURCES
@@ -90,6 +91,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE xboxrecomp)
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/recomp
+    # recomp_funcs.h, for the generated files laid out in folders below it
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/recomp/gen
     ${XBOXRECOMP_DIR}/include
 )
 

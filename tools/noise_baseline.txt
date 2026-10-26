@@ -2,8 +2,9 @@
 functions 6647
 unnamed 5432
 placeholder 0
-uncommented 6647
-numbered_files 27
+uncommented 6638
+numbered_files 0
+unsorted 1782
 registers 841407
 flags 589787
 fpu_stack 57697
