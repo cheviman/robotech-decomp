@@ -58,9 +58,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   (each 3D voice's send, `SetI3DL2Source`) and the DSP's effects are not heard. Of the mixbins, the
   fronts (0, 1) and the 3D ones (6 to 9) are mixed to the two sides; the centre, the LFE and the rears
   are not (only Bink sends to them, copies of its two channels).
-- **Bink's sound is not heard yet**: Bink plays its movies' sound through DirectSound too (PCM, written
-  with `Lock` into a buffer it owns), which the mixer reads; the scenarios run without the movies, so it
-  has not been listened to.
+- **Bink's sound is mixed but not compared**: Bink plays its movies' sound through DirectSound too (PCM,
+  written with `Lock` into a buffer it owns), which the mixer reads; the intro's sound is in the mixer's
+  output (26-10-2026), not yet set against the emulated APU's.
+- **With `ROBOTECH_VIRTUAL_CLOCK` the sound follows the frames presented**, so it stutters while they
+  come unevenly (a load) and the clock passes the game's waits at once (the 5 s legal screen); the
+  scenarios' runs sound so. A game played runs on the host's clock: Sebas's session (26-10-2026),
+  movies skipped, menu at 60 frames a second, the game's time exact, no XAudio2 underrun.
 
 ### Controls
 
@@ -69,6 +73,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   runs on another host thread). The pad's state and its rumble go to the host's XInput instead
   (`XInputGetState`, `XInputSetState`). Rumble not felt yet: in a minute of the first mission the game
   asked for none (its rumble function checks a flag first: the option, or the pad's capabilities).
+- In runs nobody plays, with the movies, the game mostly never opens the pad (no `XInputOpen`, even
+  70 s into the menu; 26-10-2026, 7 of 11 runs), so a pad script does not reach it. Without the movies
+  and in Sebas's sessions it opens. Not looked into.
 
 ### Saves
 
