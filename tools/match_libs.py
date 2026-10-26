@@ -45,7 +45,10 @@ XBE = os.path.join(REPO, "analysis", "default.xbe")
 ANALYSIS_JSON = os.path.join(REPO, "analysis", "default_analysis.json")
 OUT = os.path.join(REPO, "symbols", "lib_matches.json")
 
-# The libraries the XBE header lists, by their .lib file.
+# The libraries the XBE header lists, by their .lib file. D3DX8 and XGraphics,
+# which a game can link without a version in the header, were tried on
+# 25-10-2026: not one function of either matches by bytes, nor reads 85 % alike
+# anywhere in .text; the engine has its own maths.
 LIBS = {
     "d3d8.lib": "D3D8",
     "dsound.lib": "DSOUND",

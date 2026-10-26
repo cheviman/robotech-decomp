@@ -94,6 +94,14 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ## Dead hypotheses
 
+- **"The game links D3DX8 or XGraphics"** (they leave no version in the XBE header). Matched against
+  the XDK's `d3dx8.lib` (2,622 functions) and `xgraphics.lib` (3,096): none by bytes, none 85 % alike by
+  instructions anywhere in `.text`. The engine does its own maths and texture work.
+- **"Some of the game is C++"** (Sebas asked: C++ or C#). The XBE links no C++ runtime (no LIBCPMT), and
+  the game's code has no `operator new`/`delete`, no C++ exception handling, no `type_info`, no
+  `_purecall`; its objects are handles with tables of functions, C-style. Only Microsoft's D3D8 and
+  DirectSound are C++. The decompilation is in C.
+
 - **"The logos and the intro do not skip because the pad does not reach the game."** Measured: the pad
   is enumerated and every scripted press is delivered; the movies play whole. They are not skippable.
 - **"The menu's text draws as rectangles because its texture is sampled wrong."** The trace showed
