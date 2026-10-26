@@ -58,6 +58,26 @@ static inline void guest_put_string(uint32_t to, const char *s)
     memcpy((void *)XBOX_PTR(to), s, strlen(s) + 1);
 }
 
+/* ── The x87, as the recompiled code models it ────────────────────────────────────────────────────── */
+
+/* A stack of doubles; each arithmetic result is rounded to the precision the control word asks for
+ * (RECOMP_FP_PC: the Xbox's 24 bits), so C that wants the original's numbers rounds after each
+ * operation the original does, in its order. */
+static inline void decomp_FpPush(double value)
+{
+    g_fp_top = (g_fp_top + 7) & 7;
+    g_fp_stack[g_fp_top] = value;
+}
+
+/* A float given by its bits, for the constants the original keeps exact to the last bit. */
+static inline float float_from_bits(uint32_t bits)
+{
+    float f;
+
+    memcpy(&f, &bits, 4);
+    return f;
+}
+
 /* What a function that hands back nothing on some path leaves in eax there: what the caller had in it,
  * as the original, when a caller is known to read eax after it. */
 #define EAX_AS_CALLER_LEFT      ((uint32_t)g_eax)
@@ -85,6 +105,10 @@ static inline void guest_put_string(uint32_t to, const char *s)
 #define ENTRY_CDECL0_VOID(name)  void name##_entry(void) { name(); g_esp += 4u; }
 #define ENTRY_CDECL1_VOID(name)  void name##_entry(void) { name(ARG32(0)); g_esp += 4u; }
 #define ENTRY_CDECL2_VOID(name)  void name##_entry(void) { name(ARG32(0), ARG32(1)); g_esp += 4u; }
+
+/* cdecl, n arguments, the result a float in st(0): pushed on the emulated x87 stack, as the original's
+ * fld leaves it */
+#define ENTRY_CDECL0_FLOAT(name)  void name##_entry(void) { decomp_FpPush(name()); g_esp += 4u; }
 
 /* thiscall, the object in ecx and no other argument, no result */
 #define ENTRY_THISCALL0_VOID(name)  void name##_entry(void) { name(g_ecx); g_esp += 4u; }

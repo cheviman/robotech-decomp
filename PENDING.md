@@ -78,7 +78,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Recompilation
 
-- **Names** (26-10-2026): 1,328 of the 6,646 functions have a real name: the XDK's libraries almost
+- **Names** (26-10-2026): 1,335 of the 6,646 functions have a real name: the XDK's libraries almost
   whole (D3D 234 of 251, DSOUND 298 of 360, XPP 211 of 233), the C runtime and XAPI in `.text`, the
   engine's 30 object classes and all their slots, the object system, the engine's files, formatted strings
   and rectangles. No placeholders (Sebas: no name that is a number,
@@ -110,21 +110,23 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   - the formatted strings, `format.c`: the two static buffers `vcFormat` uses in turn, and
     `vcStrLower`;
   - the rectangles, `rects.c`: setting, copying, growing, moving, reading one, placing one against
-    the screen's title-safe part.
+    the screen's title-safe part;
+  - the random numbers, `random.c`: the game's sequence (restarted by `vcRandomReset`) and the
+    cosmetic one (the rumble, the string manager, line effects; never restarted), a hash of a seed and
+    a count; the floats worked on the emulated x87 as the original rounds them, handed back in st(0)
+    (`ENTRY_CDECL0_FLOAT`).
 
   Their locals handed to other code by address live in the guest's stack, in a frame of the
   original's size and at its offsets; a word the original keeps in its own argument's slot is in the
   frame too (called from other C, that slot is the caller's). The menu, the first mission and the save
-  play as before, frame for frame and file for file. Of the 59 functions, 45 run in them (36 called
+  play as before, frame for frame and file for file (66 functions with the random numbers). Of the first 59, 45 run in them (36 called
   from the recompiled code, 9 only from other C); `tools/verify_c.py` compares 14 with the machine code
   (80 vectors, 0 different), 3 of them among the ones that do not run. The other 11 that do not run
   are read against the machine code only: `vcObjectCollectChanged`, `vcObjectSystemShutdown`,
   `vcObjectGetSize`, `vcClassForEach`, `vcClassAddRefAll`, `vcClassDecRefAll`, `vcObjectClearChanged`,
-  `vcFileCreate`, `vcFileExists`, `vcFileReadRect`, `vcFormatAppend`. Next: the engine's random numbers
-  (0x0010FDC0 to 0x00110052, two sequences; the ones that hand back a float do it on the emulated x87
-  stack, an entry decomp.h does not have yet), the screen's functions in front of the files
-  (0x00115F30 to 0x001160B0), the text's after them (0x001165B0 to 0x00116640), then each class's
-  callbacks.
+  `vcFileCreate`, `vcFileExists`, `vcFileReadRect`, `vcFormatAppend`. Next: the screen's functions in
+  front of the files (0x00115DE0 to 0x001160B0, the device's creation among them), the text's after
+  them (0x001165B0 to past 0x00116B60, the font's loading among them), then each class's callbacks.
 - **Noise that comes from xboxrecomp's conventions**, counted and explained: the recompiler calls a
   function written by hand through the replacement lookup (`RECOMP_ICALL_SAFE`, "manual call", so that
   a replacement in `recomp_lookup_manual` wins), and this project replaces none there:

@@ -348,6 +348,29 @@ field   vcFile  20  objects        u32          # their handles, a table of u32
 002403B8  var   vcFormatBuffers  char[2048]           # two buffers of 1 KB
 00240BB8  var   vcFormatBufferIndex  u32              # the one vcFormat wrote last: 0 or 1
 
+# The engine's random numbers (src/game/engine/random.c): two sequences, a hash of a seed and a count.
+0010FDC0  func  vcRandom
+0010FE20  func  vcRandomUnit
+0010FE90  func  vcRandomSpread
+0010FF10  func  vcRandomCosmetic
+0010FF70  func  vcRandomCosmeticUnit
+0010FFE0  func  vcRandomCosmeticSpread
+00110160  func  vcRandomReset
+001B9A34  var   vcRandomSeed  u32                     # the game's sequence's seed: 0x71FB from vcRandomReset
+0023A47C  var   vcRandomCount  u32                    # its draws so far; vcRandomReset restarts it
+001B9A38  var   vcRandomCosmeticSeed  u32             # the cosmetic sequence's seed: 0x23DB
+0023A480  var   vcRandomCosmeticCount  u32            # its draws so far, never restarted
+001B9970  var   vcRandomCubeFactor  u32               # 15731: the hash's factor of the cube (never written)
+001B99C8  var   vcRandomLinearFactor  u32             # 790567: its factor of the hash itself (never written)
+001B9A2C  var   vcRandomDividend  u32                 # 1376317711, divided by the count (never written)
+comment vcRandom A number from the game's sequence: the hash of its seed and count, which counts on.
+comment vcRandomUnit A number in [0, 1) from the game's sequence.
+comment vcRandomSpread A number in (-1, 1] from the game's sequence.
+comment vcRandomCosmetic A number from the cosmetic sequence, which what the game shows draws from and its play does not (the pad's rumble, the string manager, line effects, nodes, screens).
+comment vcRandomCosmeticUnit A number in [0, 1) from the cosmetic sequence.
+comment vcRandomCosmeticSpread A number in (-1, 1] from the cosmetic sequence.
+comment vcRandomReset Sets both sequences' seeds and restarts the game's, so its draws repeat; the cosmetic one keeps counting.
+
 # The engine's rectangles (src/game/engine/rects.c): a vcRect is left, top, right, bottom.
 00110060  func  vcRectSet
 00110090  func  vcRectCopy

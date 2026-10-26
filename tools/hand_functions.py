@@ -37,21 +37,22 @@ MANUAL_FOR_TOOLKIT = os.path.join(REPO, "analysis", "recomp_manual.c")
 sys.path.insert(0, os.path.join(REPO, "tools"))
 import symbols  # noqa: E402
 
-# ENTRY_CDECL2(vcObjectFind), ENTRY_CDECL1_VOID(...), ENTRY_THISCALL0_VOID(...)
-ENTRY = re.compile(r"(?m)^ENTRY_([A-Z]+)(\d)(_VOID)?\((\w+)\)\s*$")
+# ENTRY_CDECL2(vcObjectFind), ENTRY_CDECL1_VOID(...), ENTRY_CDECL0_FLOAT(...), ENTRY_THISCALL0_VOID(...)
+ENTRY = re.compile(r"(?m)^ENTRY_([A-Z]+)(\d)(_VOID|_FLOAT)?\((\w+)\)\s*$")
 
 
 def hand_functions():
-    """{address: (entry, file, convention, arguments, returns)} of the
-    functions src/game/ writes by hand: convention "CDECL" or "THISCALL",
-    returns False for one that hands back nothing."""
+    """{address: (entry, file, convention, arguments, result)} of the
+    functions src/game/ writes by hand: convention "CDECL", "VARARGS" or
+    "THISCALL"; result "int" (in eax), "float" (in st(0)) or "void"."""
     by_name = {n: a for a, n in symbols.load()["func"].items()}
     out, unknown = {}, []
     for path in sorted(glob.glob(os.path.join(GAME, "**", "*.c"), recursive=True)):
-        for convention, count, void, name in ENTRY.findall(open(path, encoding="utf-8").read()):
+        for convention, count, kind, name in ENTRY.findall(open(path, encoding="utf-8").read()):
             if name in by_name:
+                result = {"": "int", "_VOID": "void", "_FLOAT": "float"}[kind]
                 out[by_name[name]] = (name + "_entry", os.path.relpath(path, REPO).replace("\\", "/"),
-                                      convention, int(count), not void)
+                                      convention, int(count), result)
             else:
                 unknown.append("%s (%s)" % (name, os.path.relpath(path, REPO)))
     return out, unknown

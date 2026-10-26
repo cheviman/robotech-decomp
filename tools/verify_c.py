@@ -102,8 +102,8 @@ def main():
         sys.exit("no functions written by hand in src/game/")
     data, sections, base = xbe_run.load(XBE)
     leaves = calls_only(funcs)
-    checked = {va: f for va, f in funcs.items() if f[2] == "CDECL" and f[4] and va in leaves}
-    print("%d functions written by hand, %d checked here (cdecl, a result, no call outside)"
+    checked = {va: f for va, f in funcs.items() if f[2] == "CDECL" and f[4] == "int" and va in leaves}
+    print("%d functions written by hand, %d checked here (cdecl, a result in eax, no call outside)"
           % (len(funcs), len(checked)))
 
     # Each lifted_ calls an entry; the files that define them, and the calls
