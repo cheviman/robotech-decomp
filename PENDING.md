@@ -75,8 +75,14 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 - **The base for the decompilation** (25-10-2026): `symbols/symbols.txt` is the one place of the names,
   descriptions and files (SegaSonic's format); the recompiled C is laid out in 61 files by subject
   (`xdk/`, `bink/`, `engine/`, `game/`) with each function's description in its header. Left: the
-  verification by function for C written by hand (xboxrecomp's oracle compares its own lifted C; ours
-  has to take its place) and by scenario (scripts of controls compared run to run).
+  verification by function for C written by hand (xboxrecomp's oracle maps the XBE in a 32-bit process,
+  calls the original and a `lifted_X` with the same arguments and compares eax, edx and memory: ours goes
+  in as that `lifted_X`, testable with the first function written by hand) and by scenario. Measured
+  run against run (25-10-2026): the menu repeats frame for frame (14 dumps of 14), the mission does not
+  (11 of 22 equal, all before it starts). Two causes to remove: the pad script counts milliseconds, not
+  frames, so a press lands on another frame when loading took longer; and the game reads the real clock.
+  xboxrecomp's runtime has no deterministic time; the way is frame-numbered scripts and a clock tied to
+  frames, from this repository.
 - **Noise** (`tools/noise_report.py`, baseline in `tools/noise_baseline.txt`): the generated C is a
   recompilation, every register a variable, every flag a temporary, every jump a label. The way to C
   that reads as written is xboxrecomp's decompilation path (`docs/DECOMP.md`): `tools.split` gives a
