@@ -1,8 +1,8 @@
 # tools/noise_report.py --save; one kind a line: key count
 functions 6644
-unnamed 5434
+unnamed 5401
 placeholder 0
-uncommented 6638
+uncommented 6637
 numbered_files 0
 unsorted 1782
 registers 841399

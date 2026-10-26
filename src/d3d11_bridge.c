@@ -4,7 +4,7 @@
  *                 through xboxrecomp's D3D8 layer
  *    Version:     0.1.0
  *    Created:     25-10-2026
- *    Modified:    25-10-2026
+ *    Modified:    26-10-2026
  *    Author:      Sebastian Toyos
  *
  *    On with ROBOTECH_D3D11=1. The game's own D3D keeps running, as the bookkeeping it is: it creates its
@@ -402,7 +402,7 @@ void d3d11_Swap(void)
         if (exit_at > 0 && (long)s_frame >= exit_at) {
             fprintf(stderr, "[D3D11] frame %u presented: leaving (ROBOTECH_EXIT_FRAME)\n", s_frame);
             fflush(stderr);
-            ExitProcess(0);
+            exit(0);        /* what is kept at exit (the WAV, the sound's counts) is closed */
         }
     }
     now = GetTickCount();

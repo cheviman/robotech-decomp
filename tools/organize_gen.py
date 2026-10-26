@@ -3,7 +3,7 @@ Name:        organize_gen.py
 Description: lays the recompiled C out in files by subject, each function with its description
 Version:     0.1.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    26-10-2026
 Author:      Sebastian Toyos
 
     py -3 tools/organize_gen.py
@@ -31,6 +31,9 @@ sys.path.insert(0, os.path.join(REPO, "tools"))
 import symbols  # noqa: E402
 
 KEEP = {"recomp_dispatch.c", "recomp_stubs_unresolved.c"}
+FUNCS_H = os.path.join(GEN, "recomp_funcs.h")
+# the body of a function src/recomp_manual.c wraps, as the recompiler names it
+WRAPPED = re.compile(r"\bsub_([0-9A-F]{8})_gen\b")
 # a function's header: its name, any description a run put there, its span
 BLOCK = re.compile(r"(?m)^/\*\*\n \* (\w+)\n(?: \*.*\n)*? \* Original: 0x([0-9A-F]{8})")
 WIDTH = 100
@@ -67,6 +70,12 @@ def describe(block, name, comments):
     return "\n".join(lines) + sep + rest
 
 
+def real_name(names, match):
+    """sub_X_gen as NAME_gen when symbols.txt names the function at X."""
+    name = names.get(int(match.group(1), 16))
+    return name + "_gen" if name else match.group(0)
+
+
 def file_header(path, note):
     today = time.strftime("%d-%m-%Y")
     return (
@@ -97,11 +106,23 @@ def main():
     # a fresh run of the recompiler (its files cut by count) is the truth; the
     # files laid out by an earlier run are read only when there is none
     fresh = [p for p in sources if re.match(r"recomp_\d{4}\.c$", os.path.basename(p))]
+    # A function src/recomp_manual.c wraps keeps its generated body under
+    # sub_X_gen, the recompiler's name for it whatever the function is
+    # called; it gets the real name here, NAME_gen, and recomp_manual.c calls
+    # it so. The wrapper itself keeps sub_X: that is how the recompiler finds
+    # it (--exclude-manual).
+    def rename(match):
+        return real_name(sym["func"], match)
+
     for path in fresh or sources:
-        for addr, name, block in blocks_of(open(path, encoding="utf-8").read()):
+        text = WRAPPED.sub(rename, open(path, encoding="utf-8").read())
+        for addr, name, block in blocks_of(text):
             m = re.search(r"(?m)^ \* Source: (\S+)$", block)
             dest = m.group(1) if m else "game/unsorted.c"
             found[addr] = (dest, describe(block, name, sym["comments"]))
+    declarations = open(FUNCS_H, encoding="utf-8").read()
+    with open(FUNCS_H, "w", encoding="utf-8", newline="\n") as f:
+        f.write(WRAPPED.sub(rename, declarations))
     if not found:
         sys.exit("no generated functions under %s" % os.path.relpath(GEN, REPO))
     for path in sources:

@@ -4,7 +4,7 @@
  *                 the recompiled entry point
  *    Version:     0.1.0
  *    Created:     25-10-2026
- *    Modified:    25-10-2026
+ *    Modified:    26-10-2026
  *    Author:      Sebastian Toyos
  *
  *    Started from xboxrecomp's templates/new-game/src/main.c (MIT, see licenses/xboxrecomp.txt).
@@ -54,6 +54,7 @@
 #include <xbox/xboxrecomp.h>
 #include "recomp_icall_feedback.h"
 #include "clock_bridge.h"
+#include "dsound_bridge.h"
 
 /*
  * If xboxrecomp.h is not an umbrella header in your setup, include
@@ -369,15 +370,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 
-    /* Playable by default: the Direct3D 11 bridge, the emulated APU's sound,
-     * the USB pad (a host controller through XInput) with the keyboard on top,
-     * and a 60 Hz vertical blank. The runtime reads these switches as it comes
-     * up, so they are set before anything else; one already set is left alone.
-     * ROBOTECH_PUSHBUFFER=1 takes the other path instead: the game's own D3D
-     * drawn by xboxrecomp's pushbuffer executor. */
+    /* Playable by default: the Direct3D 11 bridge, the game's DirectSound
+     * answered on the host (dsound_bridge.c), the USB pad (a host controller
+     * through XInput) with the keyboard on top, and a 60 Hz vertical blank.
+     * The runtime reads these switches as it comes up, so they are set before
+     * anything else; one already set is left alone. ROBOTECH_PUSHBUFFER=1
+     * takes the other path instead: the game's own D3D drawn by xboxrecomp's
+     * pushbuffer executor; RECOMP_AC97_READY=1, the XDK's DirectSound on the
+     * emulated APU. */
     {
         static const char *const defaults[][2] = {
-            { "RECOMP_AC97_READY", "1" },
             { "RECOMP_USB", "1" },
             { "RECOMP_KEYBOARD", "1" },
             { "RECOMP_VBLANK", "paced" },
@@ -437,6 +439,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     g_xbox_mem_offset = xbox_GetMemoryOffset();
     printf("Xbox memory mapped. Offset: 0x%llX\n", (unsigned long long)g_xbox_mem_offset);
+
+    /* The physical pages the XBE's image is loaded in are never contiguous
+     * memory for someone else, as on the console. xboxrecomp's arena hands
+     * out physical numbers from 0, and its USB model reads an address inside
+     * the image as the image: the HCCA the game's USB asks for came back at
+     * 0x00082000, the model read the game's code for it, and the pad was
+     * never seen. It went unnoticed while the XDK's DirectSound took 7.7 MB
+     * of contiguous memory first, on the emulated APU. */
+    xbox_ContiguousClaim(XBOX_CONTIG_BASE, g_xbox_image_hi);
     RECOMP_ICALL_FEEDBACK_INIT();
 #ifdef RECOMP_ICALL_FEEDBACK
     CloseHandle(CreateThread(NULL, 0, feedback_writer, NULL, 0, NULL));
@@ -462,9 +473,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                              D3D_DEVICE_GPU_TIME_OFF);
     }
 
-    /* Bring up the emulated APU.
+    /* The sound: the emulated APU with RECOMP_AC97_READY=1, the game's
+     * DirectSound answered on the host otherwise.
      *
-     * Gated on the same variable that unmaps its registers, because the two
+     * The APU is gated on the same variable that unmaps its registers, because the two
      * halves are useless apart: a trap with no model declines every access,
      * and a model nothing traps into never sees a register. The APU walks
      * Xbox physical RAM to find voice buffers, so it gets the guest RAM
@@ -473,6 +485,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         g_apu_state = mcpx_apu_init_standalone((uint8_t *)xbox_GetMemoryBase());
         fprintf(stderr, "[BOOT] emulated APU %s\n",
                 g_apu_state ? "up" : "FAILED to initialise");
+    } else {
+        /* Without it, the APU's registers are never touched: the game's
+         * DirectSound is answered on the host, and its mixer starts here. */
+        dsound_Init();
     }
 
     /* The USB host controllers. The game's XAPI is statically linked and

@@ -3,7 +3,7 @@ Name:        pipeline.py
 Description: runs xboxrecomp's pipeline on the game's XBE, from parsing it to the generated C
 Version:     0.1.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    26-10-2026
 Author:      Sebastian Toyos
 
 Every output lands in this repo: analysis data under analysis/, generated C under
@@ -64,7 +64,8 @@ def steps():
         # each function's file, from symbols/symbols.txt, where the recompiler
         # writes it into the function's header
         ("files", [os.path.join(REPO, "tools", "apply_files.py")]),
-        # the functions written by hand in src/game/, which the recompiler leaves out
+        # the functions written by hand in src/game/, which the recompiler leaves
+        # out, and the ones src/recomp_manual.c wraps, in the recompiler's names
         ("hand", [os.path.join(REPO, "tools", "hand_functions.py")]),
         ("recomp", ["tools.recomp", XBE, "--all", "--split", "250", "--gen-dir", GEN_DIR,
                     "-o", os.path.join(ANALYSIS, "recomp"),
@@ -73,7 +74,7 @@ def steps():
                     "--game-name", "Robotech: Battlecry",
                     "--disasm-dir", disasm, "--func-id-dir", func_id, "--abi-dir", abi,
                     "--icall-sites", os.path.join(ANALYSIS, "icall_sites.json"),
-                    "--exclude-manual", os.path.join(REPO, "src", "recomp_manual.c"),
+                    "--exclude-manual", os.path.join(ANALYSIS, "recomp_manual.c"),
                     "--manual-functions", os.path.join(ANALYSIS, "hand_functions.json")]),
         # the recompiler cuts by count: the C goes to its files, with descriptions
         ("organize", [os.path.join(REPO, "tools", "organize_gen.py")]),

@@ -40,6 +40,10 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       engine's own 2D draws, vertex programs (run on the CPU for now); sound, the pad and the keyboard,
       saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
+- [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
+      (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
+      stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
+      distance and a pan, and the reverb is not heard yet
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
       programs on the GPU, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
@@ -99,6 +103,9 @@ Visual Studio Build Tools (MSVC, x64).
    ```bash
    ROBOTECH_D3D11=1 RECOMP_VBLANK=paced build/Release/robotech_battlecry.exe
    ```
+
+   The sound is the game's DirectSound answered on the host; `RECOMP_AC97_READY=1` plays it through
+   xboxrecomp's emulated APU instead, and `RECOMP_AUDIO_WAV=<file>` records what is played.
 
 `symbols/xdk_symbols.json` comes from scanning the XBE with
 [XbSymbolDatabase](https://github.com/Cxbx-Reloaded/XbSymbolDatabase)'s command-line tool; to make it
@@ -162,6 +169,9 @@ src/game/               the game's C written by hand, by subject (engine/objects
 src/recomp_manual.c     the bridges' wrappers around recompiled functions
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's
                         D3D8 layer
+src/input_bridge.c      the pad and the keyboard answered from the host's XInput, and the pad scripts
+src/dsound_bridge.c     the game's DirectSound answered on the host: buffers, their 3D, the listener
+src/sound_mixer.c       mixes the game's sounds from its memory (PCM, Xbox ADPCM) to the audio device
 src/clock_bridge.c      the clock tied to the frames, for runs compared frame for frame
 tests/scenarios/        the scripted scenarios and their reference frames (tools/scenario.py)
 src/recomp/gen/         the recompiled C, laid out by subject: xdk/, bink/, engine/, game/ (ignored by git;
@@ -178,7 +188,8 @@ tools/apply_files.py    tells the recompiler each function's file, from symbols.
 tools/organize_gen.py   lays the recompiled C out in its files, each function with its description
 tools/noise_report.py   counts what keeps the generated C from reading as written (baseline beside it)
 tools/conformance.py    runs xboxrecomp's oracle: the game's machine code and the C side by side
-tools/hand_functions.py lists the functions src/game/ writes by hand, for the recompiler to leave out
+tools/hand_functions.py lists the functions written by hand (src/game/) and wrapped (src/recomp_manual.c),
+                        for the recompiler
 tools/verify_c.py       checks each function written by hand against the game's machine code
 tools/scenario.py       plays the scenarios and compares their frames with the references
 tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's scan
@@ -196,12 +207,15 @@ licenses/               licenses of the code this project starts from
 - **Game code.** xboxrecomp lifts the XBE's x86 code into C, a function per function, with the CPU's
   registers and flags as variables and the Xbox's memory at the addresses the game expects; the C is
   compiled into a native executable. That includes the libraries the game linked statically (Direct3D,
-  DirectSound, Bink), which run as recompiled code too.
+  Bink), which run as recompiled code too.
 - **Kernel.** The Xbox kernel calls the game imports are answered by the runtime with the host's
   operating system: files from `game/`, threads, events, memory.
 - **Graphics.** For now the game's own Direct3D runs and writes GPU commands, which the runtime's
   pushbuffer executor draws in software. The port's way is to route the game's Direct3D calls to
   Direct3D 11 instead (`docs/d3d.md`).
+- **Sound.** The game's DirectSound is not run: each of its entries is answered on the host, as the
+  XDK's own would answer it, and each buffer the game fills is a voice of a mixer that reads it in the
+  game's memory, decodes the Xbox's ADPCM and plays it through the host's audio device.
 - **The game's files** are read where the game asks for them, from your copy, unchanged.
 
 ## Legal

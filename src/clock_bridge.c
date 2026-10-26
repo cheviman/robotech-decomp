@@ -3,7 +3,7 @@
  *    Description: a clock tied to the frames presented, for runs compared frame for frame
  *    Version:     0.2.0
  *    Created:     25-10-2026
- *    Modified:    25-10-2026
+ *    Modified:    26-10-2026
  *    Author:      Sebastian Toyos
  *
  *    The game reads two clocks. Its engine times itself with XAPI's QueryPerformanceCounter, an rdtsc on
@@ -50,6 +50,8 @@ extern ptrdiff_t g_xbox_mem_offset;
 #define KERNEL_THUNK_VALUE(va)    (0xFE000000u + ((va) - THUNK_TABLE))
 #define GETSYSTEMTIMEASFILETIME   0x0014E562u       /* XAPI's, wrapped in recomp_manual.c */
 
+static uint64_t s_counter;         /* the virtual counter's last value read */
+
 static uint32_t arg0(void)
 {
     return *(const uint32_t *)((uintptr_t)g_esp + 4 + g_xbox_mem_offset);
@@ -94,15 +96,25 @@ void clock_GetTickCount(void)
  * clock is virtual: stdcall, one argument; writes the count, returns TRUE. */
 void clock_QueryPerformanceCounter(void)
 {
-    static uint64_t last;
     uint64_t frames = (uint64_t)d3d11_FrameCount() * FRAME_TICKS;
     uint32_t out = arg0();
 
-    last = last + READ_TICKS > frames ? last + READ_TICKS : frames;
+    s_counter = s_counter + READ_TICKS > frames ? s_counter + READ_TICKS : frames;
     if (out)
-        memcpy((void *)((uintptr_t)out + g_xbox_mem_offset), &last, 8);
+        memcpy((void *)((uintptr_t)out + g_xbox_mem_offset), &s_counter, 8);
     g_eax = 1;
     g_esp += 4 + 4;                       /* the return address, and one argument */
+}
+
+/* The time the game has read so far, in 1/rate of a second: the sound's
+ * clock while the clock is virtual (sound_mixer.c), so what is heard keeps
+ * to the time the game's engine counts. Reading it does not move it. */
+uint64_t clock_VirtualTime(unsigned rate)
+{
+    uint64_t frames = (uint64_t)d3d11_FrameCount() * FRAME_TICKS;
+    uint64_t counter = s_counter > frames ? s_counter : frames;
+
+    return counter / XBOX_COUNTER_HZ * rate + counter % XBOX_COUNTER_HZ * rate / XBOX_COUNTER_HZ;
 }
 
 /* GetSystemTimeAsFileTime(lpSystemTimeAsFileTime), replacing the game's while

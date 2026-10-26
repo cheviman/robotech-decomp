@@ -3,7 +3,7 @@
 #              toolkit's runtime libraries)
 # Version:     0.1.0
 # Created:     25-10-2026
-# Modified:    25-10-2026
+# Modified:    26-10-2026
 # Author:      Sebastian Toyos
 #
 # Started from xboxrecomp's templates/new-game/CMakeLists.txt (MIT, see licenses/xboxrecomp.txt). The
@@ -73,6 +73,7 @@ set(GAME_SOURCES
     src/d3d11_bridge.c
     src/input_bridge.c
     src/dsound_bridge.c
+    src/sound_mixer.c
     src/clock_bridge.c
     # Add game-specific sources here, e.g.:
     # src/asset_loader.c

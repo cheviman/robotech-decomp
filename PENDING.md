@@ -14,7 +14,7 @@ them goes deep; the easy entries go in batches; what the game asks for that the 
 |---|---|---|
 | Boot | legal screen, the TDK, Harmony Gold and Vicious Cycle logos, the intro, the menu, and the first mission (`m101_f.lvl`) loads and plays: the Valkyrie flies over the coast with the HUD and the radar | |
 | Video | Direct3D 11 bridge: the movies, the menu (backdrop, logo, boxes, text, prompts, the Valkyrie) and the first mission's scene and HUD; see below for what is wrong | `ROBOTECH_D3D11=1`, the default |
-| Sound | works: xboxrecomp's emulated APU through XAudio2; movies, menu and mission music play | `RECOMP_AC97_READY=1`, the default |
+| Sound | native: the game's DirectSound (the 29 entries it and its Bink call) answered on the host and mixed to XAudio2 through xboxrecomp's audio output; menu and mission music, the briefing's streamed voice and the effects play. In the first mission: 73 buffers (all Xbox ADPCM, 48 and 44.1 kHz, mono and stereo), 202 voices started, 24 at once at most; as loud as on the emulated APU (0.1 dB the menu's music, 0.4 dB the mission) | `src/dsound_bridge.c`, `src/sound_mixer.c`; `RECOMP_AC97_READY=1` the XDK's DirectSound on the emulated APU instead |
 | Controls | the game's `XInputGetState` answered from the host (XInput pads, the keyboard on port 0: arrows d-pad, Enter START, Z X C V = A B X Y, W A S D left stick); the menu takes the presses | `src/input_bridge.c`; `RECOMP_USB=1` still enumerates the pad |
 | Saves | the hard disk (UDATA, TDATA) in `%LOCALAPPDATA%\RobotechBattlecry`; title metadata and images written | `ROBOTECH_SAVE_DIR` |
 | Pacing | `Swap` held to 60 Hz | `ROBOTECH_FPS` |
@@ -44,9 +44,23 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Sound
 
-- The mission voice `079.WAV.vo` lasts 10-30 s, but the buffer that starts with it reports stopped after
-  656 ms (`ROBOTECH_TRACE_DSOUND=1`). Unclear whether that is the voice or a short effect.
-- The APU's DSP runs in passthrough: no DSP effects (reverb, Dolby).
+- **The 3D is a distance and a pan, not the console's HRTF.** The distance's fade is the XDK's own
+  (`-2000 log10(d / min)` hundredths of a decibel, held from the maximum distance; the emulated APU shows
+  the volume it programs for a voice close by, 1.56 dB, the one computed here). The side is a pan that
+  keeps the power, where the console filters each 3D voice with a pair of impulse responses chosen by
+  the azimuth: the XDK's light HRTF table is in the XBE (0x170140, 61 azimuths every 3 degrees, per ear
+  31 coefficients of 8 bits and a delay byte, written to the APU as they are). Their sign looks
+  sign-and-magnitude (as two's complement the responses jump from 10 to -120 halfway), which the
+  emulated APU reads as two's complement; neither is confirmed. That a 3D voice also loses its mixbin's
+  6 dB of headroom is measured, not read (the mission as loud as on the emulated APU with it, 6 dB
+  louder without).
+- **The effects image is not run**: `dsstdfx.bin` is taken and nothing of it plays, so the I3DL2 reverb
+  (each 3D voice's send, `SetI3DL2Source`) and the DSP's effects are not heard. Of the mixbins, the
+  fronts (0, 1) and the 3D ones (6 to 9) are mixed to the two sides; the centre, the LFE and the rears
+  are not (only Bink sends to them, copies of its two channels).
+- **Bink's sound is not heard yet**: Bink plays its movies' sound through DirectSound too (PCM, written
+  with `Lock` into a buffer it owns), which the mixer reads; the scenarios run without the movies, so it
+  has not been listened to.
 
 ### Controls
 
@@ -88,11 +102,14 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   save's list of saves shows the host's file times, so the scenario ends before it. First functions
   written by hand: the object system's three default callbacks; first types: the object system's
   `vcClassDesc`, `vcClass`, `vcInstance`.
-- **Noise that comes from xboxrecomp's conventions**, counted and explained: a function the bridges wrap
-  keeps its recompiled body as `sub_<address>_gen` (the toolkit's wrapper scheme, 35 of the "unnamed"),
-  and a direct call to a function written by hand goes through the replacement lookup
-  (`RECOMP_ICALL_SAFE`, "manual call": the toolkit makes sure no caller bypasses a replacement; 21 of the
-  "indirect calls" for the first three functions). Both go away as the callers are written by hand too.
+- **Noise that comes from xboxrecomp's conventions**, counted and explained: a direct call to a function
+  written by hand goes through the replacement lookup (`RECOMP_ICALL_SAFE`, "manual call": the toolkit
+  makes sure no caller bypasses a replacement; 21 of the "indirect calls" for the first three
+  functions); it goes away as the callers are written by hand too. A function the bridges wrap keeps
+  its recompiled body under its real name, `NAME_gen` (26-10-2026; the toolkit names it
+  `sub_<address>_gen` and finds the wrappers by that name, so the recompiler reads a copy of
+  `src/recomp_manual.c` in its naming, `tools/hand_functions.py`, and `tools/organize_gen.py` names
+  the bodies after): the 61 bodies left the "unnamed".
 - **Noise** (`tools/noise_report.py`, baseline in `tools/noise_baseline.txt`): the generated C is a
   recompilation, every register a variable, every flag a temporary, every jump a label. The way to C
   that reads as written is xboxrecomp's decompilation path (`docs/DECOMP.md`): `tools.split` gives a
@@ -130,6 +147,17 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   test), which the pure-device build never stores in its array.
 - **"The mission's opening scene waits for a sound to finish."** Traced every buffer's status: none stays
   playing; the scene is drawn and moves under a fade quad that stays at 98 %.
+- **"The mission voice `079.WAV.vo` stops after 656 ms"** (measured on the emulated APU). Natively it
+  streams through the game's 73,728-byte ring (read, a play region, `Play` looping, the game refilling it
+  behind the play cursor) from frame 1081 to 1260 of the mission scenario, where the script's A skips
+  the briefing and the game stops it.
+- **"With native sound the menu ignores the pad until the title music's first section ends"** (it took
+  the A of frame 360 on the emulated APU and not natively). An A at frame 600, after the section ended at
+  501, was ignored too: the pad was not reaching the game. Without the XDK's DirectSound taking 7.7 MB of
+  contiguous memory first, the USB's HCCA came
+  back at physical 0x00082000, inside the XBE's image, and xboxrecomp's USB model read the game's code
+  for it. `src/main.c` keeps the image's pages out of the contiguous arena, as the console's kernel
+  does.
 - **"The menu's Valkyrie is skinned by the fixed pipeline's vertex blending."** `VERTEXBLEND` is 0 for
   all its draws: each part's matrix goes to a vertex program, in c0-c3.
 - **"The layer combines the world matrix wrongly"** (the Valkyrie's parts floated apart while the
