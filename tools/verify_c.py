@@ -50,9 +50,23 @@ FUNCTIONS = os.path.join(REPO, "analysis", "disasm", "functions.json")
 GLUE = os.path.join(REPO, "src", "game", "decomp.c")     # the calls into the recompiled code
 
 
+def compare_eax_only(source):
+    """The harness compares eax, edx and the memory, as its own recompiled
+    code keeps every register. A function written by hand hands back 32 bits
+    or nothing, and after such a call no caller compiled for it reads edx
+    (the calling convention leaves it undefined): what the original happens
+    to leave there, a field it last loaded, is not its result. So edx is
+    not compared."""
+    compare = "if (nat_eax == g_eax && nat_edx == g_edx && !wrote) return;"
+    if compare not in source:
+        sys.exit("the toolkit's harness compares otherwise than verify_c expects")
+    return source.replace(compare, "if (nat_eax == g_eax && !wrote) return;")
+
+
 def calls_only(funcs):
-    """The functions whose original calls nothing but functions written by
-    hand: a direct call elsewhere, or any indirect one, leaves one out."""
+    """The functions whose original reaches nothing but functions written by
+    hand, through its calls and theirs: a direct call elsewhere, or any
+    indirect one, on the way leaves one out."""
     data = open(XBE, "rb").read()
     base = struct.unpack_from("<I", data, 0x104)[0]
     count = struct.unpack_from("<I", data, 0x11C)[0]
@@ -60,16 +74,20 @@ def calls_only(funcs):
     sections = [struct.unpack_from("<5I", data, headers + i * 56)[1:] for i in range(count)]
     ends = {int(f["start"], 16): int(f["end"], 16) for f in json.load(open(FUNCTIONS))}
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
-    out = set()
+    calls = {}
     for va in funcs:
         code = b""
         for start, size, raw, raw_size in sections:
             if start <= va < start + raw_size:
                 code = data[raw + va - start: raw + ends.get(va, va) - start]
         targets = [ins.op_str for ins in md.disasm(code, va) if ins.mnemonic == "call"]
-        if all(t.startswith("0x") and int(t, 16) in funcs for t in targets):
-            out.add(va)
-    return out
+        calls[va] = None if any(not t.startswith("0x") or int(t, 16) not in funcs for t in targets)             else {int(t, 16) for t in targets}
+    out = {va for va, c in calls.items() if c is not None}
+    while True:                         # until no function reaches one left out
+        dropped = {va for va in out if not calls[va] <= out}
+        if not dropped:
+            return out
+        out -= dropped
 
 
 def main():
@@ -103,7 +121,7 @@ def main():
         if os.path.exists(os.path.join(WORK, old)):
             os.remove(os.path.join(WORK, old))      # never run a harness of an earlier build
     with open(os.path.join(WORK, "xbe_harness.c"), "w", encoding="utf-8") as f:
-        f.write(xbe_run.harness_source(os.path.abspath(XBE), sections, lifted, entries))
+        f.write(compare_eax_only(xbe_run.harness_source(os.path.abspath(XBE), sections, lifted, entries)))
     runtime_inc = os.path.join(TOOLKIT, "templates", "runtime")
     game_inc = os.path.join(REPO, "src", "game")
     gen_inc = os.path.join(REPO, "src", "recomp", "gen")        # symbols.h

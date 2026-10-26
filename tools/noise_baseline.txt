@@ -1,16 +1,16 @@
 # tools/noise_report.py --save; one kind a line: key count
-functions 6617
-unnamed 5340
+functions 6588
+unnamed 5325
 placeholder 0
-uncommented 6600
+uncommented 6585
 numbered_files 0
-unsorted 1777
-registers 838282
-flags 587590
+unsorted 1748
+registers 836620
+flags 586417
 fpu_stack 57697
-memory_by_address 44238
-memory_computed 146291
-labels 107165
-gotos 45631
-stack_returns 12128
+memory_by_address 44219
+memory_computed 146048
+labels 107016
+gotos 45583
+stack_returns 12085
 indirect_calls 918

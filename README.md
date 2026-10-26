@@ -28,7 +28,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       calls, DirectSound, XAPI; `symbols/xdk_symbols.json`), and matching the XBE against the XDK's own
       `.lib` files names the rest that did not change from 4721 to 5849 (`symbols/lib_matches.json`,
       with the libraries' variables); the engine's 30 object classes and their callbacks come from the
-      descriptors the game registers (`symbols/classes.json`): 1,313 functions with a real name; the
+      descriptors the game registers (`symbols/classes.json`): 1,328 functions with a real name; the
       game's 366 object types (Entity, Effect, Weapon, Screen...) found in the registries it fills at
       start (`symbols/registries.json`), not named yet
 - [x] Boots: creates its Direct3D device and plays the legal screen and the TDK, Harmony Gold and
@@ -40,9 +40,10 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       engine's own 2D draws, vertex programs (run on the CPU for now); sound, the pad and the keyboard,
       saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
-- [x] The engine's object system decompiled into C (`src/game/engine/objects.c`): its 27 functions and
-      the classes' default callbacks, every name real, the menu, the first mission and a save as the
-      recompiled ones played them, frame for frame
+- [x] The first of the engine decompiled into C (`src/game/engine/`): the object system (27 functions
+      and the classes' default callbacks), the files, the formatted strings and the rectangles, 59
+      functions, every name real; the menu, the first mission and a save as the recompiled ones played
+      them, frame for frame
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -172,7 +173,8 @@ hand.
 game/                   your game's folder (ignored by git)
 src/main.c              host entry: loads the XBE, brings up the runtime, calls the recompiled entry point;
                         names the Direct3D device's GPU fence
-src/game/               the game's C written by hand, by subject (engine/objects.c...); decomp.h and
+src/game/               the game's C written by hand, by subject (engine/objects.c, files.c, format.c,
+                        rects.c...); decomp.h and
                         decomp.c, what joins it to the recompiled C
 src/recomp_manual.c     the bridges' wrappers around recompiled functions
 src/d3d11_bridge.c      the Direct3D 11 bridge: what the game's D3D calls draw, through xboxrecomp's

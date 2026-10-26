@@ -85,8 +85,8 @@ functions (registering classes, creating, sharing, cloning and releasing objects
 release queue, reading them from files) and the classes' three default callbacks; its structures
 (`vcClassDesc`, `vcClass`, `vcInstance`, `vcCollectList`, the part of `vcFile` it reads) and variables
 (`vcClassByType`, `vcDataDir`, the release queue, the lookup cache the game inlines, `vcGameTime`); and
-the engine's file and string functions it calls (`vcFileOpen`, `vcFileReadU32`, `vcFormat`...), still
-recompiled.
+the engine's files (`vcFile`, read through a 64 KB buffer), formatted strings and rectangles
+(`vcRect`, `vcScreenRect`), in `files.c`, `format.c` and `rects.c` beside it.
 
 The file lines lay the 6,647 functions out in 61 files: `xdk/` (d3d8, dsound, xapi, xapi_usb, crt),
 `bink/`, `engine/` (`objects` and a file per class) and `game/` (a file per registry family). A function

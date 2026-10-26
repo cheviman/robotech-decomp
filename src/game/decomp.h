@@ -23,11 +23,40 @@
 #ifndef DECOMP_H
 #define DECOMP_H
 
+#include <string.h>
+
 #include "recomp_types.h"
 #include "symbols.h"      /* the game's structures and variables, by name (tools/symbols.py header) */
 
 /* The n-th 32-bit argument (from 0), as the recompiled callers pushed it. */
 #define ARG32(n)                (MEM32(g_esp + 4u + 4u * (uint32_t)(n)))
+
+/* ── The guest's memory, in bytes ────────────────────────────────────────────────────────────────── */
+
+static inline void guest_copy(uint32_t to, uint32_t from, uint32_t bytes)
+{
+    memmove((void *)XBOX_PTR(to), (const void *)XBOX_PTR(from), bytes);
+}
+
+static inline void guest_zero(uint32_t at, uint32_t bytes)
+{
+    memset((void *)XBOX_PTR(at), 0, bytes);
+}
+
+static inline uint32_t guest_strlen(uint32_t s)
+{
+    uint32_t n = 0;
+
+    while (MEM8(s + n))
+        n++;
+    return n;
+}
+
+/* A C string into the guest's memory, its terminator too. */
+static inline void guest_put_string(uint32_t to, const char *s)
+{
+    memcpy((void *)XBOX_PTR(to), s, strlen(s) + 1);
+}
 
 /* What a function that hands back nothing on some path leaves in eax there: what the caller had in it,
  * as the original, when a caller is known to read eax after it. */
@@ -44,6 +73,13 @@
     { g_eax = (uint32_t)name(ARG32(0), ARG32(1), ARG32(2)); g_esp += 4u; }
 #define ENTRY_CDECL4(name)  void name##_entry(void) \
     { g_eax = (uint32_t)name(ARG32(0), ARG32(1), ARG32(2), ARG32(3)); g_esp += 4u; }
+#define ENTRY_CDECL5(name)  void name##_entry(void) \
+    { g_eax = (uint32_t)name(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4)); g_esp += 4u; }
+
+/* cdecl, one argument and then as many as the caller pushed: the function gets the guest address of
+ * the first of those, a va_list for the C runtime's vsprintf. The C written by hand calls it through
+ * its entry, CALL(name_entry, ...), so that its arguments are on the guest stack too. */
+#define ENTRY_VARARGS1(name)  void name##_entry(void) { g_eax = (uint32_t)name(ARG32(0), g_esp + 8u); g_esp += 4u; }
 
 /* cdecl, n arguments, no result: no caller of the original reads eax after it (measured, objects.c) */
 #define ENTRY_CDECL0_VOID(name)  void name##_entry(void) { name(); g_esp += 4u; }
@@ -54,6 +90,13 @@
 #define ENTRY_THISCALL0_VOID(name)  void name##_entry(void) { name(g_ecx); g_esp += 4u; }
 
 /* ── Calls into the recompiled code ──────────────────────────────────────────────────────────────── */
+
+/* A local the C written by hand hands to the recompiled code by address lives in the guest's stack, in a
+ * frame it takes below g_esp and gives back before it returns. Nothing is written above g_esp: where the
+ * original reuses its own argument's slot for a local, the C takes a word of its frame instead, since
+ * called from other C there is no slot of its own there. */
+#define FRAME_TAKE(bytes)       (g_esp -= (bytes))
+#define FRAME_GIVE(bytes)       ((void)(g_esp += (bytes)))
 
 /* The return address a call from the C written by hand pushes: no function of the game reads its own. */
 #define DECOMP_RETURN_ADDRESS   0u

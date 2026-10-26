@@ -16,14 +16,14 @@
  *
  *    Each function is the original's, line for line in what it does; the ones the recompiled code still
  *    calls have an entry (decomp.h), and the ones that hand nothing back are void because no caller
- *    of the original reads eax after them. A local whose address goes to the recompiled code (a name,
- *    a vcFile, a word read from a file) lives in the guest's stack, in a frame of the original's size
- *    and at the original's offset in it.
+ *    of the original reads eax after them. A local whose address goes to other code (a name, a vcFile,
+ *    a word read from a file) lives in the guest's stack, in a frame of the original's size and at the
+ *    original's offset in it; a word the original keeps in its argument's slot is in the frame too.
  */
-#include <string.h>
-
 #include "decomp.h"
 #include "objects.h"
+#include "files.h"
+#include "format.h"
 
 #define TYPES               64      /* vcClassByType's entries */
 #define CHANGED_ALL         7u      /* vcInstance flags: data, name and new */
@@ -46,31 +46,6 @@
 #define INDEX_OF(handle)    ((uint32_t)(handle) & 0xFFFFu)
 
 /* ── The guest's memory ──────────────────────────────────────────────────────────────────────────── */
-
-static void guest_copy(uint32_t to, uint32_t from, uint32_t bytes)
-{
-    memmove((void *)XBOX_PTR(to), (const void *)XBOX_PTR(from), bytes);
-}
-
-static void guest_zero(uint32_t at, uint32_t bytes)
-{
-    memset((void *)XBOX_PTR(at), 0, bytes);
-}
-
-static uint32_t guest_strlen(uint32_t s)
-{
-    uint32_t n = 0;
-
-    while (MEM8(s + n))
-        n++;
-    return n;
-}
-
-/* A C string into the guest's memory, its terminator too. */
-static void guest_put_string(uint32_t to, const char *s)
-{
-    memcpy((void *)XBOX_PTR(to), s, strlen(s) + 1);
-}
 
 static uint32_t class_of(uint32_t handle)
 {
@@ -385,7 +360,7 @@ int32_t vcObjectSetName(uint32_t handle, uint32_t name)
         uint32_t bytes = guest_strlen(name) + 1;
 
         guest_copy(vcInstance_name_VA(instance), name, bytes < NAME_BYTES ? bytes : NAME_BYTES);
-        CALL(vcStrLower, vcInstance_name_VA(instance));
+        vcStrLower(vcInstance_name_VA(instance));
     }
     vcInstance_flags(instance) |= CHANGED_NAME;
     return 1;
@@ -409,7 +384,7 @@ uint32_t vcObjectGetShared(uint32_t type, uint32_t name)
     if (vcObjectReportMissing && !(vcClassDesc_flags(vcClassByType(type)) & CLASS_QUIET_MISSING)) {
         uint32_t cls = vcClassByType(type);
 
-        CALL(vcFormat, vcMissingObjectFormat_VA, vcClassDesc_name_VA(cls), name, vcClassDesc_file_tag_VA(cls));
+        CALL(vcFormat_entry, vcMissingObjectFormat_VA, vcClassDesc_name_VA(cls), name, vcClassDesc_file_tag_VA(cls));
     }
     return 0;
 }
@@ -525,49 +500,51 @@ void vcObjectSystemShutdown(void)
             vcClassByType(type) = 0;
         }
     vcObjectReportMissing = 0;
-    CALL(vcFileClose, vcObjectSystemFile_VA);
+    vcFileClose(vcObjectSystemFile_VA);
 }
 ENTRY_CDECL0_VOID(vcObjectSystemShutdown)
 
 /* ── Reading objects from files ──────────────────────────────────────────────────────────────────── */
 
 /* A chunk: its tag (vcFileChunkEnd ends them), its version and the file offset it ends at. */
-#define CHUNK_FRAME         8u      /* the original's locals */
+#define CHUNK_FRAME         0xCu    /* the original's 8 bytes of locals, and the word it keeps in its
+                                       second argument's slot (decomp.h, FRAME_TAKE) */
 #define CHUNK_TAG           0x0u    /* offsets in the frame */
 #define CHUNK_VERSION       0x4u
-#define CHUNK_END           0x8u    /* the slot of the original's second argument, the handle */
+#define CHUNK_END           0x8u
 
 int32_t vcObjectLoadChunk(uint32_t file, uint32_t handle)
 {
-    uint32_t frame = (g_esp -= CHUNK_FRAME), cls = class_of(handle), instance = instance_at(cls, INDEX_OF(handle));
+    uint32_t frame = FRAME_TAKE(CHUNK_FRAME), cls = class_of(handle), instance = instance_at(cls, INDEX_OF(handle));
     uint32_t load_chunk, version;
     int32_t loaded = 0;
 
-    MEM32(frame + CHUNK_FRAME + CHUNK_END) = 0;
+    MEM32(frame + CHUNK_END) = 0;
     MEM32(frame + CHUNK_TAG) = 0;
     MEM32(frame + CHUNK_VERSION) = 0;
-    CALL(vcFileReadU32, file, frame + CHUNK_TAG);
+    vcFileReadU32(file, frame + CHUNK_TAG);
     if (MEM32(frame + CHUNK_TAG) != MEM32(vcFileChunkEnd_VA)) {
-        CALL(vcFileReadU32, file, frame + CHUNK_VERSION);
-        CALL(vcFileReadU32, file, frame + CHUNK_FRAME + CHUNK_END);
+        vcFileReadU32(file, frame + CHUNK_VERSION);
+        vcFileReadU32(file, frame + CHUNK_END);
         version = MEM32(frame + CHUNK_VERSION);
         load_chunk = vcClassDesc_load_chunk(cls);
         if (version <= vcClassDesc_chunk_version(cls) && load_chunk
             && CALL_AT(load_chunk, handle, file, version, vcInstance_object(instance)))
             loaded = 1;
-        CALL(vcFileSeek, file, MEM32(frame + CHUNK_FRAME + CHUNK_END));
+        vcFileSeek(file, MEM32(frame + CHUNK_END));
     }
-    g_esp += CHUNK_FRAME;
+    FRAME_GIVE(CHUNK_FRAME);
     return loaded;
 }
 ENTRY_CDECL2(vcObjectLoadChunk)
 
 /* The locals of vcObjectGet: its frame and where each one sits in it. */
-#define GET_FRAME           0x68u
+#define GET_FRAME           0x6Cu   /* the original's 0x68 bytes, and the word it keeps in its second
+                                       argument's slot, the file's first word */
 #define GET_SECOND_WORD     0x00u   /* the file's second word, read and not used */
 #define GET_FILE            0x04u   /* a vcFile */
 #define GET_NAME            0x28u   /* the name, lower case */
-#define GET_MAGIC           0x70u   /* the slot of the original's second argument */
+#define GET_MAGIC           0x68u
 
 uint32_t vcObjectGet(uint32_t type, uint32_t name)
 {
@@ -582,35 +559,35 @@ uint32_t vcObjectGet(uint32_t type, uint32_t name)
         if (shared)
             return shared;
     }
-    frame = (g_esp -= GET_FRAME);
+    frame = FRAME_TAKE(GET_FRAME);
     file = frame + GET_FILE;
     do
         MEM8(frame + GET_NAME + n) = MEM8(name + n);
     while (MEM8(name + n++));
-    CALL(vcStrLower, frame + GET_NAME);
+    vcStrLower(frame + GET_NAME);
     cls = vcClassByType(type);
-    CALL(vcFormat, vcObjectPathFormat_VA, vcDataDir_VA, vcGetPlatformName(), vcClassDesc_name_VA(cls),
+    CALL(vcFormat_entry, vcObjectPathFormat_VA, vcDataDir_VA, vcGetPlatformName(), vcClassDesc_name_VA(cls),
          frame + GET_NAME, vcClassDesc_file_tag_VA(cls));
-    if (!CALL(vcFileOpen, file, CALL0(vcFormatLast))) {
-        g_esp += GET_FRAME;
+    if (!vcFileOpen(file, vcFormatLast())) {
+        FRAME_GIVE(GET_FRAME);
         return 0;
     }
-    CALL(vcFileReadU32, file, frame + GET_MAGIC);
+    vcFileReadU32(file, frame + GET_MAGIC);
     if (MEM32(frame + GET_MAGIC) != MEM32(vcFileMagicVC1_VA) && MEM32(frame + GET_MAGIC) == MEM32(vcFileMagicVC2_VA)) {
         MEM32(frame + GET_SECOND_WORD) = 0xFFFFFFFFu;
-        CALL(vcFileReadU32, file, frame + GET_SECOND_WORD);
+        vcFileReadU32(file, frame + GET_SECOND_WORD);
         vcFile_by_name(file) = 1;
         loaded = vcObjectLoad(file);
         if (loaded) {
             MEM32(frame + GET_MAGIC) = 0;
-            CALL(vcFileReadU32, file, frame + GET_MAGIC);
+            vcFileReadU32(file, frame + GET_MAGIC);
         }
     }
     for (i = 0; i < vcFile_object_count(file); i++)
         vcObjectRelease(MEM32(vcFile_objects(file) + 4u * (uint32_t)i));
-    CALL(vcFileFreeObjects, file);
-    CALL(vcFileClose, file);
-    g_esp += GET_FRAME;
+    vcFileFreeObjects(file);
+    vcFileClose(file);
+    FRAME_GIVE(GET_FRAME);
     return loaded;
 }
 ENTRY_CDECL2(vcObjectGet)
@@ -650,22 +627,22 @@ ENTRY_CDECL2(vcObjectGet)
 static void read_header(uint32_t file, uint32_t type, uint32_t flags, uint32_t name_bytes, uint32_t name,
                         uint32_t words)
 {
-    CALL(vcFileReadU32, file, type);
-    CALL(vcFileReadU32, file, flags);
-    CALL(vcFileReadU16, file, name_bytes);
-    CALL(vcFileReadBytes, file, name, MEM16(name_bytes));
-    CALL(vcFileReadU32s, file, words, 4);
-    CALL(vcFileSeek, file, (CALL(vcFileTell, file) + FILE_BLOCK - 1) & ~(FILE_BLOCK - 1));
+    vcFileReadU32(file, type);
+    vcFileReadU32(file, flags);
+    vcFileReadU16(file, name_bytes);
+    vcFileReadBytes(file, name, MEM16(name_bytes));
+    vcFileReadU32s(file, words, 4);
+    vcFileSeek(file, (vcFileTell(file) + FILE_BLOCK - 1) & ~(FILE_BLOCK - 1));
 }
 
 static uint32_t load_object(uint32_t file, uint32_t frame)
 {
     uint32_t handle;
 
-    CALL(vcFileReadU32, file, frame + LOAD_PRESENT);
+    vcFileReadU32(file, frame + LOAD_PRESENT);
     if (!MEM32(frame + LOAD_PRESENT))
         return 0;
-    CALL(vcFileReadU32, file, frame + LOAD_INDEX);
+    vcFileReadU32(file, frame + LOAD_INDEX);
     if ((int32_t)MEM32(frame + LOAD_INDEX) >= 0) {
         uint32_t read_before = MEM32(vcFile_objects(file) + 4u * MEM32(frame + LOAD_INDEX));
 
@@ -677,20 +654,20 @@ static uint32_t load_object(uint32_t file, uint32_t frame)
                 frame + LOAD_WORDS);
     if (MEM8(frame + LOAD_FLAGS) & 1) {
         handle = vcObjectGet(MEM32(frame + LOAD_TYPE), frame + LOAD_NAME);
-        CALL(vcFileAddObject, file, handle);
+        vcFileAddObject(file, handle);
     } else {
-        CALL(vcFileReadU32, file, frame + LOAD_WORD_UNUSED);
+        vcFileReadU32(file, frame + LOAD_WORD_UNUSED);
         handle = vcObjectFind(MEM32(frame + LOAD_TYPE), frame + LOAD_NAME, 0);
         if (handle && !(vcClassDesc_flags(class_of(handle)) & CLASS_CLONE_SHARED)) {
             uint32_t reload;
 
-            CALL(vcFileAddObject, file, handle);
-            CALL(vcFileReadU32, file, frame + LOAD_VERSION);
-            CALL(vcFileReadU32, file, frame + LOAD_END);
+            vcFileAddObject(file, handle);
+            vcFileReadU32(file, frame + LOAD_VERSION);
+            vcFileReadU32(file, frame + LOAD_END);
             reload = vcClassDesc_reload(vcClassByType(MEM32(frame + LOAD_TYPE)));
             if (reload)
                 CALL_AT(reload, handle, file, MEM32(frame + LOAD_VERSION), vcInstance_object(instance_of(handle)));
-            CALL(vcFileSeek, file, MEM32(frame + LOAD_END));
+            vcFileSeek(file, MEM32(frame + LOAD_END));
             vcObjectAddRef(handle);
         } else {
             uint32_t cls, instance, bytes;
@@ -700,11 +677,11 @@ static uint32_t load_object(uint32_t file, uint32_t frame)
             MEM32(frame + LOAD_CLASS_SLOT) = vcClassByType_VA + 4u * TYPE_OF(handle);
             instance = vcClass_instances(MEM32(MEM32(frame + LOAD_CLASS_SLOT))) + MEM32(frame + LOAD_INSTANCE_OFFSET);
             MEM32(frame + LOAD_INSTANCE) = instance;
-            MEM32(frame + LOAD_FILE_INDEX) = CALL(vcFileAddObject, file, handle);
+            MEM32(frame + LOAD_FILE_INDEX) = vcFileAddObject(file, handle);
             bytes = MEM16(frame + LOAD_NAME_BYTES) < NAME_BYTES ? MEM16(frame + LOAD_NAME_BYTES) : NAME_BYTES;
             guest_copy(vcInstance_name_VA(instance), frame + LOAD_NAME, bytes);
-            CALL(vcFileReadU32, file, frame + LOAD_VERSION);
-            CALL(vcFileReadU32, file, frame + LOAD_END);
+            vcFileReadU32(file, frame + LOAD_VERSION);
+            vcFileReadU32(file, frame + LOAD_END);
             cls = vcClassByType(MEM32(frame + LOAD_TYPE));
             if (MEM32(frame + LOAD_VERSION) <= vcClassDesc_version(cls)
                 && CALL_AT(vcClassDesc_load(cls), handle, file, MEM32(frame + LOAD_VERSION),
@@ -717,7 +694,7 @@ static uint32_t load_object(uint32_t file, uint32_t frame)
                 vcObjectRelease(handle);
                 handle = 0;
             }
-            CALL(vcFileSeek, file, MEM32(frame + LOAD_END));
+            vcFileSeek(file, MEM32(frame + LOAD_END));
         }
     }
     if (handle)
@@ -727,9 +704,9 @@ static uint32_t load_object(uint32_t file, uint32_t frame)
 
 uint32_t vcObjectLoad(uint32_t file)
 {
-    uint32_t frame = (g_esp -= LOAD_FRAME), handle = load_object(file, frame);
+    uint32_t frame = FRAME_TAKE(LOAD_FRAME), handle = load_object(file, frame);
 
-    g_esp += LOAD_FRAME;
+    FRAME_GIVE(LOAD_FRAME);
     return handle;
 }
 ENTRY_CDECL1(vcObjectLoad)
@@ -741,30 +718,30 @@ static uint32_t reload_object(uint32_t file, uint32_t given, uint32_t frame)
 {
     uint32_t handle;
 
-    CALL(vcFileReadU32, file, frame + RELOAD_PRESENT);
+    vcFileReadU32(file, frame + RELOAD_PRESENT);
     if (!MEM32(frame + RELOAD_PRESENT))
         return 0;
-    CALL(vcFileReadU32, file, frame + RELOAD_INDEX);
+    vcFileReadU32(file, frame + RELOAD_INDEX);
     if ((int32_t)MEM32(frame + RELOAD_INDEX) >= 0)
         return MEM32(vcFile_objects(file) + 4u * MEM32(frame + RELOAD_INDEX));
     read_header(file, frame + RELOAD_TYPE, frame + RELOAD_FLAGS, frame + RELOAD_NAME_BYTES, frame + RELOAD_NAME,
                 frame + RELOAD_WORDS);
     if (MEM8(frame + RELOAD_FLAGS) & 1) {
         handle = vcObjectGet(MEM32(frame + RELOAD_TYPE), frame + RELOAD_NAME);
-        CALL(vcFileAddObject, file, handle);
+        vcFileAddObject(file, handle);
     } else {
         uint32_t found, reload;
 
-        CALL(vcFileReadU32, file, frame + RELOAD_WORD_UNUSED);
+        vcFileReadU32(file, frame + RELOAD_WORD_UNUSED);
         found = vcObjectFind(MEM32(frame + RELOAD_TYPE), frame + RELOAD_NAME, 0);
         handle = given ? given : found;
-        MEM32(frame + RELOAD_INDEX) = CALL(vcFileAddObject, file, handle);
-        CALL(vcFileReadU32, file, frame + RELOAD_VERSION);
-        CALL(vcFileReadU32, file, frame + RELOAD_END);
+        MEM32(frame + RELOAD_INDEX) = vcFileAddObject(file, handle);
+        vcFileReadU32(file, frame + RELOAD_VERSION);
+        vcFileReadU32(file, frame + RELOAD_END);
         reload = vcClassDesc_reload(vcClassByType(MEM32(frame + RELOAD_TYPE)));
         if (reload)
             CALL_AT(reload, handle, file, MEM32(frame + RELOAD_VERSION), vcInstance_object(instance_of(handle)));
-        CALL(vcFileSeek, file, MEM32(frame + RELOAD_END));
+        vcFileSeek(file, MEM32(frame + RELOAD_END));
     }
     if (handle)
         vcInstance_refs(instance_of(handle))++;
@@ -773,9 +750,9 @@ static uint32_t reload_object(uint32_t file, uint32_t given, uint32_t frame)
 
 uint32_t vcObjectReload(uint32_t file, uint32_t handle)
 {
-    uint32_t frame = (g_esp -= RELOAD_FRAME), reloaded = reload_object(file, handle, frame);
+    uint32_t frame = FRAME_TAKE(RELOAD_FRAME), reloaded = reload_object(file, handle, frame);
 
-    g_esp += RELOAD_FRAME;
+    FRAME_GIVE(RELOAD_FRAME);
     return reloaded;
 }
 ENTRY_CDECL2(vcObjectReload)

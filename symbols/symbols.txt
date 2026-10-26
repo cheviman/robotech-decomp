@@ -189,6 +189,9 @@ comment Direct3DCreate8 The XDK's Direct3DCreate8: hands back 1. The game calls 
 0014E6E6  func  xapi_GetTickCount                   # mov eax, [KeTickCount]; mov eax, [eax]; ret
 comment xapi_GetTickCount XAPI's GetTickCount: the milliseconds since the console started, the kernel's KeTickCount.
 
+001488B5  func  crt_vsprintf                        # LIBCMT vsprintf: a string FILE (_IOWRT | _IOSTRG), _output, the terminator
+comment crt_vsprintf LIBCMT's vsprintf: formats into a buffer from a va_list. Hands back the characters written.
+
 # The engine's object system (src/game/engine/objects.c; symbols/classes.json has the classes). An object is a
 # handle, (type << 16) | index: its class is vcClassByType[type], its instance the class's instances[index].
 001102C0  func  vcObjectSystemInit
@@ -267,30 +270,10 @@ field   vcInstance  00  object  u32             # the object's own data, which t
 field   vcInstance  04  refs    s32             # the references to it; at 0 it is destroyed
 field   vcInstance  08  flags   u32             # bit 0: its data changed; bit 1: its name; bit 2: it is new (the three set at creation, cleared once it is read from a file); bit 4: in vcReleaseQueue
 field   vcInstance  0C  name    char[64]        # its name, lower case, unique among its class's if the class says so
-struct  vcFile  24                              # a file the engine reads, through a 64 KB buffer
-field   vcFile  14  by_name   u32               # 1 when vcObjectGet opened it for an object asked for by name; vcFileOpen sets 0
-field   vcFile  18  object_count  s32           # the objects read from it so far, which later references to them name by their index
-field   vcFile  20  objects   u32               # their handles, a table of u32
 struct  vcCollectList  8                        # what vcObjectCollectChanged fills: the handles of the objects to save
 field   vcCollectList  00  whole   u32          # nonzero: every object goes in, changed or not
 field   vcCollectList  04  count   u32          # the handles in it, which follow from offset 8
 
-# The engine's files and strings, as the object system calls them (still recompiled)
-001162D0  func  vcFileOpen
-00116340  func  vcFileClose
-00116140  func  vcFileRead
-001164C0  func  vcFileReadU16
-001164E0  func  vcFileReadU32
-00116490  func  vcFileReadBytes
-00116530  func  vcFileReadU32s
-00116450  func  vcFileTell
-00116380  func  vcFileSeek
-001163E0  func  vcFileSkip
-00125D20  func  vcFileAddObject
-00125DA0  func  vcFileFreeObjects
-00125DD0  func  vcFormat
-00125E60  func  vcFormatLast
-00125E90  func  vcStrLower
 
 comment vcObjectSystemInit Starts the object system: no class registered, the folder the objects' files are read from, and the names of the platforms whose folders they may be in.
 comment vcClassFindFreeInstance Sets the class's free_index to a free instance: the first from free_index on, else the last before it, else the end of the table.
@@ -322,21 +305,94 @@ comment vcObjectReload Reads an object from a file into one that exists (the giv
 comment vcDefault_ReturnZero What a class gives for a callback that has nothing to do: hands back 0.
 comment vcDefault_ReturnOne What a class gives for a callback that only has to succeed: hands back 1.
 comment vcDefault_ReturnArg3 What a class with no children gives for its collect callback: hands back the changed bits it was given.
-comment vcFileOpen Opens a file of the game's disc and fills its buffer.
-comment vcFileClose Closes a file and frees its buffer.
-comment vcFileRead Reads bytes from a file through its buffer. Hands back how many.
+
+# The engine's files (src/game/engine/files.c): read from the game's disc through a 64 KB buffer, or
+# created on a drive of the console; and the table of the objects read from one (vcObjectLoad).
+001160C0  func  vcFileFill
+00116140  func  vcFileRead
+00116270  func  vcFileCreate
+001162D0  func  vcFileOpen
+00116340  func  vcFileClose
+00116380  func  vcFileSeek
+001163E0  func  vcFileSkip
+00116450  func  vcFileTell
+00116460  func  vcFileReadIfOpen
+00116490  func  vcFileReadBytes
+001164C0  func  vcFileReadU16
+001164E0  func  vcFileReadU32
+00116500  func  vcFileReadU16s
+00116530  func  vcFileReadU32s
+00116560  func  vcFileExists
+00125D20  func  vcFileAddObject
+00125DA0  func  vcFileFreeObjects
+001B9A90  var   vcFileDrive  char                     # the drive letter vcFileCreate and vcFileExists put before a name: 'D'
+001A8B1C  data  vcFileOnDriveFormat                   # "%c:\%s": a drive letter, a name
+001A8B24  data  vcFileOnDiscFormat                    # "D:\%s": a name on the game's disc
+struct  vcFile  24                              # a file the engine reads, through a 64 KB buffer
+field   vcFile  00  handle         u32          # the console's handle; 0 when closed
+field   vcFile  04  buffer         u32          # 64 KB of it, from malloc
+field   vcFile  08  buffer_offset  u32          # where in the file the buffer starts
+field   vcFile  0C  position       u32          # where in the buffer the next read is
+field   vcFile  10  size           u32          # the file's size in bytes
+field   vcFile  14  by_name        u32          # 1 when vcObjectGet opened it for an object asked for by name; vcFileOpen sets 0
+field   vcFile  18  object_count   s32          # the objects read from it so far, which later references to them name by their index
+field   vcFile  1C  object_capacity  s32        # the objects its table has room for
+field   vcFile  20  objects        u32          # their handles, a table of u32
+
+# The engine's formatted strings (src/game/engine/format.c): two static buffers, used in turn.
+00125DD0  func  vcFormat
+00125E10  func  vcFormatAppend
+00125E60  func  vcFormatLast
+00125E70  func  vcFormatClear
+00125E90  func  vcStrLower
+002403B8  var   vcFormatBuffers  char[2048]           # two buffers of 1 KB
+00240BB8  var   vcFormatBufferIndex  u32              # the one vcFormat wrote last: 0 or 1
+
+# The engine's rectangles (src/game/engine/rects.c): a vcRect is left, top, right, bottom.
+00110060  func  vcRectSet
+00110090  func  vcRectCopy
+001100C0  func  vcRectInflate
+001100F0  func  vcRectOffset
+00110120  func  vcFileReadRect
+00110180  func  vcRectPlace
+00110230  func  vcScreenRectReset
+002BF2F0  data  vcScreenRect                          # a vcRect: the part of the screen the game lays its screens out in
+001B9A74  data  vcScreenRectDefault                   # a vcRect: 48, 36, 592, 444, the title-safe part of 640 x 480
+struct  vcRect  10                              # a rectangle on the screen, in pixels
+field   vcRect  00  left    s32
+field   vcRect  04  top     s32
+field   vcRect  08  right   s32
+field   vcRect  0C  bottom  s32
+
+comment vcFileFill Learns the file's size, allocates its 64 KB buffer and reads the start of the file into it. Hands back 0 if there is no memory for the buffer.
+comment vcFileRead Reads bytes from the file through its buffer, refilling it as the read goes past it (a whole 64 KB part goes straight to the reader). Hands back how many were asked for, or 0 at the end of the file.
+comment vcFileCreate Creates a file on vcFileDrive to be written, replacing one of that name. Hands back whether it could.
+comment vcFileOpen Opens a file of the game's disc to be read and fills its buffer. Hands back whether it could.
+comment vcFileClose Frees the file's buffer and closes it. Hands back 0 if the console would not close it.
+comment vcFileSeek Moves the next read to a place in the file: within the buffer, or reading the 64 KB from there.
+comment vcFileSkip Moves the next read on by a number of bytes, as vcFileSeek.
+comment vcFileTell Where in the file the next read is.
+comment vcFileReadIfOpen Reads the given number of bytes, if the file is open. Hands back whether they were there.
+comment vcFileReadBytes Reads the given number of bytes. Hands back whether they were there.
 comment vcFileReadU16 Reads a 16-bit word. Hands back whether it was there.
 comment vcFileReadU32 Reads a 32-bit word. Hands back whether it was there.
-comment vcFileReadBytes Reads the given number of bytes. Hands back whether they were there.
+comment vcFileReadU16s Reads the given number of 16-bit words. Hands back whether they were there.
 comment vcFileReadU32s Reads the given number of 32-bit words. Hands back whether they were there.
-comment vcFileTell Where in the file the next read is.
-comment vcFileSeek Moves the next read to a place in the file.
-comment vcFileSkip Moves the next read on by a number of bytes.
-comment vcFileAddObject Adds an object read from the file to its table. Hands back its index there.
+comment vcFileExists Whether a file of that name is on vcFileDrive.
+comment vcFileAddObject Adds an object read from the file to its table, which doubles when full (32 to start). Hands back its index there.
 comment vcFileFreeObjects Frees the file's table of objects.
-comment vcFormat Formats a string into the one of two static buffers not used last time, which it hands back.
+comment vcFormat Formats a string into the one of the two buffers not written last, which it hands back (empty with no format).
+comment vcFormatAppend Formats a string onto the end of the buffer vcFormat wrote last, which it hands back.
 comment vcFormatLast The buffer vcFormat wrote last.
+comment vcFormatClear Empties the buffer vcFormat wrote last, which it hands back.
 comment vcStrLower Turns a string lower case in place.
+comment vcRectSet Sets a rectangle's left, top, right and bottom. Hands back 0 with no rectangle.
+comment vcRectCopy Copies a rectangle into another. Hands back 0 if either is missing.
+comment vcRectInflate Grows a rectangle by the given amounts on each side (left and right, top and bottom). Hands back 0 with no rectangle.
+comment vcRectOffset Moves a rectangle by the given amounts. Hands back 0 with no rectangle.
+comment vcFileReadRect Reads a rectangle from a file: its left, right, top and bottom, in that order.
+comment vcRectPlace Places a rectangle against vcScreenRect: its left from the screen's left (1) or right (2), its top from the screen's top (4) or bottom (8), then centred on that point across (16) or down (32); its size stays.
+comment vcScreenRectReset Sets vcScreenRect to vcScreenRectDefault.
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 000D6F70  func  gcComponent_Create                  # gcComponent's slot +34
