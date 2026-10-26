@@ -77,6 +77,8 @@ def steps():
                     "--manual-functions", os.path.join(ANALYSIS, "hand_functions.json")]),
         # the recompiler cuts by count: the C goes to its files, with descriptions
         ("organize", [os.path.join(REPO, "tools", "organize_gen.py")]),
+        # the structures and variables of symbols.txt, for the C written by hand
+        ("header", [os.path.join(REPO, "tools", "symbols.py"), "header"]),
     ]
 
 

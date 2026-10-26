@@ -53,6 +53,7 @@
 /* xboxrecomp runtime headers */
 #include <xbox/xboxrecomp.h>
 #include "recomp_icall_feedback.h"
+#include "clock_bridge.h"
 
 /*
  * If xboxrecomp.h is not an umbrella header in your setup, include
@@ -512,6 +513,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     /* Step 5: Initialize kernel bridge (thunk table in Xbox memory) */
     printf("Initializing kernel bridge...\n");
     xbox_kernel_bridge_init();
+    clock_Init();               /* the clock tied to the frames, when asked for (clock_bridge.c) */
 
     /* Step 6: Initialize stack */
     g_esp = XBOX_STACK_TOP;

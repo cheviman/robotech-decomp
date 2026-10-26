@@ -415,6 +415,30 @@ void sub_0014E5BE(void)
         sub_0014E5BE_gen();
 }
 
+/* GetSystemTimeAsFileTime (0x0014E562): the date, which time() and the save
+ * stamps read, tied to the frames too while the clock is virtual. */
+extern void sub_0014E562_gen(void);
+
+void sub_0014E562(void)
+{
+    if (clock_Virtual())
+        clock_GetSystemTimeAsFileTime();
+    else
+        sub_0014E562_gen();
+}
+
+/* GetTickCount (0x0014E6E6): the milliseconds of the frames while the clock
+ * is virtual. */
+extern void sub_0014E6E6_gen(void);
+
+void sub_0014E6E6(void)
+{
+    if (clock_Virtual())
+        clock_GetTickCount();
+    else
+        sub_0014E6E6_gen();
+}
+
 /* ── DirectSound ───────────────────────────────────────────── */
 
 #include "dsound_bridge.h"

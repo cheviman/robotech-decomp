@@ -123,8 +123,9 @@ The game's C is written by hand, a function at a time, into `src/game/` by subje
 recompiled version's place. Everything else under `src/recomp/gen/` is generated and never edited by
 hand.
 
-- **Names, descriptions, files**: `symbols/symbols.txt`, the one place they live (its header says how to
-  read it). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
+- **Names, descriptions, files, types**: `symbols/symbols.txt`, the one place they live (its header says
+  how to read it); `struct`, `field` and `var` lines become `symbols.h`'s accessors for the C written by
+  hand (`vcClassDesc_create(p)`, `vcClassByType(type)`). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
   a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C.
 - **A function written by hand**: defined in `src/game/` by its name in `symbols.txt`, with the
   recompiled code's interface (`src/game/decomp.h`); the pipeline's `hand` step tells the recompiler to
@@ -145,8 +146,9 @@ hand.
 
   `verify_c.py` runs each function written by hand against the game's own machine code with
   xboxrecomp's conformance harness (it needs a 32-bit MSVC). `scenario.py` plays the scripted scenarios
-  of `tests/scenarios/` with the clock tied to the frames, so runs repeat frame for frame, and compares
-  every dumped frame with the reference the build before wrote (`--save` records it). `noise_report.py`
+  of `tests/scenarios/` (the menu, the first mission, a save) with every clock the game reads tied to the
+  frames and an empty save folder of its own, so runs repeat frame for frame, and compares every dumped
+  frame and saved file with the reference the build before wrote (`--save` records it). `noise_report.py`
   counts what keeps the generated C from reading as written and fails if a count went up
   (`--save` after a round that brought some down).
 

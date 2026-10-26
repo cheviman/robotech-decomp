@@ -11,6 +11,9 @@
 #define CLOCK_BRIDGE_H
 
 int clock_Virtual(void);                  /* ROBOTECH_VIRTUAL_CLOCK=1 */
-void clock_QueryPerformanceCounter(void); /* replaces the game's while the clock is virtual */
+void clock_QueryPerformanceCounter(void); /* replace the game's while the clock is virtual */
+void clock_GetSystemTimeAsFileTime(void);
+void clock_GetTickCount(void);
+void clock_Init(void);                    /* after the kernel bridge: the thunk of KeQuerySystemTime */
 
 #endif

@@ -8,8 +8,9 @@ Author:      Sebastian Toyos
 
 A scenario (tests/scenarios/NAME.txt) is a pad script by frame, how many
 frames to run and how often to dump one. The game runs it with the clock tied
-to the frames (ROBOTECH_VIRTUAL_CLOCK, src/clock_bridge.c), so two runs of one
-build present the same frames; each dumped frame's hash is compared with the
+to the frames (ROBOTECH_VIRTUAL_CLOCK, src/clock_bridge.c) and an empty save
+folder of its own (ROBOTECH_SAVE_DIR), so two runs of one build present the
+same frames; each dumped frame's hash is compared with the
 reference kept beside the scenario (NAME.frames), which the build before a
 change wrote. A function rewritten by hand has to leave every frame as it was.
 
@@ -23,6 +24,7 @@ Scenario lines (# starts a comment):
     dump    K        dump every K-th frame
     movies  no       run from a copy of the game without its movies (analysis/game_nomovies,
                      made from game/ the first time), which boots to the menu in seconds
+    saves   compare  compare the files the game saved too (their hashes, by path)
 
 xboxrecomp's runtime has no deterministic time and no frame comparison, so
 this is the project's own; the frames come from the Direct3D 11 bridge
@@ -45,7 +47,7 @@ RUNS = os.path.join(REPO, "analysis", "scenarios")
 
 
 def load(path):
-    out = {"script": "", "frames": 600, "dump": 60, "movies": "yes"}
+    out = {"script": "", "frames": 600, "dump": 60, "movies": "yes", "saves": "no"}
     for line in open(path, encoding="utf-8"):
         line = line.split("#")[0].strip()
         if not line:
@@ -69,7 +71,8 @@ def game_dir(movies):
 def run(name, sc):
     out = os.path.join(RUNS, name)
     shutil.rmtree(out, ignore_errors=True)
-    os.makedirs(out)
+    saves = os.path.join(out, "saves")
+    os.makedirs(saves)
     env = dict(os.environ)
     env.update({
         "ROBOTECH_VIRTUAL_CLOCK": "1",
@@ -78,6 +81,8 @@ def run(name, sc):
         "ROBOTECH_D3D11_DUMP_EVERY": str(sc["dump"]),
         "ROBOTECH_EXIT_FRAME": str(sc["frames"]),
         "ROBOTECH_GAME_DIR": game_dir(sc["movies"]),
+        # its own empty save folder: what the game finds saved changes its menus
+        "ROBOTECH_SAVE_DIR": saves,
         "RECOMP_WATCHDOG_SECS": str(sc["frames"] // 60 * 3 + 60),
     })
     with open(os.path.join(out, "stderr.txt"), "w") as err:
@@ -86,7 +91,15 @@ def run(name, sc):
     frames = {}
     for path in sorted(glob.glob(os.path.join(out, "f*.bmp"))):
         frame = int(os.path.basename(path)[1:-4])
-        frames[frame] = hashlib.md5(open(path, "rb").read()).hexdigest()
+        frames["%05d" % frame] = hashlib.md5(open(path, "rb").read()).hexdigest()
+    if sc["saves"] == "compare":
+        # the saves, not the partition images the runtime keeps beside them
+        for root, _, names in os.walk(saves):
+            for n in names:
+                path = os.path.join(root, n)
+                rel = os.path.relpath(path, saves).replace("\\", "/")
+                if rel.startswith(("UDATA/", "TDATA/")):
+                    frames["save:" + rel] = hashlib.md5(open(path, "rb").read()).hexdigest()
     return frames
 
 
@@ -105,17 +118,17 @@ def main():
         frames = run(name, sc)
         ref_path = os.path.join(SCENARIOS, name + ".frames")
         expected_count = sc["frames"] // sc["dump"]
-        if len(frames) < expected_count:
+        if sum(1 for k in frames if not k.startswith("save:")) < expected_count:
             print("%-10s ran %d of %d dumps: the game stopped early (analysis/scenarios/%s/stderr.txt)"
                   % (name, len(frames), expected_count, name))
             failed += 1
             continue
         if args.save:
             with open(ref_path, "w", encoding="utf-8", newline="\n") as f:
-                f.write("# tools/scenario.py --save: frame and the hash of its dump\n")
-                for frame, h in sorted(frames.items()):
-                    f.write("%05d %s\n" % (frame, h))
-            print("%-10s %d frames saved as the reference" % (name, len(frames)))
+                f.write("# tools/scenario.py --save: each dumped frame (or saved file) and its hash\n")
+                for key, h in sorted(frames.items()):
+                    f.write("%s %s\n" % (key, h))
+            print("%-10s %d frames and files saved as the reference" % (name, len(frames)))
             continue
         if not os.path.exists(ref_path):
             print("%-10s no reference yet (--save)" % name)
@@ -125,14 +138,16 @@ def main():
         for line in open(ref_path, encoding="utf-8"):
             line = line.split("#")[0].split()
             if len(line) == 2:
-                ref[int(line[0])] = line[1]
-        differ = [f for f in sorted(ref) if frames.get(f) != ref[f]]
-        if differ:
-            print("%-10s %d of %d frames differ from the reference, the first at frame %d"
-                  % (name, len(differ), len(ref), differ[0]))
+                ref[line[0]] = line[1]
+        differ = [k for k in sorted(ref) if frames.get(k) != ref[k]]
+        extra = sorted(k for k in frames if k.startswith("save:") and k not in ref)
+        if differ or extra:
+            print("%-10s %d of %d differ from the reference, the first %s%s"
+                  % (name, len(differ), len(ref), differ[0] if differ else "-",
+                     ("; saved too: " + ", ".join(extra)) if extra else ""))
             failed += 1
         else:
-            print("%-10s %d frames, all as the reference" % (name, len(ref)))
+            print("%-10s %d frames and files, all as the reference" % (name, len(ref)))
     sys.exit(1 if failed else 0)
 
 

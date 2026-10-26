@@ -68,8 +68,9 @@ def main():
         f.write(xbe_run.harness_source(os.path.abspath(XBE), sections, lifted, entries))
     runtime_inc = os.path.join(TOOLKIT, "templates", "runtime")
     game_inc = os.path.join(REPO, "src", "game")
-    r = conf._cl(vcvars, WORK, '/W3 /EHa /I"%s" /I"%s" xbe_harness.c /Fexbe_harness.exe'
-                 % (runtime_inc, game_inc))
+    gen_inc = os.path.join(REPO, "src", "recomp", "gen")        # symbols.h
+    r = conf._cl(vcvars, WORK, '/W3 /EHa /I"%s" /I"%s" /I"%s" xbe_harness.c /Fexbe_harness.exe'
+                 % (runtime_inc, game_inc, gen_inc))
     if r.returncode != 0:
         sys.exit("harness build failed:\n" + r.stdout + r.stderr)
 

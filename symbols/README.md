@@ -12,7 +12,7 @@ sections, and `tools/symbols.py layout` its file lines; a line written by hand i
 
 | File | Read by | What |
 |---|---|---|
-| `symbols.txt` | `tools/apply_names.py`, `tools/apply_files.py`, `tools/organize_gen.py` | every name (`func`, `data`), each function's description (`comment`), the files the C is laid out in (`file`); SegaSonic's format, its header says how to read it |
+| `symbols.txt` | `tools/apply_names.py`, `tools/apply_files.py`, `tools/organize_gen.py`, `tools/symbols.py header` | every name (`func`, `data`, `var`), each function's description (`comment`), the files the C is laid out in (`file`), the game's structures (`struct`, `field`); SegaSonic's format, its header says how to read it |
 | `lib_matches.json` | `tools/symbols.py merge` | the XDK library functions and variables matched against the XDK's `.lib` files (`tools/match_libs.py` makes it); XbSymbolDatabase's names win where both name an address |
 | `classes.json` | `tools/symbols.py merge`, `layout` | the engine's classes, their registering functions and callbacks, from the descriptors the game registers (`tools/find_classes.py` makes it) |
 | `registries.json` | `tools/symbols.py layout` | the game's object types (Entity, Effect, Weapon, Screen...), their registering functions and slots, from the registries the game fills at start (`tools/find_registries.py` makes it) |

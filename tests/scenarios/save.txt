@@ -1,0 +1,8 @@
+# Saving from the menu to an empty hard disk: New Game, down to Save Game, the data check, New Save,
+# the name keyboard (the game's default, JACK), OK; then back in the menu. The run ends before the list
+# of saves shows again, whose dates are the host's file times. The saved files are compared too.
+script  f360:a,f600:down,f660:a,f840:a,f1020:a
+frames  1200
+dump    60
+movies  no
+saves   compare

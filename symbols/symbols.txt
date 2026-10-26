@@ -186,6 +186,9 @@
 00157AC0  func  Direct3DCreate8                     # mov eax, 1; ret 4; XbSymbolDatabase does not know it
 comment Direct3DCreate8 The XDK's Direct3DCreate8: hands back 1. The game calls it once, before Direct3D_CreateDevice.
 
+0014E6E6  func  xapi_GetTickCount                   # mov eax, [KeTickCount]; mov eax, [eax]; ret
+comment xapi_GetTickCount XAPI's GetTickCount: the milliseconds since the console started, the kernel's KeTickCount.
+
 # The engine's object system (symbols/classes.json has the classes)
 00110370  func  vcRegisterClass
 001103C0  func  vcObjectCreate
@@ -195,8 +198,27 @@ comment Direct3DCreate8 The XDK's Direct3DCreate8: hands back 1. The game calls 
 00147480  func  vcDefault_ReturnZero                # xor eax, eax; ret
 00147490  func  vcDefault_ReturnOne                 # mov eax, 1; ret
 0013FDD0  func  vcDefault_ReturnArg3                # mov eax, [esp + 0xC]; ret
-0023B4E8  data  vcClassTable                        # 0x70 bytes a class: its descriptor (0x5C) and the instance table
-002BF1E0  data  vcClassByType                       # a pointer per type to its class in vcClassTable
+0023B4E8  data  vcClassTable                        # the classes, a vcClass (0x70 bytes) per type
+002BF1E0  var   vcClassByType  u32[]  vcClass       # each type's class in vcClassTable
+
+# The object system's structures, as vcRegisterClass, vcObjectCreate, vcObjectClone and the walk over an
+# object's children (0x00110810) read them; a field nobody has seen used is not listed.
+struct  vcClassDesc  5C                         # what a class registers: vcRegisterClass copies it into its vcClass
+field   vcClassDesc  00  type      u32          # the class's type: its index in vcClassTable and vcClassByType, a handle's high 16 bits
+field   vcClassDesc  04  name      char[32]     # the class's name: vcTexture
+field   vcClassDesc  24  file_tag  char[4]      # the tag of the class's files: txr
+field   vcClassDesc  30  flags     u32          # bit 0 tested by the walk over an object's children
+field   vcClassDesc  34  create    u32          # vcObjectCreate calls it: allocates the object
+field   vcClassDesc  38  destroy   u32          # vcObjectRelease calls it: frees the object and its children
+field   vcClassDesc  40  load      u32          # vcObjectLoad calls it: reads the object, by the file's version
+field   vcClassDesc  44  save      u32          # writes the object, by the file's version
+field   vcClassDesc  4C  copy      u32          # vcObjectClone calls it: fills a new object from another
+field   vcClassDesc  54  get_size  u32          # hands back the object's size in bytes
+struct  vcClass  70                             # a class in vcClassTable: its vcClassDesc (whose fields sit at the same offsets), then its instances
+field   vcClass  64  capacity   u32             # how many instances it may have: vcRegisterClass's second argument
+field   vcClass  6C  instances  u32  vcInstance # its table of instances, capacity x 0x4C bytes, which vcRegisterClass allocates
+struct  vcInstance  4C                          # an object of a class: a handle's low 16 bits index it in the class's instances
+field   vcInstance  00  object  u32             # the object's own data, which the class's callbacks work on
 comment vcRegisterClass Registers an engine class: copies its descriptor (the type, its name, its file tag and the callbacks the object system calls) into vcClassTable, points vcClassByType at it and allocates the class's table of instances.
 comment vcObjectCreate Creates an object of a class: takes an instance and runs the class's Create callback.
 comment vcObjectRelease Releases an object: the class's Destroy callback frees it and its children.

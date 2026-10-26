@@ -73,18 +73,23 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   registries, found but not named: next, what each registry slot is (the generic function that calls
   it) and each type's name (its strings and behaviour).
 - **The base for the decompilation** (25-10-2026), done: `symbols/symbols.txt` is the one place of the
-  names, descriptions and files (SegaSonic's format); the recompiled C is laid out in 61 files by
-  subject with each function's description in its header; C written by hand goes in `src/game/` and
+  names, descriptions, files and types (SegaSonic's format: `func`, `data`, `var`, `struct`, `field`,
+  `file`, `comment`; `tools/symbols.py header` makes `symbols.h`, an accessor per field and variable for
+  the C written by hand, reading the guest's memory in place); the recompiled C is laid out in 61 files
+  by subject with each function's description in its header; C written by hand goes in `src/game/` and
   takes its recompiled version's place (`tools/hand_functions.py`, the recompiler's
-  `--manual-functions`); and two checks: `tools/verify_c.py` runs each function written by hand against
+  `--manual-functions`); and two checks. `tools/verify_c.py` runs each function written by hand against
   the game's own machine code with xboxrecomp's conformance harness (it caught a function returning 2
-  for 1 on purpose: 11 of 33 vectors), and `tools/scenario.py` plays scripted scenarios with a pad
-  script by frame and a clock tied to the frames (`ROBOTECH_VIRTUAL_CLOCK`), so two runs repeat frame
-  for frame (35 of 35 dumps; the mission diverged before), and compares them with saved references.
-  First functions written by hand: the object system's three default callbacks, 33 vectors and 35
-  frames as before.
+  for 1 on purpose: 11 of 33 vectors). `tools/scenario.py` plays the menu, the first mission and a save
+  to an empty hard disk with a pad script by frame and every clock the game reads tied to the frames
+  (`ROBOTECH_VIRTUAL_CLOCK`: the engine's counter, the date time() seeds srand with and saves are
+  stamped with, the tick count; the kernel thunk of KeQuerySystemTime points at it), so two runs
+  repeat frame for frame and file for file (60 of 60), and compares them with saved references. The
+  save's list of saves shows the host's file times, so the scenario ends before it. First functions
+  written by hand: the object system's three default callbacks; first types: the object system's
+  `vcClassDesc`, `vcClass`, `vcInstance`.
 - **Noise that comes from xboxrecomp's conventions**, counted and explained: a function the bridges wrap
-  keeps its recompiled body as `sub_<address>_gen` (the toolkit's wrapper scheme, 32 of the "unnamed"),
+  keeps its recompiled body as `sub_<address>_gen` (the toolkit's wrapper scheme, 35 of the "unnamed"),
   and a direct call to a function written by hand goes through the replacement lookup
   (`RECOMP_ICALL_SAFE`, "manual call": the toolkit makes sure no caller bypasses a replacement; 21 of the
   "indirect calls" for the first three functions). Both go away as the callers are written by hand too.
