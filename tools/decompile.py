@@ -577,6 +577,14 @@ def write(out_dir, for_build=False):
     emitter.writes = {entry: set(summary.writes)
                       for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
     emitter.recompiled = set(flow.outside)
+    variables = {}
+    for address, var in sym["vars"].items():
+        found = symbols.TYPE_RE.match(var["type"])
+        count = found.group(2)
+        # an array of a count not given (u32[]) goes on up to the next variable
+        variables[address] = (var["name"], found.group(1), None if count is None else int(count) if count else -1)
+    emitter.guest = emit.GuestNames(variables, {address: name for address, name in sym["data"].items()
+                                                if address not in sym["vars"]})
     emitter.flow = flow
     emitter.comments = dict(sym["comments"])
     for entry, f in built.items():

@@ -21,6 +21,6 @@ decompiled_registers 60816
 decompiled_flags 666
 decompiled_arguments 32675
 decompiled_slots 2968
-decompiled_memory_by_address 13918
+decompiled_memory_by_address 11760
 decompiled_memory_computed 16825
 decompiled_gotos 0

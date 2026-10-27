@@ -154,7 +154,7 @@ uint32_t sub_00016E80(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &ignored, &ignored_2, &ignored_3);
@@ -173,13 +173,13 @@ uint32_t sub_00016EB0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	t1 = saved_arg1;
 	ecx = MEM32(eax + 0xF4u);
 	if (t1 == 0u)
@@ -196,14 +196,14 @@ uint32_t sub_00017110(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax += 0xD0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u) + 0xD0u;
+	eax = GameObjectLastObject + 0xD0u;
 	return eax;
 }
 
@@ -211,7 +211,7 @@ uint32_t sub_00017260(void)
 {
 	uint32_t arg0 = 0, eax = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
-	esi = MEM32(MEM32(0x2B5DACu) + 0x54u);
+	esi = MEM32(GameObjectFamilies(11) + 0x54u);
 	ebp = MEM32(esi + 0x28u);
 	edi = 0u;
 	if ((int32_t)ebp <= 0)
@@ -224,13 +224,13 @@ uint32_t sub_00017260(void)
 		eax = MEM32((MEM32(esi) + 0x1Cu) * edi + MEM32(esi + 0x24u));
 		if ((int32_t)(eax & 0x7F800000u) > 0)
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if ((int8_t)(MEM8(eax + 0xF4u) & 1u) > 0)
 				break;
 		}
@@ -306,13 +306,13 @@ uint32_t sub_00017760(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	arg4 = 0u;
 	arg3 = 0u;
@@ -827,13 +827,13 @@ uint32_t sub_00018B60(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u || (MEM8(eax + 4u) & 1u) != 0u)
 	{
 		eax = 0u;
@@ -850,13 +850,13 @@ uint32_t sub_00019090(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -944,13 +944,13 @@ uint32_t sub_000191B0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -979,13 +979,13 @@ uint32_t Entity_Collect(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1_2 = saved_arg1;
 	arg0_2 = MEM32(eax + 0x18Cu);
 	ignored_3 = x86_call(GameObjectCollect, 0x000196CDu, 2, arg0_2, arg1_2);
@@ -1015,25 +1015,25 @@ uint32_t sub_000196E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		eax = 1u;
 		return eax;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
 		return eax;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg5 = 0u;
 	arg3 = eax;
 	arg2_2 = esi;
@@ -1706,7 +1706,7 @@ uint32_t sub_0001D260(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x23A48Cu);
+	eax = vcGameTime;
 	MEM32(0x1E5788u) = eax;
 	MEM32(0x20DCE0u) = MEM32(0x20DCE0u) + 1u;
 	return eax;
@@ -1939,8 +1939,8 @@ void GameObjectFromHandle(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx, uint3
 		if (t1 != 0u && MEM32(eax) == ecx)
 		{
 			eax += 0x1Cu;
-			MEM32(0x1E57B0u) = ecx;
-			MEM32(0x1E57B4u) = eax;
+			GameObjectLastHandle = ecx;
+			GameObjectLastObject = eax;
 			*p_eax = eax;
 			*p_ecx = ecx;
 			return;
@@ -1963,7 +1963,7 @@ uint32_t GameObjectQueueMessage(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	edx = arg0;
-	eax = MEM32(0x1E57A8u) << 2;
+	eax = GameObjectQueueCurrent << 2;
 	ebp = MEM32(eax + 0x1E5798u);
 	ebx = (MEM16(edx + 0x10u) + 0x17u) & ~3u;
 	if (ebp < MEM32(eax + 0x1E57A0u) + ebx)
@@ -1977,7 +1977,7 @@ uint32_t GameObjectQueueMessage(uint32_t arg0, uint32_t arg1)
 		eax = g_eax;
 		ignored = g_ecx;
 		edx = g_edx;
-		ecx = MEM32(0x1E57A8u);
+		ecx = GameObjectQueueCurrent;
 		esi = MEM32(ecx * 4u + 0x1E5790u);
 		edx = ecx * 4u + 0x1E5790u;
 		ecx = MEM32(ecx * 4u + 0x1E57A0u);
@@ -1992,7 +1992,7 @@ uint32_t GameObjectQueueMessage(uint32_t arg0, uint32_t arg1)
 		x86_call(crt_free, 0x0001D6E7u, 1, arg0_2);
 		ignored_2 = g_eax;
 		edx = g_edx;
-		eax = MEM32(0x1E57A8u) << 2;
+		eax = GameObjectQueueCurrent << 2;
 		MEM32(eax + 0x1E5790u) = saved_eax;
 		edx = saved_arg0;
 		MEM32(eax + 0x1E5798u) = ebp;
@@ -2007,8 +2007,8 @@ uint32_t GameObjectQueueMessage(uint32_t arg0, uint32_t arg1)
 	x86_rep_movs32(edi, esi, ecx);
 	x86_rep_movs8(edi + ecx * 4u, esi + ecx * 4u, edx_2 & 3u);
 	MEM32(eax + 0x1E57A0u) = MEM32(eax + 0x1E57A0u) + ebx;
-	eax = MEM32(0x1E57ACu) + 1u;
-	MEM32(0x1E57ACu) = eax;
+	eax = GameObjectQueuedCount + 1u;
+	GameObjectQueuedCount = eax;
 	return eax;
 }
 
@@ -2018,16 +2018,16 @@ uint32_t GameObjectClearQueue(void)
 	uint32_t eax = 0;
 
 	eax = 0u;
-	MEM32(0x1E57ACu) = 0u;
-	MEM32(0x1E57A0u) = 0u;
-	MEM32(0x1E57A4u) = 0u;
+	GameObjectQueuedCount = 0u;
+	GameObjectQueueUsed(0) = 0u;
+	GameObjectQueueUsed(1) = 0u;
 	return eax;
 }
 
 /* Starts the objects: GameObjectTime from vcGameTime, no families. */
 void GameObjectsInit(void)
 {
-	MEM32(0x1E578Cu) = MEM32(0x23A48Cu);
+	GameObjectTime = vcGameTime;
 	x86_rep_stos32(0x2B5D80u, 0u, 0x20u);
 }
 
@@ -2197,8 +2197,8 @@ uint32_t GameObjectsUnloadAll(uint32_t edx)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0;
 
-	MEM32(0x23A48Cu) = 0u;
-	MEM32(0x1E578Cu) = 0u;
+	vcGameTime = 0u;
+	GameObjectTime = 0u;
 	esi = 1u;
 	do
 	{
@@ -2279,7 +2279,7 @@ uint32_t sub_0001E730(uint32_t arg0)
 	eax = arg0 * 3u * 8u + 0x1E5838u;
 	if (eax == 0u || MEM32(eax + 4u) == 0u)
 		return eax;
-	ecx = MEM32(0x23A48Cu);
+	ecx = vcGameTime;
 	t1 = MEM32(eax + 0xCu) + (ecx - MEM32(eax + 8u)) * MEM32(eax + 0x10u);
 	MEM32(eax + 0xCu) = t1;
 	if ((int32_t)t1 < 0)
@@ -2361,7 +2361,7 @@ void sub_0001E830(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 	eax = arg0 * 3u * 8u + 0x1E5838u;
 	if (eax != 0u)
 	{
-		MEM32(eax + 8u) = MEM32(0x23A48Cu);
+		MEM32(eax + 8u) = vcGameTime;
 		MEM32(eax + 0xCu) = arg1;
 		MEM32(eax + 4u) = 1u;
 		MEM32(eax + 0x10u) = arg2;
@@ -2399,7 +2399,7 @@ uint32_t sub_0001E980(void)
 	uint32_t t1 = 0;
 
 	edi = 0u;
-	MEM32(0x1E5788u) = MEM32(0x23A48Cu);
+	MEM32(0x1E5788u) = vcGameTime;
 	t1 = MEM32(0x1E5FC0u);
 	MEM32(0x1E5FB8u) = 0u;
 	MEM32(0x1E5FBCu) = 0u;
@@ -2419,14 +2419,14 @@ uint32_t sub_0001E980(void)
 		if (eax != ebp)
 		{
 			eax = MEM32(esi + 0x44u);
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored_2, &ignored_3);
 				ebx = eax;
 			}
 			else
-				ebx = MEM32(0x1E57B4u);
+				ebx = GameObjectLastObject;
 			arg0 = MEM32(esi + 0x44u);
 			x86_call(sub_0009C6E0, 0x0001E9F0u, 1, arg0);
 			eax = g_eax;
@@ -2454,10 +2454,10 @@ uint32_t sub_0001EA30(uint32_t eax, uint32_t arg0)
 	if (esi == 0u)
 		return eax;
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 == MEM32(0x1E57B0u))
+	if (eax_2 == GameObjectLastHandle)
 	{
 		arg2 = 1u;
-		arg1 = MEM32(0x1E57B4u);
+		arg1 = GameObjectLastObject;
 		eax_2 = sub_0002A490(arg1, arg2);
 		return eax_2;
 	}
@@ -2669,9 +2669,9 @@ uint32_t sub_0001FD50(uint32_t arg1, uint32_t arg2)
 	if ((eax & 1u) == 0u)
 		return eax;
 	eax = MEM32(esi + 0x44u);
-	if (eax == MEM32(0x1E57B0u))
+	if (eax == GameObjectLastHandle)
 	{
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 		arg1_2 = eax;
 		arg0 = esi;
 		eax = sub_0001FBE0(eax, arg0, arg1_2);
@@ -2705,14 +2705,14 @@ void sub_0001FDC0(uint32_t arg0, uint32_t arg1)
 		if (MEM32(edi + 8u) != 0xFFFFFFFFu && (MEM32(edi - 0x24u) & ebp) != 0u)
 		{
 			eax = MEM32(edi);
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0_2 = eax;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				esi = eax;
 			}
 			else
-				esi = MEM32(0x1E57B4u);
+				esi = GameObjectLastObject;
 			eax = edi - 0x44u;
 			if (eax != 0u && esi != 0u)
 			{
@@ -2872,14 +2872,14 @@ uint32_t sub_000205A0(uint32_t edx, uint32_t arg0)
 	uint32_t t1 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &edx);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = MEM32(esi + 0x18u);
 	g_edx = edx;
 	x86_call(sub_001113A0, 0x000205CAu, 1, arg0_2);
@@ -2915,23 +2915,23 @@ uint32_t sub_00020790(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	ebp = saved_arg1;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = 0u;
 	eax = edi + 0x24u;
 	while (MEM32(eax) != 0u)
@@ -2951,13 +2951,13 @@ uint32_t sub_00020790(uint32_t arg0, uint32_t arg1)
 		MEM32(ebx + 0x24u) = eax;
 		if (eax != 0u)
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0_2 = eax;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			MEM32(eax + 0x20u) = ebp;
 		}
 	}
@@ -2973,9 +2973,9 @@ uint32_t sub_00020790(uint32_t arg0, uint32_t arg1)
 		eax = 1u;
 		return eax;
 	}
-	if (esi == MEM32(0x1E57B0u))
+	if (esi == GameObjectLastHandle)
 	{
-		MEM32(MEM32(0x1E57B4u) + 0x24u) = ebp;
+		MEM32(GameObjectLastObject + 0x24u) = ebp;
 		eax = 1u;
 		return eax;
 	}
@@ -2993,13 +2993,13 @@ uint32_t sub_000208E0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(eax + 0x14u);
 	if ((ecx & 4u) == 0u)
 		return eax;
@@ -3033,14 +3033,14 @@ uint32_t sub_00020950(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x18u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x18u) = arg1;
 	return eax;
 }
@@ -3050,14 +3050,14 @@ uint32_t sub_00020980(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x14u) & 2u;
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x14u) & 2u;
+	eax = MEM32(GameObjectLastObject + 0x14u) & 2u;
 	return eax;
 }
 
@@ -3066,13 +3066,13 @@ uint32_t sub_000209B0(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x14u) = MEM32(eax + 0x14u) | 1u;
 	eax = MEM32(eax + 0x20u);
 	if (eax != 0u)
@@ -3094,13 +3094,13 @@ uint32_t sub_00020A00(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = MEM32(0x18u);
@@ -3143,17 +3143,17 @@ uint32_t sub_00020F90(uint32_t edi, uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	eax = MEM32(edi + 8u);
-	ecx = MEM32(0x1E57B0u);
+	ecx = GameObjectLastHandle;
 	if (eax != ecx)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
-		ecx = MEM32(0x1E57B0u);
-		esi = MEM32(0x1E57B4u);
+		ecx = GameObjectLastHandle;
+		esi = GameObjectLastObject;
 	}
 	else
 	{
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 		eax = esi;
 	}
 	if (MEM32(eax + 0x44u) == ecx)
@@ -3805,14 +3805,14 @@ uint32_t sub_00023FF0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x158u) = saved_arg1 * 0x3E8u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x158u) = arg1 * 0x3E8u;
 	return eax;
 }
@@ -3822,14 +3822,14 @@ uint32_t sub_00024030(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x164u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x164u);
+	eax = MEM32(GameObjectLastObject + 0x164u);
 	return eax;
 }
 
@@ -3859,14 +3859,14 @@ uint32_t sub_00024580(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x164u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x164u) = arg1;
 	return eax;
 }
@@ -4179,7 +4179,7 @@ uint32_t sub_00024AB0(uint32_t arg0, uint32_t arg1)
 		negative = (edx - 2u) >> 31;
 		eax = ((((negative ^ overflow) == 0u) - 1u) & ~0x6D5u) + 0x128Eu;
 	}
-	edx = MEM32(0x23A48Cu) + eax;
+	edx = vcGameTime + eax;
 	eax = arg0;
 	MEM32(0x1E62F4u) = 1u;
 	MEM32(0x1E62F8u) = edx;
@@ -4210,14 +4210,14 @@ uint32_t sub_00024BB0(void)
 			MEM32(0x1AEC8Cu) = 1u;
 			if (eax == 0u)
 				eax = 0u;
-			else if (eax != MEM32(0x1E57B0u))
+			else if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				eax = MEM32(eax + 0x44u);
 			}
 			else
-				eax = MEM32(MEM32(0x1E57B4u) + 0x44u);
+				eax = MEM32(GameObjectLastObject + 0x44u);
 			saved_eax = eax;
 			if ((eax & 0x3F800u) != 0xC000u)
 			{
@@ -4236,14 +4236,14 @@ uint32_t sub_00024BB0(void)
 			MEM32(0x1AEC8Cu) = 0u;
 			if (eax == 0u)
 				eax = 0u;
-			else if (eax != MEM32(0x1E57B0u))
+			else if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				eax = MEM32(eax + 0x44u);
 			}
 			else
-				eax = MEM32(MEM32(0x1E57B4u) + 0x44u);
+				eax = MEM32(GameObjectLastObject + 0x44u);
 			saved_eax = eax;
 			if ((eax & 0x3F800u) != 0xC000u)
 			{
@@ -4261,13 +4261,13 @@ uint32_t sub_00024BB0(void)
 		return eax;
 	}
 	eax = MEM32(0x1BC980u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg0 = MEM32(eax + 0x44u);
 	x86_call(sub_0009C6E0, 0x00024BDFu, 1, arg0);
 	eax = g_eax;
@@ -5267,9 +5267,9 @@ uint32_t sub_00026FB0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ebx = 0, edi = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ebx = arg1;
 		edi = arg2;
 		g_eax = eax;
@@ -5289,11 +5289,11 @@ uint32_t sub_00026FB0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		eax = x86_call(sub_00026B00, 0x00027025u, 0);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
 	ebx = arg1;
 	edi = arg2;
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	g_eax = eax;
 	g_ebx = ebx;
 	g_edi = edi;
@@ -5315,7 +5315,7 @@ uint32_t sub_000270E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
@@ -5327,9 +5327,9 @@ uint32_t sub_000270E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 				MEM32(eax) = MEM32(0x1E64B0u);
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		if (eax == 0u)
 		{
 			eax = arg1;
@@ -5350,7 +5350,7 @@ uint32_t sub_000270E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		MEM32(ecx) = eax;
 		return eax;
 	}
-	eax = MEM32(0x2BF1C0u);
+	eax = vcObjectCacheData;
 	if (eax == 0u)
 	{
 		eax = arg1;
@@ -6018,21 +6018,21 @@ uint32_t sub_00029A20(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
 	eax = MEM32(arg0 * 4u + 0x1BC980u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax + 0x39Cu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0x140u);
@@ -6055,21 +6055,21 @@ void sub_00029A80(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = MEM32(arg0 * 4u + 0x1BC980u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax + 0x39Cu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0x140u);
@@ -6106,13 +6106,13 @@ uint32_t sub_0002A270(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = MEM32(eax + 0x134u);
@@ -6128,19 +6128,19 @@ uint32_t sub_0002A2A0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	eax = MEM32(eax + 0x16Cu);
-	if (eax == MEM32(0x1E57B0u))
+	if (eax == GameObjectLastHandle)
 	{
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 		MEM32(eax + saved_arg1 * 4u + 0x68u) = saved_arg2;
 		return eax;
 	}
@@ -6158,13 +6158,13 @@ uint32_t sub_0002A300(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0x148u);
@@ -6189,13 +6189,13 @@ uint32_t sub_0002A340(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = MEM32(eax + 0x168u);
@@ -6211,13 +6211,13 @@ uint32_t sub_0002A370(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		arg0_2 = MEM32(eax + 0x168u);
@@ -6363,7 +6363,7 @@ uint32_t sub_0002A520(uint32_t arg1, uint32_t arg2, uint32_t arg3)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg1;
-	ecx = MEM32(0x23A48Cu);
+	ecx = vcGameTime;
 	if (MEM32(eax + 0x1D4u) <= ecx)
 	{
 		edx = arg2;
@@ -6380,7 +6380,7 @@ uint32_t sub_0002A560(uint32_t arg1, uint32_t arg2)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0, esi = 0;
 
-	ecx = MEM32(0x23A48Cu);
+	ecx = vcGameTime;
 	esi = arg1;
 	eax = ecx + 0x1356u;
 	edx = 0u;
@@ -6411,14 +6411,14 @@ void sub_0002A5A0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
 		*p_eax = eax;
 		return;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	*p_ecx = esi & 0x3F800u;
 	if (*p_ecx == 0x800u)
 	{
@@ -6544,7 +6544,7 @@ uint32_t sub_0002AA00(void)
 
 	x86_rep_stos32(0x1E6C58u, 0u, 0x1Eu);
 	x86_rep_stos32(0x1E6BD8u, 0u, 0x1Eu);
-	eax = MEM32(0x2B5D88u);
+	eax = GameObjectFamilies(2);
 	ecx = MEM32(eax + 0x20Cu);
 	MEM32(0x1E6BD0u) = 0u;
 	MEM32(0x1E6C50u) = 0u;
@@ -6568,14 +6568,14 @@ uint32_t sub_0002AA00(void)
 					esi = MEM32((MEM32(ebp) + 0x1Cu) * ecx + MEM32(ebp + 0x24u));
 					if ((int32_t)(esi & 0x7F800000u) > 0)
 					{
-						if (esi != MEM32(0x1E57B0u))
+						if (esi != GameObjectLastHandle)
 						{
 							arg0 = esi;
 							GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 							ebx = eax;
 						}
 						else
-							ebx = MEM32(0x1E57B4u);
+							ebx = GameObjectLastObject;
 						arg1 = ebx;
 						eax = sub_0009B6E0(arg1);
 						if (eax != 0u)
@@ -6634,7 +6634,7 @@ uint32_t sub_0002AA00(void)
 					ecx = stack_C + 1u;
 					stack_C = ecx;
 				} while ((int32_t)ecx < (int32_t)saved_edx);
-				eax = MEM32(0x2B5D88u);
+				eax = GameObjectFamilies(2);
 			}
 		}
 		ecx = stack_8 + 1u;
@@ -6710,14 +6710,14 @@ uint32_t sub_0002C360(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -7123,13 +7123,13 @@ uint32_t sub_0002D2F0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	eax = MEM32(eax + 0x10u);
@@ -7217,7 +7217,7 @@ uint32_t sub_0002DC30(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		if (eax != 0u)
 			MEM32(eax) = MEM32((edi * 0x3Au + ecx) * 4u + 0x1E6DA0u);
 		esi = (ecx * 0x3Au + edi) * 4u + 0x1E6DA0u;
-		if ((MEM32(esi) & 0x7FFFFFFFu) != 0u && MEM32(0x23A48Cu) <= MEM32((edi * 0x3Au + ecx) * 4u + 0x1E6DA0u))
+		if ((MEM32(esi) & 0x7FFFFFFFu) != 0u && vcGameTime <= MEM32((edi * 0x3Au + ecx) * 4u + 0x1E6DA0u))
 		{
 			eax = MEM32(esi) & 0x7FFFFFFFu;
 			return eax;
@@ -7234,7 +7234,7 @@ uint32_t sub_0002DC30(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	if (eax != 0u)
 		MEM32(eax) = MEM32((ecx * 0x3Au + edi) * 4u + 0x1E6DA0u);
 	esi = (edi * 0x3Au + ecx) * 4u + 0x1E6DA0u;
-	if ((MEM32(esi) & 0x7FFFFFFFu) == 0u || MEM32((ecx * 0x3Au + edi) * 4u + 0x1E6DA0u) < MEM32(0x23A48Cu))
+	if ((MEM32(esi) & 0x7FFFFFFFu) == 0u || MEM32((ecx * 0x3Au + edi) * 4u + 0x1E6DA0u) < vcGameTime)
 	{
 		arg3_2 = ebx;
 		arg1_2 = edx;
@@ -7279,7 +7279,7 @@ uint32_t sub_0002DD30(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		edi ^= eax;
 	}
 	ecx = MEM32((edi * 0x3Au + eax) * 4u + 0x1E6DA0u);
-	ebx = MEM32(0x23A48Cu);
+	ebx = vcGameTime;
 	if (ebx < ecx)
 	{
 		MEM32(0x1E6D60u) = MEM32(0x1E6D60u) + 1u;
@@ -7440,9 +7440,9 @@ uint32_t sub_0002DF50(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi == MEM32(0x1E57B0u))
+	if (edi == GameObjectLastHandle)
 	{
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 		arg0_2 = ebx;
 		eax = x86_call(vcObjectLoad_entry, 0x0002DF99u, 1, arg0_2);
 		arg2 = 0x14u;
@@ -7502,14 +7502,14 @@ uint32_t sub_0002DFE0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -7546,13 +7546,13 @@ uint32_t sub_0002E090(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	eax = MEM32(0x1EA274u);
 	if (eax == 0u)
 		return eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax + 0xD0u);
 	if (eax == 0u)
 		return eax;
@@ -7575,13 +7575,13 @@ uint32_t sub_0002E140(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(0x1EA274u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0xD0u);
@@ -9572,14 +9572,14 @@ uint32_t sub_00032F90(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x14Cu);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x14Cu);
+	eax = MEM32(GameObjectLastObject + 0x14Cu);
 	return eax;
 }
 
@@ -9590,14 +9590,14 @@ uint32_t sub_00032FC0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x148u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x148u) = arg1;
 	return eax;
 }
@@ -9723,14 +9723,14 @@ uint32_t sub_00033FD0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x194u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x194u);
+	eax = MEM32(GameObjectLastObject + 0x194u);
 	return eax;
 }
 
@@ -9741,13 +9741,13 @@ uint32_t sub_00034000(uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = MEM32(0x1EA854u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg0;
 	arg1 = ecx;
 	arg0_2 = MEM32(eax + 0x154u);
@@ -10101,13 +10101,13 @@ void sub_00034F00(uint32_t ebx)
 						arg1 = 0u;
 						arg0 = esi;
 						sub_00044B70(arg0, arg1);
-						if (esi != MEM32(0x1E57B0u))
+						if (esi != GameObjectLastHandle)
 						{
 							arg0 = esi;
 							GameObjectFromHandle(arg0, &eax, &ignored_2, &ignored_3);
 						}
 						else
-							eax = MEM32(0x1E57B4u);
+							eax = GameObjectLastObject;
 						eax = MEM32(eax + 0x2A4u);
 						if (eax != 0u)
 						{
@@ -10149,7 +10149,7 @@ uint32_t sub_00034F90(uint32_t ebx, uint32_t edi)
 				return eax;
 			arg0 = esi;
 			eax = sub_0004CC10(arg0);
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = esi;
 				eax = sub_0004CC10(arg0);
@@ -10157,7 +10157,7 @@ uint32_t sub_00034F90(uint32_t ebx, uint32_t edi)
 				GameObjectFromHandle(arg0, &eax, &ignored_2, &ignored_3);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			eax = MEM32(eax + 0x2A4u);
 			if (eax != 0u)
 			{
@@ -10207,7 +10207,7 @@ uint32_t sub_00035410(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	esi = arg0;
 	edi = arg1;
 	if (edi == 0u)
@@ -10218,7 +10218,7 @@ uint32_t sub_00035410(uint32_t arg0, uint32_t arg1)
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		arg2 = MEM32(0x1EAB30u);
 		arg1_2 = 0u;
 		arg0_2 = eax;
@@ -10243,7 +10243,7 @@ uint32_t sub_00035410(uint32_t arg0, uint32_t arg1)
 		}
 		arg2 = MEM32(0x1B11B4u);
 		arg1_2 = 8u;
-		arg0_2 = MEM32(0x1E57B4u);
+		arg0_2 = GameObjectLastObject;
 		eax = esi;
 		g_eax = eax;
 		eax = x86_call(sub_00035090, 0x00035476u, 3, arg0_2, arg1_2, arg2);
@@ -10263,7 +10263,7 @@ uint32_t sub_00035410(uint32_t arg0, uint32_t arg1)
 	}
 	arg2 = 0u;
 	arg1_2 = edi;
-	arg0_2 = MEM32(0x1E57B4u);
+	arg0_2 = GameObjectLastObject;
 	eax = esi;
 	g_eax = eax;
 	eax = x86_call(sub_00035090, 0x0003543Cu, 3, arg0_2, arg1_2, arg2);
@@ -10415,13 +10415,13 @@ uint32_t sub_00035740(uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = sub_0001FE50();
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		arg1 = saved_arg0;
@@ -10438,13 +10438,13 @@ uint32_t sub_00035780(uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = sub_0001FE50();
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		arg1 = saved_arg0;
@@ -10572,14 +10572,14 @@ uint32_t sub_00037C50(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	ebx = arg1;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg4 = 0u;
 	arg3 = 0u;
 	arg2 = ebx;
@@ -10593,14 +10593,14 @@ uint32_t sub_00037C50(uint32_t arg0, uint32_t arg1)
 			return eax;
 		do
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				edi = eax;
 			}
 			else
-				edi = MEM32(0x1E57B4u);
+				edi = GameObjectLastObject;
 			arg1_2 = esi;
 			arg0_2 = ebx;
 			eax = sub_00037C50(arg0_2, arg1_2);
@@ -10714,13 +10714,13 @@ uint32_t sub_00037EB0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(saved_arg1);
 	if (ecx != 0u)
 	{
@@ -10744,13 +10744,13 @@ uint32_t sub_00038260(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	return eax;
 }
 
@@ -10759,13 +10759,13 @@ void sub_00038280(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, esi = 0, ignored = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, p_edx);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -10789,13 +10789,13 @@ uint32_t sub_000382C0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		arg2 = 0x40u;
@@ -10816,14 +10816,14 @@ uint32_t sub_00038300(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ecx = eax;
 	}
 	else
-		ecx = MEM32(0x1E57B4u);
+		ecx = GameObjectLastObject;
 	if (ecx == 0u)
 	{
 		eax = 0u;
@@ -10839,13 +10839,13 @@ uint32_t sub_00038370(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -10863,13 +10863,13 @@ uint32_t sub_000383A0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -10900,14 +10900,14 @@ uint32_t sub_000385A0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi == 0u)
 		return eax;
 	for (;;)
@@ -10930,13 +10930,13 @@ uint32_t Node_Collect(uint32_t arg0, uint32_t arg1)
 	saved_arg1 = arg1;
 	eax = arg0;
 	ebx = 0u;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		esi = MEM32(eax + 0xBCu);
@@ -10948,14 +10948,14 @@ uint32_t Node_Collect(uint32_t arg0, uint32_t arg1)
 		ebp = saved_arg1;
 		do
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				edi = eax;
 			}
 			else
-				edi = MEM32(0x1E57B4u);
+				edi = GameObjectLastObject;
 			arg1_2 = ebp;
 			arg0_2 = esi;
 			eax = x86_call(GameObjectCollect, 0x00038638u, 2, arg0_2, arg1_2);
@@ -10975,23 +10975,23 @@ void sub_00038650(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, p_ecx, p_edx);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	ebp = saved_arg1;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, p_ecx, p_edx);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = MEM32(ebx + 0xBCu);
 	eax = 0u;
 	if (edi != 0u)
@@ -11006,13 +11006,13 @@ void sub_00038650(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 		}
 		for (;;)
 		{
-			if (edi != MEM32(0x1E57B0u))
+			if (edi != GameObjectLastHandle)
 			{
 				arg0_2 = edi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, p_edx);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			*p_ecx = MEM32(eax + 0xC0u);
 			if (*p_ecx == 0u)
 				break;
@@ -11043,13 +11043,13 @@ void sub_00038730(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 	edi = arg1;
 	do
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, p_eax, &ignored, &ignored_2);
 		}
 		else
-			*p_eax = MEM32(0x1E57B4u);
+			*p_eax = GameObjectLastObject;
 		if ((((int32_t)esi >> 11) & 0x7Fu) == edi)
 		{
 			*p_eax = esi;
@@ -11065,27 +11065,27 @@ void sub_00038780(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, p_edx);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = MEM32(esi + 0xB8u);
 	if ((eax & 0x7C0000u) != 0x2C0000u)
 	{
 		*p_eax = eax;
 		return;
 	}
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, p_edx);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(eax + 0xBCu) == edi)
 	{
 		ecx = MEM32(esi + 0xC4u);
@@ -11096,13 +11096,13 @@ void sub_00038780(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 	eax = MEM32(esi + 0xC4u);
 	if (eax != 0u)
 	{
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		*p_edx = MEM32(esi + 0xC0u);
 		MEM32(eax + 0xC0u) = *p_edx;
 	}
@@ -11112,9 +11112,9 @@ void sub_00038780(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 		*p_eax = eax;
 		return;
 	}
-	if (eax == MEM32(0x1E57B0u))
+	if (eax == GameObjectLastHandle)
 	{
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 		MEM32(eax + 0xC4u) = MEM32(esi + 0xC4u);
 		*p_eax = eax;
 		return;
@@ -11131,7 +11131,7 @@ uint32_t sub_00038860(uint32_t arg0)
 	uint32_t stack_4 = 0, stack_8 = 0, saved_arg0 = 0;
 
 	saved_arg0 = arg0;
-	eax = MEM32(0x2B5DACu);
+	eax = GameObjectFamilies(11);
 	stack_4 = 0u;
 	if ((int32_t)MEM32(eax + 0x20Cu) <= 0)
 	{
@@ -11153,13 +11153,13 @@ uint32_t sub_00038860(uint32_t arg0)
 					esi = MEM32((MEM32(edi) + 0x1Cu) * ebx + MEM32(edi + 0x24u));
 					if ((int32_t)(esi & 0x7F800000u) > 0)
 					{
-						if (esi != MEM32(0x1E57B0u))
+						if (esi != GameObjectLastHandle)
 						{
 							arg0_2 = esi;
 							GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 						}
 						else
-							eax = MEM32(0x1E57B4u);
+							eax = GameObjectLastObject;
 						arg1 = eax;
 						arg0_2 = saved_arg0;
 						eax = x86_call(crt_stricmp, 0x000388DFu, 2, arg0_2, arg1);
@@ -11171,7 +11171,7 @@ uint32_t sub_00038860(uint32_t arg0)
 					}
 					ebx++;
 				} while ((int32_t)ebx < (int32_t)ebp);
-				eax = MEM32(0x2B5DACu);
+				eax = GameObjectFamilies(11);
 			}
 		}
 		ecx = stack_4 + 1u;
@@ -11195,13 +11195,13 @@ uint32_t sub_00038960(uint32_t arg0, uint32_t arg1)
 	stack_200000 = arg0;
 	saved_arg1 = arg1;
 	esi = stack_200000;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	stack_200000 = eax;
 	if (eax == 0u)
 		return eax;
@@ -11316,7 +11316,7 @@ uint32_t sub_00038960(uint32_t arg0, uint32_t arg1)
 				{
 					arg0_2 = esi;
 					eax = sub_0004CC10(arg0_2);
-					if (eax != MEM32(0x1E57B0u))
+					if (eax != GameObjectLastHandle)
 					{
 						arg0_2 = esi;
 						eax = sub_0004CC10(arg0_2);
@@ -11325,7 +11325,7 @@ uint32_t sub_00038960(uint32_t arg0, uint32_t arg1)
 						esi = eax;
 					}
 					else
-						esi = MEM32(0x1E57B4u);
+						esi = GameObjectLastObject;
 					eax = MEM32(esi + 0x88u);
 					if (eax != 0u)
 					{
@@ -11398,14 +11398,14 @@ uint32_t sub_00038960(uint32_t arg0, uint32_t arg1)
 		return eax;
 	do
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			ebx = eax;
 		}
 		else
-			ebx = MEM32(0x1E57B4u);
+			ebx = GameObjectLastObject;
 		if (ebx == 0u)
 			break;
 		arg1_2 = edi;
@@ -11426,13 +11426,13 @@ uint32_t sub_00038B90(uint32_t arg0, uint32_t arg1)
 	stack_200000 = arg0;
 	saved_arg1 = arg1;
 	esi = stack_200000;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	stack_200000 = eax;
 	if (eax == 0u)
 		return eax;
@@ -11539,14 +11539,14 @@ uint32_t sub_00038B90(uint32_t arg0, uint32_t arg1)
 		return eax;
 	do
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			edi = eax;
 		}
 		else
-			edi = MEM32(0x1E57B4u);
+			edi = GameObjectLastObject;
 		if (edi == 0u)
 			break;
 		arg1_2 = ebx;
@@ -11564,15 +11564,15 @@ void sub_00039090(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	uint32_t saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	ebp = arg0;
 	if (ebp == eax)
-		edx = MEM32(0x1E57B4u);
+		edx = GameObjectLastObject;
 	else
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &ignored, p_ecx, &ignored_2);
-		eax = MEM32(0x1E57B0u);
+		eax = GameObjectLastHandle;
 		if (ebp != eax)
 		{
 			arg0_2 = ebp;
@@ -11580,7 +11580,7 @@ void sub_00039090(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 			edx = eax;
 		}
 		else
-			edx = MEM32(0x1E57B4u);
+			edx = GameObjectLastObject;
 	}
 	esi = saved_arg1;
 	ebx = 0u;
@@ -11640,14 +11640,14 @@ void sub_000391A0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 	uint32_t arg0_2 = 0, ebx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	ebx = arg0;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, p_eax, &ignored, p_edx);
 		esi = *p_eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = 0u;
 	if (MEM32(esi + 0xBCu) != 0u)
 	{
@@ -11801,14 +11801,14 @@ uint32_t Action_Collect(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = saved_arg1;
 	arg1_2 = edi;
 	arg0_2 = MEM32(esi + 0x4Cu);
@@ -11826,7 +11826,7 @@ uint32_t sub_00039C50(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -11836,7 +11836,7 @@ uint32_t sub_00039C50(uint32_t arg0)
 		MEM32(eax + 0x40u) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x44u) = 0u;
 	MEM32(eax + 0x48u) = 0u;
 	MEM32(eax + 0x4Cu) = 0u;
@@ -11849,14 +11849,14 @@ uint32_t sub_00039C90(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x40u) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x40u) = 0u;
 	return eax;
 }
@@ -11868,13 +11868,13 @@ uint32_t sub_00039CC0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -11936,13 +11936,13 @@ void sub_00039EF0(uint32_t eax, uint32_t ecx, uint32_t esi)
 	if (MEM32(esi + 0xC8u) != 1u)
 		return;
 	eax_2 = MEM32(esi + 0xB8u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored_2, &ignored_3);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xD8u) = MEM32(eax_2 + 0xACu);
 	MEM32(esi + 0xDCu) = MEM32(eax_2 + 0xB0u);
 	MEM32(esi + 0xE0u) = MEM32(eax_2 + 0xB4u);
@@ -12025,14 +12025,14 @@ uint32_t sub_0003A020(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -12085,14 +12085,14 @@ uint32_t SplineNode_Collect(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -12114,13 +12114,13 @@ uint32_t sub_0003A3B0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0xD0u);
@@ -12134,13 +12134,13 @@ uint32_t sub_0003A3E0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -12155,14 +12155,14 @@ uint32_t sub_0003A410(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0xE8u) = MEM32(eax + 0xE4u);
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xE8u) = MEM32(eax + 0xE4u);
 	return eax;
 }
@@ -12174,14 +12174,14 @@ uint32_t sub_0003A450(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edx = eax;
 	}
 	else
-		edx = MEM32(0x1E57B4u);
+		edx = GameObjectLastObject;
 	eax = saved_arg1 + MEM32(edx + 0xECu);
 	ecx = MEM32(edx + 0xE0u);
 	if ((int32_t)ecx < (int32_t)eax)
@@ -12399,13 +12399,13 @@ uint32_t sub_0003B650(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -12423,22 +12423,22 @@ uint32_t sub_0003B680(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = saved_arg1;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(0x1BC474u) != 0u)
 	{
 		ecx = saved_arg2 << 5;
@@ -12455,14 +12455,14 @@ uint32_t sub_0003B700(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0xF0u) = MEM32(eax + 0xE4u);
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xF0u) = MEM32(eax + 0xE4u);
 	return eax;
 }
@@ -12542,7 +12542,7 @@ uint32_t sub_0003BD40(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	MEM32(edi + 0xF0u) = 0u;
 	MEM32(edi + 0xF4u) = ebp;
 	MEM32(edi + 0xE8u) = 0u;
-	MEM32(edi + 0xF8u) = MEM32(0x23A48Cu);
+	MEM32(edi + 0xF8u) = vcGameTime;
 	MEM32(edi + 0x100u) = 0u;
 	MEM32(edi + 0x104u) = 0x41200000u;
 	MEM32(edi + 0x108u) = 0u;
@@ -12675,7 +12675,7 @@ uint32_t sub_0003C4F0(uint32_t edx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	esi = arg0;
 	if (esi != eax)
 	{
@@ -12684,7 +12684,7 @@ uint32_t sub_0003C4F0(uint32_t edx, uint32_t arg0, uint32_t arg1)
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	ecx = MEM32(ebx + 0xD0u);
 	if ((int32_t)ecx >= 0x3E7)
 		return eax;
@@ -12838,14 +12838,14 @@ uint32_t sub_0003CAC0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = saved_arg1;
 	ebx = esi + 4u;
 	arg1_2 = edi;
@@ -12883,13 +12883,13 @@ uint32_t sub_0003CB60(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x18u) = MEM32(eax + 0x18u) | 1u;
 	eax = MEM32(eax + 0x1Cu);
 	if (eax != 0u)
@@ -12909,13 +12909,13 @@ uint32_t sub_0003CBA0(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(eax + 0x18u);
 	if ((ecx & 1u) != 0u)
 	{
@@ -12939,13 +12939,13 @@ uint32_t sub_0003CBF0(uint32_t edx, uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &edx);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax);
 	if (eax == 0u)
 		return eax;
@@ -12961,13 +12961,13 @@ uint32_t sub_0003CC20(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	t1 = saved_arg1;
 	ecx = MEM32(eax + 0x18u);
 	if (t1 == 0u)
@@ -12984,14 +12984,14 @@ uint32_t sub_0003CC60(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = ~(MEM32(eax + 0x18u) >> 1) & 1u;
 		return eax;
 	}
-	eax = ~(MEM32(MEM32(0x1E57B4u) + 0x18u) >> 1) & 1u;
+	eax = ~(MEM32(GameObjectLastObject + 0x18u) >> 1) & 1u;
 	return eax;
 }
 
@@ -13014,9 +13014,9 @@ uint32_t sub_0003CCB0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x1E57B0u))
+	if (eax == GameObjectLastHandle)
 	{
-		eax = MEM32(MEM32(0x1E57B4u) + 0x18u);
+		eax = MEM32(GameObjectLastObject + 0x18u);
 		eax = (eax & ~0xFFu) | (eax & 1u);
 		carry = (uint8_t)eax > 0u;
 		eax = 0u - (eax - eax - carry);
@@ -13153,13 +13153,13 @@ uint32_t sub_0003D130(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	MEM32(eax + 0x2Cu) = saved_arg2;
 	MEM32(eax + 0x30u) = saved_arg3;
@@ -13193,16 +13193,16 @@ uint32_t sub_0003D2F0(uint32_t esi)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(esi + 0x34Cu) != 0xFFFFFFFFu)
 	{
-		MEM32(esi + 0x38Cu) = MEM32(0x23A48Cu);
+		MEM32(esi + 0x38Cu) = vcGameTime;
 		MEM32(esi + 0x390u) = 0x1F4u;
 		return eax;
 	}
@@ -13210,7 +13210,7 @@ uint32_t sub_0003D2F0(uint32_t esi)
 	arg0 = MEM32(eax + 0x194u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(esi + 0x34Cu) = eax;
-	MEM32(esi + 0x38Cu) = MEM32(0x23A48Cu);
+	MEM32(esi + 0x38Cu) = vcGameTime;
 	MEM32(esi + 0x390u) = 0x1F4u;
 	return eax;
 }
@@ -13239,7 +13239,7 @@ uint32_t sub_0003DD60(uint32_t arg0)
 	uint32_t stack_4 = 0, saved_arg0 = 0;
 
 	saved_arg0 = arg0;
-	edi = MEM32(MEM32(0x2B5DACu) + 0x14u);
+	edi = MEM32(GameObjectFamilies(11) + 0x14u);
 	ebp = MEM32(edi + 0x28u);
 	ebx = 0u;
 	stack_4 = 0u;
@@ -13291,14 +13291,14 @@ uint32_t Player_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 		eax = ebp;
 		return eax;
 	}
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x3F0u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x0003E70Bu, 2, arg0_2, arg1_2);
@@ -13417,13 +13417,13 @@ uint32_t sub_0003E870(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	esi = saved_arg1;
 	MEM32(esi) = MEM32(eax + 0x3ECu);
 	MEM32(saved_arg2) = MEM32(eax + 0x3F0u);
@@ -13444,14 +13444,14 @@ uint32_t sub_0003E8F0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x4Cu);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x4Cu);
+	eax = MEM32(GameObjectLastObject + 0x4Cu);
 	return eax;
 }
 
@@ -13576,7 +13576,7 @@ uint32_t sub_00041A90(uint32_t arg0, uint32_t arg1)
 	uint32_t stack_C = 0, stack_10 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	edi = arg0;
 	if (edi != eax)
 	{
@@ -13585,15 +13585,15 @@ uint32_t sub_00041A90(uint32_t arg0, uint32_t arg1)
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
-	if (edi != MEM32(0x1E57B0u))
+		esi = GameObjectLastObject;
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if (saved_arg1 != 1u)
 		return eax;
 	eax = MEM32(esi + 4u);
@@ -13744,7 +13744,7 @@ uint32_t sub_00042250(uint32_t esi)
 	{
 		MEM32(eax + 0x38u) = MEM32(eax + 0x38u) | 0x50u;
 		MEM32(eax + 0x28u) = 0xFAu;
-		MEM32(eax + 0x2Cu) = MEM32(0x23A48Cu) + 0xFAu;
+		MEM32(eax + 0x2Cu) = vcGameTime + 0xFAu;
 	}
 	stack_4 = MEM32(esi + 0x194u);
 	arg0 = stack_4;
@@ -13787,14 +13787,14 @@ uint32_t sub_000444A0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x2C0u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x2C0u);
+	eax = MEM32(GameObjectLastObject + 0x2C0u);
 	return eax;
 }
 
@@ -13843,13 +13843,13 @@ uint32_t sub_00044840(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -13870,14 +13870,14 @@ uint32_t sub_00044B70(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = MEM32(esi + 0x26Cu);
 	GameObjectDestroy(arg0_2, &ignored_3, &ignored_2);
 	arg0_2 = MEM32(esi + 0x278u);
@@ -13955,14 +13955,14 @@ uint32_t sub_00044CC0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = 0u;
 	if (esi != 0u)
 	{
@@ -15065,14 +15065,14 @@ uint32_t PlayerStandInEntityNode_Load(uint32_t arg0, uint32_t arg1, uint32_t arg
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x0004CAABu, 1, arg0_2);
 	MEM32(esi + 0xD0u) = eax;
@@ -15095,14 +15095,14 @@ uint32_t PlayerStandInEntityNode_Collect(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -15120,13 +15120,13 @@ uint32_t sub_0004CC10(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -15142,7 +15142,7 @@ uint32_t sub_0004CC40(uint32_t arg0)
 	uint32_t saved_arg0 = 0;
 
 	saved_arg0 = arg0;
-	edi = MEM32(MEM32(0x2B5DACu) + 0x14u);
+	edi = MEM32(GameObjectFamilies(11) + 0x14u);
 	ebp = MEM32(edi + 0x28u);
 	ebx = 0u;
 	if ((int32_t)ebp <= 0)
@@ -15155,13 +15155,13 @@ uint32_t sub_0004CC40(uint32_t arg0)
 		esi = MEM32((MEM32(edi) + 0x1Cu) * ebx + MEM32(edi + 0x24u));
 		if ((int32_t)(esi & 0x7F800000u) > 0)
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 				eax = 0u;
 			else
@@ -15187,17 +15187,17 @@ uint32_t sub_0004CD50(uint32_t edi)
 	eax = MEM32(edi + 0xD4u);
 	if (eax == 0u || MEM32(0x1BC474u) != 0u)
 		return eax;
-	ecx = MEM32(0x1E57B0u);
+	ecx = GameObjectLastHandle;
 	if (eax != ecx)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
-		ecx = MEM32(0x1E57B0u);
-		edx = MEM32(0x1E57B4u);
+		ecx = GameObjectLastHandle;
+		edx = GameObjectLastObject;
 	}
 	else
 	{
-		edx = MEM32(0x1E57B4u);
+		edx = GameObjectLastObject;
 		eax = edx;
 	}
 	if (eax == 0u)
@@ -15238,13 +15238,13 @@ uint32_t sub_0004CD50(uint32_t edi)
 	MEM32(edi + 0xD8u) = ((int32_t)MEM32(eax + 0x44u) >> 11) & 0x7Fu;
 	MEM32(edi + 0xDCu) = 1u;
 	eax = MEM32(eax + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi + 0xE0u) = MEM32(eax + 0x180u);
 	MEM32(edi + 0xE4u) = 1u;
 	return eax;
@@ -16415,13 +16415,13 @@ uint32_t sub_00055050(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg0 = 0x25u;
 	eax_2 = x86_call(WeaponCreate, 0x0005507Du, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax_2);
 	ecx = MEM32(esi + 4u);
 	eax_2 = 0u;
@@ -16657,23 +16657,23 @@ uint32_t sub_00055E90(uint32_t ebx, uint32_t esi)
 	if (t1 == 0u)
 	{
 		eax = MEM32(esi + 0x27Cu);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		ecx = MEM32(eax);
 		eax = MEM32(esi + 0x280u);
 		MEM32(esi + 0xACu) = ecx;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		MEM32(esi + 0xB4u) = MEM32(eax);
 		MEM32(esi + 0x98u) = 0x55CA0u;
 		eax = MEM32(ebx);
@@ -16688,13 +16688,13 @@ uint32_t sub_00055E90(uint32_t ebx, uint32_t esi)
 		return eax;
 	}
 	eax = MEM32(esi + 0x27Cu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax);
 	MEM32(esi + 0xB4u) = 0u;
 	MEM32(esi + 0x98u) = 0x56DE0u;
@@ -16841,23 +16841,23 @@ uint32_t sub_00056670(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	eax_2 = x86_call(WeaponCreate, 0x000566B8u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x280u) = eax_2;
 	eax_2 = MEM32(esi + 0x27Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x280u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x1ED350u;
 	arg0 = MEM32(esi + 0x280u);
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
@@ -16989,23 +16989,23 @@ uint32_t sub_00056F00(uint32_t ebx, uint32_t esi)
 	if (t1 == 0u)
 	{
 		eax = MEM32(esi + 0x27Cu);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		ecx = MEM32(eax);
 		eax = MEM32(esi + 0x280u);
 		MEM32(esi + 0xACu) = ecx;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		MEM32(esi + 0xB4u) = MEM32(eax);
 		MEM32(esi + 0x98u) = 0x55CA0u;
 		eax = MEM32(ebx);
@@ -17020,13 +17020,13 @@ uint32_t sub_00056F00(uint32_t ebx, uint32_t esi)
 		return eax;
 	}
 	eax = MEM32(esi + 0x27Cu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax);
 	MEM32(esi + 0xB4u) = 0u;
 	MEM32(esi + 0x98u) = 0x56DE0u;
@@ -17173,23 +17173,23 @@ uint32_t sub_000576E0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	eax_2 = x86_call(WeaponCreate, 0x00057728u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x280u) = eax_2;
 	eax_2 = MEM32(esi + 0x27Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x280u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x1ED7F0u;
 	arg0 = MEM32(esi + 0x280u);
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
@@ -18091,13 +18091,13 @@ uint32_t sub_000595E0(uint32_t eax, uint32_t esi, uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax_2 = MEM32(eax + 0x18Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 == 0u)
 	{
 		stack_4 = saved_arg0;
@@ -18200,13 +18200,13 @@ uint32_t sub_000599D0(uint32_t arg0, uint32_t arg1)
 	if (eax == 0u)
 	{
 		eax = arg0;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == ebx)
 		{
 			eax = ebp;
@@ -18225,13 +18225,13 @@ uint32_t sub_000599D0(uint32_t arg0, uint32_t arg1)
 		}
 		else
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0_2 = eax;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == ebx)
 			{
 				MEM32(esi + 0x10u) = ebx;
@@ -18291,14 +18291,14 @@ uint32_t sub_00059A90(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	if (ebp == 0u)
 	{
 		eax = arg0;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			ebp = eax;
 		}
 		else
-			ebp = MEM32(0x1E57B4u);
+			ebp = GameObjectLastObject;
 		if (ebp == 0u)
 		{
 			eax = 0u;
@@ -18322,13 +18322,13 @@ uint32_t sub_00059A90(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 				edi = esi;
 			else
 			{
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax == 0u)
 					edi = esi;
 				edx = MEM32(eax + 0x2A0u);
@@ -18390,13 +18390,13 @@ uint32_t sub_0005B750(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	ebp = stack_1FFFFC;
 	esi = eax;
 	eax_2 = MEM32(ebp + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edi = 0u;
 	if (eax_2 != 0u)
 	{
@@ -24285,34 +24285,34 @@ uint32_t sub_00069CF0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00069D52u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x274u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0xACu) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xB4u) = edx;
 	MEM32(esi + 0x278u) = ebp;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != ebp)
 	{
 		MEM32(eax_2 + 0x3Cu) = ebp;
@@ -24506,13 +24506,13 @@ void sub_0006A710(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	MEM16(eax + 0xEu) = 1u;
 	if ((esi & 0x7C0000u) != 0x80000u || (esi & 0x3F800u) != 0xC800u)
 		return;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 == 0u)
 		return;
 	MEM32(edi + 0x278u) = esi;
@@ -24575,21 +24575,21 @@ void sub_0006A7F0(uint32_t ebx, uint32_t arg1)
 	ignored_2 = g_edx;
 	MEM32(ebx + 0x194u) = eax;
 	eax = MEM32(0x20445Cu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32(MEM16(0x20445Eu) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax = MEM32(ebp + 0x104u);
 	edi = 0u;
 	MEM32(ebx + 0x274u) = eax;
@@ -24941,13 +24941,13 @@ uint32_t sub_0006AF40(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	eax = esi & 0x3F800u;
 	if (eax != 0x6800u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	MEM32(edi + 0x278u) = esi;
@@ -25012,21 +25012,21 @@ void sub_0006B020(uint32_t ebx, uint32_t arg1)
 	ignored_2 = g_edx;
 	MEM32(ebx + 0x194u) = eax;
 	eax = MEM32(0x2045ACu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32(MEM16(0x2045AEu) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax = MEM32(ebp + 0x104u);
 	edi = 0u;
 	MEM32(ebx + 0x274u) = eax;
@@ -25375,13 +25375,13 @@ void sub_0006B770(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	MEM16(eax + 0xEu) = 1u;
 	if ((esi & 0x7C0000u) != 0x80000u || (esi & 0x3F800u) != 0x5000u)
 		return;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 == 0u)
 		return;
 	MEM32(edi + 0x278u) = esi;
@@ -25445,21 +25445,21 @@ void sub_0006B850(uint32_t ebx, uint32_t arg1)
 	ignored_2 = g_edx;
 	MEM32(ebx + 0x194u) = eax;
 	eax = MEM32(0x2046FCu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32(MEM16(0x2046FEu) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax = MEM32(ebp + 0x104u);
 	edi = 0u;
 	MEM32(ebx + 0x274u) = eax;
@@ -25811,13 +25811,13 @@ uint32_t sub_0006BFA0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	eax = esi & 0x3F800u;
 	if (eax != 0x10000u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	MEM32(edi + 0x278u) = esi;
@@ -25831,13 +25831,13 @@ uint32_t sub_0006C020(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	eax = MEM32(arg1 + 0x278u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = saved_arg0;
@@ -25938,21 +25938,21 @@ void sub_0006C110(uint32_t ebx, uint32_t arg1)
 	ignored_2 = g_edx;
 	MEM32(ebx + 0x194u) = eax;
 	eax = MEM32(0x20484Cu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32(MEM16(0x20484Eu) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax = MEM32(ebp + 0x104u);
 	edi = 0u;
 	MEM32(ebx + 0x274u) = eax;
@@ -27630,14 +27630,14 @@ uint32_t sub_00070260(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = 0u;
 	if (esi != 0u && MEM32(MEM32(esi + 0x29Cu) + 0x8D0u) != eax)
 	{
@@ -27693,22 +27693,22 @@ uint32_t sub_00070DB0(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		eax = x86_call(WeaponCreate, 0x00070EF1u, 6, arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 		MEM32(esi + 0x270u) = eax;
 		eax = MEM32(esi + 0x26Cu);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		MEM32(esi + 0xACu) = MEM32(eax);
 		eax = MEM32(esi + 0x26Cu);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax != ebx)
 		{
 			MEM32(eax + 0x3Cu) = ebx;
@@ -27742,13 +27742,13 @@ uint32_t sub_00070DB0(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 			MEM32(eax + 0x44u) = MEM32(MEM32(esi + 0x29Cu) + 0x8D8u);
 		}
 		eax = MEM32(esi + 0x270u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax != ebx)
 		{
 			MEM32(eax + 0x3Cu) = ebx;
@@ -27821,14 +27821,14 @@ uint32_t sub_00070DB0(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		eax = x86_call(WeaponCreate, 0x00070E85u, 6, arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 		MEM32(esi + 0x284u) = eax;
 		eax = MEM32(esi + 0x278u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			MEM32(esi + 0xACu) = MEM32(eax);
 		}
 		else
-			MEM32(esi + 0xACu) = MEM32(MEM32(0x1E57B4u));
+			MEM32(esi + 0xACu) = MEM32(GameObjectLastObject);
 	}
 	arg5 = esi + 0xB0u;
 	arg4 = 0xFFFFFFFFu;
@@ -27838,13 +27838,13 @@ uint32_t sub_00070DB0(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	arg0_2 = 0xBu;
 	eax = x86_call(WeaponCreate, 0x0007107Du, 6, arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 	MEM32(esi + 0x274u) = eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1_2 = MEM32(esi + 0x29Cu) + 0x654u;
 	arg0_2 = MEM32(esi + 0x274u);
 	MEM32(esi + 0xB4u) = MEM32(eax);
@@ -29068,7 +29068,7 @@ uint32_t sub_000745A0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	MEM32(esi + 0x2A8u) = MEM32(edi + 0xB8u);
 	MEM32(esi + 0x2ACu) = MEM32(edi + 0xBCu);
 	MEM32(esi + 0x2B0u) = MEM32(edi + 0xC0u);
-	MEM32(esi + 0x2B4u) = MEM32(0x23A48Cu);
+	MEM32(esi + 0x2B4u) = vcGameTime;
 	eax_2 = 1u;
 	return eax_2;
 }
@@ -29328,34 +29328,34 @@ uint32_t sub_00075940(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	eax_2 = x86_call(WeaponCreate, 0x00075A09u, 6, arg0_2, arg1_2, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x274u) = eax_2;
 	eax_2 = MEM32(esi + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edi = 0u;
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0x2A0u) = 0u;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ebp = 1u;
 	if (eax_2 != edi)
 	{
@@ -29388,13 +29388,13 @@ uint32_t sub_00075940(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t arg1)
 		} while (t2 != 1u);
 	}
 	eax_2 = MEM32(esi + 0x274u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != edi)
 	{
 		MEM32(eax_2 + 0x3Cu) = edi;
@@ -29501,33 +29501,33 @@ uint32_t sub_00076750(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x000767B7u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x274u) = eax_2;
 	eax_2 = MEM32(esi + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x274u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0x28Cu) = edi;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != edi)
 	{
 		MEM32(eax_2 + 0x3Cu) = edi;
@@ -29913,32 +29913,32 @@ uint32_t sub_00077B00(uint32_t eax, uint32_t ecx, uint32_t edi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00077B50u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(edi + 0x270u) = eax_2;
 	eax_2 = MEM32(edi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(edi + 0xACu) = MEM32(eax_2);
 	eax_2 = MEM32(edi + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(edi + 0x26Cu);
 	MEM32(edi + 0xB4u) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	esi = 0u;
 	if (eax_2 != 0u)
 	{
@@ -30405,32 +30405,32 @@ uint32_t sub_00078E10(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00078E60u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x270u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xB4u) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edi = 0u;
 	if (eax_2 != 0u)
 	{
@@ -30876,32 +30876,32 @@ uint32_t sub_0007A110(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x0007A160u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x270u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xB4u) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edi = 0u;
 	if (eax_2 != 0u)
 	{
@@ -31617,13 +31617,13 @@ uint32_t sub_0007CD00(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg0 = 5u;
 	eax_2 = x86_call(WeaponCreate, 0x0007CD23u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x207AB8u;
 	arg0 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xACu) = MEM32(eax_2);
@@ -32715,32 +32715,32 @@ uint32_t sub_000803A0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00080456u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x27Cu) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x27Cu);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x27Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = 0u;
 	if (eax_2 != 0u)
 	{
@@ -32982,23 +32982,23 @@ uint32_t sub_000815C0(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 	eax = x86_call(WeaponCreate, 0x000816F1u, 6, arg0_2, arg1_2, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x288u) = eax;
 	eax = MEM32(esi + 0x280u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(eax);
 	eax = MEM32(esi + 0x288u);
 	MEM32(esi + 0xACu) = ecx;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1_2 = 0x208770u;
 	arg0_2 = MEM32(esi + 0x288u);
 	MEM32(esi + 0xB4u) = MEM32(eax);
@@ -33464,13 +33464,13 @@ uint32_t sub_00083250(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -33919,35 +33919,35 @@ uint32_t sub_00084A10(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00084A5Eu, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x270u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x208F98u;
 	arg0_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	sub_000EF800(arg0_2, arg1);
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ebp = 1u;
 	if (eax_2 != ebx)
 	{
@@ -34429,32 +34429,32 @@ uint32_t sub_00085F30(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00086017u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x284u) = eax_2;
 	eax_2 = MEM32(esi + 0x280u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x284u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x280u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != ebx)
 	{
 		MEM32(eax_2 + 0x3Cu) = ebx;
@@ -34819,32 +34819,32 @@ uint32_t sub_00087170(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00087257u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x284u) = eax_2;
 	eax_2 = MEM32(esi + 0x280u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x284u);
 	MEM32(esi + 0xACu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xB4u) = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x280u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != ebx)
 	{
 		MEM32(eax_2 + 0x3Cu) = ebx;
@@ -35183,13 +35183,13 @@ uint32_t sub_000883C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg0 = 7u;
 	eax_2 = x86_call(WeaponCreate, 0x000883E3u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x209ED0u;
 	arg0 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xACu) = MEM32(eax_2);
@@ -35422,33 +35422,33 @@ uint32_t sub_00089390(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x000893D8u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x270u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0xACu) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xB4u) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != ebx)
 	{
 		MEM32(eax_2 + 0x3Cu) = ebx;
@@ -37060,21 +37060,21 @@ uint32_t sub_0008DF00(uint32_t ebx, uint32_t arg1)
 	ignored_2 = g_edx;
 	MEM32(ebx + 0x194u) = eax;
 	eax = MEM32(0x20B534u);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32(MEM16(0x20B536u) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax = MEM32(ebp + 0x104u);
 	edi = 0u;
 	MEM32(ebx + 0x30Cu) = eax;
@@ -37542,13 +37542,13 @@ uint32_t sub_0008FDD0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi)
 	arg0 = 0x2Du;
 	eax_2 = x86_call(WeaponCreate, 0x0008FE00u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax_2);
 	MEM32(esi + 0xB4u) = 0u;
 	MEM32(esi + 0x8Cu) = 0u;
@@ -37747,13 +37747,13 @@ uint32_t sub_00090BD0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg0 = 0x24u;
 	eax_2 = x86_call(WeaponCreate, 0x00090BFDu, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx = MEM32(eax_2);
 	MEM32(esi + 0xB4u) = 0u;
 	MEM32(esi + 0x8Cu) = 0u;
@@ -37957,13 +37957,13 @@ uint32_t sub_00091CE0(uint32_t eax, uint32_t ecx, uint32_t edi, uint32_t arg0)
 	MEM32(esi + 4u) = MEM32(esi + 4u) | 0x20000u;
 	eax_2 = x86_call(WeaponCreate, 0x00091D1Au, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x26Cu) = eax_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1 = 0x20BBF0u;
 	ebx_2 = 0u;
 	arg0_2 = MEM32(esi + 0x26Cu);
@@ -38922,33 +38922,33 @@ uint32_t sub_00095610(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x00095658u, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x270u) = eax_2;
 	eax_2 = MEM32(esi + 0x26Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x270u);
 	MEM32(esi + 0xACu) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x26Cu);
 	MEM32(esi + 0xB4u) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 != ebx)
 	{
 		MEM32(eax_2 + 0x3Cu) = ebx;
@@ -40495,34 +40495,34 @@ uint32_t sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	eax_2 = x86_call(WeaponCreate, 0x0009A11Fu, 6, arg0_2, arg1, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0x280u) = eax_2;
 	eax_2 = MEM32(esi + 0x27Cu);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx_2 = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x280u);
 	MEM32(esi + 0xACu) = ecx_2;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2);
 	eax_2 = MEM32(esi + 0x27Cu);
 	MEM32(esi + 0xB4u) = edx;
 	MEM32(esi + 0x284u) = ebx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ebp = 1u;
 	if (eax_2 != ebx)
 	{
@@ -40584,23 +40584,23 @@ uint32_t sub_0009A2C0(uint32_t ebx, uint32_t esi)
 	if (t1 == 0u)
 	{
 		eax = MEM32(esi + 0x27Cu);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		ecx = MEM32(eax);
 		eax = MEM32(esi + 0x280u);
 		MEM32(esi + 0xACu) = ecx;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		MEM32(esi + 0xB4u) = MEM32(eax);
 		MEM32(esi + 0x98u) = 0x99E90u;
 		eax = MEM32(ebx);
@@ -40615,13 +40615,13 @@ uint32_t sub_0009A2C0(uint32_t ebx, uint32_t esi)
 		return eax;
 	}
 	eax = MEM32(esi + 0x27Cu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi + 0xACu) = MEM32(eax);
 	MEM32(esi + 0xB4u) = 0u;
 	MEM32(esi + 0x98u) = 0x99FA0u;
@@ -40985,7 +40985,7 @@ uint32_t sub_0009B4F0(uint32_t arg0)
 		MEM32(eax + 0x98u) = ecx;
 		MEM32(eax + 0x9Cu) = ecx;
 		MEM32(eax + 4u) = MEM32(eax + 4u) & ~2u;
-		MEM32(eax + 0x94u) = MEM32(0x23A48Cu);
+		MEM32(eax + 0x94u) = vcGameTime;
 	}
 	return eax;
 }
@@ -41176,13 +41176,13 @@ uint32_t sub_0009B850(uint32_t eax, uint32_t arg0, uint32_t arg1)
 					}
 					return eax;
 				}
-				if (edi != MEM32(0x1E57B0u))
+				if (edi != GameObjectLastHandle)
 				{
 					arg0_2 = edi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (MEM32(MEM32(MEM32(eax) + 0xE8u)) != 0u)
 				{
 					if (MEM32(esi + 0xBCu) != edi)
@@ -41808,13 +41808,13 @@ uint32_t sub_0009C530(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -41875,13 +41875,13 @@ uint32_t sub_0009C7A0(uint32_t arg0, uint32_t arg1)
 		switch (jump_target)
 		{
 		case 0x09C7CEu:
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 			{
 				eax = 0u;
@@ -41900,26 +41900,26 @@ uint32_t sub_0009C7A0(uint32_t arg0, uint32_t arg1)
 			eax = 0u;
 			return eax;
 		case 0x09C7FEu:
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			arg2 = saved_arg1;
 			arg1_2 = eax;
 			sub_0002CC20(arg1_2, arg2);
 			eax = 1u;
 			return eax;
 		case 0x09C82Cu:
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			ecx = saved_arg1;
 			MEM32(ecx) = MEM32(eax);
 			MEM32(ecx + 4u) = MEM32(eax + 4u);
@@ -41927,13 +41927,13 @@ uint32_t sub_0009C7A0(uint32_t arg0, uint32_t arg1)
 			eax = 1u;
 			return eax;
 		case 0x09C85Fu:
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			ecx = saved_arg1;
 			MEM32(ecx) = MEM32(eax + 0xCu);
 			MEM32(ecx + 4u) = MEM32(eax + 0x10u);
@@ -41941,13 +41941,13 @@ uint32_t sub_0009C7A0(uint32_t arg0, uint32_t arg1)
 			eax = 1u;
 			return eax;
 		case 0x09C893u:
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 			{
 				eax = 0u;
@@ -42019,13 +42019,13 @@ uint32_t sub_0009C960(uint32_t arg0)
 		eax = t1 - 1u;
 		if (t1 != 1u)
 			break;
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == 0u)
 		{
 			eax = 0u;
@@ -42046,14 +42046,14 @@ uint32_t sub_0009C960(uint32_t arg0)
 	eax = t2 - 1u;
 	if (t2 == 1u)
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			eax = MEM32(eax + 0x184u);
 			return eax;
 		}
-		eax = MEM32(MEM32(0x1E57B4u) + 0x184u);
+		eax = MEM32(GameObjectLastObject + 0x184u);
 		return eax;
 	}
 	if (eax != 3u)
@@ -42091,24 +42091,24 @@ uint32_t sub_0009CBA0(uint32_t arg0)
 				eax = 0u;
 				return eax;
 			case 0x09CBFEu:
-				if (esi != MEM32(0x1E57B0u))
+				if (esi != GameObjectLastHandle)
 				{
 					arg0_2 = esi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 					eax = MEM32(eax + 0x194u);
 					return eax;
 				}
-				eax = MEM32(MEM32(0x1E57B4u) + 0x194u);
+				eax = MEM32(GameObjectLastObject + 0x194u);
 				return eax;
 			case 0x09CC24u:
-				if (esi != MEM32(0x1E57B0u))
+				if (esi != GameObjectLastHandle)
 				{
 					arg0_2 = esi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 					eax = MEM32(eax + 0x54u);
 					return eax;
 				}
-				eax = MEM32(MEM32(0x1E57B4u) + 0x54u);
+				eax = MEM32(GameObjectLastObject + 0x54u);
 				return eax;
 			case 0x09CC44u:
 				arg0_2 = esi;
@@ -42117,13 +42117,13 @@ uint32_t sub_0009CBA0(uint32_t arg0)
 			default:
 				invalid_jump(jump_target);
 			}
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 				break;
 			esi = MEM32(eax + 0x44u);
@@ -42158,13 +42158,13 @@ uint32_t sub_0009CE70(uint32_t arg0)
 		eax = t1 - 1u;
 		if (t1 != 1u)
 			break;
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == 0u)
 		{
 			eax = 0u;
@@ -42186,14 +42186,14 @@ uint32_t sub_0009CE70(uint32_t arg0)
 		eax = 0u;
 		return eax;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(MEM32(MEM32(eax) + 0xE8u));
 		return eax;
 	}
-	eax = MEM32(MEM32(MEM32(MEM32(0x1E57B4u)) + 0xE8u));
+	eax = MEM32(MEM32(MEM32(GameObjectLastObject) + 0xE8u));
 	return eax;
 }
 
@@ -42225,26 +42225,26 @@ uint32_t sub_0009CEF0(uint32_t arg0, uint32_t arg1)
 				eax = 0u;
 				return eax;
 			case 0x09CF47u:
-				if (esi != MEM32(0x1E57B0u))
+				if (esi != GameObjectLastHandle)
 				{
 					arg0_2 = esi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				arg2 = saved_arg1;
 				arg1_2 = eax;
 				sub_0002CC40(arg1_2, arg2);
 				eax = 1u;
 				return eax;
 			case 0x09CF75u:
-				if (esi != MEM32(0x1E57B0u))
+				if (esi != GameObjectLastHandle)
 				{
 					arg0_2 = esi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				ecx = saved_arg1;
 				MEM32(ecx) = MEM32(eax + 0xCu);
 				MEM32(ecx + 4u) = MEM32(eax + 0x10u);
@@ -42258,13 +42258,13 @@ uint32_t sub_0009CEF0(uint32_t arg0, uint32_t arg1)
 				eax = 1u;
 				return eax;
 			case 0x09CFCDu:
-				if (esi != MEM32(0x1E57B0u))
+				if (esi != GameObjectLastHandle)
 				{
 					arg0_2 = esi;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				ecx = saved_arg1;
 				MEM32(ecx) = MEM32(eax + 0x18u);
 				MEM32(ecx + 4u) = MEM32(eax + 0x1Cu);
@@ -42280,13 +42280,13 @@ uint32_t sub_0009CEF0(uint32_t arg0, uint32_t arg1)
 			default:
 				invalid_jump(jump_target);
 			}
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 				break;
 			esi = MEM32(eax + 0x44u);
@@ -42632,14 +42632,14 @@ uint32_t sub_0009D600(uint32_t eax, uint32_t arg0)
 	if (edi == 0u)
 		return eax;
 	eax = MEM32(edi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi == 0u)
 		return eax;
 	arg1 = esi;
@@ -42705,13 +42705,13 @@ uint32_t sub_0009D9F0(uint32_t arg0, uint32_t arg1)
 		if (esi == 0u)
 			return eax;
 		eax = MEM32(esi + 0x44u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		arg1_2 = eax;
 		arg0_2 = esi;
 		sub_0001F7B0(arg0_2, arg1_2);
@@ -43208,22 +43208,22 @@ uint32_t sub_0009EC90(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = saved_arg1;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(0x1BC474u) != 0u)
 	{
 		ecx = (saved_arg2 * 3u) << 4;
@@ -43250,13 +43250,13 @@ uint32_t sub_0009EDB0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(eax + 0x420u);
 	esi = MEM32(eax + 0x418u);
 	overflow = x86_overflow_sub32(ecx, esi, 0u);
@@ -43270,13 +43270,13 @@ uint32_t sub_0009EDF0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edx = MEM32(eax + 0x420u);
 	ecx = 0u;
 	if ((int32_t)edx <= 0)
@@ -43307,7 +43307,7 @@ uint32_t sub_0009EFC0(uint32_t arg0)
 	uint32_t t1 = 0;
 
 	saved_arg0 = arg0;
-	ebp = MEM32(MEM32(0x2B5DACu) + 0x4Cu);
+	ebp = MEM32(GameObjectFamilies(11) + 0x4Cu);
 	eax = MEM32(ebp + 0x28u);
 	ebx = 0u;
 	esi = 0u;
@@ -43320,13 +43320,13 @@ uint32_t sub_0009EFC0(uint32_t arg0)
 		eax = MEM32((MEM32(ebp) + 0x1Cu) * esi + MEM32(ebp + 0x24u));
 		if ((int32_t)(eax & 0x7F800000u) > 0)
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0_2 = eax;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax != ebx)
 			{
 				edi = 0u;
@@ -43368,14 +43368,14 @@ uint32_t sub_0009F090(uint32_t arg0)
 	uint32_t t1 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ecx = eax;
 	}
 	else
-		ecx = MEM32(0x1E57B4u);
+		ecx = GameObjectLastObject;
 	edx = MEM32(ecx + 0x420u);
 	eax = 0u;
 	if ((int32_t)edx <= 0)
@@ -43400,14 +43400,14 @@ uint32_t sub_0009F0D0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if (edi != 0u)
 	{
 		eax = MEM32(edi + 0x420u);
@@ -43423,13 +43423,13 @@ uint32_t sub_0009F0D0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 				eax = MEM32(esi);
 				if (eax != 0u)
 				{
-					if (eax != MEM32(0x1E57B0u))
+					if (eax != GameObjectLastHandle)
 					{
 						arg0_2 = eax;
 						GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 					}
 					else
-						eax = MEM32(0x1E57B4u);
+						eax = GameObjectLastObject;
 					if (eax != 0u)
 					{
 						arg2_2 = ebp;
@@ -43472,27 +43472,27 @@ void sub_000A0AA0(uint32_t esi, uint32_t edi, uint32_t arg1)
 	if (esi == 0u)
 		return;
 	eax = MEM32(esi + 4u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	ecx = MEM32(edi + 0x40u);
 	eax = ((int32_t)ecx >> 18) & 0x1Fu;
 	if (eax != 0xBu || (ecx & 0x3F800u) != 0x800u || ecx != MEM32(esi + 8u))
 	{
 		if (eax == 2u && ecx == MEM32(esi))
 		{
-			if (ecx != MEM32(0x1E57B0u))
+			if (ecx != GameObjectLastHandle)
 			{
 				arg0 = ecx;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			MEM32(edi + 0x40u) = MEM32(esi + 4u);
 			if (eax != 0u)
 			{
@@ -43513,7 +43513,7 @@ void sub_000A0AA0(uint32_t esi, uint32_t edi, uint32_t arg1)
 	{
 		arg0 = ecx;
 		eax = sub_0004CC10(arg0);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = MEM32(edi + 0x40u);
 			eax = sub_0004CC10(arg0);
@@ -43536,7 +43536,7 @@ void sub_000A0AA0(uint32_t esi, uint32_t edi, uint32_t arg1)
 		}
 		else
 		{
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 			MEM32(edi + 0x40u) = MEM32(esi + 0xCu);
 			if (eax != 0u)
 			{
@@ -43633,13 +43633,13 @@ void sub_000A0C10(uint32_t eax, uint32_t arg0)
 				eax_2 = MEM32(esi);
 				if (eax_2 != 0u)
 				{
-					if (eax_2 != MEM32(0x1E57B0u))
+					if (eax_2 != GameObjectLastHandle)
 					{
 						arg0_2 = eax_2;
 						GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 					}
 					else
-						eax_2 = MEM32(0x1E57B4u);
+						eax_2 = GameObjectLastObject;
 					if (eax_2 != 0u)
 					{
 						ecx = 0u;
@@ -43673,13 +43673,13 @@ void sub_000A0C10(uint32_t eax, uint32_t arg0)
 	}
 	else
 	{
-		if (eax_2 != MEM32(0x1E57B0u))
+		if (eax_2 != GameObjectLastHandle)
 		{
 			arg0_2 = eax_2;
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		}
 		else
-			eax_2 = MEM32(0x1E57B4u);
+			eax_2 = GameObjectLastObject;
 		if (eax_2 == 0u)
 			MEM32(esi + 0x40u) = 0u;
 		else
@@ -43689,13 +43689,13 @@ void sub_000A0C10(uint32_t eax, uint32_t arg0)
 		}
 	}
 	eax_2 = MEM32(esi + 0x40u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 == 0u)
 		return;
 	ecx = 0u;
@@ -43804,14 +43804,14 @@ uint32_t OnWeaponHitTrigger_Load(uint32_t arg0, uint32_t arg1)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x000A0EBAu, 1, arg0_2);
 	edi = esi + 0x44u;
@@ -43855,13 +43855,13 @@ uint32_t sub_000A0F50(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	ecx = MEM32(eax + 0x44u) - 1u;
@@ -44384,14 +44384,14 @@ uint32_t sub_000A28D0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x220u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x220u);
+	eax = MEM32(GameObjectLastObject + 0x220u);
 	return eax;
 }
 
@@ -44400,14 +44400,14 @@ uint32_t sub_000A2900(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x224u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x224u);
+	eax = MEM32(GameObjectLastObject + 0x224u);
 	return eax;
 }
 
@@ -44416,14 +44416,14 @@ uint32_t sub_000A2930(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x228u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x228u);
+	eax = MEM32(GameObjectLastObject + 0x228u);
 	return eax;
 }
 
@@ -44435,14 +44435,14 @@ uint32_t sub_000A2960(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	ebx = arg0;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = saved_arg1;
 	ecx = saved_arg2;
 	MEM32(0x1B1A38u) = eax;
@@ -44549,14 +44549,14 @@ void sub_000A36C0(uint32_t ebx, uint32_t arg2)
 	if (MEM32(ebx + 0xD4u) == 0u)
 		return;
 	eax = MEM32(arg2);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0 = MEM32(ebx + 0xD4u);
 	eax = x86_call(vcObjectClone_entry, 0x000A36F9u, 1, arg0);
 	arg0 = MEM32(ebx + 0xD4u);
@@ -44575,14 +44575,14 @@ uint32_t sub_000A3720(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	esi = saved_arg1;
 	arg1_2 = esi;
 	arg0_2 = edi;
@@ -44653,13 +44653,13 @@ uint32_t sub_000A3800(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0xD4u);
@@ -44673,13 +44673,13 @@ uint32_t sub_000A3830(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		eax = MEM32(eax + 0xD0u);
@@ -44700,7 +44700,7 @@ uint32_t sub_000A3B80(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	esi = 0u;
 	if (arg2 != 0u)
 	{
-		edi = MEM32(MEM32(0x2B5DACu) + 0x50u);
+		edi = MEM32(GameObjectFamilies(11) + 0x50u);
 		ebx = MEM32(edi + 0x28u);
 		ebp = 0u;
 		if ((int32_t)esi < (int32_t)ebx)
@@ -44710,14 +44710,14 @@ uint32_t sub_000A3B80(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 				eax = MEM32((MEM32(edi) + 0x1Cu) * ebp + MEM32(edi + 0x24u));
 				if ((int32_t)(eax & 0x7F800000u) > 0)
 				{
-					if (eax != MEM32(0x1E57B0u))
+					if (eax != GameObjectLastHandle)
 					{
 						arg0_2 = eax;
 						GameObjectFromHandle(arg0_2, &eax, &ecx, &ignored);
 						esi = eax;
 					}
 					else
-						esi = MEM32(0x1E57B4u);
+						esi = GameObjectLastObject;
 					if (MEM32(esi + 0xD0u) == 0u)
 					{
 						arg1_2 = 0u;
@@ -44805,7 +44805,7 @@ uint32_t sub_000A3B80(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 	if (saved_arg2 != esi)
 	{
-		eax = MEM32(0x2B5DACu);
+		eax = GameObjectFamilies(11);
 		edi = MEM32(eax + 0x50u);
 		ebx = MEM32(edi + 0x28u);
 		ebp = 0u;
@@ -44816,14 +44816,14 @@ uint32_t sub_000A3B80(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 			eax = MEM32((MEM32(edi) + 0x1Cu) * ebp + MEM32(edi + 0x24u));
 			if ((int32_t)(eax & 0x7F800000u) > 0)
 			{
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_3, &ignored);
 					esi = eax;
 				}
 				else
-					esi = MEM32(0x1E57B4u);
+					esi = GameObjectLastObject;
 				eax = MEM32(esi + 0xD0u);
 				if (eax == 0u)
 				{
@@ -44942,9 +44942,9 @@ void sub_000A3DB0(uint32_t eax, uint32_t ebx, uint32_t edi)
 		return;
 	}
 	eax_2 = MEM32(esi + 0xD4u);
-	if (eax_2 == MEM32(0x2BF2E0u))
+	if (eax_2 == vcObjectCacheHandle)
 	{
-		eax_2 = MEM32(0x2BF1C0u);
+		eax_2 = vcObjectCacheData;
 		if (eax_2 != 0u)
 			MEM32(eax_2 + 0x14Cu) = 0x1CFE1u;
 		MEM32(esi + 0xC8u) = 1u;
@@ -44955,9 +44955,9 @@ void sub_000A3DB0(uint32_t eax, uint32_t ebx, uint32_t edi)
 		MEM32(esi + 0xC8u) = 1u;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax_2;
+	vcObjectCacheHandle = eax_2;
 	eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax_2;
+	vcObjectCacheData = eax_2;
 	if (eax_2 != 0u)
 		MEM32(eax_2 + 0x14Cu) = 0x1CFE1u;
 	MEM32(esi + 0xC8u) = 1u;
@@ -45164,14 +45164,14 @@ uint32_t sub_000A5050(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x28u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x28u) = arg1;
 	return eax;
 }
@@ -45183,14 +45183,14 @@ uint32_t sub_000A5080(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x2Cu) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x2Cu) = arg1;
 	return eax;
 }
@@ -45203,7 +45203,7 @@ uint32_t sub_000A50B0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -45211,7 +45211,7 @@ uint32_t sub_000A50B0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		MEM32(eax + 0x38u) = saved_arg2;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x34u) = arg1;
 	MEM32(eax + 0x38u) = arg2;
 	return eax;
@@ -45227,13 +45227,13 @@ uint32_t sub_000A50F0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x44u) = saved_arg4;
 	MEM32(eax + 0x40u) = saved_arg2;
 	MEM32(eax + 0x4Cu) = saved_arg3;
@@ -45248,13 +45248,13 @@ uint32_t sub_000A5130(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	arg4 = MEM32(ecx + 0xCu);
 	arg3 = MEM32(ecx + 8u);
@@ -45270,14 +45270,14 @@ uint32_t sub_000A51F0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x50u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x50u);
+	eax = MEM32(GameObjectLastObject + 0x50u);
 	return eax;
 }
 
@@ -45288,14 +45288,14 @@ uint32_t sub_000A5290(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x54u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x54u) = arg1;
 	return eax;
 }
@@ -45340,14 +45340,14 @@ uint32_t sub_000A5300(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x3Cu) = MEM32(eax + 0x10u) - MEM32(eax + 8u) + 1u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x3Cu) = MEM32(eax + 0x10u) - MEM32(eax + 8u) + 1u;
 	return eax;
 }
@@ -45413,13 +45413,13 @@ uint32_t sub_000A5750(uint32_t arg0, uint32_t arg1)
 	eax = MEM32(0x20F7DCu);
 	if (eax == 0u)
 		return eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg6 = 2u;
 	arg5 = 0x10u;
 	arg4 = 0x118u;
@@ -45622,14 +45622,14 @@ uint32_t sub_000A6180(uint32_t eax, uint32_t arg0, uint32_t arg1)
 			return eax;
 		eax = MEM32(esi + 0x44u);
 		MEM32(esi + 4u) = MEM32(esi + 4u) & ~0x200000u;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			edi = eax;
 		}
 		else
-			edi = MEM32(0x1E57B4u);
+			edi = GameObjectLastObject;
 		if (MEM32(esi + 0x284u) != 0xFFFFFFFFu)
 		{
 			arg0_2 = esi;
@@ -45861,14 +45861,14 @@ uint32_t sub_000A6C20(uint32_t eax, uint32_t arg0, uint32_t arg1)
 			return eax;
 		eax = MEM32(esi + 0x44u);
 		MEM32(esi + 4u) = MEM32(esi + 4u) & ~0x200000u;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			edi = eax;
 		}
 		else
-			edi = MEM32(0x1E57B4u);
+			edi = GameObjectLastObject;
 		if (MEM32(esi + 0x284u) != 0xFFFFFFFFu)
 		{
 			arg0_2 = esi;
@@ -46501,13 +46501,13 @@ uint32_t sub_000A75F0(uint32_t arg0, uint32_t arg1)
 	eax = x86_call(sub_000A74F0, 0x000A7623u, 3, arg0_2, arg1_2, arg2);
 	edi = eax;
 	eax = MEM32(esi + 0xBCu);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg2 = MEM32(esi + 0x24u);
 	arg1_2 = eax;
 	arg0_2 = MEM32(esi + 0xBCu);
@@ -47103,14 +47103,14 @@ uint32_t sub_000A9180(uint32_t arg0)
 
 	ebx = arg0;
 	eax = MEM32(ebx + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if ((MEM8(ebx + 4u) & 4u) == 0u)
 	{
 		arg1 = edi;
@@ -47139,14 +47139,14 @@ uint32_t sub_000A9260(uint32_t arg0)
 
 	esi = arg0;
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if ((MEM8(esi) & 0x40u) == 0u && (MEM8(esi + 4u) & 4u) == 0u)
 	{
 		arg0_2 = MEM32(esi + 0x70u);
@@ -47508,7 +47508,7 @@ uint32_t sub_000A9C20(uint32_t arg0)
 	MEM32(esi + 0xD0u) = MEM32(esi + 0xC8u);
 	MEM32(esi + 0xC8u) = 0u;
 	MEM32(esi + 4u) = edx;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -47516,7 +47516,7 @@ uint32_t sub_000A9C20(uint32_t arg0)
 		eax = sub_000AB2D0(eax, arg0_2);
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	arg0_2 = esi;
 	eax = sub_000AB2D0(eax, arg0_2);
 	return eax;
@@ -47562,32 +47562,32 @@ uint32_t sub_000A9CA0(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi + 0x58u) = MEM32(eax + 8u);
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(eax + 0xCu);
 	eax = MEM32(esi + 0x44u);
 	MEM32(esi + 0x5Cu) = ecx;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg0_2 = esi;
 	MEM32(esi + 0x60u) = MEM32(eax + 0x10u);
 	sub_000A9C20(arg0_2);
@@ -47603,14 +47603,14 @@ uint32_t sub_000A9F20(uint32_t eax, uint32_t arg0)
 	if ((MEM8(ebx) & 0x40u) != 0u || (MEM8(ebx + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(ebx + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1 = edi;
 	arg0_2 = MEM32(ebx + 0x44u);
 	sub_0002A6B0(arg0_2, arg1, &eax_2, &ignored);
@@ -47638,14 +47638,14 @@ uint32_t sub_000A9F80(uint32_t eax, uint32_t arg0)
 	if ((MEM8(ebx) & 0x40u) != 0u || (MEM8(ebx + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(ebx + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1 = edi;
 	arg0_2 = MEM32(ebx + 0x44u);
 	sub_0002A6B0(arg0_2, arg1, &eax_2, &ignored);
@@ -47673,14 +47673,14 @@ uint32_t sub_000A9FE0(uint32_t eax, uint32_t arg0)
 	if ((MEM8(ebx) & 0x40u) != 0u || (MEM8(ebx + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(ebx + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1 = edi;
 	arg0_2 = MEM32(ebx + 0x44u);
 	sub_0002A6B0(arg0_2, arg1, &eax_2, &ignored);
@@ -47708,14 +47708,14 @@ uint32_t sub_000AA040(uint32_t eax, uint32_t arg0)
 	if ((MEM8(esi) & 0x40u) != 0u || (MEM8(esi + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = MEM32(esi + 0x70u);
 	x86_call(sub_0009C6E0, 0x000AA078u, 1, arg0_2);
 	eax = g_eax;
@@ -47739,14 +47739,14 @@ uint32_t sub_000AA090(uint32_t eax, uint32_t arg0)
 	if ((MEM8(esi) & 0x40u) != 0u || (MEM8(esi + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = MEM32(esi + 0x70u);
 	x86_call(sub_0009C6E0, 0x000AA0C8u, 1, arg0_2);
 	eax = g_eax;
@@ -47770,14 +47770,14 @@ uint32_t sub_000AA0E0(uint32_t eax, uint32_t arg0)
 	if ((MEM8(esi) & 0x40u) != 0u || (MEM8(esi + 4u) & 4u) != 0u)
 		return eax;
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = MEM32(esi + 0x70u);
 	x86_call(sub_0009C6E0, 0x000AA118u, 1, arg0_2);
 	eax = g_eax;
@@ -48092,13 +48092,13 @@ uint32_t sub_000AA9F0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	eax = arg2;
 	if (eax == 0u)
 		return eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1_2 = saved_arg1;
 	arg0_2 = eax + 8u;
 	eax = x86_call(sub_000A8BD0, 0x000AAA1Fu, 2, arg0_2, arg1_2);
@@ -48107,13 +48107,13 @@ uint32_t sub_000AA9F0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		return eax;
 	edi = saved_arg0;
 	eax = MEM32(edi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg2_2 = esi * 0x54u + 0x259A48u;
 	arg1_2 = eax;
 	arg0_2 = edi;
@@ -48284,13 +48284,13 @@ uint32_t sub_000AB2D0(uint32_t eax, uint32_t arg0)
 	if (esi == 0u)
 		return eax;
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg2 = 1u;
@@ -48298,33 +48298,33 @@ uint32_t sub_000AB2D0(uint32_t eax, uint32_t arg0)
 	arg0_2 = MEM32(esi + 0x44u);
 	sub_000AC0C0(arg0_2, arg1, arg2);
 	eax_2 = MEM32(esi + 0x44u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx = MEM32(eax_2 + 8u);
 	eax_2 = MEM32(esi + 0x44u);
 	MEM32(esi + 0x58u) = ecx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2 + 0xCu);
 	eax_2 = MEM32(esi + 0x44u);
 	MEM32(esi + 0x5Cu) = edx;
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx = (MEM32(esi + 4u) & ~0x40004u) | 0x10u;
 	arg1 = 0u;
 	arg0_2 = esi;
@@ -48346,13 +48346,13 @@ uint32_t sub_000AB530(uint32_t eax, uint32_t arg0, uint32_t arg1)
 		eax = MEM32(edi + 0x70u);
 		if (eax == 0u || arg1 == 0u || (eax & 0x7C0000u) != 0x80000u)
 			return eax;
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		}
 		else
-			eax_2 = MEM32(0x1E57B4u);
+			eax_2 = GameObjectLastObject;
 		arg1_2 = eax_2;
 		arg0_2 = MEM32(edi + 0x70u);
 		sub_0002A6B0(arg0_2, arg1_2, &eax, &ignored);
@@ -48364,13 +48364,13 @@ uint32_t sub_000AB530(uint32_t eax, uint32_t arg0, uint32_t arg1)
 			return eax;
 		}
 		eax_2 = MEM32(edi + 0x70u);
-		if (eax_2 != MEM32(0x1E57B0u))
+		if (eax_2 != GameObjectLastHandle)
 		{
 			arg0_2 = eax_2;
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		}
 		else
-			eax_2 = MEM32(0x1E57B4u);
+			eax_2 = GameObjectLastObject;
 		arg1_2 = eax_2;
 		eax = sub_0009B6E0(arg1_2);
 		esi = eax;
@@ -48916,14 +48916,14 @@ uint32_t sub_000AC0C0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = saved_arg1;
 	edi = 0u;
 	if (eax != 0u)
@@ -48969,13 +48969,13 @@ uint32_t sub_000AC680(uint32_t arg1, uint32_t arg2)
 		return eax;
 	}
 	eax = MEM32(eax);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 		MEM32(eax + saved_arg2 * 4u + 0xA0u) = 0u;
 	return eax;
@@ -49083,14 +49083,14 @@ uint32_t sub_000ACC40(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	saved_eax = eax;
 	if (eax == 0u)
 		return eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	ebx = esi + 0xD0u;
 	arg1_2 = ebx;
 	arg0_2 = edi;
@@ -49204,14 +49204,14 @@ uint32_t sub_000AD3D0(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg2 = 1u;
 	arg1_2 = esi + 0xD4u;
 	arg0_2 = ebx;
@@ -50121,14 +50121,14 @@ uint32_t sub_000B0870(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x128u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x128u);
+	eax = MEM32(GameObjectLastObject + 0x128u);
 	return eax;
 }
 
@@ -50137,14 +50137,14 @@ uint32_t sub_000B08A0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x12Cu);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x12Cu);
+	eax = MEM32(GameObjectLastObject + 0x12Cu);
 	return eax;
 }
 
@@ -50153,13 +50153,13 @@ uint32_t sub_000B08D0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x128u) = 0u;
 	MEM32(eax + 0x12Cu) = 0u;
 	arg0_2 = MEM32(eax + 0x124u);
@@ -50348,14 +50348,14 @@ uint32_t sub_000B1B30(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x148u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x148u);
+	eax = MEM32(GameObjectLastObject + 0x148u);
 	return eax;
 }
 
@@ -50364,7 +50364,7 @@ uint32_t sub_000B1B60(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -50372,7 +50372,7 @@ uint32_t sub_000B1B60(uint32_t arg0)
 		MEM32(eax + 0x148u) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x144u) = 0u;
 	MEM32(eax + 0x148u) = 0u;
 	return eax;
@@ -50455,14 +50455,14 @@ uint32_t sub_000B3670(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x144u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x144u);
+	eax = MEM32(GameObjectLastObject + 0x144u);
 	return eax;
 }
 
@@ -50487,7 +50487,7 @@ uint32_t sub_000B3720(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -50495,7 +50495,7 @@ uint32_t sub_000B3720(uint32_t arg0)
 		MEM32(eax + 0x144u) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x140u) = 0u;
 	MEM32(eax + 0x144u) = 0u;
 	return eax;
@@ -50899,14 +50899,14 @@ uint32_t sub_000B52E0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x160u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x160u);
+	eax = MEM32(GameObjectLastObject + 0x160u);
 	return eax;
 }
 
@@ -50925,7 +50925,7 @@ uint32_t sub_000B5330(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -50933,7 +50933,7 @@ uint32_t sub_000B5330(uint32_t arg0)
 		MEM32(eax + 0x160u) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x15Cu) = 0u;
 	MEM32(eax + 0x160u) = 0u;
 	return eax;
@@ -51148,14 +51148,14 @@ uint32_t sub_000B6210(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x140u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x140u);
+	eax = MEM32(GameObjectLastObject + 0x140u);
 	return eax;
 }
 
@@ -51254,7 +51254,7 @@ uint32_t sub_000B6990(uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg1;
-	if (MEM32(eax + 0x128u) + 0xAu < MEM32(0x23A48Cu))
+	if (MEM32(eax + 0x128u) + 0xAu < vcGameTime)
 	{
 		ecx = MEM32(eax + 0x124u) + 1u;
 		MEM32(eax + 0x124u) = ecx;
@@ -51384,14 +51384,14 @@ uint32_t sub_000B9620(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x138u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x138u);
+	eax = MEM32(GameObjectLastObject + 0x138u);
 	return eax;
 }
 
@@ -51400,14 +51400,14 @@ uint32_t sub_000B9650(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x13Cu);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x13Cu);
+	eax = MEM32(GameObjectLastObject + 0x13Cu);
 	return eax;
 }
 
@@ -51419,14 +51419,14 @@ uint32_t sub_000B9680(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = MEM32(esi + 0x148u);
 	if (eax != 0u)
 	{
@@ -51448,14 +51448,14 @@ uint32_t sub_000B9720(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x134u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x134u) = arg1;
 	return eax;
 }
@@ -51468,13 +51468,13 @@ uint32_t sub_000B9750(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x124u) = saved_arg1;
 	MEM32(eax + 0x128u) = saved_arg2;
 	return eax;
@@ -51705,14 +51705,14 @@ uint32_t sub_000BA330(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x158u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x158u);
+	eax = MEM32(GameObjectLastObject + 0x158u);
 	return eax;
 }
 
@@ -51721,14 +51721,14 @@ uint32_t sub_000BA360(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x15Cu);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x15Cu);
+	eax = MEM32(GameObjectLastObject + 0x15Cu);
 	return eax;
 }
 
@@ -51922,7 +51922,7 @@ uint32_t sub_000BB440(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -51930,7 +51930,7 @@ uint32_t sub_000BB440(uint32_t arg0, uint32_t arg1)
 		arg1_2 = saved_arg1;
 		return sub_000A5290(arg0_2, arg1_2);
 	}
-	arg0_2 = MEM32(MEM32(0x1E57B4u) + 0x128u);
+	arg0_2 = MEM32(GameObjectLastObject + 0x128u);
 	return sub_000A5290(arg0_2, arg1);
 }
 
@@ -52050,14 +52050,14 @@ uint32_t sub_000BCC80(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x170u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x170u);
+	eax = MEM32(GameObjectLastObject + 0x170u);
 	return eax;
 }
 
@@ -52066,14 +52066,14 @@ uint32_t sub_000BCCB0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x174u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x174u);
+	eax = MEM32(GameObjectLastObject + 0x174u);
 	return eax;
 }
 
@@ -52338,14 +52338,14 @@ uint32_t sub_000BE000(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x184u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x184u);
+	eax = MEM32(GameObjectLastObject + 0x184u);
 	return eax;
 }
 
@@ -52354,14 +52354,14 @@ uint32_t sub_000BE030(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x188u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x188u);
+	eax = MEM32(GameObjectLastObject + 0x188u);
 	return eax;
 }
 
@@ -52517,13 +52517,13 @@ uint32_t sub_000BF750(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ebx = 0u;
 	if (eax == 0u)
 		return eax;
@@ -52555,14 +52555,14 @@ uint32_t sub_000BF7D0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x3B0u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x3B0u);
+	eax = MEM32(GameObjectLastObject + 0x3B0u);
 	return eax;
 }
 
@@ -52617,13 +52617,13 @@ uint32_t sub_000BF800(uint32_t arg0, uint32_t arg1)
 		arg0_2 = ebp;
 		sub_0003CC90(arg0_2, arg1_2);
 		eax = MEM32(esi + (MEM32(esi + 0x340u) - MEM32(esi + 0x344u)) * 4u + 0x374u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		arg1_2 = ~MEM32(eax + 0x18u) & 1u;
 		arg0_2 = MEM32(esi + (MEM32(esi + 0x340u) - MEM32(esi + 0x344u)) * 4u + 0x374u);
 		sub_000C73D0(arg0_2, arg1_2, &ignored, &ignored_4);
@@ -52664,13 +52664,13 @@ uint32_t sub_000BF9C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax + 0x360u);
 	if (eax == 0u)
 		return eax;
@@ -52689,13 +52689,13 @@ uint32_t sub_000BF9F0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	if ((int32_t)ecx < 0 || (int32_t)MEM32(eax + 0x34Cu) <= (int32_t)ecx)
 		return eax;
@@ -52714,14 +52714,14 @@ uint32_t sub_000BFA50(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x3B4u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x3B4u);
+	eax = MEM32(GameObjectLastObject + 0x3B4u);
 	return eax;
 }
 
@@ -52733,13 +52733,13 @@ uint32_t sub_000BFA80(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	if ((int32_t)MEM32(eax + 0x34Cu) <= (int32_t)ecx || (int32_t)ecx < 0)
 	{
@@ -52762,14 +52762,14 @@ uint32_t sub_000BFAE0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax += 0x364u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u) + 0x364u;
+	eax = GameObjectLastObject + 0x364u;
 	return eax;
 }
 
@@ -52780,7 +52780,7 @@ uint32_t sub_000BFB10(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -52788,7 +52788,7 @@ uint32_t sub_000BFB10(uint32_t arg0, uint32_t arg1)
 		arg1_2 = saved_arg1;
 		return sub_000A5290(arg0_2, arg1_2);
 	}
-	arg0_2 = MEM32(MEM32(0x1E57B4u) + 0x360u);
+	arg0_2 = MEM32(GameObjectLastObject + 0x360u);
 	return sub_000A5290(arg0_2, arg1);
 }
 
@@ -52800,13 +52800,13 @@ uint32_t sub_000BFB50(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edx = saved_arg1;
 	esi = saved_arg2;
 	ecx = 0u;
@@ -52831,13 +52831,13 @@ uint32_t sub_000BFBA0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edx = saved_arg1;
 	esi = saved_arg2;
 	ecx = 0u;
@@ -52859,14 +52859,14 @@ uint32_t sub_000BFBF0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x340u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x340u);
+	eax = MEM32(GameObjectLastObject + 0x340u);
 	return eax;
 }
 
@@ -52875,14 +52875,14 @@ uint32_t sub_000BFC20(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x3B0u) = 0xFFFFFFFFu;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x3B0u) = 0xFFFFFFFFu;
 	return eax;
 }
@@ -52894,13 +52894,13 @@ uint32_t sub_000BFC90(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	if ((int32_t)ecx < 0 && (int32_t)MEM32(eax + 0x34Cu) <= (int32_t)ecx)
 		return eax;
@@ -52921,7 +52921,7 @@ uint32_t sub_000BFCF0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	ebx = arg0;
 	if (ebx != eax)
 	{
@@ -52930,7 +52930,7 @@ uint32_t sub_000BFCF0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = saved_arg1;
 	if ((int32_t)edi >= 0 || (int32_t)edi < (int32_t)MEM32(esi + 0x34Cu))
 	{
@@ -53016,14 +53016,14 @@ uint32_t sub_000C0660(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax_2 = (uint8_t)saved_arg3;
 	if ((eax_2 & 1u) != 0u)
 		MEM32(esi + 0x350u) = 8u;
@@ -53174,14 +53174,14 @@ uint32_t sub_000C1E40(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x344u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x344u);
+	eax = MEM32(GameObjectLastObject + 0x344u);
 	return eax;
 }
 
@@ -53190,14 +53190,14 @@ uint32_t sub_000C1E70(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax += 0x14Cu;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u) + 0x14Cu;
+	eax = GameObjectLastObject + 0x14Cu;
 	return eax;
 }
 
@@ -53222,7 +53222,7 @@ uint32_t sub_000C1F20(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -53230,7 +53230,7 @@ uint32_t sub_000C1F20(uint32_t arg0)
 		MEM8(eax + 0x14Cu) = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x344u) = 0u;
 	MEM8(eax + 0x14Cu) = 0u;
 	return eax;
@@ -53375,13 +53375,13 @@ uint32_t sub_000C27C0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	MEM32(eax + 0x168u) = ecx;
 	arg1_2 = ecx;
@@ -53528,13 +53528,13 @@ uint32_t sub_000C2C10(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x140u) = 0u;
 	arg0_2 = MEM32(eax + 0x13Cu);
 	return sub_000BFC20(arg0_2);
@@ -53707,14 +53707,14 @@ uint32_t sub_000C3080(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		arg0_2 = MEM32(eax + 0x13Cu);
 		return sub_000BF7D0(arg0_2);
 	}
-	arg0_2 = MEM32(MEM32(0x1E57B4u) + 0x13Cu);
+	arg0_2 = MEM32(GameObjectLastObject + 0x13Cu);
 	return sub_000BF7D0(arg0_2);
 }
 
@@ -54553,14 +54553,14 @@ uint32_t sub_000C6B50(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x3Cu) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x3Cu) = arg1;
 	return eax;
 }
@@ -54746,13 +54746,13 @@ uint32_t sub_000C7330(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0x28u) = saved_arg1;
 	MEM32(eax + 0x3Cu) = saved_arg2;
 	MEM32(eax + 0x30u) = 0u;
@@ -54764,14 +54764,14 @@ uint32_t sub_000C7370(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0x28u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0x28u);
+	eax = MEM32(GameObjectLastObject + 0x28u);
 	return eax;
 }
 
@@ -54783,14 +54783,14 @@ void sub_000C73D0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = saved_arg1;
 	if (eax != 0u)
 	{
@@ -54828,14 +54828,14 @@ void sub_000C7440(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x40u) = saved_arg1;
 		return;
 	}
-	MEM32(MEM32(0x1E57B4u) + 0x40u) = arg1;
+	MEM32(GameObjectLastObject + 0x40u) = arg1;
 }
 
 uint32_t sub_000C7470(uint32_t arg0, uint32_t arg1)
@@ -54845,14 +54845,14 @@ uint32_t sub_000C7470(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x44u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x44u) = arg1;
 	return eax;
 }
@@ -54864,14 +54864,14 @@ uint32_t sub_000C74A0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x38u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x38u) = arg1;
 	return eax;
 }
@@ -54883,14 +54883,14 @@ void sub_000C74D0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x48u) = saved_arg1;
 		return;
 	}
-	MEM32(MEM32(0x1E57B4u) + 0x48u) = arg1;
+	MEM32(GameObjectLastObject + 0x48u) = arg1;
 }
 
 uint32_t sub_000C7500(uint32_t ebx, uint32_t arg0, uint32_t arg1)
@@ -54900,13 +54900,13 @@ uint32_t sub_000C7500(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	stack_4 = saved_arg1;
 	stack_8 = MEM32(eax + 0x28u);
 	eax = sub_000248B0();
@@ -54955,14 +54955,14 @@ uint32_t sub_000C80A0(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(vcObjectLoad_entry, 0x000C80E9u, 1, arg0_2);
 	MEM32(edi + 0xD0u) = eax;
@@ -54997,9 +54997,9 @@ uint32_t sub_000C8100(uint32_t eax, uint32_t esi, uint32_t edi)
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	MEM32(edi + 0xD0u) = eax_2;
-	if (eax_2 == MEM32(0x2BF2E0u))
+	if (eax_2 == vcObjectCacheHandle)
 	{
-		eax_2 = MEM32(0x2BF1C0u);
+		eax_2 = vcObjectCacheData;
 		if (eax_2 == 0u)
 		{
 			MEM32(edi + 0x40u) = MEM32(edi + 0x40u) | 0x40u;
@@ -55018,9 +55018,9 @@ uint32_t sub_000C8100(uint32_t eax, uint32_t esi, uint32_t edi)
 		MEM32(edi + 0x40u) = MEM32(edi + 0x40u) | 0x40u;
 		return eax_2;
 	}
-	MEM32(0x2BF2E0u) = eax_2;
+	vcObjectCacheHandle = eax_2;
 	eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax_2;
+	vcObjectCacheData = eax_2;
 	if (eax_2 == 0u)
 	{
 		MEM32(edi + 0x40u) = MEM32(edi + 0x40u) | 0x40u;
@@ -55505,7 +55505,7 @@ uint32_t sub_000C93B0(uint32_t ecx, uint32_t esi, uint32_t arg1)
 	MEM32(esi + 0x14u) = MEM32(ecx + 0x10u);
 	eax = MEM32(esi + 0x1Cu);
 	MEM32(esi + 0x10u) = 0xFFFE7960u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
@@ -55514,13 +55514,13 @@ uint32_t sub_000C93B0(uint32_t ecx, uint32_t esi, uint32_t arg1)
 			eax = sub_00139960(edx, arg0);
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	if (edi == 0u)
 	{
 		edx = MEM32(esi + 0x1Cu);
@@ -55529,13 +55529,13 @@ uint32_t sub_000C93B0(uint32_t ecx, uint32_t esi, uint32_t arg1)
 		return eax;
 	}
 	ecx_2 = MEM32(ecx);
-	if (ecx_2 != MEM32(0x1E57B0u))
+	if (ecx_2 != GameObjectLastHandle)
 	{
 		arg0 = ecx_2;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi + 0x168u) = MEM32(eax + 0x194u);
 	MEM32(edi + 0x16Cu) = 0x1CFC1u;
 	MEM32(edi + 0x19Cu) = saved_arg1;
@@ -56277,7 +56277,7 @@ uint32_t sub_000CB180(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0;
 
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	edi = arg0;
 	if (edi != eax)
 	{
@@ -56286,7 +56286,7 @@ uint32_t sub_000CB180(uint32_t arg0)
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi != 0u)
 	{
 		t1 = ((int32_t)edi >> 11) & 0x7Fu;
@@ -56322,14 +56322,14 @@ uint32_t sub_000CB200(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi != 0u)
 	{
 		eax = MEM32(esi + 0x20u);
@@ -56350,14 +56350,14 @@ uint32_t sub_000CB250(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi != 0u)
 	{
 		edi = saved_arg1;
@@ -56516,14 +56516,14 @@ uint32_t sub_000CBC30(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	eax = MEM32(ebx + 0x1Cu);
 	edi = 0u;
 	if ((int32_t)MEM32(eax + 0x1Cu) <= 0)
@@ -56566,14 +56566,14 @@ uint32_t sub_000CBCA0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	eax = MEM32(ebx + 0x1Cu);
 	edi = 0u;
 	if ((int32_t)MEM32(eax + 0x1Cu) <= 0)
@@ -59304,7 +59304,7 @@ uint32_t sub_000D1580(uint32_t ecx, uint32_t ebx, uint32_t edi)
 	MEM32(edi + 0x18u) = MEM32(ecx + 0xCu);
 	MEM32(edi + 0x14u) = MEM32(ecx + 0x10u);
 	eax = MEM32(edi + 0x24u);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
@@ -59313,13 +59313,13 @@ uint32_t sub_000D1580(uint32_t ecx, uint32_t ebx, uint32_t edi)
 			eax = sub_00139960(edx, arg0);
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	if (esi == 0u)
 	{
 		edx = MEM32(edi + 0x24u);
@@ -59328,13 +59328,13 @@ uint32_t sub_000D1580(uint32_t ecx, uint32_t ebx, uint32_t edi)
 		return eax;
 	}
 	ecx_2 = MEM32(ecx);
-	if (ecx_2 != MEM32(0x1E57B0u))
+	if (ecx_2 != GameObjectLastHandle)
 	{
 		arg0 = ecx_2;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi + 0x168u) = MEM32(eax + 0x194u);
 	ecx_2 = ((int32_t)ebx >> 11) & 0x7Fu;
 	if (ecx_2 != 1u && ecx_2 != 0x17u)
@@ -59434,19 +59434,19 @@ uint32_t sub_000D16B0(uint32_t esi, uint32_t arg1)
 	sub_00139710(arg0, arg1_2);
 	eax = MEM32(esi + 0x24u);
 	ebx = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ebx || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0xECu) = 0x93u;
 	MEM32(eax + 0xBCu) = ebx;
 	MEM32(eax + 0xC0u) = ebx;
@@ -59610,13 +59610,13 @@ uint32_t sub_000D1B80(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	if (eax >= 0x50u)
 		return eax;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx_2 = edi;
 	esi = eax + 0x2Cu - edi;
 	do
@@ -59638,14 +59638,14 @@ uint32_t sub_000D1BF0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x84u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x84u) = arg1;
 	return eax;
 }
@@ -59964,7 +59964,7 @@ uint32_t sub_000D26C0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -59972,7 +59972,7 @@ uint32_t sub_000D26C0(uint32_t arg0)
 		eax = zero == 0u;
 		return eax;
 	}
-	zero = MEM32(MEM32(0x1E57B4u) + 0x2Cu) == 0u;
+	zero = MEM32(GameObjectLastObject + 0x2Cu) == 0u;
 	eax = zero == 0u;
 	return eax;
 }
@@ -60066,22 +60066,22 @@ uint32_t sub_000D2DD0(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	eax = arg0;
 	ebp = arg1;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
-	if (ebp != MEM32(0x1E57B0u))
+		ebx = GameObjectLastObject;
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	eax = 0u;
 	if (ebx == 0u || edi == eax)
 	{
@@ -60099,13 +60099,13 @@ uint32_t sub_000D2DD0(uint32_t arg0, uint32_t arg1)
 		}
 		for (;;)
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			ecx = MEM32(eax + 0x38u);
 			if (ecx == 0u)
 				break;
@@ -60130,22 +60130,22 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 {
 	uint32_t arg0 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
-	if (ebx != MEM32(0x1E57B0u))
+		edi = GameObjectLastObject;
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0 = ebx;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 		ebp = eax_2;
 	}
 	else
-		ebp = MEM32(0x1E57B4u);
+		ebp = GameObjectLastObject;
 	esi = MEM32(edi + 0x34u);
 	if (esi == 0u)
 	{
@@ -60158,14 +60158,14 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 	{
 		for (;;)
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0 = esi;
 				GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 				edi = eax_2;
 			}
 			else
-				edi = MEM32(0x1E57B4u);
+				edi = GameObjectLastObject;
 			if (esi == ebx)
 				break;
 			esi = MEM32(edi + 0x38u);
@@ -60180,13 +60180,13 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 		eax_2 = MEM32(edi + 0x38u);
 		if (eax_2 != 0u)
 		{
-			if (eax_2 != MEM32(0x1E57B0u))
+			if (eax_2 != GameObjectLastHandle)
 			{
 				arg0 = eax_2;
 				GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 			}
 			else
-				eax_2 = MEM32(0x1E57B4u);
+				eax_2 = GameObjectLastObject;
 			MEM32(eax_2 + 0x3Cu) = MEM32(edi + 0x3Cu);
 		}
 		eax_2 = MEM32(edi + 0x3Cu);
@@ -60197,13 +60197,13 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 			MEM32(ebp + 0x3Cu) = 0u;
 			return;
 		}
-		if (eax_2 != MEM32(0x1E57B0u))
+		if (eax_2 != GameObjectLastHandle)
 		{
 			arg0 = eax_2;
 			GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 		}
 		else
-			eax_2 = MEM32(0x1E57B4u);
+			eax_2 = GameObjectLastObject;
 		MEM32(eax_2 + 0x38u) = MEM32(edi + 0x38u);
 		MEM32(ebp + 0x30u) = 0u;
 		MEM32(ebp + 0x38u) = 0u;
@@ -60219,7 +60219,7 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 		MEM32(ebp + 0x3Cu) = 0u;
 		return;
 	}
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
@@ -60230,7 +60230,7 @@ void sub_000D2E90(uint32_t eax, uint32_t ebx)
 		MEM32(ebp + 0x3Cu) = 0u;
 		return;
 	}
-	MEM32(MEM32(0x1E57B4u) + 0x3Cu) = 0u;
+	MEM32(GameObjectLastObject + 0x3Cu) = 0u;
 	MEM32(ebp + 0x38u) = 0u;
 	MEM32(ebp + 0x30u) = 0u;
 	MEM32(ebp + 0x38u) = 0u;
@@ -60337,14 +60337,14 @@ uint32_t sub_000D3160(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebx = arg0;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	eax = MEM32(esi + 0x30u);
 	if (eax != 0u && (eax & 0x7C0000u) == 0x200000u)
 		sub_000D2E90(eax, ebx);
@@ -60392,13 +60392,13 @@ uint32_t sub_000D3200(uint32_t arg0)
 	ecx = arg0;
 	do
 	{
-		if (ecx != MEM32(0x1E57B0u))
+		if (ecx != GameObjectLastHandle)
 		{
 			arg0_2 = ecx;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		ecx = MEM32(eax + 0x30u);
 	} while ((ecx & 0x7C0000u) != 0x1C0000u);
 	eax = ecx;
@@ -60415,13 +60415,13 @@ uint32_t Trigger_Collect(uint32_t arg0, uint32_t arg1)
 	saved_arg1 = arg1;
 	eax = arg0;
 	ebx = 0u;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		esi = MEM32(eax + 0x34u);
@@ -60433,14 +60433,14 @@ uint32_t Trigger_Collect(uint32_t arg0, uint32_t arg1)
 		ebp = saved_arg1;
 		do
 		{
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0_2 = esi;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				edi = eax;
 			}
 			else
-				edi = MEM32(0x1E57B4u);
+				edi = GameObjectLastObject;
 			arg1_2 = ebp;
 			arg0_2 = esi;
 			eax = x86_call(GameObjectCollect, 0x000D3385u, 2, arg0_2, arg1_2);
@@ -60457,14 +60457,14 @@ uint32_t sub_000D33A0(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	edi = arg0;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	ebx = 0u;
 	if (MEM32(esi + 0x34u) != 0u)
 	{
@@ -60492,13 +60492,13 @@ uint32_t sub_000D33A0(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	if (ecx != MEM32(0x1E57B0u))
+	if (ecx != GameObjectLastHandle)
 	{
 		arg0_2 = ecx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(eax + 0x34u) == edi)
 	{
 		ecx = MEM32(esi + 0x3Cu);
@@ -60509,13 +60509,13 @@ uint32_t sub_000D33A0(uint32_t arg0)
 	eax = MEM32(esi + 0x3Cu);
 	if (eax != ebx)
 	{
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0_2 = eax;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		MEM32(eax + 0x38u) = MEM32(esi + 0x38u);
 	}
 	eax = MEM32(esi + 0x38u);
@@ -60528,7 +60528,7 @@ uint32_t sub_000D33A0(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -60540,7 +60540,7 @@ uint32_t sub_000D33A0(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	MEM32(MEM32(0x1E57B4u) + 0x3Cu) = MEM32(esi + 0x3Cu);
+	MEM32(GameObjectLastObject + 0x3Cu) = MEM32(esi + 0x3Cu);
 	MEM32(esi + 0x30u) = ebx;
 	MEM32(esi + 0x38u) = ebx;
 	MEM32(esi + 0x3Cu) = ebx;
@@ -60554,13 +60554,13 @@ uint32_t sub_000D34A0(uint32_t eax)
 	uint32_t arg0 = 0, eax_2 = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0;
 
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx = 0u;
 	if (eax_2 == 0u)
 		return eax_2;
@@ -60590,13 +60590,13 @@ uint32_t sub_000D3570(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = saved_arg0;
@@ -60618,13 +60618,13 @@ uint32_t sub_000D3670(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -60642,13 +60642,13 @@ uint32_t sub_000D36B0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 		MEM32(eax + 0x78u) = saved_arg1;
 	return eax;
@@ -60772,13 +60772,13 @@ void sub_000D4C30(uint32_t arg0)
 	if (esi == 0u)
 		return;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == edi)
 		return;
 	ecx = MEM32(eax + 0x18u) - 1u;
@@ -61089,13 +61089,13 @@ void sub_000D5040(uint32_t eax, uint32_t ebx, uint32_t esi)
 
 	edi = eax;
 	eax_2 = MEM32(edi);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	MEM32(esi) = MEM32(edi);
 	MEM32(esi + 4u) = MEM32(edi + 4u);
 	MEM32(esi + 8u) = MEM32(edi + 0xCu);
@@ -61209,13 +61209,13 @@ uint32_t sub_000D50C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 				esi = arg1;
 				MEM32(ebx + 8u) = 0xD4FC0u;
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				arg1_2 = eax;
 				eax = sub_0009B6E0(arg1_2);
 				if (eax == 0u)
@@ -61225,13 +61225,13 @@ uint32_t sub_000D50C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 					return eax;
 				}
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				arg1_2 = eax;
 				eax = sub_0009B6E0(arg1_2);
 				arg0_2 = eax;
@@ -61353,13 +61353,13 @@ uint32_t sub_000D5480(uint32_t eax, uint32_t arg0)
 	if (esi == 0u)
 		return eax;
 	eax_2 = MEM32(esi);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == edi)
 		return eax;
 	ecx = MEM32(eax + 0xCu) - 1u;
@@ -61559,13 +61559,13 @@ uint32_t sub_000D5630(uint32_t arg1)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(arg1);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		MEM32(eax + 0x60u) = 0xBF800000u;
@@ -61579,13 +61579,13 @@ uint32_t sub_000D5660(uint32_t arg1)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(arg1);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		MEM32(eax + 0x60u) = 0x3F800000u;
@@ -61599,13 +61599,13 @@ uint32_t sub_000D5690(uint32_t arg1)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(arg1);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 		MEM32(eax + 0x60u) = 0u;
 	return eax;
@@ -61617,14 +61617,14 @@ void sub_000D56C0(uint32_t ebx, uint32_t esi, uint32_t arg1)
 
 	ebp = arg1;
 	eax = MEM32(ebp);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	MEM32(esi) = MEM32(ebp);
 	MEM32(esi + 4u) = MEM32(ebp + 4u);
 	MEM32(esi + 8u) = 0u;
@@ -61672,13 +61672,13 @@ uint32_t sub_000D5960(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 				esi = arg1;
 				MEM32(ebx + 8u) = 0xD5690u;
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax == 0u)
 				{
 					eax = x86_call(vcRandom_entry, 0x000D5B82u, 0);
@@ -61688,13 +61688,13 @@ uint32_t sub_000D5960(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 					return eax;
 				}
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				arg1_2 = eax;
 				eax = sub_0009B6E0(arg1_2);
 				if (eax == 0u)
@@ -61706,14 +61706,14 @@ uint32_t sub_000D5960(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 					return eax;
 				}
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored_2, &ignored_3);
 					edi = eax;
 				}
 				else
-					edi = MEM32(0x1E57B4u);
+					edi = GameObjectLastObject;
 				arg1_2 = edi;
 				eax = sub_0009B6E0(arg1_2);
 				arg0_2 = eax;
@@ -61829,13 +61829,13 @@ void sub_000D5CE0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi) = MEM32(esi);
 	MEM32(edi + 4u) = MEM32(esi + 4u);
 	MEM32(edi + 8u) = MEM32(esi + 8u);
@@ -61937,13 +61937,13 @@ uint32_t sub_000D5E40(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = saved_arg0;
@@ -61966,13 +61966,13 @@ uint32_t sub_000D5E90(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	ecx = saved_arg1;
@@ -61996,7 +61996,7 @@ void sub_000D61B0(uint32_t eax, uint32_t ebx, uint32_t edi)
 
 	esi = eax;
 	eax_2 = MEM32(edi);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &ignored, &ignored_2, &ignored_3);
@@ -62075,7 +62075,7 @@ uint32_t sub_000D6230(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	}
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &ignored, &ignored_2, &ignored_3);
@@ -62106,13 +62106,13 @@ uint32_t sub_000D6330(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = saved_arg0;
@@ -62242,13 +62242,13 @@ uint32_t sub_000D6880(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(edi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(esi) = MEM32(edi);
 	MEM32(esi + 4u) = MEM32(edi + 4u);
 	MEM32(esi + 0xCu) = MEM32(edi + 8u);
@@ -62368,13 +62368,13 @@ void sub_000D7170(uint32_t eax)
 	uint32_t stack_4 = 0;
 	uint32_t t1 = 0;
 
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ebp = 0u;
 	if (eax_2 == 0u)
 		return;
@@ -62442,26 +62442,26 @@ void sub_000D7280(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	ebx = arg0;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return;
 	ebp = saved_arg1;
 	edi = 0u;
 	for (;;)
 	{
-		if (ebx != MEM32(0x1E57B0u))
+		if (ebx != GameObjectLastHandle)
 		{
 			arg0_2 = ebx;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		ecx = edi + eax + 0x44u;
 		esi = 0u;
 		eax = ecx + 0x48u;
@@ -62501,13 +62501,13 @@ uint32_t sub_000D7530(uint32_t arg0, uint32_t arg1)
 	saved_arg1 = arg1;
 	eax = stack_200000;
 	ebp = 0u;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ebx = saved_arg1;
 	esi = eax + 0x8Cu;
 	stack_200000 = esi;
@@ -62566,13 +62566,13 @@ void sub_000D75E0(uint32_t arg0)
 			eax = MEM32(edi);
 			if (eax == ebx)
 			{
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0_2 = eax;
 					GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax == 0u)
 					MEM32(edi) = 0u;
 				else
@@ -62674,13 +62674,13 @@ uint32_t sub_000D7740(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	MEM32(eax + 0xCu) = MEM32(ecx + 0x24u);
 	MEM32(eax + 0x10u) = MEM32(ecx + 0x28u);
@@ -62714,13 +62714,13 @@ uint32_t sub_000D77D0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = saved_arg1;
 	arg2 = ecx + 0x24u;
 	arg1_2 = ecx;
@@ -62755,13 +62755,13 @@ uint32_t sub_000D7850(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u || (MEM8(eax + 8u) & 1u) != 0u)
 	{
 		eax = 0u;
@@ -62780,13 +62780,13 @@ uint32_t sub_000D7AB0(uint32_t arg1, uint32_t arg2)
 	stack_1FFFF8 = arg2;
 	ebx = stack_1FFFF8;
 	eax = MEM32(ebx);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	esi = saved_arg1;
 	stack_1FFFF8 = eax;
 	MEM32(ebx + 8u) = 0u;
@@ -62878,27 +62878,27 @@ uint32_t sub_000D8240(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	esi = MEM32(eax + 0xBCu);
 	if (esi == 0u)
 		return eax;
 	ebx = saved_arg1;
 	do
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			edi = eax;
 		}
 		else
-			edi = MEM32(0x1E57B4u);
+			edi = GameObjectLastObject;
 		eax = esi & 0x3F800u;
 		if (eax == 0x3800u)
 		{
@@ -62937,27 +62937,27 @@ uint32_t sub_000D82D0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	esi = MEM32(eax + 0xBCu);
 	if (esi == 0u)
 		return eax;
 	ebx = saved_arg1;
 	do
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			edi = eax;
 		}
 		else
-			edi = MEM32(0x1E57B4u);
+			edi = GameObjectLastObject;
 		eax = esi & 0x3F800u;
 		if (eax == 0x3800u)
 		{
@@ -63100,14 +63100,14 @@ uint32_t sub_000D89A0(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	saved_ebp = ebp;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if ((int32_t)edi < 1)
 	{
 		arg0_2 = ebx;
@@ -63309,13 +63309,13 @@ uint32_t sub_000D8C80(uint32_t arg0, uint32_t arg1)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	saved_eax = eax;
 	esi = eax + 0xD0u;
 	edi = 5u;
@@ -63395,7 +63395,7 @@ uint32_t sub_000D8E90(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t edi, ui
 	MEM8(eax_2 + 0x39u) = edx;
 	MEM8(eax_2 + 0x3Au) = ebx;
 	MEM32(eax_2 + 0x34u) = saved_arg2;
-	MEM32(eax_2 + 0x30u) = MEM32(0x23A48Cu);
+	MEM32(eax_2 + 0x30u) = vcGameTime;
 	eax_2 = 1u;
 	return eax_2;
 }
@@ -63464,13 +63464,13 @@ void sub_000D93A0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		ecx = saved_arg1;
@@ -63543,13 +63543,13 @@ uint32_t sub_000DA560(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -63653,13 +63653,13 @@ uint32_t sub_000DA6B0(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg2 = 0x100u;
 	arg1_2 = eax + 0xD0u;
 	arg0_2 = edi;
@@ -63774,14 +63774,14 @@ uint32_t sub_000DAB80(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg2 = 1u;
 	arg1_2 = esi + 0xD0u;
 	arg0_2 = ebx;
@@ -63927,14 +63927,14 @@ uint32_t sub_000DAEB0(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(vcObjectLoad_entry, 0x000DAEFBu, 1, arg0_2);
 	MEM32(edi + 0xD0u) = eax;
@@ -64136,20 +64136,20 @@ void sub_000DBCD0(uint32_t esi, uint32_t arg1, uint32_t arg2)
 	uint32_t t1 = 0;
 
 	eax = MEM32(esi + 0xD0u);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	eax = arg1;
 	arg1_2 = arg2;
 	arg0 = eax;
@@ -64316,14 +64316,14 @@ uint32_t sub_000DBF50(uint32_t arg0, uint32_t arg1)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = edi;
 	eax = x86_call(vcObjectLoad_entry, 0x000DBF99u, 1, arg0_2);
 	MEM32(esi + 0xD0u) = eax;
@@ -64375,14 +64375,14 @@ uint32_t sub_000DC050(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0xD0u;
 	arg0_2 = ebx;
 	x86_call(vcFileReadU32_entry, 0x000DC0A0u, 2, arg0_2, arg1_2);
@@ -64407,14 +64407,14 @@ uint32_t sub_000DC0D0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(eax + 0xD0u);
 		return eax;
 	}
-	eax = MEM32(MEM32(0x1E57B4u) + 0xD0u);
+	eax = MEM32(GameObjectLastObject + 0xD0u);
 	return eax;
 }
 
@@ -64425,13 +64425,13 @@ uint32_t sub_000DC100(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = saved_arg1;
 	ecx = MEM32(eax + 0x40u) | 0x80000u;
 	MEM32(eax + 0xD0u) = 0u;
@@ -64447,13 +64447,13 @@ uint32_t sub_000DC140(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = saved_arg1;
 	ecx = MEM32(eax + 0x40u) | 0x80000u;
 	MEM32(eax + 0xD0u) = 1u;
@@ -64469,7 +64469,7 @@ uint32_t sub_000DC190(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -64477,7 +64477,7 @@ uint32_t sub_000DC190(uint32_t arg0, uint32_t arg1)
 		MEM32(eax + 0xD0u) = 2u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = arg1;
 	MEM32(eax + 0xD0u) = 2u;
 	return eax;
@@ -64490,7 +64490,7 @@ uint32_t sub_000DC1E0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -64498,7 +64498,7 @@ uint32_t sub_000DC1E0(uint32_t arg0, uint32_t arg1)
 		MEM32(eax + 0xD0u) = 3u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = arg1;
 	MEM32(eax + 0xD0u) = 3u;
 	return eax;
@@ -64511,7 +64511,7 @@ uint32_t sub_000DC230(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -64519,7 +64519,7 @@ uint32_t sub_000DC230(uint32_t arg0, uint32_t arg1)
 		MEM32(eax + 0xD0u) = 4u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = arg1;
 	MEM32(eax + 0xD0u) = 4u;
 	return eax;
@@ -64532,7 +64532,7 @@ uint32_t sub_000DC280(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -64540,7 +64540,7 @@ uint32_t sub_000DC280(uint32_t arg0, uint32_t arg1)
 		MEM32(eax + 0xD0u) = 5u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = arg1;
 	MEM32(eax + 0xD0u) = 5u;
 	return eax;
@@ -64553,7 +64553,7 @@ uint32_t sub_000DC2D0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -64561,7 +64561,7 @@ uint32_t sub_000DC2D0(uint32_t arg0, uint32_t arg1)
 		MEM32(eax + 0xD0u) = 6u;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0xD4u) = arg1;
 	MEM32(eax + 0xD0u) = 6u;
 	return eax;
@@ -64572,14 +64572,14 @@ uint32_t sub_000DC355(uint32_t eax)
 	uint32_t arg0 = 0, eax_2 = 0, ignored = 0, ignored_2 = 0;
 
 	eax_2 = MEM32(eax + 0xB8u);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0 = eax_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 		eax_2 = MEM32(eax_2 + 0xB8u);
 		return eax_2;
 	}
-	eax_2 = MEM32(MEM32(0x1E57B4u) + 0xB8u);
+	eax_2 = MEM32(GameObjectLastObject + 0xB8u);
 	return eax_2;
 }
 
@@ -64711,14 +64711,14 @@ uint32_t sub_000DD030(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(vcObjectLoad_entry, 0x000DD079u, 1, arg0_2);
 	MEM32(esi + 0xD0u) = eax;
@@ -64869,14 +64869,14 @@ uint32_t sub_000DD580(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1_2 = edi + 0xD4u;
 	arg0_2 = ebx;
 	x86_call(vcFileReadU32_entry, 0x000DD5D0u, 2, arg0_2, arg1_2);
@@ -64899,14 +64899,14 @@ uint32_t sub_000DD584(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1_2 = edi + 0xD4u;
 	arg0_2 = ebx;
 	x86_call(vcFileReadU32_entry, 0x000DD5D0u, 2, arg0_2, arg1_2);
@@ -64939,7 +64939,7 @@ uint32_t sub_000DD650(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
-	eax = MEM32(0x1E57B0u);
+	eax = GameObjectLastHandle;
 	ebx = arg0;
 	if (ebx != eax)
 	{
@@ -64948,7 +64948,7 @@ uint32_t sub_000DD650(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi != 0u)
 	{
 		edi = saved_arg1;
@@ -64976,13 +64976,13 @@ uint32_t sub_000DD6B0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	ecx = saved_arg1;
@@ -65111,9 +65111,9 @@ uint32_t sub_000DE6D0(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi == MEM32(0x1E57B0u))
+	if (esi == GameObjectLastHandle)
 	{
-		arg1_2 = MEM32(0x1E57B4u) + 0xD0u;
+		arg1_2 = GameObjectLastObject + 0xD0u;
 		arg0_2 = edi;
 		x86_call(vcFileReadU32_entry, 0x000DE710u, 2, arg0_2, arg1_2);
 		ignored = g_ecx;
@@ -65595,14 +65595,14 @@ uint32_t RumbleAction_Load(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x54u;
 	arg0_2 = ebx;
 	x86_call(vcFileReadU32_entry, 0x000DEE8Du, 2, arg0_2, arg1_2);
@@ -65717,14 +65717,14 @@ uint32_t MovePlayerAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg2 = 3u;
 	arg1_2 = esi + 0x50u;
 	arg0_2 = ebx;
@@ -65789,7 +65789,7 @@ void sub_000DF2B0(uint32_t ebx)
 		{
 			if (eax == 5u)
 			{
-				if (ecx != MEM32(0x1E57B0u))
+				if (ecx != GameObjectLastHandle)
 				{
 					arg0 = ecx;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
@@ -65797,7 +65797,7 @@ void sub_000DF2B0(uint32_t ebx)
 					MEM32(ebx + 0x40u) = 1u;
 					return;
 				}
-				MEM32(MEM32(0x1E57B4u) + 0x34u) = MEM32(ebx + 0x50u);
+				MEM32(GameObjectLastObject + 0x34u) = MEM32(ebx + 0x50u);
 				MEM32(ebx + 0x40u) = 1u;
 				return;
 			}
@@ -65809,9 +65809,9 @@ void sub_000DF2B0(uint32_t ebx)
 					MEM32(ebx + 0x40u) = 1u;
 					return;
 				}
-				if (ecx == MEM32(0x1E57B0u))
+				if (ecx == GameObjectLastHandle)
 				{
-					MEM32(MEM32(0x1E57B4u) + 0x48u) = MEM32(ebx + 0x50u);
+					MEM32(GameObjectLastObject + 0x48u) = MEM32(ebx + 0x50u);
 					MEM32(ebx + 0x40u) = 1u;
 					return;
 				}
@@ -65830,13 +65830,13 @@ void sub_000DF2B0(uint32_t ebx)
 				if (MEM32(esi + 0x194u) != 0u)
 				{
 					eax = MEM32(esi);
-					if (eax != MEM32(0x1E57B0u))
+					if (eax != GameObjectLastHandle)
 					{
 						arg0 = eax;
 						GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 					}
 					else
-						eax = MEM32(0x1E57B4u);
+						eax = GameObjectLastObject;
 					if (eax != 0u)
 						MEM32(eax + 0x174u) = MEM32(ebx + 0x50u);
 				}
@@ -65847,26 +65847,26 @@ void sub_000DF2B0(uint32_t ebx)
 			MEM32(ebx + 0x40u) = 1u;
 			return;
 		}
-		if (ecx != MEM32(0x1E57B0u))
+		if (ecx != GameObjectLastHandle)
 		{
 			arg0 = ecx;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == 0u)
 		{
 			MEM32(ebx + 0x40u) = 1u;
 			return;
 		}
 		eax = MEM32(eax + 0x44u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax != 0u)
 		{
 			MEM32(eax + 0x174u) = MEM32(ebx + 0x50u);
@@ -65876,13 +65876,13 @@ void sub_000DF2B0(uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return;
 	}
-	if (ecx != MEM32(0x1E57B0u))
+	if (ecx != GameObjectLastHandle)
 	{
 		arg0 = ecx;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		MEM32(eax + 0x174u) = MEM32(ebx + 0x50u);
@@ -65960,13 +65960,13 @@ uint32_t sub_000DF500(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if ((int32_t)ebx >= 1)
 	{
 		arg1_2 = eax + 0x50u;
@@ -66184,13 +66184,13 @@ uint32_t QueueIMusicAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if ((int32_t)ebx > 1)
 	{
 		arg1_2 = eax + 0x50u;
@@ -66346,14 +66346,14 @@ uint32_t SetKeyValAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x50u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x000DFD2Fu, 2, arg0_2, arg1_2);
@@ -66447,7 +66447,7 @@ uint32_t sub_000DFFA0(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -66458,7 +66458,7 @@ uint32_t sub_000DFFA0(uint32_t arg0, uint32_t arg1)
 		eax = esi;
 		return eax;
 	}
-	edi = MEM32(0x1E57B4u);
+	edi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x000DFFDCu, 1, arg0_2);
 	MEM32(edi + 0x50u) = eax;
@@ -66496,7 +66496,7 @@ void sub_000E0070(uint32_t edi)
 			eax = sub_0003B650(arg0);
 			if (eax != esi)
 			{
-				MEM32(eax + 0x3C4u) = MEM32(0x23A48Cu);
+				MEM32(eax + 0x3C4u) = vcGameTime;
 				MEM32(eax + 0x350u) = esi;
 				MEM32(eax + 0x33Cu) = esi;
 				ecx = 0x64u;
@@ -66979,13 +66979,13 @@ void sub_000E0A00(uint32_t ebx)
 			if (MEM32(esi + 0x194u) != 0u)
 			{
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0 = eax;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax != 0u)
 				{
 					arg1 = eax;
@@ -67008,13 +67008,13 @@ void sub_000E0A00(uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		MEM32(ebx + 0x40u) = 1u;
@@ -67070,13 +67070,13 @@ uint32_t sub_000E0A03(uint32_t eax, uint32_t ebx)
 			if (eax != 0u)
 			{
 				eax_2 = MEM32(esi);
-				if (eax_2 != MEM32(0x1E57B0u))
+				if (eax_2 != GameObjectLastHandle)
 				{
 					arg0 = eax_2;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax != 0u)
 				{
 					arg1 = eax;
@@ -67099,13 +67099,13 @@ uint32_t sub_000E0A03(uint32_t eax, uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return eax;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		MEM32(ebx + 0x40u) = 1u;
@@ -67241,13 +67241,13 @@ void sub_000E0C80(uint32_t ebx)
 			if (MEM32(esi + 0x194u) != 0u)
 			{
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0 = eax;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax != 0u)
 				{
 					arg1 = eax;
@@ -67266,13 +67266,13 @@ void sub_000E0C80(uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		MEM32(ebx + 0x40u) = 1u;
@@ -67364,9 +67364,9 @@ uint32_t sub_000E0E80(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi == MEM32(0x1E57B0u))
+	if (esi == GameObjectLastHandle)
 	{
-		arg1_2 = MEM32(0x1E57B4u) + 0x50u;
+		arg1_2 = GameObjectLastObject + 0x50u;
 		arg0_2 = edi;
 		x86_call(vcFileReadU32_entry, 0x000E0EBEu, 2, arg0_2, arg1_2);
 		ignored = g_ecx;
@@ -67408,7 +67408,7 @@ uint32_t sub_000E1070(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &ignored, &ignored_2, &ignored_3);
@@ -67481,13 +67481,13 @@ void sub_000E1160(uint32_t ebx)
 			if (MEM32(esi + 0x194u) != 0u)
 			{
 				eax = MEM32(esi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0 = eax;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax != 0u)
 				{
 					arg1 = eax;
@@ -67506,13 +67506,13 @@ void sub_000E1160(uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		MEM32(ebx + 0x40u) = 1u;
@@ -67657,13 +67657,13 @@ void sub_000E13F0(uint32_t edi)
 			if (MEM32(ebx + 0x194u) != ebp)
 			{
 				eax = MEM32(ebx);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0 = eax;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 				}
 				else
-					eax = MEM32(0x1E57B4u);
+					eax = GameObjectLastObject;
 				if (eax != ebp)
 				{
 					arg1 = eax;
@@ -67701,24 +67701,24 @@ void sub_000E13F0(uint32_t edi)
 						{
 							if (eax == 5u)
 							{
-								if (ecx != MEM32(0x1E57B0u))
+								if (ecx != GameObjectLastHandle)
 								{
 									arg0 = ecx;
 									GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 									MEM32(esi + 0x70u) = MEM32(eax + 0x40u);
 								}
 								else
-									MEM32(esi + 0x70u) = MEM32(MEM32(0x1E57B4u) + 0x40u);
+									MEM32(esi + 0x70u) = MEM32(GameObjectLastObject + 0x40u);
 							}
 						}
-						else if (ecx != MEM32(0x1E57B0u))
+						else if (ecx != GameObjectLastHandle)
 						{
 							arg0 = ecx;
 							GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 							MEM32(esi + 0x70u) = MEM32(eax + 0x44u);
 						}
 						else
-							MEM32(esi + 0x70u) = MEM32(MEM32(0x1E57B4u) + 0x44u);
+							MEM32(esi + 0x70u) = MEM32(GameObjectLastObject + 0x44u);
 					}
 				}
 			}
@@ -67731,13 +67731,13 @@ void sub_000E13F0(uint32_t edi)
 		MEM32(edi + 0x40u) = 1u;
 		return;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0 = esi;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == ebp)
 	{
 		MEM32(edi + 0x40u) = 1u;
@@ -67779,7 +67779,7 @@ void sub_000E13F0(uint32_t edi)
 		eax = ((int32_t)ecx >> 18) & 0x1Fu;
 		if (eax == 1u)
 		{
-			if (ecx != MEM32(0x1E57B0u))
+			if (ecx != GameObjectLastHandle)
 			{
 				arg0 = ecx;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
@@ -67787,7 +67787,7 @@ void sub_000E13F0(uint32_t edi)
 				MEM32(edi + 0x40u) = 1u;
 				return;
 			}
-			MEM32(esi + 0x70u) = MEM32(MEM32(0x1E57B4u) + 0x44u);
+			MEM32(esi + 0x70u) = MEM32(GameObjectLastObject + 0x44u);
 			MEM32(edi + 0x40u) = 1u;
 			return;
 		}
@@ -67796,7 +67796,7 @@ void sub_000E13F0(uint32_t edi)
 			MEM32(edi + 0x40u) = 1u;
 			return;
 		}
-		if (ecx != MEM32(0x1E57B0u))
+		if (ecx != GameObjectLastHandle)
 		{
 			arg0 = ecx;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
@@ -67804,7 +67804,7 @@ void sub_000E13F0(uint32_t edi)
 			MEM32(edi + 0x40u) = 1u;
 			return;
 		}
-		MEM32(esi + 0x70u) = MEM32(MEM32(0x1E57B4u) + 0x40u);
+		MEM32(esi + 0x70u) = MEM32(GameObjectLastObject + 0x40u);
 		MEM32(edi + 0x40u) = 1u;
 		return;
 	}
@@ -67889,14 +67889,14 @@ uint32_t AIAssignBFOAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = edi;
 	eax = x86_call(GameObjectLoad, 0x000E181Bu, 1, arg0_2);
 	arg1_2 = esi + 0x54u;
@@ -68061,14 +68061,14 @@ uint32_t EnableAIChannelAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x50u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x000E1C1Fu, 2, arg0_2, arg1_2);
@@ -68193,14 +68193,14 @@ uint32_t SetObjectivePosAction_Load(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg1_2 = edi + 0x50u;
 	arg0_2 = ebx;
 	x86_call(vcFileReadU32_entry, 0x000E1DFDu, 2, arg0_2, arg1_2);
@@ -68262,18 +68262,18 @@ void sub_000E1EC0(uint32_t edi)
 				MEM32(edi + 0x40u) = 1u;
 				return;
 			}
-			edx = MEM32(0x1E57B0u);
+			edx = GameObjectLastHandle;
 			if (ecx != edx)
 			{
 				arg0 = ecx;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1E57B0u);
-				esi = MEM32(0x1E57B4u);
+				edx = GameObjectLastHandle;
+				esi = GameObjectLastObject;
 				ecx = MEM32(0x1BC980u);
 			}
 			else
 			{
-				esi = MEM32(0x1E57B4u);
+				esi = GameObjectLastObject;
 				eax = esi;
 			}
 			if (MEM32(eax + 0x44u) != edx)
@@ -68287,8 +68287,8 @@ void sub_000E1EC0(uint32_t edi)
 					eax = esi;
 				arg0 = MEM32(eax + 0x44u);
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1E57B0u);
-				esi = MEM32(0x1E57B4u);
+				edx = GameObjectLastHandle;
+				esi = GameObjectLastObject;
 				ecx = MEM32(0x1BC980u);
 			}
 			else
@@ -68302,8 +68302,8 @@ void sub_000E1EC0(uint32_t edi)
 			{
 				arg0 = ecx;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1E57B0u);
-				esi = MEM32(0x1E57B4u);
+				edx = GameObjectLastHandle;
+				esi = GameObjectLastObject;
 				ecx = MEM32(0x1BC980u);
 			}
 			else
@@ -68338,7 +68338,7 @@ void sub_000E1EC0(uint32_t edi)
 		}
 		arg0 = eax;
 		eax = sub_0004CC10(arg0);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = MEM32(edi + 0x48u);
 			eax = sub_0004CC10(arg0);
@@ -68346,7 +68346,7 @@ void sub_000E1EC0(uint32_t edi)
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax != 0u)
 		{
 			MEM32(eax + 4u) = MEM32(eax + 4u) | 0x20u;
@@ -68356,7 +68356,7 @@ void sub_000E1EC0(uint32_t edi)
 		MEM32(edi + 0x40u) = 1u;
 		return;
 	}
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
@@ -68369,7 +68369,7 @@ void sub_000E1EC0(uint32_t edi)
 		MEM32(edi + 0x40u) = 1u;
 		return;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		MEM32(eax + 4u) = MEM32(eax + 4u) | 0x20u;
@@ -68479,7 +68479,7 @@ uint32_t LoadMapAction_Load(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -68492,7 +68492,7 @@ uint32_t LoadMapAction_Load(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	arg2 = 0x40u;
-	arg1_2 = MEM32(0x1E57B4u) + 0x50u;
+	arg1_2 = GameObjectLastObject + 0x50u;
 	arg0_2 = edi;
 	x86_call(vcFileReadBytes_entry, 0x000E2260u, 3, arg0_2, arg1_2, arg2);
 	ignored = g_ecx;
@@ -68550,24 +68550,24 @@ void sub_000E2340(uint32_t ebx)
 				eax = MEM32(edi);
 				if (eax != 0u)
 				{
-					if (eax != MEM32(0x1E57B0u))
+					if (eax != GameObjectLastHandle)
 					{
 						arg0 = eax;
 						GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 						esi = eax;
 					}
 					else
-						esi = MEM32(0x1E57B4u);
+						esi = GameObjectLastObject;
 					if (esi != 0u)
 					{
 						eax = MEM32(esi + 0x44u);
-						if (eax != MEM32(0x1E57B0u))
+						if (eax != GameObjectLastHandle)
 						{
 							arg0 = eax;
 							GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 						}
 						else
-							eax = MEM32(0x1E57B4u);
+							eax = GameObjectLastObject;
 						if (eax != 0u)
 						{
 							stack_C = 2u;
@@ -68617,13 +68617,13 @@ void sub_000E2340(uint32_t ebx)
 				MEM32(ebx + 0x40u) = 1u;
 				return;
 			}
-			if (esi != MEM32(0x1E57B0u))
+			if (esi != GameObjectLastHandle)
 			{
 				arg0 = esi;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 			{
 				MEM32(ebx + 0x40u) = 1u;
@@ -68659,27 +68659,27 @@ void sub_000E2340(uint32_t ebx)
 			MEM32(ebx + 0x40u) = 1u;
 			return;
 		}
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			esi = eax;
 		}
 		else
-			esi = MEM32(0x1E57B4u);
+			esi = GameObjectLastObject;
 		if (esi == 0u)
 		{
 			MEM32(ebx + 0x40u) = 1u;
 			return;
 		}
 		eax = MEM32(esi + 0x44u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == 0u)
 		{
 			MEM32(ebx + 0x40u) = 1u;
@@ -68805,13 +68805,13 @@ uint32_t FreezePlayerAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if ((int32_t)edi > 0)
 	{
 		arg1_2 = eax + 0x50u;
@@ -68868,13 +68868,13 @@ void sub_000E2750(uint32_t esi)
 	if (MEM32(esi + 0x64u) == 0u)
 		return;
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 	{
 		MEM32(eax + MEM32(esi + 0x50u) * 4u + 0xA04u) = 0xFFFFFFFFu;
@@ -68897,13 +68897,13 @@ void sub_000E27A0(uint32_t ecx, uint32_t esi)
 	else
 	{
 		eax = MEM32(esi + 0x44u);
-		if (eax != MEM32(0x1E57B0u))
+		if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax == 0u)
 			eax = saved_ecx;
 		else
@@ -68993,14 +68993,14 @@ uint32_t SetClearTimerAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x50u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x000E292Fu, 2, arg0_2, arg1_2);
@@ -69488,14 +69488,14 @@ uint32_t AIAssignPathAction_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	saved_ebp = ebp;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	if ((int32_t)esi >= 1)
 	{
 		arg0_2 = edi;
@@ -69618,14 +69618,14 @@ uint32_t sub_000E4390(uint32_t ebx)
 			if (eax != 0u)
 			{
 				eax = MEM32(edi);
-				if (eax != MEM32(0x1E57B0u))
+				if (eax != GameObjectLastHandle)
 				{
 					arg0 = eax;
 					GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 					esi = eax;
 				}
 				else
-					esi = MEM32(0x1E57B4u);
+					esi = GameObjectLastObject;
 				if (esi != 0u)
 				{
 					arg1 = esi;
@@ -69643,14 +69643,14 @@ uint32_t sub_000E4390(uint32_t ebx)
 		MEM32(ebx + 0x40u) = 1u;
 		return eax;
 	}
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	if (esi == 0u)
 	{
 		MEM32(ebx + 0x40u) = 1u;
@@ -69803,13 +69803,13 @@ void sub_000E46B0(uint32_t esi)
 	eax = MEM32(esi + 0x48u);
 	if (eax == 0u)
 		return;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	ecx = MEM32(esi + 0x50u);
 	if (ecx != 0u)
 	{
@@ -69859,13 +69859,13 @@ void sub_000E4760(uint32_t esi)
 	eax = MEM32(esi + 0x48u);
 	if (eax == 0u)
 		return;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	eax = MEM32(eax + 0xC8u);
 	if (eax == 2u)
 	{
@@ -70337,7 +70337,7 @@ void sub_000E6570(uint32_t eax, uint32_t ebx, uint32_t edi, uint32_t arg0)
 	sub_0003CAC0(arg0_2, arg1, arg2);
 	MEM32(esi + 0x28u) = MEM32(edi + 0x18u);
 	MEM32(esi + 0x3Cu) = 0u;
-	eax_2 = MEM32(0x1E57B0u);
+	eax_2 = GameObjectLastHandle;
 	MEM32(0x2229ECu) = 0u;
 	esi = MEM32(esi + 0x28u);
 	if (esi != eax_2)
@@ -70346,7 +70346,7 @@ void sub_000E6570(uint32_t eax, uint32_t ebx, uint32_t edi, uint32_t arg0)
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored_2, &ignored_3);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	eax_2 = ((int32_t)MEM32(eax_2 + 0x44u) >> 11) & 0x7Fu;
 	if (eax_2 <= 0x3Au)
 	{
@@ -70667,13 +70667,13 @@ uint32_t sub_000E7840(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edx = saved_arg2;
 	ecx = saved_arg1;
 	esi = 0u;
@@ -70717,13 +70717,13 @@ uint32_t sub_000E78E0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (MEM32(eax + 0x38u) != 0u)
 	{
 		zero = MEM32(eax + 0x34u) == 0u;
@@ -70739,13 +70739,13 @@ uint32_t sub_000E7920(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1 = esi;
 	arg0_2 = esi;
 	MEM32(eax + 0x38u) = 0u;
@@ -70768,7 +70768,7 @@ uint32_t sub_000E7970(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
@@ -70776,7 +70776,7 @@ uint32_t sub_000E7970(uint32_t arg0)
 		eax = zero == 0u;
 		return eax;
 	}
-	zero = MEM32(MEM32(0x1E57B4u) + 0x34u) == 0u;
+	zero = MEM32(GameObjectLastObject + 0x34u) == 0u;
 	eax = zero == 0u;
 	return eax;
 }
@@ -70789,13 +70789,13 @@ uint32_t sub_000E79B0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (saved_arg1 == 0u)
 	{
 		MEM32(eax + 0x40u) = saved_arg2;
@@ -70815,17 +70815,17 @@ uint32_t sub_000E79F0(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM8(eax + 0x68u) = 1u;
-		MEM32(eax + 0x6Cu) = MEM32(0x23A48Cu);
+		MEM32(eax + 0x6Cu) = vcGameTime;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM8(eax + 0x68u) = 1u;
-	MEM32(eax + 0x6Cu) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x6Cu) = vcGameTime;
 	return eax;
 }
 
@@ -70837,13 +70837,13 @@ uint32_t sub_000E7A30(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (saved_arg1 != 0u)
 	{
 		MEM32(eax + 0x64u) = saved_arg2;
@@ -70860,14 +70860,14 @@ uint32_t sub_000E7A70(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		MEM32(eax + 0x80u) = saved_arg1;
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	MEM32(eax + 0x80u) = arg1;
 	return eax;
 }
@@ -71088,10 +71088,10 @@ void sub_000E8280(uint32_t eax, uint32_t ecx, uint32_t edi, uint32_t arg0)
 	MEM32(edi + 0x40u) = 0u;
 	MEM32(edi + 0x2Cu) = eax_2;
 	MEM32(edi + 0x30u) = 0u;
-	edx = MEM32(0x1E57B4u);
+	edx = GameObjectLastObject;
 	esi = 0x222C4Cu;
 	ebp = 0xC2340000u;
-	ecx_2 = MEM32(0x1E57B0u);
+	ecx_2 = GameObjectLastHandle;
 	for (;;)
 	{
 		eax_2 = MEM32(edi + 0x28u);
@@ -71099,8 +71099,8 @@ void sub_000E8280(uint32_t eax, uint32_t ecx, uint32_t edi, uint32_t arg0)
 		{
 			arg0_2 = eax_2;
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored_2, &ignored_3);
-			ecx_2 = MEM32(0x1E57B0u);
-			edx = MEM32(0x1E57B4u);
+			ecx_2 = GameObjectLastHandle;
+			edx = GameObjectLastObject;
 		}
 		else
 			eax_2 = edx;
@@ -71116,8 +71116,8 @@ void sub_000E8280(uint32_t eax, uint32_t ecx, uint32_t edi, uint32_t arg0)
 				eax_2 = edx;
 			arg0_2 = MEM32(eax_2 + 0x44u);
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored_2, &ignored_3);
-			ecx_2 = MEM32(0x1E57B0u);
-			edx = MEM32(0x1E57B4u);
+			ecx_2 = GameObjectLastHandle;
+			edx = GameObjectLastObject;
 		}
 		else
 			eax_2 = edx;
@@ -72384,24 +72384,24 @@ uint32_t sub_000EDA40(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1, 
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	ecx = MEM32(eax_2 + 0x54u);
-	edi = MEM32(0x2BF2E0u);
+	edi = vcObjectCacheHandle;
 	if (ecx == edi || ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	else
 	{
 		edi = ecx;
 		edx = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = edi;
+		vcObjectCacheHandle = edi;
 		ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-		MEM32(0x2BF1C0u) = ecx;
+		vcObjectCacheData = ecx;
 	}
 	if (ebx != edi)
 	{
@@ -72411,9 +72411,9 @@ uint32_t sub_000EDA40(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1, 
 		{
 			edx = MEM32((ebx >> 16) * 4u + 0x2BF1E0u);
 			edi = ebx;
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			ecx = MEM32((ebx & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			edx = ecx;
 		}
 	}
@@ -72426,9 +72426,9 @@ uint32_t sub_000EDA40(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1, 
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			edx = MEM32((edx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((edx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = edx;
+			vcObjectCacheData = edx;
 			esi = edx;
 		}
 	}
@@ -72540,20 +72540,20 @@ void sub_000EF0F0(uint32_t eax, uint32_t edi)
 		MEM32(edi + 0x6Cu) = eax_2;
 	}
 	eax_2 = MEM32(MEM32(edi + 0x6Cu));
-	if (eax_2 != MEM32(0x2BF2E0u))
+	if (eax_2 != vcObjectCacheHandle)
 	{
 		if (eax_2 == 0u || (eax_2 & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax_2;
+			vcObjectCacheHandle = eax_2;
 			eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax_2;
+			vcObjectCacheData = eax_2;
 			ebp = eax_2;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	eax_2 = MEM32(ebp + 0x104u);
 	esi = 0u;
 	MEM32(edi + 0x68u) = eax_2;
@@ -72906,14 +72906,14 @@ uint32_t sub_000EF800(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		x86_rep_movs32(eax + 0x20u, saved_arg1, 0x9Eu);
 		return eax;
 	}
-	eax = MEM32(0x1E57B4u);
+	eax = GameObjectLastObject;
 	x86_rep_movs32(eax + 0x20u, arg1, 0x9Eu);
 	return eax;
 }
@@ -72923,14 +72923,14 @@ uint32_t sub_000EF840(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edx = eax;
 	}
 	else
-		edx = MEM32(0x1E57B4u);
+		edx = GameObjectLastObject;
 	esi = edx + 0x298u;
 	x86_rep_stos32(esi, 0u, 0x11u);
 	eax = MEM32(edx + 0x28u) * MEM32(edx + 0x24u);
@@ -72945,13 +72945,13 @@ void sub_000F2EB0(uint32_t esi, uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	arg1 = eax;
 	sub_0009B6E0(arg1);
 	arg0_2 = MEM32(esi + 8u);
@@ -72971,13 +72971,13 @@ uint32_t sub_000F2F00(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = saved_arg0;
@@ -73073,14 +73073,14 @@ uint32_t sub_000F3F40(uint32_t arg0)
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		eax = MEM32(MEM32(MEM32(eax + 0x1Cu) + 0x34u));
 		return eax;
 	}
-	eax = MEM32(MEM32(MEM32(MEM32(0x1E57B4u) + 0x1Cu) + 0x34u));
+	eax = MEM32(MEM32(MEM32(GameObjectLastObject + 0x1Cu) + 0x34u));
 	return eax;
 }
 
@@ -73097,7 +73097,7 @@ uint32_t sub_000F3F70(uint32_t ecx, uint32_t esi, uint32_t arg1)
 	MEM32(esi + 0x14u) = MEM32(ecx + 0x10u);
 	eax = MEM32(esi + 0x20u);
 	MEM32(esi + 0x24u) = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
@@ -73106,13 +73106,13 @@ uint32_t sub_000F3F70(uint32_t ecx, uint32_t esi, uint32_t arg1)
 			eax = sub_00139960(edx, arg0);
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	if (edi == 0u)
 	{
 		edx = MEM32(esi + 0x20u);
@@ -73121,13 +73121,13 @@ uint32_t sub_000F3F70(uint32_t ecx, uint32_t esi, uint32_t arg1)
 		return eax;
 	}
 	ecx_2 = MEM32(ecx);
-	if (ecx_2 != MEM32(0x1E57B0u))
+	if (ecx_2 != GameObjectLastHandle)
 	{
 		arg0 = ecx_2;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi + 0x168u) = MEM32(eax + 0x194u);
 	MEM32(edi + 0x16Cu) = 0x1CFC1u;
 	MEM32(edi + 0x19Cu) = saved_arg1;
@@ -73145,13 +73145,13 @@ uint32_t sub_000F55A0(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	esi = arg1;
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 		return eax;
 	arg0_2 = saved_arg0;
@@ -73173,7 +73173,7 @@ void sub_000F59C0(uint32_t esi, uint32_t edi, uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = MEM32(edi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &ignored, &ignored_2, &ignored_3);
@@ -73661,9 +73661,9 @@ void sub_000F6A30(uint32_t arg2)
 	arg0 = MEM32(0x2247CCu);
 	eax = x86_call(vcObjectClone_entry, 0x000F6A3Bu, 1, arg0);
 	MEM32(saved_arg2 + 0x58u) = eax;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x11u;
 		return;
 	}
@@ -73672,9 +73672,9 @@ void sub_000F6A30(uint32_t arg2)
 		MEM32(0xECu) = MEM32(0xECu) | 0x11u;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x11u;
 }
 
@@ -77999,13 +77999,13 @@ void sub_000FE4B0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = MEM32(edi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &ignored, &ignored_2, &ignored_3);
 	}
 	eax = MEM32(edi + 8u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &ignored, &ignored_2, &ignored_3);
@@ -78104,13 +78104,13 @@ void sub_000FE7E0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = MEM32(edi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &ignored, &ignored_2, &ignored_3);
 	}
 	eax = MEM32(edi + 8u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &ignored, &ignored_2, &ignored_3);
@@ -78212,13 +78212,13 @@ void sub_000FEB00(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi) = MEM32(esi);
 	MEM32(edi + 4u) = MEM32(esi + 4u);
 	MEM32(edi + 8u) = MEM32(esi + 8u);
@@ -78296,13 +78296,13 @@ void sub_000FED50(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi) = MEM32(esi);
 	MEM32(edi + 4u) = MEM32(esi + 4u);
 	MEM32(edi + 8u) = MEM32(esi + 8u);
@@ -78450,13 +78450,13 @@ uint32_t sub_000FEFD0(uint32_t eax, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		return eax_2;
 	}
 	eax_2 = MEM32(esi);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1_2 = eax_2;
 	eax_2 = sub_0009B6E0(arg1_2);
 	arg0_2 = eax_2;
@@ -78638,13 +78638,13 @@ uint32_t sub_000FF8F0(uint32_t eax, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		return eax_2;
 	}
 	eax_2 = MEM32(esi);
-	if (eax_2 != MEM32(0x1E57B0u))
+	if (eax_2 != GameObjectLastHandle)
 	{
 		arg0_2 = eax_2;
 		GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	arg1_2 = eax_2;
 	eax_2 = sub_0009B6E0(arg1_2);
 	arg0_2 = eax_2;
@@ -78660,13 +78660,13 @@ uint32_t sub_000FF9D0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	MEM32(edi) = MEM32(esi);
 	MEM32(edi + 4u) = MEM32(esi + 4u);
 	MEM32(edi + 0x18u) = MEM32(esi + 0x14u);
@@ -78923,22 +78923,22 @@ void sub_00101A50(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(esi + 0x18u) = MEM32(ecx + 0xCu);
 	MEM32(esi + 0x14u) = MEM32(ecx + 0x10u);
 	eax = MEM32(esi + 0x20u);
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	ebp = arg0;
 	ebx = 0u;
 	if (eax == edx)
 	{
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 		if (edi != ebx)
 		{
 			ecx_2 = MEM32(ecx);
-			if (ecx_2 != MEM32(0x1E57B0u))
+			if (ecx_2 != GameObjectLastHandle)
 			{
 				arg0_2 = ecx_2;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			MEM32(edi + 0x168u) = MEM32(eax + 0x194u);
 			if (MEM32(eax + 0x184u) != 0xFFFFFFFFu)
 				MEM32(edi + 0x16Cu) = 0x8040u;
@@ -78964,21 +78964,21 @@ void sub_00101A50(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	}
 	if (eax != ebx && (eax & ~0xFFFFFFu) == 0u)
 	{
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		edx = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + edx);
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		edi = eax;
 		if (edi != ebx)
 		{
 			ecx_2 = MEM32(ecx);
-			if (ecx_2 != MEM32(0x1E57B0u))
+			if (ecx_2 != GameObjectLastHandle)
 			{
 				arg0_2 = ecx_2;
 				GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			MEM32(edi + 0x168u) = MEM32(eax + 0x194u);
 			if (MEM32(eax + 0x184u) != 0xFFFFFFFFu)
 				MEM32(edi + 0x16Cu) = 0x8040u;
@@ -79154,13 +79154,13 @@ uint32_t sub_00101FF0(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	}
 	if ((esi & 0x7C0000u) != 0x2C0000u || (esi & 0x3F800u) != 0x7800u)
 	{
-		if (esi != MEM32(0x1E57B0u))
+		if (esi != GameObjectLastHandle)
 		{
 			arg0_2 = esi;
 			GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 		}
 		else
-			eax_2 = MEM32(0x1E57B4u);
+			eax_2 = GameObjectLastObject;
 		if (eax_2 != edi)
 		{
 			arg5 = edi;
@@ -79190,13 +79190,13 @@ uint32_t sub_00101FF0(uint32_t eax, uint32_t arg0, uint32_t arg1)
 			eax_2 = MEM32(esi);
 			if (eax_2 != 0u)
 			{
-				if (eax_2 != MEM32(0x1E57B0u))
+				if (eax_2 != GameObjectLastHandle)
 				{
 					arg0_2 = eax_2;
 					GameObjectFromHandle(arg0_2, &eax_2, &ignored, &ignored_2);
 				}
 				else
-					eax_2 = MEM32(0x1E57B4u);
+					eax_2 = GameObjectLastObject;
 				if (eax_2 != 0u)
 				{
 					arg5 = 0u;
@@ -79280,13 +79280,13 @@ void sub_00102100(uint32_t eax, uint32_t ecx)
 				eax_2 = MEM32(edi);
 				if (eax_2 != 0u)
 				{
-					if (eax_2 != MEM32(0x1E57B0u))
+					if (eax_2 != GameObjectLastHandle)
 					{
 						arg0 = eax_2;
 						GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 					}
 					else
-						eax_2 = MEM32(0x1E57B4u);
+						eax_2 = GameObjectLastObject;
 					if (eax_2 != 0u && MEM32(eax_2 + 0x1A0u) != 0u && MEM16(eax_2 + 0x1A4u) != 0u)
 					{
 						arg1 = eax_2;
@@ -79313,13 +79313,13 @@ void sub_00102100(uint32_t eax, uint32_t ecx)
 		sub_000D31F0(arg1);
 		return;
 	}
-	if (ecx_2 != MEM32(0x1E57B0u))
+	if (ecx_2 != GameObjectLastHandle)
 	{
 		arg0 = ecx_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	if (eax_2 == ebx)
 	{
 		MEM32(esi + 0x40u) = ebx;
@@ -79419,14 +79419,14 @@ uint32_t HasLOSTrigger_Load(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x00102399u, 1, arg0_2);
 	arg0_2 = ebx;
@@ -79564,9 +79564,9 @@ uint32_t OnRandomValueTrigger_Load(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi == MEM32(0x1E57B0u))
+	if (esi == GameObjectLastHandle)
 	{
-		arg1_2 = MEM32(0x1E57B4u) + 0x40u;
+		arg1_2 = GameObjectLastObject + 0x40u;
 		arg0_2 = edi;
 		x86_call(vcFileReadU32_entry, 0x0010257Eu, 2, arg0_2, arg1_2);
 		ignored = g_ecx;
@@ -79632,24 +79632,24 @@ uint32_t sub_00102660(uint32_t esi)
 	uint32_t arg0 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
 	eax = MEM32(esi + 0x40u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edi = 0u;
 	if (eax == 0u)
 		MEM32(esi + 0x40u) = edi;
 	eax = MEM32(esi + 0x44u);
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == edi)
 		MEM32(esi + 0x44u) = edi;
 	eax = MEM32(esi + 0x40u);
@@ -79670,13 +79670,13 @@ uint32_t sub_00102660(uint32_t esi)
 		}
 		else
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == edi)
 				MEM32(esi + 0x40u) = edi;
 			else
@@ -79701,13 +79701,13 @@ uint32_t sub_00102660(uint32_t esi)
 		}
 		else
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == edi)
 				MEM32(esi + 0x44u) = edi;
 			else
@@ -79797,14 +79797,14 @@ uint32_t EntityToEntityProximityTrigger_Load(uint32_t arg0, uint32_t arg1)
 	edi = eax;
 	if (edi == 0u)
 		return eax;
-	if (edi != MEM32(0x1E57B0u))
+	if (edi != GameObjectLastHandle)
 	{
 		arg0_2 = edi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x00102909u, 1, arg0_2);
 	arg0_2 = ebx;
@@ -80016,13 +80016,13 @@ void sub_00103000(uint32_t esi)
 		}
 		else
 		{
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = eax;
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 			if (eax == 0u)
 			{
 				MEM32(esi + 0x40u) = 0u;
@@ -80043,13 +80043,13 @@ void sub_00103000(uint32_t esi)
 		MEM32(esi + 0x44u) = ((zero == 0u) - 1u) & eax;
 		return;
 	}
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax == 0u)
 	{
 		MEM32(esi + 0x44u) = 0u;
@@ -80139,14 +80139,14 @@ void sub_001030F0(uint32_t eax, uint32_t ecx)
 				}
 				else
 				{
-					if (eax_2 != MEM32(0x1E57B0u))
+					if (eax_2 != GameObjectLastHandle)
 					{
 						arg0 = eax_2;
 						GameObjectFromHandle(arg0, &eax_2, &ignored_2, &ignored_3);
 						edi = eax_2;
 					}
 					else
-						edi = MEM32(0x1E57B4u);
+						edi = GameObjectLastObject;
 					if (edi == 0u || MEM32(edi + 0x1A0u) == 0u)
 					{
 						if (ebx != 0u)
@@ -80207,14 +80207,14 @@ void sub_001030F0(uint32_t eax, uint32_t ecx)
 		}
 		return;
 	}
-	if (ecx_2 != MEM32(0x1E57B0u))
+	if (ecx_2 != GameObjectLastHandle)
 	{
 		arg0 = ecx_2;
 		GameObjectFromHandle(arg0, &eax_2, &ignored_2, &ignored_3);
 		edi = eax_2;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if (edi == ebx)
 	{
 		MEM32(esi + 0x40u) = ebx;
@@ -80348,14 +80348,14 @@ uint32_t OnAITargetTrigger_Load(uint32_t arg0, uint32_t arg1)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	ebx = esi + 0x4Cu;
 	arg1_2 = ebx;
 	arg0_2 = edi;
@@ -80667,14 +80667,14 @@ uint32_t KeyValCompareTrigger_Load(uint32_t arg0, uint32_t arg1)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x40u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x001036CDu, 2, arg0_2, arg1_2);
@@ -80748,7 +80748,7 @@ void sub_001037C0(uint32_t arg2, uint32_t arg3)
 	saved_arg3 = arg3;
 	ebp = stack_1FFFF8;
 	MEM32(arg3) = MEM32(ebp + 0x2Cu);
-	esi = MEM32(MEM32(0x2B5DACu) + 0x4Cu);
+	esi = MEM32(GameObjectFamilies(11) + 0x4Cu);
 	ebx = MEM32(esi + 0x28u);
 	edi = 0u;
 	stack_1FFFF8 = 0u;
@@ -80851,14 +80851,14 @@ uint32_t SpawnLevelQuotaTrigger_Load(uint32_t arg0, uint32_t arg1)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	arg0_2 = ebx;
 	eax = x86_call(GameObjectLoad, 0x00103939u, 1, arg0_2);
 	MEM32(edi + 0x40u) = eax;
@@ -80927,18 +80927,18 @@ void sub_001039F0(uint32_t edi, uint32_t arg2)
 		return;
 	}
 	ecx = MEM32(0x1BC980u);
-	edx = MEM32(0x1E57B0u);
+	edx = GameObjectLastHandle;
 	if (ecx != edx)
 	{
 		arg0 = ecx;
 		GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		ecx = MEM32(0x1BC980u);
-		edx = MEM32(0x1E57B0u);
-		esi = MEM32(0x1E57B4u);
+		edx = GameObjectLastHandle;
+		esi = GameObjectLastObject;
 	}
 	else
 	{
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 		eax = esi;
 	}
 	if (MEM32(eax + 0x44u) != edx)
@@ -81049,14 +81049,14 @@ uint32_t ItemHeldTrigger_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	esi = eax;
 	if (esi == 0u)
 		return eax;
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		edi = eax;
 	}
 	else
-		edi = MEM32(0x1E57B4u);
+		edi = GameObjectLastObject;
 	if ((int32_t)ebx <= 0)
 	{
 		MEM32(edi + 0x40u) = 0u;
@@ -81335,14 +81335,14 @@ uint32_t sub_001045B0(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx != MEM32(0x1E57B0u))
+	if (ebx != GameObjectLastHandle)
 	{
 		arg0_2 = ebx;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	arg1_2 = esi + 0x48u;
 	arg0_2 = edi;
 	x86_call(vcFileReadU32_entry, 0x001045FFu, 2, arg0_2, arg1_2);
@@ -81412,7 +81412,7 @@ void sub_001046E0(uint32_t ecx, uint32_t esi)
 		{
 			arg0 = eax;
 			eax = sub_000D3200(arg0);
-			if (eax != MEM32(0x1E57B0u))
+			if (eax != GameObjectLastHandle)
 			{
 				arg0 = MEM32(esi + 0x30u);
 				eax = sub_000D3200(arg0);
@@ -81420,15 +81420,15 @@ void sub_001046E0(uint32_t ecx, uint32_t esi)
 				GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 			}
 			else
-				eax = MEM32(0x1E57B4u);
+				eax = GameObjectLastObject;
 		}
-		else if (eax != MEM32(0x1E57B0u))
+		else if (eax != GameObjectLastHandle)
 		{
 			arg0 = eax;
 			GameObjectFromHandle(arg0, &eax, &ignored, &ignored_2);
 		}
 		else
-			eax = MEM32(0x1E57B4u);
+			eax = GameObjectLastObject;
 		if (eax != 0u)
 			edi = MEM32(eax + MEM32(esi + 0x40u) * 4u + 0xA04u);
 	}
@@ -81541,9 +81541,9 @@ uint32_t OnTimeTrigger_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebx = eax;
 	if (ebx == 0u)
 		return eax;
-	if (ebx == MEM32(0x1E57B0u))
+	if (ebx == GameObjectLastHandle)
 	{
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 		arg1_2 = esi + 0x40u;
 		arg0_2 = edi;
 		x86_call(vcFileReadU32_entry, 0x0010488Fu, 2, arg0_2, arg1_2);
@@ -81751,9 +81751,9 @@ uint32_t ObjectiveStateTrigger_Load(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	ebp = eax;
 	if (ebp == 0u)
 		return eax;
-	if (ebp == MEM32(0x1E57B0u))
+	if (ebp == GameObjectLastHandle)
 	{
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 		arg1_2 = esi + 0x40u;
 		arg0_2 = edi;
 		x86_call(vcFileReadU32_entry, 0x00104AEEu, 2, arg0_2, arg1_2);
@@ -82741,14 +82741,14 @@ void sub_00105DE0(uint32_t ecx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ecx, &ignored);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	edi = saved_arg1;
 	arg0_2 = edi;
 	g_ecx = ecx;
@@ -82809,13 +82809,13 @@ uint32_t sub_00105E80(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 		eax = esi;
 		return eax;
 	}
-	if (esi != MEM32(0x1E57B0u))
+	if (esi != GameObjectLastHandle)
 	{
 		arg0_2 = esi;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edi = eax + 0x5Cu;
 	arg2 = 0x40u;
 	arg1_2 = edi;
@@ -83811,14 +83811,14 @@ uint32_t sub_00107190(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x1E57B0u))
+	if (ebp != GameObjectLastHandle)
 	{
 		arg0_2 = ebp;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	ebx = saved_arg1;
 	edi = esi + 0x48u;
 	arg1_2 = ebx;
@@ -83893,14 +83893,14 @@ uint32_t sub_00107270(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		esi = eax;
 	}
 	else
-		esi = MEM32(0x1E57B4u);
+		esi = GameObjectLastObject;
 	ebx = saved_arg1;
 	edi = esi + 0x8Cu;
 	arg1_2 = ebx;
@@ -83973,13 +83973,13 @@ uint32_t sub_00107340(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edi = saved_arg1;
 	esi = eax + 0xD0u;
 	arg1_2 = edi;
@@ -84012,13 +84012,13 @@ uint32_t sub_001073A0(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	edi = saved_arg1;
 	esi = eax + 0x110u;
 	arg1_2 = edi;
@@ -84059,9 +84059,9 @@ void sub_001075F0(uint32_t edi, uint32_t arg0)
 		MEM32(ebp + 0x18u) = MEM32(edi + 0x150u);
 		return;
 	}
-	if (esi == MEM32(0x2BF2E0u))
+	if (esi == vcObjectCacheHandle)
 	{
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 		arg2 = edi;
 		arg1 = edi + 0xCu;
 		arg0_2 = esi;
@@ -84106,9 +84106,9 @@ void sub_001075F0(uint32_t edi, uint32_t arg0)
 		return;
 	}
 	ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = esi;
+	vcObjectCacheHandle = esi;
 	ebx = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ebx;
+	vcObjectCacheData = ebx;
 	arg2 = edi;
 	arg1 = edi + 0xCu;
 	arg0_2 = esi;
@@ -84178,9 +84178,9 @@ void sub_001076A0(uint32_t esi, uint32_t arg0)
 		MEM32(ebp + 0x18u) = MEM32(esi + 0x154u);
 		return;
 	}
-	if (edi == MEM32(0x2BF2E0u))
+	if (edi == vcObjectCacheHandle)
 	{
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 		arg2 = esi;
 		arg1 = esi + 0xCu;
 		arg0_2 = edi;
@@ -84222,9 +84222,9 @@ void sub_001076A0(uint32_t esi, uint32_t arg0)
 		return;
 	}
 	eax = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = edi;
+	vcObjectCacheHandle = edi;
 	ebx = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(eax + 0x6Cu));
-	MEM32(0x2BF1C0u) = ebx;
+	vcObjectCacheData = ebx;
 	arg2 = esi;
 	arg1 = esi + 0xCu;
 	arg0_2 = edi;
@@ -84752,25 +84752,25 @@ uint32_t sub_00107E50(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	esi = saved_arg1;
 	MEM32(eax + 0x48Cu) = esi;
 	eax = MEM32(eax + 0x40u);
 	if (eax == 0u)
 		return eax;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 	}
 	else
-		eax = MEM32(0x1E57B4u);
+		eax = GameObjectLastObject;
 	if (eax != 0u)
 		MEM32(eax + 0x244u) = esi;
 	return eax;
@@ -84781,9 +84781,9 @@ void sub_00107EB0(uint32_t *p_eax, uint32_t *p_ecx)
 	uint32_t eax = *p_eax;
 	uint32_t eax_2 = 0;
 
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax_2 = MEM32(0x2BF1C0u);
+		eax_2 = vcObjectCacheData;
 		*p_eax = eax_2;
 		return;
 	}
@@ -84793,10 +84793,10 @@ void sub_00107EB0(uint32_t *p_eax, uint32_t *p_ecx)
 		*p_eax = eax_2;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	*p_ecx = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 	eax_2 = MEM32((eax & 0xFFFFu) * 0x4Cu + *p_ecx);
-	MEM32(0x2BF1C0u) = eax_2;
+	vcObjectCacheData = eax_2;
 	*p_eax = eax_2;
 }
 
@@ -84804,16 +84804,16 @@ uint32_t sub_00108080(uint32_t eax)
 {
 	uint32_t arg0 = 0, eax_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0 = eax;
 		GameObjectFromHandle(arg0, &eax_2, &ignored, &ignored_2);
 	}
 	else
-		eax_2 = MEM32(0x1E57B4u);
+		eax_2 = GameObjectLastObject;
 	edx = MEM32(eax_2 + 0x48u) * 0x1AC4u + MEM32(0x227664u);
 	ecx = MEM32(eax_2 + 0x4Cu);
-	esi = MEM32(0x2BF2E0u);
+	esi = vcObjectCacheHandle;
 	if (ecx != esi)
 	{
 		if (ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
@@ -84822,18 +84822,18 @@ uint32_t sub_00108080(uint32_t eax)
 		{
 			esi = ecx;
 			edi = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(edi + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	ecx = MEM32(ecx + 0xBCu);
 	if (ecx != esi && ecx != 0u && (ecx & ~0xFFFFFFu) == 0u)
 	{
-		MEM32(0x2BF2E0u) = ecx;
-		MEM32(0x2BF1C0u) = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
+		vcObjectCacheHandle = ecx;
+		vcObjectCacheData = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
 	}
 	ecx = 0u;
 	if ((int32_t)MEM32(edx + 0x40u) > 0)
@@ -84865,27 +84865,27 @@ uint32_t sub_00108980(uint32_t arg2)
 		}
 		return eax;
 	}
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if ((eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			ebp = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ebp = eax;
 	}
 	ecx = MEM32(ebp + 0xBCu);
@@ -84895,9 +84895,9 @@ uint32_t sub_00108980(uint32_t arg2)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			edi = ecx;
 		}
 	}
@@ -84979,14 +84979,14 @@ uint32_t sub_0010A8B0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x1E57B0u))
+	if (eax != GameObjectLastHandle)
 	{
 		arg0_2 = eax;
 		GameObjectFromHandle(arg0_2, &eax, &ignored, &ignored_2);
 		ebx = eax;
 	}
 	else
-		ebx = MEM32(0x1E57B4u);
+		ebx = GameObjectLastObject;
 	if (ebx != 0u)
 	{
 		eax = MEM32(ebx + 0x68u);
@@ -85143,20 +85143,20 @@ void sub_0010AA40(uint32_t eax, uint32_t arg1)
 		MEM32(ebp + 0x6Cu) = eax_2;
 	}
 	eax_2 = MEM32(MEM32(ebp + 0x6Cu));
-	if (eax_2 != MEM32(0x2BF2E0u))
+	if (eax_2 != vcObjectCacheHandle)
 	{
 		if (eax_2 == 0u || (eax_2 & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax_2;
+			vcObjectCacheHandle = eax_2;
 			eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax_2;
+			vcObjectCacheData = eax_2;
 			ebx = eax_2;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	eax_2 = MEM32(ebx + 0x104u);
 	esi = 0u;
 	MEM32(ebp + 0x68u) = eax_2;
@@ -85406,20 +85406,20 @@ void sub_0010AFE0(uint32_t eax, uint32_t ecx)
 	MEM32(ebx + 0xD64u) = eax_2 + 8u;
 	MEM32(ebx + 0xD60u) = MEM32(eax_2);
 	eax_2 = MEM32(eax_2 + 4u);
-	if (eax_2 != MEM32(0x2BF2E0u))
+	if (eax_2 != vcObjectCacheHandle)
 	{
 		if (eax_2 == 0u || (eax_2 & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax_2;
+			vcObjectCacheHandle = eax_2;
 			eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax_2;
+			vcObjectCacheData = eax_2;
 			ebp = eax_2;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	esi = 0u;
 	stack_4 = MEM32(ebp + 0x104u);
 	if ((int32_t)MEM32(ebx + 0xD60u) <= 0)
@@ -85740,9 +85740,9 @@ void sub_0010B850(uint32_t ebx, uint32_t edi)
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, esi = 0, ignored = 0;
 
 	eax = MEM32(edi + 0x5Cu);
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		if (esi == 0u)
 		{
 			eax = MEM32(ebx + 0x10u) | 1u;
@@ -85766,9 +85766,9 @@ void sub_0010B850(uint32_t ebx, uint32_t edi)
 		MEM32(ebx + 0x10u) = eax;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	esi = eax;
 	if (esi == 0u)
 	{
@@ -86284,9 +86284,9 @@ void sub_0010C200(uint32_t eax, uint32_t esi)
 		sub_0013C500(arg0, arg1);
 	}
 	eax_2 = MEM32(esi + 0x5Cu);
-	if (eax_2 == MEM32(0x2BF2E0u))
+	if (eax_2 == vcObjectCacheHandle)
 	{
-		eax_2 = MEM32(0x2BF1C0u);
+		eax_2 = vcObjectCacheData;
 		MEM32(eax_2 + 0xE4u) = MEM32(MEM32(MEM32(esi + 0x58u) + 4u));
 		MEM32(eax_2 + 0xE8u) = MEM32(MEM32(MEM32(esi + 0x58u) + 8u));
 		MEM32(eax_2 + 0xECu) = MEM32(MEM32(MEM32(esi + 0x58u)));
@@ -86330,9 +86330,9 @@ void sub_0010C200(uint32_t eax, uint32_t esi)
 		sub_0013C310(arg0, arg1);
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax_2;
+	vcObjectCacheHandle = eax_2;
 	eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax_2 >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax_2;
+	vcObjectCacheData = eax_2;
 	MEM32(eax_2 + 0xE4u) = MEM32(MEM32(MEM32(esi + 0x58u) + 4u));
 	MEM32(eax_2 + 0xE8u) = MEM32(MEM32(MEM32(esi + 0x58u) + 8u));
 	MEM32(eax_2 + 0xECu) = MEM32(MEM32(MEM32(esi + 0x58u)));
@@ -86357,7 +86357,7 @@ uint32_t sub_0010C25E(uint32_t esi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	eax = MEM32(0x2BF1C0u);
+	eax = vcObjectCacheData;
 	MEM32(eax + 0xE4u) = MEM32(MEM32(MEM32(esi + 0x58u) + 4u));
 	MEM32(eax + 0xE8u) = MEM32(MEM32(MEM32(esi + 0x58u) + 8u));
 	MEM32(eax + 0xECu) = MEM32(MEM32(MEM32(esi + 0x58u)));
@@ -86702,9 +86702,9 @@ uint32_t sub_0010D0F0(uint32_t ecx, uint32_t ebx, uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = MEM32(ecx);
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 		arg1 = ebx;
 		eax = edi;
 		eax = sub_0010CB90(eax, arg1);
@@ -86732,9 +86732,9 @@ uint32_t sub_0010D0F0(uint32_t ecx, uint32_t ebx, uint32_t arg0)
 		}
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	edi = eax;
 	arg1 = ebx;
 	eax = edi;
@@ -87058,20 +87058,20 @@ uint32_t sub_0010E690(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	arg0_2 = MEM32(edi);
 	x86_call(vcObjectRelease_entry, 0x0010E6E3u, 1, arg0_2);
 	ignored = g_eax;
@@ -87096,20 +87096,20 @@ uint32_t sub_0010E690(uint32_t arg0, uint32_t arg1)
 		MEM32(edi + 0x44u) = eax;
 		return eax;
 	}
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if ((esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	t1 = MEM8(eax) & 1u;
 	eax = MEM32(edi + 4u);
 	if (t1 == 0u)
@@ -87129,9 +87129,9 @@ uint32_t sub_0010F230(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		if ((MEM8(ecx + 4u) & 1u) != 0u)
 		{
 			arg3 = 1u;
@@ -87156,9 +87156,9 @@ uint32_t sub_0010F230(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	if ((MEM8(ecx + 4u) & 1u) != 0u)
 	{
 		arg3 = 1u;
@@ -87176,20 +87176,20 @@ uint32_t sub_0010F2A0(uint32_t arg0)
 
 	eax = arg0;
 	edi = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == edi || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	if ((MEM8(esi + 4u) & 1u) == 0u)
 		return eax;
 	eax = MEM32(esi + 0x3Cu);
@@ -87214,19 +87214,19 @@ uint32_t sub_0010F320(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	if ((MEM8(eax + 4u) & 1u) != 0u)
 	{
 		ecx = arg1;
@@ -87252,19 +87252,19 @@ uint32_t sub_0010F440(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	if ((MEM8(eax + 4u) & 1u) == 0u)
 		return eax;
 	ecx = arg1;
@@ -87284,20 +87284,20 @@ uint32_t vcSound_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	edx = arg1;
 	x86_rep_movs32(ebx, edx, 0x12u);
 	MEM32(ebx) = 0u;
@@ -88145,23 +88145,23 @@ uint32_t vcStringManager_Copy(uint32_t edx, uint32_t arg0, uint32_t arg1)
 	stack_200000 = arg0;
 	saved_arg1 = arg1;
 	eax = stack_200000;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			stack_200000 = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_200000 = eax;
 		}
 		edi = stack_200000;
 	}
 	else
 	{
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 		stack_200000 = edi;
 	}
 	eax = MEM32(edi + 0xCu);
@@ -88239,8 +88239,8 @@ uint32_t sub_00111CF0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
 	eax = arg0;
-	ecx = MEM32(0x2BF1C0u);
-	esi = MEM32(0x2BF2E0u);
+	ecx = vcObjectCacheData;
+	esi = vcObjectCacheHandle;
 	if (eax != esi)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -88254,9 +88254,9 @@ uint32_t sub_00111CF0(uint32_t arg0, uint32_t arg1)
 				{
 					edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 					esi = eax;
-					MEM32(0x2BF2E0u) = esi;
+					vcObjectCacheHandle = esi;
 					ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-					MEM32(0x2BF1C0u) = ecx;
+					vcObjectCacheData = ecx;
 					edx = ecx;
 				}
 			}
@@ -88267,9 +88267,9 @@ uint32_t sub_00111CF0(uint32_t arg0, uint32_t arg1)
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			esi = eax;
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			ebx = ecx;
 			edx = ecx;
 		}
@@ -88285,9 +88285,9 @@ uint32_t sub_00111CF0(uint32_t arg0, uint32_t arg1)
 			{
 				edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 				esi = eax;
-				MEM32(0x2BF2E0u) = esi;
+				vcObjectCacheHandle = esi;
 				ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-				MEM32(0x2BF1C0u) = ecx;
+				vcObjectCacheData = ecx;
 				edx = ecx;
 			}
 		}
@@ -88323,9 +88323,9 @@ uint32_t sub_00111CF0(uint32_t arg0, uint32_t arg1)
 		eax = MEM32(MEM32(ebx + 0xCu) + eax + 0x10u) + MEM32(ebx + 4u);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ecx = eax;
 	eax = (edi * 5u) << 2;
 	if ((int32_t)MEM32(MEM32(ecx + 0xCu) + eax + 0x10u) <= -1)
@@ -88356,20 +88356,20 @@ uint32_t sub_00111FE0(uint32_t arg0, uint32_t arg1)
 	uint32_t t2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	eax = MEM32(ecx + 0x10u);
 	ebp = 0u;
 	if (eax == 0u)
@@ -88439,20 +88439,20 @@ uint32_t sub_00112090(uint32_t arg0, uint32_t arg1)
 	uint32_t t2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	eax = 0u;
 	if (MEM32(edi + 0x10u) == 0u)
 	{
@@ -88841,7 +88841,7 @@ uint32_t sub_00112DB0(uint32_t edx)
 	MEM32(eax + 0xCu) = 0x3F800000u;
 	MEM32(eax + 0x1Cu) = 0x3F800000u;
 	MEM32(eax + 0x2Cu) = 0x3F800000u;
-	MEM32(eax + 0x2B8u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x2B8u) = vcGameTime;
 	return eax;
 }
 
@@ -88916,7 +88916,7 @@ uint32_t sub_00112EF0(uint32_t arg0)
 	edx = eax + 0x2D0u;
 	MEM32(edx) = 0u;
 	MEM32(edx + 4u) = 0u;
-	MEM32(eax + 0x2B8u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x2B8u) = vcGameTime;
 	return eax;
 }
 
@@ -89000,7 +89000,7 @@ uint32_t sub_00113020(uint32_t arg0)
 
 	esi = arg0;
 	arg0_2 = esi + 0x2C0u;
-	MEM32(esi + 0x2B8u) = MEM32(0x23A48Cu);
+	MEM32(esi + 0x2B8u) = vcGameTime;
 	x86_call(vcScreenSetViewport_entry, 0x0011303Cu, 1, arg0_2);
 	arg0_2 = esi + 0x1D0u;
 	sub_001175F0(arg0_2);
@@ -89018,7 +89018,7 @@ uint32_t sub_00113090(uint32_t arg0)
 
 	eax = arg0;
 	arg0_2 = eax;
-	MEM32(eax + 0x2B8u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x2B8u) = vcGameTime;
 	sub_00113020(arg0_2);
 	return sub_00117240();
 }
@@ -89212,9 +89212,9 @@ void sub_00113B00(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 					}
 					else
 					{
-						if (eax == MEM32(0x2BF2E0u))
+						if (eax == vcObjectCacheHandle)
 						{
-							ebx = MEM32(0x2BF1C0u);
+							ebx = vcObjectCacheData;
 							L_113BB7 = true;
 						}
 						if (!L_113BB7 && (eax == 0u || (eax & ~0xFFFFFFu) != 0u))
@@ -89232,9 +89232,9 @@ void sub_00113B00(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 						{
 							if (!L_113BB7)
 							{
-								MEM32(0x2BF2E0u) = eax;
+								vcObjectCacheHandle = eax;
 								eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-								MEM32(0x2BF1C0u) = eax;
+								vcObjectCacheData = eax;
 								ebx = eax;
 							}
 							L_113BB7 = false;
@@ -89645,25 +89645,25 @@ void sub_00116E90(uint32_t arg0, uint32_t arg1)
 	if ((int32_t)esi < 0xC)
 	{
 		edx = shl32(1u, (int)(ecx & 0x1Fu));
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		MEM32(eax + 0x166B58u) = edi;
-		MEM32(0x166B54u) = ecx | edx;
+		D3D__DirtyFlags = ecx | edx;
 		return;
 	}
 	if (esi == 0xCu)
 	{
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		carry = edi < 0x19u;
 		MEM32(edx * 4u + 0x166B88u) = edi;
-		MEM32(0x166B54u) = ecx | (((eax - eax - carry) & ~0x400Eu) + 0x480Fu);
+		D3D__DirtyFlags = ecx | (((eax - eax - carry) & ~0x400Eu) + 0x480Fu);
 		return;
 	}
 	if ((int32_t)esi < 0x16)
 	{
 		ecx = MEM32(esi * 4u + 0x18EC40u);
-		edx = MEM32(0x166B54u);
+		edx = D3D__DirtyFlags;
 		MEM32(eax + 0x166B58u) = edi;
-		MEM32(0x166B54u) = edx | ecx;
+		D3D__DirtyFlags = edx | ecx;
 		return;
 	}
 	if (esi == 0x1Cu)
@@ -89702,78 +89702,78 @@ uint32_t sub_00117240(void)
 	uint32_t t1 = 0;
 
 	t1 = MEM32(0x23D35Cu);
-	eax = MEM32(0x1B9F58u);
+	eax = vcRenderStates(92);
 	if (t1 == 0u)
 	{
 		if (eax != 0u)
 		{
-			MEM32(0x1B9F58u) = 0u;
-			MEM32(0x166EC8u) = 0u;
-			MEM32(0x166B54u) = MEM32(0x166B54u) | 0x2000u;
+			vcRenderStates(92) = 0u;
+			D3D__RenderState(92) = 0u;
+			D3D__DirtyFlags = D3D__DirtyFlags | 0x2000u;
 		}
 	}
 	else if (eax != 1u)
 	{
-		MEM32(0x1B9F58u) = 1u;
-		MEM32(0x166EC8u) = 1u;
-		MEM32(0x166B54u) = MEM32(0x166B54u) | 0x2000u;
+		vcRenderStates(92) = 1u;
+		D3D__RenderState(92) = 1u;
+		D3D__DirtyFlags = D3D__DirtyFlags | 0x2000u;
 	}
-	arg0 = MEM32(0x1BA014u);
+	arg0 = vcRenderStates(139);
 	x86_call(D3DDevice_SetRenderState_FillMode, 0x00117296u, 1, arg0);
-	arg0 = MEM32(0x1BA018u);
+	arg0 = vcRenderStates(140);
 	x86_call(D3DDevice_SetRenderState_BackFillMode, 0x001172A1u, 1, arg0);
-	arg0 = MEM32(0x1BA034u);
+	arg0 = vcRenderStates(147);
 	x86_call(D3DDevice_SetRenderState_CullMode, 0x001172ACu, 1, arg0);
-	edx = MEM32(0x1B9EECu);
+	edx = vcRenderStates(65);
 	ecx = 0x40310u;
 	g_ecx = ecx;
 	g_edx = edx;
 	ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x001172BCu, 0);
-	edx = MEM32(0x1B9ED8u);
+	edx = vcRenderStates(60);
 	ecx = 0x40300u;
 	g_ecx = ecx;
 	g_edx = edx;
 	ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x001172CCu, 0);
-	edx = MEM32(0x1B9ED4u);
+	edx = vcRenderStates(59);
 	ecx = 0x40304u;
 	g_ecx = ecx;
 	g_edx = edx;
 	ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x001172DCu, 0);
-	ecx = MEM32(0x166B54u);
-	MEM32(0x166EC8u) = MEM32(0x1B9F58u);
-	arg0 = MEM32(0x1BA044u);
-	MEM32(0x166B54u) = ecx | 0x2000u;
+	ecx = D3D__DirtyFlags;
+	D3D__RenderState(92) = vcRenderStates(92);
+	arg0 = vcRenderStates(151);
+	D3D__DirtyFlags = ecx | 0x2000u;
 	x86_call(D3DDevice_SetRenderState_EdgeAntiAlias, 0x00117303u, 1, arg0);
-	arg0 = MEM32(0x1BA028u);
+	arg0 = vcRenderStates(144);
 	x86_call(D3DDevice_SetRenderState_StencilEnable, 0x0011730Eu, 1, arg0);
-	edx = MEM32(0x166B54u);
-	MEM32(0x166EF0u) = MEM32(0x1B9F80u);
-	arg0 = MEM32(0x1BA04Cu);
-	MEM32(0x166B54u) = edx | 0x1200u;
+	edx = D3D__DirtyFlags;
+	D3D__RenderState(102) = vcRenderStates(102);
+	arg0 = vcRenderStates(153);
+	D3D__DirtyFlags = edx | 0x1200u;
 	x86_call(D3DDevice_SetRenderState_MultiSampleMask, 0x00117335u, 1, arg0);
-	arg0 = MEM32(0x1BA040u);
+	arg0 = vcRenderStates(150);
 	x86_call(D3DDevice_SetRenderState_LogicOp, 0x00117340u, 1, arg0);
-	edx = MEM32(0x1B9EF4u);
+	edx = vcRenderStates(67);
 	ecx = 0x40358u;
 	g_ecx = ecx;
 	g_edx = edx;
 	ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117350u, 0);
-	arg0 = MEM32(0x1BA068u);
+	arg0 = vcRenderStates(160);
 	x86_call(D3DDevice_SetRenderState_YuvEnable, 0x0011735Bu, 1, arg0);
-	edx = MEM32(0x166B54u);
-	MEM32(0x166EF4u) = MEM32(0x1B9F84u);
-	arg0 = MEM32(0x1BA03Cu);
-	MEM32(0x166B54u) = edx | 0x3000u;
+	edx = D3D__DirtyFlags;
+	D3D__RenderState(103) = vcRenderStates(103);
+	arg0 = vcRenderStates(149);
+	D3D__DirtyFlags = edx | 0x3000u;
 	x86_call(D3DDevice_SetRenderState_ZBias, 0x00117382u, 1, arg0);
 	arg1 = 0xCu;
 	arg0 = 0u;
 	sub_00116E90(arg0, arg1);
-	ecx = MEM32(0x166B54u);
-	MEM32(0x166B90u) = MEM32(0x1BA0B8u);
-	MEM32(0x166B98u) = MEM32(0x1BA0C0u);
-	arg1 = MEM32(0x1BA0F0u);
+	ecx = D3D__DirtyFlags;
+	D3D__TextureState(14) = vcRenderTextureStageStates(14);
+	D3D__TextureState(16) = vcRenderTextureStageStates(16);
+	arg1 = vcRenderTextureStageStates(28);
 	arg0 = 0u;
-	MEM32(0x166B54u) = ecx | 0x800u | 0x800u;
+	D3D__DirtyFlags = ecx | 0x800u | 0x800u;
 	x86_call(D3DDevice_SetTextureState_TexCoordIndex, 0x001173C7u, 2, arg0, arg1);
 	arg1 = 0u;
 	arg0 = 0u;
@@ -89804,68 +89804,68 @@ uint32_t sub_00117410(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	edi = 1u;
-	if (MEM32(0x1B9ED4u) != 1u)
+	if (vcRenderStates(59) != 1u)
 	{
 		edx = edi;
 		ecx = 0x40304u;
-		MEM32(0x1B9ED4u) = edi;
+		vcRenderStates(59) = edi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117432u, 0);
 	}
 	esi = 0u;
-	if (MEM32(0x1B9EE8u) != 0u)
+	if (vcRenderStates(64) != 0u)
 	{
 		edx = 0u;
 		ecx = 0x4035Cu;
-		MEM32(0x1B9EE8u) = esi;
+		vcRenderStates(64) = esi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0011744Fu, 0);
 	}
 	edx = 0x207u;
-	if (MEM32(0x1B9ECCu) != 0x207u)
+	if (vcRenderStates(57) != 0x207u)
 	{
 		ecx = 0x40354u;
-		MEM32(0x1B9ECCu) = edx;
+		vcRenderStates(57) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0011746Du, 0);
 	}
-	if (MEM32(0x1B9F58u) != esi)
+	if (vcRenderStates(92) != esi)
 	{
-		eax = MEM32(0x166B54u) | 0x2000u;
-		MEM32(0x1B9F58u) = esi;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166EC8u) = esi;
+		eax = D3D__DirtyFlags | 0x2000u;
+		vcRenderStates(92) = esi;
+		D3D__DirtyFlags = eax;
+		D3D__RenderState(92) = esi;
 	}
-	if (MEM32(0x1B9F80u) != esi)
+	if (vcRenderStates(102) != esi)
 	{
-		eax = MEM32(0x166B54u) | 0x1200u;
-		MEM32(0x1B9F80u) = esi;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166EF0u) = esi;
+		eax = D3D__DirtyFlags | 0x1200u;
+		vcRenderStates(102) = esi;
+		D3D__DirtyFlags = eax;
+		D3D__RenderState(102) = esi;
 	}
 	eax = 4u;
-	if (MEM32(0x1BA0B0u) != 4u)
+	if (vcRenderTextureStageStates(12) != 4u)
 	{
-		ecx = MEM32(0x166B54u) | 0x800u;
-		MEM32(0x1BA0B0u) = eax;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166B88u) = eax;
+		ecx = D3D__DirtyFlags | 0x800u;
+		vcRenderTextureStageStates(12) = eax;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(12) = eax;
 	}
-	if (MEM32(0x1BA0F0u) != esi)
+	if (vcRenderTextureStageStates(28) != esi)
 	{
 		arg1 = esi;
 		arg0 = esi;
-		MEM32(0x1BA0F0u) = esi;
+		vcRenderTextureStageStates(28) = esi;
 		x86_call(D3DDevice_SetTextureState_TexCoordIndex, 0x001174F3u, 2, arg0, arg1);
 	}
-	if (MEM32(0x1BA170u) != edi)
+	if (vcRenderTextureStageStates(60) != edi)
 	{
 		arg1 = edi;
 		arg0 = edi;
-		MEM32(0x1BA170u) = edi;
+		vcRenderTextureStageStates(60) = edi;
 		x86_call(D3DDevice_SetTextureState_TexCoordIndex, 0x00117508u, 2, arg0, arg1);
 	}
 	arg0 = 0x144u;
@@ -89883,28 +89883,28 @@ uint32_t sub_00117520(void)
 	uint32_t eax = 0, ecx = 0, edx = 0, ignored = 0;
 
 	edx = 1u;
-	if (MEM32(0x1B9EE8u) != 1u)
+	if (vcRenderStates(64) != 1u)
 	{
 		ecx = 0x4035Cu;
-		MEM32(0x1B9EE8u) = edx;
+		vcRenderStates(64) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0011753Eu, 0);
 	}
-	if (MEM32(0x1B9ED4u) != 0u)
+	if (vcRenderStates(59) != 0u)
 	{
 		edx = 0u;
 		ecx = 0x40304u;
-		MEM32(0x1B9ED4u) = 0u;
+		vcRenderStates(59) = 0u;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0011755Du, 0);
 	}
-	eax = MEM32(0x1B9ECCu);
+	eax = vcRenderStates(57);
 	edx = 0x203u;
 	if (eax == 0x203u)
 		return eax;
-	MEM32(0x1B9ECCu) = edx;
+	vcRenderStates(57) = edx;
 	ecx = 0x40354u;
 	g_ecx = ecx;
 	g_edx = edx;
@@ -90006,34 +90006,34 @@ void sub_00117850(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_edx
 	if (edi != MEM32(eax * 4u + 0x1BA080u))
 	{
 		edx = shl32(1u, (int)(esi & 0x1Fu));
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		MEM32(eax * 4u + 0x1BA080u) = edi;
 		MEM32(eax * 4u + 0x166B58u) = edi;
-		MEM32(0x166B54u) = ecx | edx;
+		D3D__DirtyFlags = ecx | edx;
 	}
 	if (edi != MEM32(eax * 4u + 0x1BA084u))
 	{
 		edx = shl32(1u, (int)(esi & 0x1Fu));
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		MEM32(eax * 4u + 0x1BA084u) = edi;
 		MEM32(eax * 4u + 0x166B5Cu) = edi;
-		MEM32(0x166B54u) = ecx | edx;
+		D3D__DirtyFlags = ecx | edx;
 	}
 	if (ebx != MEM32(eax * 4u + 0x1BA08Cu))
 	{
 		edx = shl32(1u, (int)(esi & 0x1Fu));
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		MEM32(eax * 4u + 0x1BA08Cu) = ebx;
 		MEM32(eax * 4u + 0x166B64u) = ebx;
-		MEM32(0x166B54u) = ecx | edx;
+		D3D__DirtyFlags = ecx | edx;
 	}
 	if (ebx != MEM32(eax * 4u + 0x1BA090u))
 	{
 		edx = shl32(1u, (int)(esi & 0x1Fu));
-		ecx = MEM32(0x166B54u);
+		ecx = D3D__DirtyFlags;
 		MEM32(eax * 4u + 0x1BA090u) = ebx;
 		MEM32(eax * 4u + 0x166B68u) = ebx;
-		MEM32(0x166B54u) = ecx | edx;
+		D3D__DirtyFlags = ecx | edx;
 	}
 	*p_eax = eax;
 	*p_edx = edx;
@@ -90044,7 +90044,7 @@ uint32_t sub_00117980(uint32_t edx)
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, edx_2 = 0, esi = 0, ignored = 0;
 
 	edx = sub_0013E3C0(edx);
-	if (MEM32(0x23D2DCu) == 0u)
+	if (vcDevice == 0u)
 		return edx;
 	arg0 = 0u;
 	x86_call(D3DDevice_SetVertexShader, 0x00117996u, 1, arg0);
@@ -90104,190 +90104,190 @@ uint32_t sub_001179E0(void)
 		esi++;
 	} while ((int32_t)esi < 8);
 	edi = 1u;
-	if (MEM32(0x1BA024u) != 1u)
+	if (vcRenderStates(143) != 1u)
 	{
 		arg0 = edi;
-		MEM32(0x1BA024u) = edi;
+		vcRenderStates(143) = edi;
 		x86_call(D3DDevice_SetRenderState_ZEnable, 0x00117A41u, 1, arg0);
 	}
-	if (MEM32(0x1B9EE8u) != edi)
+	if (vcRenderStates(64) != edi)
 	{
 		edx = edi;
 		ecx = 0x4035Cu;
-		MEM32(0x1B9EE8u) = edi;
+		vcRenderStates(64) = edi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117A5Bu, 0);
 	}
 	esi = 0x203u;
-	if (MEM32(0x1B9ECCu) != 0x203u)
+	if (vcRenderStates(57) != 0x203u)
 	{
 		edx = esi;
 		ecx = 0x40354u;
-		MEM32(0x1B9ECCu) = esi;
+		vcRenderStates(57) = esi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117A7Bu, 0);
 	}
-	if (MEM32(0x1B9ED8u) != edi)
+	if (vcRenderStates(60) != edi)
 	{
 		edx = edi;
 		ecx = 0x40300u;
-		MEM32(0x1B9ED8u) = edi;
+		vcRenderStates(60) = edi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117A95u, 0);
 	}
 	edx = 0x204u;
-	if (MEM32(0x1B9ED0u) != 0x204u)
+	if (vcRenderStates(58) != 0x204u)
 	{
 		ecx = 0x4033Cu;
-		MEM32(0x1B9ED0u) = edx;
+		vcRenderStates(58) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117AB3u, 0);
 	}
-	if (MEM32(0x1B9EDCu) != 3u)
+	if (vcRenderStates(61) != 3u)
 	{
 		edx = 3u;
 		ecx = 0x40340u;
-		MEM32(0x1B9EDCu) = 3u;
+		vcRenderStates(61) = 3u;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117AD5u, 0);
 	}
-	if (MEM32(0x1B9ECCu) != esi)
+	if (vcRenderStates(57) != esi)
 	{
 		edx = esi;
 		ecx = 0x40354u;
-		MEM32(0x1B9ECCu) = esi;
+		vcRenderStates(57) = esi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117AEFu, 0);
 	}
 	edx = 0x1D01u;
-	if (MEM32(0x1B9EF0u) != 0x1D01u)
+	if (vcRenderStates(66) != 0x1D01u)
 	{
 		ecx = 0x4037Cu;
-		MEM32(0x1B9EF0u) = edx;
+		vcRenderStates(66) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117B0Du, 0);
 	}
 	edx = 0x302u;
-	if (MEM32(0x1B9EE0u) != 0x302u)
+	if (vcRenderStates(62) != 0x302u)
 	{
 		ecx = 0x40344u;
-		MEM32(0x1B9EE0u) = edx;
+		vcRenderStates(62) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117B2Bu, 0);
 	}
 	edx = 0x303u;
-	if (MEM32(0x1B9EE4u) != 0x303u)
+	if (vcRenderStates(63) != 0x303u)
 	{
 		ecx = 0x40348u;
-		MEM32(0x1B9EE4u) = edx;
+		vcRenderStates(63) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117B49u, 0);
 	}
 	eax = 0x901u;
-	if (MEM32(0x1BA034u) != 0x901u)
+	if (vcRenderStates(147) != 0x901u)
 	{
 		arg0 = eax;
-		MEM32(0x1BA034u) = eax;
+		vcRenderStates(147) = eax;
 		x86_call(D3DDevice_SetRenderState_CullMode, 0x00117B63u, 1, arg0);
 	}
-	if (MEM32(0x1B9EECu) != edi)
+	if (vcRenderStates(65) != edi)
 	{
 		edx = edi;
 		ecx = 0x40310u;
-		MEM32(0x1B9EECu) = edi;
+		vcRenderStates(65) = edi;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117B7Du, 0);
 	}
-	if (MEM32(0x1B9ED4u) != ebx)
+	if (vcRenderStates(59) != ebx)
 	{
 		edx = 0u;
 		ecx = 0x40304u;
-		MEM32(0x1B9ED4u) = ebx;
+		vcRenderStates(59) = ebx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x00117B97u, 0);
 	}
-	if (MEM32(0x1B9F84u) != ebx)
+	if (vcRenderStates(103) != ebx)
 	{
-		eax = MEM32(0x166B54u) | 0x3000u;
-		MEM32(0x1B9F84u) = ebx;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166EF4u) = ebx;
+		eax = D3D__DirtyFlags | 0x3000u;
+		vcRenderStates(103) = ebx;
+		D3D__DirtyFlags = eax;
+		D3D__RenderState(103) = ebx;
 	}
-	if (MEM32(0x1B9F80u) != ebx)
+	if (vcRenderStates(102) != ebx)
 	{
-		eax = MEM32(0x166B54u) | 0x1200u;
-		MEM32(0x1B9F80u) = ebx;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166EF0u) = ebx;
+		eax = D3D__DirtyFlags | 0x1200u;
+		vcRenderStates(102) = ebx;
+		D3D__DirtyFlags = eax;
+		D3D__RenderState(102) = ebx;
 	}
-	if (MEM32(0x1BA028u) != ebx)
+	if (vcRenderStates(144) != ebx)
 	{
 		arg0 = ebx;
-		MEM32(0x1BA028u) = ebx;
+		vcRenderStates(144) = ebx;
 		x86_call(D3DDevice_SetRenderState_StencilEnable, 0x00117BF1u, 1, arg0);
 	}
-	if (MEM32(0x1B9FB4u) != ebx)
+	if (vcRenderStates(115) != ebx)
 	{
-		eax = MEM32(0x166B54u) | 0x1000u;
-		MEM32(0x1B9FB4u) = ebx;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166F24u) = ebx;
+		eax = D3D__DirtyFlags | 0x1000u;
+		vcRenderStates(115) = ebx;
+		D3D__DirtyFlags = eax;
+		D3D__RenderState(115) = ebx;
 	}
 	edi = 2u;
 	eax = 0x800u;
-	if (MEM32(0x1BA0B8u) != 2u)
+	if (vcRenderTextureStageStates(14) != 2u)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0B8u) = edi;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166B90u) = edi;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(14) = edi;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(14) = edi;
 	}
-	if (MEM32(0x1BA0BCu) != ebx)
+	if (vcRenderTextureStageStates(15) != ebx)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0BCu) = ebx;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166B94u) = ebx;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(15) = ebx;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(15) = ebx;
 	}
 	esi = 4u;
-	if (MEM32(0x1BA0B0u) != 4u)
+	if (vcRenderTextureStageStates(12) != 4u)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0B0u) = esi;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166B88u) = esi;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(12) = esi;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(12) = esi;
 	}
-	if (MEM32(0x1BA0C8u) != edi)
+	if (vcRenderTextureStageStates(18) != edi)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0C8u) = edi;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166BA0u) = edi;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(18) = edi;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(18) = edi;
 	}
-	if (MEM32(0x1BA0CCu) != ebx)
+	if (vcRenderTextureStageStates(19) != ebx)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0CCu) = ebx;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166BA4u) = ebx;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(19) = ebx;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(19) = ebx;
 	}
-	if (MEM32(0x1BA0C0u) != esi)
+	if (vcRenderTextureStageStates(16) != esi)
 	{
-		ecx = MEM32(0x166B54u) | eax;
-		MEM32(0x1BA0C0u) = esi;
-		MEM32(0x166B54u) = ecx;
-		MEM32(0x166B98u) = esi;
+		ecx = D3D__DirtyFlags | eax;
+		vcRenderTextureStageStates(16) = esi;
+		D3D__DirtyFlags = ecx;
+		D3D__TextureState(16) = esi;
 	}
 	arg2 = edi;
 	arg1 = 3u;
@@ -90471,9 +90471,9 @@ uint32_t sub_001180A0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + 0x18u);
+		eax = MEM32(vcObjectCacheData + 0x18u);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -90481,9 +90481,9 @@ uint32_t sub_001180A0(uint32_t arg0)
 		eax = MEM32(0x18u);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + 0x18u);
 	return eax;
 }
@@ -90493,9 +90493,9 @@ uint32_t sub_001180F0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + 0x1Cu);
+		eax = MEM32(vcObjectCacheData + 0x1Cu);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -90503,9 +90503,9 @@ uint32_t sub_001180F0(uint32_t arg0)
 		eax = MEM32(0x1Cu);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + 0x1Cu);
 	return eax;
 }
@@ -90515,19 +90515,19 @@ uint32_t sub_00118140(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = arg1;
 	arg4 = MEM32(eax + 0x1Cu);
 	arg3 = MEM32(eax + 0x18u);
@@ -90543,9 +90543,9 @@ uint32_t sub_001181A0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + 0x14u);
+		eax = MEM32(vcObjectCacheData + 0x14u);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -90553,9 +90553,9 @@ uint32_t sub_001181A0(uint32_t arg0)
 		eax = MEM32(0x14u);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + 0x14u);
 	return eax;
 }
@@ -90567,21 +90567,21 @@ uint32_t sub_001181F0(uint32_t edx, uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	eax = MEM32(esi + 0x10u);
 	if (eax == 0u)
 	{
@@ -90642,9 +90642,9 @@ uint32_t sub_00118500(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	uint32_t eax = 0;
 
 	eax = x86_call(sub_001182A0, 0x00118519u, 4, arg0, arg1, arg2, arg3);
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -90652,9 +90652,9 @@ uint32_t sub_00118500(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		eax = 0u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	return eax;
 }
 
@@ -90867,7 +90867,7 @@ uint32_t sub_001195F0(uint32_t arg0)
 	ecx = eax + 0x90u;
 	arg2 = ecx;
 	arg1 = eax;
-	arg0_2 = MEM32(MEM32(0x23DEA8u) + 4u);
+	arg0_2 = MEM32(vcSceneBoundsTree + 4u);
 	g_ecx = ecx;
 	eax = x86_call(sub_00119500, 0x0011960Du, 4, arg0_2, arg1, arg2, arg3);
 	return eax;
@@ -91006,21 +91006,21 @@ void sub_0011CD60(uint32_t edx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	edi = arg1;
 	ebx = (arg3 - 1u) * arg2 + edi;
 	if ((int32_t)ebx <= 0)
@@ -91061,9 +91061,9 @@ uint32_t sub_0011CE80(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		if (eax == 0u)
 		{
 			eax = 0u;
@@ -91077,9 +91077,9 @@ uint32_t sub_0011CE80(uint32_t arg0)
 		eax = 0u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -91366,19 +91366,19 @@ uint32_t vcMultiSubObject_GetSize(uint32_t arg1, uint32_t arg2)
 	saved_arg2 = arg2;
 	ebp = stack_1FFFFC;
 	eax = MEM32(ebp + 0xBCu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
 			eax = 0u;
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ebx = 0u;
 	if (eax == 0u)
 	{
@@ -91446,9 +91446,9 @@ uint32_t sub_0011D8F0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		MEM32(arg1) = MEM32(0x2BF1C0u) + 0xD8u;
+		MEM32(arg1) = vcObjectCacheData + 0xD8u;
 		eax = 3u;
 		return eax;
 	}
@@ -91458,9 +91458,9 @@ uint32_t sub_0011D8F0(uint32_t arg0, uint32_t arg1)
 		eax = 3u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(arg1) = eax + 0xD8u;
 	eax = 3u;
 	return eax;
@@ -91471,27 +91471,27 @@ uint32_t sub_0011D970(uint32_t arg0, uint32_t arg3)
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0;
 
 	edx = arg3;
-	esi = MEM32(0x2BF2E0u);
+	esi = vcObjectCacheHandle;
 	if (edx != esi)
 	{
 		if (edx == 0u || (edx & ~0xFFFFFFu) != 0u)
 		{
-			ecx = MEM32(0x2BF1C0u);
+			ecx = vcObjectCacheData;
 			edi = 0u;
 		}
 		else
 		{
 			ecx = MEM32((edx >> 16) * 4u + 0x2BF1E0u);
 			esi = edx;
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			ecx = MEM32((edx & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			edi = ecx;
 		}
 	}
 	else
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		edi = ecx;
 	}
 	eax = arg0;
@@ -91501,9 +91501,9 @@ uint32_t sub_0011D970(uint32_t arg0, uint32_t arg3)
 			ebx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebx = eax;
 		}
 	}
@@ -91538,9 +91538,9 @@ uint32_t sub_0011DFA0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0xC0u) = MEM32(eax + 0xC0u) | 4u;
 		return eax;
 	}
@@ -91550,9 +91550,9 @@ uint32_t sub_0011DFA0(uint32_t arg0)
 		MEM32(0xC0u) = MEM32(0xC0u) | 4u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0xC0u) = MEM32(eax + 0xC0u) | 4u;
 	return eax;
 }
@@ -91564,27 +91564,27 @@ uint32_t sub_0011E000(uint32_t arg0)
 
 	stack_200000 = arg0;
 	eax = stack_200000;
-	esi = MEM32(0x2BF2E0u);
+	esi = vcObjectCacheHandle;
 	if (eax != esi)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			edx = MEM32(0x2BF1C0u);
+			edx = vcObjectCacheData;
 			eax = 0u;
 		}
 		else
 		{
 			esi = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edx;
+			vcObjectCacheData = edx;
 			eax = edx;
 		}
 	}
 	else
 	{
-		edx = MEM32(0x2BF1C0u);
+		edx = vcObjectCacheData;
 		eax = edx;
 	}
 	ecx = MEM32(eax + 0xBCu);
@@ -91594,9 +91594,9 @@ uint32_t sub_0011E000(uint32_t arg0)
 			stack_200000 = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			stack_200000 = ecx;
 		}
 	}
@@ -91659,20 +91659,20 @@ void sub_0011E150(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 	saved_arg2 = arg2;
 	eax = stack_200000;
 	ebx = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ebx || (eax & ~0xFFFFFFu) != 0u)
 			stack_200000 = ebx;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_200000 = eax;
 		}
 	}
 	else
-		stack_200000 = MEM32(0x2BF1C0u);
+		stack_200000 = vcObjectCacheData;
 	ebp = arg1;
 	esi = ebp * 0x138u + MEM32(stack_200000 + 0xCCu);
 	edi = arg3;
@@ -91712,20 +91712,20 @@ void sub_0011E150(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 		MEM32(esi + 0xCu) = ebx;
 		return;
 	}
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if ((edi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			edi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(MEM32((edi >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 			eax = edi;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = MEM32(eax + 4u);
 	if ((int32_t)ecx > 8)
 		ecx = 8u;
@@ -91745,9 +91745,9 @@ uint32_t sub_0011E2A0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = MEM32(eax + 0xCCu);
 		esi = arg1 * 0x138u;
 		eax = MEM32(esi + ecx + 8u);
@@ -91801,9 +91801,9 @@ uint32_t sub_0011E2A0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		}
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ecx = MEM32(eax + 0xCCu);
 	esi = arg1 * 0x138u;
 	eax = MEM32(esi + ecx + 8u);
@@ -91836,19 +91836,19 @@ uint32_t sub_0011E770(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	edx = arg1;
 	if ((int32_t)edx <= 0)
 		return eax;
@@ -91871,19 +91871,19 @@ uint32_t sub_0011E7F0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = arg2;
 	eax += arg1 * 0x3Cu;
 	MEM32(eax + 0x29Cu) = MEM32(ecx);
@@ -91903,27 +91903,27 @@ uint32_t sub_0011E970(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			ecx = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = eax;
 	}
 	ecx = MEM32(ecx + 0xBCu);
@@ -91933,9 +91933,9 @@ uint32_t sub_0011E970(uint32_t arg0, uint32_t arg1)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 		}
 	}
 	else
@@ -92007,27 +92007,27 @@ uint32_t sub_0011EA70(uint32_t arg0, uint32_t arg1)
 	uint32_t t2 = 0;
 
 	eax = arg0;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			ecx = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = eax;
 	}
 	ecx = MEM32(ecx + 0xBCu);
@@ -92037,9 +92037,9 @@ uint32_t sub_0011EA70(uint32_t arg0, uint32_t arg1)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 		}
 	}
 	else
@@ -92113,27 +92113,27 @@ uint32_t sub_0011EB70(uint32_t arg0, uint32_t arg1)
 
 	stack_200000 = arg0;
 	eax = stack_200000;
-	esi = MEM32(0x2BF2E0u);
+	esi = vcObjectCacheHandle;
 	if (eax != esi)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			edx = 0u;
 		}
 		else
 		{
 			esi = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edx = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		edx = eax;
 	}
 	ecx = MEM32(edx + 0xBCu);
@@ -92143,9 +92143,9 @@ uint32_t sub_0011EB70(uint32_t arg0, uint32_t arg1)
 			stack_200000 = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			stack_200000 = ecx;
 		}
 	}
@@ -92217,9 +92217,9 @@ uint32_t sub_0011EDE0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		eax = arg1 << 6;
 		edx = arg2;
 		MEM32(edx) = MEM32(eax + MEM32(ecx + 0xD0u));
@@ -92259,9 +92259,9 @@ uint32_t sub_0011EDE0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		MEM32(edx + 8u) = eax;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ecx = eax;
 	eax = arg1 << 6;
 	edx = arg2;
@@ -92288,20 +92288,20 @@ uint32_t sub_0011EEE0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 
 	eax = arg0;
 	esi = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == esi || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	edx = arg2;
 	eax = arg1 << 6;
 	MEM32(eax + MEM32(ecx + 0xD0u)) = MEM32(edx);
@@ -92329,27 +92329,27 @@ uint32_t sub_0011F2D0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			ecx = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = eax;
 	}
 	ecx = MEM32(ecx + 0xBCu);
@@ -92360,9 +92360,9 @@ uint32_t sub_0011F2D0(uint32_t arg0, uint32_t arg1)
 	}
 	if (ecx != 0u && (ecx & ~0xFFFFFFu) == 0u)
 	{
-		MEM32(0x2BF2E0u) = ecx;
+		vcObjectCacheHandle = ecx;
 		eax = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		eax = MEM32((arg1 << 7) + eax + 0x38u);
 		return eax;
 	}
@@ -92376,27 +92376,27 @@ uint32_t sub_0011F380(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			ecx = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = eax;
 	}
 	ecx = MEM32(ecx + 0xBCu);
@@ -92440,9 +92440,9 @@ uint32_t sub_0011F380(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		}
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = ecx;
+	vcObjectCacheHandle = ecx;
 	ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	eax = arg1;
 	if ((int32_t)eax < (int32_t)MEM32(ecx + 8u))
 	{
@@ -92466,21 +92466,21 @@ uint32_t sub_0011F460(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0xC0u) = (MEM32(eax + 0xC0u) & ~0x10u) | 8u;
-	MEM32(eax + 0x474u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x474u) = vcGameTime;
 	MEM32(eax + 0x478u) = arg1;
 	return eax;
 }
@@ -92490,21 +92490,21 @@ uint32_t sub_0011F4D0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0xC0u) = (MEM32(eax + 0xC0u) & ~8u) | 0x10u;
-	MEM32(eax + 0x474u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x474u) = vcGameTime;
 	MEM32(eax + 0x478u) = arg1;
 	return eax;
 }
@@ -92514,9 +92514,9 @@ uint32_t sub_0011F540(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0xC0u) = MEM32(eax + 0xC0u) & ~0x18u;
 		return eax;
 	}
@@ -92526,9 +92526,9 @@ uint32_t sub_0011F540(uint32_t arg0)
 		MEM32(0xC0u) = MEM32(0xC0u) & ~0x18u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0xC0u) = MEM32(eax + 0xC0u) & ~0x18u;
 	return eax;
 }
@@ -92541,28 +92541,28 @@ uint32_t sub_00120370(uint32_t arg0)
 
 	stack_200000 = arg0;
 	eax = stack_200000;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			stack_200000 = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_200000 = eax;
 		}
 		esi = stack_200000;
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		esi = eax;
 		stack_200000 = esi;
 	}
@@ -92573,9 +92573,9 @@ uint32_t sub_00120370(uint32_t arg0)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			eax = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	ecx = MEM32(eax + 0x14u);
@@ -92622,21 +92622,21 @@ uint32_t sub_00120550(uint32_t arg0)
 
 	eax = arg0;
 	ecx = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ecx || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0xF4u) = ecx;
-	MEM32(eax + 0xF0u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0xF0u) = vcGameTime;
 	MEM32(eax + 0x128u) = ecx;
 	return eax;
 }
@@ -92647,20 +92647,20 @@ uint32_t sub_00120980(uint32_t arg0)
 
 	ecx = arg0;
 	eax = 0u;
-	if (ecx != MEM32(0x2BF2E0u))
+	if (ecx != vcObjectCacheHandle)
 	{
 		if (ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(MEM32((ecx >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 			edi = ecx;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	esi = MEM32(edi + 0xF4u);
 	ecx = 0u;
 	if ((int32_t)esi <= 0)
@@ -92682,20 +92682,20 @@ uint32_t sub_00120A10(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	edx = MEM32(ecx + 0xF4u);
 	eax = 0u;
 	if ((int32_t)edx <= 0)
@@ -92720,20 +92720,20 @@ uint32_t sub_00120A90(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0, ebp = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	esi = MEM32(edi + 0xF4u);
 	ecx = 0u;
 	if ((int32_t)esi <= 0)
@@ -92771,9 +92771,9 @@ uint32_t sub_00120B30(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0xF4u) = 0u;
 		return eax;
 	}
@@ -92784,9 +92784,9 @@ uint32_t sub_00120B30(uint32_t arg0)
 		MEM32(0xF4u) = ecx;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0xF4u) = ecx;
 	return eax;
 }
@@ -92796,9 +92796,9 @@ uint32_t sub_00120B90(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0x128u) = 0u;
 		return eax;
 	}
@@ -92809,9 +92809,9 @@ uint32_t sub_00120B90(uint32_t arg0)
 		MEM32(0x128u) = ecx;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0x128u) = ecx;
 	return eax;
 }
@@ -92831,28 +92831,28 @@ uint32_t sub_00121720(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	stack_1FFFFC = arg1;
-	eax = MEM32(0x2BF2E0u);
+	eax = vcObjectCacheHandle;
 	ebx = arg0;
 	if (ebx != eax)
 	{
 		if (ebx == 0u || (ebx & ~0xFFFFFFu) != 0u)
 		{
-			ebp = MEM32(0x2BF1C0u);
+			ebp = vcObjectCacheData;
 			esi = 0u;
 		}
 		else
 		{
 			edx = MEM32((ebx >> 16) * 4u + 0x2BF1E0u);
 			eax = ebx;
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebp = MEM32((ebx & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebp;
+			vcObjectCacheData = ebp;
 			esi = ebp;
 		}
 	}
 	else
 	{
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 		esi = ebp;
 	}
 	edi = stack_1FFFFC;
@@ -92863,9 +92863,9 @@ uint32_t sub_00121720(uint32_t arg0, uint32_t arg1)
 		else
 		{
 			ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			eax = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_1FFFFC = eax;
 		}
 		ebp = stack_1FFFFC;
@@ -92981,11 +92981,11 @@ uint32_t sub_00121970(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u) && eax != 0u && (eax & ~0xFFFFFFu) == 0u)
+	if (eax != vcObjectCacheHandle && eax != 0u && (eax & ~0xFFFFFFu) == 0u)
 	{
 		edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = eax;
-		MEM32(0x2BF1C0u) = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
+		vcObjectCacheHandle = eax;
+		vcObjectCacheData = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 	}
 	arg0_2 = eax;
 	eax = sub_00120980(arg0_2);
@@ -93008,23 +93008,23 @@ uint32_t vcMultiSubObject_Copy(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	stack_1FFFFC = arg1;
 	ebx = arg0;
-	if (ebx != MEM32(0x2BF2E0u))
+	if (ebx != vcObjectCacheHandle)
 	{
 		if (ebx == 0u || (ebx & ~0xFFFFFFu) != 0u)
 			stack_4 = 0u;
 		else
 		{
 			ecx = MEM32((ebx >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebx;
+			vcObjectCacheHandle = ebx;
 			eax = MEM32((ebx & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_4 = eax;
 		}
 		esi = stack_4;
 	}
 	else
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		stack_4 = esi;
 	}
 	ebp = stack_1FFFFC;
@@ -93201,20 +93201,20 @@ uint32_t sub_00122220(uint32_t arg0, uint32_t arg1, uint32_t arg3)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3_2 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ecx;
+			vcObjectCacheData = ecx;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	arg5 = arg3;
 	arg4 = arg1;
 	arg3_2 = eax;
@@ -93230,20 +93230,20 @@ uint32_t sub_00122290(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0;
 
 	ecx = arg0;
-	if (ecx != MEM32(0x2BF2E0u))
+	if (ecx != vcObjectCacheHandle)
 	{
 		if (ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
 			edx = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			eax = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	edx = arg1;
 	arg5 = edx;
 	arg4 = edx;
@@ -93262,20 +93262,20 @@ void sub_00122300(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edi = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	arg0_2 = MEM32(edi + 0xBCu);
 	x86_call(vcObjectRelease_entry, 0x0012235Cu, 1, arg0_2);
 	ignored = g_eax;
@@ -93300,20 +93300,20 @@ void sub_00122380(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	arg0_2 = MEM32(esi + 0xF8u);
 	x86_call(vcObjectRelease_entry, 0x001223D6u, 1, arg0_2);
 	ignored = g_eax;
@@ -93334,20 +93334,20 @@ void sub_00122510(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			esi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	arg0_2 = MEM32(esi + 0x120u);
 	x86_call(vcObjectRelease_entry, 0x0012256Cu, 1, arg0_2);
 	ignored = g_eax;
@@ -93376,20 +93376,20 @@ void sub_00122510(uint32_t arg0, uint32_t arg1)
 	ignored_2 = g_ecx;
 	edx = g_edx;
 	eax = MEM32(esi + 0x120u);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + edx);
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = MEM32(eax + 0xECu) | 0x100u;
 	MEM32(eax + 0x104u) = 0u;
 	MEM32(eax + 0x100u) = 0u;
@@ -93412,20 +93412,20 @@ void sub_00122720(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			*p_ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			esi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(*p_ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	arg0_2 = MEM32(esi + 0x124u);
 	x86_call(vcObjectRelease_entry, 0x0012277Cu, 1, arg0_2);
 	ignored = g_eax;
@@ -93455,20 +93455,20 @@ void sub_00122720(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	ignored_2 = g_ecx;
 	edx = g_edx;
 	eax = MEM32(esi + 0x124u);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + edx);
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0x104u) = 0u;
 	MEM32(eax + 0x100u) = 0u;
 	arg1_2 = 0x1Eu;
@@ -93631,20 +93631,20 @@ uint32_t vcWater_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 
 	edi = arg0;
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			ebx = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	esi = arg1;
 	MEM32(ebx + 0xBCu) = 0u;
 	arg1_2 = MEM32(esi + 0xBCu);
@@ -94059,19 +94059,19 @@ uint32_t vcTerrain_Copy(uint32_t arg0, uint32_t arg1)
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	ebp = arg1;
 	x86_rep_movs32(ebx, ebp, 0xA9ECu);
 	edi = 0u;
@@ -94108,9 +94108,9 @@ uint32_t sub_00123F10(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		ecx = MEM32(ecx + 0x2A7ACu);
 		if (ecx != 0u)
 		{
@@ -94133,9 +94133,9 @@ uint32_t sub_00123F10(uint32_t arg0)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	ecx = MEM32(ecx + 0x2A7ACu);
 	if (ecx != 0u)
 	{
@@ -94151,19 +94151,19 @@ uint32_t sub_00124EF0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	eax = (eax & ~0xFFu) | MEM8(shl32(arg2, (int)(MEM32(eax + 0xD4u) & 0x1Fu)) + eax + arg1 + arg2 + 0xE8u);
 	return eax;
 }
@@ -94175,20 +94175,20 @@ uint32_t sub_00124F60(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			esi = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	ebp = arg1;
 	if ((int32_t)MEM32(esi + 0xE4u) <= (int32_t)ebp)
 	{
@@ -94227,20 +94227,20 @@ uint32_t sub_00125630(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	ecx = arg0;
-	if (ecx != MEM32(0x2BF2E0u))
+	if (ecx != vcObjectCacheHandle)
 	{
 		if (ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			edx = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			esi = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	ebp = arg1;
 	if ((int32_t)ebp <= 0)
 	{
@@ -94306,9 +94306,9 @@ uint32_t sub_00125710(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		edx = MEM32(esi + 0x2A7A8u);
 		arg0_2 = edx;
 		g_edx = edx;
@@ -94356,9 +94356,9 @@ uint32_t sub_00125710(uint32_t arg0, uint32_t arg1)
 		}
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	esi = eax;
 	edx = MEM32(esi + 0x2A7A8u);
 	arg0_2 = edx;
@@ -94646,14 +94646,14 @@ uint32_t sub_00127C10(uint32_t arg0)
 	uint32_t t1 = 0;
 
 	t1 = arg0;
-	eax = MEM32(0x1B9EE0u);
+	eax = vcRenderStates(62);
 	edx = 0x302u;
 	if (t1 == 0u)
 	{
 		if (eax != edx)
 		{
 			ecx = 0x40344u;
-			MEM32(0x1B9EE0u) = edx;
+			vcRenderStates(62) = edx;
 			g_ecx = ecx;
 			g_edx = edx;
 			eax = x86_call(D3DDevice_SetRenderState_Simple, 0x00127C51u, 0);
@@ -94665,16 +94665,16 @@ uint32_t sub_00127C10(uint32_t arg0)
 		if (eax != edx)
 		{
 			ecx = 0x40344u;
-			MEM32(0x1B9EE0u) = edx;
+			vcRenderStates(62) = edx;
 			g_ecx = ecx;
 			g_edx = edx;
 			eax = x86_call(D3DDevice_SetRenderState_Simple, 0x00127C36u, 0);
 		}
 		edx = 1u;
 	}
-	if (MEM32(0x1B9EE4u) == edx)
+	if (vcRenderStates(63) == edx)
 		return eax;
-	MEM32(0x1B9EE4u) = edx;
+	vcRenderStates(63) = edx;
 	ecx = 0x40348u;
 	g_ecx = ecx;
 	g_edx = edx;
@@ -94762,20 +94762,20 @@ uint32_t vcVolumeObject_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t saved_edx = 0, saved_eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	edx = arg1;
 	saved_edx = edx;
 	saved_eax = eax;
@@ -94792,9 +94792,9 @@ uint32_t sub_00127D80(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -94802,9 +94802,9 @@ uint32_t sub_00127D80(uint32_t arg0)
 		eax = 0u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	return eax;
 }
 
@@ -94813,19 +94813,19 @@ uint32_t sub_00127EC0(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = arg1;
 	MEM32(eax + 0x78u) = MEM32(ecx);
 	MEM32(eax + 0x7Cu) = MEM32(ecx + 4u);
@@ -94845,19 +94845,19 @@ uint32_t sub_00127F50(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	ecx = arg1;
 	MEM32(ecx) = MEM32(eax + 0x78u);
 	MEM32(ecx + 4u) = MEM32(eax + 0x7Cu);
@@ -94952,19 +94952,19 @@ uint32_t vcLight_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	x86_rep_movs32(eax, arg1, 0x10u);
 	MEM32(eax + 0x3Cu) = 0u;
 	return eax;
@@ -94975,20 +94975,20 @@ uint32_t sub_00128850(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edi = 0, esi = 0;
 
 	edi = arg0;
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			esi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	eax = MEM32(esi + 0x28u);
 	if (eax == 0u || (MEM8(esi + 0x2Cu) & 1u) != 0u)
 		return eax;
@@ -95247,20 +95247,20 @@ uint32_t sub_0012D520(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg2 = arg2;
 	eax = arg0;
 	ebp = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ebp || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebx = eax;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	if (MEM32(0x1BAC44u) == 0x240D28u)
 		return eax;
 	arg0_2 = ebp;
@@ -95280,56 +95280,56 @@ uint32_t sub_0012D520(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	arg0_2 = ebp;
 	sub_00117850(arg0_2, arg1_2, &ignored, &ignored_2);
 	ecx = 0x800u;
-	if (MEM32(0x1BA0B8u) != 1u)
+	if (vcRenderTextureStageStates(14) != 1u)
 	{
-		eax = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0B8u) = esi;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166B90u) = esi;
+		eax = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(14) = esi;
+		D3D__DirtyFlags = eax;
+		D3D__TextureState(14) = esi;
 	}
 	eax = 3u;
-	if (MEM32(0x1BA0BCu) != 3u)
+	if (vcRenderTextureStageStates(15) != 3u)
 	{
-		edx = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0BCu) = eax;
-		MEM32(0x166B54u) = edx;
-		MEM32(0x166B94u) = eax;
+		edx = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(15) = eax;
+		D3D__DirtyFlags = edx;
+		D3D__TextureState(15) = eax;
 	}
-	if (MEM32(0x1BA0B0u) != eax)
+	if (vcRenderTextureStageStates(12) != eax)
 	{
-		edx = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0B0u) = eax;
-		MEM32(0x166B54u) = edx;
-		MEM32(0x166B88u) = eax;
+		edx = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(12) = eax;
+		D3D__DirtyFlags = edx;
+		D3D__TextureState(12) = eax;
 	}
 	eax = saved_arg2;
-	if (eax != MEM32(0x1BA038u))
+	if (eax != vcRenderStates(148))
 	{
 		arg0_2 = eax;
-		MEM32(0x1BA038u) = eax;
+		vcRenderStates(148) = eax;
 		x86_call(D3DDevice_SetRenderState_TextureFactor, 0x0012D633u, 1, arg0_2);
 	}
 	eax = 0x1B01u;
-	if (MEM32(0x1BA014u) != 0x1B01u)
+	if (vcRenderStates(139) != 0x1B01u)
 	{
 		arg0_2 = eax;
-		MEM32(0x1BA014u) = eax;
+		vcRenderStates(139) = eax;
 		x86_call(D3DDevice_SetRenderState_FillMode, 0x0012D64Du, 1, arg0_2);
 	}
-	if (MEM32(0x1B9EE8u) != ebp)
+	if (vcRenderStates(64) != ebp)
 	{
 		edx = 0u;
 		ecx = 0x4035Cu;
-		MEM32(0x1B9EE8u) = ebp;
+		vcRenderStates(64) = ebp;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0012D667u, 0);
 	}
 	esi = 2u;
-	if (MEM32(0x1BA03Cu) != 2u)
+	if (vcRenderStates(149) != 2u)
 	{
 		arg0_2 = esi;
-		MEM32(0x1BA03Cu) = esi;
+		vcRenderStates(149) = esi;
 		x86_call(D3DDevice_SetRenderState_ZBias, 0x0012D681u, 1, arg0_2);
 	}
 	arg0_2 = 0x2C2u;
@@ -95363,50 +95363,50 @@ uint32_t sub_0012D520(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		} while ((int32_t)edi_2 < (int32_t)MEM32(ebx + 0xE4u));
 		esi = 2u;
 	}
-	if (MEM32(0x1BA03Cu) != ebp)
+	if (vcRenderStates(149) != ebp)
 	{
 		arg0_2 = ebp;
-		MEM32(0x1BA03Cu) = ebp;
+		vcRenderStates(149) = ebp;
 		x86_call(D3DDevice_SetRenderState_ZBias, 0x0012D703u, 1, arg0_2);
 	}
 	edx = 1u;
-	if (MEM32(0x1B9EE8u) != 1u)
+	if (vcRenderStates(64) != 1u)
 	{
 		ecx = 0x4035Cu;
-		MEM32(0x1B9EE8u) = edx;
+		vcRenderStates(64) = edx;
 		g_ecx = ecx;
 		g_edx = edx;
 		ignored = x86_call(D3DDevice_SetRenderState_Simple, 0x0012D721u, 0);
 	}
 	eax = 0x1B02u;
-	if (MEM32(0x1BA014u) != 0x1B02u)
+	if (vcRenderStates(139) != 0x1B02u)
 	{
 		arg0_2 = eax;
-		MEM32(0x1BA014u) = eax;
+		vcRenderStates(139) = eax;
 		x86_call(D3DDevice_SetRenderState_FillMode, 0x0012D73Bu, 1, arg0_2);
 	}
 	ecx = 0x800u;
-	if (MEM32(0x1BA0B8u) != esi)
+	if (vcRenderTextureStageStates(14) != esi)
 	{
-		eax = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0B8u) = esi;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166B90u) = esi;
+		eax = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(14) = esi;
+		D3D__DirtyFlags = eax;
+		D3D__TextureState(14) = esi;
 	}
-	if (MEM32(0x1BA0BCu) != ebp)
+	if (vcRenderTextureStageStates(15) != ebp)
 	{
-		eax = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0BCu) = ebp;
-		MEM32(0x166B54u) = eax;
-		MEM32(0x166B94u) = ebp;
+		eax = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(15) = ebp;
+		D3D__DirtyFlags = eax;
+		D3D__TextureState(15) = ebp;
 	}
 	eax = 4u;
-	if (MEM32(0x1BA0B0u) != 4u)
+	if (vcRenderTextureStageStates(12) != 4u)
 	{
-		edx = MEM32(0x166B54u) | ecx;
-		MEM32(0x1BA0B0u) = eax;
-		MEM32(0x166B54u) = edx;
-		MEM32(0x166B88u) = eax;
+		edx = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(12) = eax;
+		D3D__DirtyFlags = edx;
+		D3D__TextureState(12) = eax;
 	}
 	return eax;
 }
@@ -95696,20 +95696,20 @@ uint32_t vcSplineObject_Copy(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == 0u || (ebp & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			ebx = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	x86_rep_movs32(ebx, arg1, 0x35u);
 	arg0_2 = MEM32(ebx + 0xBCu);
 	x86_call(vcObjectAddRef_entry, 0x0012EAABu, 1, arg0_2);
@@ -95727,20 +95727,20 @@ void sub_0012EBF0(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	if (edi != 0u)
 	{
@@ -95754,19 +95754,19 @@ void sub_0012EBF0(uint32_t arg0, uint32_t arg1)
 		ignored_2 = g_ecx;
 		ignored_3 = g_edx;
 		MEM32(esi + 0xBCu) = edi;
-		if (edi != MEM32(0x2BF2E0u))
+		if (edi != vcObjectCacheHandle)
 		{
 			if ((edi & ~0xFFFFFFu) != 0u)
 				eax = 0u;
 			else
 			{
-				MEM32(0x2BF2E0u) = edi;
+				vcObjectCacheHandle = edi;
 				eax = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(MEM32((edi >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-				MEM32(0x2BF1C0u) = eax;
+				vcObjectCacheData = eax;
 			}
 		}
 		else
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 		MEM32(esi + 0x60u) = MEM32(eax + 0x10u);
 		MEM32(esi + 0x64u) = MEM32(eax + 0x14u);
 		MEM32(esi + 0x68u) = MEM32(eax + 0x18u);
@@ -95804,9 +95804,9 @@ uint32_t sub_0012ED20(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + 0xBCu);
+		eax = MEM32(vcObjectCacheData + 0xBCu);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -95814,9 +95814,9 @@ uint32_t sub_0012ED20(uint32_t arg0)
 		eax = MEM32(0xBCu);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + 0xBCu);
 	return eax;
 }
@@ -95965,9 +95965,9 @@ uint32_t vcSpline_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 		ebp = arg1;
 		x86_rep_movs32(ebx, ebp, 0xBu);
 		if (MEM32(ebx + 0x28u) != 0u)
@@ -96015,9 +96015,9 @@ uint32_t vcSpline_Copy(uint32_t arg0, uint32_t arg1)
 		eax = ebx;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ebx = eax;
 	ebp = arg1;
 	x86_rep_movs32(ebx, ebp, 0xBu);
@@ -96093,20 +96093,20 @@ uint32_t sub_0012F5E0(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, edi = 0, esi = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	esi = edi + 0x10u;
 	MEM32(esi) = 0x7F7FFFFFu;
 	MEM32(esi + 4u) = 0x7F7FFFFFu;
@@ -96199,17 +96199,17 @@ uint32_t sub_0012FEC0(uint32_t arg0, uint32_t arg1)
 	eax = arg0;
 	if (eax == 0u)
 		return eax;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0x190u) = arg1;
 		return eax;
 	}
 	if ((eax & ~0xFFFFFFu) == 0u)
 	{
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		MEM32(eax + 0x190u) = arg1;
 		return eax;
 	}
@@ -96523,20 +96523,20 @@ uint32_t sub_001305D0(uint32_t arg0, uint32_t arg1)
 
 	eax = arg0;
 	ebp = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ebp || (eax & ~0xFFFFFFu) != 0u)
 			edx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edx = eax;
 		}
 	}
 	else
-		edx = MEM32(0x2BF1C0u);
+		edx = vcObjectCacheData;
 	edi = MEM32(edx + 0x28u);
 	MEM32(edx + 0x2Cu) = arg1;
 	ecx = (MEM32(edx + 0x24u) * 5u) << 2;
@@ -96593,9 +96593,9 @@ uint32_t sub_001306F0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0x2Cu) = arg1;
 		return eax;
 	}
@@ -96605,9 +96605,9 @@ uint32_t sub_001306F0(uint32_t arg0, uint32_t arg1)
 		MEM32(0x2Cu) = arg1;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0x2Cu) = arg1;
 	return eax;
 }
@@ -96617,20 +96617,20 @@ uint32_t sub_00130750(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	eax = arg1 * 0x34u + MEM32(ecx + 4u);
 	MEM32(eax + 0x10u) = arg2 & 0xFFFFFFu;
 	MEM32(eax + 8u) = arg3;
@@ -96645,19 +96645,19 @@ uint32_t sub_001307D0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	arg0_2 = arg2;
 	esi = arg1 * 0x34u + MEM32(eax + 4u);
 	x86_call(vcObjectAddRef_entry, 0x0013082Du, 1, arg0_2);
@@ -96672,20 +96672,20 @@ uint32_t sub_001309E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			esi = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = esi;
+			vcObjectCacheData = esi;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	ecx = MEM32(esi + 0x1Cu);
 	if (ecx != MEM32(esi + 0x18u))
 	{
@@ -96718,20 +96718,20 @@ uint32_t sub_00131CF0(uint32_t arg0)
 	stack_200000 = arg0;
 	eax = stack_200000;
 	ecx = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ecx || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
-	stack_4 = MEM32(0x23A48Cu);
+		eax = vcObjectCacheData;
+	stack_4 = vcGameTime;
 	stack_200000 = eax;
 	saved_ecx = ecx;
 	if ((int32_t)MEM32(eax) <= (int32_t)ecx)
@@ -96891,21 +96891,21 @@ uint32_t sub_00133370(uint32_t edx, uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, edx_2 = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	if (MEM32(esi + 0x178u) != edi)
 	{
@@ -96952,21 +96952,21 @@ void sub_00133420(uint32_t arg0, uint32_t *p_eax, uint32_t *p_edx)
 	uint8_t t1 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
-	edx = MEM32(0x23A48Cu);
+		eax = vcObjectCacheData;
+	edx = vcGameTime;
 	ecx = MEM32(eax + 0xECu) & ~0x20u;
 	MEM32(eax + 0xECu) = ecx;
 	if ((ecx & 8u) == 0u)
@@ -97036,18 +97036,18 @@ uint32_t sub_001334F0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		if (eax != 0u)
 			MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x20u;
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		return eax;
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	if (eax != 0u)
 		MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x20u;
 	return eax;
@@ -97058,7 +97058,7 @@ void sub_00133540(uint32_t edx, uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ecx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
@@ -97066,13 +97066,13 @@ void sub_00133540(uint32_t edx, uint32_t arg0)
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
 			edx = (esi & 0xFFFFu) * 0x4Cu;
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32(edx + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	arg1 = MEM32(eax + 0x178u);
 	arg0_2 = esi;
 	sub_00133370(edx, arg0_2, arg1);
@@ -97086,21 +97086,21 @@ void sub_001335B0(uint32_t arg0, uint32_t arg1)
 	uint32_t t1 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
-	ecx = MEM32(0x23A48Cu);
+		eax = vcObjectCacheData;
+	ecx = vcGameTime;
 	t1 = arg1;
 	edx = MEM32(eax + 0xECu);
 	if (t1 == 0u)
@@ -97130,20 +97130,20 @@ uint32_t sub_00133660(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edi = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	eax = arg1;
 	ebx = arg2;
 	arg2_2 = arg4;
@@ -97168,20 +97168,20 @@ uint32_t vcParticleSystem_Copy(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == 0u || (ebp & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			ebx = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	x86_rep_movs32(ebx, arg1, 0x6Au);
 	arg0_2 = MEM32(ebx + 0xC8u);
 	x86_call(vcObjectAddRef_entry, 0x0013374Bu, 1, arg0_2);
@@ -97211,9 +97211,9 @@ uint32_t sub_00133980(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0, edx = 0, ignored = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		if ((MEM8(ecx + 0xECu) & 1u) != 0u)
 			return eax;
 		g_eax = eax;
@@ -97234,9 +97234,9 @@ uint32_t sub_00133980(uint32_t arg0)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	if ((MEM8(ecx + 0xECu) & 1u) != 0u)
 		return eax;
 	g_eax = eax;
@@ -97354,21 +97354,21 @@ void sub_00133C50(uint32_t edx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	ebx = arg1;
 	arg1_2 = 8u;
 	arg0_2 = ebx;
@@ -97405,20 +97405,20 @@ uint32_t vcSceneExport_Copy(uint32_t arg0, uint32_t arg1)
 
 	stack_200000 = arg0;
 	eax = stack_200000;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebp = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebp;
+			vcObjectCacheData = ebp;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	ebx = arg1;
 	x86_rep_movs32(ebp, ebx, 0x41u);
 	MEM32(ebp + 0x104u) = MEM32(ebx + 0x104u);
@@ -97588,7 +97588,7 @@ uint32_t sub_00134F50(uint32_t ecx, uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, eax = 0, ecx_2 = 0, esi = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
@@ -97598,18 +97598,18 @@ uint32_t sub_00134F50(uint32_t ecx, uint32_t arg0, uint32_t arg1)
 			MEM32(0u) = eax;
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		ecx_2 = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + ecx_2);
 		arg0_2 = 2u;
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 		esi = eax;
 		g_ecx = ecx_2;
 		eax = x86_call(vcObjectGet_entry, 0x00134FB3u, 2, arg0_2, arg1);
 		MEM32(esi) = eax;
 		return eax;
 	}
-	esi = MEM32(0x2BF1C0u);
+	esi = vcObjectCacheData;
 	arg0_2 = 2u;
 	g_ecx = ecx;
 	eax = x86_call(vcObjectGet_entry, 0x00134F6Fu, 2, arg0_2, arg1);
@@ -97800,20 +97800,20 @@ void sub_00136260(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	ebp = arg0;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == 0u || (ebp & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			edi = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	esi = arg1;
 	arg0_2 = esi;
 	x86_call(vcObjectAddRef_entry, 0x001362BBu, 1, arg0_2);
@@ -97850,9 +97850,9 @@ void sub_00136260(uint32_t arg0, uint32_t arg1)
 		ignored_2 = g_edx;
 		return;
 	}
-	if (esi == MEM32(0x2BF2E0u))
+	if (esi == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = MEM32(eax + 4u);
 		if ((int32_t)ecx > 8)
 			ecx = 8u;
@@ -97886,9 +97886,9 @@ void sub_00136260(uint32_t arg0, uint32_t arg1)
 		ignored_2 = g_edx;
 		return;
 	}
-	MEM32(0x2BF2E0u) = esi;
+	vcObjectCacheHandle = esi;
 	eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(MEM32((esi >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ecx = MEM32(eax + 4u);
 	if ((int32_t)ecx > 8)
 		ecx = 8u;
@@ -97909,9 +97909,9 @@ void sub_00136390(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		edi = arg1;
 		if ((int32_t)edi < (int32_t)MEM32(esi + 4u))
 		{
@@ -97955,9 +97955,9 @@ void sub_00136390(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		}
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	esi = eax;
 	edi = arg1;
 	if ((int32_t)edi < (int32_t)MEM32(esi + 4u))
@@ -97986,20 +97986,20 @@ uint32_t vcRefObject_Copy(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == 0u || (ebp & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			ebx = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	eax = arg1;
 	x86_rep_movs32(ebx, eax, 0x51u);
 	arg1_2 = MEM32(eax + 8u);
@@ -98084,20 +98084,20 @@ uint32_t sub_001365C0(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edi = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	arg0_2 = 0x10u;
 	x86_call(vcObjectCreate_entry, 0x00136618u, 1, arg0_2);
 	eax = g_eax;
@@ -98250,20 +98250,20 @@ void sub_001367C0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	ebx = edi + 8u;
 	if (ebx != 0u)
 	{
@@ -98315,9 +98315,9 @@ void sub_00136890(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		edi = arg1;
 		if ((int32_t)edi < (int32_t)MEM32(esi + 4u))
 		{
@@ -98355,9 +98355,9 @@ void sub_00136890(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		}
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	esi = eax;
 	edi = arg1;
 	if ((int32_t)edi < (int32_t)MEM32(esi + 4u))
@@ -98381,20 +98381,20 @@ uint32_t vcSkybox_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	edx = arg1;
 	x86_rep_movs32(ebx, edx, 0x20u);
 	arg2 = edx + 8u;
@@ -98850,20 +98850,20 @@ uint32_t sub_00139710(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x00139765u, 1, arg0_2);
@@ -98884,21 +98884,21 @@ uint32_t sub_00139780(uint32_t edx, uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, edx_2 = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	if (MEM32(esi + 0x170u) != edi)
 	{
@@ -98943,21 +98943,21 @@ uint32_t sub_00139830(uint32_t arg0)
 	uint8_t t1 = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
-	edx = MEM32(0x23A48Cu);
+		eax = vcObjectCacheData;
+	edx = vcGameTime;
 	ecx = MEM32(eax + 0xECu) & ~0x20u;
 	MEM32(eax + 0xECu) = ecx;
 	if ((ecx & 8u) == 0u)
@@ -99018,9 +99018,9 @@ uint32_t sub_00139900(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x20u;
 		return eax;
 	}
@@ -99030,9 +99030,9 @@ uint32_t sub_00139900(uint32_t arg0)
 		MEM32(0xECu) = MEM32(0xECu) | 0x20u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0xECu) = MEM32(eax + 0xECu) | 0x20u;
 	return eax;
 }
@@ -99042,7 +99042,7 @@ uint32_t sub_00139960(uint32_t edx, uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ecx = 0, esi = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			eax = 0u;
@@ -99050,13 +99050,13 @@ uint32_t sub_00139960(uint32_t edx, uint32_t arg0)
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
 			edx = (esi & 0xFFFFu) * 0x4Cu;
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			eax = MEM32(edx + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	arg1 = MEM32(eax + 0x170u);
 	arg0_2 = esi;
 	sub_00139780(edx, arg0_2, arg1);
@@ -99070,9 +99070,9 @@ uint32_t sub_001399D0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0x198u) = arg1;
 		MEM32(eax + 0x19Cu) = arg2;
 		return eax;
@@ -99081,9 +99081,9 @@ uint32_t sub_001399D0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		eax = 0u;
 	else
 	{
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 	}
 	MEM32(eax + 0x198u) = arg1;
 	MEM32(eax + 0x19Cu) = arg2;
@@ -99097,20 +99097,20 @@ uint32_t sub_00139A40(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 
 	saved_arg2 = arg2;
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edi = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	eax = arg1;
 	arg2_2 = arg4;
 	arg1_2 = arg3;
@@ -99135,20 +99135,20 @@ uint32_t vcBeamParticleSystem_Copy(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	ebp = arg0;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == 0u || (ebp & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			ebx = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	x86_rep_movs32(ebx, arg1, 0x68u);
 	arg0_2 = MEM32(ebx + 0xC8u);
 	x86_call(vcObjectAddRef_entry, 0x00139B2Bu, 1, arg0_2);
@@ -99178,9 +99178,9 @@ uint32_t sub_00139D00(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 		if ((MEM8(ecx + 0xECu) & 1u) != 0u)
 			return eax;
 		g_eax = eax;
@@ -99197,9 +99197,9 @@ uint32_t sub_00139D00(uint32_t arg0)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	if ((MEM8(ecx + 0xECu) & 1u) != 0u)
 		return eax;
 	g_eax = eax;
@@ -99356,7 +99356,7 @@ uint32_t sub_00139FB0(uint32_t edx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 
 	esi = arg0;
-	if (esi != MEM32(0x2BF2E0u))
+	if (esi != vcObjectCacheHandle)
 	{
 		if (esi == 0u || (esi & ~0xFFFFFFu) != 0u)
 			edi = 0u;
@@ -99364,13 +99364,13 @@ uint32_t sub_00139FB0(uint32_t edx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		{
 			ecx = MEM32((esi >> 16) * 4u + 0x2BF1E0u);
 			edx = (esi & 0xFFFFu) * 0x4Cu;
-			MEM32(0x2BF2E0u) = esi;
+			vcObjectCacheHandle = esi;
 			edi = MEM32(edx + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = edi;
+			vcObjectCacheData = edi;
 		}
 	}
 	else
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 	ebx = arg1;
 	if (arg2 == 0u)
 	{
@@ -99414,20 +99414,20 @@ uint32_t sub_0013A140(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x0013A196u, 1, arg0_2);
@@ -99452,20 +99452,20 @@ uint32_t sub_0013A1C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x0013A215u, 1, arg0_2);
@@ -99492,20 +99492,20 @@ uint32_t sub_0013A240(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x0013A296u, 1, arg0_2);
@@ -99529,9 +99529,9 @@ uint32_t sub_0013A2C0(uint32_t arg0)
 
 	eax = arg0;
 	edi = 0u;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		edx = MEM32(0x2BF1C0u);
+		edx = vcObjectCacheData;
 		eax = edx + 0x320u;
 		MEM32(edx + 0x2724u) = eax;
 		MEM32(eax + 0x40u) = edi;
@@ -99573,9 +99573,9 @@ uint32_t sub_0013A2C0(uint32_t arg0)
 		MEM32(edx + 0x2720u) = edi;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	edx = eax;
 	eax = edx + 0x320u;
 	MEM32(edx + 0x2724u) = eax;
@@ -99602,20 +99602,20 @@ uint32_t sub_0013A4E0(uint32_t arg0)
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	eax = MEM32(ecx + 0x2724u);
 	if (eax == 0u)
 		return eax;
@@ -99638,20 +99638,20 @@ uint32_t sub_0013A570(uint32_t arg0, uint32_t arg1)
 
 	eax = arg0;
 	ebx = 0u;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == ebx || (eax & ~0xFFFFFFu) != 0u)
 			ecx = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ecx = eax;
 		}
 	}
 	else
-		ecx = MEM32(0x2BF1C0u);
+		ecx = vcObjectCacheData;
 	eax = arg1;
 	if (eax == ebx || ecx == ebx)
 	{
@@ -99693,9 +99693,9 @@ uint32_t sub_0013A650(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + 0x2720u);
+		eax = MEM32(vcObjectCacheData + 0x2720u);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -99703,9 +99703,9 @@ uint32_t sub_0013A650(uint32_t arg0)
 		eax = MEM32(0x2720u);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + 0x2720u);
 	return eax;
 }
@@ -99715,19 +99715,19 @@ uint32_t sub_0013A6B0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0x473Cu) = arg1;
 	MEM32(eax + 0x4740u) = arg2;
 	return eax;
@@ -99868,19 +99868,19 @@ uint32_t vcObject_GetSize(uint32_t arg1, uint32_t arg2)
 	saved_arg2 = arg2;
 	ebp = arg1;
 	eax = MEM32(ebp + 0xBCu);
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
 			eax = 0u;
 			return eax;
 		}
-		MEM32(0x2BF2E0u) = eax;
+		vcObjectCacheHandle = eax;
 		eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -99921,27 +99921,27 @@ uint32_t sub_0013AEF0(uint32_t arg0, uint32_t arg3)
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0;
 
 	eax = arg0;
-	ecx = MEM32(0x2BF2E0u);
+	ecx = vcObjectCacheHandle;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			edi = 0u;
 		}
 		else
 		{
 			ecx = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			edi = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		edi = eax;
 	}
 	edx = arg3;
@@ -99950,9 +99950,9 @@ uint32_t sub_0013AEF0(uint32_t arg0, uint32_t arg3)
 		if (edx == 0u || (edx & ~0xFFFFFFu) != 0u)
 			return eax;
 		ecx = MEM32((edx >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = edx;
+		vcObjectCacheHandle = edx;
 		eax = MEM32((edx & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 	}
 	if (eax == 0u || (MEM8(eax + 0x2Cu) & 1u) == 0u || (MEM8(edi + 0x90u) & 2u) != 0u)
 		return eax;
@@ -99983,9 +99983,9 @@ uint32_t sub_0013AFD0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		MEM32(arg1) = MEM32(0x2BF1C0u) + 0x1F4u;
+		MEM32(arg1) = vcObjectCacheData + 0x1F4u;
 		eax = 3u;
 		return eax;
 	}
@@ -99995,9 +99995,9 @@ uint32_t sub_0013AFD0(uint32_t arg0, uint32_t arg1)
 		eax = 3u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(arg1) = eax + 0x1F4u;
 	eax = 3u;
 	return eax;
@@ -100008,9 +100008,9 @@ uint32_t sub_0013B050(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		MEM32(arg1) = MEM32(0x2BF1C0u) + 0x1E8u;
+		MEM32(arg1) = vcObjectCacheData + 0x1E8u;
 		eax = 3u;
 		return eax;
 	}
@@ -100020,9 +100020,9 @@ uint32_t sub_0013B050(uint32_t arg0, uint32_t arg1)
 		eax = 3u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(arg1) = eax + 0x1E8u;
 	eax = 3u;
 	return eax;
@@ -100035,7 +100035,7 @@ uint32_t sub_0013B220(uint32_t arg0, uint32_t arg1)
 
 	stack_200000 = arg0;
 	eax = stack_200000;
-	ecx = MEM32(0x2BF2E0u);
+	ecx = vcObjectCacheHandle;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -100044,20 +100044,20 @@ uint32_t sub_0013B220(uint32_t arg0, uint32_t arg1)
 		{
 			ecx = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ecx;
+			vcObjectCacheHandle = ecx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	if (edi != ecx && edi != 0u && (edi & ~0xFFFFFFu) == 0u)
 	{
 		ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = edi;
-		MEM32(0x2BF1C0u) = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
+		vcObjectCacheHandle = edi;
+		vcObjectCacheData = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
 	}
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x0013B2B5u, 1, arg0_2);
@@ -100072,19 +100072,19 @@ uint32_t sub_0013B220(uint32_t arg0, uint32_t arg1)
 	MEM32(esi + 0xBCu) = edi;
 	if (edi != 0u)
 	{
-		if (edi != MEM32(0x2BF2E0u))
+		if (edi != vcObjectCacheHandle)
 		{
 			if ((edi & ~0xFFFFFFu) != 0u)
 				edi = 0u;
 			else
 			{
-				MEM32(0x2BF2E0u) = edi;
+				vcObjectCacheHandle = edi;
 				edi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(MEM32((edi >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-				MEM32(0x2BF1C0u) = edi;
+				vcObjectCacheData = edi;
 			}
 		}
 		else
-			edi = MEM32(0x2BF1C0u);
+			edi = vcObjectCacheData;
 		eax = MEM32(edi + 4u);
 		stack_200000 = eax;
 		if ((int32_t)eax > 8)
@@ -100171,9 +100171,9 @@ void sub_0013B460(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 		edi = arg1;
 		if ((int32_t)edi < (int32_t)MEM32(esi + 0x1E4u))
 		{
@@ -100217,9 +100217,9 @@ void sub_0013B460(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 		}
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	esi = eax;
 	edi = arg1;
 	if ((int32_t)edi < (int32_t)MEM32(esi + 0x1E4u))
@@ -100246,14 +100246,14 @@ void sub_0013B4F0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		ecx = arg1;
 		if ((int32_t)ecx <= (int32_t)MEM32(eax + 0x1E4u))
 		{
 			eax += ecx * 9u * 4u;
-			MEM32(eax + 0xDCu) = MEM32(0x23A48Cu);
+			MEM32(eax + 0xDCu) = vcGameTime;
 			ecx = MEM32(eax + 0xC4u) & ~2u;
 			MEM32(eax + 0xCCu) = 0u;
 			MEM32(eax + 0xC4u) = ecx;
@@ -100267,21 +100267,21 @@ void sub_0013B4F0(uint32_t arg0, uint32_t arg1)
 		if ((int32_t)ecx <= (int32_t)MEM32(eax + 0x1E4u))
 		{
 			eax += ecx * 9u * 4u;
-			MEM32(eax + 0xDCu) = MEM32(0x23A48Cu);
+			MEM32(eax + 0xDCu) = vcGameTime;
 			ecx = MEM32(eax + 0xC4u) & ~2u;
 			MEM32(eax + 0xCCu) = 0u;
 			MEM32(eax + 0xC4u) = ecx;
 		}
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ecx = arg1;
 	if ((int32_t)ecx <= (int32_t)MEM32(eax + 0x1E4u))
 	{
 		eax += ecx * 9u * 4u;
-		MEM32(eax + 0xDCu) = MEM32(0x23A48Cu);
+		MEM32(eax + 0xDCu) = vcGameTime;
 		ecx = MEM32(eax + 0xC4u) & ~2u;
 		MEM32(eax + 0xCCu) = 0u;
 		MEM32(eax + 0xC4u) = ecx;
@@ -100293,9 +100293,9 @@ void sub_0013B570(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		MEM32(MEM32(0x2BF1C0u) + 0x210u) = arg1;
+		MEM32(vcObjectCacheData + 0x210u) = arg1;
 		return;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -100303,9 +100303,9 @@ void sub_0013B570(uint32_t arg0, uint32_t arg1)
 		MEM32(0x210u) = arg1;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0x210u) = arg1;
 }
 
@@ -100314,9 +100314,9 @@ void sub_0013B5E0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		MEM32(MEM32(0x2BF1C0u) + 0x200u) = arg1;
+		MEM32(vcObjectCacheData + 0x200u) = arg1;
 		return;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -100324,9 +100324,9 @@ void sub_0013B5E0(uint32_t arg0, uint32_t arg1)
 		MEM32(0x200u) = arg1;
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0x200u) = arg1;
 }
 
@@ -100335,19 +100335,19 @@ void sub_0013B650(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0x204u) = arg1;
 	MEM32(eax + 0x208u) = arg2;
 	MEM32(eax + 0x20Cu) = arg3;
@@ -100358,21 +100358,21 @@ uint32_t sub_0013B6C0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	MEM32(eax + 0x1E0u) = MEM32(eax + 0x1E0u) | 0x10u;
-	MEM32(eax + 0x214u) = MEM32(0x23A48Cu);
+	MEM32(eax + 0x214u) = vcGameTime;
 	MEM32(eax + 0x218u) = arg1;
 	return eax;
 }
@@ -100382,9 +100382,9 @@ uint32_t sub_0013B730(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		MEM32(eax + 0x1E0u) = MEM32(eax + 0x1E0u) & ~0x10u;
 		return eax;
 	}
@@ -100394,9 +100394,9 @@ uint32_t sub_0013B730(uint32_t arg0)
 		MEM32(0x1E0u) = MEM32(0x1E0u) & ~0x10u;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	MEM32(eax + 0x1E0u) = MEM32(eax + 0x1E0u) & ~0x10u;
 	return eax;
 }
@@ -100408,20 +100408,20 @@ uint32_t vcObject_Copy(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	edx = arg0;
-	if (edx != MEM32(0x2BF2E0u))
+	if (edx != vcObjectCacheHandle)
 	{
 		if (edx == 0u || (edx & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((edx >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			ebx = MEM32((edx & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	ebp = arg1;
 	eax = 0u;
 	x86_rep_movs32(ebx, ebp, 0x87u);
@@ -100549,20 +100549,20 @@ uint32_t sub_0013C310(uint32_t arg0, uint32_t arg1)
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	ebx = arg1;
 	if (ebx == 0u)
 		return eax;
@@ -100675,10 +100675,10 @@ uint32_t sub_0013C450(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored_2 = 0;
 
 	edi = arg0;
-	if (edi == MEM32(0x2BF2E0u))
+	if (edi == vcObjectCacheHandle)
 	{
-		esi = MEM32(0x2BF1C0u);
-		eax = MEM32(0x23A48Cu);
+		esi = vcObjectCacheData;
+		eax = vcGameTime;
 		arg1 = MEM32(esi + 0x104u);
 		arg0_2 = edi;
 		MEM32(esi + 0x114u) = eax;
@@ -100700,7 +100700,7 @@ uint32_t sub_0013C450(uint32_t arg0)
 	if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 	{
 		esi = 0u;
-		eax = MEM32(0x23A48Cu);
+		eax = vcGameTime;
 		arg1 = MEM32(esi + 0x104u);
 		arg0_2 = edi;
 		MEM32(esi + 0x114u) = eax;
@@ -100720,10 +100720,10 @@ uint32_t sub_0013C450(uint32_t arg0)
 		return eax;
 	}
 	ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = edi;
+	vcObjectCacheHandle = edi;
 	esi = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-	MEM32(0x2BF1C0u) = esi;
-	eax = MEM32(0x23A48Cu);
+	vcObjectCacheData = esi;
+	eax = vcGameTime;
 	arg1 = MEM32(esi + 0x104u);
 	arg0_2 = edi;
 	MEM32(esi + 0x114u) = eax;
@@ -100748,20 +100748,20 @@ uint32_t sub_0013C500(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg1;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x0013C555u, 1, arg0_2);
@@ -100785,20 +100785,20 @@ uint32_t vcGeometryTrail_Copy(uint32_t arg0, uint32_t arg1)
 	saved_arg1 = arg1;
 	ebp = arg0;
 	edx = 0u;
-	if (ebp != MEM32(0x2BF2E0u))
+	if (ebp != vcObjectCacheHandle)
 	{
 		if (ebp == edx || (ebp & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((ebp >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = ebp;
+			vcObjectCacheHandle = ebp;
 			ebx = MEM32((ebp & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	eax = arg1;
 	x86_rep_movs32(ebx, eax, 0x4Du);
 	MEM32(ebx + 0x110u) = edx;
@@ -101153,20 +101153,20 @@ uint32_t sub_0013D190(uint32_t arg0, uint32_t arg1)
 	uint32_t saved_eax = 0;
 
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			ebx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	saved_eax = eax;
 	arg0_2 = arg1;
 	eax = x86_call(vcObjectGetName_entry, 0x0013D1E9u, 1, arg0_2);
@@ -101594,20 +101594,20 @@ uint32_t sub_0013EE70(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	edi = arg0;
-	if (edi != MEM32(0x2BF2E0u))
+	if (edi != vcObjectCacheHandle)
 	{
 		if (edi == 0u || (edi & ~0xFFFFFFu) != 0u)
 			ebx = 0u;
 		else
 		{
 			ecx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edi;
+			vcObjectCacheHandle = edi;
 			ebx = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = ebx;
+			vcObjectCacheData = ebx;
 		}
 	}
 	else
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 	arg0_2 = MEM32(ebx);
 	x86_call(vcObjectRelease_entry, 0x0013EEC9u, 1, arg0_2);
 	ignored = g_eax;
@@ -101619,9 +101619,9 @@ uint32_t sub_0013EE70(uint32_t arg0, uint32_t arg1)
 	eax = g_eax;
 	ignored_3 = g_edx;
 	MEM32(ebx) = eax;
-	if (esi == MEM32(0x2BF2E0u))
+	if (esi == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		if (eax != 0u)
 			MEM32(eax + 0x60u) = MEM32(eax + 0x60u) | 0x6000000u;
 		arg0_2 = edi;
@@ -101638,9 +101638,9 @@ uint32_t sub_0013EE70(uint32_t arg0, uint32_t arg1)
 		ignored_2 = g_ecx;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = esi;
+	vcObjectCacheHandle = esi;
 	eax = MEM32((esi & 0xFFFFu) * 0x4Cu + MEM32(MEM32((esi >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	if (eax != 0u)
 		MEM32(eax + 0x60u) = MEM32(eax + 0x60u) | 0x6000000u;
 	arg0_2 = edi;
@@ -101656,10 +101656,10 @@ uint32_t sub_0013EF40(uint32_t arg0, uint32_t arg1)
 	uint32_t saved_eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
 		saved_eax = eax;
-		MEM32(MEM32(0x2BF1C0u) + 4u) = arg1;
+		MEM32(vcObjectCacheData + 4u) = arg1;
 		arg0_2 = saved_eax;
 		x86_call(vcObjectMarkChanged_entry, 0x0013EF5Fu, 1, arg0_2);
 		eax = g_eax;
@@ -101677,9 +101677,9 @@ uint32_t sub_0013EF40(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	saved_eax = eax;
 	MEM32(ecx + 4u) = arg1;
 	arg0_2 = saved_eax;
@@ -101695,10 +101695,10 @@ uint32_t sub_0013EFC0(uint32_t arg0, uint32_t arg1)
 	uint32_t saved_eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
 		saved_eax = eax;
-		MEM32(MEM32(0x2BF1C0u) + 8u) = arg1;
+		MEM32(vcObjectCacheData + 8u) = arg1;
 		arg0_2 = saved_eax;
 		x86_call(vcObjectMarkChanged_entry, 0x0013EFDFu, 1, arg0_2);
 		eax = g_eax;
@@ -101716,9 +101716,9 @@ uint32_t sub_0013EFC0(uint32_t arg0, uint32_t arg1)
 		return eax;
 	}
 	edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	ecx = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-	MEM32(0x2BF1C0u) = ecx;
+	vcObjectCacheData = ecx;
 	saved_eax = eax;
 	MEM32(ecx + 8u) = arg1;
 	arg0_2 = saved_eax;
@@ -101810,20 +101810,20 @@ uint32_t sub_0013F310(uint32_t arg0, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edx = MEM32(esi + 0x3Cu);
 	arg0_2 = edx;
 	g_edx = edx;
@@ -102105,20 +102105,20 @@ uint32_t sub_0013F770(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edx = MEM32(esi + 0x14u);
 	arg0_2 = edx;
 	g_edx = edx;
@@ -102163,21 +102163,21 @@ uint32_t sub_0013F820(uint32_t edx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
 	eax = stack_200000;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			edx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			ebp = eax;
 		}
 	}
 	else
-		ebp = MEM32(0x2BF1C0u);
+		ebp = vcObjectCacheData;
 	esi = MEM32(ebp + 0x10u);
 	edi = 0u;
 	if (esi == 0u)
@@ -102282,19 +102282,19 @@ uint32_t sub_0013F910(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			eax = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 		}
 	}
 	else
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 	edi = arg4;
 	arg0_2 = edi;
 	esi = arg1 * 0x2Cu + MEM32(eax + 0x10u);
@@ -102329,11 +102329,11 @@ uint32_t sub_0013F910(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 		MEM32(esi + 8u) = 0u;
 		return eax;
 	}
-	if (edi != MEM32(0x2BF2E0u) && (edi & ~0xFFFFFFu) == 0u)
+	if (edi != vcObjectCacheHandle && (edi & ~0xFFFFFFu) == 0u)
 	{
 		edx = MEM32((edi >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = edi;
-		MEM32(0x2BF1C0u) = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
+		vcObjectCacheHandle = edi;
+		vcObjectCacheData = MEM32((edi & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 	}
 	MEM32(esi + 4u) = saved_arg2;
 	eax = MEM32(esi + 8u);
@@ -102745,9 +102745,9 @@ uint32_t vcMaterial_Copy(uint32_t arg0, uint32_t arg1)
 	uint32_t t1 = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		ebx = MEM32(0x2BF1C0u);
+		ebx = vcObjectCacheData;
 		x86_rep_movs32(ebx, arg1, 0x2Cu);
 		esi = ebx + 0x50u;
 		edi = 4u;
@@ -102783,9 +102783,9 @@ uint32_t vcMaterial_Copy(uint32_t arg0, uint32_t arg1)
 		eax = ebx;
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	ebx = eax;
 	x86_rep_movs32(ebx, arg1, 0x2Cu);
 	esi = ebx + 0x50u;
@@ -102811,20 +102811,20 @@ uint32_t sub_00140610(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 	saved_arg1 = arg1;
 	eax = arg0;
-	if (eax != MEM32(0x2BF2E0u))
+	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			esi = 0u;
 		else
 		{
-			MEM32(0x2BF2E0u) = eax;
+			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			esi = eax;
 		}
 	}
 	else
-		esi = MEM32(0x2BF1C0u);
+		esi = vcObjectCacheData;
 	edi = arg2;
 	arg0_2 = edi;
 	x86_call(vcObjectAddRef_entry, 0x00140666u, 1, arg0_2);
@@ -102846,18 +102846,18 @@ uint32_t sub_00140680(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		if (eax != 0u)
 			MEM32(eax + 0x30u) = arg1;
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		return eax;
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	if (eax != 0u)
 		MEM32(eax + 0x30u) = arg1;
 	return eax;
@@ -102868,9 +102868,9 @@ uint32_t sub_001406D0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if (eax == MEM32(0x2BF2E0u))
+	if (eax == vcObjectCacheHandle)
 	{
-		eax = MEM32(MEM32(0x2BF1C0u) + arg1 * 4u + 0x50u);
+		eax = MEM32(vcObjectCacheData + arg1 * 4u + 0x50u);
 		return eax;
 	}
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
@@ -102878,9 +102878,9 @@ uint32_t sub_001406D0(uint32_t arg0, uint32_t arg1)
 		eax = MEM32(arg1 * 4u + 0x50u);
 		return eax;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu));
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	eax = MEM32(eax + arg1 * 4u + 0x50u);
 	return eax;
 }
@@ -102945,7 +102945,7 @@ void sub_001414F0(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0;
 
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	esi = arg1 * 0x138u;
 	edi = MEM32(arg0 + 0xCCu);
 	eax = MEM32(esi + edi);
@@ -102953,7 +102953,7 @@ void sub_001414F0(uint32_t arg0, uint32_t arg1)
 	ecx = 0u;
 	if (eax == edx)
 	{
-		edi = MEM32(0x2BF1C0u);
+		edi = vcObjectCacheData;
 		MEM32(esi + 0x130u) = ecx;
 		MEM32(esi + 0x134u) = ecx;
 		if ((MEM8(edi) & 1u) != 0u)
@@ -103003,10 +103003,10 @@ void sub_001414F0(uint32_t arg0, uint32_t arg1)
 		}
 		return;
 	}
-	MEM32(0x2BF2E0u) = eax;
+	vcObjectCacheHandle = eax;
 	edx = MEM32(MEM32((eax >> 16) * 4u + 0x2BF1E0u) + 0x6Cu);
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + edx);
-	MEM32(0x2BF1C0u) = eax;
+	vcObjectCacheData = eax;
 	edi = eax;
 	MEM32(esi + 0x130u) = ecx;
 	MEM32(esi + 0x134u) = ecx;
@@ -103147,29 +103147,29 @@ uint32_t sub_001463B0(uint32_t arg0, uint32_t arg1)
 
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
-	edx = MEM32(0x2BF2E0u);
+	edx = vcObjectCacheHandle;
 	ebp = arg1;
 	eax = MEM32(ebp + 0x40u);
 	if (eax != edx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 		{
-			eax = MEM32(0x2BF1C0u);
+			eax = vcObjectCacheData;
 			stack_C = 0u;
 		}
 		else
 		{
 			edx = eax;
 			ecx = MEM32((eax >> 16) * 4u + 0x2BF1E0u);
-			MEM32(0x2BF2E0u) = edx;
+			vcObjectCacheHandle = edx;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
-			MEM32(0x2BF1C0u) = eax;
+			vcObjectCacheData = eax;
 			stack_C = eax;
 		}
 	}
 	else
 	{
-		eax = MEM32(0x2BF1C0u);
+		eax = vcObjectCacheData;
 		stack_C = eax;
 	}
 	ecx = MEM32(stack_C + 0xBCu);
@@ -103182,9 +103182,9 @@ uint32_t sub_001463B0(uint32_t arg0, uint32_t arg1)
 			return eax;
 		edx = ecx;
 		eax = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
-		MEM32(0x2BF2E0u) = edx;
+		vcObjectCacheHandle = edx;
 		eax = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(eax + 0x6Cu));
-		MEM32(0x2BF1C0u) = eax;
+		vcObjectCacheData = eax;
 	}
 	ebx = eax;
 	if (ebx == 0u)
@@ -103195,10 +103195,10 @@ uint32_t sub_001463B0(uint32_t arg0, uint32_t arg1)
 	{
 		if (ecx == 0u || (ecx & ~0xFFFFFFu) != 0u)
 			return eax;
-		MEM32(0x2BF2E0u) = ecx;
+		vcObjectCacheHandle = ecx;
 		eax = MEM32((ecx >> 16) * 4u + 0x2BF1E0u);
 		ecx = MEM32((ecx & 0xFFFFu) * 0x4Cu + MEM32(eax + 0x6Cu));
-		MEM32(0x2BF1C0u) = ecx;
+		vcObjectCacheData = ecx;
 		ebp = ecx;
 	}
 	else

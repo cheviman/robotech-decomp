@@ -11,8 +11,9 @@ Author:      Sebastian Toyos
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
 memory and the x86's effects. The game's memory is the guest's, the one the recompiled C reads and
 writes: MEM8, MEM16 and MEM32 of an address (xboxrecomp's recomp_types.h), so that the C and the
-recompiled code share it. No variable or structure has a name in it yet (symbols.txt's var and struct
-lines will). The string instructions' effects and the 64-bit divisions print as the calls of x86.h
+recompiled code share it. A place symbols.txt names goes by that name, as symbols.h spells it
+(GuestNames: vcGameTime, D3D__TextureState(3), MEM32(vcDataDir_VA + 0x4u)); no structure's field has a
+name in the C yet. The string instructions' effects and the 64-bit divisions print as the calls of x86.h
 (x86_rep_stos32, x86_udiv64...). A call of a function that stays recompiled goes as the recompiled code
 makes it: the registers it reads in the globals g_eax..., its arguments on the guest's stack
 (x86_call), what it hands back read from the globals after.
@@ -76,11 +77,54 @@ def use_memory_map():
     pointers.PAGED = False
 
 
+INTEGER_TYPES = {"u8": (8, False), "s8": (8, True), "u16": (16, False), "s16": (16, True),
+                 "u32": (32, False), "s32": (32, True)}
+TYPE_BYTES = {"u8": 1, "s8": 1, "u16": 2, "s16": 2, "u32": 4, "s32": 4, "f32": 4, "f64": 8, "char": 1}
+
+
+class GuestNames:
+    """The game's memory by the names symbols.txt gives it, as symbols.h spells them for C (tools/symbols.py
+    header): a variable NAME, an element of one NAME(i), and any other place in one, or at a data label,
+    by its address NAME_VA. 'variables': {address: (name, type, count: None for one, -1 for an array of a
+    count not given)}; 'labels': {address: name}."""
+
+    def __init__(self, variables, labels):
+        self.variables = variables
+        self.labels = labels
+        self.starts = sorted(variables)
+
+    def place(self, address, bits):
+        """(C text, signed) of the memory at a constant address 'bits' wide, or None."""
+        import bisect
+        position = bisect.bisect_right(self.starts, address) - 1
+        if position >= 0:
+            start = self.starts[position]
+            name, kind, count = self.variables[start]
+            size = TYPE_BYTES[kind]
+            offset = address - start
+            # an array of a count not given (-1) goes on up to the next variable
+            end = (self.starts[position + 1] if position + 1 < len(self.starts) else start + 0x10000) \
+                if count == -1 else start + size * (count or 1)
+            if address < end:
+                integer = INTEGER_TYPES.get(kind)
+                if integer is not None and integer[0] == bits and offset % size == 0:
+                    return (f"{name}({offset // size})" if count else name), integer[1]
+                return f"MEM{bits}({name}_VA + 0x{offset:X}u)" if offset else f"MEM{bits}({name}_VA)", False
+        if address in self.labels:
+            return f"MEM{bits}({self.labels[address]}_VA)", False
+        return None
+
+
 class X86Names(emit.Names):
     def memory(self, load):
         found = super().memory(load)
         if found is not None:
             return found
+        guest = getattr(self.writer.emitter, "guest", None)
+        if guest is not None and isinstance(load.address, ir.Const):
+            named = guest.place(load.address.value & 0xFFFFFFFF, load.bits)
+            if named is not None:
+                return named
         return f"MEM{load.bits}({self.writer.exact(load.address)})", False
 
 
@@ -157,6 +201,11 @@ class X86Writer(emit.FunctionWriter):
             target = self.memory(statement.address, statement.bits, id(statement))
             if target is not None and target[2]:
                 return [self.assignment(target[0], statement, target[1])]
+            guest = getattr(self.emitter, "guest", None)
+            if guest is not None and isinstance(statement.address, ir.Const):
+                named = guest.place(statement.address.value & 0xFFFFFFFF, statement.bits)
+                if named is not None:
+                    return [f"{named[0]} = {self.stored(statement.value, statement.bits)};"]
             return [f"MEM{statement.bits}({self.exact(statement.address)}) = "
                     f"{self.stored(statement.value, statement.bits)};"]
         return super().statement(statement)
@@ -178,6 +227,7 @@ class X86Emitter(emit.Emitter):
         self.saved_locals = True
         self.flow = None
         self.recompiled = set()     # the functions called that stay recompiled (decompile.py)
+        self.guest = None           # the game's memory by name (GuestNames, decompile.py)
 
     def restores_current(self, entry):
         return None, None

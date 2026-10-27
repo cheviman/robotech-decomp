@@ -309,7 +309,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   registers kept as variables by their names (23.3 a function, 17.6 before the bridge: each call of
   recompiled code hands its registers in and reads its results back by the globals), 666 flags,
   32,675 parameters named arg0 up (12.5 a function, 4.3 before: the arguments of every x86_call), 2,968
-  stack slots named by their offset, 13,918 reads and writes at a raw address (5.3 a function, 7.4
+  stack slots named by their offset, 11,760 reads and writes at a raw address (4.5 a function, 7.4
   before).
 - **The comparisons back** (27-10-2026): flags 12,171 to 664. The lifter binds the registers an
   instruction that sets the flags reads to temporaries (`Lifter.operand`), as the V60's does, so the
@@ -328,9 +328,16 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   edx; call calloc" is `arg1_2 = 4u; arg0_2 = edx;`, not two slots the call reads after. Left: the
   arguments of a call as their own variables (arg0_2 = edx; then the call), 32,675 of them with the
   parameters, since the core's calls read their registers implicitly: putting the values into the call
-  needs calls with their arguments as expressions in tools/core, which SegaSonic shares. Next:
-  parameters, locals and the game's variables named from `symbols.txt`; the functions written by hand
-  calling the decompiled ones directly; the x87.
+  needs calls with their arguments as expressions in tools/core, which SegaSonic shares.
+- **The game's variables by name in the decompiled C** (27-10-2026): reads and writes at a raw address
+  13,918 to 11,760. A place `symbols.txt` names goes by the name `symbols.h` gives it (`emit.GuestNames`):
+  `GameObjectTime = vcGameTime;`, an element of an array `D3D__TextureState(3)`, any other place in a
+  variable or at a data label by its address, `MEM32(vcDataDir_VA + 0x4u)`; a float or a string by its
+  address too, since their C types are no integers. Left: the 11,760 at places of `.data` nothing names
+  yet (about 10,000 addresses, most read or written once: structures the game keeps in place, set up
+  field by field), which want `var` and `struct` lines. Next: parameters and locals named from
+  `symbols.txt` (param and local lines, as SegaSonic's); the functions written by hand calling the
+  decompiled ones directly; the x87.
 
 ## Dead hypotheses
 
