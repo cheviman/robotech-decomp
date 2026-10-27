@@ -1,0 +1,847 @@
+diff --git a/hw/xbox/nv2a/pgraph/gl/renderer.c b/hw/xbox/nv2a/pgraph/gl/renderer.c
+index e9e2109..04f81d5 100644
+--- a/hw/xbox/nv2a/pgraph/gl/renderer.c
++++ b/hw/xbox/nv2a/pgraph/gl/renderer.c
+@@ -23,6 +23,7 @@
+ #include "hw/xbox/nv2a/pgraph/pgraph.h"
+ #include "debug.h"
+ #include "renderer.h"
++#include "ui/xemu-reference.h"
+ 
+ GloContext *g_nv2a_context_render;
+ GloContext *g_nv2a_context_display;
+@@ -99,10 +100,44 @@ static void pgraph_gl_finalize(NV2AState *d)
+     pg->gl_renderer_state = NULL;
+ }
+ 
++/* A reference run's frame (xemu-reference.c): the colour surface the game just drew, or else the one
++ * the display shows, read back whole. */
++static void reference_dump(NV2AState *d, uint32_t frame)
++{
++    PGRAPHGLState *r = d->pgraph.gl_renderer_state;
++    SurfaceBinding *surface = r->color_binding;
++    GLint width = 0, height = 0;
++    uint8_t *pixels;
++
++    if (surface == NULL || !surface->color) {
++        VGADisplayParams params;
++        d->vga.get_params(&d->vga, &params);
++        surface = pgraph_gl_surface_get_within(d, d->pcrtc.start + params.line_offset);
++    }
++    if (surface == NULL || !surface->color) {
++        return;
++    }
++    glBindTexture(GL_TEXTURE_2D, surface->gl_buffer);
++    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
++    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
++    if (width <= 0 || height <= 0) {
++        return;
++    }
++    pixels = g_malloc((size_t)width * height * 4);
++    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
++    xemu_reference_dump(frame, width, height, pixels, false);
++    g_free(pixels);
++}
++
+ static void pgraph_gl_flip_stall(NV2AState *d)
+ {
++    uint32_t frame;
++
+     NV2A_GL_DFRAME_TERMINATOR();
+     glFinish();
++    if (xemu_reference_flip(&frame)) {
++        reference_dump(d, frame);
++    }
+ }
+ 
+ static void pgraph_gl_flush(NV2AState *d)
+diff --git a/hw/xbox/xid.c b/hw/xbox/xid.c
+index 396d811..25acfba 100644
+--- a/hw/xbox/xid.c
++++ b/hw/xbox/xid.c
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include "xid.h"
++#include "ui/xemu-reference.h"
+ 
+ /*
+  * http://xbox-linux.cvs.sourceforge.net/viewvc/xbox-linux/kernel-2.6/drivers/usb/input/xpad.c
+@@ -101,6 +102,7 @@ void update_input(USBXIDGamepadState *s)
+     s->in_state.sThumbLY = state->axis[CONTROLLER_AXIS_LSTICK_Y];
+     s->in_state.sThumbRX = state->axis[CONTROLLER_AXIS_RSTICK_X];
+     s->in_state.sThumbRY = state->axis[CONTROLLER_AXIS_RSTICK_Y];
++    xemu_reference_report(s->device_index, s->in_state.wButtons, s->in_state.bAnalogButtons[GAMEPAD_A]);
+ }
+ 
+ void usb_xid_handle_reset(USBDevice *dev)
+diff --git a/scripts/symlink-install-tree.py b/scripts/symlink-install-tree.py
+index b725638..cf9ad6f 100644
+--- a/scripts/symlink-install-tree.py
++++ b/scripts/symlink-install-tree.py
+@@ -14,23 +14,39 @@ def destdir_join(d1: str, d2: str) -> str:
+     # c:\destdir + c:\prefix must produce c:\destdir\prefix
+     return str(PurePath(d1, *PurePath(d2).parts[1:]))
+ 
+-introspect = os.environ.get('MESONINTROSPECT')
+-out = subprocess.run([*shlex.split(introspect), '--installed'],
+-                     stdout=subprocess.PIPE, check=True).stdout
+-for source, dest in json.loads(out).items():
+-    bundle_dest = destdir_join('qemu-bundle', dest)
+-    path = os.path.dirname(bundle_dest)
+-    try:
+-        os.makedirs(path, exist_ok=True)
+-    except BaseException as e:
+-        print(f'error making directory {path}', file=sys.stderr)
+-        raise e
+-    try:
+-        os.symlink(source, bundle_dest)
+-    except BaseException as e:
+-        if not isinstance(e, OSError) or e.errno != errno.EEXIST:
+-            if os.name == 'nt':
+-                print('Please enable Developer Mode to support soft link '
+-                      'without Administrator permission')
++def main():
++    introspect = os.environ.get('MESONINTROSPECT')
++    out = subprocess.run([*shlex.split(introspect), '--installed'],
++                         stdout=subprocess.PIPE, check=True).stdout
++    for source, dest in json.loads(out).items():
++        bundle_dest = destdir_join('qemu-bundle', dest)
++        path = os.path.dirname(bundle_dest)
++        try:
++            os.makedirs(path, exist_ok=True)
++        except BaseException as e:
++            print(f'error making directory {path}', file=sys.stderr)
++            raise e
++        try:
++            os.symlink(source, bundle_dest)
++        except OSError as e:
++            if e.errno == errno.EEXIST:
++                continue
++            if os.name == 'nt' and os.path.exists(source):
++                # no symbolic links without Developer Mode: a copy does for running from the build tree
++                import shutil
++                if os.path.isdir(source):
++                    shutil.copytree(source, bundle_dest, dirs_exist_ok=True)
++                else:
++                    shutil.copyfile(source, bundle_dest)
++                continue
+             print(f'error making symbolic link {dest}', file=sys.stderr)
+             raise e
++
++
++try:
++    main()
++except Exception as e:
++    # the bundle only serves running from the build tree: a Windows without Developer Mode goes on
++    print(f'qemu-bundle not made: {e!r}', file=sys.stderr)
++    if os.name != 'nt':
++        raise
+diff --git a/target/i386/helper.h b/target/i386/helper.h
+index dde92f2..fa569e0 100644
+--- a/target/i386/helper.h
++++ b/target/i386/helper.h
+@@ -71,6 +71,9 @@ DEF_HELPER_1(rechecking_single_step, void, env)
+ DEF_HELPER_1(cpuid, void, env)
+ DEF_HELPER_FLAGS_1(rdpid, TCG_CALL_NO_WG, tl, env)
+ DEF_HELPER_1(rdtsc, void, env)
++#ifdef XBOX
++DEF_HELPER_1(xemu_reference_hook, void, env)
++#endif
+ DEF_HELPER_FLAGS_1(rdpmc, TCG_CALL_NO_WG, noreturn, env)
+ 
+ #ifndef CONFIG_USER_ONLY
+diff --git a/target/i386/tcg/misc_helper.c b/target/i386/tcg/misc_helper.c
+index 2b5f092..f477e47 100644
+--- a/target/i386/tcg/misc_helper.c
++++ b/target/i386/tcg/misc_helper.c
+@@ -23,6 +23,10 @@
+ #include "exec/helper-proto.h"
+ #include "exec/cputlb.h"
+ #include "helper-tcg.h"
++#ifdef XBOX
++#include "accel/tcg/cpu-ldst.h"
++#include "ui/xemu-reference.h"
++#endif
+ 
+ /*
+  * NOTE: the translator must set DisasContext.cc_op to CC_OP_EFLAGS
+@@ -75,6 +79,62 @@ void helper_rdtsc(CPUX86State *env)
+     env->regs[R_EDX] = (uint32_t)(val >> 32);
+ }
+ 
++#ifdef XBOX
++/*
++ * A reference run's hook at the instruction about to run (ui/xemu-reference.c): a present counted, or
++ * the game's function answered as the port answers it and returned from, its stdcall arguments popped.
++ */
++void helper_xemu_reference_hook(CPUX86State *env)
++{
++    uintptr_t ra = GETPC();
++    uint32_t esp = env->regs[R_ESP];
++    uint32_t out, pop;
++    uint64_t value;
++    uint8_t state[XEMU_REFERENCE_PAD_STATE];
++
++    switch (xemu_reference_hook_at(env->eip)) {
++    case XEMU_REFERENCE_HOOK_SWAP:
++        xemu_reference_swap();
++        return;
++    case XEMU_REFERENCE_HOOK_COUNTER:
++        value = xemu_reference_counter();
++        out = cpu_ldl_data_ra(env, esp + 4, ra);
++        if (out) {
++            cpu_stq_data_ra(env, out, value, ra);
++        }
++        env->regs[R_EAX] = 1;
++        pop = 4;
++        break;
++    case XEMU_REFERENCE_HOOK_TICKS:
++        env->regs[R_EAX] = xemu_reference_ticks();
++        pop = 0;
++        break;
++    case XEMU_REFERENCE_HOOK_DATE:
++        value = xemu_reference_date();
++        out = cpu_ldl_data_ra(env, esp + 4, ra);
++        if (out) {
++            cpu_stq_data_ra(env, out, value, ra);
++        }
++        pop = 4;
++        break;
++    case XEMU_REFERENCE_HOOK_PAD:
++        xemu_reference_pad_state(state);
++        out = cpu_ldl_data_ra(env, esp + 8, ra);
++        for (int i = 0; out && i < XEMU_REFERENCE_PAD_STATE; i++) {
++            cpu_stb_data_ra(env, out + i, state[i], ra);
++        }
++        env->regs[R_EAX] = 0;               /* ERROR_SUCCESS */
++        pop = 8;
++        break;
++    default:
++        return;
++    }
++    env->eip = cpu_ldl_data_ra(env, esp, ra);
++    env->regs[R_ESP] = esp + 4 + pop;
++    cpu_loop_exit(env_cpu(env));
++}
++#endif
++
+ G_NORETURN void helper_rdpmc(CPUX86State *env)
+ {
+     if (((env->cr[4] & CR4_PCE_MASK) == 0 ) &&
+diff --git a/target/i386/tcg/translate.c b/target/i386/tcg/translate.c
+index c753caf..99f3cfe 100644
+--- a/target/i386/tcg/translate.c
++++ b/target/i386/tcg/translate.c
+@@ -35,6 +35,10 @@
+ 
+ #include "exec/log.h"
+ 
++#ifdef XBOX
++#include "ui/xemu-reference.h"
++#endif
++
+ static int g_use_hard_fpu;
+ 
+ #if defined(XBOX) && defined(__x86_64__)
+@@ -4328,6 +4332,22 @@ static void i386_tr_translate_insn(DisasContextBase *dcbase, CPUState *cpu)
+     }
+ #endif
+ 
++#ifdef XBOX
++    /*
++     * A reference run's hook at this instruction (ui/xemu-reference.c), called before it runs. One that
++     * could reach into the next page is never hooked: its translation can be undone and made again in
++     * the next block, and the hook's code with it.
++     */
++    if (xemu_reference_hook_at(dc->base.pc_next) &&
++        (dc->base.pc_next & ~TARGET_PAGE_MASK) <= TARGET_PAGE_SIZE - 16) {
++        gen_update_cc_op(dc);
++        gen_update_eip_cur(dc);
++        gen_helper_xemu_reference_hook(tcg_env);
++        orig_cc_op_dirty = dc->cc_op_dirty;
++        orig_pc_save = dc->pc_save;
++    }
++#endif
++
+     switch (sigsetjmp(dc->jmpbuf, 0)) {
+     case 0:
+         disas_insn(dc, cpu);
+diff --git a/ui/meson.build b/ui/meson.build
+index ea46bf0..4948f5b 100644
+--- a/ui/meson.build
++++ b/ui/meson.build
+@@ -22,6 +22,7 @@ subdir('thirdparty')
+ xemu_ss = ss.source_set()
+ xemu_ss.add(files(
+   'xemu-input.c',
++  'xemu-reference.c',
+   'xemu-monitor.c',
+   'xemu-net.c',
+   'xemu-settings.cc',
+diff --git a/ui/xemu-input.c b/ui/xemu-input.c
+index 4fbc863..2428ce2 100644
+--- a/ui/xemu-input.c
++++ b/ui/xemu-input.c
+@@ -29,6 +29,7 @@
+ #include "qemu/config-file.h"
+ 
+ #include "xemu-input.h"
++#include "xemu-reference.h"
+ #include "xemu-notifications.h"
+ #include "xemu-settings.h"
+ #include <stdio.h>
+@@ -517,6 +518,8 @@ void xemu_input_update_controller(ControllerState *state)
+     } else if (state->type == INPUT_DEVICE_SDL_GAMEPAD) {
+         xemu_input_update_sdl_controller_state(state);
+     }
++    /* a reference run's pad script, over what the controller holds (xemu-reference.c) */
++    xemu_reference_pad(&state->buttons, state->axis);
+ 
+     state->last_input_updated_ts = qemu_clock_get_us(QEMU_CLOCK_REALTIME);
+ }
+@@ -733,6 +736,7 @@ void xemu_input_bind(int index, ControllerState *state, int save)
+ 
+         bound_controllers[index] = state;
+         bound_controllers[index]->bound = index;
++        xemu_reference_bound(index, state->name);
+ 
+         char *tmp;
+ 
+@@ -959,7 +963,8 @@ void xemu_input_set_test_mode(int enabled)
+ 
+ int xemu_input_get_test_mode(void)
+ {
+-    return test_mode;
++    /* a reference run's pad goes to the game whatever the HUD has in focus (a notification) */
++    return xemu_reference_active() ? 0 : test_mode;
+ }
+ 
+ void xemu_input_reset_input_mapping(ControllerState *state)
+diff --git a/ui/xemu-reference.c b/ui/xemu-reference.c
+new file mode 100644
+index 0000000..6d96aa8
+--- /dev/null
++++ b/ui/xemu-reference.c
+@@ -0,0 +1,440 @@
++/*
++ * xemu as a reference for a game's port: a pad script by frame, the frames dumped, an exit frame, and the
++ * game's clocks and pad answered as the port answers them
++ *
++ * Copyright (c) 2026 Sebastian Toyos
++ *
++ * This program is free software; you can redistribute it and/or modify it under the terms of the
++ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
++ * License, or (at your option) any later version.
++ *
++ * Robotech: Battlecry's port (robotech-decomp) runs its scenarios with a pad script by the frames the
++ * game presents and dumps every K-th frame; this does the same on xemu, so the original's frames are
++ * the reference, as MAME's are for an arcade game's:
++ *
++ *   XEMU_REFERENCE_DIR      where the frames go (fNNNNN.bmp); the run is a reference's when it is set
++ *   XEMU_REFERENCE_SCRIPT   the pad script, as the port's ROBOTECH_PAD_SCRIPT with frames:
++ *                           f<frame>:<button>[+<button>...][:<hold frames>],... (9 frames held by
++ *                           default); a b x y black white lt rt up down left right start back
++ *   XEMU_REFERENCE_DUMP     every how many frames one is dumped (0: none)
++ *   XEMU_REFERENCE_EXIT     the frame the run ends at
++ *   XEMU_REFERENCE_HOOKS    the game's functions answered as the port answers them, name=address,...:
++ *                             swap     its present (D3DDevice_Swap): a frame, counted when it is called
++ *                             counter  QueryPerformanceCounter(pCount): the frames times a sixtieth of a
++ *                                      second at the console's 733,333,333 Hz, never less, and each read
++ *                                      a tenth of a frame on
++ *                             ticks    GetTickCount(): the frames' milliseconds
++ *                             date     GetSystemTimeAsFileTime(pTime): XEMU_REFERENCE_EPOCH (Unix
++ *                                      seconds) plus the frames
++ *                             pad      XInputGetState(hDevice, pState): the pad script, its packet number
++ *                                      moving only when the state does
++ *
++ * A frame dumped is a flip of the GPU (NV097_FLIP_STALL), counted from the flips there were at the game's
++ * first present (the swap hook; the console's start flips some 30 times before it): the n-th flip from
++ * there shows what the n-th present drew, as the port's n-th frame does, while the CPU runs a frame or
++ * two ahead of the GPU. The frame the pad script and the clocks go by is the presents the game
++ * has made, counted at the call (the swap hook) as the port counts them; without the hook, the flips. On
++ * the console the game's engine times itself with the console's time, which goes on while it loads; the
++ * port's scenarios run on a clock tied to the frames instead, and with the hooks the reference runs on
++ * that same clock: the same pad script lands on the same frames, and what the game times comes out the
++ * same in both. Each hook answers the call where it starts (target/i386/tcg/misc_helper.c).
++ */
++#include "qemu/osdep.h"
++#include "qemu/atomic.h"
++#include "qemu/bswap.h"
++#include "system/runstate.h"
++#include "ui/xemu-input.h"
++#include "ui/xemu-reference.h"
++
++#define SCRIPT_MAX        512
++#define HOOKS_MAX         8
++#define COUNTER_HZ        733333333ull                  /* the console's rdtsc, QueryPerformanceFrequency */
++#define FRAME_TICKS       (COUNTER_HZ / 60u)
++#define READ_TICKS        (FRAME_TICKS / 10u)
++#define FILETIME_EPOCH    11644473600ull                /* seconds from 1601 to 1970 */
++#define FILETIME_HZ       10000000ull                   /* 100 ns units */
++
++typedef struct {
++    uint32_t at, hold;
++    uint32_t buttons;           /* the controller's (CONTROLLER_BUTTON_*), for the emulated USB pad */
++    bool ltrig, rtrig;
++    uint16_t digital;           /* XINPUT_GAMEPAD's wButtons and bAnalogButtons, for the pad hook */
++    uint8_t analog[8];
++} Step;
++
++static const char *dump_dir;
++static uint32_t dump_every, exit_frame;
++static uint64_t epoch;
++static Step script[SCRIPT_MAX];
++static int script_len;
++static struct { uint32_t address; int hook; } hooks[HOOKS_MAX];
++static int hook_count;
++static bool counting_swaps;     /* a swap hook: the frames are the presents */
++static uint32_t flips, swaps;
++static int64_t first_present = -1;  /* the flips there were at the game's first present */
++static uint64_t counter;        /* the counter's last value read */
++static FILE *log_file;          /* XEMU_REFERENCE_DIR/reference.log: a program with a window has no stderr */
++static uint32_t reads;
++static int pressed_logged;
++
++static void say(const char *format, ...) G_GNUC_PRINTF(1, 2);
++static void say(const char *format, ...)
++{
++    va_list args;
++
++    if (!log_file) {
++        return;
++    }
++    va_start(args, format);
++    vfprintf(log_file, format, args);
++    va_end(args);
++    fflush(log_file);
++}
++
++static void load_script(const char *spec)
++{
++    static const struct {
++        const char *name;
++        uint32_t bit;
++        int trigger;
++        uint16_t digital;
++        int analog;
++    } names[] = {
++        { "up", CONTROLLER_BUTTON_DPAD_UP, 0, 0x0001, -1 },
++        { "down", CONTROLLER_BUTTON_DPAD_DOWN, 0, 0x0002, -1 },
++        { "left", CONTROLLER_BUTTON_DPAD_LEFT, 0, 0x0004, -1 },
++        { "right", CONTROLLER_BUTTON_DPAD_RIGHT, 0, 0x0008, -1 },
++        { "start", CONTROLLER_BUTTON_START, 0, 0x0010, -1 },
++        { "back", CONTROLLER_BUTTON_BACK, 0, 0x0020, -1 },
++        { "a", CONTROLLER_BUTTON_A, 0, 0, 0 }, { "b", CONTROLLER_BUTTON_B, 0, 0, 1 },
++        { "x", CONTROLLER_BUTTON_X, 0, 0, 2 }, { "y", CONTROLLER_BUTTON_Y, 0, 0, 3 },
++        { "black", CONTROLLER_BUTTON_BLACK, 0, 0, 4 }, { "white", CONTROLLER_BUTTON_WHITE, 0, 0, 5 },
++        { "lt", 0, 1, 0, 6 }, { "rt", 0, 2, 0, 7 },
++    };
++    char *buf = g_strdup(spec), *entry, *save = NULL;
++
++    for (entry = strtok_r(buf, ",", &save); entry && script_len < SCRIPT_MAX;
++         entry = strtok_r(NULL, ",", &save)) {
++        char *colon = strchr(entry, ':'), *btn, *hold, *plus;
++        Step *step = &script[script_len];
++
++        if (!colon || entry[0] != 'f') {
++            continue;
++        }
++        memset(step, 0, sizeof(*step));
++        step->at = strtoul(entry + 1, NULL, 10);
++        btn = colon + 1;
++        hold = strchr(btn, ':');
++        step->hold = hold ? strtoul(hold + 1, NULL, 10) : 9;
++        if (hold) {
++            *hold = 0;
++        }
++        for (; btn && *btn; btn = plus ? plus + 1 : NULL) {
++            plus = strchr(btn, '+');
++            if (plus) {
++                *plus = 0;
++            }
++            for (size_t k = 0; k < G_N_ELEMENTS(names); k++) {
++                if (!strcmp(btn, names[k].name)) {
++                    step->buttons |= names[k].bit;
++                    step->ltrig |= names[k].trigger == 1;
++                    step->rtrig |= names[k].trigger == 2;
++                    step->digital |= names[k].digital;
++                    if (names[k].analog >= 0) {
++                        step->analog[names[k].analog] = 0xFF;
++                    }
++                }
++            }
++        }
++        script_len++;
++    }
++    g_free(buf);
++}
++
++static void load_hooks(const char *spec)
++{
++    static const struct { const char *name; int hook; } names[] = {
++        { "swap", XEMU_REFERENCE_HOOK_SWAP }, { "counter", XEMU_REFERENCE_HOOK_COUNTER },
++        { "ticks", XEMU_REFERENCE_HOOK_TICKS }, { "date", XEMU_REFERENCE_HOOK_DATE },
++        { "pad", XEMU_REFERENCE_HOOK_PAD },
++    };
++    char *buf = g_strdup(spec), *entry, *save = NULL;
++
++    for (entry = strtok_r(buf, ",", &save); entry && hook_count < HOOKS_MAX;
++         entry = strtok_r(NULL, ",", &save)) {
++        char *equal = strchr(entry, '=');
++
++        if (!equal) {
++            continue;
++        }
++        *equal = 0;
++        for (size_t k = 0; k < G_N_ELEMENTS(names); k++) {
++            if (!strcmp(entry, names[k].name)) {
++                hooks[hook_count].address = strtoul(equal + 1, NULL, 16);
++                hooks[hook_count].hook = names[k].hook;
++                counting_swaps |= names[k].hook == XEMU_REFERENCE_HOOK_SWAP;
++                say("%s at 0x%08X\n", entry, hooks[hook_count].address);
++                hook_count++;
++            }
++        }
++    }
++    g_free(buf);
++}
++
++static gpointer load(gpointer unused)
++{
++    const char *spec;
++
++    dump_dir = getenv("XEMU_REFERENCE_DIR");
++    if (!dump_dir || !*dump_dir) {
++        dump_dir = NULL;
++        return NULL;
++    }
++    {
++        char *path = g_strdup_printf("%s/reference.log", dump_dir);
++        log_file = fopen(path, "w");
++        g_free(path);
++    }
++    dump_every = getenv("XEMU_REFERENCE_DUMP") ? strtoul(getenv("XEMU_REFERENCE_DUMP"), NULL, 10) : 0;
++    exit_frame = getenv("XEMU_REFERENCE_EXIT") ? strtoul(getenv("XEMU_REFERENCE_EXIT"), NULL, 10) : 0;
++    epoch = getenv("XEMU_REFERENCE_EPOCH") ? strtoull(getenv("XEMU_REFERENCE_EPOCH"), NULL, 10) : 0;
++    spec = getenv("XEMU_REFERENCE_SCRIPT");
++    if (spec && *spec) {
++        load_script(spec);
++    }
++    spec = getenv("XEMU_REFERENCE_HOOKS");
++    if (spec && *spec) {
++        load_hooks(spec);
++    }
++    say("frames to %s, every %u, exit at %u, %d script step(s), %d hook(s)\n", dump_dir, dump_every,
++        exit_frame, script_len, hook_count);
++    return NULL;
++}
++
++bool xemu_reference_active(void)
++{
++    static GOnce once = G_ONCE_INIT;
++
++    g_once(&once, load, NULL);
++    return dump_dir != NULL;
++}
++
++/* The frame the game is at: the presents it has made, or the flips without a swap hook. */
++static uint32_t frame_now(void)
++{
++    return counting_swaps ? qatomic_read(&swaps) : qatomic_read(&flips);
++}
++
++bool xemu_reference_flip(uint32_t *frame)
++{
++    uint32_t now;
++    int64_t first;
++
++    if (!xemu_reference_active()) {
++        return false;
++    }
++    now = qatomic_fetch_inc(&flips);
++    if (counting_swaps) {
++        /* the flips before the game's first present are the console starting: the port has none */
++        first = qatomic_read(&first_present);
++        if (first < 0 || now < first) {
++            return false;
++        }
++        now -= first;
++    }
++    /* the first frame is frame 0, as the port counts */
++    if (exit_frame && now >= exit_frame) {
++        say("frame %u flipped, %u presented: leaving; the pad read %u times\n", now, qatomic_read(&swaps),
++            reads);
++        qemu_system_shutdown_request(SHUTDOWN_CAUSE_HOST_UI);
++    }
++    if (!dump_every || now % dump_every) {
++        return false;
++    }
++    say("frame %u dumped, %u presented\n", now, qatomic_read(&swaps));
++    *frame = now;
++    return true;
++}
++
++void xemu_reference_dump(uint32_t frame, unsigned width, unsigned height, const uint8_t *rgba,
++                         bool bottom_up)
++{
++    unsigned row_bytes = (width * 3 + 3) & ~3u;
++    uint32_t size = 54 + row_bytes * height;
++    uint8_t header[54] = { 'B', 'M' };
++    uint8_t *row = g_malloc0(row_bytes);
++    char *path = g_strdup_printf("%s/f%05u.bmp", dump_dir, frame);
++    FILE *f = fopen(path, "wb");
++
++    if (!f) {
++        say("%s: cannot write\n", path);
++        g_free(path);
++        g_free(row);
++        return;
++    }
++    stl_le_p(header + 2, size);
++    stl_le_p(header + 10, 54);
++    stl_le_p(header + 14, 40);
++    stl_le_p(header + 18, width);
++    stl_le_p(header + 22, height);
++    stw_le_p(header + 26, 1);
++    stw_le_p(header + 28, 24);
++    stl_le_p(header + 34, row_bytes * height);
++    fwrite(header, 1, sizeof(header), f);
++    /* a BMP's rows go from the bottom up */
++    for (unsigned y = 0; y < height; y++) {
++        unsigned source = bottom_up ? y : height - 1 - y;
++        const uint8_t *pixel = rgba + (size_t)source * width * 4;
++        for (unsigned x = 0; x < width; x++) {
++            row[x * 3 + 0] = pixel[x * 4 + 2];
++            row[x * 3 + 1] = pixel[x * 4 + 1];
++            row[x * 3 + 2] = pixel[x * 4 + 0];
++        }
++        fwrite(row, 1, row_bytes, f);
++    }
++    fclose(f);
++    g_free(path);
++    g_free(row);
++}
++
++void xemu_reference_report(int port, uint16_t buttons, uint8_t a)
++{
++    static uint32_t reports, last = 0xFFFFFFFF;
++    uint32_t now = ((uint32_t)port << 24) | ((uint32_t)buttons << 8) | a;
++
++    if (!xemu_reference_active()) {
++        return;
++    }
++    reports++;
++    if (now != last) {
++        say("frame %u: report %u on port %d: buttons 0x%04X, A 0x%02X\n", frame_now(), reports, port,
++            buttons, a);
++        last = now;
++    }
++}
++
++void xemu_reference_bound(int port, const char *name)
++{
++    if (xemu_reference_active()) {
++        say("frame %u: port %d %s %s\n", frame_now(), port + 1, name ? "bound to" : "unbound",
++            name ? name : "");
++    }
++}
++
++/* The step of the script pressed at the frame, logged the first time. */
++static bool pressed(int i, uint32_t now)
++{
++    if (now < script[i].at || now >= script[i].at + script[i].hold) {
++        return false;
++    }
++    if (pressed_logged != i + 1) {
++        pressed_logged = i + 1;
++        say("frame %u: step %d pressed\n", now, i);
++    }
++    return true;
++}
++
++void xemu_reference_pad(uint16_t *buttons, int16_t *axis)
++{
++    uint32_t now;
++
++    /* with the pad hook the script goes to the game's XInputGetState instead */
++    if (!xemu_reference_active() || !script_len || xemu_reference_hooked(XEMU_REFERENCE_HOOK_PAD)) {
++        return;
++    }
++    now = frame_now();
++    if (reads++ == 0) {
++        say("frame %u: the pad read for the first time\n", now);
++    }
++    for (int i = 0; i < script_len; i++) {
++        if (pressed(i, now)) {
++            *buttons |= script[i].buttons;
++            if (script[i].ltrig) {
++                axis[CONTROLLER_AXIS_LTRIG] = 32767;
++            }
++            if (script[i].rtrig) {
++                axis[CONTROLLER_AXIS_RTRIG] = 32767;
++            }
++        }
++    }
++}
++
++int xemu_reference_hook_at(uint32_t address)
++{
++    if (!xemu_reference_active()) {
++        return XEMU_REFERENCE_HOOK_NONE;
++    }
++    for (int i = 0; i < hook_count; i++) {
++        if (hooks[i].address == address) {
++            return hooks[i].hook;
++        }
++    }
++    return XEMU_REFERENCE_HOOK_NONE;
++}
++
++bool xemu_reference_hooked(int hook)
++{
++    for (int i = 0; i < hook_count; i++) {
++        if (hooks[i].hook == hook) {
++            return true;
++        }
++    }
++    return false;
++}
++
++void xemu_reference_swap(void)
++{
++    if (qatomic_fetch_inc(&swaps) == 0) {
++        qatomic_set(&first_present, qatomic_read(&flips));
++        say("the game's first present at flip %u\n", qatomic_read(&flips));
++    }
++}
++
++uint64_t xemu_reference_counter(void)
++{
++    uint64_t frames = (uint64_t)frame_now() * FRAME_TICKS;
++
++    counter = counter + READ_TICKS > frames ? counter + READ_TICKS : frames;
++    return counter;
++}
++
++uint32_t xemu_reference_ticks(void)
++{
++    return (uint32_t)((uint64_t)frame_now() * 1000u / 60u);
++}
++
++uint64_t xemu_reference_date(void)
++{
++    return (epoch + FILETIME_EPOCH) * FILETIME_HZ + (uint64_t)frame_now() * (FILETIME_HZ / 60u);
++}
++
++void xemu_reference_pad_state(uint8_t state[XEMU_REFERENCE_PAD_STATE])
++{
++    static uint8_t last[XEMU_REFERENCE_PAD_STATE - 4];
++    static uint32_t packet;
++    uint8_t pad[XEMU_REFERENCE_PAD_STATE - 4] = { 0 };     /* wButtons, bAnalogButtons[8], the sticks */
++    uint32_t now = frame_now();
++    uint16_t digital = 0;
++
++    if (reads++ == 0) {
++        say("frame %u: the pad read for the first time\n", now);
++    }
++    for (int i = 0; i < script_len; i++) {
++        if (pressed(i, now)) {
++            digital |= script[i].digital;
++            for (int k = 0; k < 8; k++) {
++                if (script[i].analog[k]) {
++                    pad[2 + k] = script[i].analog[k];
++                }
++            }
++        }
++    }
++    stw_le_p(pad, digital);
++    /* the packet number moves only when the state does, as the console's does */
++    if (memcmp(pad, last, sizeof(pad))) {
++        memcpy(last, pad, sizeof(pad));
++        packet++;
++    }
++    stl_le_p(state, packet);
++    memcpy(state + 4, pad, sizeof(pad));
++}
+diff --git a/ui/xemu-reference.h b/ui/xemu-reference.h
+new file mode 100644
+index 0000000..e03bd24
+--- /dev/null
++++ b/ui/xemu-reference.h
+@@ -0,0 +1,75 @@
++/*
++ * xemu as a reference for a game's port: a pad script by frame, the frames dumped, an exit frame, and the
++ * game's clocks and pad answered as the port answers them
++ *
++ * Copyright (c) 2026 Sebastian Toyos
++ *
++ * This program is free software; you can redistribute it and/or modify it under the terms of the
++ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
++ * License, or (at your option) any later version.
++ */
++#ifndef XEMU_REFERENCE_H
++#define XEMU_REFERENCE_H
++
++#include <stdbool.h>
++#include <stdint.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/* The game's functions a reference run answers as the port does (XEMU_REFERENCE_HOOKS). */
++enum {
++    XEMU_REFERENCE_HOOK_NONE,
++    XEMU_REFERENCE_HOOK_SWAP,       /* its present: a frame, counted; the function then runs */
++    XEMU_REFERENCE_HOOK_COUNTER,    /* QueryPerformanceCounter(pCount), stdcall */
++    XEMU_REFERENCE_HOOK_TICKS,      /* GetTickCount() */
++    XEMU_REFERENCE_HOOK_DATE,       /* GetSystemTimeAsFileTime(pTime), stdcall */
++    XEMU_REFERENCE_HOOK_PAD,        /* XInputGetState(hDevice, pState), stdcall */
++};
++
++/* An XINPUT_STATE: the packet number, then XINPUT_GAMEPAD (wButtons, bAnalogButtons[8], the sticks). */
++#define XEMU_REFERENCE_PAD_STATE 22
++
++/* Whether a run is a reference's (XEMU_REFERENCE_DIR set). */
++bool xemu_reference_active(void);
++
++/* At the guest's flip (NV097_FLIP_STALL): counts it, as the n-th frame the game presents; true when
++ * that frame is to be dumped, its number in *frame. */
++bool xemu_reference_flip(uint32_t *frame);
++
++/* Writes a frame, RGBA rows from the top or from the bottom, as XEMU_REFERENCE_DIR/fNNNNN.bmp. */
++void xemu_reference_dump(uint32_t frame, unsigned width, unsigned height, const uint8_t *rgba,
++                         bool bottom_up);
++
++/* A report the emulated pad on 'port' hands the game over USB (its digital buttons, its A): counted, and
++ * logged when it changes. */
++void xemu_reference_report(int port, uint16_t buttons, uint8_t a);
++
++/* A controller bound to a port, or unbound (name NULL): logged. */
++void xemu_reference_bound(int port, const char *name);
++
++/* The pad script's buttons and axes for the frame the game is at, over what the controller holds; nothing
++ * with a pad hook. */
++void xemu_reference_pad(uint16_t *buttons, int16_t *axis);
++
++/* The hook at a guest address (XEMU_REFERENCE_HOOK_*), NONE when there is none or the run is not a
++ * reference's: the translator asks it of each instruction. */
++int xemu_reference_hook_at(uint32_t address);
++
++/* Whether the run has a hook of that kind. */
++bool xemu_reference_hooked(int hook);
++
++/* What the hooks answer: a present counted; the counter, the milliseconds and the date (100 ns units
++ * since 1601) of the frames presented; the pad script's state for the frame. */
++void xemu_reference_swap(void);
++uint64_t xemu_reference_counter(void);
++uint32_t xemu_reference_ticks(void);
++uint64_t xemu_reference_date(void);
++void xemu_reference_pad_state(uint8_t state[XEMU_REFERENCE_PAD_STATE]);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif

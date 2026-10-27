@@ -41,6 +41,9 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
    `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
    (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`).
+5. **Against the original** (xemu, `tools/xemu_reference.py`, 27-10-2026): the menu's background emblem
+   (the circles and the grid on the left) is brighter in xemu, and the difference grows as it turns
+   (2.0 at frame 60, 5.0 at 840). The rest of what differs is at the edges.
 
 ### Sound
 
@@ -138,6 +141,19 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   stamped with, the tick count; the kernel thunk of KeQuerySystemTime points at it), so two runs
   repeat frame for frame and file for file (60 of 60), and compares them with saved references. The
   save's list of saves shows the host's file times, so the scenario ends before it.
+- **The original as the reference** (27-10-2026), done: xemu runs the scenarios on the original XBE
+  (`tools/xemu_reference.py`, with the patch and its build in `tools/reference/xemu/`) and dumps its frames
+  with the port's numbers, as MAME does for an arcade game. Counting xemu's flips was not enough: the
+  console's clock goes on while the game loads (some six seconds of console time between flip 34 and 38
+  before the menu, none on the port's), so the animations were shifted and the distance to the port grew
+  from 6 to 27; and the console's start flips 33 times before the game's first present. xemu answers the
+  same functions the port replaces as the port does (Swap counted, QueryPerformanceCounter,
+  GetTickCount, GetSystemTimeAsFileTime, XInputGetState: a helper the translator calls before their first
+  instruction), and its frames count from the first present. Now the menu, the first mission and the save
+  are the same on both, the flight and the shots included, at a distance of 5.5 or less (the mean
+  difference of the channels, 0 to 255) for the whole run. Left: the date the kernel gives XAPI's own
+  calls is still the console's in xemu (a save's folder times); a numbered threshold per scenario, so a
+  change that moves the port away from the original fails like one that moves it from its last build.
 - **The engine in C, so far** (26-10-2026), each function the original's in what it does, read from its
   machine code (which callers read eax after it decided which hand nothing back):
   - the object system, `src/game/engine/objects.c`: the 27 functions from 0x001102C0 to 0x00111160 and

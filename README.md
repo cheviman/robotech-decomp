@@ -54,6 +54,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
       distance and a pan, and the reverb is not heard yet
+- [x] The original game as the reference: the scenarios played in xemu on the port's clock and pad, its
+      frames set against the port's; the menu, the first mission and a save the same on both, the flight
+      and the shots included, at a mean difference of 5.5 of 255 or less
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
       programs on the GPU, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
@@ -177,6 +180,14 @@ hand.
   frame and saved file with the reference the build before wrote (`--save` records it). `noise_report.py`
   counts what keeps the generated C from reading as written and fails if a count went up
   (`--save` after a round that brought some down).
+- **Checking against the original**: the same scenarios run on the original game in xemu, patched to
+  dump its frames with the port's numbers and to answer the game's clock and pad as the port does
+  (`tools/reference/xemu/` has the patch, how to build it and what it needs of your own console), and
+  each frame is set against the port's:
+
+  ```bash
+  py -3 tools/xemu_reference.py menu mission1 save
+  ```
 
 ## Layout
 
@@ -218,6 +229,8 @@ tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
 tools/find_registries.py  makes symbols/registries.json from the game's object type registries
 tools/make_xiso.py      packs the game's folder into an Xbox disc image (XDVDFS) for xemu
+tools/xemu_reference.py runs the scenarios on the original game in xemu and sets its frames against the port's
+tools/reference/xemu/   the patch that makes xemu the reference (GPL-2.0-or-later, as xemu), and its build
 tools/decompile.py      the game's functions through arcade-decomp's decompiler: lifted, their stack and
                         data flow followed, their signatures found, their C written into src/decompiled/
 tools/x86/              the decompiler's x86 frontend: the functions decoded, lifted to its IR, made graphs,
@@ -255,6 +268,9 @@ licenses/               licenses of the code this project starts from
 - `CMakeLists.txt`, `src/main.c` and `src/recomp_manual.c` started from xboxrecomp's
   `templates/new-game` (MIT); see `licenses/xboxrecomp.txt`. xboxrecomp itself is not part of this
   repository.
+- `tools/reference/xemu/xemu-reference.patch` changes xemu and is licensed as xemu is, GPL-2.0-or-later;
+  xemu itself is not part of this repository, and neither are the console's MCPX ROM, BIOS or hard disk
+  it runs with.
 - `symbols/xdk_symbols.json` is the output of XbSymbolDatabase (MIT): names and addresses, no code.
 - `symbols/lib_matches.json` holds names and addresses only: the XDK's libraries are read on your
   machine, and no XDK code or file is part of this repository.
