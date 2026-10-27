@@ -82,6 +82,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 - Memory units are not modelled: saves go to the hard disk only. The menu's Save Game works there
   (25-10-2026: a profile saved with its name, date and screenshot thumbnail, and overwritten after the
   game's own prompt). Saving in a mission not tried yet.
+- **To fix: a save's profile name overflows the stack when the game loads it** (27-10-2026, Sebas).
+  robohaxx (github.com/InvoxiPlayGames/robohaxx) is a savegame exploit for the Xbox and GameCube
+  versions: its README calls it a stack overflow in the profile name, set off by Load Game at the
+  main menu, which the port runs as the original does. Not looked into yet: the function that copies
+  the name, the buffer's size; the fix is the copy bounded to the buffer, a name too long refused as
+  a damaged save, in the C of that function (src/game/ or the decompiled), with a save that overflows
+  as a scenario.
 
 ### Recompilation
 
@@ -346,6 +353,16 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   it. Next: the naming itself, in batches (parameters, locals, the game's variables and structures),
   each batch checked by the scenarios; the functions written by hand calling the decompiled ones
   directly; the x87.
+- **2,749 functions in the build** (27-10-2026, from 2,610): 139 that called a function taking the
+  address of an argument (`vcObjectGet` passes `&name` on, 118 of them; `vcFileSkip`, `vcFormat`...)
+  from a caller that drops the arguments later, after more code, had no count for the call. The count
+  is now what `tools/x86/recompiled.py` saw pushed for the call since the call before it (the registers
+  the caller saved left out), before what the caller drops right after it: six calls of `vcObjectGet`
+  in a row, dropped together by one "add esp, 0x30" after the last, each hand it its 2 arguments, not
+  the last 12. Of the game's 2,401 functions still out: the x87 (about 1,070, the IR has integers
+  only), the stack kept in memory (603: a local whose address is passed on, EBP as a frame), the XDK's,
+  Bink's and the ones written by hand (265), callees whose effects `recompiled.py` cannot tell (about
+  120), calls and jumps through a pointer (52).
 
 ## Dead hypotheses
 

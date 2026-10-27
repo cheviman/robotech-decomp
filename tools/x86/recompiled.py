@@ -170,6 +170,7 @@ class Summaries:
         self.entries = sorted(program.functions)
         self.fragments = {}
         self.kernel = kernel_drops()
+        self.site_pushes = {}   # a call's return address -> (bytes pushed for it without the registers saved, with them)
 
     def fragment(self, address):
         """Code no function's bounds hold (memmove's tails, past where the disassembler ends it), decoded
@@ -733,6 +734,10 @@ class Scan:
         return True
 
     def call(self, instruction, state):
+        # what was pushed for the call, without and with the registers saved (decompile.site_count)
+        pushed = (state.pushed, state.pushed_all)
+        known = self.summaries.site_pushes.get(instruction.next, pushed)
+        self.summaries.site_pushes[instruction.next] = pushed if known == pushed else (None, None)
         if self.frame_helper(instruction, state):
             return self.successors(instruction, state)
         if instruction.targets:

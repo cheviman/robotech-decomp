@@ -198,21 +198,31 @@ def call_targets_seen():
 
 def site_count(program, caller, return_address, summary):
     """How many words a call hands a function that counts its arguments by its callers (escapes): what the
-    caller drops after it ("add esp, N", or "pop ecx" a word at a time), or what the callee drops itself;
-    None when neither says."""
+    callee drops itself; what recompiled.py saw pushed for the call since the call before it, without the
+    registers the caller saved, or with them when that is fewer than the callee reads itself (a register
+    passed as it came); else what the caller drops right after it ("add esp, N", or "pop ecx" a word at a
+    time; a run of calls dropped together by one "add esp" after the last says nothing of the last's own);
+    None when nothing says."""
     if summary.drops:
         return summary.drops // 4
+    pushes = SITE_PUSHES.get(return_address)
+    if pushes is not None and pushes[0] is not None:
+        pushed, pushed_all = pushes
+        words = pushed // 4 if pushed // 4 >= summary.arguments else (pushed_all // 4 if pushed_all is not None else 0)
+        if words:
+            return words
     instructions = program.function(caller).instructions
     following = instructions.get(return_address)
-    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg" \
-            and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
+    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg"             and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
         return following.operands[1].imm // 4
     words = 0
-    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
-            and following.operands[0].reg == "ecx":
+    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg"             and following.operands[0].reg == "ecx":
         words += 1
         following = instructions.get(following.next)
     return words or None
+
+
+SITE_PUSHES = {}    # return address of a call -> recompiled.Summaries.site_pushes of the call (analyse)
 
 
 def outside_problem(program, builder, caller, target, return_address, summary, tail):
@@ -336,6 +346,8 @@ def analyse(quiet=False, for_build=False):
     skip, subject = (alone, of_subject) if for_build else (frozenset(), None)
     summaries = recompiled.Summaries(program, call_targets_seen(),
                                      lambda entry: of_subject(entry).startswith(("xdk/d3d8", "xdk/dsound")))
+    SITE_PUSHES.clear()
+    summaries.site_pushes = SITE_PUSHES
     builder = function.Builder(program)
     chosen = None
     while True:
