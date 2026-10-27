@@ -307,10 +307,10 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 - The decompiled C's noise is counted apart (`tools/noise_report.py`, the decompiled_ kinds), with the
   bridge to the recompiled code: 1,896 functions without a name, 2,057 without a description, 60,814
   registers kept as variables by their names (23.3 a function, 17.6 before the bridge: each call of
-  recompiled code hands its registers in and reads its results back by the globals), 664 flags,
-  32,291 parameters named arg0 up (12.4 a function, 4.3 before: the arguments of every x86_call, and
-  each function's own copied into its slots as it starts, saved_arg0), 39,382 stack slots named by
-  their offset, 13,914 reads and writes at a raw address (5.3 a function, 7.4 before).
+  recompiled code hands its registers in and reads its results back by the globals), 666 flags,
+  32,675 parameters named arg0 up (12.5 a function, 4.3 before: the arguments of every x86_call), 2,968
+  stack slots named by their offset, 13,918 reads and writes at a raw address (5.3 a function, 7.4
+  before).
 - **The comparisons back** (27-10-2026): flags 12,171 to 664. The lifter binds the registers an
   instruction that sets the flags reads to temporaries (`Lifter.operand`), as the V60's does, so the
   core's condition recovery finds the values compared still holding at the branch: "cmp eax, ebx; jl"
@@ -319,10 +319,18 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   flags a call or another block sets. And a call through a pointer reads no register from the game's
   C and the C runtime's (their callbacks are cdecl), only from the XDK's C++ (ECX, "this"): 4,419
   registers fewer handed to the recompiled code (`GameObjectTypeRelease` alone took ECX and EDX at
-  575 calls, for the type callbacks it calls). Next: each function's arguments read where they are
-  instead of copied into slots as it starts (saved_arg0 = arg0); parameters, locals and the game's
-  variables named from `symbols.txt`; the functions written by hand calling the decompiled ones
-  directly; the x87.
+  575 calls, for the type callbacks it calls).
+- **The arguments where they are** (27-10-2026): stack slots 39,382 to 2,968. A function's argument it
+  never changes is read where it came (ARG0 + n), wherever nothing before set that register for a call
+  or called, and its copy into the function's own slot goes when no read needs it
+  (`arguments.read_in_place`); a word pushed for a call that nothing else reads goes into its ARG
+  register where it is pushed, when no call comes in between (`arguments.pass_pushes`): "push 4; push
+  edx; call calloc" is `arg1_2 = 4u; arg0_2 = edx;`, not two slots the call reads after. Left: the
+  arguments of a call as their own variables (arg0_2 = edx; then the call), 32,675 of them with the
+  parameters, since the core's calls read their registers implicitly: putting the values into the call
+  needs calls with their arguments as expressions in tools/core, which SegaSonic shares. Next:
+  parameters, locals and the game's variables named from `symbols.txt`; the functions written by hand
+  calling the decompiled ones directly; the x87.
 
 ## Dead hypotheses
 

@@ -176,8 +176,141 @@ def rewrite(functions, counts, sites=None):
                     statements[position] = replaced
             ir.map_statement(block.end, own)
             block.statements = statements
+        pass_pushes(function)
         taken = counts[function.entry]
         if taken:
             entry = function.blocks[function.entry]
             entry.statements[:0] = [placed(ir.SetStack(own_slot(4 + 4 * n), ir.Reg(ARG0 + n)), function.entry)
                                     for n in range(taken)]
+            read_in_place(function, taken)
+
+
+def slot_reads(statement):
+    return {node.offset for expression in ir.statement_expressions(statement) for node in ir.walk(expression)
+            if isinstance(node, ir.Stack)}
+
+
+def pass_pushes(function):
+    """A word pushed for a call that nothing else reads goes into its ARG register where it is pushed,
+    when no call comes in between: "push 4; push edx; call" sets arg1 and arg0 there, not two slots the
+    call then reads (stack_18 = 4u; arg1_2 = stack_18)."""
+    blocks = function.blocks
+    # the slots live after each statement: read later before they are written whole
+    live_in = {label: set() for label in blocks}
+    changed = True
+    while changed:
+        changed = False
+        for label, block in blocks.items():
+            live = set().union(*[live_in[successor] for successor in block.successors() if successor in live_in])
+            live |= slot_reads(block.end)
+            for statement in reversed(block.statements):
+                if isinstance(statement, ir.SetStack) and statement.bits == 32:
+                    live.discard(statement.offset)
+                live |= slot_reads(statement)
+            if live != live_in[label]:
+                live_in[label] = live
+                changed = True
+    for label, block in blocks.items():
+        statements = block.statements
+        live = set().union(*[live_in[successor] for successor in block.successors() if successor in live_in])
+        live |= slot_reads(block.end)
+        live_after = [None] * len(statements)
+        for position in range(len(statements) - 1, -1, -1):
+            live_after[position] = set(live)
+            statement = statements[position]
+            if isinstance(statement, ir.SetStack) and statement.bits == 32:
+                live.discard(statement.offset)
+            live |= slot_reads(statement)
+        dropped = set()
+        for position, statement in enumerate(statements):
+            if not (isinstance(statement, ir.SetReg) and ARG0 <= statement.index < ARG0 + ARGUMENTS
+                    and isinstance(statement.value, ir.Stack) and statement.value.bits == 32
+                    and statement.value.offset not in live_after[position]):
+                continue
+            offset, register = statement.value.offset, statement.index
+            for earlier in range(position - 1, -1, -1):
+                if earlier in dropped:
+                    continue        # the setting of another argument of the call, gone to its push
+                found = statements[earlier]
+                if isinstance(found, ir.SetStack) and found.offset == offset:
+                    if found.bits == 32:
+                        replaced = ir.SetReg(register, found.value)
+                        replaced.origin = getattr(found, "origin", None)
+                        statements[earlier] = replaced
+                        dropped.add(position)
+                    break
+                if isinstance(found, (ir.Call, ir.Effect)) or offset in slot_reads(found) \
+                        or (isinstance(found, ir.SetReg) and found.index == register) \
+                        or any(isinstance(node, ir.Reg) and node.index == register
+                               for expression in ir.statement_expressions(found) for node in ir.walk(expression)):
+                    break
+        if dropped:
+            block.statements = [statement for position, statement in enumerate(statements) if position not in dropped]
+
+
+def read_in_place(function, taken):
+    """An argument the function never changes is read where it came, ARG0 + n, wherever nothing before has
+    set ARG0 + n for a call or made a call: its copy into the function's own slot goes when no read of
+    it is left (saved_arg0 = arg0, and saved_arg0 read after, is arg0 read)."""
+    written = set()
+    for block in function.blocks.values():
+        for statement in block.statements:
+            if isinstance(statement, ir.SetStack) and statement.offset < 0 and \
+                    not (isinstance(statement.value, ir.Reg) and statement.value.index == ARG0 + (statement.offset - OWN_SLOTS) // 4):
+                written.add(statement.offset)
+    kept = [n for n in range(taken) if own_slot(4 + 4 * n) not in written]
+    if not kept:
+        return
+    # where each argument still holds what came (nothing before set it for a call, or called)
+    predecessors = {label: [] for label in function.blocks}
+    for label, block in function.blocks.items():
+        for successor in block.successors():
+            predecessors.setdefault(successor, []).append(label)
+
+    def after(block, holding):
+        holding = set(holding)
+        for statement in block.statements:
+            if isinstance(statement, ir.SetReg) and statement.index - ARG0 in holding:
+                holding.discard(statement.index - ARG0)
+            elif isinstance(statement, (ir.Call, ir.Effect)):
+                holding.clear()
+        return holding
+    start = {label: set(kept) for label in function.blocks}
+    changed = True
+    while changed:
+        changed = False
+        for label, block in function.blocks.items():
+            # the start holds them all; a block nothing reaches, none; another, what every way in leaves
+            holding = set(kept) if label == function.entry or predecessors.get(label) else set()
+            for before in predecessors.get(label, []):
+                holding &= after(function.blocks[before], start[before])
+            if holding != start[label]:
+                start[label] = holding
+                changed = True
+    slots = {own_slot(4 + 4 * n): n for n in kept}
+    left = set()
+
+    def rewrite_reads(statement, holding):
+        def change(node):
+            if isinstance(node, ir.Stack) and node.offset in slots and node.bits == 32:
+                if slots[node.offset] in holding:
+                    return ir.Reg(ARG0 + slots[node.offset])
+                left.add(node.offset)
+            return None
+        ir.map_statement(statement, change)
+
+    for label, block in function.blocks.items():
+        holding = set(start[label])
+        for statement in block.statements:
+            if not (isinstance(statement, ir.SetStack) and statement.offset in slots):
+                rewrite_reads(statement, holding)
+            if isinstance(statement, ir.SetReg) and statement.index - ARG0 in holding:
+                holding.discard(statement.index - ARG0)
+            elif isinstance(statement, (ir.Call, ir.Effect)):
+                holding.clear()
+        rewrite_reads(block.end, holding)
+    # the copies no read needs any more
+    entry = function.blocks[function.entry]
+    entry.statements = [statement for statement in entry.statements
+                        if not (isinstance(statement, ir.SetStack) and statement.offset in slots
+                                and statement.offset not in left and isinstance(statement.value, ir.Reg))]
