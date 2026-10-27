@@ -5,3 +5,6 @@
 *.cmd text eol=crlf
 *.bat text eol=crlf
 *.sh text eol=lf
+
+# Patches apply as they were made, with LF
+*.patch text eol=lf
