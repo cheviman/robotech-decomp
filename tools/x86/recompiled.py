@@ -27,7 +27,9 @@ reads an argument; one that takes the address of an argument (a variable argumen
 passed whole) leaves the count to the caller: as many as it drops after the call (escapes).
 
 A call takes its callee's summary. A call through a pointer takes the compiler's convention for code it
-cannot see (ECX and EDX in, EAX, ECX and EDX written) and, the game's C being C, drops nothing: its caller
+cannot see (EAX, ECX and EDX written; ECX and EDX in from the XDK's C++, "this" and a fastcall's
+second argument, nothing from the game's C and the C runtime's, whose callbacks are cdecl) and, the
+game's C being C, drops nothing: its caller
 drops the arguments when it likes ("add esp, 8" or "pop ecx", a few instructions on). When the function
 does not come out even that way, it is followed again with each such call dropping what was pushed for it
 (stdcall, as the kernel's functions are). A jump into another function's code that is not a call of it
@@ -157,9 +159,12 @@ class Summaries:
     changes: a function's depends on its callees'. 'targets': {call site: functions a run saw it reach}
     (analysis/icall_sites.json), which say what a call through a pointer drops."""
 
-    def __init__(self, program, targets=None):
+    def __init__(self, program, targets=None, cxx=None):
         self.program = program
         self.targets = targets or {}
+        # whether a function is C++ (the XDK's Direct3D and DirectSound), whose calls through a pointer
+        # pass "this" in ECX; the game's and the C runtime's are C, whose callbacks read no register
+        self.cxx = cxx or (lambda entry: True)
         self.found = {}
         self.callees = {}
         self.entries = sorted(program.functions)
@@ -655,7 +660,7 @@ class Scan:
         seen = [self.summaries.found.get(target) for target in self.summaries.targets.get(instruction.address, ())]
         if seen and all(summary is not None and summary.known for summary in seen):
             return frozenset().union(*[summary.inputs for summary in seen]) & UNSEEN_CALLS_READ
-        return UNSEEN_CALLS_READ
+        return UNSEEN_CALLS_READ if self.summaries.cxx(self.decoded.entry) else frozenset()
 
     def cleaned_after(self, instruction):
         """Whether the caller drops the arguments itself after a call: an "add esp" or a "pop" among the

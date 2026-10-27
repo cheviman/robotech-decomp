@@ -305,15 +305,24 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   callee no longer had to be decompiled; every function decompiled now has to come out even in its
   own machine code too.
 - The decompiled C's noise is counted apart (`tools/noise_report.py`, the decompiled_ kinds), with the
-  bridge to the recompiled code: 1,896 functions without a name, 2,057 without a description, 71,454
-  registers kept as variables by their names (27.4 a function, 17.6 before: each call of recompiled
-  code hands its registers in and reads its results back by the globals), 12,171 flags (comparisons
-  the core's condition recovery does not take yet: it wants the values compared bound to temporaries,
-  as the V60's lifter binds them), 32,449 parameters named arg0 up (12.4 a function, 4.3 before: the
-  arguments of every x86_call), 39,595 stack slots named by their offset, 13,986 reads and writes at a
-  raw address (5.4 a function, 7.4 before). Next: the lifter's reads bound as the V60's, so the
-  comparisons come back; parameters, locals and the game's variables named from `symbols.txt`; the
-  functions written by hand calling the decompiled ones directly; the x87.
+  bridge to the recompiled code: 1,896 functions without a name, 2,057 without a description, 60,814
+  registers kept as variables by their names (23.3 a function, 17.6 before the bridge: each call of
+  recompiled code hands its registers in and reads its results back by the globals), 664 flags,
+  32,291 parameters named arg0 up (12.4 a function, 4.3 before: the arguments of every x86_call, and
+  each function's own copied into its slots as it starts, saved_arg0), 39,382 stack slots named by
+  their offset, 13,914 reads and writes at a raw address (5.3 a function, 7.4 before).
+- **The comparisons back** (27-10-2026): flags 12,171 to 664. The lifter binds the registers an
+  instruction that sets the flags reads to temporaries (`Lifter.operand`), as the V60's does, so the
+  core's condition recovery finds the values compared still holding at the branch: "cmp eax, ebx; jl"
+  is `if (eax < ebx)`; "test eax, eax" the flags of EAX itself, `if (eax != 0u)`, not
+  `(eax & eax) != 0u`. Left: the borrow idioms ("neg eax; sbb eax, eax", a boolean by the carry) and
+  flags a call or another block sets. And a call through a pointer reads no register from the game's
+  C and the C runtime's (their callbacks are cdecl), only from the XDK's C++ (ECX, "this"): 4,419
+  registers fewer handed to the recompiled code (`GameObjectTypeRelease` alone took ECX and EDX at
+  575 calls, for the type callbacks it calls). Next: each function's arguments read where they are
+  instead of copied into slots as it starts (saved_arg0 = arg0); parameters, locals and the game's
+  variables named from `symbols.txt`; the functions written by hand calling the decompiled ones
+  directly; the x87.
 
 ## Dead hypotheses
 

@@ -332,8 +332,10 @@ def analyse(quiet=False, for_build=False):
     sym = symbols.load()
     names = sym["func"]
     program = disassembler.Program(names)
-    skip, subject = left_alone(sym) if for_build else (frozenset(), None)
-    summaries = recompiled.Summaries(program, call_targets_seen())
+    alone, of_subject = left_alone(sym)
+    skip, subject = (alone, of_subject) if for_build else (frozenset(), None)
+    summaries = recompiled.Summaries(program, call_targets_seen(),
+                                     lambda entry: of_subject(entry).startswith(("xdk/d3d8", "xdk/dsound")))
     builder = function.Builder(program)
     chosen = None
     while True:

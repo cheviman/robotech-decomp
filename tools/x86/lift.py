@@ -3,14 +3,16 @@
 """
 Name:        lift.py
 Description: translates decoded x86 data instructions into IR statements that do what the Pentium III does
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 The registers are the decompiler's (profile.py): EAX to EDI are 32-bit registers whose parts AX, AL and AH
 (and so on) are read and written in place, the rest of the register kept. Every memory read becomes a
-temporary in the order the instruction makes it, before anything it writes. Of the flags, ZF, SF, OF and
+temporary in the order the instruction makes it, before anything it writes, and so does every register
+an instruction that sets the flags reads (Lifter.operand): the flags then describe values that hold
+where a branch reads them, and the decompiler turns the branch into a comparison. Of the flags, ZF, SF, OF and
 CF are kept as z, s, ov and cy, set as Intel's manual says for each instruction; PF and AF are not kept
 (only the x87's compares branch on PF, and nothing reads AF). A flag the manual leaves undefined is given
 the value the instruction would have set at its defined widths; nothing in the game reads one.
@@ -119,6 +121,13 @@ class Lifter:
             return ir.const(op.imm & mask(op.bits), op.bits)
         return self.load(self.address(op), op.bits, hint)
 
+    def operand(self, op, hint="source"):
+        """An operand of an instruction that sets the flags, bound to a temporary as the V60's lifter
+        binds them: the flags then describe values that still hold at the branch that reads them, which
+        is what lets tools/core/decompiler/conditions.py turn "cmp eax, ebx; jl" into eax < ebx."""
+        value = self.read(op, hint)
+        return self.temp(value, hint) if op.kind == "reg" and not isinstance(value, ir.Temp) else value
+
     def write(self, op, value):
         if op.kind == "reg":
             self.write_register(op.reg, value)
@@ -210,8 +219,8 @@ def lift_data(lifter, instruction):
         return True
     if name in ("add", "adc", "sub", "sbb", "cmp"):
         bits = ops[0].bits
-        value = read(ops[0], "value")
-        source = ir.zext(read(ops[1]), bits) if ops[1].kind == "imm" else read(ops[1])
+        value = lifter.operand(ops[0], "value")
+        source = ir.zext(read(ops[1]), bits) if ops[1].kind == "imm" else lifter.operand(ops[1])
         # the carry going in is read before the instruction sets a new one
         carry = lifter.temp(ir.Flag("cy"), "carry_in") if name in ("adc", "sbb") else ir.const(0, 1)
         if name in ("add", "adc"):
@@ -231,10 +240,15 @@ def lift_data(lifter, instruction):
         write(ops[0], result)
         lifter.logic_flags(result)
         return True
+    if name in ("and", "or", "test") and ops[0].kind == "reg" and ops[1].kind == "reg" and ops[0].reg == ops[1].reg:
+        # test eax, eax (and eax, eax; or eax, eax): the flags of EAX itself, which stays as it is
+        result = lifter.operand(ops[0], "value")
+        lifter.logic_flags(result)
+        return True
     if name in ("and", "or", "xor", "test"):
         bits = ops[0].bits
-        value = read(ops[0], "value")
-        source = ir.zext(read(ops[1]), bits) if ops[1].kind == "imm" else read(ops[1])
+        value = lifter.operand(ops[0], "value")
+        source = ir.zext(read(ops[1]), bits) if ops[1].kind == "imm" else lifter.operand(ops[1])
         result = lifter.temp(ir.op("and" if name == "test" else name, (value, source), bits), "result")
         lifter.logic_flags(result)
         if name != "test":
@@ -242,7 +256,7 @@ def lift_data(lifter, instruction):
         return True
     if name in ("inc", "dec"):
         bits = ops[0].bits
-        value = read(ops[0], "value")
+        value = lifter.operand(ops[0], "value")
         one = ir.const(1, bits)
         result = lifter.temp(ir.op("add" if name == "inc" else "sub", (value, one), bits), "result")
         emit(ir.SetFlag("ov", ir.op("overflow_add" if name == "inc" else "overflow_sub",
@@ -252,7 +266,7 @@ def lift_data(lifter, instruction):
         return True
     if name == "neg":
         bits = ops[0].bits
-        value = read(ops[0], "value")
+        value = lifter.operand(ops[0], "value")
         zero = ir.const(0, bits)
         result = lifter.temp(ir.op("sub", (zero, value), bits), "result")
         emit(ir.SetFlag("cy", ir.op("ne", (value, zero), 1)))
@@ -340,7 +354,7 @@ def shift(lifter, name, ops):
     """SHL, SHR and SAR by an immediate count or by CL (masked to five bits, as the processor does); a
     count of 0 changes no flag."""
     bits = ops[0].bits
-    value = lifter.read(ops[0], "value")
+    value = lifter.operand(ops[0], "value")
     if len(ops) == 1:
         count = ir.const(1, 8)
     elif ops[1].kind == "imm":
