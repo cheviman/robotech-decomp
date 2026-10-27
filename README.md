@@ -213,6 +213,10 @@ tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's s
 tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
 tools/find_registries.py  makes symbols/registries.json from the game's object type registries
+tools/decompile.py      the game's functions through arcade-decomp's decompiler: lifted, their stack and
+                        data flow followed, their signatures found (no C yet)
+tools/x86/              the decompiler's x86 frontend: the functions decoded, lifted to its IR, made graphs
+tools/core/             arcade-decomp (a git submodule), the decompiler the frontend feeds
 docs/d3d.md             how the game uses Direct3D: the map for the Direct3D 11 path
 analysis/               the pipeline's data: a copy of the XBE, disassembly, function and ABI databases
                         (ignored by git)

@@ -244,6 +244,25 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   found gets a seed. The mission tick's epilogue was one (`symbols/README.md`): the fade over the first
   mission never cleared and the guest stack lost bytes every tick.
 
+### Decompilation to C
+
+- **The structured decompiler** (26-10-2026), started: the recompiled C runs the game an instruction at a
+  time, with the CPU's registers and flags as variables; the way to C a person reads is arcade-decomp's
+  decompiler (SegaSonic's, `tools/core`, a git submodule), which takes any processor lifted to its IR,
+  with an x86 frontend of this repository's (`tools/x86`: Capstone decodes, the integer instructions and
+  their flags lift as Intel's manual says, the functions become graphs; the stack's arguments pass in
+  registers ARG0 up, since the decompiler's passes take inputs from registers). `tools/decompile.py
+  check`: of the 5,150 functions of the game's code, 3,860 lift (213,492 instructions) and the core's
+  stack analysis follows them all, 3,219 with the stack as slots and 641 kept in memory (a local whose
+  address is passed on, about 370; EBP as a frame pointer, about 90; the rest pieces of other
+  functions). Not lifted yet: the x87 (about 1,100 functions; the IR has integers only), calls and
+  jumps through a pointer (147), and a few odd ones. `tools/decompile.py analyse`: the 1,395 whose
+  calls all reach functions with their stack in slots go through the core's data flow, its registers
+  saved and put back, its conditions (1,004 branches compare values instead of flags) and its
+  signatures (`GameObjectFromHandle`: one argument, its result in EAX). Next: the C, through the core's
+  writer with the guest's memory as the recompiled C has it, each function checked against the
+  original by `tools/verify_c.py` before it goes into the build in its recompiled version's place.
+
 ## Dead hypotheses
 
 - **"The game links D3DX8 or XGraphics"** (they leave no version in the XBE header). Matched against
