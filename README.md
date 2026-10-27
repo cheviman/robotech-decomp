@@ -47,7 +47,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       (fonts, measuring and laying out strings), the render state setters, 19 classes'
       registrations and the scene objects' tree, 134 functions, every name real; the menu, the first mission and a save as the recompiled ones played them, frame for frame
 - [x] The structured decompiler: arcade-decomp's (SegaSonic's), with an x86 frontend of this project's
-      (`tools/x86`); 2,610 of the game's functions in its C (`src/decompiled/`), with no goto, in the
+      (`tools/x86`); 2,910 of the game's functions in its C (`src/decompiled/`), with no goto, in the
       recompiled ones' place, calling the ones still recompiled as the recompiled code does, the menu,
       the first mission and a save frame for frame as before
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
@@ -217,6 +217,7 @@ tools/xdk_symbols.py    makes symbols/xdk_symbols.json from XbSymbolDatabase's s
 tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
 tools/find_registries.py  makes symbols/registries.json from the game's object type registries
+tools/make_xiso.py      packs the game's folder into an Xbox disc image (XDVDFS) for xemu
 tools/decompile.py      the game's functions through arcade-decomp's decompiler: lifted, their stack and
                         data flow followed, their signatures found, their C written into src/decompiled/
 tools/x86/              the decompiler's x86 frontend: the functions decoded, lifted to its IR, made graphs,

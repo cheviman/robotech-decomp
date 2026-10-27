@@ -363,6 +363,19 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   only), the stack kept in memory (603: a local whose address is passed on, EBP as a frame), the XDK's,
   Bink's and the ones written by hand (265), callees whose effects `recompiled.py` cannot tell (about
   120), calls and jumps through a pointer (52).
+- **2,910 in the build: the stack in memory** (27-10-2026, from 2,749). A function whose stack the core
+  cannot turn into slots (a local whose address is handed on, EBP as a frame) keeps it in the guest's
+  memory, as the V60's do (stack.MEMORY_SP): its SP is the guest's, `g_esp`, a register the whole
+  program shares, and its pushes, pops and locals are `MEM32(g_esp + n)`. It takes its arguments in
+  ARG registers as the others do and lays them out over its return address's place as it starts, SP
+  put back on every way out (`arguments.in_memory`; as many as `recompiled.py` reads it take, none
+  counted by its callers); its calls take their callees' arguments from where it pushed them, and of
+  recompiled code it calls only the return address goes on (`x86_call(..., 0)`, `x86_jump` for a jump).
+  Found on the way: the core keeps a register the whole program shares live where a function ends only
+  when told it is one (`cleanup.eliminate`'s context, and the other passes' too): without it the pops
+  and the frame's putting back went, and the menu stopped at its first frame. The noise grows with
+  them: 14,020 stack accesses of theirs counted among the memory at a computed address, 18,384
+  registers (big functions, 114 each). Left: their frames by name.
 
 ## Dead hypotheses
 

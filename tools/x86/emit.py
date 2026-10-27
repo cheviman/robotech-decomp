@@ -19,6 +19,7 @@ makes it: the registers it reads in the globals g_eax..., its arguments on the g
 (x86_call), what it hands back read from the globals after.
 """
 from decompiler import emit
+from decompiler.stack import MEMORY_SP
 from v60 import ir
 
 from .profile import ARG0, ARGUMENTS, EAX
@@ -179,7 +180,7 @@ class X86Writer(emit.FunctionWriter):
     def ending(self, end):
         if isinstance(end, ir.TailCall) and end.target in self.emitter.recompiled:
             self.current = end
-            return self.recompiled_call(end.target, None) + self.copy_out() + [self.return_text()]
+            return self.recompiled_call(end.target, None, tail=True) + self.copy_out() + [self.return_text()]
         return super().ending(end)
 
     def register_input(self, index):
@@ -191,10 +192,12 @@ class X86Writer(emit.FunctionWriter):
         declared = set(self.widths) | {self.emitter.param_name(self.entry, value) for value in self.params + self.results}
         return name if name in declared else "0u"
 
-    def recompiled_call(self, target, return_address):
+    def recompiled_call(self, target, return_address, tail=False):
         """A call of a function left recompiled (decompile.py, recompiled.py): the registers it reads, and
         the ones it may leave as they were, into the register globals; its arguments on the guest's stack,
-        under the return address the original pushes (x86_call); what it hands back from the globals."""
+        under the return address the original pushes (x86_call); what it hands back from the globals. From
+        a function whose stack stays in memory its arguments are there already: only the return address
+        goes on, and a jump to it pushes nothing (x86_jump)."""
         emitter = self.emitter
         by_value, by_pointer, returned = emitter.by_value(target), emitter.by_pointer(target), emitter.returned(target)
         params = emitter.signatures[target].params
@@ -211,7 +214,10 @@ class X86Writer(emit.FunctionWriter):
                 handed.add(index)   # one it may leave as it was, which the caller reads afterwards
         lines = [f"{REGISTER_GLOBALS[index]} = {self.register_input(index)};" for index in sorted(handed)]
         values = "".join(", " + self.register_input(index) for index in sorted(arguments))
-        call = f"x86_call({emitter.names[target]}, 0x{return_address or 0:08X}u, {len(arguments)}{values})"
+        if tail and getattr(self.function, "memory_stack", False):
+            call = f"x86_jump({emitter.names[target]})"
+        else:
+            call = f"x86_call({emitter.names[target]}, 0x{return_address or 0:08X}u, {len(arguments)}{values})"
         results = [value for value in by_pointer] + ([returned] if returned is not None else [])
         if returned is not None and returned[1] == EAX:
             lines.append(f"{self.register_set(EAX)} = {call};")
@@ -250,7 +256,10 @@ class X86Emitter(emit.Emitter):
     """emit.Emitter with nothing of the V60 program's: no context registers, no structures yet."""
 
     def __init__(self, functions, signatures, names, memory_, always, layouts):
-        super().__init__(functions, signatures, names, (), set(), memory_, always, lambda address: 0)
+        # the one register the whole program shares: the guest's SP, g_esp, where a function's stack stays
+        # in memory (stack.MEMORY_SP)
+        super().__init__(functions, signatures, names, (MEMORY_SP,), set(), memory_, always, lambda address: 0)
+        self.register_names = {MEMORY_SP: "g_esp"}
         self.layouts = layouts
         self.saved_locals = True
         self.flow = None

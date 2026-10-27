@@ -159,6 +159,17 @@ static inline uint32_t x86_call(void (*function)(void), uint32_t return_address,
     return g_eax;
 }
 
+/* A jump to a function that stays recompiled from one whose stack stays in memory: it runs on the
+ * caller's frame as the original's jump has it, its arguments and return address where the caller's are,
+ * and SP is put back after. */
+static inline uint32_t x86_jump(void (*function)(void))
+{
+    uint32_t sp = g_esp;
+    function();
+    g_esp = sp;
+    return g_eax;
+}
+
 /* A jump through a table to an entry it does not have: the game's guard before each table keeps it from
  * happening. */
 static inline void invalid_jump(uint32_t value)

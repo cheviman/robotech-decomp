@@ -172,7 +172,8 @@ def lifted(program, chosen, skip=frozenset(), subject=None):
         except lift.Unsupported:
             continue
         stack.analyse(built)
-        if getattr(built, "memory_stack", False) or overlapping_slots(built):
+        # a function whose stack stays in memory goes in too: the guest's, g_esp (arguments.in_memory)
+        if not getattr(built, "memory_stack", False) and overlapping_slots(built):
             continue
         slotted[entry] = built
     return slotted
@@ -225,12 +226,15 @@ def site_count(program, caller, return_address, summary):
 SITE_PUSHES = {}    # return address of a call -> recompiled.Summaries.site_pushes of the call (analyse)
 
 
-def outside_problem(program, builder, caller, target, return_address, summary, tail):
-    """Why the decompiled C cannot call 'target', a function left recompiled, from 'caller'; None if it can."""
+def outside_problem(program, builder, caller, target, return_address, summary, tail, memory=False):
+    """Why the decompiled C cannot call 'target', a function left recompiled, from 'caller'; None if it can.
+    'memory': the caller's stack stays in memory, where the arguments are already (no count needed)."""
     if summary is None or not summary.known:
         return "calls a function whose effects are not known"
     if builder.drops(target) != summary.drops:
         return "calls a function that drops otherwise than its returns say"
+    if memory:
+        return None
     if summary.arguments > ARGUMENTS:
         return "calls a function that takes too many arguments"
     if summary.escapes and (tail or site_count(program, caller, return_address, summary) is None):
@@ -244,7 +248,7 @@ class Flow(dataflow.Program):
     dataflow.Summary, from recompiled.py), which the analysis never changes."""
 
     def __init__(self, functions, analysis, outside):
-        super().__init__(functions, analysis, [], ())
+        super().__init__(functions, analysis, [], (stack.MEMORY_SP,))
         self.outside = outside
 
     def summary_of(self, target):
@@ -338,7 +342,7 @@ def analyse(quiet=False, for_build=False):
     cpu.use(X86)
     dataflow.configure()
     dataflow.HANDLER_SLOTS = (None,)    # no object loop calls handlers through a field of its objects
-    signatures.CONTEXT = ()
+    signatures.CONTEXT = (stack.MEMORY_SP,)      # the guest's SP, g_esp, where a stack stays in memory
     sym = symbols.load()
     names = sym["func"]
     program = disassembler.Program(names)
@@ -363,11 +367,16 @@ def analyse(quiet=False, for_build=False):
                 # disassembler took for one (sub_0001166C, "pop edi" of a register its jumper saved, then
                 # "ret") does not, and its C would leave ESP where the original does not
                 own = summaries.found.get(entry)
+                memory = getattr(built[entry], "memory_stack", False)
                 problems = ["is no function of its own"] if own is None or not own.known or \
                     own.drops != builder.drops(entry) else []
-                problems += [outside_problem(program, builder, entry, target, address, summaries.found.get(target), False)
+                # one whose stack stays in memory takes as many arguments as its machine code reads
+                if getattr(built[entry], "memory_stack", False) and own is not None and \
+                        (own.escapes or own.arguments > ARGUMENTS):
+                    problems.append("counts its arguments by its callers, its stack in memory")
+                problems += [outside_problem(program, builder, entry, target, address, summaries.found.get(target), False, memory)
                              for target, address in found if target not in built]
-                problems += [outside_problem(program, builder, entry, target, None, summaries.found.get(target), True)
+                problems += [outside_problem(program, builder, entry, target, None, summaries.found.get(target), True, memory)
                              for target in tails if target not in built]
                 if any(problems):
                     del built[entry]
@@ -375,11 +384,18 @@ def analyse(quiet=False, for_build=False):
         # the calls of the ones that count their arguments by their callers, each a target of its own
         aliases, outside_counts = {}, {}
         for entry, f in built.items():
+            memory = getattr(f, "memory_stack", False)
             for block in f.blocks.values():
                 for statement in block.statements:
                     if isinstance(statement, ir.Call) and statement.target not in built:
                         summary = summaries.found[statement.target]
-                        if summary.escapes:
+                        if memory:
+                            # from a function whose stack stays in memory: its arguments are there already
+                            alias = SITES + len(aliases)
+                            aliases[alias] = statement.target
+                            outside_counts[alias] = 0
+                            statement.target = alias
+                        elif summary.escapes:
                             alias = SITES + len(aliases)
                             aliases[alias] = statement.target
                             outside_counts[alias] = max(summary.arguments,
@@ -388,8 +404,16 @@ def analyse(quiet=False, for_build=False):
                         else:
                             outside_counts[statement.target] = summary.arguments
                 if isinstance(block.end, ir.TailCall) and block.end.target not in built:
-                    outside_counts[block.end.target] = summaries.found[block.end.target].arguments
-        counts = arguments.counts(built, outside_counts)
+                    if memory:
+                        alias = SITES + len(aliases)
+                        aliases[alias] = block.end.target
+                        outside_counts[alias] = 0
+                        block.end.target = alias
+                    else:
+                        outside_counts[block.end.target] = summaries.found[block.end.target].arguments
+        in_memory = {entry: summaries.found[entry].arguments for entry, f in built.items()
+                     if getattr(f, "memory_stack", False)}
+        counts = arguments.counts(built, outside_counts, in_memory)
         try:
             arguments.rewrite(built, {**outside_counts, **counts})
         except arguments.Straddles as problem:
@@ -402,6 +426,11 @@ def analyse(quiet=False, for_build=False):
         # the original leaves it for the recompiled callers
         signatures.OPEN = {entry for entry in built if called_from_outside(program, entry, built)}
         flow.declared = {entry: {EAX} for entry in signatures.OPEN}
+        # one whose stack stays in memory leaves the guest's SP where it found it, which every caller
+        # counts on whether it reads it or not: its pops and the putting back of its frame stay
+        for entry, f in built.items():
+            if getattr(f, "memory_stack", False):
+                flow.declared.setdefault(entry, set()).add(stack.MEMORY_SP)
         flow.solve()
         while sum(len(preserved.analyse(f, flow.call_writes)) for f in built.values()):
             flow.solve()
@@ -561,21 +590,21 @@ def write(out_dir, for_build=False):
         if returned is not None and returned[0] == "r" and returned in signature.params:
             registers.add(returned[1])
         arguments_by_value[entry] = registers
-    whole = set()
+    whole = set(signatures.CONTEXT)     # global variables in C: the guest's SP, g_esp
     live_after, live_at_start = {}, {}
     for entry, f in built.items():
-        after, start = cleanup.eliminate(flow, f, found[entry].results, (), arguments_by_value)
+        after, start = cleanup.eliminate(flow, f, found[entry].results, signatures.CONTEXT, arguments_by_value)
         expressions.tidy(f, flow, after, whole)
         results_of_calls = call_results(f, found, flow)
-        if expressions.propagate_constants(f, results_of_calls, ()):
-            after, start = cleanup.eliminate(flow, f, found[entry].results, (), arguments_by_value)
+        if expressions.propagate_constants(f, results_of_calls, signatures.CONTEXT):
+            after, start = cleanup.eliminate(flow, f, found[entry].results, signatures.CONTEXT, arguments_by_value)
             expressions.tidy(f, flow, after, whole)
         if expressions.inline_registers(f, flow, after, whole):
             expressions.simplify_function(f)
         if expressions.switch_values(f, flow):
-            after, start = cleanup.eliminate(flow, f, found[entry].results, (), arguments_by_value)
+            after, start = cleanup.eliminate(flow, f, found[entry].results, signatures.CONTEXT, arguments_by_value)
             expressions.tidy(f, flow, after, whole)
-        knownbits.simplify(f, found[entry], (), results_of_calls)
+        knownbits.simplify(f, found[entry], signatures.CONTEXT, results_of_calls)
         expressions.simplify_function(f)
         live_after[entry], live_at_start[entry] = after, start
     emit.use_memory_map()

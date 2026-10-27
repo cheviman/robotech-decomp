@@ -18,8 +18,10 @@ slot 0. A function takes as many as the highest of those slots it reads or write
   - at a call, the caller copies the callee's arguments, its slots from where SP stands at the call
     (the marker function.py leaves), into ARG0 up; at a tail call, from the slot above SP.
 The ARG registers carry nothing else, so a call that sets them for its callee leaves the caller's own
-arguments in its slots.
+arguments in its slots. A function whose stack stays in memory (stack.MEMORY_SP, the guest's g_esp)
+takes them in ARG registers too, and lays them out in memory as it starts (in_memory).
 """
+from decompiler.stack import MEMORY_SP
 from v60 import ir
 
 from .function import CALL_FRAME, TAIL_FRAME
@@ -58,18 +60,22 @@ def count(function):
     return taken
 
 
-def counts(functions, outside=None):
+def counts(functions, outside=None, in_memory=None):
     """How many arguments each of 'functions' takes: the slots from 4 it reads or writes itself, and the
     ones a call or a tail call hands on from its own arguments. A function that ends by jumping to
     another passes that one's arguments on, its caller's slots above its own (sub_000BF9C0 takes the
     five sub_000A50F0 reads, though it reads one itself); so does a call to a function that takes more
     than the caller pushed. Worked out until nothing changes, which covers recursion. 'outside': what
-    the functions they call that are not among them take (recompiled.py)."""
+    the functions they call that are not among them take (recompiled.py); 'in_memory': what the ones
+    whose stack stays in memory take (recompiled.py too: they read their arguments from memory)."""
     found = dict(outside or {})
-    found.update({entry: count(f) for entry, f in functions.items()})
+    found.update({entry: (in_memory or {}).get(entry, 0) if getattr(f, "memory_stack", False) else count(f)
+                  for entry, f in functions.items()})
     frames = {}
     for entry, f in functions.items():
         frames[entry] = []
+        if getattr(f, "memory_stack", False):
+            continue        # its arguments stay in memory, where its calls find theirs (decompile.py)
         for block in f.blocks.values():
             for position, statement in enumerate(block.statements):
                 sp = frame_of(statement, CALL_FRAME)
@@ -103,6 +109,49 @@ def frame_of(statement, name):
         if not isinstance(slot, ir.Stack):
             raise ValueError(f"a {name} marker without its slot: {slot}")
         return slot.offset
+    return None
+
+
+def in_memory(function, counts):
+    """A function whose stack stays in memory (the guest's, g_esp: stack.MEMORY_SP) takes its arguments
+    in ARG registers as the others do, and as it starts lays its frame out in memory as the original's
+    caller left it: SP down by the return address's word and theirs, its arguments over the return
+    address's place, which it never reads (recompiled.py makes sure); every way out puts SP back. A call
+    of its takes its callee's arguments from where it pushed them, a tail call from above its return
+    address."""
+    sp = ir.Reg(MEMORY_SP, 32)
+    taken = counts[function.entry]
+    for block in function.blocks.values():
+        statements = []
+        for position, statement in enumerate(block.statements):
+            name = frame_of_any(statement)
+            if name is None:
+                statements.append(statement)
+                continue
+            marker = statement.args[0]
+            address = marker.address if isinstance(marker, ir.Load) else sp
+            target = block.statements[position + 1].target if name == CALL_FRAME else block.end.target
+            first = 0 if name == CALL_FRAME else 4
+            for n in range(counts.get(target, 0)):
+                moved = ir.SetReg(ARG0 + n, ir.Load(ir.op("add", (address, ir.const(first + 4 * n)), 32), 32))
+                moved.origin = getattr(statement, "origin", None)
+                statements.append(moved)
+        if taken and isinstance(block.end, (ir.Return, ir.TailCall)):
+            statements.append(ir.SetReg(MEMORY_SP, ir.op("add", (sp, ir.const(4 + 4 * taken)), 32)))
+        block.statements = statements
+    if taken:
+        entry = function.blocks[function.entry]
+        frame = [ir.SetReg(MEMORY_SP, ir.op("sub", (sp, ir.const(4 + 4 * taken)), 32))]
+        frame += [ir.Store(ir.op("add", (sp, ir.const(4 + 4 * n)), 32), ir.Reg(ARG0 + n), 32) for n in range(taken)]
+        for statement in frame:
+            statement.origin = function.entry
+        entry.statements[:0] = frame
+
+
+def frame_of_any(statement):
+    """The marker's name (CALL_FRAME, TAIL_FRAME) of a marker statement, whatever it holds; else None."""
+    if isinstance(statement, ir.Effect) and statement.name in (CALL_FRAME, TAIL_FRAME):
+        return statement.name
     return None
 
 
@@ -151,6 +200,9 @@ def rewrite(functions, counts, sites=None):
         return ir.SetStack(own_slot(first), value)
 
     for function in functions.values():
+        if getattr(function, "memory_stack", False):
+            in_memory(function, counts)
+            continue
         for block in function.blocks.values():
             statements = []
             for position, statement in enumerate(block.statements):
