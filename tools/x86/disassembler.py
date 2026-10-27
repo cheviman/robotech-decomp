@@ -3,9 +3,9 @@
 """
 Name:        disassembler.py
 Description: the game's x86 functions decoded: their instructions, where each goes, their jump tables
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 The functions are the ones xboxrecomp's disassembler found (analysis/disasm/functions.json), each the
@@ -57,6 +57,8 @@ class Instruction:
     flow: int
     targets: tuple = ()      # where a branch, jump or call goes (a jump table's entries)
     table: int = None        # a jump table's address
+    reads: tuple = ()        # the registers it reads and writes, by Capstone's names, the implied ones too
+    writes: tuple = ()       # ("rep stosd": ecx, edi; "cdq": edx): recompiled.py
 
     @property
     def next(self):
@@ -148,7 +150,9 @@ class Program:
             flow = FLOW_RETURN
         elif name in ("int3", "hlt", "ud2"):
             flow = FLOW_STOP
-        return Instruction(insn.address, insn.size, name, insn.op_str, tuple(operands), flow, targets)
+        read, written = insn.regs_access()
+        return Instruction(insn.address, insn.size, name, insn.op_str, tuple(operands), flow, targets,
+                           reads=tuple(insn.reg_name(r) for r in read), writes=tuple(insn.reg_name(r) for r in written))
 
     def jump_table(self, instruction, before, function):
         op = instruction.operands[0]

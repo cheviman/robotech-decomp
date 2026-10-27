@@ -2,10 +2,10 @@
  *    Name:        x86.h
  *    Description: what the decompiled C (tools/decompile.py) calls for the x86's own arithmetic: shifts
  *                 by a count the processor masks, the flags of an addition or a subtraction, the string
- *                 instructions, the 64-bit divisions
- *    Version:     0.1.0
+ *                 instructions, the 64-bit divisions, the calls of functions that stay recompiled
+ *    Version:     0.2.0
  *    Created:     26-10-2026
- *    Modified:    26-10-2026
+ *    Modified:    27-10-2026
  *    Author:      Sebastian Toyos
  *
  *    Each does what the Pentium III does: a shift's count is taken modulo 32 (64 for a 64-bit value), a
@@ -16,6 +16,7 @@
 #ifndef DECOMPILED_X86_H
 #define DECOMPILED_X86_H
 
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -134,6 +135,28 @@ static inline uint32_t x86_sdiv64(uint32_t high, uint32_t low, uint32_t divisor)
 static inline uint32_t x86_srem64(uint32_t high, uint32_t low, uint32_t divisor)
 {
     return (uint32_t)(int32_t)((int64_t)(((uint64_t)high << 32) | low) % (int32_t)divisor);
+}
+
+/* ── A call of a function that stays recompiled ──────────────────────────────────────────────────── */
+
+/* As the recompiled code calls it: its 'count' arguments on the guest's stack as the original pushes
+ * them, the return address the original's call pushes over them, SP back where it was afterwards (the
+ * function drops what it drops, the caller the rest). The registers it reads are in the globals already;
+ * what it hands back in EAX is the value. */
+static inline uint32_t x86_call(void (*function)(void), uint32_t return_address, int count, ...)
+{
+    uint32_t sp = g_esp;
+    va_list arguments;
+    va_start(arguments, count);
+    g_esp -= 4u * (uint32_t)count;
+    for (int n = 0; n < count; n++)
+        MEM32(g_esp + 4u * (uint32_t)n) = va_arg(arguments, uint32_t);
+    va_end(arguments);
+    g_esp -= 4u;
+    MEM32(g_esp) = return_address;
+    function();
+    g_esp = sp;
+    return g_eax;
 }
 
 /* A jump through a table to an entry it does not have: the game's guard before each table keeps it from

@@ -4,13 +4,15 @@
 Name:        __init__.py
 Description: the x86 frontend of the decompiler: the game's code decoded and lifted to the IR of
              arcade-decomp's decompiler (tools/core)
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 disassembler.py decodes the game's functions (the ones xboxrecomp's disassembler found,
 analysis/disasm/functions.json) with Capstone; lift.py turns each instruction into IR statements;
 function.py makes each function a graph of IR blocks, as tools/core/z80 does for the Z80. profile.py
-tells the decompiler's passes about the processor (tools/core/decompiler/cpu.py).
+tells the decompiler's passes about the processor (tools/core/decompiler/cpu.py). arguments.py passes
+the stack's arguments in registers; emit.py writes the C; recompiled.py says what a function left
+recompiled reads, writes and takes, for the decompiled C that calls it.
 """

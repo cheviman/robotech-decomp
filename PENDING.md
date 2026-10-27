@@ -116,7 +116,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   - Left: the rest of the game's own code (about 4,400 functions, a retail build whose strings name
     little; xboxrecomp's naming paths need RTTI, assert strings, a map file or a Fusion package, and
     this title has none; nor do the PlayStation 2 and GameCube builds, both stripped, with no map file
-    on their discs).
+    on their discs, nor the sequel, Robotech: Invasion: see the dead hypotheses).
 - **The base for the decompilation** (25-10-2026), done: `symbols/symbols.txt` is the one place of the
   names, descriptions, files and types (SegaSonic's format: `func`, `data`, `var`, `struct`, `field`,
   `file`, `comment`; `tools/symbols.py header` makes `symbols.h`, an accessor per field and variable for
@@ -265,23 +265,55 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   memory the recompiled C's (MEM8/16/32, the same bytes), and an entry each, NAME_entry, which the
   recompiled code calls in their place (`tools/hand_functions.py` hands them to the recompiler with
   the ones written by hand); `src/decompiled/x86.h` has what the C calls for the x86's own arithmetic.
-  Left out: the XDK's and Bink's functions, the ones written by hand or wrapped, the ones the C
-  written by hand calls as recompiled code, and any whose calls reach one of those. The game plays
-  the menu, the first mission and the save frame for frame and file for file as the references, 60
-  of 60. Found on the way, by halving the set with `tools/decompile.py subset` and the menu's
+  Left out: the XDK's and Bink's functions, the ones written by hand or wrapped, and the ones the C
+  written by hand calls as recompiled code. The game plays the menu, the first mission and the save
+  frame for frame and file for file as the references, 60 of 60. Found on the way, by halving the set
+  with `tools/decompile.py subset` and the menu's
   scenario: a function that ends by jumping to another passes that one's arguments on, its caller's
   slots above its own, so it takes as many (`sub_000BF9C0`, whose tail call reads five where it reads
   one). `tools/verify_c.py --decompiled` runs them against the original too, but the toolkit's harness
   calls the game's code with arguments of its own, which most functions of the game take for
   pointers and fault on, and loses the XBE's mapping to Windows' address randomisation in long runs:
   the scenarios are the check.
-- The decompiled C's noise is counted apart (`tools/noise_report.py`, the decompiled_ kinds): 1,059
-  functions without a name, 1,077 without a description, 23,450 registers kept as variables by their
-  names, 4,646 flags (comparisons the core's condition recovery does not take yet: it wants the values
-  compared bound to temporaries, as the V60's lifter binds them), 5,684 parameters named arg0 up, 7,475
-  stack slots named by their offset, 9,913 reads and writes at a raw address. Next: the lifter's reads
-  bound as the V60's, so the comparisons come back; parameters, locals and the game's variables named
-  from `symbols.txt`; the functions written by hand calling the decompiled ones directly; the x87.
+- **The decompiled C calls the recompiled code** (27-10-2026): 2,610 functions in the build (from
+  1,333), 0 goto, the menu, the first mission and the save as the references, 60 of 60. A function no
+  longer needs every function it calls decompiled: a call of one that stays recompiled (390 of them:
+  the x87's, the XDK's, the ones written by hand, the ones that call through a pointer...) goes as the
+  recompiled code makes it, the registers it reads in the globals, its arguments on the guest's stack
+  under the return address the original pushes (`x86_call`, `src/decompiled/x86.h`), its results
+  read back; 4,238 such calls. An entry whose function calls recompiled code puts EBX, EBP, ESI and EDI
+  back as they came, as the original's pops did. What such a function reads, writes on some way back
+  and on every one, and the arguments it takes, comes from its machine code: `tools/x86/recompiled.py`
+  follows each function with ESP (from its start, or from where "and esp, -16" aligned it), EBP as a
+  frame and the registers it saves and puts back, per part of register as the core's data flow, its
+  callees' summaries worked out together; a call through a pointer by the compiler's convention for
+  code it cannot see, dropping what the run saw its targets drop, what the caller drops after it, or
+  what was pushed for it (stdcall); the kernel's by xboxrecomp's table of their arguments
+  (`stdcall_args_for_ordinal`); the C runtime's `_chkstk`, `__SEH_prolog` and `__SEH_epilog` by what
+  they do to their caller's frame; a function that takes the address of its arguments (`vcFormat`,
+  `GameObjectSendMessage`) with as many as each caller drops. When it cannot tell, a register is
+  "maybe" written, and the C hands the caller's value in and reads it back, which is right either
+  way. It knows 4,111 of the game's 5,150 functions; set against the core's data flow for the 1,389
+  both see, it never says a register is always written where the core does not, and where they differ
+  the core is the one that cannot tell (a register saved inside an if). Not known, and code that calls
+  them stays recompiled: the C runtime's x87 helpers that read their caller's caller's frame
+  (`sub_001485F1`, 235 functions behind it), DirectSound's pool, whose switch has no guard (170),
+  `memmove`'s jumps by tables past where the disassembler ends it (145), and calls through a pointer
+  whose arguments cannot be told. Found by halving the new functions against the first mission (it
+  stayed in the briefing from frame 1200): `sub_0001166C` is no function but a piece of another's
+  code ("pop edi" of a register the code that jumps there saved, then "ret"), which came in once its
+  callee no longer had to be decompiled; every function decompiled now has to come out even in its
+  own machine code too.
+- The decompiled C's noise is counted apart (`tools/noise_report.py`, the decompiled_ kinds), with the
+  bridge to the recompiled code: 1,896 functions without a name, 2,057 without a description, 71,454
+  registers kept as variables by their names (27.4 a function, 17.6 before: each call of recompiled
+  code hands its registers in and reads its results back by the globals), 12,171 flags (comparisons
+  the core's condition recovery does not take yet: it wants the values compared bound to temporaries,
+  as the V60's lifter binds them), 32,449 parameters named arg0 up (12.4 a function, 4.3 before: the
+  arguments of every x86_call), 39,595 stack slots named by their offset, 13,986 reads and writes at a
+  raw address (5.4 a function, 7.4 before). Next: the lifter's reads bound as the V60's, so the
+  comparisons come back; parameters, locals and the game's variables named from `symbols.txt`; the
+  functions written by hand calling the decompiled ones directly; the x87.
 
 ## Dead hypotheses
 
@@ -292,6 +324,17 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   the game's code has no `operator new`/`delete`, no C++ exception handling, no `type_info`, no
   `_purecall`; its objects are handles with tables of functions, C-style. Only Microsoft's D3D8 and
   DirectSound are C++. The decompilation is in C.
+- **"Robotech: Invasion (Xbox, 2004, Vicious Cycle's next game) shares the engine's code and names
+  some of it"** (27-10-2026, the USA disc). Its XBE is a retail build (XDK 5849, built 17-08-2004) with
+  no symbols, no RTTI, no assert or source-file strings but Havok's, and not even the engine's class
+  names (`vcTexture`, `vcSound`: one string with `vc` in it). The two XBEs share 224 strings, nearly
+  all the C runtime's and XAPI's. Matched function by function (xboxrecomp's disassembly of both, each
+  function's instructions with the image's addresses and the calls' targets masked, then the mnemonics
+  alone, then the callees of the pairs): 223 pairs of Battlecry's 5,500 functions in `.text` and
+  Invasion's 10,881, 221 of them the C runtime's and XAPI's and 2 of the game's; by each function's set
+  of distinctive constants and floats, for the same source built by another compiler: 32, all the
+  runtime's. Invasion's engine is another one (Havok, files by hashed names, Xbox Live); nothing in it
+  names Battlecry's code.
 
 - **"The logos and the intro do not skip because the pad does not reach the game."** Measured: the pad
   is enumerated and every scripted press is delivered; the movies play whole. They are not skippable.

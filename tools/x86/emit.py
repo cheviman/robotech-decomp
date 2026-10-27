@@ -3,9 +3,9 @@
 """
 Name:        emit.py
 Description: writes the game's functions as C, through the decompiler's writer
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
@@ -13,10 +13,16 @@ memory and the x86's effects. The game's memory is the guest's, the one the reco
 writes: MEM8, MEM16 and MEM32 of an address (xboxrecomp's recomp_types.h), so that the C and the
 recompiled code share it. No variable or structure has a name in it yet (symbols.txt's var and struct
 lines will). The string instructions' effects and the 64-bit divisions print as the calls of x86.h
-(x86_rep_stos32, x86_udiv64...).
+(x86_rep_stos32, x86_udiv64...). A call of a function that stays recompiled goes as the recompiled code
+makes it: the registers it reads in the globals g_eax..., its arguments on the guest's stack
+(x86_call), what it hands back read from the globals after.
 """
 from decompiler import emit
 from v60 import ir
+
+from .profile import ARG0, ARGUMENTS, EAX
+
+REGISTER_GLOBALS = {0: "g_eax", 1: "g_ecx", 2: "g_edx", 3: "g_ebx", 5: "g_ebp", 6: "g_esi", 7: "g_edi"}
 
 
 def use_memory_map():
@@ -96,6 +102,56 @@ class X86Writer(emit.FunctionWriter):
         super().__init__(*args, **kwargs)
         self.printer = X86Printer(self)
 
+    def call(self, statement):
+        if statement.target is not None and statement.target in self.emitter.recompiled:
+            return self.recompiled_call(statement.target, statement.return_address)
+        return super().call(statement)
+
+    def ending(self, end):
+        if isinstance(end, ir.TailCall) and end.target in self.emitter.recompiled:
+            self.current = end
+            return self.recompiled_call(end.target, None) + self.copy_out() + [self.return_text()]
+        return super().ending(end)
+
+    def register_input(self, index):
+        """What the caller's register holds where the call reads it: its variable, or 0 when nothing has
+        set it (as the core passes a register a function never sets)."""
+        if self.never_set(index):
+            return "0u"
+        name = self.implicit_value(index)
+        declared = set(self.widths) | {self.emitter.param_name(self.entry, value) for value in self.params + self.results}
+        return name if name in declared else "0u"
+
+    def recompiled_call(self, target, return_address):
+        """A call of a function left recompiled (decompile.py, recompiled.py): the registers it reads, and
+        the ones it may leave as they were, into the register globals; its arguments on the guest's stack,
+        under the return address the original pushes (x86_call); what it hands back from the globals."""
+        emitter = self.emitter
+        by_value, by_pointer, returned = emitter.by_value(target), emitter.by_pointer(target), emitter.returned(target)
+        params = emitter.signatures[target].params
+        live = self.after.get(id(self.current))
+        arguments, handed = [], set()
+        for value in by_value + by_pointer:
+            index = value[1]
+            if ARG0 <= index < ARG0 + ARGUMENTS:
+                arguments.append(index)
+            elif value in params:
+                handed.add(index)
+            elif not emitter.always_written(target, value) and \
+                    (live is None or any(variable[0] == "r" and variable[1] == index for variable in live)):
+                handed.add(index)   # one it may leave as it was, which the caller reads afterwards
+        lines = [f"{REGISTER_GLOBALS[index]} = {self.register_input(index)};" for index in sorted(handed)]
+        values = "".join(", " + self.register_input(index) for index in sorted(arguments))
+        call = f"x86_call({emitter.names[target]}, 0x{return_address or 0:08X}u, {len(arguments)}{values})"
+        results = [value for value in by_pointer] + ([returned] if returned is not None else [])
+        if returned is not None and returned[1] == EAX:
+            lines.append(f"{self.register_set(EAX)} = {call};")
+        else:
+            lines.append(call + ";")
+        lines += [f"{self.register_set(value[1])} = {REGISTER_GLOBALS[value[1]]};"
+                  for value in results if not (value is returned and value[1] == EAX)]
+        return lines
+
     def statement(self, statement):
         if isinstance(statement, ir.Store):
             target = self.memory(statement.address, statement.bits, id(statement))
@@ -121,6 +177,7 @@ class X86Emitter(emit.Emitter):
         self.layouts = layouts
         self.saved_locals = True
         self.flow = None
+        self.recompiled = set()     # the functions called that stay recompiled (decompile.py)
 
     def restores_current(self, entry):
         return None, None

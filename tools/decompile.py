@@ -2,9 +2,9 @@
 Name:        decompile.py
 Description: the game's functions decompiled to C by arcade-decomp's decompiler (tools/core) through the
              x86 frontend (tools/x86)
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 The recompiled C (xboxrecomp) runs the game an instruction at a time; this is its way to C a person reads:
@@ -23,7 +23,11 @@ found, and the C written from that. It grows a step at a time, each checked agai
                                         # what build left in analysis/decompiled_cache.json
 
 The functions of the XDK and Bink, and the ones written by hand (src/game/) or wrapped
-(src/recomp_manual.c), are left as they are: a function that calls one of them is not decompiled yet.
+(src/recomp_manual.c), are left as they are. The decompiled C calls them, and every other function that
+stays recompiled (the x87's, the ones that call through a pointer...), as the recompiled code does: the
+registers it reads in the globals, its arguments on the guest's stack (x86_call, src/decompiled/x86.h),
+its results read back; what each reads, writes and takes is read from its machine code
+(tools/x86/recompiled.py). A function that calls one whose effects that cannot say stays recompiled.
 """
 import argparse
 import bisect
@@ -43,7 +47,7 @@ from decompiler import preserved, signatures, stack, structure                  
 from decompiler import emit as core_emit                                                            # noqa: E402
 from decompiler.gotos import GotoError                                                              # noqa: E402
 from v60 import ir                                                       # noqa: E402
-from x86 import arguments, disassembler, function, lift                  # noqa: E402
+from x86 import arguments, disassembler, function, lift, recompiled      # noqa: E402
 from x86 import emit                                                     # noqa: E402
 from x86.profile import ARG0, ARGUMENTS, EAX, X86                        # noqa: E402
 
@@ -56,6 +60,7 @@ BUILD_DIR = os.path.join(REPO, "src", "decompiled")
 DECOMPILED_JSON = os.path.join(REPO, "analysis", "decompiled_functions.json")
 DECOMPILED_SIGNATURES = os.path.join(REPO, "analysis", "decompiled_signatures.json")
 DECOMPILED_CACHE = os.path.join(REPO, "analysis", "decompiled_cache.json")
+ICALL_SITES = os.path.join(REPO, "analysis", "icall_sites.json")
 MANUAL = os.path.join(REPO, "src", "recomp_manual.c")
 REGISTER_GLOBALS = {0: "g_eax", 1: "g_ecx", 2: "g_edx", 3: "g_ebx", 5: "g_ebp", 6: "g_esi", 7: "g_edi"}
 
@@ -153,13 +158,13 @@ def overlapping_slots(f):
     return False
 
 
-def lifted_closed(program, names, skip=frozenset(), subject=None):
-    """The functions lifted with their stack in slots whose calls all go to such functions:
+def lifted(program, chosen, skip=frozenset(), subject=None):
+    """The functions of 'chosen' (all of the game's code when None) lifted with their stack in slots:
     {entry: Function}, their stacks analysed; but for those in 'skip', and those 'subject' says are the
     XDK's or Bink's."""
     builder = function.Builder(program)
-    slotted, calls = {}, {}
-    for entry in game_entries(program):
+    slotted = {}
+    for entry in game_entries(program) if chosen is None else sorted(chosen):
         if entry in skip or (subject is not None and subject(entry).startswith(("xdk/", "bink/"))):
             continue
         try:
@@ -170,18 +175,138 @@ def lifted_closed(program, names, skip=frozenset(), subject=None):
         if getattr(built, "memory_stack", False) or overlapping_slots(built):
             continue
         slotted[entry] = built
-        calls[entry] = {statement.target for block in built.blocks.values() for statement in block.statements
-                        if isinstance(statement, ir.Call)}
-        calls[entry] |= {block.end.target for block in built.blocks.values() if isinstance(block.end, ir.TailCall)}
-    closed = set(slotted)
-    changed = True
-    while changed:
-        changed = False
-        for entry in list(closed):
-            if not calls[entry] <= closed:
-                closed.discard(entry)
-                changed = True
-    return {entry: slotted[entry] for entry in sorted(closed)}
+    return slotted
+
+
+def calls_of(f):
+    """(the calls of a function, its tail calls): [(target, return address)], [target]."""
+    calls = [(statement.target, statement.return_address) for block in f.blocks.values()
+             for statement in block.statements if isinstance(statement, ir.Call)]
+    tails = [block.end.target for block in f.blocks.values() if isinstance(block.end, ir.TailCall)]
+    return calls, tails
+
+
+def call_targets_seen():
+    """{call site: the functions a run saw a call through a pointer there reach} (xboxrecomp's icall
+    feedback): recompiled.py takes what they drop."""
+    if not os.path.exists(ICALL_SITES):
+        return {}
+    sites = json.load(open(ICALL_SITES))
+    return {int(site, 16): [int(target, 16) for target in found["targets"] if int(target, 16) < 0xFE000000]
+            for site, found in sites.items()}
+
+
+def site_count(program, caller, return_address, summary):
+    """How many words a call hands a function that counts its arguments by its callers (escapes): what the
+    caller drops after it ("add esp, N", or "pop ecx" a word at a time), or what the callee drops itself;
+    None when neither says."""
+    if summary.drops:
+        return summary.drops // 4
+    instructions = program.function(caller).instructions
+    following = instructions.get(return_address)
+    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg" \
+            and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
+        return following.operands[1].imm // 4
+    words = 0
+    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
+            and following.operands[0].reg == "ecx":
+        words += 1
+        following = instructions.get(following.next)
+    return words or None
+
+
+def outside_problem(program, builder, caller, target, return_address, summary, tail):
+    """Why the decompiled C cannot call 'target', a function left recompiled, from 'caller'; None if it can."""
+    if summary is None or not summary.known:
+        return "calls a function whose effects are not known"
+    if builder.drops(target) != summary.drops:
+        return "calls a function that drops otherwise than its returns say"
+    if summary.arguments > ARGUMENTS:
+        return "calls a function that takes too many arguments"
+    if summary.escapes and (tail or site_count(program, caller, return_address, summary) is None):
+        return "calls a function that counts its arguments by its callers, with no count"
+    return None
+
+
+class Flow(dataflow.Program):
+    """The decompiler's data flow (tools/core/decompiler/dataflow.py) over the functions decompiled, with
+    the ones they call that stay recompiled known by summaries of their own ('outside': entry ->
+    dataflow.Summary, from recompiled.py), which the analysis never changes."""
+
+    def __init__(self, functions, analysis, outside):
+        super().__init__(functions, analysis, [], ())
+        self.outside = outside
+
+    def summary_of(self, target):
+        found = self.summaries.get(target)
+        return found if found is not None else self.outside.get(target)
+
+    def combine(self, targets):
+        reads, writes = set(), set()
+        always = None
+        for target in targets:
+            summary = self.summary_of(target)
+            if summary is None:
+                continue
+            reads |= summary.reads
+            writes |= summary.writes
+            always = set(summary.always) if always is None else always & summary.always
+        return reads, writes, always or set()
+
+    def target_reads(self, targets, live_after):
+        reads = set()
+        for target in targets:
+            summary = self.summary_of(target)
+            if summary is None:
+                continue
+            reads |= summary.base
+            for variable in live_after & summary.writes:
+                found = summary.passes.get((variable[0], variable[1]))
+                reads |= summary.reads if found is None else found
+        return reads
+
+    def outcome_kills(self, call, mask, zero):
+        if call.slot is not None:
+            return set()
+        always = None
+        for target in self.call_targets(call):
+            summary = self.summary_of(target)
+            if summary is None:
+                continue
+            outcome = summary.always_when.get((mask, zero))
+            if outcome is None:
+                outcome = summary.always
+            always = set(outcome) if always is None else always & outcome
+        return always or set()
+
+
+class Typing(pointers.Program):
+    """The core's pointer typing (tools/core/decompiler/pointers.py) over the functions decompiled: what
+    a caller passes a function that stays recompiled goes nowhere, since there is no C of it to type."""
+
+    def tell_callee(self, target, state):
+        if target in self.functions:
+            super().tell_callee(target, state)
+
+
+def outside_summary(summary, count):
+    """A function left recompiled as the data flow sees it: it reads its inputs and its arguments (ARG0
+    up); a register it may leave as it was it reads only when the caller reads it afterwards (passes);
+    it writes the flags on every way back (no caller reads them after a call: decompile.py checks)."""
+    found = dataflow.Summary()
+    base = {("r", register, part) for register, part in summary.inputs}
+    base |= {("r", ARG0 + n, part) for n in range(count) for part in range(3)}
+    found.base = base
+    found.writes = {("r", register, part) for register, part in summary.writes}
+    found.always = {("r", register, part) for register, part in summary.always} | set(dataflow.FLAGS)
+    found.reads = base | (found.writes - found.always)
+    found.passes = {}
+    for register, _ in summary.writes:
+        key = ("r", register)
+        kept = {("r", register, part) for part in range(3)} - found.always
+        found.passes[key] = base | kept
+    found.always_when = {}
+    return found
 
 
 def called_from_outside(program, entry, built):
@@ -190,7 +315,16 @@ def called_from_outside(program, entry, built):
     return not callers or any(caller not in built for caller in callers)
 
 
+SITES = 0x00F00000     # where the calls of a function that counts its arguments by its callers go, one each
+
+
 def analyse(quiet=False, for_build=False):
+    """The functions decompiled, their data flow solved: (program, built, flow, found). A function goes in
+    when it lifts with its stack in slots and each function it calls is decompiled too or stays
+    recompiled with its effects known (recompiled.py); a call of one of those is a call of the recompiled
+    code (emit.py). flow.outside: the functions called that stay recompiled, by their summaries;
+    flow.aliases: for a call of one that counts its arguments by its callers, the target of its own
+    (SITES up) that stands for it, and the function."""
     cpu.use(X86)
     dataflow.configure()
     dataflow.HANDLER_SLOTS = (None,)    # no object loop calls handlers through a field of its objects
@@ -198,30 +332,83 @@ def analyse(quiet=False, for_build=False):
     sym = symbols.load()
     names = sym["func"]
     program = disassembler.Program(names)
-    if for_build:
-        skip, subject = left_alone(sym)
-        built = lifted_closed(program, names, skip, subject)
-    else:
-        built = lifted_closed(program, names)
-    counts = arguments.counts(built)
-    try:
-        arguments.rewrite(built, counts)
-    except arguments.Straddles as problem:
-        raise SystemExit(str(problem))
-    flow = dataflow.Program(built, Analysis(), [], ())
-    # a function the recompiled code calls (or nothing does) takes all it reads, and hands back EAX, as the
-    # original leaves it for the recompiled callers
-    signatures.OPEN = {entry for entry in built if called_from_outside(program, entry, built)}
-    flow.declared = {entry: {EAX} for entry in signatures.OPEN}
-    flow.solve()
-    while sum(len(preserved.analyse(f, flow.call_writes)) for f in built.values()):
+    skip, subject = left_alone(sym) if for_build else (frozenset(), None)
+    summaries = recompiled.Summaries(program, call_targets_seen())
+    builder = function.Builder(program)
+    chosen = None
+    while True:
+        built = lifted(program, chosen, skip, subject)
+        changed = True
+        while changed:
+            changed = False
+            calls = {entry: calls_of(f) for entry, f in built.items()}
+            summaries.compute(set(built) | {target for found, _ in calls.values() for target, _ in found}
+                              | {target for _, tails in calls.values() for target in tails})
+            for entry, (found, tails) in calls.items():
+                # its own machine code has to come out even too: a piece of another function's code the
+                # disassembler took for one (sub_0001166C, "pop edi" of a register its jumper saved, then
+                # "ret") does not, and its C would leave ESP where the original does not
+                own = summaries.found.get(entry)
+                problems = ["is no function of its own"] if own is None or not own.known or \
+                    own.drops != builder.drops(entry) else []
+                problems += [outside_problem(program, builder, entry, target, address, summaries.found.get(target), False)
+                             for target, address in found if target not in built]
+                problems += [outside_problem(program, builder, entry, target, None, summaries.found.get(target), True)
+                             for target in tails if target not in built]
+                if any(problems):
+                    del built[entry]
+                    changed = True
+        # the calls of the ones that count their arguments by their callers, each a target of its own
+        aliases, outside_counts = {}, {}
+        for entry, f in built.items():
+            for block in f.blocks.values():
+                for statement in block.statements:
+                    if isinstance(statement, ir.Call) and statement.target not in built:
+                        summary = summaries.found[statement.target]
+                        if summary.escapes:
+                            alias = SITES + len(aliases)
+                            aliases[alias] = statement.target
+                            outside_counts[alias] = max(summary.arguments,
+                                                        site_count(program, entry, statement.return_address, summary))
+                            statement.target = alias
+                        else:
+                            outside_counts[statement.target] = summary.arguments
+                if isinstance(block.end, ir.TailCall) and block.end.target not in built:
+                    outside_counts[block.end.target] = summaries.found[block.end.target].arguments
+        counts = arguments.counts(built, outside_counts)
+        try:
+            arguments.rewrite(built, {**outside_counts, **counts})
+        except arguments.Straddles as problem:
+            raise SystemExit(str(problem))
+        flow = Flow(built, Analysis(), {target: outside_summary(summaries.found[aliases.get(target, target)], count)
+                                        for target, count in outside_counts.items()})
+        flow.aliases = aliases
+        flow.recompiled = summaries
+        # a function the recompiled code calls (or nothing does) takes all it reads, and hands back EAX, as
+        # the original leaves it for the recompiled callers
+        signatures.OPEN = {entry for entry in built if called_from_outside(program, entry, built)}
+        flow.declared = {entry: {EAX} for entry in signatures.OPEN}
         flow.solve()
-    changed = sum(conditions.recover(f, flow) for f in built.values())
-    if changed:
-        flow.reset()
-        flow.solve()
-    found = signatures.compute(flow)
-    flow.conditions_recovered = changed
+        while sum(len(preserved.analyse(f, flow.call_writes)) for f in built.values()):
+            flow.solve()
+        changed = sum(conditions.recover(f, flow) for f in built.values())
+        if changed:
+            flow.reset()
+            flow.solve()
+        found = signatures.compute(flow)
+        flow.conditions_recovered = changed
+        # a flag read after a call of a recompiled function, which the C does not hand back: the caller
+        # stays recompiled, and the analysis goes again without it
+        flagged = {entry for entry in built for call, live in flow.live_after_calls(entry)
+                   if call.target in flow.outside and any(variable[0] == "f" for variable in live)}
+        if not flagged:
+            break
+        chosen = set(built) - flagged
+    outside_signatures(flow, built, found)
+    # what writes the C from here (pointers.py, emit.py) looks a callee up among the summaries; the
+    # analysis, which works the summaries of its own functions out, is done
+    for target, summary in flow.outside.items():
+        flow.summaries.setdefault(target, summary)
     if quiet:
         return program, built, flow, found
     print("%d functions analysed, %d conditions recovered" % (len(built), changed))
@@ -230,6 +417,26 @@ def analyse(quiet=False, for_build=False):
         print("  %-28s args %d  in %s  out %s" % (names.get(entry, "%08X" % entry), counts[entry],
                                                  describe(signature.params), describe(signature.results)))
     return program, built, flow, found
+
+
+def outside_signatures(flow, built, found):
+    """The signatures of the functions called that stay recompiled, into 'found': what they read for
+    themselves (their arguments too) are their parameters; what some caller reads after a call, of what
+    they may write, their results (a register they may leave as it was goes in and out)."""
+    results = {target: set() for target in flow.outside}
+    for entry, f in built.items():
+        for call, live in flow.live_after_calls(entry):
+            if call.slot is None and call.target in flow.outside:
+                results[call.target] |= signatures.scratch(live & flow.outside[call.target].writes)
+        leaving = flow.exit_live.get(entry, frozenset())
+        for block in f.blocks.values():
+            if isinstance(block.end, ir.TailCall) and block.end.target in flow.outside:
+                results[block.end.target] |= signatures.scratch(leaving & flow.outside[block.end.target].writes)
+    for target, summary in flow.outside.items():
+        signature = signatures.Signature()
+        signature.params = signatures.scratch(summary.base)
+        signature.results = results[target]
+        found[target] = signature
 
 
 def describe(values):
@@ -268,11 +475,13 @@ def call_results(function, found, flow):
     return results
 
 
-def entry_text(emitter, entry, drops):
+def entry_text(emitter, entry, drops, keeps=False):
     """NAME_entry, the function as the recompiled code calls it: its arguments from the guest's stack
     (ARG32) and registers, its result into EAX, the return address (and, for one that drops its own
     arguments, those) popped. None when it takes or hands back a flag, which the recompiled code keeps
-    in its own way."""
+    in its own way. 'keeps': it calls recompiled code (itself or through the decompiled functions it
+    calls), handing registers in the globals: EBX, EBP, ESI and EDI go back as they came, as the
+    original's pops put them back, but for the ones it hands back."""
     values = []
     for value in emitter.by_value(entry):
         if value[0] != "r":
@@ -286,6 +495,14 @@ def entry_text(emitter, entry, drops):
             return None
     lines = ["void %s_entry(void)" % emitter.names[entry], "{"]
     copies = []
+    handed = {value[1] for value in emitter.by_pointer(entry)}
+    returned = emitter.returned(entry)
+    if returned is not None:
+        handed.add(returned[1])
+    kept = [register for register in (3, 5, 6, 7) if register not in handed] if keeps else []
+    if kept:
+        lines.append("\tuint32_t " + ", ".join("%s_kept = %s" % (REGISTER_GLOBALS[register][2:], REGISTER_GLOBALS[register])
+                                               for register in kept) + ";")
     for value in emitter.by_pointer(entry):
         if value[0] != "r" or value[1] not in REGISTER_GLOBALS:
             return None
@@ -294,12 +511,12 @@ def entry_text(emitter, entry, drops):
         values.append("&" + local)
         copies.append("\t%s = %s;" % (REGISTER_GLOBALS[value[1]], local))
     call = "%s(%s);" % (emitter.names[entry], ", ".join(values))
-    returned = emitter.returned(entry)
     if returned is not None:
         if returned[0] != "r" or returned[1] not in REGISTER_GLOBALS:
             return None
         call = "%s = %s" % (REGISTER_GLOBALS[returned[1]], call)
     lines.append("\t" + call)
+    lines += ["\t%s = %s_kept;" % (REGISTER_GLOBALS[register], REGISTER_GLOBALS[register][2:]) for register in kept]
     lines += copies
     lines.append("\tg_esp += %du;" % (4 + drops))
     lines.append("}")
@@ -317,6 +534,12 @@ def write(out_dir, for_build=False):
     program, built, flow, found = analyse(quiet=True, for_build=for_build)
     sym = symbols.load()
     names = {entry: program.functions[entry][1] for entry in built}
+    # a function called that stays recompiled, by the name the recompiled code calls it by: the entry of
+    # one written by hand, the recompiled function's own name
+    hand = hand_functions.hand_functions()[0]
+    for target in flow.outside:
+        real = flow.aliases.get(target, target)
+        names[target] = hand[real][0] if real in hand and real not in built else program.functions[real][1]
     arguments_by_value = {}
     for entry, signature in found.items():
         registers = {value[1] for value in signature.params - signature.results if value[0] == "r"}
@@ -343,13 +566,15 @@ def write(out_dir, for_build=False):
         live_after[entry], live_at_start[entry] = after, start
     emit.use_memory_map()
     known = NoNames()
-    typing = pointers.Program(built, flow, found, {entry: call_results(f, found, flow) for entry, f in built.items()},
-                              (), known.targets, {}, {})
+    typing = Typing(built, flow, found, {entry: call_results(f, found, flow) for entry, f in built.items()},
+                    (), known.targets, {}, {})
     fields, accesses = typing.run()
     named = memory.Memory(known, memory.accesses_of(built.values()), {})
-    always = {entry: set(summary.always) for entry, summary in flow.summaries.items()}
+    always = {entry: set(summary.always) for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
     emitter = emit.X86Emitter(built, found, names, named, always, pointers.Layouts(accesses, known))
-    emitter.writes = {entry: set(summary.writes) for entry, summary in flow.summaries.items()}
+    emitter.writes = {entry: set(summary.writes)
+                      for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
+    emitter.recompiled = set(flow.outside)
     emitter.flow = flow
     emitter.comments = dict(sym["comments"])
     for entry, f in built.items():
@@ -365,17 +590,17 @@ def write(out_dir, for_build=False):
             problems[key] += 1
             examples.setdefault(key, entry)
     if for_build:
-        texts, entries = for_the_build(program, built, emitter, texts)
+        texts, entries = for_the_build(program, built, emitter, texts, flow)
         cache = {}
         for entry in texts:
             f = built[entry]
-            calls = {statement.target for block in f.blocks.values() for statement in block.statements
-                     if isinstance(statement, ir.Call)}
-            calls |= {block.end.target for block in f.blocks.values() if isinstance(block.end, ir.TailCall)}
+            targets = targets_of(f)
             by_value = emitter.by_value(entry)
             cache["0x%08X" % entry] = {
                 "name": emitter.names[entry], "prototype": emitter.prototype(entry), "text": texts[entry],
-                "entry_text": entries.get(entry), "calls": ["0x%08X" % c for c in sorted(calls)],
+                "entry_text": entries.get(entry),
+                "calls": ["0x%08X" % c for c in sorted(targets & set(built))],
+                "recompiled": sorted({emitter.names[c] for c in targets if c in flow.outside}),
                 "registers": [REGISTER_GLOBALS[value[1]] for value in by_value if value[1] in REGISTER_GLOBALS],
                 "arguments": sum(1 for value in by_value if ARG0 <= value[1] < ARG0 + ARGUMENTS),
                 "by_pointer": len(emitter.by_pointer(entry)), "drops": f.drops or 0}
@@ -433,11 +658,15 @@ def write_build_files(cache, chosen):
                 keep.discard(key)
                 changed = True
     ordered = sorted(keep, key=lambda key: int(key, 16))
+    recompiled_names = sorted({name for key in ordered for name in cache[key].get("recompiled", ())})
     os.makedirs(BUILD_DIR, exist_ok=True)
     with open(os.path.join(BUILD_DIR, "decompiled.h"), "w", encoding="ascii", newline="\n") as out:
-        out.write(file_header("decompiled.h", "the game's functions the decompiler writes, by their prototypes"))
+        out.write(file_header("decompiled.h", "the game's functions the decompiler writes, by their prototypes, "
+                              "and the recompiled ones they call"))
         out.write("#ifndef DECOMPILED_H\n#define DECOMPILED_H\n\n#include \"decomp.h\"\n#include \"x86.h\"\n\n")
-        out.write("\n".join(cache[key]["prototype"] + ";" for key in ordered) + "\n\n#endif\n")
+        out.write("\n".join(cache[key]["prototype"] + ";" for key in ordered) + "\n\n")
+        out.write("/* the functions they call that stay recompiled, as the recompiled code calls them (x86_call) */\n")
+        out.write("\n".join("void %s(void);" % name for name in recompiled_names) + "\n\n#endif\n")
     with open(os.path.join(BUILD_DIR, "decompiled.c"), "w", encoding="ascii", errors="replace", newline="\n") as out:
         out.write(file_header("decompiled.c", "the game's functions the decompiler writes so far, and the entries "
                               "the recompiled code calls them by"))
@@ -463,24 +692,40 @@ def subset(low, high):
           (len(ordered), len(cache), ordered[0] if ordered else "-", ordered[-1] if ordered else "-"))
 
 
-def for_the_build(program, built, emitter, texts):
+def targets_of(f):
+    """The functions a function calls or jumps to (a call's own target, SITES up, for one of a function
+    that counts its arguments by its callers)."""
+    calls, tails = calls_of(f)
+    return {target for target, _ in calls} | set(tails)
+
+
+def for_the_build(program, built, emitter, texts, flow):
     """The functions that go into the build and their entries: the ones written whose calls all reach
-    others that go in, and that the recompiled code calls only if what they take was worked out with it
-    (signatures.OPEN: every input a parameter, EAX handed back) and their entry can be made."""
+    others that go in or recompiled code, and that the recompiled code calls only if what they take was
+    worked out with it (signatures.OPEN: every input a parameter, EAX handed back) and their entry can
+    be made."""
     keep = set(texts)
     entries = {}
+    # the ones that call recompiled code, themselves or through decompiled functions: their entries
+    # keep EBX, EBP, ESI and EDI (entry_text)
+    calling = {entry for entry in built if targets_of(built[entry]) & set(flow.outside)}
+    changed = True
+    while changed:
+        changed = False
+        for entry in built:
+            if entry not in calling and targets_of(built[entry]) & calling:
+                calling.add(entry)
+                changed = True
     changed = True
     while changed:
         changed = False
         for entry in sorted(keep):
             f = built[entry]
-            calls = {statement.target for block in f.blocks.values() for statement in block.statements
-                     if isinstance(statement, ir.Call)}
-            calls |= {block.end.target for block in f.blocks.values() if isinstance(block.end, ir.TailCall)}
+            calls = targets_of(f) - set(flow.outside)
             # every one gets an entry: the recompiler leaves out its body and lists the entry in its
             # dispatch; the recompiled code calls only those of signatures.OPEN
             outside = entry not in signatures.OPEN and any(caller not in keep for caller in program.callers.get(entry, ()))
-            text = entry_text(emitter, entry, f.drops or 0)
+            text = entry_text(emitter, entry, f.drops or 0, entry in calling)
             if not calls <= keep or outside or text is None:
                 keep.discard(entry)
                 entries.pop(entry, None)

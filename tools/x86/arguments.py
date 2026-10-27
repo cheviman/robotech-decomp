@@ -3,9 +3,9 @@
 """
 Name:        arguments.py
 Description: the arguments a function takes on the stack, passed in registers ARG0 up
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's passes take a function's inputs and results from its registers (the V60's code passes
@@ -58,13 +58,15 @@ def count(function):
     return taken
 
 
-def counts(functions):
+def counts(functions, outside=None):
     """How many arguments each of 'functions' takes: the slots from 4 it reads or writes itself, and the
     ones a call or a tail call hands on from its own arguments. A function that ends by jumping to
     another passes that one's arguments on, its caller's slots above its own (sub_000BF9C0 takes the
     five sub_000A50F0 reads, though it reads one itself); so does a call to a function that takes more
-    than the caller pushed. Worked out until nothing changes, which covers recursion."""
-    found = {entry: count(f) for entry, f in functions.items()}
+    than the caller pushed. Worked out until nothing changes, which covers recursion. 'outside': what
+    the functions they call that are not among them take (recompiled.py)."""
+    found = dict(outside or {})
+    found.update({entry: count(f) for entry, f in functions.items()})
     frames = {}
     for entry, f in functions.items():
         frames[entry] = []
@@ -91,7 +93,7 @@ def counts(functions):
             if taken != found[entry]:
                 found[entry] = taken
                 changed = True
-    return found
+    return {entry: found[entry] for entry in functions}
 
 
 def frame_of(statement, name):
@@ -109,9 +111,11 @@ def own_slot(offset):
     return OWN_SLOTS + offset - 4
 
 
-def rewrite(functions, counts):
+def rewrite(functions, counts, sites=None):
     """Passes the arguments of 'functions' (entry -> Function, their stacks analysed) in registers, in
-    place; 'counts' says how many each callee takes."""
+    place; 'counts' says how many each callee takes, 'sites' how many a call hands one that counts
+    them by its callers (a variable argument list: {the call's return address: count})."""
+    sites = sites or {}
     def placed(statement, origin):
         statement.origin = origin
         return statement
@@ -154,8 +158,9 @@ def rewrite(functions, counts):
                 sp = frame_of(statement, CALL_FRAME)
                 if sp is not None:
                     call = block.statements[position + 1]
+                    taken = sites.get(call.return_address, counts.get(call.target, 0))
                     statements += [placed(ir.SetReg(ARG0 + n, ir.Stack(sp + 4 * n)), origin)
-                                   for n in range(counts.get(call.target, 0))]
+                                   for n in range(taken)]
                     continue
                 sp = frame_of(statement, TAIL_FRAME)
                 if sp is not None:
