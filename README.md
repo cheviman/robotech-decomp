@@ -56,7 +56,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       distance and a pan, and the reverb is not heard yet
 - [x] The original game as the reference: the scenarios played in xemu on the port's clock and pad, its
       frames set against the port's; the menu, the first mission and a save the same on both, the flight
-      and the shots included, at a mean difference of 5.5 of 255 or less
+      and the shots included, at a mean difference of 1.23 of 255 or less (1.5 fails)
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
       programs on the GPU, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
@@ -183,7 +183,8 @@ hand.
 - **Checking against the original**: the same scenarios run on the original game in xemu, patched to
   dump its frames with the port's numbers and to answer the game's clock and pad as the port does
   (`tools/reference/xemu/` has the patch, how to build it and what it needs of your own console), and
-  each frame is set against the port's:
+  each frame is set against the port's; it fails when a frame is further than the scenario's `original`
+  line allows:
 
   ```bash
   py -3 tools/xemu_reference.py menu mission1 save

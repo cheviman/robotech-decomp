@@ -3,3 +3,4 @@ script  f360:a
 frames  900
 dump    60
 movies  no
+original 1.5

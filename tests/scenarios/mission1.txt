@@ -4,3 +4,4 @@ script  f360:a,f540:a,f720:a,f900:a,f1080:a,f1260:a,f1440:a,f1620:a,f1800:a,f198
 frames  2400
 dump    120
 movies  no
+original 1.5

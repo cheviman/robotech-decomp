@@ -40,10 +40,8 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
    25-10-2026; no draw there uses a vertex program).
 4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
    `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
-   (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`).
-5. **Against the original** (xemu, `tools/xemu_reference.py`, 27-10-2026): the menu's background emblem
-   (the circles and the grid on the left) is brighter in xemu, and the difference grows as it turns
-   (2.0 at frame 60, 5.0 at 840). The rest of what differs is at the edges.
+   (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`), texture transforms `PROJECTED` (the
+   layer's shader does not divide) and on pre-transformed vertices (the layer leaves them out).
 
 ### Sound
 
@@ -150,10 +148,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   same functions the port replaces as the port does (Swap counted, QueryPerformanceCounter,
   GetTickCount, GetSystemTimeAsFileTime, XInputGetState: a helper the translator calls before their first
   instruction), and its frames count from the first present. Now the menu, the first mission and the save
-  are the same on both, the flight and the shots included, at a distance of 5.5 or less (the mean
-  difference of the channels, 0 to 255) for the whole run. Left: the date the kernel gives XAPI's own
-  calls is still the console's in xemu (a save's folder times); a numbered threshold per scenario, so a
-  change that moves the port away from the original fails like one that moves it from its last build.
+  are the same on both, the flight and the shots included, at a distance of 1.23 or less (the mean
+  difference of the channels, 0 to 255) for the whole run, and each scenario's `original` line (1.5)
+  fails the comparison when a frame goes further. The first thing it found: the menu's background emblem
+  scrolls a texture by its texture matrix, which the port left still (5.0 at frame 840, now 0.98; the
+  bridge now gives the layer the texture matrices as D3D applies them). What is left is the edges, from
+  the console's 1280 halved to 640. Left: the date the kernel gives XAPI's own calls is still the
+  console's in xemu (a save's folder times).
 - **The engine in C, so far** (26-10-2026), each function the original's in what it does, read from its
   machine code (which callers read eax after it decided which hand nothing back):
   - the object system, `src/game/engine/objects.c`: the 27 functions from 0x001102C0 to 0x00111160 and

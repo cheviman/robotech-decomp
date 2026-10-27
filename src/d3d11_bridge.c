@@ -4,7 +4,7 @@
  *                 through xboxrecomp's D3D8 layer
  *    Version:     0.1.0
  *    Created:     25-10-2026
- *    Modified:    26-10-2026
+ *    Modified:    27-10-2026
  *    Author:      Sebastian Toyos
  *
  *    On with ROBOTECH_D3D11=1. The game's own D3D keeps running, as the bookkeeping it is: it creates its
@@ -64,6 +64,7 @@ extern IDXGISwapChain *d3d8_GetSwapChain(void);
 #define XB_TEXTURE_STATE_VA 0x00166B58u     /* D3D__TextureState[4][D3DTSS_MAX] */
 #define XB_RS_MAX           166
 #define XB_TSS_MAX          32
+#define XB_TSS_TEXTURETRANSFORMFLAGS 21
 
 typedef struct {
     uint32_t va;               /* the guest D3DTexture */
@@ -86,6 +87,9 @@ static size_t s_scratch_size;
 static uint32_t s_rs_sent[XB_RS_MAX], s_ts_sent[BRIDGE_STAGES][XB_TSS_MAX];
 static int s_states_sent;              /* the arrays above hold what was sent */
 static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
+static float s_tex_matrix[BRIDGE_STAGES][16];  /* SetTransform's TEXTURE0-3, as the game set them */
+static float s_tex_sent[BRIDGE_STAGES][16];    /* what the layer was given for them */
+static int s_tex_matrix_set[BRIDGE_STAGES], s_tex_sent_valid[BRIDGE_STAGES];
 static uint32_t s_stream_va, s_stream_stride, s_base_vertex;
 static struct {
     uint32_t va, stride;
@@ -628,6 +632,42 @@ void d3d11_SetRenderStateSimple(void)
         }
 }
 
+/* The texture matrices as D3D applies them. A stage whose
+ * TEXTURETRANSFORMFLAGS is DISABLE takes its coordinates as they are, and the
+ * layer applies the matrix whatever the flag says. And D3D completes a
+ * coordinate set of fewer than four elements with a 1 right after its own (a
+ * 2D set is (u, v, 1, 0): a 2D texture scrolls by the matrix's third row),
+ * where the layer's shader gets Direct3D 11's (u, v, 0, 1); so the row the 1
+ * meets moves to the fourth, as Wine does. The menu's background emblem
+ * scrolls a texture so; it stood still. */
+static void bridge_texture_transforms(const uint32_t ts[BRIDGE_STAGES][XB_TSS_MAX])
+{
+    /* the elements of a coordinate set by the FVF's size field, D3DFVF_TEXTUREFORMATn */
+    static const int elements[4] = { 2, 3, 4, 1 };
+    int s, k;
+
+    for (s = 0; s < BRIDGE_STAGES; s++) {
+        float m[16];
+        uint32_t set = s_tci[s] & 0xFFFFu;
+        int n = 3;          /* a generated set (TCI_CAMERASPACE*, SPHEREMAP) is (x, y, z, 1) as in the layer */
+
+        for (k = 0; k < 16; k++)
+            m[k] = k % 5 == 0 ? 1.0f : 0.0f;
+        if (ts[s][XB_TSS_TEXTURETRANSFORMFLAGS] && s_tex_matrix_set[s]) {
+            memcpy(m, s_tex_matrix[s], sizeof m);
+            if (!(s_tci[s] & 0xFFFF0000u))
+                n = set < 8 ? elements[(s_fvf >> (16 + 2 * set)) & 3u] : 2;
+            if (n < 3)
+                memcpy(m + 12, m + 4 * n, 4 * sizeof m[0]);
+        }
+        if (s_tex_sent_valid[s] && !memcmp(m, s_tex_sent[s], sizeof m))
+            continue;
+        s_dev->lpVtbl->SetTransform(s_dev, (D3DTRANSFORMSTATETYPE)(D3DTS_TEXTURE0 + s), (const D3DMATRIX *)m);
+        memcpy(s_tex_sent[s], m, sizeof m);
+        s_tex_sent_valid[s] = 1;
+    }
+}
+
 /* Send what changed in the game's state arrays since the last draw. */
 static void bridge_sync_states(void)
 {
@@ -660,6 +700,7 @@ static void bridge_sync_states(void)
                                                 ts_value(s_ts_map[i].kind, ts[s][x]));
         }
     }
+    bridge_texture_transforms(ts);
     memcpy(s_rs_sent, rs, sizeof rs);
     memcpy(s_ts_sent, ts, sizeof ts);
     s_states_sent = 1;
@@ -712,12 +753,16 @@ void d3d11_SetTransform(void)
             fprintf(stderr, "%s%.3f", k % 4 ? " " : " | ", f[k]);
         fprintf(stderr, "\n");
     }
+    if (state >= 2 && state <= 5) {
+        /* the layer gets it before each draw, made to D3D's rules (bridge_texture_transforms) */
+        memcpy(s_tex_matrix[state - 2], guest_ptr(m), sizeof s_tex_matrix[0]);
+        s_tex_matrix_set[state - 2] = 1;
+        return;
+    }
     if (state == 0)
         pc = D3DTS_VIEW;
     else if (state == 1)
         pc = D3DTS_PROJECTION;
-    else if (state <= 5)
-        pc = (D3DTRANSFORMSTATETYPE)(D3DTS_TEXTURE0 + (state - 2));
     else
         pc = (D3DTRANSFORMSTATETYPE)(D3DTS_WORLD + (state - 6));
     s_dev->lpVtbl->SetTransform(s_dev, pc, (const D3DMATRIX *)guest_ptr(m));

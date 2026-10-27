@@ -1,7 +1,7 @@
 """
 Name:        xemu_reference.py
 Description: runs a scenario on the original game in xemu, the reference the port's frames are set against
-Version:     0.2.0
+Version:     0.3.0
 Created:     27-10-2026
 Modified:    27-10-2026
 Author:      Sebastian Toyos
@@ -12,7 +12,8 @@ reference hooks of tools/reference/xemu (built in MSYS2's MINGW64; a pad script 
 presents, a frame dumped every so many, an exit frame), as MAME is the reference of an arcade game's port.
 The frames land in analysis/reference/NAME/ (fNNNNN.bmp, as the port's), and each is set against the
 port's of the same number in analysis/scenarios/NAME/ when that run is there: how far apart they are, a
-pixel at a time.
+pixel at a time. A scenario's `original` line is the most a frame may be apart; with a frame further, the
+run ends in failure, as the port's own comparison does when it moves from its last build.
 
 The scenarios run the port on a clock tied to the frames (ROBOTECH_VIRTUAL_CLOCK, src/clock_bridge.c),
 its pad answered at XInputGetState (src/input_bridge.c); on the console the game's clock goes on while it
@@ -151,14 +152,28 @@ def distance(a, b):
     return total / (wa * ha * 3)
 
 
-def compare(name):
+def compare(name, most):
+    """Each frame of xemu's against the port's; False when a frame is further from the original than the
+    scenario allows (its `original` line), or none could be set side by side."""
     ours = os.path.join(REPO, "analysis", "scenarios", name)
+    over, worst = [], None
     for path in sorted(glob.glob(os.path.join(RUNS, name, "f*.bmp"))):
+        frame = os.path.basename(path)[:-4]
         port = os.path.join(ours, os.path.basename(path))
         found = distance(path, port) if os.path.exists(port) else None
-        print("  %s  %s" % (os.path.basename(path)[:-4],
-                            "no frame of the port's" if not os.path.exists(port) else
+        print("  %s  %s" % (frame, "no frame of the port's" if not os.path.exists(port) else
                             "sizes differ" if found is None else "%.2f" % found))
+        if os.path.exists(port) and (found is None or (most is not None and found > most)):
+            over.append(frame)
+        if found is not None and (worst is None or found > worst[1]):
+            worst = (frame, found)
+    if worst is None:
+        print("%-10s no frame of xemu's and the port's to set side by side" % name)
+        return False
+    print("%-10s the furthest from the original %s, at %.2f%s" % (
+        name, worst[0], worst[1], "" if most is None else
+        "; over %s: %s" % (most, " ".join(over)) if over else " (%s allowed)" % most))
+    return not over
 
 
 def main():
@@ -167,6 +182,7 @@ def main():
     ap.add_argument("--compare-only", action="store_true", help="set the frames there against the port's")
     ap.add_argument("--script", help="another pad script for the run, to try one")
     args = ap.parse_args()
+    ok = True
     for name in args.names:
         sc = scenario.load(os.path.join(scenario.SCENARIOS, name + ".txt"))
         if args.script is not None:
@@ -174,7 +190,8 @@ def main():
         if not args.compare_only:
             frames = run(name, sc)
             print("%-10s %d of %d frames from xemu" % (name, len(frames), sc["frames"] // sc["dump"] + 1))
-        compare(name)
+        ok = compare(name, float(sc["original"]) if "original" in sc else None) and ok
+    sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":

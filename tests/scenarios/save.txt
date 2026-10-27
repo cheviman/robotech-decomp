@@ -5,4 +5,5 @@ script  f360:a,f600:down,f660:a,f840:a,f1020:a
 frames  1200
 dump    60
 movies  no
+original 1.5
 saves   compare
