@@ -46,6 +46,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       numbers, the screen (the Direct3D device, the viewport, clearing and showing it), the text
       (fonts, measuring and laying out strings), the render state setters, 19 classes'
       registrations and the scene objects' tree, 134 functions, every name real; the menu, the first mission and a save as the recompiled ones played them, frame for frame
+- [x] The structured decompiler: arcade-decomp's (SegaSonic's), with an x86 frontend of this project's
+      (`tools/x86`); 1,333 of the game's functions in its C (`src/decompiled/`), with no goto, in the
+      recompiled ones' place, the menu, the first mission and a save frame for frame as before
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -214,8 +217,11 @@ tools/match_libs.py     makes symbols/lib_matches.json from the XDK's .lib files
 tools/find_classes.py   makes symbols/classes.json from the class descriptors the game registers
 tools/find_registries.py  makes symbols/registries.json from the game's object type registries
 tools/decompile.py      the game's functions through arcade-decomp's decompiler: lifted, their stack and
-                        data flow followed, their signatures found (no C yet)
-tools/x86/              the decompiler's x86 frontend: the functions decoded, lifted to its IR, made graphs
+                        data flow followed, their signatures found, their C written into src/decompiled/
+tools/x86/              the decompiler's x86 frontend: the functions decoded, lifted to its IR, made graphs,
+                        their C written
+src/decompiled/         the decompiled C (tools/decompile.py build), each function in its recompiled
+                        version's place, and x86.h, what it calls for the x86's own arithmetic
 tools/core/             arcade-decomp (a git submodule), the decompiler the frontend feeds
 docs/d3d.md             how the game uses Direct3D: the map for the Direct3D 11 path
 analysis/               the pipeline's data: a copy of the XBE, disassembly, function and ABI databases

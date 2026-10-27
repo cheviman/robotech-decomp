@@ -2,12 +2,13 @@
 Name:        verify_c.py
 Description: checks each function written by hand against the game's own machine code, with xboxrecomp's
              conformance harness
-Version:     0.3.0
+Version:     0.4.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
 
-    py -3 tools/verify_c.py
+    py -3 tools/verify_c.py                 # the functions written by hand (src/game/)
+    py -3 tools/verify_c.py --decompiled    # the ones the decompiler writes (src/decompiled/)
 
 xboxrecomp's tools.conformance maps the XBE where it was linked in a 32-bit
 process, calls one of its functions with a set of argument vectors, runs a
@@ -53,6 +54,8 @@ import conformance  # noqa: E402  (tools/conformance.py: the 32-bit MSVC)
 import hand_functions  # noqa: E402
 
 FUNCTIONS = os.path.join(REPO, "analysis", "disasm", "functions.json")
+DECOMPILED = os.path.join(REPO, "analysis", "decompiled_signatures.json")
+DECOMPILED_C = os.path.join("src", "decompiled", "decompiled.c")
 GLUE = os.path.join(REPO, "src", "game", "decomp.c")     # the calls into the recompiled code
 
 
@@ -198,14 +201,25 @@ def main():
     vcvars = conformance.find_vcvars32()
     if not vcvars:
         sys.exit("no 32-bit MSVC (vcvars32.bat) found")
-    funcs, _ = hand_functions.hand_functions()
+    decompiled = "--decompiled" in sys.argv[1:]
+    if decompiled:
+        # the decompiler's (tools/decompile.py build): its arguments on the stack only, as many as the
+        # harness passes (four), its results in eax alone; they call none but each other
+        funcs = {int(va, 16): (d["entry"], DECOMPILED_C,
+                               "CDECL" if not d["registers"] and not d["by_pointer"] and d["arguments"] <= 4
+                               else "OTHER", d["arguments"], "int")
+                 for va, d in json.load(open(DECOMPILED)).items()}
+        what = "written by the decompiler"
+    else:
+        funcs, _ = hand_functions.hand_functions()
+        what = "written by hand"
     if not funcs:
-        sys.exit("no functions written by hand in src/game/")
+        sys.exit("no functions %s" % what)
     data, sections, base = xbe_run.load(XBE)
-    leaves = calls_only(funcs)
+    leaves = set(funcs) if decompiled else calls_only(funcs)
     checked = {va: f for va, f in funcs.items() if f[2] == "CDECL" and f[4] in ("int", "void") and va in leaves}
-    print("%d functions written by hand, %d checked here (cdecl, a result in eax or none, no call outside)"
-          % (len(funcs), len(checked)))
+    print("%d functions %s, %d checked here (cdecl, a result in eax or none, no call outside)"
+          % (len(funcs), what, len(checked)))
 
     # Each lifted_ calls an entry; the files that define them, and the calls
     # into the recompiled code, come in ahead of the first.
@@ -228,14 +242,15 @@ def main():
     runtime_inc = os.path.join(TOOLKIT, "templates", "runtime")
     game_inc = os.path.join(REPO, "src", "game")
     gen_inc = os.path.join(REPO, "src", "recomp", "gen")        # symbols.h
+    decompiled_inc = os.path.join(REPO, "src", "decompiled")    # decompiled.h, x86.h
     # The harness maps the XBE where it was linked, low in the address space,
     # and what Windows randomises there (ASLR) takes some of it now and then:
     # one run in three found the code's sections taken ("mapped nothing", or a
     # section skipped and no vector run). Linking the harness fixed and high
     # made it worse (its stack and heap then always land there), so a run that
     # could not map the code is started again instead.
-    r = conf._cl(vcvars, WORK, '/W3 /EHa /I"%s" /I"%s" /I"%s" xbe_harness.c /Fexbe_harness.exe'
-                 ' /link /FORCE:UNRESOLVED' % (runtime_inc, game_inc, gen_inc))
+    r = conf._cl(vcvars, WORK, '/W3 /EHa /I"%s" /I"%s" /I"%s" /I"%s" xbe_harness.c /Fexbe_harness.exe'
+                 ' /link /FORCE:UNRESOLVED' % (runtime_inc, game_inc, gen_inc, decompiled_inc))
     if r.returncode != 0:
         sys.exit("harness build failed:\n" + r.stdout + r.stderr)
 
@@ -243,11 +258,21 @@ def main():
     # out and the run starts again.
     exe = os.path.join(WORK, "xbe_harness.exe")
     skips, run, unmapped = [], None, 0
-    for _ in range(40):
+    for _ in range(200):
         cmd = [exe, os.path.abspath(XBE)]
         if skips:
             cmd.append(",".join("%08X" % va for va in skips))
-        run = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        try:
+            run = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+        except subprocess.TimeoutExpired as hung:
+            # a function that never comes back with the harness's vectors (a loop they keep going, on the
+            # original or the C): left out as one that brings it down
+            out = hung.stdout.decode("utf-8", "replace") if isinstance(hung.stdout, bytes) else (hung.stdout or "")
+            started = re.findall(r"@RUN ([0-9A-Fa-f]{8})", out)
+            if not started or int(started[-1], 16) in skips:
+                sys.exit("the harness stopped answering before it named a function")
+            skips.append(int(started[-1], 16))
+            continue
         # the code and its data (up to .data's end) have to be mapped; the
         # sections above (DOLBY, BINKDATA, the title images) never are
         skipped = [int(a, 16) for a in re.findall(r"note: ([0-9A-Fa-f]{8})\.\.", run.stdout)]

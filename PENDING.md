@@ -259,9 +259,29 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   jumps through a pointer (147), and a few odd ones. `tools/decompile.py analyse`: the 1,395 whose
   calls all reach functions with their stack in slots go through the core's data flow, its registers
   saved and put back, its conditions (1,004 branches compare values instead of flags) and its
-  signatures (`GameObjectFromHandle`: one argument, its result in EAX). Next: the C, through the core's
-  writer with the guest's memory as the recompiled C has it, each function checked against the
-  original by `tools/verify_c.py` before it goes into the build in its recompiled version's place.
+  signatures (`GameObjectFromHandle`: one argument, its result in EAX).
+- **The decompiled C in the game** (27-10-2026): `tools/decompile.py build` writes 1,333 functions
+  through the core's writer into `src/decompiled/decompiled.c`, structured, with no goto, the game's
+  memory the recompiled C's (MEM8/16/32, the same bytes), and an entry each, NAME_entry, which the
+  recompiled code calls in their place (`tools/hand_functions.py` hands them to the recompiler with
+  the ones written by hand); `src/decompiled/x86.h` has what the C calls for the x86's own arithmetic.
+  Left out: the XDK's and Bink's functions, the ones written by hand or wrapped, the ones the C
+  written by hand calls as recompiled code, and any whose calls reach one of those. The game plays
+  the menu, the first mission and the save frame for frame and file for file as the references, 60
+  of 60. Found on the way, by halving the set with `tools/decompile.py subset` and the menu's
+  scenario: a function that ends by jumping to another passes that one's arguments on, its caller's
+  slots above its own, so it takes as many (`sub_000BF9C0`, whose tail call reads five where it reads
+  one). `tools/verify_c.py --decompiled` runs them against the original too, but the toolkit's harness
+  calls the game's code with arguments of its own, which most functions of the game take for
+  pointers and fault on, and loses the XBE's mapping to Windows' address randomisation in long runs:
+  the scenarios are the check.
+- The decompiled C's noise is counted apart (`tools/noise_report.py`, the decompiled_ kinds): 1,059
+  functions without a name, 1,077 without a description, 23,450 registers kept as variables by their
+  names, 4,646 flags (comparisons the core's condition recovery does not take yet: it wants the values
+  compared bound to temporaries, as the V60's lifter binds them), 5,684 parameters named arg0 up, 7,475
+  stack slots named by their offset, 9,913 reads and writes at a raw address. Next: the lifter's reads
+  bound as the V60's, so the comparisons come back; parameters, locals and the game's variables named
+  from `symbols.txt`; the functions written by hand calling the decompiled ones directly; the x87.
 
 ## Dead hypotheses
 

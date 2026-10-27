@@ -1,7 +1,7 @@
 """
 Name:        hand_functions.py
 Description: lists the functions written by hand, for the recompiler to leave them out
-Version:     0.3.0
+Version:     0.4.0
 Created:     25-10-2026
 Modified:    26-10-2026
 Author:      Sebastian Toyos
@@ -14,7 +14,9 @@ with its own signature, and beside it an entry, ENTRY_<convention>(NAME)
 code calls it. This writes them as {address: NAME_entry} to
 analysis/hand_functions.json, which xboxrecomp's recompiler takes as
 --manual-functions: it generates no body for them, and declares and calls
-the entries in their place.
+the entries in their place. The functions tools/decompile.py build writes
+into src/decompiled/ go in the same list, found by the entries defined
+there.
 
 src/recomp_manual.c wraps others, or replaces them: it defines NAME and calls
 the generated body, NAME_gen. The recompiler knows a function by its address
@@ -35,6 +37,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GAME = os.path.join(REPO, "src", "game")
 OUT = os.path.join(REPO, "analysis", "hand_functions.json")
 MANUAL = os.path.join(REPO, "src", "recomp_manual.c")
+DECOMPILED_DIR = os.path.join(REPO, "src", "decompiled")
 MANUAL_FOR_TOOLKIT = os.path.join(REPO, "analysis", "recomp_manual.c")
 sys.path.insert(0, os.path.join(REPO, "tools"))
 import symbols  # noqa: E402
@@ -79,13 +82,34 @@ def manual_for_toolkit():
     return len(re.findall(r"(?m)^void sub_[0-9A-F]{8}\(void\)$", text))
 
 
+def decompiled_functions():
+    """{address: NAME_entry} of the functions src/decompiled/ defines, by the entries it defines
+    (tools/decompile.py build): NAME is a name of symbols.txt or sub_ and the address."""
+    names = {name: address for address, name in symbols.load()["func"].items()}
+    found = {}
+    for path in glob.glob(os.path.join(DECOMPILED_DIR, "*.c")):
+        for name in re.findall(r"(?m)^void (\w+)_entry\(void\)$", open(path, encoding="utf-8").read()):
+            address = names.get(name)
+            if address is None and re.match(r"sub_[0-9A-F]{8}$", name):
+                address = int(name[4:], 16)
+            if address is None:
+                sys.exit("src/decompiled/: %s_entry, of no function of symbols.txt" % name)
+            found[address] = name + "_entry"
+    return found
+
+
 def main():
     found, unknown = hand_functions()
+    listed = {"0x%08X" % a: f_[0] for a, f_ in sorted(found.items())}
+    # the ones tools/decompile.py build wrote into src/decompiled/, in their recompiled versions' place too
+    decompiled = decompiled_functions()
+    for address, entry in decompiled.items():
+        listed.setdefault("0x%08X" % address, entry)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as f:
-        json.dump({"0x%08X" % a: f_[0] for a, f_ in sorted(found.items())}, f, indent=1)
+        json.dump(dict(sorted(listed.items())), f, indent=1)
         f.write("\n")
-    print("%d functions written by hand" % len(found))
+    print("%d functions written by hand, %d by the decompiler" % (len(found), len(decompiled)))
     print("%d functions wrapped or replaced by src/recomp_manual.c" % manual_for_toolkit())
     for u in unknown:
         print("  not a function of symbols.txt, not handed to the recompiler: %s" % u)

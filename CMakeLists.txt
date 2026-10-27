@@ -65,9 +65,14 @@ file(GLOB_RECURSE RECOMP_GEN_SOURCES CONFIGURE_DEPENDS "src/recomp/gen/*.c")
 # recompiled version's place
 file(GLOB_RECURSE GAME_HAND_SOURCES CONFIGURE_DEPENDS "src/game/*.c")
 
+# The game's functions the decompiler writes (tools/decompile.py build), each in its recompiled version's
+# place too
+file(GLOB DECOMPILED_SOURCES CONFIGURE_DEPENDS "src/decompiled/*.c")
+
 # Core game sources
 set(GAME_SOURCES
     ${GAME_HAND_SOURCES}
+    ${DECOMPILED_SOURCES}
     src/main.c
     src/recomp_manual.c
     src/d3d11_bridge.c
@@ -102,6 +107,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/recomp/gen
     # decomp.h, for the C written by hand
     ${CMAKE_CURRENT_SOURCE_DIR}/src/game
+    # decompiled.h and x86.h, for the decompiled C
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/decompiled
     ${XBOXRECOMP_DIR}/include
 )
 
