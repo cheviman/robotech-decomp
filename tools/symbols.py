@@ -1,9 +1,9 @@
 """
 Name:        symbols.py
 Description: symbols/symbols.txt, the one place the names, descriptions and files of the C live
-Version:     0.2.0
+Version:     0.3.0
 Created:     25-10-2026
-Modified:    26-10-2026
+Modified:    27-10-2026
 Author:      Sebastian Toyos
 
 symbols/symbols.txt holds, by address, every name the C gets (functions and
@@ -33,6 +33,14 @@ writes, in SegaSonic's terms:
                                             says a u32 points at one)
     struct  NAME  SIZE                      a structure (SIZE in hexadecimal)
     field   STRUCT  OFFSET  NAME  TYPE [STRUCT]   one of its fields (OFFSET in hexadecimal)
+
+the names of the decompiled C's parameters and locals (tools/decompile.py), as SegaSonic's:
+
+    param   FUNCTION  REG  NAME             what FUNCTION takes in REG: a register (eax...) or an
+                                            argument on the stack, arg0 up
+    local   FUNCTION  WHERE  REG  NAME      the local variable that holds what the instructions at
+                                            WHERE (addresses, separated by commas) write in REG;
+                                            "entry" what REG holds when the function starts
 
 and the game's object types by name, which name their functions:
 
@@ -162,6 +170,7 @@ def is_generated(title):
 TYPES = {"u8": "uint8_t", "s8": "int8_t", "u16": "uint16_t", "s16": "int16_t", "u32": "uint32_t",
          "s32": "int32_t", "f32": "float", "f64": "double", "char": "char"}
 TYPE_RE = re.compile(r"^(u8|s8|u16|s16|u32|s32|f32|f64|char)(?:\[(\d*)\])?$")
+REGISTER_RE = re.compile(r"^(eax|ecx|edx|ebx|ebp|esi|edi|arg\d+)$")
 
 
 def entries(lines):
@@ -174,6 +183,12 @@ def entries(lines):
         note = note.strip()
         if len(f) >= 3 and f[0] == "comment":
             out.append({"kind": "comment", "name": f[1], "text": line.split(None, 2)[2].strip()})
+        elif len(f) == 4 and f[0] == "param" and REGISTER_RE.match(f[2]):
+            out.append({"kind": "param", "function": f[1], "register": f[2], "name": f[3], "note": note})
+        elif len(f) == 5 and f[0] == "local" and REGISTER_RE.match(f[3]) and \
+                all(where == "entry" or re.match(r"^[0-9A-Fa-f]{8}$", where) for where in f[2].split(",")):
+            out.append({"kind": "local", "function": f[1], "where": f[2].split(","), "register": f[3],
+                        "name": f[4], "note": note})
         elif len(f) == 4 and f[0] == "type" and f[2].isdigit():
             out.append({"kind": "type", "family": f[1], "number": int(f[2]), "name": f[3], "note": note})
         elif len(f) == 3 and f[0] == "struct":
@@ -192,12 +207,18 @@ def entries(lines):
 def load(path=SYMBOLS):
     """{"func": {addr: name}, "data": {addr: name}, "files": [(addr, path, note)],
     "comments": {name: text}, "hand": set of addresses named by hand, "hand_comments": names commented by
-    hand, "types": {(family, number): (name, note)}}."""
+    hand, "types": {(family, number): (name, note)}, "params": {(function, register): name},
+    "locals": {(function, where, register): name} (where an address or "entry")}."""
     out = {"func": {}, "data": {}, "files": [], "comments": {}, "hand": set(), "structs": {}, "vars": {},
-           "hand_comments": set(), "types": {}}
+           "hand_comments": set(), "types": {}, "params": {}, "locals": {}}
     for title, lines in parse(path):
         for e in entries(lines):
-            if e["kind"] == "comment":
+            if e["kind"] == "param":
+                out["params"][(e["function"], e["register"])] = e["name"]
+            elif e["kind"] == "local":
+                for where in e["where"]:
+                    out["locals"][(e["function"], where if where == "entry" else int(where, 16), e["register"])] = e["name"]
+            elif e["kind"] == "comment":
                 if not is_generated(title):
                     out["hand_comments"].add(e["name"])
                     out["comments"][e["name"]] = e["text"]

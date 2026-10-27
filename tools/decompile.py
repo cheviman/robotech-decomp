@@ -49,7 +49,7 @@ from decompiler.gotos import GotoError                                          
 from v60 import ir                                                       # noqa: E402
 from x86 import arguments, disassembler, function, lift, recompiled      # noqa: E402
 from x86 import emit                                                     # noqa: E402
-from x86.profile import ARG0, ARGUMENTS, EAX, X86                        # noqa: E402
+from x86.profile import ARG0, ARGUMENTS, EAX, NAMES, X86                 # noqa: E402
 
 import hand_functions                                                    # noqa: E402
 import symbols                                                           # noqa: E402
@@ -585,6 +585,20 @@ def write(out_dir, for_build=False):
         variables[address] = (var["name"], found.group(1), None if count is None else int(count) if count else -1)
     emitter.guest = emit.GuestNames(variables, {address: name for address, name in sym["data"].items()
                                                 if address not in sym["vars"]})
+    # symbols.txt's param and local lines: a parameter by its function and register, a local by the
+    # instruction that writes it (wherever that code now is), what a register holds as it starts by the
+    # function
+    entries_by_name = {name: entry for entry, name in names.items() if entry in built}
+
+    def register_number(text):
+        return {name: index for index, name in NAMES.items()}[text]
+    emitter.param_names = {(entries_by_name[function], register_number(register)): name
+                           for (function, register), name in sym["params"].items() if function in entries_by_name}
+    emitter.local_sites = {(where, "r%d" % register_number(register)): name
+                           for (function, where, register), name in sym["locals"].items() if where != "entry"}
+    emitter.local_names = {(entries_by_name[function], "entry", "r%d" % register_number(register)): name
+                           for (function, where, register), name in sym["locals"].items()
+                           if where == "entry" and function in entries_by_name}
     emitter.flow = flow
     emitter.comments = dict(sym["comments"])
     for entry, f in built.items():

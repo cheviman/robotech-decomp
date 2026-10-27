@@ -308,7 +308,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   bridge to the recompiled code: 1,896 functions without a name, 2,057 without a description, 60,814
   registers kept as variables by their names (23.3 a function, 17.6 before the bridge: each call of
   recompiled code hands its registers in and reads its results back by the globals), 666 flags,
-  32,675 parameters named arg0 up (12.5 a function, 4.3 before: the arguments of every x86_call), 2,968
+  30,806 parameters named arg0 up (11.8 a function, 4.3 before: the arguments of every x86_call), 2,968
   stack slots named by their offset, 11,760 reads and writes at a raw address (4.5 a function, 7.4
   before).
 - **The comparisons back** (27-10-2026): flags 12,171 to 664. The lifter binds the registers an
@@ -335,9 +335,17 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   variable or at a data label by its address, `MEM32(vcDataDir_VA + 0x4u)`; a float or a string by its
   address too, since their C types are no integers. Left: the 11,760 at places of `.data` nothing names
   yet (about 10,000 addresses, most read or written once: structures the game keeps in place, set up
-  field by field), which want `var` and `struct` lines. Next: parameters and locals named from
-  `symbols.txt` (param and local lines, as SegaSonic's); the functions written by hand calling the
-  decompiled ones directly; the x87.
+  field by field), which want `var` and `struct` lines. An array's element by a computed index goes by
+  name too, when the address is its start plus the index times its elements' size:
+  `GameObjectFamilies(edx)`.
+- **Parameters and locals by name** (27-10-2026): `symbols.txt` takes SegaSonic's `param FUNCTION REG
+  NAME` (a register, eax..., or an argument on the stack, arg0 up) and `local FUNCTION WHERE REG NAME`
+  (by the instructions that write it, or "entry"), which `tools/decompile.py` hands the core's writer.
+  Eight param lines of the object system (`GameObjectPauseFamily(uint32_t family, uint32_t paused)`)
+  took 1,869 arg names out of the C, since the core calls what a caller passes by the callee's name for
+  it. Next: the naming itself, in batches (parameters, locals, the game's variables and structures),
+  each batch checked by the scenarios; the functions written by hand calling the decompiled ones
+  directly; the x87.
 
 ## Dead hypotheses
 

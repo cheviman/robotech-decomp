@@ -114,6 +114,27 @@ class GuestNames:
             return f"MEM{bits}({self.labels[address]}_VA)", False
         return None
 
+    def element(self, address, bits):
+        """For an address "base + index * size": (name, signed) of the array of integers starting at base
+        whose elements are 'bits' wide and size bytes apart, and the index; None if it is not one."""
+        if not (isinstance(address, ir.Op) and address.name == "add"):
+            return None
+        left, right = address.args
+        base, index = (left, right) if isinstance(left, ir.Const) else (right, left)
+        if not isinstance(base, ir.Const) or isinstance(index, ir.Const):
+            return None
+        found = self.variables.get(base.value & 0xFFFFFFFF)
+        if found is None or found[2] is None or INTEGER_TYPES.get(found[1], (None,))[0] != bits:
+            return None
+        size = TYPE_BYTES[found[1]]
+        if size == 1:
+            return found[0], INTEGER_TYPES[found[1]][1], index
+        if isinstance(index, ir.Op) and isinstance(index.args[1], ir.Const) and \
+                ((index.name == "mul" and index.args[1].value == size) or
+                 (index.name == "shl" and 1 << index.args[1].value == size)):
+            return found[0], INTEGER_TYPES[found[1]][1], index.args[0]
+        return None
+
 
 class X86Names(emit.Names):
     def memory(self, load):
@@ -125,6 +146,10 @@ class X86Names(emit.Names):
             named = guest.place(load.address.value & 0xFFFFFFFF, load.bits)
             if named is not None:
                 return named
+        if guest is not None:
+            element = guest.element(load.address, load.bits)
+            if element is not None:
+                return f"{element[0]}({self.writer.exact(element[2])})", element[1]
         return f"MEM{load.bits}({self.writer.exact(load.address)})", False
 
 
@@ -206,6 +231,9 @@ class X86Writer(emit.FunctionWriter):
                 named = guest.place(statement.address.value & 0xFFFFFFFF, statement.bits)
                 if named is not None:
                     return [f"{named[0]} = {self.stored(statement.value, statement.bits)};"]
+            element = guest.element(statement.address, statement.bits) if guest is not None else None
+            if element is not None:
+                return [f"{element[0]}({self.exact(element[2])}) = {self.stored(statement.value, statement.bits)};"]
             return [f"MEM{statement.bits}({self.exact(statement.address)}) = "
                     f"{self.stored(statement.value, statement.bits)};"]
         return super().statement(statement)

@@ -703,7 +703,15 @@ comment GameObjectsShutdown Frees every entry of every type, alive or free (Game
 comment GameObjectUnloadFamily For each type of a family in use: frees every entry, alive or free, and the pool, and lets go of the type's uses; then of the family's.
 comment GameObjectsUnloadAll Unloads every family in use (GameObjectUnloadFamily); GameObjectTime and vcGameTime back to 0.
 comment GameObjectCreateInFile Creates an object (GameObjectCreate) and adds it to a file's table of the objects read from it, where the file's later references find it. Hands back its handle.
-comment DoNothing Does nothing: the startup and shutdown of many object types, and the registering function of the ones left out of the build.
+param   GameObjectFromHandle   arg0  handle
+param   GameObjectSetFlags     arg0  handle
+param   GameObjectSetFlags     arg1  flags
+param   GameObjectClearFlags   arg0  handle
+param   GameObjectClearFlags   arg1  flags
+param   GameObjectPauseFamily  arg0  family
+param   GameObjectPauseFamily  arg1  paused
+param   GameObjectDestroy      arg0  handle
+comment DoNothing Does nothing: the startup and shutdown of many object types, and the registering function of the onesleft out of the build.
 
 # The game's object types by name (type lines): what each is called, from its own strings -- the name a
 # trigger or an action copies into its objects, the asset an entity, an effect or a screen loads. A type
