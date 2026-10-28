@@ -1,9 +1,9 @@
 /**
  *    Name:        clock_bridge.c
  *    Description: a clock tied to the frames presented, for runs compared frame for frame
- *    Version:     0.2.0
+ *    Version:     0.3.0
  *    Created:     25-10-2026
- *    Modified:    26-10-2026
+ *    Modified:    28-10-2026
  *    Author:      Sebastian Toyos
  *
  *    The game reads two clocks. Its engine times itself with XAPI's QueryPerformanceCounter, an rdtsc on
@@ -106,15 +106,28 @@ void clock_QueryPerformanceCounter(void)
     g_esp += 4 + 4;                       /* the return address, and one argument */
 }
 
+/* The counter's ticks in 1/rate of a second, rounded down. */
+static uint64_t ticks_to(uint64_t counter, unsigned rate)
+{
+    return counter / XBOX_COUNTER_HZ * rate + counter % XBOX_COUNTER_HZ * rate / XBOX_COUNTER_HZ;
+}
+
 /* The time the game has read so far, in 1/rate of a second: the sound's
  * clock while the clock is virtual (sound_mixer.c), so what is heard keeps
  * to the time the game's engine counts. Reading it does not move it. */
 uint64_t clock_VirtualTime(unsigned rate)
 {
     uint64_t frames = (uint64_t)d3d11_FrameCount() * FRAME_TICKS;
-    uint64_t counter = s_counter > frames ? s_counter : frames;
 
-    return counter / XBOX_COUNTER_HZ * rate + counter % XBOX_COUNTER_HZ * rate / XBOX_COUNTER_HZ;
+    return ticks_to(s_counter > frames ? s_counter : frames, rate);
+}
+
+/* The frames presented alone, in 1/rate of a second: never more than
+ * clock_VirtualTime gives from then on, whatever the game reads in between.
+ * What another thread may go up to without getting ahead of the game. */
+uint64_t clock_FramesTime(unsigned rate)
+{
+    return ticks_to((uint64_t)d3d11_FrameCount() * FRAME_TICKS, rate);
 }
 
 /* GetSystemTimeAsFileTime(lpSystemTimeAsFileTime), replacing the game's while

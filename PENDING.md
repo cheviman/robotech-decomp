@@ -168,10 +168,22 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   The bridge turns the camera space's z for the layer (the view's third column, the projection's third
   row; the coordinates generated in camera space turned back by their texture matrix), and they are at
   1.35, 1.49 and 1.25; the training went from 3.2 to 1.60 with it (its scaffolds' edges), Rebel Revenge
-  (m701) is at 1.45. Rebel Revenge's first run in the port, before the fog, went its own way from frame
-  3240 (the Battloid somewhere else, 32.7 apart); the three runs since repeat each other frame for
-  frame, and the original: the race of the first mission's frame 2280, most likely, not looked into
-  yet. Left: the date the
+  (m701) is at 1.45. All 22 missions of the Story Mode's menu were set against the original once
+  (28-10-2026; with the code, chapter by chapter: R moves a chapter, right goes round a row of three,
+  down to the second row; the second chapter's fourth is under its middle). Of the other 16, fourteen
+  are within 1.25 to 2.55 of it, what is left the edges and the finest textures (the console draws
+  1280 across, and so at another mip level), and two went apart. Deadly Storm (m1201) was 8.5 at a frame where the port still showed a
+  line of dialogue: two runs of xemu differ there, its sound's clock. Backlash (m1701) went its own way
+  from frame 3240 (39.1): two of the port's runs differ there and xemu's repeat, as Rebel Revenge's
+  first run did (from 3240 too, the Battloid somewhere else, 32.7). The game has one thread of its
+  own; beside it run the runtime's (the GPU interrupt's DPC, some six a frame, on xboxrecomp's timer
+  thread) and the sound mixer's. The mixer brought the mix up to the frames presented, frames x 800
+  samples, where a read of the game's brings it to the clock, whose frame rounds down to a sample short
+  of that: which thread came first set where a voice the game started began, a sample apart. It goes
+  up to the clock's own value for the frames now (clock_FramesTime). Whether that was Backlash's race is
+  not shown: of nine runs of Backlash before the change one went its own way; after it, the survey's
+  sixteen missions run again are as close to the original as before, Backlash's one run too; the
+  GPU's DPC still runs on another thread. Left: the date the
   kernel gives XAPI's own calls is still the console's in xemu (a save's folder times); xemu's sound
   keeps the emulator's clock, so a voice line, and the dialogue that waits for it, ends on frames that
   change from run to run.
@@ -238,7 +250,8 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   frame too, or in a C variable when only the x87 reads it (called from other C, that slot is the caller's). The menu, the first mission and the save
   play as before, frame for frame and file for file (134 functions); once in some ten runs, right
   after a build, the first mission's frame 2280 differed and the eight runs after it did not: a race
-  between the game's threads that the clock tied to the frames does not cover, not looked into yet. Of the first 59, 45 run in them (36 called
+  the clock tied to the frames does not cover (the game has one thread of its own; see the original
+  as the reference, Backlash). Of the first 59, 45 run in them (36 called
   from the recompiled code, 9 only from other C). `tools/verify_c.py` compares 26 with the machine code
   (209 vectors, 0 different), the game's own memory too (26-10-2026: until then only the memory the
   arguments point into, so a function that writes the game's variables passed whatever it wrote,

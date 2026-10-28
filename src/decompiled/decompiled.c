@@ -5724,11 +5724,12 @@ uint32_t sub_00024CD0(void)
 	return eax;
 }
 
-void sub_00024FE0(uint32_t *p_eax, uint32_t *p_ecx)
+/* The number of levels in Levels: the entries before the one whose flags are -1. */
+void LevelCount(uint32_t *p_eax, uint32_t *p_ecx)
 {
 	uint32_t ecx = 0, edx = 0;
 
-	ecx = MEM32(0x1AECB8u);
+	ecx = MEM32(Levels_VA);
 	*p_eax = 0u;
 	if (ecx == 0xFFFFFFFFu)
 	{
@@ -5745,28 +5746,31 @@ void sub_00024FE0(uint32_t *p_eax, uint32_t *p_ecx)
 	*p_ecx = ecx;
 }
 
-uint32_t sub_00025000(uint32_t arg0)
+/* A level's entry in Levels, by its number. */
+uint32_t LevelGet(uint32_t level)
 {
 	uint32_t eax = 0;
 
-	eax = arg0 * 0x54u + 0x1AECB8u;
+	eax = level * 0x54u + 0x1AECB8u;
 	return eax;
 }
 
-uint32_t sub_00025010(uint32_t arg0)
+/* Sets the level being played (LevelCurrent). Hands back the one before. */
+uint32_t LevelSetCurrent(uint32_t level)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1E639Cu);
-	MEM32(0x1E639Cu) = arg0;
+	eax = LevelCurrent;
+	LevelCurrent = level;
 	return eax;
 }
 
-uint32_t sub_00025020(void)
+/* The level being played (LevelCurrent). */
+uint32_t LevelGetCurrent(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1E639Cu);
+	eax = LevelCurrent;
 	return eax;
 }
 
@@ -5791,14 +5795,18 @@ uint32_t sub_0002504F(void)
 	return eax;
 }
 
-uint32_t sub_00025060(uint32_t arg0)
+/* Whether a level can be chosen: never one not shown on its own; every other with the code that unlocks
+   every mission (Cheats' 2) or while LevelsAllOpen is set; a versus arena with its flag 0x20 or
+   MULTIMAYHEM's cheat (0x100); one with its flag 8 once every other level of its chapter shown on its
+   own is finished; any other once the levels it requires are finished. */
+uint32_t LevelIsOpen(uint32_t level)
 {
 	uint8_t ebx = 0;
 	uint16_t eax_2 = 0, esi_2 = 0;
 	uint32_t eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, mask = 0;
 	uint32_t t1 = 0;
 
-	edi = arg0;
+	edi = level;
 	t1 = edi * 0x54u + 0x1AECB8u;
 	esi = t1;
 	if (t1 == 0u || (MEM8(esi) & 4u) != 0u)
@@ -5808,7 +5816,7 @@ uint32_t sub_00025060(uint32_t arg0)
 	}
 	mask = 2u;
 	eax = CheatIsOn(mask);
-	if (eax != 0u || MEM32(0x1E6398u) != 0u)
+	if (eax != 0u || LevelsAllOpen != 0u)
 	{
 		eax = 1u;
 		return eax;
@@ -5873,7 +5881,7 @@ uint32_t sub_00025060(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	sub_00024FE0(&eax, &ignored);
+	LevelCount(&eax, &ignored);
 	ecx = 0u;
 	if ((int32_t)eax <= 0)
 	{
@@ -5899,12 +5907,13 @@ uint32_t sub_00025060(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00025160(uint32_t arg0)
+/* Whether a level is finished (its flag 1). */
+uint32_t LevelIsFinished(uint32_t level)
 {
 	uint32_t eax = 0;
 	uint32_t t1 = 0;
 
-	t1 = arg0 * 0x54u + 0x1AECB8u;
+	t1 = level * 0x54u + 0x1AECB8u;
 	eax = t1;
 	if (t1 != 0u)
 	{
@@ -5915,13 +5924,14 @@ uint32_t sub_00025160(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00025180(uint32_t arg0, uint32_t arg1)
+/* Marks a level finished or not. */
+uint32_t LevelSetFinished(uint32_t level, uint32_t finished)
 {
 	uint32_t eax = 0, ecx = 0;
 	uint32_t t1 = 0;
 
-	eax = arg0 * 0x54u + 0x1AECB8u;
-	t1 = arg1;
+	eax = level * 0x54u + 0x1AECB8u;
+	t1 = finished;
 	ecx = MEM32(eax);
 	if (t1 == 0u)
 	{
@@ -5948,20 +5958,22 @@ uint32_t sub_000251B0(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000251D0(uint32_t arg0)
+/* Sets LevelsAllOpen. */
+uint32_t LevelsSetAllOpen(uint32_t open)
 {
 	uint32_t eax = 0;
 
-	eax = arg0;
-	MEM32(0x1E6398u) = eax;
+	eax = open;
+	LevelsAllOpen = eax;
 	return eax;
 }
 
-uint32_t sub_000251E0(uint32_t arg0)
+/* A level's chapter. */
+uint32_t LevelGetChapter(uint32_t level)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(arg0 * 0x54u + 0x1AED08u);
+	eax = MEM32(level * 0x54u + 0x1AED08u);
 	return eax;
 }
 
@@ -5986,7 +5998,7 @@ uint32_t sub_000251F0(uint32_t arg0)
 	}
 	if (esi == 0xFFFFFFFEu)
 	{
-		zero = MEM32(MEM32(0x1E639Cu) * 0x54u + 0x1AED08u) - 5u == 0u;
+		zero = MEM32(LevelCurrent * 0x54u + 0x1AED08u) - 5u == 0u;
 		eax = zero == 0u;
 		return eax;
 	}
@@ -6031,13 +6043,14 @@ uint32_t sub_000251F0(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00025290(uint32_t arg0)
+/* Whether a level is finished, or every one is with the code that unlocks every mission (Cheats' 2). */
+uint32_t LevelCountsAsFinished(uint32_t level)
 {
 	uint32_t eax = 0, mask = 0;
-	uint32_t saved_arg0 = 0;
+	uint32_t saved_level = 0;
 	uint32_t t1 = 0;
 
-	saved_arg0 = arg0;
+	saved_level = level;
 	mask = 2u;
 	eax = CheatIsOn(mask);
 	if (eax != 0u)
@@ -6045,7 +6058,7 @@ uint32_t sub_00025290(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	t1 = saved_arg0 * 0x54u + 0x1AECB8u;
+	t1 = saved_level * 0x54u + 0x1AECB8u;
 	eax = t1;
 	if (t1 != 0u)
 	{
@@ -6116,7 +6129,7 @@ void sub_00025320(void)
 		eax += 0x54u;
 	} while ((int32_t)eax <= 0x1B04AC);
 	MEM32(0x1B0014u) = MEM32(0x1B0014u) | 0x20u;
-	MEM32(0x1E639Cu) = 0u;
+	LevelCurrent = 0u;
 }
 
 uint32_t sub_00025360(uint32_t arg0)
@@ -6142,7 +6155,7 @@ uint32_t sub_00025540(uint32_t arg0)
 
 	eax = arg0;
 	if ((int32_t)eax < 0)
-		eax = MEM32(0x1E639Cu);
+		eax = LevelCurrent;
 	eax = eax * 0x54u + 0x1AECB8u;
 	if (eax == 0u)
 	{
@@ -6215,7 +6228,7 @@ uint32_t sub_00025560(uint32_t arg0)
 			eax = 1u;
 			return eax;
 		}
-		sub_00024FE0(&eax, &ignored);
+		LevelCount(&eax, &ignored);
 		ecx = 0u;
 		if ((int32_t)eax <= 0)
 		{
@@ -11431,14 +11444,14 @@ void sub_0002EFA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx)
 
 uint32_t sub_0002EFF0(void)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, esi = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, esi = 0, finished = 0, level = 0;
 
 	esi = 0u;
 	do
 	{
-		arg1 = MEM32(esi * 4u + 0x1EA340u);
-		arg0 = esi;
-		sub_00025180(arg0, arg1);
+		finished = MEM32(esi * 4u + 0x1EA340u);
+		level = esi;
+		LevelSetFinished(level, finished);
 		if ((int32_t)esi >= 0x3B && (int32_t)esi <= 0x49 && MEM32(esi * 4u + 0x1EA340u) != 0u)
 		{
 			arg0 = esi;
@@ -11579,16 +11592,16 @@ uint32_t sub_0002F1F0(uint32_t arg0)
 
 uint32_t sub_0002F220(uint32_t eax, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
+	uint32_t arg0_2 = 0, esi = 0, finished = 0, level = 0;
 
 	esi = arg0;
 	if ((int32_t)esi >= 0x3B && (int32_t)esi <= 0x49)
 	{
 		arg0_2 = esi;
 		sub_000252C0(arg0_2);
-		arg1 = 1u;
-		arg0_2 = esi;
-		eax = sub_00025180(arg0_2, arg1);
+		finished = 1u;
+		level = esi;
+		eax = LevelSetFinished(level, finished);
 		MEM32(esi * 4u + 0x1EA340u) = 1u;
 	}
 	return eax;
@@ -11750,15 +11763,15 @@ uint32_t CheatsRestore(void)
 
 void sub_0002F450(void)
 {
-	uint32_t arg0 = 0, arg1 = 0;
+	uint32_t arg0 = 0, finished = 0, level = 0;
 	uint32_t stack_C = 0;
 
 	stack_C = 1u;
 	x86_rep_stos32(0x1EA288u, 0u, 0xDCu);
-	arg0 = 0x3Bu;
+	level = 0x3Bu;
 	MEM32(0x1EA42Cu) = 1u;
-	arg1 = stack_C;
-	sub_00025180(arg0, arg1);
+	finished = stack_C;
+	LevelSetFinished(level, finished);
 	arg0 = 0x3Bu;
 	sub_000252C0(arg0);
 	MEM32(0x1EA5A0u) = 1u;
@@ -15477,15 +15490,15 @@ uint32_t sub_00035850(void)
 
 uint32_t sub_00035870(uint32_t ebx, uint32_t ebp)
 {
-	uint32_t arg0 = 0, ignored = 0;
+	uint32_t arg0 = 0, ignored = 0, level = 0;
 
 	sub_0002F450();
 	sub_00025320();
 	sub_000305A0();
 	arg0 = 1u;
 	sub_0002EFA0(arg0, &ignored, &ebx);
-	arg0 = 0u;
-	sub_00025010(arg0);
+	level = 0u;
+	LevelSetCurrent(level);
 	arg0 = 0x18F960u;
 	sub_0002EF60(arg0);
 	return sub_0004AE00(ebx, ebp);
@@ -24540,7 +24553,7 @@ uint32_t sub_00049A60(uint32_t eax)
 		eax_2 = sub_0002F1C0(arg0);
 		if ((int16_t)eax_2 > 0)
 		{
-			eax_2 = sub_00025020();
+			eax_2 = LevelGetCurrent();
 			if ((int32_t)eax_2 >= 0x3B)
 			{
 				eax_2 = 1u;
@@ -24557,7 +24570,7 @@ uint32_t sub_00049A60(uint32_t eax)
 		eax_2 = sub_000251F0(arg0);
 		return eax_2;
 	}
-	eax_2 = sub_00025020();
+	eax_2 = LevelGetCurrent();
 	if ((int32_t)eax_2 >= 0x3B || MEM32(esi + 0x1B1408u) != 0xFFFFFFFCu)
 	{
 		arg0 = MEM32(esi + 0x1B1408u);
@@ -24583,7 +24596,7 @@ uint32_t sub_00049A60(uint32_t eax)
 
 uint32_t sub_00049AF0(uint32_t edi)
 {
-	uint32_t arg0 = 0, eax = 0, esi = 0;
+	uint32_t arg0 = 0, eax = 0, esi = 0, level = 0;
 
 	esi = edi << 4;
 	eax = MEM32(esi + 0x1B1408u);
@@ -24595,12 +24608,12 @@ uint32_t sub_00049AF0(uint32_t edi)
 		{
 			if ((int32_t)edi <= 4 || edi == 0xFu)
 				return eax;
-			eax = sub_00025020();
-			arg0 = eax;
-			eax = sub_00025000(arg0);
+			eax = LevelGetCurrent();
+			level = eax;
+			eax = LevelGet(level);
 			if ((MEM8(eax) & 0x40u) == 0u)
 			{
-				eax = sub_00025020();
+				eax = LevelGetCurrent();
 				if ((int32_t)eax < 0x3B)
 				{
 					eax = 0u;
@@ -24628,12 +24641,12 @@ uint32_t sub_00049AF0(uint32_t edi)
 	eax = 1u;
 	if ((int32_t)edi <= 4 || edi == 0xFu)
 		return eax;
-	eax = sub_00025020();
-	arg0 = eax;
-	eax = sub_00025000(arg0);
+	eax = LevelGetCurrent();
+	level = eax;
+	eax = LevelGet(level);
 	if ((MEM8(eax) & 0x40u) == 0u)
 	{
-		eax = sub_00025020();
+		eax = LevelGetCurrent();
 		if ((int32_t)eax < 0x3B)
 		{
 			eax = 0u;
@@ -24647,11 +24660,11 @@ uint32_t sub_00049AF0(uint32_t edi)
 uint32_t sub_00049B70(uint32_t esi)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, eax = 0, mask = 0;
+	uint32_t arg0 = 0, eax = 0, level = 0, mask = 0;
 
-	eax = sub_00025020();
-	arg0 = eax;
-	eax = sub_00025000(arg0);
+	eax = LevelGetCurrent();
+	level = eax;
+	eax = LevelGet(level);
 	if (MEM32(eax + 0x50u) == 5u)
 	{
 		zero = esi == 0u;
@@ -68562,17 +68575,17 @@ void sub_000A1560(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 
 uint32_t sub_000A16D0(void)
 {
-	uint32_t arg0 = 0, eax = 0, esi = 0;
+	uint32_t eax = 0, esi = 0, level = 0;
 
 	esi = 0u;
 	for (;;)
 	{
-		arg0 = esi;
-		eax = sub_00025060(arg0);
+		level = esi;
+		eax = LevelIsOpen(level);
 		if (eax != 0u)
 		{
-			arg0 = esi;
-			eax = sub_00025160(arg0);
+			level = esi;
+			eax = LevelIsFinished(level);
 			if (eax == 0u)
 				break;
 		}
@@ -68666,7 +68679,7 @@ uint32_t sub_000A2160(uint32_t eax, uint32_t edx, uint32_t arg1)
 
 uint32_t sub_000A2450(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, esi_2 = 0, ignored = 0, level = 0;
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
@@ -68677,7 +68690,7 @@ uint32_t sub_000A2450(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_00024FE0(&eax, &ecx);
+	LevelCount(&eax, &ecx);
 	ebp_2 = eax;
 	esi_2 = 0u;
 	ebx_2 = 0x20E068u;
@@ -68687,8 +68700,8 @@ uint32_t sub_000A2450(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2;
-			arg0 = MEM32(g_esp);
-			eax = sub_00025000(arg0);
+			level = MEM32(g_esp);
+			eax = LevelGet(level);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
 			{
@@ -68790,7 +68803,7 @@ uint32_t sub_000A2500(void)
 uint32_t sub_000A27D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t negative = 0, overflow = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp = 0, ebx = 0, edi = 0, esi = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp = 0, ebx = 0, edi = 0, esi = 0, level = 0;
 	uint32_t saved_arg0 = 0;
 
 	saved_arg0 = arg0;
@@ -68824,8 +68837,8 @@ uint32_t sub_000A27D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 				MEM32(esi + 0x124u) = ebx;
 			else
 				MEM32(esi + 0x124u) = eax;
-			arg0_2 = MEM32(MEM32(esi + 0x124u) * 8u + 0x1B1900u);
-			eax = sub_00025060(arg0_2);
+			level = MEM32(MEM32(esi + 0x124u) * 8u + 0x1B1900u);
+			eax = LevelIsOpen(level);
 		} while (eax == 0u);
 		eax = MEM32(esi + 0x124u);
 		if (ebp != eax)
@@ -68846,8 +68859,8 @@ uint32_t sub_000A27D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 			MEM32(esi + 0x124u) = eax;
 		else
 			MEM32(esi + 0x124u) = edi;
-		arg0_2 = MEM32(MEM32(esi + 0x124u) * 8u + 0x1B1900u);
-		eax = sub_00025060(arg0_2);
+		level = MEM32(MEM32(esi + 0x124u) * 8u + 0x1B1900u);
+		eax = LevelIsOpen(level);
 	} while (eax == 0u);
 	eax = MEM32(esi + 0x124u);
 	if (ebp == eax)
@@ -68911,7 +68924,7 @@ uint32_t sub_000A2930(uint32_t arg0)
 
 uint32_t sub_000A2960(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, level = 0;
 	uint32_t saved_arg2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -68945,8 +68958,8 @@ uint32_t sub_000A2960(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 	eax = sub_000A16D0();
 	edi_2 = eax;
-	arg0_2 = edi_2;
-	eax = sub_00025000(arg0_2);
+	level = edi_2;
+	eax = LevelGet(level);
 	if (eax == 0u)
 		eax = 0xFFFFFFFFu;
 	else
@@ -79197,7 +79210,7 @@ uint32_t sub_000BC360(uint32_t eax, uint32_t ecx, uint32_t edx)
 
 uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, level = 0;
 
 	g_esp = g_esp - 0x14u;
 	g_esp = g_esp - 4u;
@@ -79206,7 +79219,7 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_00024FE0(&eax, &ecx);
+	LevelCount(&eax, &ecx);
 	MEM32(g_esp + 0xCu) = eax;
 	edi_2 = 0u;
 	esi_2 = 0x219FE8u;
@@ -79216,8 +79229,8 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edi_2;
-			arg0 = MEM32(g_esp);
-			eax = sub_00025000(arg0);
+			level = MEM32(g_esp);
+			eax = LevelGet(level);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
 			{
@@ -79869,7 +79882,7 @@ uint32_t sub_000BDBF0(uint32_t eax, uint32_t ecx, uint32_t edx)
 
 uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, level = 0;
 
 	g_esp = g_esp - 0x14u;
 	g_esp = g_esp - 4u;
@@ -79878,7 +79891,7 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_00024FE0(&eax, &ecx);
+	LevelCount(&eax, &ecx);
 	MEM32(g_esp + 0xCu) = eax;
 	edi_2 = 0u;
 	esi_2 = 0x21B3F0u;
@@ -79888,8 +79901,8 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edi_2;
-			arg0 = MEM32(g_esp);
-			eax = sub_00025000(arg0);
+			level = MEM32(g_esp);
+			eax = LevelGet(level);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
 			{
@@ -81373,7 +81386,7 @@ uint32_t sub_000C2380(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 
 uint32_t sub_000C2460(uint32_t ecx, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, eax = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0;
+	uint32_t eax = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, level = 0;
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
@@ -81415,7 +81428,7 @@ uint32_t sub_000C2460(uint32_t ecx, uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x21C924u;
 	x86_call(sub_00126D90, 0x000C24ACu, 0);
 	g_esp = g_esp + 0x30u;
-	sub_00024FE0(&eax, &ecx_2);
+	LevelCount(&eax, &ecx_2);
 	ebx_2 = eax;
 	esi_2 = 0u;
 	edi_2 = 0x1B2968u;
@@ -81427,8 +81440,8 @@ uint32_t sub_000C2460(uint32_t ecx, uint32_t ebx, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2;
-			arg0 = MEM32(g_esp);
-			eax = sub_00025000(arg0);
+			level = MEM32(g_esp);
+			eax = LevelGet(level);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
 			{
@@ -81497,7 +81510,7 @@ void sub_000C2550(uint32_t arg0)
 
 uint32_t sub_000C25A0(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, level = 0;
 
 	g_esp = g_esp - 0xCu;
 	MEM32(g_esp + 4u) = arg0;
@@ -81529,8 +81542,8 @@ uint32_t sub_000C25A0(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0_2 = MEM32(g_esp);
-		eax = sub_00025000(arg0_2);
+		level = MEM32(g_esp);
+		eax = LevelGet(level);
 		g_esp = g_esp + 4u;
 		if (eax != 0u)
 		{
@@ -150221,31 +150234,31 @@ void sub_00024CD0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00024FE0_entry(void)
+void LevelCount_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ecx_out = g_ecx;
-	sub_00024FE0(&eax_out, &ecx_out);
+	LevelCount(&eax_out, &ecx_out);
 	g_eax = eax_out;
 	g_ecx = ecx_out;
 	g_esp += 4u;
 }
 
-void sub_00025000_entry(void)
+void LevelGet_entry(void)
 {
-	g_eax = sub_00025000(ARG32(0));
+	g_eax = LevelGet(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_00025010_entry(void)
+void LevelSetCurrent_entry(void)
 {
-	g_eax = sub_00025010(ARG32(0));
+	g_eax = LevelSetCurrent(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_00025020_entry(void)
+void LevelGetCurrent_entry(void)
 {
-	g_eax = sub_00025020();
+	g_eax = LevelGetCurrent();
 	g_esp += 4u;
 }
 
@@ -150266,21 +150279,21 @@ void sub_0002504F_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00025060_entry(void)
+void LevelIsOpen_entry(void)
 {
-	g_eax = sub_00025060(ARG32(0));
+	g_eax = LevelIsOpen(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_00025160_entry(void)
+void LevelIsFinished_entry(void)
 {
-	g_eax = sub_00025160(ARG32(0));
+	g_eax = LevelIsFinished(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_00025180_entry(void)
+void LevelSetFinished_entry(void)
 {
-	g_eax = sub_00025180(ARG32(0), ARG32(1));
+	g_eax = LevelSetFinished(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -150290,15 +150303,15 @@ void sub_000251B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000251D0_entry(void)
+void LevelsSetAllOpen_entry(void)
 {
-	g_eax = sub_000251D0(ARG32(0));
+	g_eax = LevelsSetAllOpen(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000251E0_entry(void)
+void LevelGetChapter_entry(void)
 {
-	g_eax = sub_000251E0(ARG32(0));
+	g_eax = LevelGetChapter(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -150308,9 +150321,9 @@ void sub_000251F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00025290_entry(void)
+void LevelCountsAsFinished_entry(void)
 {
-	g_eax = sub_00025290(ARG32(0));
+	g_eax = LevelCountsAsFinished(ARG32(0));
 	g_esp += 4u;
 }
 

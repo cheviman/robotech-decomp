@@ -2,9 +2,9 @@
  *    Name:        clock_bridge.h
  *    Description: the clock tied to the frames that recomp_manual.c routes the game's counter to
  *                 (clock_bridge.c)
- *    Version:     0.1.0
+ *    Version:     0.2.0
  *    Created:     25-10-2026
- *    Modified:    26-10-2026
+ *    Modified:    28-10-2026
  *    Author:      Sebastian Toyos
  */
 #ifndef CLOCK_BRIDGE_H
@@ -18,5 +18,6 @@ void clock_GetSystemTimeAsFileTime(void);
 void clock_GetTickCount(void);
 void clock_Init(void);                    /* after the kernel bridge: the thunk of KeQuerySystemTime */
 uint64_t clock_VirtualTime(unsigned rate); /* the game's time so far, in 1/rate s (virtual clock) */
+uint64_t clock_FramesTime(unsigned rate);  /* the frames presented alone, in 1/rate s */
 
 #endif

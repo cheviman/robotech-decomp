@@ -1,9 +1,9 @@
 /**
  *    Name:        sound_mixer.c
  *    Description: the host's mixer of the game's sounds: voices read from guest memory, mixed to 48 kHz stereo
- *    Version:     0.1.0
+ *    Version:     0.1.1
  *    Created:     26-10-2026
- *    Modified:    26-10-2026
+ *    Modified:    28-10-2026
  *    Author:      Sebastian Toyos
  *
  *    What the console's audio processor did for the game's DirectSound, done on the host: each voice reads
@@ -249,7 +249,12 @@ static DWORD WINAPI mixer_thread(LPVOID unused)
     for (;;) {
         mixer_Lock();
         if (clock_Virtual()) {
-            mix_to((uint64_t)d3d11_FrameCount() * FRAME_SAMPLES);
+            /* not frames * FRAME_SAMPLES: the clock rounds a frame's ticks
+             * down, to a sample short of that, and a read of the game's
+             * brings the mix to the clock; a sample ahead or not, by which
+             * thread came first, a voice the game starts then may end a
+             * sample apart from run to run */
+            mix_to(clock_FramesTime(MIXER_RATE));
         } else if (xa2_is_active()) {
             while (xa2_queued_samples() < s_high)
                 mix(PERIOD);

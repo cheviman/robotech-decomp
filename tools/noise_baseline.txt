@@ -15,12 +15,12 @@ gotos 34899
 stack_returns 7141
 indirect_calls 897
 decompiled_functions 2910
-decompiled_unnamed 2062
-decompiled_uncommented 2254
+decompiled_unnamed 2052
+decompiled_uncommented 2244
 decompiled_registers 85949
 decompiled_flags 703
-decompiled_arguments 38909
+decompiled_arguments 38847
 decompiled_slots 2793
-decompiled_memory_by_address 14307
-decompiled_memory_computed 31852
+decompiled_memory_by_address 14298
+decompiled_memory_computed 31853
 decompiled_gotos 0
