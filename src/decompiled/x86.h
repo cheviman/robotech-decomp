@@ -178,4 +178,97 @@ static inline void invalid_jump(uint32_t value)
     abort();
 }
 
+/* ── The x87's floating point (tools/x86/x87.py, tools/core/decompiler/floats.py) ─────────────────── */
+
+/* The x87's registers are doubles in the C, as in the recompiled code (recomp_types.h). A float is made one
+ * as FLD makes it (FLOAT_AT); each operation is rounded as the control word's precision says (x87_round:
+ * at 24 bits, a float's precision with the exponent kept, which a float's range does not have; the game
+ * also runs at 53, a double's); a value becomes a float where memory holds one. What C has no operator
+ * for is the x87's own, as the recompiled code works it out: its trigonometry, its conversions to
+ * integers, its status word. */
+
+/* An arithmetic result as the x87 rounds it, under the control word's precision. */
+static inline double x87_round(double value)
+{
+    return RECOMP_FP_PC(value);
+}
+
+/* A float's bits as FLD loads them: a double, a signaling NaN made quiet (so a float loaded and stored
+ * again is not always a copy of its bits). */
+static inline double x87_float(uint32_t bits)
+{
+    if ((bits & 0x7F800000u) == 0x7F800000u && (bits & 0x007FFFFFu) != 0u)
+        bits |= 0x00400000u;
+    return (double)float_from_bits(bits);
+}
+
+/* The float at a guest address, as FLD loads it. */
+#define FLOAT_AT(address) x87_float(MEM32(address))
+
+static inline double double_from_bits(uint64_t bits)
+{
+    double d;
+
+    memcpy(&d, &bits, 8);
+    return d;
+}
+
+static inline uint64_t double_to_bits(double d)
+{
+    uint64_t bits;
+
+    memcpy(&bits, &d, 8);
+    return bits;
+}
+
+/* True when a or b is a NaN: a compare's unordered outcome. */
+static inline int x87_unordered(double a, double b)
+{
+    return a != a || b != b;
+}
+
+/* FSIN and FCOS: past 2^63 the x87 leaves the value as it was. */
+static inline double x87_sin(double value)
+{
+    return recomp_fp_trig_in_range(value) ? recomp_x87_sin(value) : value;
+}
+
+static inline double x87_cos(double value)
+{
+    return recomp_fp_trig_in_range(value) ? recomp_x87_cos(value) : value;
+}
+
+/* FIST(P): rounded as the control word says (to nearest, the game's), the integer indefinite past range. */
+static inline uint64_t x87_fist(double value, uint32_t bits)
+{
+    return (uint64_t)recomp_fist(value, g_fp_control_word, bits);
+}
+
+/* The C runtime's _ftol2, which C's (int) of a float calls: the value rounded to nearest by FISTP, then
+ * one back toward 0 when the rounding went past it, as the float of the difference's sign says; 0 and the
+ * integer indefinite as FISTP gives them. EDX:EAX. */
+static inline uint64_t x87_ftol(double value)
+{
+    int64_t n = recomp_fist(value, g_fp_control_word, 64);
+    uint32_t sign = float_to_bits((float)value), difference;
+
+    if ((uint32_t)n == 0u && ((uint64_t)n >> 32 & 0x7FFFFFFFu) == 0u)
+        return (uint64_t)n;
+    difference = float_to_bits((float)RECOMP_FP_PC(value - (double)n));
+    if (!(sign & 0x80000000u)) {
+        if (difference > 0x80000000u)
+            n -= 1;
+    } else if ((difference ^ 0x80000000u) > 0x80000000u) {
+        n += 1;
+    }
+    return (uint64_t)n;
+}
+
+/* FNSTSW AX after a compare of a with b, with 'depth' values on the stack: TOP in bits 11-13 (the stack the
+ * recompiled code keeps does not move while the decompiled C works), C3 C2 C0 as the outcome sets them. */
+static inline uint64_t x87_status(double a, double b, uint32_t depth)
+{
+    return (((uint32_t)(g_fp_top - (int)depth) & 7u) << 11) | RECOMP_FCMP_CC(RECOMP_FCMP(a, b));
+}
+
 #endif

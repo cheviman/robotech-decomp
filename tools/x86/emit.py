@@ -138,6 +138,14 @@ class GuestNames:
 
 
 class X86Names(emit.Names):
+    # The core writes "(x & 0xFFFF0000) | link" as LINKED(x, link) where a pointer moves within its 64 KB
+    # page (an arcade board's links); the x86 has none of those, and that is a write of AX.
+    def pointer(self, node):
+        return False
+
+    def link(self, load):
+        return False
+
     def memory(self, load):
         found = super().memory(load)
         if found is not None:
@@ -228,6 +236,9 @@ class X86Writer(emit.FunctionWriter):
         return lines
 
     def statement(self, statement):
+        if isinstance(statement, ir.Store) and isinstance(statement.value, ir.Op) \
+                and statement.value.name in ("f.bits32", "f.bits64"):
+            return super().statement(statement)     # a float or a double: MEMF(address) = value
         if isinstance(statement, ir.Store):
             target = self.memory(statement.address, statement.bits, id(statement))
             if target is not None and target[2]:

@@ -3,9 +3,9 @@
 """
 Name:        function.py
 Description: the game's x86 functions as control-flow graphs of IR blocks
-Version:     0.1.0
+Version:     0.2.0
 Created:     26-10-2026
-Modified:    26-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 Takes the functions disassembler.py decodes and lifts every instruction to IR (lift.py for data, here
@@ -15,14 +15,20 @@ it, as the decompiler expects (tools/core/decompiler/stack.py), but for a callee
 arguments ("ret N", stdcall), after which SP is N bytes up. A jump to another function is a tail call;
 a jump through a table, a switch over the table's entries.
 
-What is not translated yet raises lift.Unsupported: an x87 or SSE instruction, a call or a jump through
-a pointer, a branch on PF.
+The x87's stack is a register for each depth (x87.py): a function whose depth is known at every
+instruction, which takes nothing from it and leaves nothing on it, and whose calls take and leave nothing
+either (but for _ftol2, lifted as the conversion it is), has its floating-point code lifted; the compare
+idiom "fcom; fnstsw ax; test ah, mask; j(n)e/j(n)p" becomes a branch on the compare's outcome.
+
+What is not translated yet raises lift.Unsupported: an SSE instruction, an x87 one past those, a call or a
+jump through a pointer, a branch on PF other than a compare's.
 """
 from decompiler.function import Block, Function
 from v60 import ir
 
 from . import disassembler as dis
 from . import lift
+from . import x87
 from .profile import ESP
 
 CALL_FRAME = "x86_call_frame"
@@ -35,6 +41,9 @@ class Builder:
     def __init__(self, program):
         self.program = program
         self.dropped = {}
+        self.x87 = x87.Depths(program)
+        self.ftol = next((entry for entry, (end, name, section) in program.functions.items()
+                          if name == x87.FTOL), None)
 
     def drops(self, entry):
         """The bytes of arguments a function drops when it returns (its "ret N"); None for no function."""
@@ -66,6 +75,11 @@ class Builder:
             raise lift.Unsupported("returns that drop different amounts")
         leaders = self.leaders(decoded)
         order = list(decoded.instructions)
+        self.depths = None
+        if any(x87.is_x87(instruction.mnemonic) for instruction in decoded.instructions.values()):
+            self.depths = self.x87.at(entry)
+            if self.depths is None or self.x87.effect(entry) != (0, 0):
+                raise lift.Unsupported("x87: its stack's depth not known, or values taken or left")
         current = None
         for position, address in enumerate(order):
             instruction = decoded.instructions[address]
@@ -76,6 +90,7 @@ class Builder:
             if current is None:
                 current = Block(address)
                 function.blocks[address] = current
+                self.state = x87.State()
             current.addresses.append(address)
             before = len(current.statements)
             self.lift(decoded, current, instruction, position)
@@ -86,6 +101,9 @@ class Builder:
                 current.end.origin = address
             following = instruction.next
             if current.end is None and (position + 1 >= len(order) or order[position + 1] != following):
+                if self.depths is not None and following not in decoded.instructions \
+                        and self.x87.effect(following) != (0, 0):
+                    raise lift.Unsupported(f"x87: runs on into {following:08X}, which takes or leaves its values")
                 current.end = self.leave(decoded, following)
         # where SP stands at a tail call: the callee's arguments are the slots above it (arguments.py)
         for block in function.blocks.values():
@@ -101,12 +119,32 @@ class Builder:
             return ir.TailCall(target)
         raise lift.Unsupported(f"a jump to {target:08X}, in no function")
 
+    def depth(self, instruction):
+        if self.depths is None or instruction.address not in self.depths:
+            raise lift.Unsupported(f"x87: {instruction.mnemonic} where its stack's depth is not known")
+        return self.depths[instruction.address]
+
     def lift(self, decoded, block, instruction, position):
         flow = instruction.flow
         if flow == dis.FLOW_NONE:
             lifter = lift.Lifter(prefix=f"t{instruction.address:X}_")
+            state = self.state
             try:
-                handled = lift.lift_data(lifter, instruction)
+                if x87.is_x87(instruction.mnemonic):
+                    x87.lift(lifter, instruction, self.depth(instruction), state)
+                    handled = True
+                elif x87.lift_test(lifter, instruction, state):
+                    handled = True
+                else:
+                    handled = lift.lift_data(lifter, instruction)
+                    # what the instruction changed of what a compare left: the flags, AH
+                    if any(isinstance(statement, ir.SetFlag) for statement in lifter.statements):
+                        state.test = None
+                    if any(isinstance(statement, ir.SetReg) and statement.index == 0
+                           for statement in lifter.statements):
+                        state.status = None
+            except x87.Unsupported as problem:
+                raise lift.Unsupported(f"x87: {problem}")
             except (IndexError, KeyError) as problem:
                 raise lift.Unsupported(f"{instruction.mnemonic} {instruction.op_str}: {problem}")
             if not handled:
@@ -118,10 +156,23 @@ class Builder:
             target = instruction.targets[0]
             if target not in decoded.instructions:
                 raise lift.Unsupported(f"a branch out of the function, to {target:08X}")
-            block.end = ir.Branch(lift.condition(code), target, instruction.next)
+            condition = x87.branch_condition(code, self.state)
+            block.end = ir.Branch(condition if condition is not None else lift.condition(code), target,
+                                  instruction.next)
             return
         if flow == dis.FLOW_JUMP:
-            block.end = self.leave(decoded, instruction.targets[0])
+            target = instruction.targets[0]
+            if self.depths is not None and target not in decoded.instructions:
+                if target == self.ftol:
+                    # "jmp _ftol2": the conversion, and _ftol2's return is this function's
+                    lifter = lift.Lifter(prefix=f"t{instruction.address:X}_")
+                    x87.lift_ftol(lifter, self.depth(instruction))
+                    block.statements.extend(lifter.statements)
+                    block.end = ir.Return()
+                    return
+                if self.x87.effect(target) != (0, 0):
+                    raise lift.Unsupported(f"x87: a jump to {target:08X}, which takes or leaves its values")
+            block.end = self.leave(decoded, target)
             return
         if flow == dis.FLOW_COMPUTED:
             if instruction.table is None:
@@ -135,6 +186,15 @@ class Builder:
             if not instruction.targets:
                 raise lift.Unsupported(f"call {instruction.op_str}")
             target = instruction.targets[0]
+            if self.depths is not None:
+                if target == self.ftol:
+                    lifter = lift.Lifter(prefix=f"t{instruction.address:X}_")
+                    x87.lift_ftol(lifter, self.depth(instruction))
+                    block.statements.extend(lifter.statements)
+                    self.state.status = self.state.test = None
+                    return
+                if self.x87.effect(target) != (0, 0):
+                    raise lift.Unsupported(f"x87: a call to {target:08X}, which takes or leaves its values")
             drops = self.drops(target)
             if drops is None:
                 raise lift.Unsupported(f"a call to {target:08X}, which drops different amounts or is no function")

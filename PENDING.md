@@ -312,7 +312,7 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   check`: of the 5,150 functions of the game's code, 3,860 lift (213,492 instructions) and the core's
   stack analysis follows them all, 3,219 with the stack as slots and 641 kept in memory (a local whose
   address is passed on, about 370; EBP as a frame pointer, about 90; the rest pieces of other
-  functions). Not lifted yet: the x87 (about 1,100 functions; the IR has integers only), calls and
+  functions). Not lifted yet: the x87 (about 1,100 functions; the IR had integers only, see below), calls and
   jumps through a pointer (147), and a few odd ones. `tools/decompile.py analyse`: the 1,395 whose
   calls all reach functions with their stack in slots go through the core's data flow, its registers
   saved and put back, its conditions (1,004 branches compare values instead of flags) and its
@@ -426,6 +426,29 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   and the frame's putting back went, and the menu stopped at its first frame. The noise grows with
   them: 14,020 stack accesses of theirs counted among the memory at a computed address, 18,384
   registers (big functions, 114 each). Left: their frames by name.
+- **3,328 in the build: the x87** (28-10-2026, from 2,910; 4,424 of the game's 5,150 lift, from
+  3,860). The x87's stack is not a stack in the C: its depth at each instruction is known before the
+  code runs (`tools/x86/x87.py`: empty where a function starts and calls, one value left by one that
+  hands a float back, the C runtime's helpers taking theirs from it), and st(i) is the register of its
+  depth, f0 to f7. 1,010 of the 1,104 functions of the game that use the x87 have a depth at every
+  instruction. The core takes floating-point values as 64-bit values with operators of their own
+  ("f.something", `tools/core/decompiler/floats.py`), which its integer passes leave alone, and writes
+  them as doubles, as the recompiled code keeps the x87's registers: a float loaded as FLD loads it
+  (FLOAT_AT: a signaling NaN made quiet), each operation rounded as the control word says
+  (x87_round), a value written to a float's memory rounded then (MEMF), the trigonometry and the
+  conversions to integers as the recompiled code works them out (`src/decompiled/x86.h`). The compare
+  idiom, "fcom; fnstsw ax; test ah, mask; j(n)e or j(n)p", is a branch on the compare's outcome, NaN
+  as the x87 has it: `!(f0 <= t1)`, `MEMF(...) != ...`. A call or a jump to the C runtime's _ftol2 is
+  the conversion it does (x87_ftol). This first step takes the functions whose x87 stays inside them:
+  nothing taken from its stack or left on it, and every call to one that takes and leaves nothing.
+  SegaSonic's C comes out of the core as it did, byte for byte. The nine scenarios frame for frame as
+  their references. Found on the way: the game's control word is not always the 24 bits of precision
+  the Xbox starts with: 0x023F (53 bits) in the missions, which x87_round follows; a "jmp _ftol2" that
+  ends a function (the animations' frame count, 0x0011CE20) had its conversion lost, and the missions
+  went their own way from frame 2400 (a missile's trail drawn across the screen) until it was the
+  conversion too. Left: the functions that take or hand back x87 values (56 hand a float back in
+  st(0); their callers with them), the 94 without a depth known, fptan, fsincos, frndint and the like;
+  the floats' names (f0 is a register's, not a value's).
 
 ## Dead hypotheses
 

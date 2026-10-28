@@ -47,9 +47,10 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       (fonts, measuring and laying out strings), the render state setters, 19 classes'
       registrations and the scene objects' tree, 134 functions, every name real; the menu, the first mission and a save as the recompiled ones played them, frame for frame
 - [x] The structured decompiler: arcade-decomp's (SegaSonic's), with an x86 frontend of this project's
-      (`tools/x86`); 2,910 of the game's functions in its C (`src/decompiled/`), with no goto, in the
-      recompiled ones' place, calling the ones still recompiled as the recompiled code does, the menu,
-      the first mission and a save frame for frame as before
+      (`tools/x86`); 3,328 of the game's functions in its C (`src/decompiled/`), with no goto, in the
+      recompiled ones' place, calling the ones still recompiled as the recompiled code does, their
+      x87 floating point as C doubles rounded as the x87 rounds them; the nine scenarios frame for
+      frame as before
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a

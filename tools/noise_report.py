@@ -2,9 +2,9 @@
 Name:        noise_report.py
 Description: counts, in one pass over the generated C, every kind of noise that keeps it from reading
              as code a person wrote, and compares it with the baseline kept in the repo
-Version:     0.2.0
+Version:     0.3.0
 Created:     25-10-2026
-Modified:    26-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 The C under src/recomp/gen/ is a recompilation: xboxrecomp lifts each x86
@@ -77,11 +77,15 @@ DECOMPILED_KINDS = [
      re.compile(r"\b(?:zero|negative|overflow|carry)(?:_\d+)?\b")),
     ("decompiled_arguments", "parameters named by their place (arg0, arg1...)", re.compile(r"\barg\d+(?:_\d+)?\b")),
     ("decompiled_slots", "stack slots named by their offset or the register they save (stack_4, saved_eax)",
-     re.compile(r"\b(?:stack_[0-9A-F]+|saved_\w+?)(?:_\d+)?\b")),
+     re.compile(r"\b(?:stack(?:_[0-9A-F]+)?|saved_\w+?)(?:_\d+)?\b")),
     ("decompiled_memory_by_address", "memory read or written at a raw address: MEM32(0x...)",
-     re.compile(r"\bMEM(?:8|16|32)\(0x[0-9A-Fa-f]+u?\)")),
+     re.compile(r"\b(?:MEM(?:8|16|32|F|D)|FLOAT_AT)\(0x[0-9A-Fa-f]+u?\)")),
     ("decompiled_memory_computed", "memory at a computed address: MEM32(p + n)",
-     re.compile(r"\bMEM(?:8|16|32)\((?!0x[0-9A-Fa-f]+u?\))")),
+     re.compile(r"\b(?:MEM(?:8|16|32|F|D)|FLOAT_AT)\((?!0x[0-9A-Fa-f]+u?\))")),
+    ("decompiled_float_registers", "x87 values named by their stack depth (f0, f1_2...)",
+     re.compile(r"\bf[0-7](?:_\d+)?\b")),
+    ("decompiled_float_bits", "floating-point values carried as their bits (x87_float(t), float_to_bits...)",
+     re.compile(r"\b(?:x87_float|float_to_bits|float_from_bits|double_from_bits|double_to_bits)\(")),
     ("decompiled_gotos", "goto", re.compile(r"\bgoto\b")),
 ]
 NOT_NOISE = ("functions", "decompiled_functions")    # counts of work done, not of noise
