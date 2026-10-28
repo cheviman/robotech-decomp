@@ -56,7 +56,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       distance and a pan, and the reverb is not heard yet
 - [x] The original game as the reference: the scenarios played in xemu on the port's clock and pad, its
       frames set against the port's; the menu, the first mission and a save the same on both, the flight
-      and the shots included, at a mean difference of 1.23 of 255 or less (1.5 fails)
+      and the shots included, at a mean difference of 1.23 of 255 or less (1.5 fails), and the training,
+      its shadow drawn to a texture, at 3.2 (its dialogue waits for voice lines, which end on other
+      frames in xemu)
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
       programs on the GPU, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
@@ -175,7 +177,7 @@ hand.
   xboxrecomp's conformance harness (it needs a 32-bit MSVC): eax and the memory, the game's variables
   included, and names any function it compared with nothing.
   `scenario.py` plays the scripted scenarios
-  of `tests/scenarios/` (the menu, the first mission, a save) with every clock the game reads tied to the
+  of `tests/scenarios/` (the menu, the first mission, a save, the training) with every clock the game reads tied to the
   frames and an empty save folder of its own, so runs repeat frame for frame, and compares every dumped
   frame and saved file with the reference the build before wrote (`--save` records it). `noise_report.py`
   counts what keeps the generated C from reading as written and fails if a count went up
@@ -187,7 +189,7 @@ hand.
   line allows:
 
   ```bash
-  py -3 tools/xemu_reference.py menu mission1 save
+  py -3 tools/xemu_reference.py menu mission1 save training
   ```
 
 ## Layout

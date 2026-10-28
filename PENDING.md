@@ -36,12 +36,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
    coordinates' z and w are dropped (two floats a set: the layer reads the FVF's texture size field
    otherwise than the XDK, 1 = 3 floats, 2 = 4, 3 = 1). **Pixel shaders**: `SetPixelShader` is counted,
    0 draws with one so far.
-3. **The training's opening scene** draws the fighter as a white silhouette on black (seen once,
-   25-10-2026; no draw there uses a vertex program).
-4. **Render targets**, `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`,
-   `TWOSIDEDLIGHTING`, `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated
-   (`BLENDTEXTUREALPHAPM`, `MODULATE*_ADD*`, `BUMPENVMAP*`), texture transforms `PROJECTED` (the
-   layer's shader does not divide) and on pre-transformed vertices (the layer leaves them out).
+3. `D3DResource_Release`, the states with no layer state (`BLENDCOLOR`, `TWOSIDEDLIGHTING`,
+   `BACKFILLMODE`, `ZBIAS`, `LOGICOP`, multisample), texture ops approximated (`BLENDTEXTUREALPHAPM`,
+   `MODULATE*_ADD*`, `BUMPENVMAP*`). Render targets: a texture's first level only, and a projective
+   sampling only of a square one the game draws to (a cube's face, `bridge_make_cube`); texture
+   transforms on pre-transformed vertices (the layer leaves them out). The camera-space normal the
+   layer gives `TCI_CAMERASPACENORMAL` and `REFLECTIONVECTOR` still turns the wrong way on a rotated
+   object (the bridge mends the world normals only).
 
 ### Sound
 
@@ -153,8 +154,12 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   fails the comparison when a frame goes further. The first thing it found: the menu's background emblem
   scrolls a texture by its texture matrix, which the port left still (5.0 at frame 840, now 0.98; the
   bridge now gives the layer the texture matrices as D3D applies them). What is left is the edges, from
-  the console's 1280 halved to 640. Left: the date the kernel gives XAPI's own calls is still the
-  console's in xemu (a save's folder times).
+  the console's 1280 halved to 640. The training (27-10-2026) was 121.9 apart, a black screen and a
+  white fighter: the game draws the fighter's shadow to a texture, and the bridge drew everything to the
+  back buffer; now 3.2 (its `original` 6.0), what is left the dialogue's timing. Left: the date the
+  kernel gives XAPI's own calls is still the console's in xemu (a save's folder times); xemu's sound
+  keeps the emulator's clock, so a voice line, and the dialogue that waits for it, ends on frames that
+  change from run to run.
 - **The engine in C, so far** (26-10-2026), each function the original's in what it does, read from its
   machine code (which callers read eax after it decided which hand nothing back):
   - the object system, `src/game/engine/objects.c`: the 27 functions from 0x001102C0 to 0x00111160 and

@@ -63,12 +63,14 @@ What xemu needs that is the console's is your own: its MCPX boot ROM, a BIOS and
 never written (QEMU's `-snapshot`). The game is a disc image `tools/make_xiso.py` makes from `game/`.
 
 ```bash
-py -3 tools/xemu_reference.py menu mission1 save
+py -3 tools/xemu_reference.py menu mission1 save training
 ```
 
 The frames land in `analysis/reference/NAME/`, with `reference.log` (the hooks, the presses, the frame
 each dump is at), and each is set against the port's frame of the same number: the mean difference of
 their channels, 0 to 255; a scenario's `original` line is the most a frame may be, and a frame further
-fails the run. On 27-10-2026 the three scenarios stay at 1.23 or under for the whole run (1.5 allowed):
-the same screens, the same flight and the same shots in the first mission, the same save; what is left
-is the edges, xemu's 1280 halved to the port's 640.
+fails the run. On 27-10-2026 the menu, the first mission and the save stay at 1.23 or under for the
+whole run (1.5 allowed): the same screens, the same flight and the same shots in the first mission, the
+same save; what is left is the edges, xemu's 1280 halved to the port's 640. The training stays at 3.2
+(6.0 allowed): its dialogue goes on as each voice line ends, and xemu's sound keeps the emulator's clock,
+not the frames, so a portrait or a line shows a little earlier or later from run to run.

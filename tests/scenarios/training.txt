@@ -1,0 +1,10 @@
+# Into the training: New Game, up to Training, A on the first practice, the Veritech chosen, then A
+# every 3 seconds; its opening scene (letterboxed, the fighter's shadow cast by a render target) and the
+# first of the flight (the fences lit by the fixed pipeline's light).
+script  f360:a,f540:up,f600:a,f780:a,f960:a,f1140:a,f1320:a,f1500:a,f1680:a,f1860:a,f2040:a,f2220:a
+frames  3600
+dump    120
+movies  no
+# The dialogue goes on as each voice line ends, and in xemu the sound keeps the emulator's clock, not
+# the frames: two of its runs differ in a few frames, a portrait or a line shown earlier or later.
+original 6.0

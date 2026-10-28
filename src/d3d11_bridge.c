@@ -2,7 +2,7 @@
  *    Name:        d3d11_bridge.c
  *    Description: routes the game's Direct3D (the XDK's, statically linked and recompiled) to Direct3D 11
  *                 through xboxrecomp's D3D8 layer
- *    Version:     0.1.0
+ *    Version:     0.2.0
  *    Created:     25-10-2026
  *    Modified:    27-10-2026
  *    Author:      Sebastian Toyos
@@ -19,6 +19,7 @@
 #define COBJMACROS
 #include <windows.h>
 #include <d3d11.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,6 +36,8 @@ extern ptrdiff_t g_xbox_mem_offset;
 extern ID3D11Device *d3d8_GetD3D11Device(void);
 extern ID3D11DeviceContext *d3d8_GetD3D11Context(void);
 extern IDXGISwapChain *d3d8_GetSwapChain(void);
+extern UINT d3d8_GetBackbufferWidth(void);
+extern UINT d3d8_GetBackbufferHeight(void);
 
 /* The XDK's D3DCLEAR flags. Xbox splits the target into its four channels;
  * xboxrecomp's layer takes the PC values. */
@@ -65,6 +68,18 @@ extern IDXGISwapChain *d3d8_GetSwapChain(void);
 #define XB_RS_MAX           166
 #define XB_TSS_MAX          32
 #define XB_TSS_TEXTURETRANSFORMFLAGS 21
+#define XB_TSS_TEXCOORDINDEX         28
+#define XB_TTFF_PROJECTED            0x100u
+
+/* The device the game's D3D keeps (D3D_g_pDevice) holds the surfaces it draws
+ * to: D3DDevice_SetRenderTarget stores them there, GetRenderTarget2 and
+ * GetDepthStencilSurface2 read them back. A D3DSurface is a
+ * D3DPixelContainer and then the texture it is a level of, none for the
+ * device's own. */
+#define XB_DEVICE_PTR_VA         0x00166B48u
+#define XB_DEVICE_RENDER_TARGET  0x21B4u
+#define XB_DEVICE_DEPTH_STENCIL  0x21B8u
+#define XB_SURFACE_PARENT        0x14u
 
 typedef struct {
     uint32_t va;               /* the guest D3DTexture */
@@ -73,6 +88,8 @@ typedef struct {
     UINT width, height, levels, pitch;
     D3DFORMAT format;
     int dirty;                 /* the game locked it since the last upload */
+    int target;                /* the game draws to it: a render target on the host, never uploaded */
+    IDirect3DCubeTexture8 *cube;  /* a target sampled projectively: copied to this cube's +Z face, sampled there */
 } BridgeTexture;
 
 static IDirect3DDevice8 *s_dev;
@@ -87,6 +104,11 @@ static size_t s_scratch_size;
 static uint32_t s_rs_sent[XB_RS_MAX], s_ts_sent[BRIDGE_STAGES][XB_TSS_MAX];
 static int s_states_sent;              /* the arrays above hold what was sent */
 static uint32_t s_tci[BRIDGE_STAGES] = { 0, 1, 2, 3 };
+static uint32_t s_guest_rt = 0xFFFFFFFFu, s_guest_zs;  /* the surfaces the game draws to, as last seen */
+static BridgeTexture *s_target;                /* the texture drawn to; NULL: the back buffer */
+static IDirect3DSurface8 *s_target_depth;      /* a depth buffer of its size */
+static UINT s_target_depth_w, s_target_depth_h;
+static float s_world[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };  /* SetTransform's WORLD */
 static float s_tex_matrix[BRIDGE_STAGES][16];  /* SetTransform's TEXTURE0-3, as the game set them */
 static float s_tex_sent[BRIDGE_STAGES][16];    /* what the layer was given for them */
 static int s_tex_matrix_set[BRIDGE_STAGES], s_tex_sent_valid[BRIDGE_STAGES];
@@ -256,6 +278,9 @@ void d3d11_CreateDevice(void)
         s_dev = NULL;
 }
 
+static void bridge_follow_target(void);
+static void bridge_bind(uint32_t stage);
+
 /* D3DDevice_Clear(Count, pRects, Flags, Color, Z, Stencil). */
 void d3d11_Clear(void)
 {
@@ -266,6 +291,7 @@ void d3d11_Clear(void)
 
     if (!s_dev)
         return;
+    bridge_follow_target();
     if (xflags & XB_CLEAR_TARGET)
         flags |= D3DCLEAR_TARGET;
     if (xflags & XB_CLEAR_ZBUFFER)
@@ -283,6 +309,66 @@ void d3d11_Clear(void)
  * bridge drew, checkable without looking at the window.
  * ROBOTECH_D3D11_DUMP=<prefix> turns it on, ROBOTECH_D3D11_DUMP_EVERY=<n>
  * keeps one present in n (30 by default). */
+/* ROBOTECH_D3D11_PICK=<frame>:<x>,<y>: in that frame, every draw that changes
+ * the back buffer's pixel (x, y), 640 x 480, with what it was drawn with and
+ * from where: which draw makes a pixel that differs from the original's. */
+static void bridge_pick(const char *what)
+{
+    static long frame = -2;
+    static UINT px, py;
+    static uint32_t last;
+    static unsigned draws;
+    ID3D11Texture2D *back = NULL, *staging = NULL;
+    D3D11_TEXTURE2D_DESC td;
+    D3D11_MAPPED_SUBRESOURCE map;
+    D3D11_BOX box;
+    ID3D11DeviceContext *ctx = d3d8_GetD3D11Context();
+    uint32_t now = 0;
+
+    if (frame == -2) {
+        const char *e = getenv("ROBOTECH_D3D11_PICK");
+        frame = e && sscanf(e, "%ld:%u,%u", &frame, &px, &py) == 3 ? frame : -1;
+    }
+    if (frame < 0 || s_frame != (unsigned)frame || s_target)
+        return;
+    draws++;
+    if (FAILED(IDXGISwapChain_GetBuffer(d3d8_GetSwapChain(), 0, &IID_ID3D11Texture2D, (void **)&back)))
+        return;
+    ID3D11Texture2D_GetDesc(back, &td);
+    td.Width = td.Height = 1;
+    td.MipLevels = td.ArraySize = 1;
+    td.SampleDesc.Count = 1;
+    td.SampleDesc.Quality = 0;
+    td.Usage = D3D11_USAGE_STAGING;
+    td.BindFlags = 0;
+    td.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    td.MiscFlags = 0;
+    box.left = px;
+    box.right = px + 1;
+    box.top = py;
+    box.bottom = py + 1;
+    box.front = 0;
+    box.back = 1;
+    if (SUCCEEDED(ID3D11Device_CreateTexture2D(d3d8_GetD3D11Device(), &td, NULL, &staging))) {
+        ID3D11DeviceContext_CopySubresourceRegion(ctx, (ID3D11Resource *)staging, 0, 0, 0, 0,
+                                                  (ID3D11Resource *)back, 0, &box);
+        if (SUCCEEDED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)staging, 0, D3D11_MAP_READ, 0, &map))) {
+            memcpy(&now, map.pData, 4);
+            ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)staging, 0);
+        }
+        ID3D11Texture2D_Release(staging);
+    }
+    ID3D11Texture2D_Release(back);
+    if (now != last) {
+        const uint32_t *rs = s_rs_sent;
+        fprintf(stderr, "[PICK] draw %u (%s) from 0x%08X: %08X -> %08X; texture 0x%08X, FVF 0x%X%s, "
+                "LIGHTING %u, ALPHABLEND %u SRC %X DEST %X, CULL %X\n", draws, what, guest32(g_esp), last, now,
+                s_stage[0] ? s_stage[0]->va : 0, s_fvf, s_vprog ? " (vertex program)" : "",
+                rs[102], rs[59], rs[62], rs[63], rs[147]);
+        last = now;
+    }
+}
+
 static void bridge_dump(void)
 {
     static const char *prefix = (const char *)-1;
@@ -640,6 +726,8 @@ void d3d11_SetRenderStateSimple(void)
  * where the layer's shader gets Direct3D 11's (u, v, 0, 1); so the row the 1
  * meets moves to the fourth, as Wine does. The menu's background emblem
  * scrolls a texture so; it stood still. */
+static int bridge_make_cube(BridgeTexture *t);
+
 static void bridge_texture_transforms(const uint32_t ts[BRIDGE_STAGES][XB_TSS_MAX])
 {
     /* the elements of a coordinate set by the FVF's size field, D3DFVF_TEXTUREFORMATn */
@@ -654,11 +742,28 @@ static void bridge_texture_transforms(const uint32_t ts[BRIDGE_STAGES][XB_TSS_MA
         for (k = 0; k < 16; k++)
             m[k] = k % 5 == 0 ? 1.0f : 0.0f;
         if (ts[s][XB_TSS_TEXTURETRANSFORMFLAGS] && s_tex_matrix_set[s]) {
+            uint32_t flags = ts[s][XB_TSS_TEXTURETRANSFORMFLAGS], count = flags & 0xFFu;
+
             memcpy(m, s_tex_matrix[s], sizeof m);
             if (!(s_tci[s] & 0xFFFF0000u))
                 n = set < 8 ? elements[(s_fvf >> (16 + 2 * set)) & 3u] : 2;
             if (n < 3)
                 memcpy(m + 12, m + 4 * n, 4 * sizeof m[0]);
+            if ((flags & XB_TTFF_PROJECTED) && count >= 2 && count <= 4 && s_stage[s]
+                    && bridge_make_cube(s_stage[s])) {
+                /* (s, t, q) to (2s - q, q - 2t, q), q the last of the count: the
+                 * direction that finds (s/q, t/q) on the cube's +Z face */
+                float p[16];
+                uint32_t q = count - 1;
+
+                memcpy(p, m, sizeof p);
+                for (k = 0; k < 4; k++) {
+                    m[4 * k + 0] = 2.0f * p[4 * k + 0] - p[4 * k + q];
+                    m[4 * k + 1] = p[4 * k + q] - 2.0f * p[4 * k + 1];
+                    m[4 * k + 2] = p[4 * k + q];
+                    m[4 * k + 3] = 0.0f;
+                }
+            }
         }
         if (s_tex_sent_valid[s] && !memcmp(m, s_tex_sent[s], sizeof m))
             continue;
@@ -699,6 +804,12 @@ static void bridge_sync_states(void)
             s_dev->lpVtbl->SetTextureStageState(s_dev, (DWORD)s, (D3DTEXTURESTAGESTATETYPE)s_ts_map[i].pc,
                                                 ts_value(s_ts_map[i].kind, ts[s][x]));
         }
+        /* the coordinate set a stage reads (low 16 bits), or how it is made
+         * from the vertex (TCI_* in the high ones), the same on both sides */
+        if (!s_states_sent || ts[s][XB_TSS_TEXCOORDINDEX] != s_tci[s]) {
+            s_tci[s] = ts[s][XB_TSS_TEXCOORDINDEX];
+            s_dev->lpVtbl->SetTextureStageState(s_dev, (DWORD)s, D3DTSS_TEXCOORDINDEX, s_tci[s]);
+        }
     }
     bridge_texture_transforms(ts);
     memcpy(s_rs_sent, rs, sizeof rs);
@@ -706,17 +817,13 @@ static void bridge_sync_states(void)
     s_states_sent = 1;
 }
 
-/* D3DDevice_SetTextureState_TexCoordIndex(Stage, Value): not kept in the
- * game's array, so it is taken here. Also says which coordinate set a stage
- * reads, which the linear-texture fix-up needs. */
+/* D3DDevice_SetTextureState_TexCoordIndex(Stage, Value). */
 void d3d11_SetTexCoordIndex(void)
 {
-    uint32_t stage = arg(0), value = arg(1);
-
-    if (!s_dev || stage >= BRIDGE_STAGES)
-        return;
-    s_tci[stage] = value & 0xFFFFu;
-    s_dev->lpVtbl->SetTextureStageState(s_dev, stage, D3DTSS_TEXCOORDINDEX, value);
+    /* Nothing more: the XDK keeps the value in the texture-stage array as
+     * well (D3D__TextureState[Stage][28]), where the game also writes it
+     * itself, without this call (the training's shadow, a camera-space
+     * position); bridge_sync_states reads it there before each draw. */
 }
 
 /* ── Transforms, viewport, material, lights ────────────────── */
@@ -759,6 +866,8 @@ void d3d11_SetTransform(void)
         s_tex_matrix_set[state - 2] = 1;
         return;
     }
+    if (state == 6)
+        memcpy(s_world, guest_ptr(m), sizeof s_world);
     if (state == 0)
         pc = D3DTS_VIEW;
     else if (state == 1)
@@ -783,25 +892,47 @@ void d3d11_SetViewport(void)
 void d3d11_SetMaterial(void)
 {
     uint32_t m = arg(0);
+    int k;
 
-    if (s_dev && m)
-        s_dev->lpVtbl->SetMaterial(s_dev, (const D3DMATERIAL8 *)guest_ptr(m));
+    if (!s_dev || !m)
+        return;
+    if (xform_frame()) {
+        const float *f = (const float *)guest_ptr(m);
+        fprintf(stderr, "[XFORM] material from 0x%08X: diffuse ambient specular emissive", guest32(g_esp));
+        for (k = 0; k < 17; k++)
+            fprintf(stderr, "%s%.3f", k % 4 ? " " : " | ", f[k]);
+        fprintf(stderr, "\n");
+    }
+    s_dev->lpVtbl->SetMaterial(s_dev, (const D3DMATERIAL8 *)guest_ptr(m));
 }
 
 /* D3DDevice_SetLight(Index, pLight): the same layout and light types. */
 void d3d11_SetLight(void)
 {
     uint32_t i = arg(0), l = arg(1);
+    int k;
 
-    if (s_dev && l)
-        s_dev->lpVtbl->SetLight(s_dev, i, (const D3DLIGHT8 *)guest_ptr(l));
+    if (!s_dev || !l)
+        return;
+    if (xform_frame()) {
+        const float *f = (const float *)guest_ptr(l);
+        fprintf(stderr, "[XFORM] light %u from 0x%08X: type %u, diffuse specular ambient position direction"
+                " range falloff attenuation theta phi", i, guest32(g_esp), guest32(l));
+        for (k = 1; k < 26; k++)
+            fprintf(stderr, " %.3f", f[k]);
+        fprintf(stderr, "\n");
+    }
+    s_dev->lpVtbl->SetLight(s_dev, i, (const D3DLIGHT8 *)guest_ptr(l));
 }
 
 /* D3DDevice_LightEnable(Index, bEnable). */
 void d3d11_LightEnable(void)
 {
-    if (s_dev)
-        s_dev->lpVtbl->LightEnable(s_dev, arg(0), (BOOL)arg(1));
+    if (!s_dev)
+        return;
+    if (xform_frame())
+        fprintf(stderr, "[XFORM] light %u enabled %u from 0x%08X\n", arg(0), arg(1), guest32(g_esp));
+    s_dev->lpVtbl->LightEnable(s_dev, arg(0), (BOOL)arg(1));
 }
 
 /* ── Textures ──────────────────────────────────────────────── */
@@ -833,8 +964,11 @@ static BridgeTexture *bridge_texture(uint32_t va)
         if (s_tex_count == BRIDGE_MAX_TEXTURES)
             return NULL;
         t = &s_tex[s_tex_count++];
-    } else if (t->host) {
-        t->host->lpVtbl->Release(t->host);
+    } else {
+        if (t->host)
+            t->host->lpVtbl->Release(t->host);
+        if (t->cube)
+            t->cube->lpVtbl->Release(t->cube);
     }
     memset(t, 0, sizeof *t);
     t->va = va;
@@ -878,7 +1012,7 @@ static void bridge_upload(BridgeTexture *t)
     BOOL blocks = d3d8_format_is_compressed(t->format);
     UINT level;
 
-    if (!t->host || !src)
+    if (!t->host || !src || t->target)
         return;
     for (level = 0; level < t->levels; level++) {
         D3DLOCKED_RECT lr;
@@ -903,6 +1037,39 @@ static void bridge_upload(BridgeTexture *t)
     t->dirty = 0;
 }
 
+/* Gives the layer what a stage samples: the host texture of the guest one
+ * set there, or its cube when it has one. Again after either is remade.
+ * The layer's SetTexture changes the stage's COLOROP as D3D does not: no
+ * texture turns it to DISABLE, a texture on a DISABLE stage to MODULATE. So
+ * the stage gets the game's COLOROP again, the one last sent: the training's
+ * shadow is drawn with no texture and SELECTARG2 of TFACTOR, black, and the
+ * layer drew it with the stage off, in the vertices' white. And a stage
+ * with no texture samples opaque white, as on the console (D3D's no texture),
+ * where the layer's would sample nothing: the letterbox of the scenes, black
+ * quads with MODULATE of TEXTURE and DIFFUSE and no texture, went
+ * transparent. */
+static void bridge_bind(uint32_t stage)
+{
+    static IDirect3DTexture8 *white;
+    BridgeTexture *t = s_stage[stage];
+    IDirect3DBaseTexture8 *host = NULL;
+
+    if (!white && SUCCEEDED(s_dev->lpVtbl->CreateTexture(s_dev, 1, 1, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED,
+                                                         &white))) {
+        D3DLOCKED_RECT lr;
+
+        if (SUCCEEDED(white->lpVtbl->LockRect(white, 0, &lr, NULL, 0))) {
+            *(uint32_t *)lr.pBits = 0xFFFFFFFFu;
+            white->lpVtbl->UnlockRect(white, 0);
+        }
+    }
+    if (t)
+        host = t->cube ? (IDirect3DBaseTexture8 *)t->cube : (IDirect3DBaseTexture8 *)t->host;
+    s_dev->lpVtbl->SetTexture(s_dev, stage, host ? host : (IDirect3DBaseTexture8 *)white);
+    if (s_states_sent)
+        s_dev->lpVtbl->SetTextureStageState(s_dev, stage, D3DTSS_COLOROP, xb_top(s_ts_sent[stage][12]));
+}
+
 /* D3DDevice_SetTexture(Stage, pTexture). */
 void d3d11_SetTexture(void)
 {
@@ -913,7 +1080,7 @@ void d3d11_SetTexture(void)
         return;
     t = va ? bridge_texture(va) : NULL;
     s_stage[stage] = t;
-    s_dev->lpVtbl->SetTexture(s_dev, stage, t ? (IDirect3DBaseTexture8 *)t->host : NULL);
+    bridge_bind(stage);
 }
 
 /* D3DTexture_LockRect(pThis, Level, pLockedRect, pRect, Flags): the game is
@@ -929,6 +1096,188 @@ void d3d11_TextureLockRect(void)
     for (i = 0; i < s_tex_count; i++)
         if (s_tex[i].va == va)
             s_tex[i].dirty = 1;
+}
+
+/* ── Render targets ────────────────────────────────────────── */
+
+/* The stages that sample t, given its host texture again after it was remade. */
+static void bridge_rebind(const BridgeTexture *t)
+{
+    uint32_t s;
+
+    for (s = 0; s < BRIDGE_STAGES; s++)
+        if (s_stage[s] == t)
+            bridge_bind(s);
+}
+
+/* A texture the game draws to becomes a render target on the host, its
+ * first level only; what the game samples from it after is what was drawn
+ * there, never the guest's bytes. */
+static int bridge_make_target(BridgeTexture *t)
+{
+    HRESULT hr;
+
+    if (t->target)
+        return t->host != NULL;
+    if (t->host)
+        t->host->lpVtbl->Release(t->host);
+    t->host = NULL;
+    t->target = 1;
+    t->levels = 1;
+    t->dirty = 0;
+    hr = s_dev->lpVtbl->CreateTexture(s_dev, t->width, t->height, 1, D3DUSAGE_RENDERTARGET, t->format,
+                                      D3DPOOL_DEFAULT, &t->host);
+    fprintf(stderr, "[D3D11] texture 0x%08X: %ux%u format 0x%02X, a render target: %s\n",
+            t->va, t->width, t->height, (unsigned)t->format, SUCCEEDED(hr) ? "created" : "failed");
+    if (FAILED(hr))
+        t->host = NULL;
+    bridge_rebind(t);
+    return t->host != NULL;
+}
+
+/* A depth buffer the size of a texture drawn to. The game draws to one with
+ * none (the training's shadow, the fighter seen from the light), and the layer would take the back
+ * buffer's, of another size; so the texture gets its own, cleared each time
+ * it is set, which nothing drawn in one pass can tell from none. */
+static IDirect3DSurface8 *bridge_target_depth(UINT w, UINT h)
+{
+    if (s_target_depth && (s_target_depth_w != w || s_target_depth_h != h)) {
+        s_target_depth->lpVtbl->Release(s_target_depth);
+        s_target_depth = NULL;
+    }
+    if (!s_target_depth
+            && FAILED(s_dev->lpVtbl->CreateDepthStencilSurface(s_dev, w, h, D3DFMT_D24S8,
+                                                               D3DMULTISAMPLE_NONE, &s_target_depth)))
+        s_target_depth = NULL;
+    s_target_depth_w = w;
+    s_target_depth_h = h;
+    return s_target_depth;
+}
+
+/* A texture the game draws to and then samples projectively: its
+ * TEXTURETRANSFORMFLAGS have PROJECTED, the coordinates divided by their last
+ * before sampling (the training's shadow, cast by its own texture matrix
+ * from a camera-space position). The layer's shader samples a 2D texture
+ * with the coordinates as they come, divided by nothing; a cube texture,
+ * though, is sampled by a direction, the same whatever its length. So the
+ * texture goes to the +Z face of a cube of its size, and a stage
+ * sampling it gets the coordinates (2s - q, q - 2t, q) (bridge_texture_transforms):
+ * on that face, at (s/q, t/q). Where s/q or t/q is outside 0..1 the
+ * direction leaves the face for one of the other five, all cleared to
+ * nothing as the border the game keeps around what it draws (a viewport a
+ * texel inside the texture) would have given.
+ *
+ * The game still draws to the 2D texture: drawn to the face itself, nothing
+ * arrived there (the layer binds a depth buffer of its own, a plain 2D one,
+ * with every target). What was drawn goes to the face by a copy, on the
+ * GPU, each time the game leaves the texture (bridge_follow_target), and
+ * once as the cube is made. The
+ * layer's textures keep their ID3D11Texture2D first after the interface and
+ * its count (d3d8_internal.h, the same for a cube). */
+typedef struct {
+    void *iface;
+    LONG ref_count;
+    ID3D11Texture2D *d3d11_texture;
+} LayerTexture;
+
+static void bridge_copy_to_cube(const BridgeTexture *t)
+{
+    ID3D11Texture2D *flat = ((const LayerTexture *)t->host)->d3d11_texture;
+    ID3D11Texture2D *cube = ((const LayerTexture *)t->cube)->d3d11_texture;
+
+    /* the face's subresource is its number, the cube having one level */
+    ID3D11DeviceContext_CopySubresourceRegion(d3d8_GetD3D11Context(), (ID3D11Resource *)cube,
+                                              D3DCUBEMAP_FACE_POSITIVE_Z, 0, 0, 0,
+                                              (ID3D11Resource *)flat, 0, NULL);
+}
+
+static int bridge_make_cube(BridgeTexture *t)
+{
+    static const float nothing[4] = { 0 };
+    D3D11_TEXTURE2D_DESC td;
+    D3D11_RENDER_TARGET_VIEW_DESC rd;
+    ID3D11Texture2D *cube;
+    HRESULT hr;
+    int f;
+
+    if (t->cube)
+        return 1;
+    if (!t->target || !t->host || t->width != t->height)
+        return 0;
+    hr = s_dev->lpVtbl->CreateCubeTexture(s_dev, t->width, 1, D3DUSAGE_RENDERTARGET, t->format,
+                                          D3DPOOL_DEFAULT, &t->cube);
+    fprintf(stderr, "[D3D11] texture 0x%08X: sampled projectively, copied to a cube of %u: %s\n",
+            t->va, t->width, SUCCEEDED(hr) ? "created" : "failed");
+    if (FAILED(hr)) {
+        t->cube = NULL;
+        return 0;
+    }
+    cube = ((LayerTexture *)t->cube)->d3d11_texture;
+    ID3D11Texture2D_GetDesc(cube, &td);
+    memset(&rd, 0, sizeof rd);
+    rd.Format = td.Format;
+    rd.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+    rd.Texture2DArray.ArraySize = 1;
+    for (f = 0; f < 6; f++) {
+        ID3D11RenderTargetView *view = NULL;
+
+        rd.Texture2DArray.FirstArraySlice = (UINT)f;
+        if (SUCCEEDED(ID3D11Device_CreateRenderTargetView(d3d8_GetD3D11Device(), (ID3D11Resource *)cube,
+                                                          &rd, &view))) {
+            ID3D11DeviceContext_ClearRenderTargetView(d3d8_GetD3D11Context(), view, nothing);
+            ID3D11RenderTargetView_Release(view);
+        }
+    }
+    bridge_copy_to_cube(t);
+    bridge_rebind(t);
+    return 1;
+}
+
+/* The game sets where it draws with D3DDevice_SetRenderTarget, which runs as
+ * the bookkeeping it is and keeps the surface in the device; before each
+ * clear and draw the bridge looks there, and draws where the game does: a
+ * level of a texture, or the back buffer. With the back buffer only, the
+ * training's shadow pass cleared the scene drawn so far to black and drew
+ * the fighter white over it. */
+static void bridge_follow_target(void)
+{
+    static int shown;
+    uint32_t dev = guest32(XB_DEVICE_PTR_VA);
+    uint32_t rt, zs, parent;
+    IDirect3DSurface8 *surface = NULL;
+    BridgeTexture *t = NULL;
+
+    if (!dev)
+        return;
+    rt = guest32(dev + XB_DEVICE_RENDER_TARGET);
+    zs = guest32(dev + XB_DEVICE_DEPTH_STENCIL);
+    if (rt == s_guest_rt && zs == s_guest_zs)
+        return;
+    s_guest_rt = rt;
+    s_guest_zs = zs;
+    if (s_target && s_target->cube)
+        bridge_copy_to_cube(s_target);    /* what the pass drew, for the projective sampling */
+    parent = rt ? guest32(rt + XB_SURFACE_PARENT) : 0;
+    if (parent)
+        t = bridge_texture(parent);
+    if (t && bridge_make_target(t) && SUCCEEDED(t->host->lpVtbl->GetSurfaceLevel(t->host, 0, &surface))) {
+        IDirect3DSurface8 *depth = bridge_target_depth(t->width, t->height);
+
+        s_dev->lpVtbl->SetRenderTarget(s_dev, surface, depth);
+        surface->lpVtbl->Release(surface);
+        if (depth)
+            s_dev->lpVtbl->Clear(s_dev, 0, NULL, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+        s_target = t;
+    } else {
+        s_dev->lpVtbl->SetRenderTarget(s_dev, NULL, NULL);      /* the back buffer and its depth */
+        s_target = NULL;
+    }
+    if (shown < 4) {
+        shown++;
+        fprintf(stderr, "[D3D11] drawing to surface 0x%08X (depth 0x%08X): %s 0x%08X\n", rt, zs,
+                s_target ? "a level of texture" : parent ? "not routed, back buffer for texture" :
+                "the back buffer", parent);
+    }
 }
 
 /* ── Drawing ───────────────────────────────────────────────── */
@@ -977,11 +1326,52 @@ static UINT fvf_texcoords(uint32_t fvf, UINT floats[8])
  * divided by the texture's size. Stage k reads the set its TEXCOORDINDEX
  * names (k by default). Returns the vertices to draw, the game's own when
  * nothing needs rewriting. */
+/* The layer lights with the normals times the inverse of the world matrix,
+ * where D3D takes the inverse's transpose (it uploads the transpose of the
+ * transpose, for a shader that reads matrices by columns): on a rotated
+ * object the normal turns the other way, and the training's fences were lit
+ * on the side away from the light. So a lit draw's normals go to it times
+ * W^-T W (the world's 3 x 3, vectors in rows), which its W^-1 turns into the
+ * normals D3D lights with. Returns 0 when that is the identity. */
+static int normal_fix(float a[9])
+{
+    const float *w = s_world;
+    const float m[9] = { w[0], w[1], w[2], w[4], w[5], w[6], w[8], w[9], w[10] };
+    float inv[9], det;
+    int i, j, k, same = 1;
+
+    det = m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6])
+        + m[2] * (m[3] * m[7] - m[4] * m[6]);
+    if (det == 0.0f)
+        return 0;
+    inv[0] = (m[4] * m[8] - m[5] * m[7]) / det;
+    inv[1] = (m[2] * m[7] - m[1] * m[8]) / det;
+    inv[2] = (m[1] * m[5] - m[2] * m[4]) / det;
+    inv[3] = (m[5] * m[6] - m[3] * m[8]) / det;
+    inv[4] = (m[0] * m[8] - m[2] * m[6]) / det;
+    inv[5] = (m[2] * m[3] - m[0] * m[5]) / det;
+    inv[6] = (m[3] * m[7] - m[4] * m[6]) / det;
+    inv[7] = (m[1] * m[6] - m[0] * m[7]) / det;
+    inv[8] = (m[0] * m[4] - m[1] * m[3]) / det;
+    for (i = 0; i < 3; i++)
+        for (j = 0; j < 3; j++) {
+            float s = 0.0f;
+            for (k = 0; k < 3; k++)
+                s += inv[k * 3 + i] * m[k * 3 + j];
+            a[i * 3 + j] = s;
+            if (fabsf(s - (i == j ? 1.0f : 0.0f)) > 1e-5f)
+                same = 0;
+        }
+    return !same;
+}
+
 static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT stride)
 {
+    static const UINT pos_bytes[8] = { 0, 12, 16, 16, 20, 24, 28, 0 };
     UINT floats[8], off, k, v;
     size_t bytes = (size_t)vertices * stride;
-    int any = 0;
+    float fix[9];
+    int any = 0, normals;
 
     if (!s_fvf)
         return src;
@@ -989,7 +1379,9 @@ static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT strid
     for (k = 0; k < BRIDGE_STAGES; k++)
         if (s_tci[k] < 8 && floats[s_tci[k]] && s_stage[k] && s_stage[k]->pitch)
             any = 1;
-    if (!any)
+    normals = s_rs_sent[102] && (s_fvf & D3DFVF_NORMAL) && (s_fvf & D3DFVF_POSITION_MASK) != D3DFVF_XYZRHW
+              && normal_fix(fix);
+    if (!any && !normals)
         return src;
     if (bytes > s_scratch_size) {
         free(s_scratch);
@@ -1014,6 +1406,15 @@ static const void *bridge_vertices(const uint8_t *src, UINT vertices, UINT strid
                 uv[1] /= (float)t->height;
         }
     }
+    if (normals)
+        for (v = 0; v < vertices; v++) {
+            float *n = (float *)(s_scratch + (size_t)v * stride + pos_bytes[(s_fvf >> 1) & 7u]);
+            float x = n[0], y = n[1], z = n[2];
+
+            n[0] = x * fix[0] + y * fix[3] + z * fix[6];
+            n[1] = x * fix[1] + y * fix[4] + z * fix[7];
+            n[2] = x * fix[2] + y * fix[5] + z * fix[8];
+        }
     return s_scratch;
 }
 
@@ -1050,6 +1451,7 @@ static int bridge_before_draw(void)
     }
     if (s_pixel_shader)
         s_ps_draws++;
+    bridge_follow_target();
     bridge_sync_states();
     for (s = 0; s < BRIDGE_STAGES; s++)
         if (s_stage[s] && s_stage[s]->dirty)
@@ -1079,6 +1481,7 @@ void d3d11_DrawVerticesUP(void)
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count,
                                    bridge_vertices((const uint8_t *)guest_ptr(data), vertices, stride),
                                    stride);
+    bridge_pick("vertices UP");
     s_draws++;
 }
 
@@ -1412,11 +1815,17 @@ static int vprog_transform(uint32_t first, uint32_t count, uint32_t base, uint32
     const uint8_t *src[16] = { 0 };
     uint32_t stride[16] = { 0 }, v;
     float in[NV2A_VSH_INPUTS][4];
+    float target_x = 1.0f, target_y = 1.0f;
     Nv2aVshOutput out;
     int a;
 
     if (!s_vprog)
         return 0;
+    if (s_target) {
+        /* the layer places pre-transformed vertices by the back buffer's size whatever it draws to */
+        target_x = (float)d3d8_GetBackbufferWidth() / (float)s_target->width;
+        target_y = (float)d3d8_GetBackbufferHeight() / (float)s_target->height;
+    }
     if (first + count > s_vout_cap) {
         UINT cap = first + count + 1024;
         VprogVertex *grown = (VprogVertex *)realloc(s_vout, cap * sizeof *grown);
@@ -1453,8 +1862,8 @@ static int vprog_transform(uint32_t first, uint32_t count, uint32_t base, uint32
         if (!nv2a_vsh_run((const float (*)[4])in, &out))
             return 0;
         w = out.pos[3];
-        o->x = s_viewport.X + (out.pos[0] + 1.0f) * 0.5f * s_viewport.Width;
-        o->y = s_viewport.Y + (1.0f - out.pos[1]) * 0.5f * s_viewport.Height;
+        o->x = (s_viewport.X + (out.pos[0] + 1.0f) * 0.5f * s_viewport.Width) * target_x;
+        o->y = (s_viewport.Y + (1.0f - out.pos[1]) * 0.5f * s_viewport.Height) * target_y;
         o->z = s_viewport.MinZ + out.pos[2] * (s_viewport.MaxZ - s_viewport.MinZ);
         o->rhw = w != 0.0f ? 1.0f / w : 1.0f;
         o->diffuse = vprog_color(out.d0);
@@ -1486,6 +1895,7 @@ static void vprog_draw(D3DPRIMITIVETYPE pt, UINT count, UINT vertices, const uin
     s_fvf = game_fvf;
     if (s_fvf)
         s_dev->lpVtbl->SetVertexShader(s_dev, s_fvf);
+    bridge_pick(idx ? "indexed" : "vertices");
     s_vp_draws++;
 }
 /* ── The game's own pushbuffer writes ──────────────────────── */
@@ -1533,8 +1943,13 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     int i;
 
     if (xform_frame())
-        fprintf(stderr, "[XFORM] draw %s prim %u, %u vertices, FVF 0x%X, texture 0x%08X, from 0x%08X\n",
-                what, prim, vertices, s_fvf, va, guest32(g_esp));
+        fprintf(stderr, "[XFORM] draw %s prim %u, %u vertices, FVF 0x%X, texture 0x%08X, from 0x%08X, to %s;"
+                " COLOROP %u %u %u ALPHAOP %u %u %u, TFACTOR %08X, BLEND %u %X %X, COLORWRITE %X, Z %u %X %u,"
+                " FOG %u %u %08X, LIGHTING %u SPECULAR %u\n",
+                what, prim, vertices, s_fvf, va, guest32(g_esp), s_target ? "a texture" : "the back buffer",
+                ts[12], ts[14], ts[15], ts[16], ts[18], ts[19], s_rs_sent[148], s_rs_sent[59], s_rs_sent[62],
+                s_rs_sent[63], s_rs_sent[67], s_rs_sent[143], s_rs_sent[57], s_rs_sent[64],
+                s_rs_sent[92], s_rs_sent[93], s_rs_sent[138], s_rs_sent[102], s_rs_sent[103]);
     if (!v)
         return;                         /* a vertex program's draw: no FVF vertices to show */
     if (on < 0) {
@@ -1589,7 +2004,8 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     if (s_stage[0])
         fprintf(stderr, " %ux%u fmt 0x%02X%s", s_stage[0]->width, s_stage[0]->height,
                 (unsigned)s_stage[0]->format, s_stage[0]->pitch ? " linear" : "");
-    fprintf(stderr, "; COLOROP %u ARG1 %u ARG2 %u, ALPHAOP %u; TCI %u\n", ts[12], ts[14], ts[15], ts[16], s_tci[0]);
+    fprintf(stderr, "; COLOROP %u ARG1 %u ARG2 %u, ALPHAOP %u ARG1 %u ARG2 %u; TCI 0x%X, TEXTURETRANSFORMFLAGS 0x%X\n",
+            ts[12], ts[14], ts[15], ts[16], ts[18], ts[19], ts[XB_TSS_TEXCOORDINDEX], ts[XB_TSS_TEXTURETRANSFORMFLAGS]);
     {
         const uint32_t *rs = s_rs_sent;      /* as last sent, simple states included */
         fprintf(stderr, "  sent: ZFUNC %X ALPHABLEND %u SRC %X DEST %X ALPHATEST %u ALPHAFUNC %X REF %u"
@@ -1627,6 +2043,7 @@ static void push_draw(uint32_t prim, const uint32_t *words, size_t n)
     trace_draw("pushed", prim, vertices, stride, (const uint8_t *)words);
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count,
                                    bridge_vertices((const uint8_t *)words, vertices, stride), stride);
+    bridge_pick("pushed");
     s_push_draws++;
 }
 
@@ -1761,6 +2178,7 @@ void d3d11_DrawVertices(void)
     trace_draw("vertices", xbtype, vertices, s_stream_stride, vb);
     s_dev->lpVtbl->DrawPrimitiveUP(s_dev, pt, count, bridge_vertices(vb, vertices, s_stream_stride),
                                    s_stream_stride);
+    bridge_pick("vertices");
     s_draws++;
 }
 
@@ -1803,5 +2221,6 @@ void d3d11_DrawIndexedVertices(void)
     (void)lo;
     s_dev->lpVtbl->DrawIndexedPrimitiveUP(s_dev, pt, 0, hi + 1, count, idx, D3DFMT_INDEX16,
                                           bridge_vertices(vb, hi + 1, s_stream_stride), s_stream_stride);
+    bridge_pick("indexed");
     s_draws++;
 }
