@@ -1,8 +1,8 @@
 # tools/noise_report.py --save; one kind a line: key count
 functions 3546
-unnamed 2288
+unnamed 2286
 placeholder 0
-uncommented 3364
+uncommented 3362
 numbered_files 0
 unsorted 861
 registers 623794
@@ -15,12 +15,12 @@ gotos 34899
 stack_returns 7141
 indirect_calls 897
 decompiled_functions 2910
-decompiled_unnamed 2069
-decompiled_uncommented 2261
+decompiled_unnamed 2062
+decompiled_uncommented 2254
 decompiled_registers 85949
 decompiled_flags 703
-decompiled_arguments 38928
+decompiled_arguments 38909
 decompiled_slots 2793
-decompiled_memory_by_address 14317
+decompiled_memory_by_address 14307
 decompiled_memory_computed 31852
 decompiled_gotos 0

@@ -5795,7 +5795,7 @@ uint32_t sub_00025060(uint32_t arg0)
 {
 	uint8_t ebx = 0;
 	uint16_t eax_2 = 0, esi_2 = 0;
-	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0;
+	uint32_t eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, mask = 0;
 	uint32_t t1 = 0;
 
 	edi = arg0;
@@ -5806,8 +5806,8 @@ uint32_t sub_00025060(uint32_t arg0)
 		eax = 0u;
 		return eax;
 	}
-	arg0_2 = 2u;
-	eax = sub_0002F350(arg0_2);
+	mask = 2u;
+	eax = CheatIsOn(mask);
 	if (eax != 0u || MEM32(0x1E6398u) != 0u)
 	{
 		eax = 1u;
@@ -5818,8 +5818,8 @@ uint32_t sub_00025060(uint32_t arg0)
 	{
 		if ((eax & 0x20u) == 0u)
 		{
-			arg0_2 = 0x100u;
-			eax = sub_0002F350(arg0_2);
+			mask = 0x100u;
+			eax = CheatIsOn(mask);
 			if (eax == 0u)
 			{
 				eax = 0u;
@@ -5968,7 +5968,7 @@ uint32_t sub_000251E0(uint32_t arg0)
 uint32_t sub_000251F0(uint32_t arg0)
 {
 	uint32_t zero = 0, negative = 0, overflow = 0;
-	uint32_t arg0_2 = 0, eax = 0, esi = 0;
+	uint32_t arg0_2 = 0, eax = 0, esi = 0, mask = 0;
 	uint32_t stack_8 = 0;
 
 	esi = arg0;
@@ -5977,8 +5977,8 @@ uint32_t sub_000251F0(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
-	arg0_2 = 4u;
-	eax = sub_0002F350(arg0_2);
+	mask = 4u;
+	eax = CheatIsOn(mask);
 	if (eax != 0u)
 	{
 		eax = 1u;
@@ -6033,13 +6033,13 @@ uint32_t sub_000251F0(uint32_t arg0)
 
 uint32_t sub_00025290(uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, eax = 0;
+	uint32_t eax = 0, mask = 0;
 	uint32_t saved_arg0 = 0;
 	uint32_t t1 = 0;
 
 	saved_arg0 = arg0;
-	arg0_2 = 2u;
-	eax = sub_0002F350(arg0_2);
+	mask = 2u;
+	eax = CheatIsOn(mask);
 	if (eax != 0u)
 	{
 		eax = 1u;
@@ -6246,7 +6246,7 @@ uint32_t sub_00025560(uint32_t arg0)
 
 uint32_t sub_00025620(uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
+	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, mask = 0;
 	uint32_t saved_arg0 = 0;
 
 	saved_arg0 = arg0;
@@ -6271,8 +6271,8 @@ uint32_t sub_00025620(uint32_t arg0)
 		eax = 0x36u;
 		return eax;
 	}
-	arg0_2 = 2u;
-	eax = sub_0002F350(arg0_2);
+	mask = 2u;
+	eax = CheatIsOn(mask);
 	if (eax == 0u)
 	{
 		edi = ebx + 1u;
@@ -11478,7 +11478,7 @@ uint32_t sub_0002EFF0(void)
 	if ((int32_t)eax < 5)
 		MEM32(0x1B7710u) = esi;
 	if ((int32_t)eax < 6)
-		MEM32(0x1EA5ECu) = 0u;
+		Cheats = 0u;
 	if ((int32_t)eax < 7)
 	{
 		MEM32(0x1BC49Cu) = 0u;
@@ -11541,7 +11541,7 @@ uint32_t sub_0002F1C0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1EA5ECu);
+	eax = Cheats;
 	if (((eax >> 8) & 0x20u) != 0u)
 	{
 		eax = (eax & ~0xFFFFu) | 3u;
@@ -11699,47 +11699,52 @@ uint32_t sub_0002F340(uint32_t eax)
 	return eax_2;
 }
 
-uint32_t sub_0002F350(uint32_t arg0)
+/* Whether every bit of a mask is on in Cheats. */
+uint32_t CheatIsOn(uint32_t mask)
 {
 	uint32_t carry = 0;
 	uint32_t eax = 0;
 
-	eax = (MEM32(0x1EA5ECu) & arg0) - arg0;
+	eax = (Cheats & mask) - mask;
 	carry = eax != 0u;
 	eax = 0u - eax;
 	eax = eax - eax - carry + 1u;
 	return eax;
 }
 
-uint32_t sub_0002F370(uint32_t arg0)
+/* Turns a mask's bits on in Cheats. */
+uint32_t CheatSet(uint32_t mask)
 {
 	uint32_t eax = 0;
 
-	eax = arg0;
-	MEM32(0x1EA5ECu) = MEM32(0x1EA5ECu) | eax;
+	eax = mask;
+	Cheats = Cheats | eax;
 	return eax;
 }
 
-void sub_0002F390(void)
+/* Turns every cheat off. */
+void CheatsClear(void)
 {
-	MEM32(0x1EA5ECu) = 0u;
+	Cheats = 0u;
 }
 
-uint32_t sub_0002F3A0(void)
+/* Copies Cheats to CheatsKept. */
+uint32_t CheatsKeep(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1EA5ECu);
-	MEM32(0x1EA614u) = eax;
+	eax = Cheats;
+	CheatsKept = eax;
 	return eax;
 }
 
-uint32_t sub_0002F3B0(void)
+/* Copies CheatsKept back to Cheats. */
+uint32_t CheatsRestore(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1EA614u);
-	MEM32(0x1EA5ECu) = eax;
+	eax = CheatsKept;
+	Cheats = eax;
 	return eax;
 }
 
@@ -24642,7 +24647,7 @@ uint32_t sub_00049AF0(uint32_t edi)
 uint32_t sub_00049B70(uint32_t esi)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, eax = 0;
+	uint32_t arg0 = 0, eax = 0, mask = 0;
 
 	eax = sub_00025020();
 	arg0 = eax;
@@ -24653,8 +24658,8 @@ uint32_t sub_00049B70(uint32_t esi)
 		eax = zero;
 		return eax;
 	}
-	arg0 = 0x80u;
-	eax = sub_0002F350(arg0);
+	mask = 0x80u;
+	eax = CheatIsOn(mask);
 	if (eax == 0u)
 	{
 		arg0 = esi;
@@ -127002,7 +127007,9 @@ uint32_t sub_00112430(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-void sub_00112530(uint32_t eax, uint32_t ecx)
+/* Widens a port's stick ranges to the furthest each stick has been seen to go, and zeroes a stick's axis
+   within its dead zone. */
+void vcPadCalibrate(uint32_t eax, uint32_t ecx)
 {
 	uint16_t eax_2 = 0, ebx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t ebp = 0;
@@ -127073,7 +127080,9 @@ void sub_00112530(uint32_t eax, uint32_t ecx)
 		MEM16(ecx + 0x14u) = ebp;
 }
 
-uint32_t sub_00112690(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Reads a port's pad with XInputGetState into the engine's state of it: the sticks as bytes, the digital
+   buttons as 0 or 255, an analog button under 30 as 0. Nothing for a port with no pad open. */
+uint32_t vcPadRead(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint8_t eax_2 = 0, ebx_2 = 0, ecx_2 = 0, edx = 0;
 	uint16_t ecx_3 = 0, edx_2 = 0;
@@ -127142,7 +127151,7 @@ uint32_t sub_00112690(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 	ecx = g_esp + 0xCu;
 	MEM8(esi_2 + 0xEu) = ebx_2;
 	MEM8(esi_2 + 0x10u) = edx;
-	sub_00112530(eax, ecx);
+	vcPadCalibrate(eax, ecx);
 	eax = MEM32(g_esp + 0x1Cu);
 	ecx_3 = (uint16_t)MEM32(g_esp + 0x1Eu);
 	MEM8(esi_2) = (int32_t)(MEM32(g_esp + 0x1Au) + 0x8000u) >> 8;
@@ -151355,33 +151364,33 @@ void sub_0002F340_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0002F350_entry(void)
+void CheatIsOn_entry(void)
 {
-	g_eax = sub_0002F350(ARG32(0));
+	g_eax = CheatIsOn(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_0002F370_entry(void)
+void CheatSet_entry(void)
 {
-	g_eax = sub_0002F370(ARG32(0));
+	g_eax = CheatSet(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_0002F390_entry(void)
+void CheatsClear_entry(void)
 {
-	sub_0002F390();
+	CheatsClear();
 	g_esp += 4u;
 }
 
-void sub_0002F3A0_entry(void)
+void CheatsKeep_entry(void)
 {
-	g_eax = sub_0002F3A0();
+	g_eax = CheatsKeep();
 	g_esp += 4u;
 }
 
-void sub_0002F3B0_entry(void)
+void CheatsRestore_entry(void)
 {
-	g_eax = sub_0002F3B0();
+	g_eax = CheatsRestore();
 	g_esp += 4u;
 }
 
@@ -170268,16 +170277,16 @@ void sub_00112430_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00112530_entry(void)
+void vcPadCalibrate_entry(void)
 {
-	sub_00112530(g_eax, g_ecx);
+	vcPadCalibrate(g_eax, g_ecx);
 	g_esp += 4u;
 }
 
-void sub_00112690_entry(void)
+void vcPadRead_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00112690(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = vcPadRead(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;

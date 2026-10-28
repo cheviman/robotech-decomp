@@ -1105,6 +1105,8 @@ comment vcPadRead Reads a port's pad with XInputGetState into the engine's state
 0002F3B0  func  CheatsRestore
 000346B0  func  MainMenuCodeSequence
 00034B10  func  MainMenuEnterCode
+param   CheatIsOn  arg0  mask
+param   CheatSet   arg0  mask
 001EA5EC  var   Cheats  u32                           # the cheats on, a bit each: WEWILLWIN's 2 unlocks every mission
 001EA614  var   CheatsKept  u32                       # Cheats as CheatsKeep found them
 001EAB40  var   MainMenuCodeStep  u32                 # how many presses of the code sequence have come in order
