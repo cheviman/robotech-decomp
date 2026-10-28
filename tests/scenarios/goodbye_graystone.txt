@@ -1,0 +1,9 @@
+# Into Goodbye Graystone (m1401), the first mission of chapter 4: as Ambush Hills, R three times; the
+# town's opening scene and the flight over it, in its fog.
+code    f600 WEWILLWIN
+script  f360:a,f1500:a,f1620:rt:4,f1680:rt:4,f1740:rt:4,f1860:a,f2040:a,f2220:a,f2400:a,f2580:a,f2760:a,f2940:a,f3120:a,f3300:a
+frames  3600
+dump    120
+movies  no
+# The town's many edges, from the console's 1280 halved to 640, keep it near 1.5 for the whole flight.
+original 2.0

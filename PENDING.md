@@ -26,9 +26,10 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 
 ### Video (`docs/d3d.md` has the map)
 
-1. **Big cyan-white shapes over the mission scene**: not seen since vertex programs run (25-10-2026,
-   a minute of the first mission); they were most likely effects drawn by a program through the fixed
-   pipeline. To confirm over a longer run.
+1. **Fog drawn by a vertex program, and on pre-transformed vertices**: the bridge runs vertex programs on
+   the CPU and hands the layer screen positions, which it fogs not at all (nor any XYZRHW draw: the
+   layer's depth for them is 0); a program's oFog is dropped. The table fog of the fixed pipeline is
+   right since 28-10-2026.
 2. **Vertex programs run on the CPU** (the bridge, with xboxrecomp's NV2A interpreter), which drew the
    Valkyrie whole in the menu and in the mission. Left: on the GPU instead (the layer's translator lays
    the inputs out in a fixed order instead of by the declaration, and takes oPos as clip space while XDK
@@ -156,7 +157,21 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   bridge now gives the layer the texture matrices as D3D applies them). What is left is the edges, from
   the console's 1280 halved to 640. The training (27-10-2026) was 121.9 apart, a black screen and a
   white fighter: the game draws the fighter's shadow to a texture, and the bridge drew everything to the
-  back buffer; now 3.2 (its `original` 6.0), what is left the dialogue's timing. Left: the date the
+  back buffer; now 3.2 (its `original` 6.0), what is left the dialogue's timing. Every mission is in
+  reach of a scenario (28-10-2026): the game menu takes codes (MainMenuScreen: with L and R held,
+  left, up, down, A, right, B, START open a keyboard, whose text it sets against twelve codes, each a
+  bit of the cheats' word), and WEWILLWIN unlocks every mission; a scenario's `code` line types one with
+  the pad, so xemu runs it as the port does. A mission of each chapter is a scenario now: Force of Arms
+  (m104, in space) at 1.25 from the start; Ambush Hills (m201), Goodbye Graystone (m1401) and Besieged
+  (m2101) were 4.22, 5.20 and 18.61 apart, the table fog missing: the layer's pixel shader takes -z of
+  the camera-space position for the depth, as if the camera looked down -z, and D3D's look down +z.
+  The bridge turns the camera space's z for the layer (the view's third column, the projection's third
+  row; the coordinates generated in camera space turned back by their texture matrix), and they are at
+  1.35, 1.49 and 1.25; the training went from 3.2 to 1.60 with it (its scaffolds' edges), Rebel Revenge
+  (m701) is at 1.45. Rebel Revenge's first run in the port, before the fog, went its own way from frame
+  3240 (the Battloid somewhere else, 32.7 apart); the three runs since repeat each other frame for
+  frame, and the original: the race of the first mission's frame 2280, most likely, not looked into
+  yet. Left: the date the
   kernel gives XAPI's own calls is still the console's in xemu (a save's folder times); xemu's sound
   keeps the emulator's clock, so a voice line, and the dialogue that waits for it, ends on frames that
   change from run to run.

@@ -1,9 +1,9 @@
 """
 Name:        xemu_reference.py
 Description: runs a scenario on the original game in xemu, the reference the port's frames are set against
-Version:     0.3.0
+Version:     0.4.0
 Created:     27-10-2026
-Modified:    27-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 The port's scenarios (tests/scenarios/NAME.txt, tools/scenario.py) compare its frames with frames an
@@ -21,7 +21,8 @@ loads, and its pad comes over USB. So xemu is handed the same functions the port
 their names in symbols.txt) and answers them as the port does: the frames are the game's presents, and
 what the game times, and the pad script, land on the same frames in both.
 
-    py -3 tools/xemu_reference.py menu                 # run the reference of a scenario
+    py -3 tools/xemu_reference.py                      # every scenario
+    py -3 tools/xemu_reference.py menu                 # run the reference of one
     py -3 tools/xemu_reference.py menu --compare-only  # only set the frames there side by side
 
 What xemu needs that is the console's (its MCPX boot ROM, a BIOS and a hard disk image) is the user's
@@ -178,12 +179,14 @@ def compare(name, most):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("names", nargs="+", help="scenarios")
+    ap.add_argument("names", nargs="*", help="scenarios (all by default)")
     ap.add_argument("--compare-only", action="store_true", help="set the frames there against the port's")
     ap.add_argument("--script", help="another pad script for the run, to try one")
     args = ap.parse_args()
+    names = args.names or sorted(os.path.splitext(os.path.basename(p))[0]
+                                 for p in glob.glob(os.path.join(scenario.SCENARIOS, "*.txt")))
     ok = True
-    for name in args.names:
+    for name in names:
         sc = scenario.load(os.path.join(scenario.SCENARIOS, name + ".txt"))
         if args.script is not None:
             sc["script"] = args.script

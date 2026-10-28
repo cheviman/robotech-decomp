@@ -5,6 +5,7 @@ script  f360:a,f540:up,f600:a,f780:a,f960:a,f1140:a,f1320:a,f1500:a,f1680:a,f186
 frames  3600
 dump    120
 movies  no
-# The dialogue goes on as each voice line ends, and in xemu the sound keeps the emulator's clock, not
-# the frames: two of its runs differ in a few frames, a portrait or a line shown earlier or later.
-original 6.0
+# The scaffolds' many edges keep it near 1.6. Its dialogue goes on as each voice line ends, and in xemu
+# the sound keeps the emulator's clock, not the frames: two of its runs differed in a few frames, a
+# portrait or a line shown earlier or later.
+original 2.0

@@ -1,0 +1,8 @@
+# Into Rebel Revenge (m701), the first mission of chapter 3: as Ambush Hills, R twice; the city at dusk
+# and the Battloid on its square, firing.
+code    f600 WEWILLWIN
+script  f360:a,f1500:a,f1620:rt:4,f1680:rt:4,f1800:a,f1980:a,f2160:a,f2340:a,f2520:a,f2700:a,f2880:a,f3060:a,f3240:a,f3420:a
+frames  3600
+dump    120
+movies  no
+original 1.5

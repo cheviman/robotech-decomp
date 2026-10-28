@@ -1,9 +1,9 @@
 """
 Name:        scenario.py
 Description: runs the game through scripted scenarios and compares every dumped frame with the reference
-Version:     0.1.0
+Version:     0.2.0
 Created:     25-10-2026
-Modified:    25-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 A scenario (tests/scenarios/NAME.txt) is a pad script by frame, how many
@@ -25,6 +25,11 @@ Scenario lines (# starts a comment):
     movies  no       run from a copy of the game without its movies (analysis/game_nomovies,
                      made from game/ the first time), which boots to the menu in seconds
     saves   compare  compare the files the game saved too (their hashes, by path)
+    code    f<frame> TEXT
+                     enter TEXT as a code at the game menu from that frame: with L and R held,
+                     left, up, down, A, right, B, START (MainMenuScreen's sequence) open a keyboard,
+                     the cursor goes to each letter, OK, and A dismisses the game's answer; the
+                     presses are added to the script. WEWILLWIN unlocks every mission.
 
 xboxrecomp's runtime has no deterministic time and no frame comparison, so
 this is the project's own; the frames come from the Direct3D 11 bridge
@@ -46,14 +51,67 @@ NOMOVIES = os.path.join(REPO, "analysis", "game_nomovies")
 RUNS = os.path.join(REPO, "analysis", "scenarios")
 
 
+# MainMenuScreen's code entry: the seven presses it waits for while L and R are held, and its
+# keyboard's characters, ten a row, with OK under the last row's right end; the cursor starts on OK
+# and wraps round both ways.
+CODE_SEQUENCE = ["left", "up", "down", "a", "right", "b", "start"]
+CODE_KEYS = ["ABCDEFGHIJ", "KLMNOPQRST", "UVWXYZ0123", "456789.!$%"]
+
+
+def code_script(start, text):
+    """The pad script entering TEXT as a code from the game menu at frame START, and the frame its
+    answer is dismissed at."""
+    out = ["f%d:lt+rt:250" % start]
+    out += ["f%d:%s" % (start + 40 + 30 * i, b) for i, b in enumerate(CODE_SEQUENCE)]
+    t = start + 250
+    row, col = 4, 9
+
+    def press(button):
+        nonlocal t
+        out.append("f%d:%s:4" % (t, button))
+        t += 10
+
+    def across(to):
+        right = (to - col) % 10
+        for _ in range(right if right <= 5 else 10 - right):
+            press("right" if right <= 5 else "left")
+
+    press("up")
+    row = 3
+    for ch in text:
+        rows = [r for r, keys in enumerate(CODE_KEYS) if ch in keys]
+        if not rows:
+            raise ValueError("%r is not on the code keyboard" % ch)
+        while row != rows[0]:
+            press("up" if rows[0] < row else "down")
+            row += -1 if rows[0] < row else 1
+        across(CODE_KEYS[rows[0]].index(ch))
+        col = CODE_KEYS[rows[0]].index(ch)
+        press("a")
+    while row != 3:
+        press("down")
+        row += 1
+    across(9)
+    press("down")
+    press("a")
+    out.append("f%d:a" % (t + 40))
+    return ",".join(out), t + 40
+
+
 def load(path):
     out = {"script": "", "frames": 600, "dump": 60, "movies": "yes", "saves": "no"}
+    codes = []
     for line in open(path, encoding="utf-8"):
         line = line.split("#")[0].strip()
         if not line:
             continue
         key, _, value = line.partition(" ")
+        if key == "code":
+            at, _, text = value.strip().partition(" ")
+            codes.append(code_script(int(at.lstrip("f")), text.strip())[0])
+            continue
         out[key] = value.strip()
+    out["script"] = ",".join(s for s in [out["script"]] + codes if s)
     out["frames"], out["dump"] = int(out["frames"]), int(out["dump"])
     return out
 

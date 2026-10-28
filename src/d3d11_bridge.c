@@ -4,7 +4,7 @@
  *                 through xboxrecomp's D3D8 layer
  *    Version:     0.2.0
  *    Created:     25-10-2026
- *    Modified:    27-10-2026
+ *    Modified:    28-10-2026
  *    Author:      Sebastian Toyos
  *
  *    On with ROBOTECH_D3D11=1. The game's own D3D keeps running, as the bookkeeping it is: it creates its
@@ -468,6 +468,39 @@ static void bridge_pace(void)
     next.QuadPart += (LONGLONG)period;
 }
 
+/* ROBOTECH_WATCH=<address>[,<address>...]: the 32-bit word of the game's
+ * memory at each address (hexadecimal), logged on the frames it changes, for
+ * finding what a press or a screen sets. */
+static void bridge_watch(void)
+{
+    static int count = -1;
+    static uint32_t addr[16], last[16];
+    int i;
+
+    if (count < 0) {
+        const char *e = getenv("ROBOTECH_WATCH");
+        count = 0;
+        while (e && *e && count < 16) {
+            char *end;
+            uint32_t a = strtoul(e, &end, 16);
+            if (end == e)
+                break;
+            addr[count] = a;
+            last[count] = guest32(a);
+            fprintf(stderr, "[WATCH] frame %u 0x%08X = 0x%08X\n", s_frame, a, last[count]);
+            count++;
+            e = *end == ',' ? end + 1 : end;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        uint32_t v = guest32(addr[i]);
+        if (v != last[i]) {
+            fprintf(stderr, "[WATCH] frame %u 0x%08X = 0x%08X\n", s_frame, addr[i], v);
+            last[i] = v;
+        }
+    }
+}
+
 /* D3DDevice_Swap(Flags): present, and pump the window's messages. */
 void d3d11_Swap(void)
 {
@@ -495,6 +528,7 @@ void d3d11_Swap(void)
             exit(0);        /* what is kept at exit (the WAV, the sound's counts) is closed */
         }
     }
+    bridge_watch();
     now = GetTickCount();
     if (!last)
         last = now;
@@ -765,6 +799,9 @@ static void bridge_texture_transforms(const uint32_t ts[BRIDGE_STAGES][XB_TSS_MA
                 }
             }
         }
+        if ((s_tci[s] & 0xFFFF0000u) >= 0x10000u && (s_tci[s] & 0xFFFF0000u) <= 0x30000u)
+            for (k = 8; k < 12; k++)
+                m[k] = -m[k];   /* the camera space's z, turned for the fog (d3d11_SetTransform), turned back */
         if (s_tex_sent_valid[s] && !memcmp(m, s_tex_sent[s], sizeof m))
             continue;
         s_dev->lpVtbl->SetTransform(s_dev, (D3DTRANSFORMSTATETYPE)(D3DTS_TEXTURE0 + s), (const D3DMATRIX *)m);
@@ -841,6 +878,14 @@ static int xform_frame(void)
     return want >= 0 && s_frame == (unsigned)want;
 }
 
+/* A render state the game set as a float (the fog's start, end and density). */
+static float rs_float(int state)
+{
+    float f;
+    memcpy(&f, &s_rs_sent[state], sizeof f);
+    return f;
+}
+
 /* D3DDevice_SetTransform(State, pMatrix): the XDK numbers the transforms
  * VIEW 0, PROJECTION 1, TEXTURE0-3 2-5, WORLD 6, WORLD1-3 7-9. */
 void d3d11_SetTransform(void)
@@ -868,12 +913,34 @@ void d3d11_SetTransform(void)
     }
     if (state == 6)
         memcpy(s_world, guest_ptr(m), sizeof s_world);
-    if (state == 0)
-        pc = D3DTS_VIEW;
-    else if (state == 1)
-        pc = D3DTS_PROJECTION;
-    else
-        pc = (D3DTRANSFORMSTATETYPE)(D3DTS_WORLD + (state - 6));
+    if (state <= 1) {
+        /* The layer's table fog takes -z of the camera-space position for the
+         * depth, as if the camera looked down -z; D3D's cameras look down +z,
+         * so no table fog ever showed (Ambush Hills' far hills, 2000 to 3400).
+         * Its camera space gets z turned (the view's third column), the
+         * projection takes it back (its third row), the position on screen is
+         * the same; what else reads that space, the coordinates generated in
+         * it, is turned back by their texture matrix (bridge_texture_transforms).
+         * The lighting works in world space, and the eye's position does not
+         * change. */
+        float f[16];
+
+        memcpy(f, guest_ptr(m), sizeof f);
+        if (state == 0) {
+            f[2] = -f[2];
+            f[6] = -f[6];
+            f[10] = -f[10];
+            f[14] = -f[14];
+        } else {
+            f[8] = -f[8];
+            f[9] = -f[9];
+            f[10] = -f[10];
+            f[11] = -f[11];
+        }
+        s_dev->lpVtbl->SetTransform(s_dev, state == 0 ? D3DTS_VIEW : D3DTS_PROJECTION, (const D3DMATRIX *)f);
+        return;
+    }
+    pc = (D3DTRANSFORMSTATETYPE)(D3DTS_WORLD + (state - 6));
     s_dev->lpVtbl->SetTransform(s_dev, pc, (const D3DMATRIX *)guest_ptr(m));
 }
 
@@ -1945,11 +2012,12 @@ static void trace_draw(const char *what, uint32_t prim, UINT vertices, UINT stri
     if (xform_frame())
         fprintf(stderr, "[XFORM] draw %s prim %u, %u vertices, FVF 0x%X, texture 0x%08X, from 0x%08X, to %s;"
                 " COLOROP %u %u %u ALPHAOP %u %u %u, TFACTOR %08X, BLEND %u %X %X, COLORWRITE %X, Z %u %X %u,"
-                " FOG %u %u %08X, LIGHTING %u SPECULAR %u\n",
+                " FOG %u %u %08X %g-%g %g range %u, LIGHTING %u SPECULAR %u\n",
                 what, prim, vertices, s_fvf, va, guest32(g_esp), s_target ? "a texture" : "the back buffer",
                 ts[12], ts[14], ts[15], ts[16], ts[18], ts[19], s_rs_sent[148], s_rs_sent[59], s_rs_sent[62],
                 s_rs_sent[63], s_rs_sent[67], s_rs_sent[143], s_rs_sent[57], s_rs_sent[64],
-                s_rs_sent[92], s_rs_sent[93], s_rs_sent[138], s_rs_sent[102], s_rs_sent[103]);
+                s_rs_sent[92], s_rs_sent[93], s_rs_sent[138], rs_float(94), rs_float(95), rs_float(96),
+                s_rs_sent[97], s_rs_sent[102], s_rs_sent[103]);
     if (!v)
         return;                         /* a vertex program's draw: no FVF vertices to show */
     if (on < 0) {

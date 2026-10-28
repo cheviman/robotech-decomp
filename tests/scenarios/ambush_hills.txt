@@ -1,0 +1,10 @@
+# Into Ambush Hills (m201), the first mission of chapter 2: New Game, the code that unlocks every
+# mission (WEWILLWIN), Story Mode, R to the second chapter, the Veritech, then A every 3 seconds: the
+# briefing, the desert's opening scene in its fog (linear, 2000 to 3400), and the Battloid by the
+# crashed ship, firing.
+code    f600 WEWILLWIN
+script  f360:a,f1500:a,f1620:rt:4,f1740:a,f1920:a,f2100:a,f2280:a,f2460:a,f2640:a,f2820:a,f3000:a,f3180:a,f3360:a
+frames  3600
+dump    120
+movies  no
+original 1.5
