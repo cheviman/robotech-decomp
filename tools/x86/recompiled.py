@@ -512,6 +512,9 @@ class Scan:
     def data(self, instruction, state):
         m = instruction.mnemonic
         operands = instruction.operands
+        if m == "lea" and operands[0].kind == "reg" and operands[1].base == operands[0].reg \
+                and operands[1].index is None and operands[1].disp == 0:
+            return      # "lea esp, [esp]": the compiler's fill before a loop, which does nothing
         same = len(operands) == 2 and operands[0].kind == "reg" and operands[1].kind == "reg" \
             and operands[0].reg == operands[1].reg
         # what does not depend on the register's value: xor eax, eax; sbb eax, eax; or eax, -1; and eax, 0
@@ -750,27 +753,26 @@ class Scan:
         """A jump through a pointer that is not a table's (krnl_DbgPrint: the kernel's DbgPrint, which takes
         as many arguments as its format asks for and is in no table of xboxrecomp's): code the compiler
         cannot see, which returns for this function, with this function's arguments. What it drops is
-        certain where every call of this function drops its arguments right after it (cdecl): nothing.
-        How many it takes is each call's to say, as for a function that takes the address of its
-        arguments (escapes): what a caller drops after one call may be the arguments of several (DbgPrint's
-        70 words, "add esp, 0x118"). None where a call does not drop them, or nothing calls it."""
+        certain where a call of this function drops its arguments right after it (cdecl, the convention
+        of every call of a function: the others drop them later, with another call's, as sub_0001FC10's of
+        sub_0001EAD0, an object's callback): nothing. How many it takes is each call's to say, as for a
+        function that takes the address of its arguments (escapes): what a caller drops after one call
+        may be the arguments of several (DbgPrint's 70 words, "add esp, 0x118"). None where no call drops
+        them right after, a jump reaches the function, or nothing calls it."""
         if state.esp != (0, 0):
             return None
         entry = self.decoded.entry
-        words = []
+        dropped = False
         for caller in self.summaries.program.callers.get(entry, ()):
             if caller not in self.program.functions:
                 return None
             code = self.program.function(caller).instructions
             for call in code.values():
                 if call.flow == dis.FLOW_CALL and call.targets == (entry,):
-                    cleaned = cleaned_words(code, call)
-                    if cleaned is None:
-                        return None
-                    words.append(cleaned)
+                    dropped = dropped or cleaned_words(code, call) is not None
                 elif call.flow == dis.FLOW_JUMP and call.targets == (entry,):
                     return None
-        if not words:
+        if not dropped:
             return None
         exit_state = state.copy()
         self.take(exit_state, Summary(self.unseen_reads(instruction, state), UNSEEN_CALLS_WRITE, UNSEEN_CALLS_WRITE,

@@ -521,6 +521,20 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   analysis once. The nine scenarios frame for frame as their references. Left as roots: jumps through a
   pointer whose callers do not all drop the arguments right after (sub_0001EAD0, an object's callback, 33
   functions with it; vcSceneObjectGet, 24), sub_00133FB0, which reads its return address (24).
+- **4,332 in the build: the last roots of the code not known** (29-10-2026, from 4,259; 4,922 lift).
+  A jump through a pointer is cdecl where one call of its function drops the arguments right after it
+  (a function has one convention for all its calls; the others drop them later with another call's:
+  sub_0001EAD0, vcSceneObjectGet), its arguments as many as each call hands it. "lea esp, [esp]", the
+  compiler's fill before a loop, is nothing to recompiled.py, which took it for the address of the
+  return address (sub_00133FB0). 330 of the game's functions not known, from 429, nearly all pieces of
+  others the disassembler took for functions of their own, reached by a jump (they return with ESP
+  where their owner has it, or hand its return address on). Found on the way: a call of a function that
+  counts its arguments by its callers was handed the words pushed for it without the registers the
+  caller saved, and a register passed as it came ("push esi; push 0x10") went missing: ambush_hills went
+  its own way from frame 2880, goodbye_graystone from 3240. decompile.site_count now takes what the
+  caller drops right after the call, else every word pushed for it, never fewer than the callee reads
+  (a word more is one it never looks at), for the C runtime's sprintf and its kin too. The nine
+  scenarios frame for frame as their references.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

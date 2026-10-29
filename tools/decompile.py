@@ -213,30 +213,25 @@ def call_targets_seen():
 
 def site_count(program, caller, return_address, summary):
     """How many words a call hands a function that counts its arguments by its callers (escapes): what the
-    callee drops itself; what recompiled.py saw pushed for the call since the call before it, without the
-    registers the caller saved, or with them when that is fewer than the callee reads itself (a register
-    passed as it came); else what the caller drops right after it ("add esp, N", or "pop ecx" a word at a
-    time; a run of calls dropped together by one "add esp" after the last says nothing of the last's own);
-    None when nothing says."""
+    callee drops itself; else what the caller drops right after it ("add esp, N" before the next call or
+    jump, or "pop ecx" a word at a time), more than its own when it drops an earlier call's with them;
+    else what recompiled.py saw pushed for it since the call before, the registers the caller saved
+    too, which may be arguments (a register passed as it came: "push esi; push 0x10" for a function
+    of the kind vcSceneObjectGet jumps to). A word more than the callee reads is one it never looks
+    at; one fewer, one it reads from elsewhere (the pushes without the registers saved, counted first,
+    made ambush_hills go its own way from frame 2880). Never fewer than the callee reads itself; None
+    when nothing says."""
     if summary.drops:
         return summary.drops // 4
-    pushes = SITE_PUSHES.get(return_address)
-    if pushes is not None and pushes[0] is not None:
-        pushed, pushed_all = pushes
-        words = pushed // 4 if pushed // 4 >= summary.arguments else (pushed_all // 4 if pushed_all is not None else 0)
-        if words:
-            return words
     instructions = program.function(caller).instructions
-    following = instructions.get(return_address)
-    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg" \
-            and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
-        return following.operands[1].imm // 4
-    words = 0
-    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
-            and following.operands[0].reg == "ecx":
-        words += 1
-        following = instructions.get(following.next)
-    return words or None
+    call = next((instruction for instruction in instructions.values()
+                 if instruction.next == return_address and instruction.flow == disassembler.FLOW_CALL), None)
+    words = recompiled.cleaned_words(instructions, call) if call is not None else None
+    if words is None:
+        pushed, pushed_all = SITE_PUSHES.get(return_address, (None, None))
+        pushed = pushed_all if pushed_all is not None else pushed
+        words = pushed // 4 if pushed is not None else None
+    return max(words, summary.arguments) if words else None
 
 
 SITE_PUSHES = {}    # return address of a call -> recompiled.Summaries.site_pushes of the call (analyse)
