@@ -3,7 +3,7 @@
 """
 Name:        recompiled.py
 Description: what a function left recompiled reads, writes and takes, as the decompiled C that calls it sees it
-Version:     0.2.0
+Version:     0.3.0
 Created:     27-10-2026
 Modified:    29-10-2026
 Author:      Sebastian Toyos
@@ -40,9 +40,16 @@ kernel's, its caller drops the arguments right after it, or nothing was pushed f
 makes it as the recompiled code does (decompile.py): the site's drop, the registers it reads and the words
 pushed for it are kept by the call's address (Summaries.icalls).
 
+The C runtime's x87 helpers (_CIacos and its kin) are known by their contract (CONTRACTS); a jump through
+the kernel's table returns for the function that makes it, as a jump to another function does, and so
+does a jump through any other pointer where every call of the function drops its arguments right after
+it (cdecl, so the code it jumps to drops none), the arguments as many as each call hands it (the kernel's
+DbgPrint, which takes as many as its format asks for). A frame set below the locals ("lea ebp, [esp - N]") is
+followed back up by "add ebp, N" to the "mov esp, ebp" that ends the function.
+
 A function is not known, and the decompiled code does not call it, when ESP cannot be followed (it moves
-by a value, as _chkstk's does), when it reads its return address, when it jumps through a pointer, or
-when it calls a function not known.
+by a value, as _chkstk's does), when it reads its return address, when it jumps through a pointer and
+what that drops is not certain, or when it calls a function not known.
 """
 import bisect
 import os
@@ -63,6 +70,11 @@ for _index, _name in enumerate(FULL_NAMES):
 ALL_PARTS = frozenset((register, part) for register in range(8) if register != ESP for part in range(3))
 UNSEEN_CALLS_READ = frozenset((register, part) for register in (ECX, EDX) for part in range(3))
 UNSEEN_CALLS_WRITE = frozenset((register, part) for register in (EAX, ECX, EDX) for part in range(3))
+# The C runtime's x87 helpers (MSVC's intrinsics, x87.HELPERS), by their contract: their values on the
+# x87's stack, none on the guest's, EAX, ECX and EDX theirs to change. Inside, they run on through their
+# return address and jump about in code they share, which the scan does not follow.
+CONTRACTS = {name: (frozenset(), UNSEEN_CALLS_WRITE, frozenset(), 0, 0)
+             for name in ("crt_CIacos", "crt_CIasin", "crt_CIpow_default", "crt_CIfmod")}
 KERNEL_THUNKS = (0x0018EA40, 0x0018EA40 + 4 * 512)   # the XBE's table of the kernel's functions
 # the bytes of arguments each of the kernel's functions drops, by its ordinal: xboxrecomp's
 # stdcall_args_for_ordinal, which its kernel bridges keep the stack even by
@@ -249,6 +261,8 @@ class Summaries:
 
     def called(self, entry):
         """The functions a function calls or jumps to, and the ones whose code it may run as its own."""
+        if self.program.functions[entry][1] in CONTRACTS:
+            return set(), set()
         decoded = self.program.function(entry)
         found, owners = set(), set()
         for instruction in decoded.instructions.values():
@@ -282,6 +296,9 @@ class Summaries:
         return drops.pop() if len(drops) == 1 else 0
 
     def scan(self, entry):
+        contract = CONTRACTS.get(self.program.functions[entry][1])
+        if contract is not None:
+            return Summary(*contract)
         problem = None
         for mode in MODES:
             try:
@@ -294,6 +311,29 @@ class Summaries:
                 if not getattr(found, "uneven", False):
                     break
         return Summary(known=False, why=str(problem))
+
+
+def cleaned_words(instructions, instruction):
+    """The words a caller drops right after a call: "pop ecx" one at a time, or the first "add esp, N"
+    before the next jump or call; None when it drops none there. 'instructions': the caller's, by address."""
+    following = instructions.get(instruction.next)
+    words = 0
+    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
+            and following.operands[0].reg == "ecx":
+        words += 1
+        following = instructions.get(following.next)
+    if words:
+        return words
+    at = instruction.next
+    for _ in range(12):
+        following = instructions.get(at)
+        if following is None or following.flow != dis.FLOW_NONE:
+            return None
+        if following.mnemonic == "add" and following.operands[0].kind == "reg" \
+                and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
+            return following.operands[1].imm // 4
+        at = following.next
+    return None
 
 
 def uneven(text):
@@ -498,6 +538,11 @@ class Scan:
         elif m == "lea" and operands[0].kind == "reg" and operands[0].reg == "ebp" and operands[1].base == "esp" \
                 and operands[1].index is None:
             frame = moved(state.esp, signed(operands[1].disp))
+        elif m in ("add", "sub") and operands[0].kind == "reg" and operands[0].reg == "ebp" \
+                and operands[1].kind == "imm" and state.frame is not None:
+            # a frame set below its locals ("lea ebp, [esp - 0x54]") put back before "mov esp, ebp"
+            amount = signed(operands[1].imm)
+            frame = moved(state.frame, amount if m == "add" else -amount)
         for name in instruction.writes:
             self.write(state, name)
             if name in PARTS_OF:
@@ -699,26 +744,40 @@ class Scan:
         return drops, reads, words
 
     def cleaned_words(self, instruction):
-        """The words a caller drops right after a call: "pop ecx" one at a time, or the first "add esp, N"
-        before the next jump or call; None when it drops none there."""
-        following = self.instructions.get(instruction.next)
-        words = 0
-        while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
-                and following.operands[0].reg == "ecx":
-            words += 1
-            following = self.instructions.get(following.next)
-        if words:
-            return words
-        at = instruction.next
-        for _ in range(12):
-            following = self.instructions.get(at)
-            if following is None or following.flow != dis.FLOW_NONE:
+        return cleaned_words(self.instructions, instruction)
+
+    def pointer_jump(self, instruction, state):
+        """A jump through a pointer that is not a table's (krnl_DbgPrint: the kernel's DbgPrint, which takes
+        as many arguments as its format asks for and is in no table of xboxrecomp's): code the compiler
+        cannot see, which returns for this function, with this function's arguments. What it drops is
+        certain where every call of this function drops its arguments right after it (cdecl): nothing.
+        How many it takes is each call's to say, as for a function that takes the address of its
+        arguments (escapes): what a caller drops after one call may be the arguments of several (DbgPrint's
+        70 words, "add esp, 0x118"). None where a call does not drop them, or nothing calls it."""
+        if state.esp != (0, 0):
+            return None
+        entry = self.decoded.entry
+        words = []
+        for caller in self.summaries.program.callers.get(entry, ()):
+            if caller not in self.program.functions:
                 return None
-            if following.mnemonic == "add" and following.operands[0].kind == "reg" \
-                    and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
-                return following.operands[1].imm // 4
-            at = following.next
-        return None
+            code = self.program.function(caller).instructions
+            for call in code.values():
+                if call.flow == dis.FLOW_CALL and call.targets == (entry,):
+                    cleaned = cleaned_words(code, call)
+                    if cleaned is None:
+                        return None
+                    words.append(cleaned)
+                elif call.flow == dis.FLOW_JUMP and call.targets == (entry,):
+                    return None
+        if not words:
+            return None
+        exit_state = state.copy()
+        self.take(exit_state, Summary(self.unseen_reads(instruction, state), UNSEEN_CALLS_WRITE, UNSEEN_CALLS_WRITE,
+                                      0, 0, escapes=True), 4)
+        self.drops.add(0)
+        self.exits.append(list(exit_state.status))
+        return []
 
     def unseen_reads(self, instruction, state):
         """The registers a call through a pointer reads: none for a function of the kernel's that takes
@@ -872,6 +931,16 @@ class Scan:
         if operand.kind != "mem" or operand.base is not None or operand.index is None or operand.scale != 4:
             return None
         before = [at for at in sorted(self.instructions) if at < instruction.address][-6:]
+        for at in before:
+            # "sub reg, N; jb" to it: the index from -N to -1 (memmove's last bytes, from the end of the table
+            # its aligned copy takes)
+            guard, following = self.instructions[at], self.instructions.get(self.instructions[at].next)
+            if guard.mnemonic == "sub" and len(guard.operands) == 2 and guard.operands[0].kind == "reg" \
+                    and guard.operands[0].reg == operand.index and guard.operands[1].kind == "imm" \
+                    and 0 < guard.operands[1].imm <= 16 and following is not None and following.mnemonic == "jb" \
+                    and following.targets == (instruction.address,):
+                entries = [self.program.word(operand.disp + 4 * k) for k in range(-guard.operands[1].imm, 0)]
+                return entries if all(entry is not None for entry in entries) else None
         for at in reversed(before):
             guard = self.instructions[at]
             if len(guard.operands) == 2 and guard.operands[0].kind == "reg" and guard.operands[0].reg == operand.index \
@@ -889,11 +958,38 @@ class Scan:
                 return found if len(found) >= max(1, count - 1) else None
         return None
 
+    def kernel_jump(self, instruction, state):
+        """A jump through the kernel's table (DirectSound's PoolFree: "jmp [ExFreePool]"): the kernel's
+        function, with the arguments this function's caller handed it, returns for this function, dropping
+        what xboxrecomp's bridges drop for it. None for a jump through any other pointer, or to a function
+        of the kernel's whose drop that does not know."""
+        operand = instruction.operands[0]
+        if operand.kind != "mem" or operand.base is not None or operand.index is not None \
+                or not KERNEL_THUNKS[0] <= operand.disp < KERNEL_THUNKS[1]:
+            return None
+        ordinal = self.program.word(operand.disp)
+        if not ordinal & 0x80000000 or (ordinal & 0xFFFF) not in self.summaries.kernel:
+            return None
+        if state.esp != (0, 0):
+            raise uneven("a jump to the kernel with ESP at %s" % (state.esp,))
+        drops = self.summaries.kernel[ordinal & 0xFFFF]
+        exit_state = state.copy()
+        self.take(exit_state, Summary(frozenset(), UNSEEN_CALLS_WRITE, UNSEEN_CALLS_WRITE, drops // 4, drops), 4)
+        self.drops.add(drops)
+        self.exits.append(list(exit_state.status))
+        return []
+
     def successors(self, instruction, state):
         flow = instruction.flow
         if flow == dis.FLOW_COMPUTED:
+            kernel = self.kernel_jump(instruction, state)
+            if kernel is not None:
+                return kernel
             targets = self.table(instruction)
             if targets is None:
+                jumped = self.pointer_jump(instruction, state)
+                if jumped is not None:
+                    return jumped
                 raise NotKnown("jumps through a pointer")
             found = []
             for target in targets:

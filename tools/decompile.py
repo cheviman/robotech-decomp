@@ -61,6 +61,7 @@ DECOMPILED_JSON = os.path.join(REPO, "analysis", "decompiled_functions.json")
 DECOMPILED_SIGNATURES = os.path.join(REPO, "analysis", "decompiled_signatures.json")
 DECOMPILED_CACHE = os.path.join(REPO, "analysis", "decompiled_cache.json")
 ICALL_SITES = os.path.join(REPO, "analysis", "icall_sites.json")
+REFUSED = os.path.join(REPO, "analysis", "refused_functions.json")   # the ones the C writer refused (write)
 MANUAL = os.path.join(REPO, "src", "recomp_manual.c")
 REGISTER_GLOBALS = {0: "g_eax", 1: "g_ecx", 2: "g_edx", 3: "g_ebx", 5: "g_ebp", 6: "g_esi", 7: "g_edi"}
 
@@ -638,14 +639,23 @@ def write(out_dir, for_build=False):
     goes back to the recompiled code and the analysis goes again without it, so that its callers call it
     as they call the recompiled code: in the build they were written calling its C, and would go out with
     it, and theirs with them (sub_0001D1A0, which copies a structure onto the stack for its callee,
-    took 459 functions with it)."""
+    took 459 functions with it). The ones refused are kept (analysis/refused_functions.json), so that the
+    next build starts without them instead of going through the analysis twice; with the file gone, every
+    function is tried again."""
     refused = frozenset()
+    if for_build and os.path.exists(REFUSED):
+        refused = frozenset(int(address, 16) for address in json.load(open(REFUSED)))
+        print("%d functions the C writer refused in an earlier build, left recompiled (%s)"
+              % (len(refused), os.path.relpath(REFUSED, REPO)))
     while True:
         found = write_once(out_dir, for_build, refused)
         if not found:
-            return
+            break
         print("%d functions the C writer refuses, back to the recompiled code: the analysis again" % len(found))
         refused |= found
+    if for_build:
+        with open(REFUSED, "w") as out:
+            json.dump(["0x%08X" % address for address in sorted(refused)], out, indent=1)
 
 
 def write_once(out_dir, for_build, refused):

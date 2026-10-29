@@ -3,9 +3,9 @@
 """
 Name:        disassembler.py
 Description: the game's x86 functions decoded: their instructions, where each goes, their jump tables
-Version:     0.2.0
+Version:     0.3.0
 Created:     26-10-2026
-Modified:    27-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The functions are the ones xboxrecomp's disassembler found (analysis/disasm/functions.json), each the
@@ -154,26 +154,51 @@ class Program:
         return Instruction(insn.address, insn.size, name, insn.op_str, tuple(operands), flow, targets,
                            reads=tuple(insn.reg_name(r) for r in read), writes=tuple(insn.reg_name(r) for r in written))
 
+    def table_entries(self, table, count, function):
+        """A jump table's 'count' entries, None when one leaves the function; with no count, the entries up
+        to the first that does."""
+        entries = []
+        for k in range(count if count is not None else 512):
+            target = self.word(table + 4 * k)
+            if target is None or not function.entry <= target < function.end:
+                if count is not None:
+                    return None
+                break
+            entries.append(target)
+        return entries
+
     def jump_table(self, instruction, before, function):
         op = instruction.operands[0]
         if op.base is not None or op.index is None or op.scale != 4 or op.segment:
             return
         count = None
+        # a sparse switch: the index a byte of a table of its own ("movzx reg, byte ptr [value + bytes]"),
+        # its cases sharing entries; the compare then guards the value
+        indexed = None
+        if before and before[-1].mnemonic == "movzx" and len(before[-1].operands) == 2:
+            load = before[-1]
+            dst, src = load.operands
+            if dst.type == X.X86_OP_REG and load.reg_name(dst.reg) == op.index and src.type == X.X86_OP_MEM \
+                    and src.size == 1 and src.mem.base != 0 and src.mem.index == 0 and not src.mem.segment:
+                indexed = (load.reg_name(src.mem.base), src.mem.disp & 0xFFFFFFFF)
+        guarded = indexed[0] if indexed is not None else op.index
         # "cmp reg, N" then "ja" within the few instructions before: N + 1 entries
         for insn in reversed(before[-6:]):
             if insn.mnemonic == "cmp" and len(insn.operands) == 2 and insn.operands[1].type == X.X86_OP_IMM \
-                    and insn.operands[0].type == X.X86_OP_REG and insn.reg_name(insn.operands[0].reg) == op.index:
+                    and insn.operands[0].type == X.X86_OP_REG and insn.reg_name(insn.operands[0].reg) == guarded:
                 count = (insn.operands[1].imm & 0xFFFFFFFF) + 1
                 break
-        entries = []
-        limit = count if count is not None else 512
-        for k in range(limit):
-            target = self.word(op.disp + 4 * k)
-            if target is None or not function.entry <= target < function.end:
-                if count is not None:
-                    return       # a guarded table whose entries leave the function: not one of ours
-                break
-            entries.append(target)
+        if indexed is not None:
+            cases = self.read(indexed[1], count) if count is not None and count <= 1024 else None
+            count = max(cases) + 1 if cases and len(cases) >= count else None
+        entries = self.table_entries(op.disp, count, function)
+        if entries is None and indexed is not None and count is not None:
+            # a byte table the compare does not bound (D3D_LazySetTextureTransform's, whose compare guards a
+            # value the bits of others make up): the entries that point into the function, as for a table
+            # with no compare
+            entries = self.table_entries(op.disp, None, function)
+        if entries is None:
+            return       # a guarded table whose entries leave the function: not one of ours
         if entries:
             instruction.table = op.disp
             instruction.targets = tuple(entries)

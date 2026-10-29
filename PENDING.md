@@ -44,6 +44,12 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
    transforms on pre-transformed vertices (the layer leaves them out). The camera-space normal the
    layer gives `TCI_CAMERASPACENORMAL` and `REFLECTIONVECTOR` still turns the wrong way on a rotated
    object (the bridge mends the world normals only).
+4. **After the decompilation** (Sebas, 29-10-2026: the decompiled C first, a clean project to work on):
+   options off by default, so that the scenarios' frames stay the original's: 16× anisotropic filtering
+   (the sampler where the game asks for linear or mipmapped filtering), FXAA, SMAA (iryoku/smaa, MIT, three
+   passes before Present), as the Colin McRae Rally 2005 port on XboxXBERecomp has them; the reverb and
+   the other effects of the Xbox's DSP, with xemu's DSP56300 interpreter (GPL: the build would be GPL
+   too, Sebas's call).
 
 ### Sound
 
@@ -490,6 +496,31 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   functions whose calls through a pointer drop what is only a guess, 17 that jump through one; of the
   107 more that lift, 36 more in the build (the rest drop out in the analysis or with their callers, not
   looked into yet).
+- **4,259 in the build: the roots of the code not known** (29-10-2026, from 3,762; 4,921 of the game's
+  5,150 lift, from 4,896). Of the 71 more that lift, the ones out of the build were the XDK's and Bink's,
+  which stay out; what kept the game's own out was the code recompiled.py does not know, which the C
+  never calls: 993 of the game's functions, nearly all through a few roots of the C runtime's and the
+  XDK's. Now known: the C runtime's x87 helpers _CIacos, _CIasin, _CIpow and _CIfmod, which run on through
+  their return address, by MSVC's contract for its intrinsics (their values on the x87's stack, none on
+  the guest's, EAX, ECX and EDX theirs to change: 235 functions with them); DirectSound's MemFree, whose
+  PoolFree ends in "jmp [ExFreePool]" through the kernel's table, followed as the kernel's function
+  returning for it (160); memmove, whose last bytes' table is indexed from -4 to -1 after "sub ecx, 4; jb"
+  (141); MSVC's sparse switches, their index a byte of a table of its own (`tools/x86/disassembler.py`:
+  sub_0002FAA0, sub_0001A700, D3D_PixelJar_GetSurfaceFormat); frames set below their locals ("lea ebp,
+  [esp - 0x54]") put back by "add ebp, 0x54" before "mov esp, ebp"; and the kernel's DbgPrint, reached by
+  a jump the stdcall table of xboxrecomp's has no drop for: cdecl, as every call drops its arguments
+  right after it, and as many as each call hands it. 429 of the game's functions still not known. Found on
+  the way: DbgPrint's arguments counted first by the most a call drops after it, 70 words where one
+  caller drops several calls' together ("add esp, 0x118"), made the summaries of the functions that print
+  read 70 words of their stack, and three missions went their own way from frame 2640, until each call
+  counted them (found by turning the round's changes off one at a time: a build of part of the
+  decompiled functions does not test the rest, since a function's signature comes out of its callers
+  being decompiled or not); and a byte table its compare does not bound (D3D_LazySetTextureTransform's)
+  took the D3D draws and 162 functions out of the build until its entries were read as before. The build
+  keeps the functions the C writer refuses (analysis/refused_functions.json) and goes through the
+  analysis once. The nine scenarios frame for frame as their references. Left as roots: jumps through a
+  pointer whose callers do not all drop the arguments right after (sub_0001EAD0, an object's callback, 33
+  functions with it; vcSceneObjectGet, 24), sub_00133FB0, which reads its return address (24).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the
