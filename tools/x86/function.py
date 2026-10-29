@@ -3,7 +3,7 @@
 """
 Name:        function.py
 Description: the game's x86 functions as control-flow graphs of IR blocks
-Version:     0.2.0
+Version:     0.3.0
 Created:     26-10-2026
 Modified:    28-10-2026
 Author:      Sebastian Toyos
@@ -16,9 +16,11 @@ arguments ("ret N", stdcall), after which SP is N bytes up. A jump to another fu
 a jump through a table, a switch over the table's entries.
 
 The x87's stack is a register for each depth (x87.py): a function whose depth is known at every
-instruction, which takes nothing from it and leaves nothing on it, and whose calls take and leave nothing
-either (but for _ftol2, lifted as the conversion it is), has its floating-point code lifted; the compare
-idiom "fcom; fnstsw ax; test ah, mask; j(n)e/j(n)p" becomes a branch on the compare's outcome.
+instruction, which takes nothing from it and leaves nothing on it or one float, and whose calls take and
+leave nothing either (but for _ftol2, lifted as the conversion it is) or hand back a float where the
+stack is empty, has its floating-point code lifted; the float a function hands back is its st(0) where
+it returns, FLOAT0 (decompile.py). The compare idiom "fcom; fnstsw ax; test ah, mask; j(n)e/j(n)p"
+becomes a branch on the compare's outcome.
 
 What is not translated yet raises lift.Unsupported: an SSE instruction, an x87 one past those, a call or a
 jump through a pointer, a branch on PF other than a compare's.
@@ -76,10 +78,11 @@ class Builder:
         leaders = self.leaders(decoded)
         order = list(decoded.instructions)
         self.depths = None
-        if any(x87.is_x87(instruction.mnemonic) for instruction in decoded.instructions.values()):
+        if any(x87.is_x87(instruction.mnemonic) or self.leaves_floats(decoded, instruction)
+               for instruction in decoded.instructions.values()):
             self.depths = self.x87.at(entry)
-            if self.depths is None or self.x87.effect(entry) != (0, 0):
-                raise lift.Unsupported("x87: its stack's depth not known, or values taken or left")
+            if self.depths is None or self.x87.effect(entry) not in ((0, 0), (0, 1)):
+                raise lift.Unsupported("x87: its stack's depth not known, or values taken or left but one float")
         current = None
         for position, address in enumerate(order):
             instruction = decoded.instructions[address]
@@ -110,6 +113,18 @@ class Builder:
             if isinstance(block.end, ir.TailCall):
                 block.statements.append(ir.Effect(TAIL_FRAME, (ir.Load(ir.Reg(ESP), 32),)))
         return function
+
+    def leaves_floats(self, decoded, instruction):
+        """Whether an instruction calls or jumps to a function that takes values from the x87's stack or
+        leaves them on it: one without x87 code of its own that does has its depths worked out too
+        (a float handed on from a call, or a call to _ftol2 of a float a call handed back)."""
+        if instruction.flow not in (dis.FLOW_CALL, dis.FLOW_JUMP) or not instruction.targets:
+            return False
+        target = instruction.targets[0]
+        if target in decoded.instructions:
+            return False
+        effect = self.x87.effect(target)
+        return effect is not None and effect != (0, 0)
 
     def leave(self, decoded, target):
         """The end of a block that goes to 'target': a jump within the function, or a tail call."""
@@ -170,7 +185,8 @@ class Builder:
                     block.statements.extend(lifter.statements)
                     block.end = ir.Return()
                     return
-                if self.x87.effect(target) != (0, 0):
+                # (one that hands back a float hands it back for this function, from an empty stack)
+                if self.x87.effect(target) not in ((0, 0), (0, 1)) or self.depth(instruction) != 0:
                     raise lift.Unsupported(f"x87: a jump to {target:08X}, which takes or leaves its values")
             block.end = self.leave(decoded, target)
             return
@@ -193,7 +209,10 @@ class Builder:
                     block.statements.extend(lifter.statements)
                     self.state.status = self.state.test = None
                     return
-                if self.x87.effect(target) != (0, 0):
+                effect = self.x87.effect(target)
+                if effect == (0, 1) and self.depth(instruction) != 0:
+                    raise lift.Unsupported(f"x87: a call to {target:08X}, which hands back a float, with the stack not empty")
+                if effect not in ((0, 0), (0, 1)):
                     raise lift.Unsupported(f"x87: a call to {target:08X}, which takes or leaves its values")
             drops = self.drops(target)
             if drops is None:

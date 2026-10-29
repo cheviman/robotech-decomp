@@ -3,9 +3,9 @@
 """
 Name:        emit.py
 Description: writes the game's functions as C, through the decompiler's writer
-Version:     0.2.0
+Version:     0.3.0
 Created:     26-10-2026
-Modified:    27-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
@@ -22,7 +22,7 @@ from decompiler import emit
 from decompiler.stack import MEMORY_SP
 from v60 import ir
 
-from .profile import ARG0, ARGUMENTS, EAX
+from .profile import ARG0, ARGUMENTS, EAX, FLOAT0
 
 REGISTER_GLOBALS = {0: "g_eax", 1: "g_ecx", 2: "g_edx", 3: "g_ebx", 5: "g_ebp", 6: "g_esi", 7: "g_edi"}
 
@@ -232,7 +232,11 @@ class X86Writer(emit.FunctionWriter):
         else:
             lines.append(call + ";")
         lines += [f"{self.register_set(value[1])} = {REGISTER_GLOBALS[value[1]]};"
-                  for value in results if not (value is returned and value[1] == EAX)]
+                  for value in results if not (value is returned and value[1] == EAX) and value[1] != FLOAT0]
+        if target in getattr(emitter, "float_returns", ()):
+            # the float it hands back in st(0), off the recompiled code's stack, read or not
+            read = any(value[1] == FLOAT0 for value in results)
+            lines.append(f"{self.register_set(FLOAT0)} = x87_pop();" if read else "x87_pop();")
         return lines
 
     def statement(self, statement):

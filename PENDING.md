@@ -449,6 +449,42 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   conversion too. Left: the functions that take or hand back x87 values (56 hand a float back in
   st(0); their callers with them), the 94 without a depth known, fptan, fsincos, frndint and the like;
   the floats' names (f0 is a register's, not a value's).
+- **3,726 in the build: the floats handed back** (28-10-2026, from 3,328; 4,789 of the game's 5,150
+  lift, from 4,424). A function that hands back a float in st(0) is C that returns a double (32 of
+  them), or hands it back through `double *p_f0` when it hands back registers too (15): its st(0)
+  where it returns is FLOAT0, the st(0) of a caller whose stack was empty at the call, the only way the
+  game calls one. The recompiled code that calls one finds the float on its stack (the entry pushes it,
+  x87_push); a call to one still recompiled takes it off (x87_pop, 244 calls). In the data flow the
+  values a function keeps on the x87's stack are its own, since a callee's go above its caller's
+  (decompile.py's Flow drops the float registers from what a callee writes, but for the float it hands
+  back). Of the 1,008 calls of the 79 functions that hand back a float, none reads EAX after it before
+  writing it but one in the C runtime (crt_fload_withFB, past the game's code): they hand back the float
+  alone. A function with no x87 code of its own that hands on the float a call left it, or converts it
+  with _ftol2, has its depths worked out too, so that its C does with the float what the original does.
+  Found on the way: one function the C writer refuses (sub_0001D1A0, which copies a structure onto the
+  stack for its callee, newly in reach once its callee lifted) took 459 others out of the build, its
+  callers having been written calling its C, and theirs calling them; the build now goes through the
+  analysis again without the ones refused, which stay recompiled alone. The nine scenarios frame for
+  frame as their references, on the core with SegaSonic's latest (fa3fadc) under it. For a processor
+  without floating-point registers the core's change writes the same types as before; it was not run on
+  SegaSonic and OutRunners this time (OutRunners' session had its checkout in use). Left of the x87: 73
+  functions without a depth known, 19 that call the C runtime's helpers that take their values from the
+  stack (_CIacos, _CIpow and their kin), 22 that take floats on the stack themselves, 24 with an
+  instruction the depth's walk does not reach, 7 with fnstsw outside a compare, 4 with fptan; the
+  floats' names.
+- **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
+  its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
+  fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the
+  rest, and the port never goes back to an Xbox. A structure goes over to the host's memory, with real
+  pointers and its variables plain C ones, once every function that touches it is C by hand or
+  decompiled: by subsystem, not all at the end, since the recompiled code reads the Xbox's layout until
+  then. What it opens: fields added to the game's structures (a network id, a skin's palette, a team),
+  more than one world in a process (the server and the client of a quick match, replays), sizes that
+  grow, ARM (Switch, Android, Mac) without translating addresses, a debugger that shows the objects by
+  their fields. What it takes: a reader wherever a structure comes from disk as it is laid out in memory
+  (the `VC2` objects' chunk readers to be looked at for it), and the saves' format kept, with a reader of
+  its own, so the saves made before still open. The game's behaviour stays the original's: the engine's
+  fixed limits (objects, missiles, particles), which decide what is drawn, are a change of their own.
 
 ## Dead hypotheses
 

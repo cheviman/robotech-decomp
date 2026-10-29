@@ -3,9 +3,9 @@
  *    Description: what the decompiled C (tools/decompile.py) calls for the x86's own arithmetic: shifts
  *                 by a count the processor masks, the flags of an addition or a subtraction, the string
  *                 instructions, the 64-bit divisions, the calls of functions that stay recompiled
- *    Version:     0.2.0
+ *    Version:     0.3.0
  *    Created:     26-10-2026
- *    Modified:    27-10-2026
+ *    Modified:    28-10-2026
  *    Author:      Sebastian Toyos
  *
  *    Each does what the Pentium III does: a shift's count is taken modulo 32 (64 for a 64-bit value), a
@@ -204,6 +204,27 @@ static inline double x87_float(uint32_t bits)
 
 /* The float at a guest address, as FLD loads it. */
 #define FLOAT_AT(address) x87_float(MEM32(address))
+
+/* A 64-bit integer at a guest address, as FILD and FISTP load and store it whole. */
+#define MEM64(address) (*(volatile uint64_t *)XBOX_PTR(address))
+
+/* The float a function that stays recompiled hands back in st(0), taken off the recompiled code's stack:
+ * read or not, as the original's caller pops it. */
+static inline double x87_pop(void)
+{
+    double value = g_fp_stack[g_fp_top & 7];
+
+    g_fp_top = (g_fp_top + 1) & 7;
+    return value;
+}
+
+/* The float a decompiled function hands back to the recompiled code that calls it, onto its stack: st(0),
+ * where the original leaves it. */
+static inline void x87_push(double value)
+{
+    g_fp_top = (g_fp_top + 7) & 7;
+    g_fp_stack[g_fp_top] = value;
+}
 
 static inline double double_from_bits(uint64_t bits)
 {

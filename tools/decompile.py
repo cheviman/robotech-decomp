@@ -2,9 +2,9 @@
 Name:        decompile.py
 Description: the game's functions decompiled to C by arcade-decomp's decompiler (tools/core) through the
              x86 frontend (tools/x86)
-Version:     0.2.0
+Version:     0.3.0
 Created:     26-10-2026
-Modified:    27-10-2026
+Modified:    28-10-2026
 Author:      Sebastian Toyos
 
 The recompiled C (xboxrecomp) runs the game an instruction at a time; this is its way to C a person reads:
@@ -49,7 +49,7 @@ from decompiler.gotos import GotoError                                          
 from v60 import ir                                                       # noqa: E402
 from x86 import arguments, disassembler, function, lift, recompiled      # noqa: E402
 from x86 import emit                                                     # noqa: E402
-from x86.profile import ARG0, ARGUMENTS, EAX, NAMES, X86                 # noqa: E402
+from x86.profile import ARG0, ARGUMENTS, EAX, FLOAT0, FLOATS, NAMES, X86 # noqa: E402
 
 import hand_functions                                                    # noqa: E402
 import symbols                                                           # noqa: E402
@@ -250,6 +250,20 @@ class Flow(dataflow.Program):
     def __init__(self, functions, analysis, outside):
         super().__init__(functions, analysis, [], (stack.MEMORY_SP,))
         self.outside = outside
+        self.float_results = set()  # the functions decompiled that hand back a float in st(0)
+
+    def solve_function(self, entry):
+        """The core's summary, the x87's registers as a caller sees them: where a function calls another
+        its stack is empty or the callee's values go above the caller's, so the values a function keeps
+        there are its own, but for the float one hands back, its caller's st(0) where the caller's stack
+        was empty: FLOAT0 (function.py)."""
+        summary = super().solve_function(entry)
+        kept = (FLOAT0,) if entry in self.float_results else ()
+        own = {("r", register, part) for register in FLOATS if register not in kept for part in range(3)}
+        summary.writes = set(summary.writes) - own
+        summary.always = set(summary.always) - own
+        summary.always_when = {key: set(value) - own for key, value in summary.always_when.items()}
+        return summary
 
     def summary_of(self, target):
         found = self.summaries.get(target)
@@ -303,16 +317,19 @@ class Typing(pointers.Program):
             super().tell_callee(target, state)
 
 
-def outside_summary(summary, count):
+def outside_summary(summary, count, float_result=False):
     """A function left recompiled as the data flow sees it: it reads its inputs and its arguments (ARG0
     up); a register it may leave as it was it reads only when the caller reads it afterwards (passes);
-    it writes the flags on every way back (no caller reads them after a call: decompile.py checks)."""
+    it writes the flags on every way back (no caller reads them after a call: decompile.py checks). One
+    that hands a float back in st(0) writes FLOAT0, its caller's st(0) where the stack was empty (the C
+    pops it off the recompiled code's stack, emit.py)."""
     found = dataflow.Summary()
     base = {("r", register, part) for register, part in summary.inputs}
     base |= {("r", ARG0 + n, part) for n in range(count) for part in range(3)}
     found.base = base
-    found.writes = {("r", register, part) for register, part in summary.writes}
-    found.always = {("r", register, part) for register, part in summary.always} | set(dataflow.FLAGS)
+    floats = {("r", FLOAT0, part) for part in range(3)} if float_result else set()
+    found.writes = {("r", register, part) for register, part in summary.writes} | floats
+    found.always = {("r", register, part) for register, part in summary.always} | set(dataflow.FLAGS) | floats
     found.reads = base | (found.writes - found.always)
     found.passes = {}
     for register, _ in summary.writes:
@@ -332,13 +349,14 @@ def called_from_outside(program, entry, built):
 SITES = 0x00F00000     # where the calls of a function that counts its arguments by its callers go, one each
 
 
-def analyse(quiet=False, for_build=False):
+def analyse(quiet=False, for_build=False, refused=frozenset()):
     """The functions decompiled, their data flow solved: (program, built, flow, found). A function goes in
     when it lifts with its stack in slots and each function it calls is decompiled too or stays
     recompiled with its effects known (recompiled.py); a call of one of those is a call of the recompiled
     code (emit.py). flow.outside: the functions called that stay recompiled, by their summaries;
     flow.aliases: for a call of one that counts its arguments by its callers, the target of its own
-    (SITES up) that stands for it, and the function."""
+    (SITES up) that stands for it, and the function. 'refused': the ones the C writer refused, which stay
+    recompiled (write)."""
     cpu.use(X86)
     dataflow.configure()
     dataflow.HANDLER_SLOTS = (None,)    # no object loop calls handlers through a field of its objects
@@ -347,7 +365,7 @@ def analyse(quiet=False, for_build=False):
     names = sym["func"]
     program = disassembler.Program(names)
     alone, of_subject = left_alone(sym)
-    skip, subject = (alone, of_subject) if for_build else (frozenset(), None)
+    skip, subject = (alone | refused, of_subject) if for_build else (frozenset(), None)
     summaries = recompiled.Summaries(program, call_targets_seen(),
                                      lambda entry: of_subject(entry).startswith(("xdk/d3d8", "xdk/dsound")))
     SITE_PUSHES.clear()
@@ -418,14 +436,21 @@ def analyse(quiet=False, for_build=False):
             arguments.rewrite(built, {**outside_counts, **counts})
         except arguments.Straddles as problem:
             raise SystemExit(str(problem))
-        flow = Flow(built, Analysis(), {target: outside_summary(summaries.found[aliases.get(target, target)], count)
+        float_returns = {target for target in outside_counts
+                         if builder.x87.effect(aliases.get(target, target)) == (0, 1)}
+        flow = Flow(built, Analysis(), {target: outside_summary(summaries.found[aliases.get(target, target)], count,
+                                                                target in float_returns)
                                         for target, count in outside_counts.items()})
+        flow.float_returns = float_returns
+        flow.float_results = {entry for entry in built if builder.x87.effect(entry) == (0, 1)}
         flow.aliases = aliases
         flow.recompiled = summaries
         # a function the recompiled code calls (or nothing does) takes all it reads, and hands back EAX, as
-        # the original leaves it for the recompiled callers
+        # the original leaves it for the recompiled callers; one that hands back a float, that float alone:
+        # of the 1008 calls of those in the game, none reads EAX after it before writing it (one of the C
+        # runtime's, crt_fload_withFB, which hands back EAX too, past the game's code)
         signatures.OPEN = {entry for entry in built if called_from_outside(program, entry, built)}
-        flow.declared = {entry: {EAX} for entry in signatures.OPEN}
+        flow.declared = {entry: {FLOAT0} if entry in flow.float_results else {EAX} for entry in signatures.OPEN}
         # one whose stack stays in memory leaves the guest's SP where it found it, which every caller
         # counts on whether it reads it or not: its pops and the putting back of its frame stay
         for entry, f in built.items():
@@ -520,9 +545,9 @@ def call_results(function, found, flow):
 
 def entry_text(emitter, entry, drops, keeps=False):
     """NAME_entry, the function as the recompiled code calls it: its arguments from the guest's stack
-    (ARG32) and registers, its result into EAX, the return address (and, for one that drops its own
-    arguments, those) popped. None when it takes or hands back a flag, which the recompiled code keeps
-    in its own way. 'keeps': it calls recompiled code (itself or through the decompiled functions it
+    (ARG32) and registers, its result into EAX (a float onto the x87's stack, where the original leaves
+    it in st(0): x87_push), the return address (and, for one that drops its own arguments, those)
+    popped. None when it takes or hands back a flag, which the recompiled code keeps in its own way. 'keeps': it calls recompiled code (itself or through the decompiled functions it
     calls), handing registers in the globals: EBX, EBP, ESI and EDI go back as they came, as the
     original's pops put them back, but for the ones it hands back."""
     values = []
@@ -547,6 +572,11 @@ def entry_text(emitter, entry, drops, keeps=False):
         lines.append("\tuint32_t " + ", ".join("%s_kept = %s" % (REGISTER_GLOBALS[register][2:], REGISTER_GLOBALS[register])
                                                for register in kept) + ";")
     for value in emitter.by_pointer(entry):
+        if value[0] == "r" and value[1] == FLOAT0:
+            lines.append("\tdouble f0_out;")
+            values.append("&f0_out")
+            copies.append("\tx87_push(f0_out);")
+            continue
         if value[0] != "r" or value[1] not in REGISTER_GLOBALS:
             return None
         local = "%s_out" % REGISTER_GLOBALS[value[1]][2:]
@@ -554,7 +584,9 @@ def entry_text(emitter, entry, drops, keeps=False):
         values.append("&" + local)
         copies.append("\t%s = %s;" % (REGISTER_GLOBALS[value[1]], local))
     call = "%s(%s);" % (emitter.names[entry], ", ".join(values))
-    if returned is not None:
+    if returned is not None and returned[0] == "r" and returned[1] == FLOAT0:
+        call = "x87_push(%s(%s));" % (emitter.names[entry], ", ".join(values))
+    elif returned is not None:
         if returned[0] != "r" or returned[1] not in REGISTER_GLOBALS:
             return None
         call = "%s = %s" % (REGISTER_GLOBALS[returned[1]], call)
@@ -574,7 +606,24 @@ def file_header(name, description):
 
 
 def write(out_dir, for_build=False):
-    program, built, flow, found = analyse(quiet=True, for_build=for_build)
+    """The C of the functions decompiled into out_dir. For the build, a function the C writer refuses
+    goes back to the recompiled code and the analysis goes again without it, so that its callers call it
+    as they call the recompiled code: in the build they were written calling its C, and would go out with
+    it, and theirs with them (sub_0001D1A0, which copies a structure onto the stack for its callee,
+    took 459 functions with it)."""
+    refused = frozenset()
+    while True:
+        found = write_once(out_dir, for_build, refused)
+        if not found:
+            return
+        print("%d functions the C writer refuses, back to the recompiled code: the analysis again" % len(found))
+        refused |= found
+
+
+def write_once(out_dir, for_build, refused):
+    """write's round: the functions the C writer refused, for the build, before anything is written;
+    else nothing."""
+    program, built, flow, found = analyse(quiet=True, for_build=for_build, refused=refused)
     sym = symbols.load()
     names = {entry: program.functions[entry][1] for entry in built}
     # a function called that stays recompiled, by the name the recompiled code calls it by: the entry of
@@ -618,6 +667,7 @@ def write(out_dir, for_build=False):
     emitter.writes = {entry: set(summary.writes)
                       for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
     emitter.recompiled = set(flow.outside)
+    emitter.float_returns = flow.float_returns
     variables = {}
     for address, var in sym["vars"].items():
         found = symbols.TYPE_RE.match(var["type"])
@@ -654,6 +704,10 @@ def write(out_dir, for_build=False):
             key = "%s: %s" % (type(problem).__name__, str(problem).split(":")[-1].strip()[:60])
             problems[key] += 1
             examples.setdefault(key, entry)
+    if for_build and len(texts) < len(built):
+        for key, count in problems.most_common(15):
+            print("  %5d  %s  e.g. %08X" % (count, key, examples[key]))
+        return set(built) - set(texts)
     if for_build:
         texts, entries = for_the_build(program, built, emitter, texts, flow)
         cache = {}
