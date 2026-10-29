@@ -237,6 +237,50 @@ def site_count(program, caller, return_address, summary):
 SITE_PUSHES = {}    # return address of a call -> recompiled.Summaries.site_pushes of the call (analyse)
 
 
+def escaping_calls(program, built, summaries):
+    """{a call's return address: the words it hands the function it calls}, for the calls of the
+    functions decompiled that count their arguments by their callers (calls_count): each call hands its
+    own, a caller whose stack stays in memory takes no more from it (arguments.in_memory)."""
+    sites = {}
+    for entry, f in built.items():
+        for block in f.blocks.values():
+            for statement in block.statements:
+                if isinstance(statement, ir.Call) and statement.target in built:
+                    callee = summaries.found.get(statement.target)
+                    if callee is not None and callee.escapes:
+                        words = site_count(program, entry, statement.return_address, callee)
+                        if words is not None:
+                            sites[statement.return_address] = words
+    return sites
+
+
+def calls_count(program, summaries, entry, summary):
+    """The most words a call of a function that counts its arguments by its callers hands it, each call's
+    as site_count has it (GameObjectSendMessage's message and what goes with it): as many as its stack,
+    in memory, takes; a word more is one it never looks at. None where a call does not say, a jump
+    reaches the function, or a run saw it called through a pointer (a call no count covers)."""
+    if not hasattr(calls_count, "seen"):
+        calls_count.seen = {target for targets in call_targets_seen().values() for target in targets}
+    if entry in calls_count.seen:
+        return None
+    callers = [caller for caller in program.callers.get(entry, ())]
+    if not callers or any(caller not in program.functions for caller in callers):
+        return None
+    summaries.compute(callers)      # what was pushed for each call (SITE_PUSHES)
+    words = summary.arguments
+    for caller in callers:
+        for instruction in program.function(caller).instructions.values():
+            if instruction.targets != (entry,):
+                continue
+            if instruction.flow != disassembler.FLOW_CALL:
+                return None
+            count = site_count(program, caller, instruction.next, summary)
+            if count is None:
+                return None
+            words = max(words, count)
+    return words
+
+
 def outside_problem(program, builder, caller, target, return_address, summary, tail, memory=False):
     """Why the decompiled C cannot call 'target', a function left recompiled, from 'caller'; None if it can.
     'memory': the caller's stack stays in memory, where the arguments are already (no count needed)."""
@@ -386,6 +430,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
     chosen = None
     while True:
         built = lifted(program, chosen, skip, subject, icalls)
+        taken = {}      # the words of arguments a function whose stack stays in memory lays out
         changed = True
         while changed:
             changed = False
@@ -400,10 +445,14 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                 memory = getattr(built[entry], "memory_stack", False)
                 problems = ["is no function of its own"] if own is None or not own.known or \
                     own.drops != builder.drops(entry) else []
-                # one whose stack stays in memory takes as many arguments as its machine code reads
-                if getattr(built[entry], "memory_stack", False) and own is not None and \
-                        (own.escapes or own.arguments > ARGUMENTS):
-                    problems.append("counts its arguments by its callers, its stack in memory")
+                # one whose stack stays in memory takes as many arguments as its machine code reads; one
+                # that counts them by its callers, as many as the most a call of it hands it
+                if getattr(built[entry], "memory_stack", False) and own is not None and own.known:
+                    words = calls_count(program, summaries, entry, own) if own.escapes else own.arguments
+                    if words is None or words > ARGUMENTS:
+                        problems.append("counts its arguments by its callers, its stack in memory")
+                    else:
+                        taken[entry] = words
                 problems += [outside_problem(program, builder, entry, target, address, summaries.found.get(target), False, memory)
                              for target, address in found if target not in built]
                 problems += [outside_problem(program, builder, entry, target, None, summaries.found.get(target), True, memory)
@@ -452,11 +501,11 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                         block.end.target = alias
                     else:
                         outside_counts[block.end.target] = summaries.found[block.end.target].arguments
-        in_memory = {entry: summaries.found[entry].arguments for entry, f in built.items()
+        in_memory = {entry: taken.get(entry, summaries.found[entry].arguments) for entry, f in built.items()
                      if getattr(f, "memory_stack", False)}
         counts = arguments.counts(built, outside_counts, in_memory)
         try:
-            arguments.rewrite(built, {**outside_counts, **counts})
+            arguments.rewrite(built, {**outside_counts, **counts}, escaping_calls(program, built, summaries))
         except arguments.Straddles as problem:
             raise SystemExit(str(problem))
         float_returns = {target for target in outside_counts

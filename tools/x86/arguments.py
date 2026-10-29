@@ -3,9 +3,9 @@
 """
 Name:        arguments.py
 Description: the arguments a function takes on the stack, passed in registers ARG0 up
-Version:     0.2.0
+Version:     0.3.0
 Created:     26-10-2026
-Modified:    27-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's passes take a function's inputs and results from its registers (the V60's code passes
@@ -112,14 +112,24 @@ def frame_of(statement, name):
     return None
 
 
-def in_memory(function, counts):
+def unhanded(target, handed, counts):
+    """The arguments a call of a function that counts them by its callers does not hand it, of the
+    ones the function lays out (as many as the most a call hands it): 0, words it never looks at. Left
+    unset, the caller's ARG registers would seem to carry its own caller's on to it, and so up every
+    caller (2,479 functions out of the build)."""
+    return [ir.SetReg(ARG0 + n, ir.const(0)) for n in range(handed, counts.get(target, 0))]
+
+
+def in_memory(function, counts, sites=None):
     """A function whose stack stays in memory (the guest's, g_esp: stack.MEMORY_SP) takes its arguments
     in ARG registers as the others do, and as it starts lays its frame out in memory as the original's
     caller left it: SP down by the return address's word and theirs, its arguments over the return
     address's place, which it never reads (recompiled.py makes sure); every way out puts SP back. A call
     of its takes its callee's arguments from where it pushed them, a tail call from above its return
-    address."""
+    address; a call of one that counts them by its callers, as many as 'sites' says this call hands it
+    (more would reach this function's own return address: GameObjectSendMessage's callers)."""
     sp = ir.Reg(MEMORY_SP, 32)
+    sites = sites or {}
     taken = counts[function.entry]
     for block in function.blocks.values():
         statements = []
@@ -132,10 +142,16 @@ def in_memory(function, counts):
             address = marker.address if isinstance(marker, ir.Load) else sp
             target = block.statements[position + 1].target if name == CALL_FRAME else block.end.target
             first = 0 if name == CALL_FRAME else 4
-            for n in range(counts.get(target, 0)):
+            words = counts.get(target, 0)
+            if name == CALL_FRAME:
+                words = sites.get(block.statements[position + 1].return_address, words)
+            for n in range(words):
                 moved = ir.SetReg(ARG0 + n, ir.Load(ir.op("add", (address, ir.const(first + 4 * n)), 32), 32))
                 moved.origin = getattr(statement, "origin", None)
                 statements.append(moved)
+            for zero in unhanded(target, words, counts):
+                zero.origin = getattr(statement, "origin", None)
+                statements.append(zero)
         if taken and isinstance(block.end, (ir.Return, ir.TailCall)):
             statements.append(ir.SetReg(MEMORY_SP, ir.op("add", (sp, ir.const(4 + 4 * taken)), 32)))
         block.statements = statements
@@ -201,7 +217,7 @@ def rewrite(functions, counts, sites=None):
 
     for function in functions.values():
         if getattr(function, "memory_stack", False):
-            in_memory(function, counts)
+            in_memory(function, counts, sites)
             continue
         for block in function.blocks.values():
             statements = []
@@ -213,6 +229,7 @@ def rewrite(functions, counts, sites=None):
                     taken = sites.get(call.return_address, counts.get(call.target, 0))
                     statements += [placed(ir.SetReg(ARG0 + n, ir.Stack(sp + 4 * n)), origin)
                                    for n in range(taken)]
+                    statements += [placed(statement, origin) for statement in unhanded(call.target, taken, counts)]
                     continue
                 sp = frame_of(statement, TAIL_FRAME)
                 if sp is not None:

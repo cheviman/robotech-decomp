@@ -550,6 +550,20 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   caller drops right after the call, else every word pushed for it, never fewer than the callee reads
   (a word more is one it never looks at), for the C runtime's sprintf and its kin too. The nine
   scenarios frame for frame as their references.
+- **4,365 in the build: functions with variable arguments whose stack stays in memory** (29-10-2026,
+  from 4,332). Of the game's functions that lift and stayed out, 88 took the address of their arguments
+  (a variable argument list: GameObjectSendMessage, a message and what goes with it) and kept their stack
+  in memory, which lays the arguments out on the guest's stack as it starts, as many as it takes. Such a
+  function now lays out the most any call of it hands it (decompile.calls_count, each call counted by
+  site_count; none where a call does not say, a jump reaches the function or a run saw it called through
+  a pointer), and each call hands it its own words (decompile.escaping_calls), the rest 0, words it
+  never looks at. Found on the way: a caller whose stack stays in memory took the most words, past its
+  own pushes up to its return address, and the C writer refused 21 functions that were in before; and the
+  words a call does not hand left unset made every caller seem to carry its caller's on (2,479 functions
+  out of the build) until they were 0 (arguments.unhanded). The nine scenarios frame for frame as their
+  references. Of the rest that lift and stay out, some 200 are pieces of other functions; 21 have a frame
+  "mov esp, ebp" ends where the scan lost EBP; 23 call code not known; 16 go with a function they call or
+  that calls them.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

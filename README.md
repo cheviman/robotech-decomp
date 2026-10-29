@@ -48,7 +48,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       (fonts, measuring and laying out strings), the render state setters, 19 classes'
       registrations and the scene objects' tree, 134 functions, every name real; the menu, the first mission and a save as the recompiled ones played them, frame for frame
 - [x] The structured decompiler: arcade-decomp's (SegaSonic's), with an x86 frontend of this project's
-      (`tools/x86`); 4,332 of the game's functions in its C (`src/decompiled/`), with no goto, in the
+      (`tools/x86`); 4,365 of the game's functions in its C (`src/decompiled/`), with no goto, in the
       recompiled ones' place, calling the ones still recompiled and through a pointer as the
       recompiled code does, their
       x87 floating point as C doubles rounded as the x87 rounds them, a float handed back a double
