@@ -272,6 +272,32 @@ static inline void x87_push(double value)
     g_fp_stack[g_fp_top] = value;
 }
 
+/* The C runtime's x87 helpers (_CIacos, _CIasin, _CIfmod: tools/x86/x87.py, CRT_HELPERS), called as the
+ * recompiled code calls them: the values onto its stack, the deepest first, the helper run with the
+ * original's return address under it (x86_call), its result taken off. */
+void crt_CIacos(void);
+void crt_CIasin(void);
+void crt_CIfmod(void);
+
+static inline double x87_crt1(void (*helper)(void), uint32_t return_address, double x)
+{
+    x87_push(x);
+    x86_call(helper, return_address, 0);
+    return x87_pop();
+}
+
+static inline double x87_crt2(void (*helper)(void), uint32_t return_address, double a, double b)
+{
+    x87_push(a);
+    x87_push(b);
+    x86_call(helper, return_address, 0);
+    return x87_pop();
+}
+
+#define x87_CIacos(return_address, x) x87_crt1(crt_CIacos, (return_address), (x))
+#define x87_CIasin(return_address, x) x87_crt1(crt_CIasin, (return_address), (x))
+#define x87_CIfmod(return_address, a, b) x87_crt2(crt_CIfmod, (return_address), (a), (b))
+
 static inline double double_from_bits(uint64_t bits)
 {
     double d;

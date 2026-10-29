@@ -564,6 +564,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   references. Of the rest that lift and stay out, some 200 are pieces of other functions; 21 have a frame
   "mov esp, ebp" ends where the scan lost EBP; 23 call code not known; 16 go with a function they call or
   that calls them.
+- **4,374 in the build: the C runtime's x87 helpers called from the C** (29-10-2026, from 4,365; 4,932
+  lift, from 4,922). A call of _CIacos, _CIasin or _CIfmod, which take their values from the top of the
+  x87's stack and leave their result in st(0), is an expression of x86.h's (`f0 = x87_CIacos(0x...u, f0)`):
+  the values onto the recompiled code's stack, the deepest first, the recompiled helper run with the
+  original's return address under it, its result taken off (x87.lift_crt). 9 calls in the C. _CIpow is
+  in no function of the disassembler's own (crt_CIpow_default lies inside another's bounds), and its
+  callers stay out. The nine scenarios frame for frame as their references.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

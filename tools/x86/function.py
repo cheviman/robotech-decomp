@@ -229,6 +229,14 @@ class Builder:
                     block.statements.extend(lifter.statements)
                     self.state.status = self.state.test = None
                     return
+                name = self.program.functions[target][1] if target in self.program.functions else None
+                if name in x87.CRT_HELPERS:
+                    # _CIacos and its kin: their values from the top of the stack, their result in st(0)
+                    lifter = lift.Lifter(prefix=f"t{instruction.address:X}_")
+                    x87.lift_crt(lifter, name, self.x87.effect(target)[0], self.depth(instruction), instruction.next)
+                    block.statements.extend(lifter.statements)
+                    self.state.status = self.state.test = None
+                    return
                 effect = self.x87.effect(target)
                 if effect == (0, 1) and self.depth(instruction) != 0:
                     raise lift.Unsupported(f"x87: a call to {target:08X}, which hands back a float, with the stack not empty")

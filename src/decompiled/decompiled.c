@@ -3027,7 +3027,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 	uint32_t ebp = *p_ebp;
 	uint32_t esi = *p_esi;
 	uint32_t zero = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t jump_target = 0, jump_target_2 = 0, jump_target_3 = 0;
 	double f0 = 0, f0_2 = 0;
 
@@ -3112,7 +3112,11 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		MEM32(g_esp) = esi_2 + 0xACu;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2 + 0x88u;
-		x86_call(sub_00114ED0, 0x00017BBBu, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored_2, &ignored);
 		MEM32(g_esp + 0x38u) = MEM32(esi_2 + 0xACu);
 		MEM32(g_esp + 0x3Cu) = MEM32(ebp_2);
 		MEM32(g_esp + 0x40u) = MEM32(edi);
@@ -8573,6 +8577,77 @@ void sub_0001B820(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	*p_edi = edi;
 }
 
+void sub_0001BED0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
+{
+	uint32_t ebx = *p_ebx;
+	uint32_t arg0_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edx = 0, ignored = 0;
+	double f1 = 0, ignored64 = 0, t1 = 0, t2 = 0;
+
+	g_esp = g_esp - 0x14u;
+	MEM32(g_esp + 4u) = arg0;
+	MEM32(g_esp + 8u) = arg1;
+	MEM32(g_esp + 0xCu) = arg2;
+	MEM32(g_esp + 0x10u) = arg3;
+	g_esp = g_esp - 0x20u;
+	eax = MEM32(g_esp + 0x28u);
+	edx = MEM32(eax + 0x44u);
+	MEM32(g_esp + 8u) = MEM32(eax + 0x38u);
+	ecx = MEM32(eax + 0x50u);
+	MEM32(g_esp + 0xCu) = edx;
+	edx = g_esp + 0x14u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx;
+	MEM32(g_esp + 0x14u) = ecx;
+	MEM32(g_esp + 4u) = eax + 8u;
+	MEM32(g_esp + 0x2Cu) = edx;
+	ebx_2 = MEM32(g_esp + 0x30u);
+	ecx = MEM32(g_esp + 4u);
+	eax = MEM32(g_esp + 0x2Cu);
+	f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+	t1 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+	MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+	MEMF(eax + 4u) = (float)f1;
+	MEMF(eax + 8u) = (float)t1;
+	eax = g_esp + 0xCu;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = eax;
+	MEM32(g_esp + 0x14u) = 0u;
+	MEM32(g_esp + 0x20u) = 0u;
+	arg0_2 = MEM32(g_esp);
+	sub_00011A80(ecx, arg0_2, &ignored, &ebx_2, p_ebp, &ignored64);
+	ecx = g_esp + 0x1Cu;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ecx;
+	arg0_2 = MEM32(g_esp);
+	sub_00011A80(ecx, arg0_2, &ignored, &ebx_2, p_ebp, &ignored64);
+	edx = g_esp + 0x14u;
+	eax = g_esp + 0x20u;
+	g_esp = g_esp + 8u;
+	MEM32(g_esp + 0x2Cu) = edx;
+	MEM32(g_esp + 4u) = eax;
+	ebx_2 = MEM32(g_esp + 4u);
+	ecx = MEM32(g_esp + 0x2Cu);
+	t2 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx + 8u));
+	MEMF(g_esp + 8u) = (float)x87_round(t2 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx))));
+	f1 = x87_round(FLOAT_AT(0x18F440u) * x87_CIacos(0x1BF88u, FLOAT_AT(g_esp + 8u)));
+	ebx_2 = MEM32(g_esp);
+	g_esp = g_esp + 4u;
+	if (!(f1 < FLOAT_AT(g_esp + 0x30u)))
+	{
+		eax = 0u;
+		g_esp = g_esp + 0x20u;
+		g_esp = g_esp + 0x14u;
+		*p_eax = eax;
+		*p_ebx = ebx_2;
+		return;
+	}
+	eax = 1u;
+	g_esp = g_esp + 0x20u;
+	g_esp = g_esp + 0x14u;
+	*p_eax = eax;
+	*p_ebx = ebx_2;
+}
+
 uint32_t sub_0001BFB0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t zero = 0;
@@ -13651,7 +13726,7 @@ uint32_t sub_0001FEF0(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 
 uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x24u;
@@ -13769,7 +13844,11 @@ uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 					MEM32(g_esp) = edx;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = eax + 0xCu;
-					x86_call(sub_00114ED0, 0x000200A8u, 0);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					arg3 = MEM32(g_esp + 0xCu);
+					sub_00114ED0(arg0, arg1, arg2, arg3, &ignored, &ignored_2);
 					edx = MEM32(0x1E61E4u);
 					eax = g_esp + 0x2Cu;
 					g_esp = g_esp - 4u;
@@ -16002,7 +16081,10 @@ void sub_00021700(uint32_t eax, uint32_t edi, uint32_t arg0, uint32_t *p_ebx, ui
 			ecx = g_esp + 0x58u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
-			x86_call(sub_00114F60, 0x000217F6u, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			sub_00114F60(arg0_2, arg1, arg2);
 			eax_2 = MEM32(g_esp + 0x38u);
 			edx = MEM32(esi_2);
 			g_esp = g_esp - 4u;
@@ -31564,9 +31646,305 @@ void sub_0002BCF0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	}
 }
 
+void sub_0002BDA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+{
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	double f0 = 0, f0_2 = 0, f1 = 0, ignored64 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+
+	g_esp = g_esp - 0x10u;
+	MEM32(g_esp + 4u) = arg0;
+	MEM32(g_esp + 8u) = arg1;
+	MEM32(g_esp + 0xCu) = arg2;
+	MEM32(MEM32(g_esp + 0xCu)) = MEM32(esi + 0x2Cu);
+	eax = MEM32(0x1BC980u);
+	g_esp = g_esp - 0x6Cu;
+	if (eax == 0u)
+	{
+		MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+		g_esp = g_esp + 0x6Cu;
+		g_esp = g_esp + 0x10u;
+		return;
+	}
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = eax;
+	eax = x86_call(sub_0009C6E0, 0x0002BDBFu, 0);
+	g_esp = g_esp + 4u;
+	if (eax == 0u)
+	{
+		MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+		g_esp = g_esp + 0x6Cu;
+		g_esp = g_esp + 0x10u;
+		return;
+	}
+	ecx = MEM32(0x1BC980u);
+	edx = GameObjectLastHandle;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edi;
+	if (ecx != edx)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ecx;
+		handle = MEM32(g_esp);
+		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+		ecx = MEM32(0x1BC980u);
+		edx = GameObjectLastHandle;
+		edi_2 = GameObjectLastObject;
+		g_esp = g_esp + 4u;
+	}
+	else
+	{
+		edi_2 = GameObjectLastObject;
+		eax = edi_2;
+	}
+	if (MEM32(eax + 0x44u) != edx)
+	{
+		if (ecx != edx)
+		{
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = ecx;
+			handle = MEM32(g_esp);
+			GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+			g_esp = g_esp + 4u;
+		}
+		else
+			eax = edi_2;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = MEM32(eax + 0x44u);
+		handle = MEM32(g_esp);
+		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+		edi_2 = eax;
+		g_esp = g_esp + 4u;
+	}
+	if (edi_2 == 0u)
+	{
+		g_esp = g_esp + 4u;
+		g_esp = g_esp + 4u;
+		MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+		g_esp = g_esp + 0x6Cu;
+		g_esp = g_esp + 0x10u;
+		return;
+	}
+	if (MEM32(esi + 0x58u) == 0u)
+	{
+		edx = 1u;
+		if ((1u & ((uint16_t)x87_status(FLOAT_AT(esi + 0x50u), FLOAT_AT(0x18EEB8u), 0u) >> 8)) == 0u)
+		{
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = edi_2 + 8u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = esi + 0x40u;
+			eax = g_esp + 0x4Cu;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2_2 = MEM32(g_esp + 8u);
+			sub_00011990(arg0_2, arg1_2, arg2_2, &ignored_3, &ignored);
+			edx = MEM32(edi_2 + 0x44u);
+			eax = MEM32(edi_2 + 0x50u);
+			MEM32(g_esp + 0x44u) = MEM32(edi_2 + 0x38u);
+			ecx = g_esp + 0x50u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = ecx;
+			MEM32(g_esp + 0x4Cu) = edx;
+			MEM32(g_esp + 0x50u) = eax;
+			arg0_2 = MEM32(g_esp);
+			sub_00011A80(ecx, arg0_2, &ignored_3, &ebx, &ebp, &ignored64);
+			g_esp = g_esp + 0x10u;
+			if (MEM32(esi + 0x54u) != 0u)
+			{
+				MEM32(g_esp + 0x48u) = 0u;
+				MEM32(g_esp + 0x3Cu) = 0u;
+			}
+			edx = g_esp + 0x38u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = edx;
+			eax = g_esp + 0x48u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			sub_000118F0(arg0_2, arg1_2, &ignored, &f0_2);
+			g_esp = g_esp + 8u;
+			if (!(x87_round(FLOAT_AT(0x18F440u) * x87_CIacos(0x2C08Cu, f0_2)) < FLOAT_AT(esi + 0x50u)))
+				edx = 0u;
+			else
+				edx = 1u;
+		}
+		MEM32(g_esp + 0xCu) = edi_2 + 8u;
+		MEM32(g_esp + 8u) = esi + 0x40u;
+		MEM32(g_esp + 0x10u) = g_esp + 0x2Cu;
+		ebx_2 = MEM32(g_esp + 8u);
+		ecx = MEM32(g_esp + 0xCu);
+		eax = MEM32(g_esp + 0x10u);
+		f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+		t1 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+		MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+		MEMF(eax + 4u) = (float)f1;
+		MEMF(eax + 8u) = (float)t1;
+		MEM32(g_esp + 0x10u) = g_esp + 0x2Cu;
+		MEM32(g_esp + 0xCu) = g_esp + 0x2Cu;
+		ebx_2 = MEM32(g_esp + 0xCu);
+		ecx = MEM32(g_esp + 0x10u);
+		t2 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx + 8u));
+		MEMF(g_esp + 8u) = (float)x87_round(t2 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx))));
+		f0 = FLOAT_AT(esi + 0x4Cu);
+		if (!(FLOAT_AT(g_esp + 8u) < x87_round(f0 * f0)) || edx == 0u)
+		{
+			if ((MEM8(esi + 0x2Cu) & 2u) == 0u)
+			{
+				g_esp = g_esp + 4u;
+				g_esp = g_esp + 4u;
+				MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+				g_esp = g_esp + 0x6Cu;
+				g_esp = g_esp + 0x10u;
+				return;
+			}
+			edx = MEM32(g_esp + 0x7Cu);
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = esi;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = edx;
+			arg1_2 = MEM32(g_esp + 4u);
+			sub_000D31F0(arg1_2);
+			g_esp = g_esp + 8u;
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 4u;
+			MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+			g_esp = g_esp + 0x6Cu;
+			g_esp = g_esp + 0x10u;
+			return;
+		}
+	}
+	else
+	{
+		if (FLOAT_AT(esi + 0x78u) > FLOAT_AT(0x18F408u) || FLOAT_AT(esi + 0x78u) < FLOAT_AT(0x18EEBCu) || FLOAT_AT(esi + 0x74u) > FLOAT_AT(0x18F408u) || FLOAT_AT(esi + 0x74u) < FLOAT_AT(0x18EEBCu))
+		{
+			f0 = FLOAT_AT(esi + 0x78u);
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = ebp;
+			f0 = x87_round(f0 * FLOAT_AT(0x18EEBCu));
+			g_esp = g_esp - 8u;
+			eax = g_esp + 0x5Cu;
+			MEM32(g_esp + 0x5Cu) = 0x3F800000u;
+			MEMF(g_esp + 4u) = (float)f0;
+			MEM32(g_esp + 0x60u) = 0u;
+			f0 = FLOAT_AT(esi + 0x74u);
+			MEM32(g_esp + 0x64u) = 0u;
+			f0 = x87_round(f0 * FLOAT_AT(0x18EEBCu));
+			MEM32(g_esp + 0x68u) = 0u;
+			MEM32(g_esp + 0x6Cu) = 0x3F800000u;
+			MEM32(g_esp + 0x70u) = 0u;
+			MEMF(g_esp) = (float)f0;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+			MEM32(g_esp + 0x78u) = 0u;
+			MEM32(g_esp + 0x7Cu) = 0u;
+			MEM32(g_esp + 0x80u) = 0x3F800000u;
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2_2 = MEM32(g_esp + 8u);
+			sub_00114D30(arg0_2, arg1_2, arg2_2, &ignored_3, &ignored);
+			ebp_2 = esi + 0x7Cu;
+			ecx = g_esp + 0x30u;
+			g_esp = g_esp + 0xCu;
+			MEM32(g_esp + 0x10u) = ebp_2;
+			MEM32(g_esp + 0x14u) = edi_2 + 8u;
+			MEM32(g_esp + 0xCu) = ecx;
+			ebx_2 = MEM32(g_esp + 0x14u);
+			ecx = MEM32(g_esp + 0x10u);
+			eax = MEM32(g_esp + 0xCu);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+			t3 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t3;
+			edx = g_esp + 0x24u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = edx;
+			eax = g_esp + 0x58u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+			ecx = g_esp + 0x20u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = ecx;
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2_2 = MEM32(g_esp + 8u);
+			sub_00011B30(arg0_2, arg1_2, arg2_2);
+			edx = g_esp + 0x24u;
+			eax = g_esp + 0x24u;
+			g_esp = g_esp + 0xCu;
+			MEM32(g_esp + 0x10u) = ebp_2;
+			MEM32(g_esp + 0xCu) = edx;
+			MEM32(g_esp + 0x14u) = eax;
+			ebx_2 = MEM32(g_esp + 0xCu);
+			ecx = MEM32(g_esp + 0x10u);
+			eax = MEM32(g_esp + 0x14u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) + FLOAT_AT(ecx + 4u));
+			t4 = x87_round(FLOAT_AT(ebx_2 + 8u) + FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) + FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t4;
+			g_esp = g_esp + 4u;
+		}
+		else
+		{
+			MEM32(g_esp + 0x14u) = MEM32(edi_2 + 8u);
+			MEM32(g_esp + 0x18u) = MEM32(edi_2 + 0xCu);
+			MEM32(g_esp + 0x1Cu) = MEM32(edi_2 + 0x10u);
+		}
+		if (!(FLOAT_AT(g_esp + 0x14u) >= FLOAT_AT(esi + 0x5Cu)) || !(FLOAT_AT(g_esp + 0x18u) >= FLOAT_AT(esi + 0x60u)) || !(FLOAT_AT(g_esp + 0x1Cu) >= FLOAT_AT(esi + 0x64u)) || !(FLOAT_AT(g_esp + 0x14u) <= FLOAT_AT(esi + 0x68u)) || !(FLOAT_AT(g_esp + 0x18u) <= FLOAT_AT(esi + 0x6Cu)) || !(FLOAT_AT(g_esp + 0x1Cu) <= FLOAT_AT(esi + 0x70u)))
+		{
+			if ((MEM8(esi + 0x2Cu) & 2u) != 0u)
+			{
+				edx = MEM32(g_esp + 0x7Cu);
+				g_esp = g_esp - 4u;
+				MEM32(g_esp) = esi;
+				g_esp = g_esp - 4u;
+				MEM32(g_esp) = edx;
+				arg1_2 = MEM32(g_esp + 4u);
+				sub_000D31F0(arg1_2);
+				g_esp = g_esp + 8u;
+			}
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 4u;
+			MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+			g_esp = g_esp + 0x6Cu;
+			g_esp = g_esp + 0x10u;
+			return;
+		}
+	}
+	if ((MEM8(esi + 0x2Cu) & 2u) != 0u)
+	{
+		g_esp = g_esp + 4u;
+		g_esp = g_esp + 4u;
+		MEM32(MEM32(g_esp + 0x78u)) = MEM32(esi + 0x2Cu);
+		g_esp = g_esp + 0x6Cu;
+		g_esp = g_esp + 0x10u;
+		return;
+	}
+	ecx = MEM32(g_esp + 0x7Cu);
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = esi;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ecx;
+	arg1_2 = MEM32(g_esp + 4u);
+	sub_000D31E0(arg1_2);
+	ecx = MEM32(g_esp + 0x88u);
+	g_esp = g_esp + 8u;
+	MEM32(ecx) = MEM32(esi + 0x2Cu);
+	g_esp = g_esp + 4u;
+	g_esp = g_esp + 4u;
+	g_esp = g_esp + 0x6Cu;
+	g_esp = g_esp + 0x10u;
+}
+
 /* The PlayerProximityTrigger type's state machine: how its objects answer each message in each state
    (GameObjectDeliver). Hands back whether one was answered. */
-uint32_t PlayerProximityTrigger_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+uint32_t PlayerProximityTrigger_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -31607,8 +31985,7 @@ uint32_t PlayerProximityTrigger_StateMachine(uint32_t arg0, uint32_t arg1, uint3
 		arg2_2 = arg4;
 		arg1_2 = ecx;
 		arg0_2 = edx;
-		g_esi = esi;
-		x86_call(sub_0002BDA0, 0x0002C1DBu, 3, arg0_2, arg1_2, arg2_2);
+		sub_0002BDA0(ebx, ebp, esi, edi, arg0_2, arg1_2, arg2_2);
 		eax = 1u;
 		return eax;
 	}
@@ -32948,7 +33325,7 @@ uint32_t sub_0002D610(uint32_t arg1, uint32_t arg3)
 void sub_0002D650(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi)
 {
 	uint32_t esi = *p_esi;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 	double ignored64 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -32992,7 +33369,11 @@ void sub_0002D650(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp
 		MEM32(g_esp + 0x14u) = 0u;
 		MEM32(g_esp + 0x18u) = 0u;
 		MEM32(g_esp + 0x1Cu) = 0u;
-		x86_call(sub_00114ED0, 0x0002D6D0u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored, &ignored_2);
 		ecx = MEM32(g_esp + 0x18u);
 		edx = MEM32(g_esp + 0x14u);
 		g_esp = g_esp - 4u;
@@ -47096,7 +47477,10 @@ void sub_000393B0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	MEM32(g_esp) = eax;
 	MEM32(g_esp + 0x2Cu) = 0u;
 	MEM32(g_esp + 0x30u) = 0u;
-	x86_call(sub_00114F60, 0x0003940Cu, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	sub_00114F60(arg0_2, arg1_2, arg2_2);
 	ecx = MEM32(g_esp + 0x20u);
 	edx = MEM32(g_esp + 0x1Cu);
 	g_esp = g_esp - 4u;
@@ -49894,7 +50278,11 @@ void sub_0003B290(uint32_t ecx, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 			ecx_2 = g_esp + 0x70u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx_2;
-			x86_call(sub_00114ED0, 0x0003B556u, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2_2 = MEM32(g_esp + 8u);
+			arg3 = MEM32(g_esp + 0xCu);
+			sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored_3, &ignored_2);
 			ebx_2 = MEM32(g_esp + 0xA0u);
 			g_esp = g_esp + 0x10u;
 		}
@@ -51343,7 +51731,7 @@ void sub_0003C620(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 {
 	uint32_t ebp = *p_ebp;
 	bool L_03C6A4 = false;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0, f0_2 = 0, f1 = 0, t1 = 0;
 
 	g_esp = g_esp - 0x10u;
@@ -51499,7 +51887,11 @@ void sub_0003C620(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 				edx = g_esp + 0x7Cu;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = edx;
-				x86_call(sub_00114ED0, 0x0003C87Bu, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1_2 = MEM32(g_esp + 4u);
+				arg2_2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored_3, &ignored);
 				g_esp = g_esp + 0x10u;
 			}
 			edx = MEM32(g_esp + 0x9Cu);
@@ -52284,7 +52676,10 @@ uint32_t sub_0003D1D0(uint32_t esi, uint32_t edi)
 	ecx = g_esp + 0x30u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	x86_call(sub_00114EA0, 0x0003D252u, 0);
+	arg0 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	sub_00114EA0(arg0, arg1, arg2);
 	f0 = FLOAT_AT(g_esp + 0x20u);
 	g_esp = g_esp + 0x1Cu;
 	if (!(f0 < FLOAT_AT(0x190058u)))
@@ -55002,7 +55397,11 @@ uint32_t sub_0003F270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				MEM32(g_esp) = ebx_2;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ebp_2 + 0x88u;
-				x86_call(sub_00114ED0, 0x0003F4DDu, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored_3, &ignored);
 				MEM32(g_esp + 0x6Cu) = MEM32(ebx_2);
 				MEM32(g_esp + 0x70u) = MEM32(edi_2);
 				MEM32(g_esp + 0x74u) = MEM32(esi_2);
@@ -55023,7 +55422,11 @@ uint32_t sub_0003F270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				MEM32(g_esp) = ebp_2;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2 + 0x88u;
-				x86_call(sub_00114ED0, 0x0003F48Cu, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored_3, &ignored);
 				MEM32(g_esp + 0x6Cu) = MEM32(ebp_2);
 				MEM32(g_esp + 0x70u) = MEM32(ebx_2);
 				MEM32(g_esp + 0x74u) = MEM32(edi_2);
@@ -61558,7 +61961,11 @@ uint32_t sub_00044D10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(g_esp) = esi_2;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ebp_2;
-			eax = x86_call(sub_0001BED0, 0x00044E49u, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			arg3 = MEM32(g_esp + 0xCu);
+			sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx_2, &ebp_2);
 			g_esp = g_esp + 0x10u;
 			if (eax == 0u)
 			{
@@ -61620,7 +62027,10 @@ uint32_t sub_00044D10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 						eax = g_esp + 0x88u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = eax;
-						x86_call(sub_00114EA0, 0x00044F6Au, 0);
+						arg0_2 = MEM32(g_esp);
+						arg1 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						sub_00114EA0(arg0_2, arg1, arg2);
 						f0 = fabs(FLOAT_AT(g_esp + 0x3Cu));
 						g_esp = g_esp + 0x28u;
 						MEMF(g_esp + 0x10u) = (float)x87_round(FLOAT_AT(g_esp + 0x10u) - x87_round(x87_round(x87_round(f0 - FLOAT_AT(g_esp + 0x10u)) / x87_round(FLOAT_AT(0x18F548u) - FLOAT_AT(g_esp + 0x10u))) * FLOAT_AT(g_esp + 0x10u)));
@@ -61854,7 +62264,11 @@ uint32_t sub_000451A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = esi_2;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
-	eax = x86_call(sub_0001BED0, 0x00045227u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx, &ebp);
 	g_esp = g_esp + 0x10u;
 	if (eax == 0u || FLOAT_AT(esi_2 + 0x20u) >= FLOAT_AT(0x191D58u))
 	{
@@ -62173,7 +62587,11 @@ uint32_t sub_000454A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = esi_2;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
-	eax = x86_call(sub_0001BED0, 0x000455A2u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx, &ebp_2);
 	g_esp = g_esp + 0x10u;
 	t2 = eax;
 	eax_2 = MEM8(ebp_2 + 0x2D4u);
@@ -67994,7 +68412,7 @@ void sub_0004C650(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	uint32_t ebp = *p_ebp;
 	uint32_t esi = *p_esi;
 	uint32_t edi = *p_edi;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 0x18u;
@@ -68039,7 +68457,11 @@ void sub_0004C650(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + 0x88u;
 	MEM32(g_esp + 0x74u) = 0u;
-	x86_call(sub_00114ED0, 0x0004C6B9u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	arg3_2 = MEM32(g_esp + 0xCu);
+	sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3_2, &ignored_3, &ignored);
 	eax = MEM32(g_esp + 0x24u);
 	ecx = MEM32(g_esp + 0x28u);
 	MEM32(g_esp + 0x44u) = MEM32(g_esp + 0x20u);
@@ -68716,7 +69138,7 @@ void sub_0004CD50(uint32_t edi)
 uint32_t sub_0004CE70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	bool L_04CFBD = false;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f1 = 0, t1 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -68881,7 +69303,11 @@ uint32_t sub_0004CE70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = edx;
 						MEM32(0x1B16B8u) = 0u;
-						x86_call(sub_00114ED0, 0x0004D011u, 0);
+						arg0_2 = MEM32(g_esp);
+						arg1_2 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						arg3 = MEM32(g_esp + 0xCu);
+						sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored_3, &ignored);
 						eax = g_esp + 0x38u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = eax;
@@ -68894,7 +69320,11 @@ uint32_t sub_0004CE70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 						g_esp = g_esp - 4u;
 						esi_2 += 0x88u;
 						MEM32(g_esp) = esi_2;
-						x86_call(sub_00114ED0, 0x0004D02Cu, 0);
+						arg0_2 = MEM32(g_esp);
+						arg1_2 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						arg3 = MEM32(g_esp + 0xCu);
+						sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored_3, &ignored);
 						eax = g_esp + 0x40u;
 						ecx = g_esp + 0x34u;
 						edx = g_esp + 0x4Cu;
@@ -73600,6 +74030,237 @@ uint32_t ZenHeavyMissileTurret_Shutdown(void)
 	x86_call(GameObjectTypeRelease, 0x00053542u, 2, arg0, arg1);
 	eax = g_eax;
 	ignored_3 = g_edx;
+	return eax;
+}
+
+uint32_t sub_00053550(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
+{
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t t1 = 0;
+	double f0 = 0, f1 = 0, ignored64 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0;
+
+	g_esp = g_esp - 8u;
+	MEM32(g_esp + 4u) = arg0;
+	eax = GameObjectLastHandle;
+	g_esp = g_esp - 0x88u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebp;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = esi;
+	esi_2 = MEM32(g_esp + 0x94u);
+	if (esi_2 != eax)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = esi_2;
+		handle = MEM32(g_esp);
+		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+		g_esp = g_esp + 4u;
+		ebp_2 = eax;
+	}
+	else
+		ebp_2 = GameObjectLastObject;
+	t1 = GameObjectLastHandle;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edi;
+	if (esi_2 != t1)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = esi_2;
+		handle = MEM32(g_esp);
+		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+		g_esp = g_esp + 4u;
+		edi_2 = eax;
+	}
+	else
+		edi_2 = GameObjectLastObject;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edi_2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = esi_2;
+	arg0_2 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	sub_0002A6B0(arg0_2, arg1, &eax, &ignored);
+	g_esp = g_esp + 8u;
+	if (eax != GameObjectLastHandle)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = edi_2;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = esi_2;
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		sub_0002A6B0(arg0_2, arg1, &eax, &ignored);
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		handle = MEM32(g_esp);
+		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
+		g_esp = g_esp + 0xCu;
+		esi_2 = eax;
+	}
+	else
+		esi_2 = GameObjectLastObject;
+	g_esp = g_esp + 4u;
+	if (esi_2 != 0u)
+	{
+		eax = MEM32(0x1ECBF0u);
+		if (eax == 0u)
+		{
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 0x88u;
+			g_esp = g_esp + 8u;
+			return eax;
+		}
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ebx;
+		ecx = g_esp + 0x30u;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ecx;
+		edx = g_esp + 0x50u;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = edx;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = MEM32(ebp_2 + 0x194u);
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_0011EC90(arg0_2, arg1, arg2, arg3);
+		ecx = g_esp + 0x40u;
+		edx = g_esp + 0x28u;
+		g_esp = g_esp + 0x10u;
+		MEM32(g_esp + 0xCu) = ecx;
+		MEM32(g_esp + 0x10u) = esi_2 + 0xB8u;
+		MEM32(g_esp + 0x14u) = edx;
+		ebx_2 = MEM32(g_esp + 0x10u);
+		ecx = MEM32(g_esp + 0xCu);
+		eax = MEM32(g_esp + 0x14u);
+		f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+		t2 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+		MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+		MEMF(eax + 4u) = (float)f1;
+		MEMF(eax + 8u) = (float)t2;
+		eax = g_esp + 0x18u;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		MEM32(g_esp + 0x20u) = 0u;
+		arg0_2 = MEM32(g_esp);
+		sub_00011A80(ecx, arg0_2, &ignored_3, &ebx_2, &ebp_2, &ignored64);
+		edx = MEM32(g_esp + 0x64u);
+		eax = MEM32(g_esp + 0x70u);
+		MEM32(g_esp + 0x40u) = MEM32(g_esp + 0x58u);
+		MEM32(g_esp + 0x44u) = edx;
+		ecx = g_esp + 0x40u;
+		edx = g_esp + 0x1Cu;
+		g_esp = g_esp + 4u;
+		MEM32(g_esp + 0x44u) = eax;
+		MEM32(g_esp + 0x10u) = ecx;
+		MEM32(g_esp + 0xCu) = edx;
+		ebx_2 = MEM32(g_esp + 0xCu);
+		ecx = MEM32(g_esp + 0x10u);
+		t3 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx + 8u));
+		MEMF(g_esp + 0x14u) = (float)x87_round(t3 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx))));
+		ecx = MEM32(g_esp + 0x58u);
+		edx = MEM32(g_esp + 0x64u);
+		MEM32(g_esp + 0x24u) = MEM32(g_esp + 0x4Cu);
+		MEM32(g_esp + 0x28u) = ecx;
+		MEM32(g_esp + 0x2Cu) = edx;
+		MEM32(g_esp + 0x10u) = g_esp + 0x24u;
+		MEM32(g_esp + 0xCu) = g_esp + 0x18u;
+		ebx_2 = MEM32(g_esp + 0xCu);
+		ecx = MEM32(g_esp + 0x10u);
+		t4 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx + 8u));
+		MEMF(g_esp + 0x48u) = (float)x87_round(t4 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx))));
+		f0 = x87_CIacos(0x536EAu, FLOAT_AT(g_esp + 0x14u));
+		eax = MEM32(ebp_2 + 4u);
+		g_esp = g_esp + 4u;
+		if (!(f0 < FLOAT_AT(0x19286Cu)))
+			eax &= ~4u;
+		else
+			eax |= 4u;
+		f0 = FLOAT_AT(g_esp + 0x10u);
+		MEM32(ebp_2 + 4u) = eax;
+		t5 = FLOAT_AT(0x192944u);
+		eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t5, 0u);
+		if (f0 > t5)
+		{
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 4u;
+			g_esp = g_esp + 0x88u;
+			g_esp = g_esp + 8u;
+			return eax;
+		}
+		ecx = MEM32(0x1ECBF0u);
+		edx = g_esp + 0x2Cu;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = edx;
+		edx = MEM32(ebp_2 + 0x194u);
+		eax = g_esp + 0x4Cu;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ecx;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = edx;
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_0011EDE0(arg0_2, arg1, arg2, arg3);
+		f0 = FLOAT_AT(g_esp + 0x54u);
+		g_esp = g_esp + 0x10u;
+		if (!(f0 > FLOAT_AT(0x18EEB8u)))
+		{
+			edx = g_esp + 0x48u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = edx;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = 0x1EC9F4u;
+			eax = g_esp + 0x74u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+		}
+		else
+		{
+			eax = g_esp + 0x48u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = eax;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = 0x1EC9D0u;
+			ecx = g_esp + 0x74u;
+			g_esp = g_esp - 4u;
+			MEM32(g_esp) = ecx;
+		}
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		sub_00011C60(arg0_2, arg1, arg2);
+		eax = MEM32(0x1ECBF0u);
+		g_esp = g_esp + 0xCu;
+		ecx = g_esp + 0x2Cu;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ecx;
+		ecx = MEM32(ebp_2 + 0x194u);
+		edx = g_esp + 0x70u;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = edx;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ecx;
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		eax = sub_0011EEE0(arg0_2, arg1, arg2, arg3);
+		g_esp = g_esp + 0x10u;
+	}
+	g_esp = g_esp + 4u;
+	g_esp = g_esp + 4u;
+	g_esp = g_esp + 0x88u;
+	g_esp = g_esp + 8u;
 	return eax;
 }
 
@@ -94965,7 +95626,11 @@ uint32_t sub_000702C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(g_esp) = esi_2;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
-		eax = x86_call(sub_0001BED0, 0x00070477u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx_2, &ebp_2);
 		g_esp = g_esp + 0x10u;
 		if (eax != 0u || MEM32(ebx_2 + 0x298u) != 0u)
 		{
@@ -95071,7 +95736,11 @@ uint32_t sub_000702C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(g_esp) = esi_2;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		eax = x86_call(sub_0001BED0, 0x000703B6u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx_2, &ebp_2);
 		g_esp = g_esp + 0x10u;
 		if (eax == 0u && MEM32(ebx_2 + 0x298u) == 0u)
 		{
@@ -98420,7 +99089,11 @@ uint32_t sub_00075170(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 				MEM32(g_esp) = esi_2;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ebp_2;
-				eax = x86_call(sub_0001BED0, 0x0007533Cu, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx_2, &ebp_2);
 				g_esp = g_esp + 0x10u;
 				if (eax == 0u)
 				{
@@ -98509,7 +99182,11 @@ uint32_t sub_00075170(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 					MEM32(g_esp) = esi_2;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ebp_2;
-					eax = x86_call(sub_0001BED0, 0x000752ADu, 0);
+					arg0_2 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					arg3 = MEM32(g_esp + 0xCu);
+					sub_0001BED0(arg0_2, arg1, arg2, arg3, &eax, &ebx_2, &ebp_2);
 					g_esp = g_esp + 0x10u;
 					if (eax == 0u)
 					{
@@ -133575,7 +134252,7 @@ uint32_t sub_0009CEF0(uint32_t arg0, uint32_t arg1)
 void sub_0009D040(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi)
 {
 	uint32_t esi = *p_esi;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 	uint32_t jump_target = 0;
 	double ignored64 = 0;
 
@@ -133619,7 +134296,11 @@ void sub_0009D040(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 				eax = g_esp + 0x24u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = eax;
-				x86_call(sub_00114ED0, 0x0009D095u, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1_2 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored, &ignored_2);
 				ecx = MEM32(g_esp + 0x1Cu);
 				edx = MEM32(g_esp + 0x20u);
 				esi_2 = MEM32(g_esp + 0x54u);
@@ -136732,7 +137413,7 @@ void sub_0009F170(uint32_t ebx, uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebp,
 	uint32_t ebp = *p_ebp;
 	uint32_t esi = *p_esi;
 	uint32_t edi = *p_edi;
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
@@ -136860,7 +137541,11 @@ void sub_0009F170(uint32_t ebx, uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebp,
 				ecx = g_esp + 0xDCu;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ecx;
-				x86_call(sub_00114ED0, 0x0009F34Du, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				arg3 = MEM32(g_esp + 0xCu);
+				sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored, &ignored_2);
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = MEM32(esi + 0xD8u) + ebx_2;
 				eax = g_esp + 0x2Cu;
@@ -138172,7 +138857,11 @@ void sub_0009F990(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = eax;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ((MEM32(esi_2 + 0x414u) * 3u) << 4) + edx + 0xCu;
-			x86_call(sub_00114ED0, 0x000A00CBu, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			arg3 = MEM32(g_esp + 0xCu);
+			sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored_3, &ignored);
 			ecx = MEM32(g_esp + 0x44u);
 			edx = MEM32(g_esp + 0x48u);
 			MEM32(g_esp + 0x68u) = MEM32(g_esp + 0x4Cu);
@@ -153986,7 +154675,7 @@ void sub_000AACC0(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 
 uint32_t sub_000AAD10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 
 	g_esp = g_esp - 0x10u;
 	MEM32(g_esp + 4u) = arg0;
@@ -154065,7 +154754,11 @@ uint32_t sub_000AAD10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2 + 0xCu;
-	x86_call(sub_00114ED0, 0x000AAD84u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ignored_2);
 	ecx = MEM32(g_esp + 0x20u);
 	edx = MEM32(g_esp + 0x1Cu);
 	g_esp = g_esp - 4u;
@@ -154132,7 +154825,7 @@ uint32_t sub_000AAD10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 
 uint32_t sub_000AADF0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 
 	g_esp = g_esp - 0x10u;
 	MEM32(g_esp + 4u) = arg0;
@@ -154206,7 +154899,11 @@ uint32_t sub_000AADF0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2 + 0xCu;
-	x86_call(sub_00114ED0, 0x000AAE62u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ignored_2);
 	ecx = MEM32(g_esp + 0x20u);
 	edx = MEM32(g_esp + 0x1Cu);
 	g_esp = g_esp - 4u;
@@ -157293,7 +157990,11 @@ void sub_000AD4E0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t *p_ebx, ui
 		MEM32(g_esp) = ecx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x24EC0Cu;
-		x86_call(sub_00114ED0, 0x000AD7D5u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored_3, &ignored);
 		edx = g_esp + 0x58u;
 		eax_2 = g_esp + 0x4Cu;
 		g_esp = g_esp + 0x2Cu;
@@ -157466,7 +158167,11 @@ void sub_000AD4E0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t *p_ebx, ui
 	MEM32(g_esp) = eax_2;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x24EC0Cu;
-	x86_call(sub_00114ED0, 0x000AD66Au, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_00114ED0(arg0_2, arg1, arg2, arg3, &ignored_3, &ignored);
 	ecx = g_esp + 0x40u;
 	edx = g_esp + 0x4Cu;
 	g_esp = g_esp + 0x20u;
@@ -195105,7 +195810,11 @@ uint32_t sub_000CC620(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 					MEM32(g_esp) = esi_2 + 0xB4u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ebp_2 + 0xCu;
-					x86_call(sub_00114ED0, 0x000CC8C3u, 0);
+					arg0_2 = MEM32(g_esp);
+					arg1_2 = MEM32(g_esp + 4u);
+					arg2_2 = MEM32(g_esp + 8u);
+					arg3 = MEM32(g_esp + 0xCu);
+					sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored_3, &ignored);
 					g_esp = g_esp + 0x10u;
 				}
 				g_esp = g_esp - 4u;
@@ -197634,7 +198343,7 @@ void sub_000CF5F0(uint32_t arg0)
 
 void sub_000CF690(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x10u;
@@ -197704,7 +198413,11 @@ void sub_000CF690(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 		eax = g_esp + 0x90u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		x86_call(sub_00114ED0, 0x000CF71Eu, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2_2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ignored_2);
 		ecx = MEM32(g_esp + 0x2Cu);
 		eax = MEM32(g_esp + 0x34u);
 		MEM32(g_esp + 0x3Cu) = MEM32(g_esp + 0x30u);
@@ -224478,8 +225191,11 @@ void sub_000E3570(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	ecx = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	x86_call(sub_00114ED0, 0x000E361Fu, 0);
-	ecx = g_ecx;
+	arg0 = MEM32(g_esp);
+	arg1 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	arg3 = MEM32(g_esp + 0xCu);
+	sub_00114ED0(arg0, arg1, arg2, arg3, &ignored_3, &ecx);
 	edx = MEM32(g_esp + 0x4Cu);
 	f0 = x87_round(FLOAT_AT(g_esp + 0x44u) + FLOAT_AT(edi + 0x50u));
 	eax = MEM32(g_esp + 0x48u);
@@ -240945,7 +241661,10 @@ uint32_t sub_000EFEF0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + 0x30u;
-	x86_call(sub_00114EA0, 0x000F000Au, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	sub_00114EA0(arg0_2, arg1_2, arg2_2);
 	f0 = FLOAT_AT(esi_2 + 0x6Cu);
 	ecx = MEM32(esi_2 + 4u);
 	ebx_2 = 0x800u;
@@ -241676,7 +242395,10 @@ uint32_t sub_000F11E0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + 0x30u;
-	x86_call(sub_00114EA0, 0x000F12FAu, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	sub_00114EA0(arg0_2, arg1_2, arg2_2);
 	f0 = FLOAT_AT(esi_2 + 0x6Cu);
 	ecx = MEM32(esi_2 + 4u);
 	ebx_2 = 0x800u;
@@ -245376,7 +246098,10 @@ uint32_t sub_000F4C40(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi + 0x30u;
-	x86_call(sub_00114EA0, 0x000F4D52u, 0);
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2_2 = MEM32(g_esp + 8u);
+	sub_00114EA0(arg0_2, arg1_2, arg2_2);
 	g_esp = g_esp + 0xCu;
 	MEMF(g_esp + 0x3Cu) = (float)x87_round(x87_round(FLOAT_AT(esi_2) * FLOAT_AT(0x18F400u)) + FLOAT_AT(g_esp + 0x3Cu));
 	MEMF(g_esp + 0xCu) = (float)x87_round(x87_round(FLOAT_AT(esi_2 + 4u) * FLOAT_AT(0x18F400u)) + FLOAT_AT(g_esp + 0xCu));
@@ -246244,7 +246969,7 @@ void sub_000F5BA0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 void sub_000F5DD0(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f1 = 0, ignored64 = 0, t1 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -246332,7 +247057,11 @@ void sub_000F5DD0(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp
 		ecx = g_esp + 0x44u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
-		x86_call(sub_00114ED0, 0x000F5E59u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2 = MEM32(g_esp + 8u);
+		arg3 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored_3, &ignored);
 		edx = MEM32(g_esp + 0x70u);
 		eax = MEM32(g_esp + 0x28u);
 		g_esp = g_esp - 4u;
@@ -246619,7 +247348,7 @@ void sub_000F6070(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 
 uint32_t sub_000F6180(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t t1 = 0;
 	double f0 = 0, f1 = 0, ignored64 = 0, t2 = 0, t3 = 0;
 
@@ -246719,7 +247448,11 @@ uint32_t sub_000F6180(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		ebx_2 += 0x30u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebx_2;
-		x86_call(sub_00114ED0, 0x000F622Cu, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2_2 = MEM32(g_esp + 8u);
+		arg3_2 = MEM32(g_esp + 0xCu);
+		sub_00114ED0(arg0_2, arg1_2, arg2_2, arg3_2, &ignored_3, &ignored);
 		eax_2 = MEM32(g_esp + 0x30u);
 		ecx = MEM32(g_esp + 0x2Cu);
 		g_esp = g_esp - 4u;
@@ -273313,7 +274046,7 @@ uint32_t sub_00109790(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 {
 	uint32_t carry = 0;
 	uint8_t eax_2 = 0, ebx_3 = 0, ecx_2 = 0, edx_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 	uint8_t t3 = 0, t5 = 0;
 	uint32_t t1 = 0, t2 = 0, t4 = 0, t6 = 0;
 	double f0 = 0, f1 = 0, f2 = 0, f3 = 0, f4 = 0, f5 = 0, f6 = 0, f7 = 0, t7 = 0, t8 = 0, t9 = 0, t10 = 0, t11 = 0;
@@ -273702,7 +274435,11 @@ uint32_t sub_00109790(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			eax = g_esp + 0x7Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
-			x86_call(sub_00114ED0, 0x00109CF7u, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			arg3 = MEM32(g_esp + 0xCu);
+			sub_00114ED0(arg0_2, arg1_2, arg2, arg3, &ignored, &ignored_2);
 			edx = (int8_t)MEM8(MEM32(g_esp + 0x1A8u) + 0x59u);
 			g_esp = g_esp + 0x20u;
 			if (ebx_2 == edx)
@@ -285960,6 +286697,28 @@ double sub_00114E80(uint32_t arg0)
 	return f0;
 }
 
+uint32_t sub_00114EA0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+{
+	uint32_t eax = 0;
+
+	eax = arg0;
+	MEMF(arg1) = (float)x87_round(atan2(FLOAT_AT(eax + 8u), FLOAT_AT(eax + 0x20u)) * FLOAT_AT(0x18F440u));
+	MEMF(arg2) = (float)x87_round(x87_CIasin(0x114EC0u, FLOAT_AT(eax + 0x14u)) * FLOAT_AT(0x18F440u));
+	return eax;
+}
+
+void sub_00114ED0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ecx)
+{
+	uint32_t esi = 0;
+
+	esi = arg0;
+	*p_eax = arg1;
+	MEMF(*p_eax) = (float)x87_round(atan2(FLOAT_AT(esi + 8u), FLOAT_AT(esi + 0x20u)) * FLOAT_AT(0x18F440u));
+	*p_ecx = arg2;
+	MEMF(*p_ecx) = (float)x87_round(x87_CIasin(0x114EF1u, FLOAT_AT(esi + 0x14u)) * FLOAT_AT(0x18F440u));
+	MEMF(arg3) = (float)x87_round(atan2(-FLOAT_AT(esi + 0xCu), FLOAT_AT(esi + 0x10u)) * FLOAT_AT(0x18F440u));
+}
+
 uint32_t sub_00114F20(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t eax = 0;
@@ -285974,6 +286733,17 @@ uint32_t sub_00114F20(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	MEMF(eax) = (float)x87_round(x87_sin(f0) * x87_float(stack_1FFFFC));
 	MEMF(eax + 4u) = (float)x87_sin(f1);
 	MEMF(eax + 8u) = (float)x87_round(x87_cos(f0) * x87_float(stack_1FFFFC));
+	return eax;
+}
+
+uint32_t sub_00114F60(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+{
+	uint32_t eax = 0, esi = 0;
+
+	esi = arg0;
+	eax = arg2;
+	MEMF(eax) = (float)x87_round(x87_CIasin(0x114F6Du, FLOAT_AT(esi + 4u)) * FLOAT_AT(0x18F440u));
+	MEMF(arg1) = (float)x87_round(atan2(FLOAT_AT(esi), FLOAT_AT(esi + 8u)) * FLOAT_AT(0x18F440u));
 	return eax;
 }
 
@@ -286561,6 +287331,103 @@ void sub_001157E0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	*p_ecx = ecx;
 	*p_ebx = ebx_2;
 	*p_esi = esi_2;
+}
+
+void sub_00115960(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+{
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0;
+	uint32_t stack = 0, stack_8 = 0, stack_C = 0, stack_10 = 0, stack_14 = 0, stack_18 = 0, saved_arg2 = 0, saved_arg1 = 0, saved_arg0 = 0;
+	double f0 = 0, f0_2 = 0, f1 = 0, f2 = 0, f3 = 0, t1 = 0, t2 = 0, t3 = 0;
+
+	saved_arg0 = arg0;
+	saved_arg1 = arg1;
+	saved_arg2 = arg2;
+	ebx = arg1;
+	ecx = arg2;
+	t1 = x87_round(FLOAT_AT(ebx + 0xCu) * FLOAT_AT(ecx + 0xCu));
+	stack_18 = float_to_bits((float)x87_round(x87_round(FLOAT_AT(ebx) * FLOAT_AT(ecx)) + x87_round(t1 + x87_round(x87_round(FLOAT_AT(ebx + 8u) * FLOAT_AT(ecx + 8u)) + x87_round(FLOAT_AT(ebx + 4u) * FLOAT_AT(ecx + 4u))))));
+	stack_14 = stack_18;
+	if (!(x87_float(stack_18) >= FLOAT_AT(0x18F408u)))
+	{
+		if (!(x87_float(stack_18) >= FLOAT_AT(0x1A8B18u)))
+		{
+			eax = arg2;
+			if (!(x87_float(stack_18) < FLOAT_AT(0x18EEB8u)))
+			{
+				stack_10 = MEM32(eax);
+				stack_C = MEM32(eax + 4u);
+				stack_8 = MEM32(eax + 8u);
+				stack = MEM32(eax + 0xCu);
+			}
+			else
+			{
+				stack_14 = float_to_bits((float)-x87_float(stack_18));
+				stack_10 = float_to_bits((float)-FLOAT_AT(eax));
+				stack_C = float_to_bits((float)-FLOAT_AT(eax + 4u));
+				stack_8 = float_to_bits((float)-FLOAT_AT(eax + 8u));
+				stack = float_to_bits((float)-FLOAT_AT(eax + 0xCu));
+			}
+			if (!(x87_round(FLOAT_AT(0x18F408u) - x87_float(stack_14)) > FLOAT_AT(0x18F48Cu)))
+			{
+				f0_2 = x87_round(FLOAT_AT(0x18F408u) - x87_float(arg3));
+				f1 = x87_float(arg3);
+			}
+			else
+			{
+				f0_2 = x87_CIacos(0x115B3Au, x87_float(stack_14));
+				stack_14 = float_to_bits((float)f0_2);
+				stack_18 = float_to_bits((float)x87_round(FLOAT_AT(0x18F408u) / x87_sin(f0_2)));
+				f0_2 = x87_round(x87_sin(x87_round(x87_round(FLOAT_AT(0x18F408u) - x87_float(arg3)) * x87_float(stack_14))) * x87_float(stack_18));
+				f1 = x87_round(x87_sin(x87_round(x87_float(stack_14) * x87_float(arg3))) * x87_float(stack_18));
+			}
+			eax = arg1;
+			ecx = arg0;
+			MEMF(ecx) = (float)x87_round(x87_round(f0_2 * FLOAT_AT(eax)) + x87_round(x87_float(stack_10) * f1));
+			MEMF(ecx + 4u) = (float)x87_round(x87_round(f0_2 * FLOAT_AT(eax + 4u)) + x87_round(x87_float(stack_C) * f1));
+			MEMF(ecx + 8u) = (float)x87_round(x87_round(f0_2 * FLOAT_AT(eax + 8u)) + x87_round(x87_float(stack_8) * f1));
+			t2 = f1;
+			MEMF(ecx + 0xCu) = (float)x87_round(x87_round(f0_2 * FLOAT_AT(eax + 0xCu)) + x87_round(x87_float(stack) * t2));
+			return;
+		}
+		if (!(x87_float(arg3) < FLOAT_AT(0x18F41Cu)))
+		{
+			arg1_2 = stack_18;
+			arg0_2 = float_to_bits((float)x87_round(FLOAT_AT(0x18F408u) - x87_float(arg3)));
+			f0 = sub_00115350(arg0_2, arg1_2);
+			f0 = x87_round(FLOAT_AT(0x18F408u) - f0);
+		}
+		else
+		{
+			arg1_2 = stack_18;
+			arg0_2 = arg3;
+			f0 = sub_00115350(arg0_2, arg1_2);
+		}
+		ecx = saved_arg1;
+		f1 = x87_round(FLOAT_AT(0x18F408u) - f0);
+		eax = saved_arg0;
+		edx = saved_arg2;
+		MEMF(eax) = (float)x87_round(x87_round(f1 * FLOAT_AT(ecx)) + x87_round(f0 * FLOAT_AT(edx)));
+		MEMF(eax + 4u) = (float)x87_round(x87_round(f1 * FLOAT_AT(ecx + 4u)) + x87_round(f0 * FLOAT_AT(edx + 4u)));
+		MEMF(eax + 8u) = (float)x87_round(x87_round(f1 * FLOAT_AT(ecx + 8u)) + x87_round(f0 * FLOAT_AT(edx + 8u)));
+		t3 = x87_round(f1 * FLOAT_AT(ecx + 0xCu));
+		f0 = x87_round(t3 + x87_round(f0 * FLOAT_AT(edx + 0xCu)));
+		MEMF(eax + 0xCu) = (float)f0;
+		f1 = FLOAT_AT(eax + 8u);
+		f2 = FLOAT_AT(eax + 4u);
+		f3 = FLOAT_AT(eax);
+		f0 = x87_round(FLOAT_AT(0x18F408u) / x87_round(sqrt(x87_round(x87_round(x87_round(x87_round(f1 * f1) + x87_round(f0 * f0)) + x87_round(f3 * f3)) + x87_round(f2 * f2)))));
+		MEMF(eax) = (float)x87_round(f0 * FLOAT_AT(eax));
+		MEMF(eax + 4u) = (float)x87_round(f0 * FLOAT_AT(eax + 4u));
+		MEMF(eax + 8u) = (float)x87_round(f0 * FLOAT_AT(eax + 8u));
+		MEMF(eax + 0xCu) = (float)x87_round(f0 * FLOAT_AT(eax + 0xCu));
+		return;
+	}
+	eax = arg2;
+	ecx = arg0;
+	MEM32(ecx) = MEM32(eax);
+	MEM32(ecx + 4u) = MEM32(eax + 4u);
+	MEM32(ecx + 8u) = MEM32(eax + 8u);
+	MEM32(ecx + 0xCu) = MEM32(eax + 0xCu);
 }
 
 void sub_00115BD0(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_ebx, uint32_t *p_ebp)
@@ -292452,8 +293319,12 @@ uint32_t sub_0011CE80(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0011CED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+void sub_0011CED0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
+	uint32_t ebx = *p_ebx;
+	uint32_t ebp = *p_ebp;
+	uint32_t esi = *p_esi;
+	uint32_t edi = *p_edi;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0;
 
 	g_esp = g_esp - 0x14u;
@@ -292558,13 +293429,22 @@ uint32_t sub_0011CED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 				MEM32(g_esp + 0x10u) = edx;
 			} while ((int32_t)eax < (int32_t)ecx);
 		}
+		edi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		esi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		ebp_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		ebx_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 0x90u;
 		g_esp = g_esp + 0x14u;
-		return eax;
+		*p_eax = eax;
+		*p_ebx = ebx_2;
+		*p_ebp = ebp_2;
+		*p_esi = esi_2;
+		*p_edi = edi_2;
+		return;
 	}
 	eax = MEM32(ebp_2 + 0x14u) * (eax - 1u);
 	MEM32(g_esp + 0x10u) = MEM32(ebp_2 + 0x18u);
@@ -292574,13 +293454,22 @@ uint32_t sub_0011CED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp + 0x14u) = 0u;
 	if ((int32_t)ecx <= 0)
 	{
+		edi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		esi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		ebp_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
+		ebx_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 0x90u;
 		g_esp = g_esp + 0x14u;
-		return eax;
+		*p_eax = eax;
+		*p_ebx = ebx_2;
+		*p_ebp = ebp_2;
+		*p_esi = esi_2;
+		*p_edi = edi_2;
+		return;
 	}
 	MEM32(g_esp + 0x1Cu) = edx + 0x3Cu;
 	for (;;)
@@ -292630,13 +293519,21 @@ uint32_t sub_0011CED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			break;
 		eax = MEM32(g_esp + 0x18u);
 	}
+	edi_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
+	esi_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
+	ebp_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
+	ebx_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x90u;
 	g_esp = g_esp + 0x14u;
-	return eax;
+	*p_eax = eax;
+	*p_ebx = ebx_2;
+	*p_ebp = ebp_2;
+	*p_esi = esi_2;
+	*p_edi = edi_2;
 }
 
 uint32_t vcMotionFiles_Load(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
@@ -294374,7 +295271,7 @@ uint32_t sub_0011E7F0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 void sub_0011E860(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi)
 {
 	uint32_t esi = *p_esi;
-	uint32_t eax = 0, ecx = 0, edx = 0, esi_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0;
 
 	g_esp = g_esp - 0x10u;
 	MEM32(g_esp + 4u) = arg0;
@@ -294451,7 +295348,10 @@ void sub_0011E860(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		eax = g_esp + 0xCu;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		eax = x86_call(sub_00114EA0, 0x0011E933u, 0);
+		arg0_2 = MEM32(g_esp);
+		arg1_2 = MEM32(g_esp + 4u);
+		arg2_2 = MEM32(g_esp + 8u);
+		eax = sub_00114EA0(arg0_2, arg1_2, arg2_2);
 		g_esp = g_esp + 0xCu;
 	}
 	MEM32(esi_2 + 4u) = (MEM32(esi_2 + 4u) & ~8u) | 1u;
@@ -295427,7 +296327,7 @@ void sub_0011F680(uint32_t edx, uint32_t esi, uint32_t arg0)
 		arg2 = ebx;
 		arg1 = edi;
 		arg0_2 = edx;
-		x86_call(sub_00115960, 0x0011F733u, 4, arg0_2, arg1, arg2, arg3);
+		sub_00115960(arg0_2, arg1, arg2, arg3);
 		stack_C = MEM32(esi + 0x1Cu);
 		stack_8 = ebx + 0x10u;
 		stack = edi + 0x10u;
@@ -295459,7 +296359,7 @@ void sub_0011F7A0(uint32_t eax, uint32_t edx, uint32_t edi, uint32_t arg0, uint3
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t esi = *p_esi;
-	uint32_t arg0_2 = 0, eax_2 = 0, ebx_2 = 0, ecx = 0, edx_2 = 0, esi_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx_2 = 0, ecx = 0, edx_2 = 0, esi_2 = 0;
 	double f0 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -295503,7 +296403,11 @@ void sub_0011F7A0(uint32_t eax, uint32_t edx, uint32_t edi, uint32_t arg0, uint3
 			MEM32(g_esp) = ecx;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edi;
-			x86_call(sub_00115960, 0x0011F826u, 0);
+			arg0_2 = MEM32(g_esp);
+			arg1_2 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			arg3 = MEM32(g_esp + 0xCu);
+			sub_00115960(arg0_2, arg1_2, arg2, arg3);
 			edx_2 = g_esp + 0x34u;
 			eax_2 = g_esp + 0x28u;
 			g_esp = g_esp + 0x18u;
@@ -295604,7 +296508,7 @@ uint32_t sub_0011F890(uint32_t edx, uint32_t esi, uint32_t arg0)
 		arg2 = ebx;
 		arg1 = edi;
 		arg0_2 = edx;
-		x86_call(sub_00115960, 0x0011F954u, 4, arg0_2, arg1, arg2, arg3);
+		sub_00115960(arg0_2, arg1, arg2, arg3);
 		arg3 = MEM32(esi + 0x1Cu);
 		arg2 = ebx + 0x10u;
 		arg1 = edi + 0x10u;
@@ -295629,7 +296533,7 @@ uint32_t sub_0011F980(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 {
 	bool L_11FD1D = false;
 	uint8_t eax_2 = 0;
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t14 = 0, t26 = 0;
 	double f0 = 0, f1 = 0, f3 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0, t9 = 0, t10 = 0, t11 = 0, t12 = 0, t13 = 0, t15 = 0, t16 = 0, t17 = 0, t18 = 0, t19 = 0, t20 = 0, t21 = 0, t22 = 0, t23 = 0, t24 = 0, t25 = 0;
 
@@ -295922,7 +296826,11 @@ uint32_t sub_0011F980(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 							MEM32(g_esp) = ebp_2 + 0x20u;
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = ebp_2 + 0x20u;
-							x86_call(sub_00115960, 0x0011FD6Eu, 0);
+							arg0_2 = MEM32(g_esp);
+							arg1 = MEM32(g_esp + 4u);
+							arg2 = MEM32(g_esp + 8u);
+							arg3 = MEM32(g_esp + 0xCu);
+							sub_00115960(arg0_2, arg1, arg2, arg3);
 							MEM32(ebp_2 + 0x58u) = ebp_2 + 0x30u;
 							MEM32(ebp_2 + 0x70u) = ebp_2 + 0x3Cu;
 							MEM32(ebp_2 + 0x5Cu) = ebp_2 + 0x3Cu;
@@ -296102,7 +297010,10 @@ uint32_t sub_0011F980(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 					MEM32(g_esp) = ebp_2 + 0x18u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ebp_2 - 0xACu;
-					x86_call(sub_00114EA0, 0x0011FF08u, 0);
+					arg0_2 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_00114EA0(arg0_2, arg1, arg2);
 					eax_2 = (uint8_t)MEM32(MEM32(ebp_2 + 0x4Cu) + 4u);
 					g_esp = g_esp + 0xCu;
 					if ((eax_2 & 2u) != 0u)
@@ -296197,7 +297108,10 @@ uint32_t sub_0011F980(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 				MEM32(g_esp) = ebp_2 + 0x6Cu;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ebp_2 - 0x24u;
-				x86_call(sub_00114F60, 0x001200D8u, 0);
+				arg0_2 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_00114F60(arg0_2, arg1, arg2);
 				MEMF(ebp_2 + 0x68u) = (float)x87_round(FLOAT_AT(ebp_2 + 0x6Cu) - FLOAT_AT(esi_2 + 0x30u));
 				MEMF(ebp_2 + 0x54u) = (float)x87_round(FLOAT_AT(ebp_2 + 0x64u) - FLOAT_AT(esi_2 + 0x34u));
 				f0 = x87_round(FLOAT_AT(esi_2 + 0x24u) * FLOAT_AT(0x1A8B78u));
@@ -296316,7 +297230,11 @@ uint32_t sub_0011F980(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 						MEM32(g_esp) = ebp_2 - 0x13Cu;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = ebp_2 + 8u;
-						x86_call(sub_00115960, 0x0012026Eu, 0);
+						arg0_2 = MEM32(g_esp);
+						arg1 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						arg3 = MEM32(g_esp + 0xCu);
+						sub_00115960(arg0_2, arg1, arg2, arg3);
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = ebp_2 + 8u;
 						g_esp = g_esp - 4u;
@@ -318800,6 +319718,320 @@ uint32_t sub_00134030(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, u
 	return eax;
 }
 
+uint32_t sub_001348B0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+{
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
+	uint32_t t1 = 0;
+	double f0 = 0, f1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0, t9 = 0;
+
+	g_esp = g_esp - 0xCu;
+	MEM32(g_esp + 4u) = arg0;
+	MEM32(g_esp + 8u) = arg1;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebp;
+	ebp_2 = g_esp;
+	g_esp = g_esp & ~0x3Fu;
+	eax = MEM32(ebp_2 + 8u);
+	t1 = vcObjectCacheHandle;
+	g_esp = g_esp - 0x134u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = esi;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edi;
+	if (eax != t1)
+	{
+		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
+			MEM32(g_esp + 0x24u) = 0u;
+		else
+		{
+			vcObjectCacheHandle = eax;
+			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(eax >> 16) + 0x6Cu));
+			vcObjectCacheData = eax;
+			MEM32(g_esp + 0x24u) = eax;
+		}
+		esi_2 = MEM32(g_esp + 0x24u);
+	}
+	else
+	{
+		esi_2 = vcObjectCacheData;
+		MEM32(g_esp + 0x24u) = esi_2;
+	}
+	edi_2 = MEM32(ebp_2 + 0xCu);
+	ebx_2 = edi_2 + 0xCu;
+	edx = g_esp + 0x38u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx_2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edx;
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	sub_00115390(arg0_2, arg1_2);
+	eax = g_esp + 0x34u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx_2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = eax;
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	sub_001153B0(arg0_2, arg1_2, &ignored, &ignored_2);
+	edx = g_esp + 0x3Cu;
+	eax = g_esp + 0x3Cu;
+	g_esp = g_esp + 0x10u;
+	MEM32(g_esp + 0x50u) = MEM32(esi_2 + 8u);
+	MEM32(g_esp + 0x28u) = edx;
+	MEM32(g_esp + 0x20u) = eax;
+	ebx_2 = MEM32(g_esp + 0x28u);
+	eax = MEM32(g_esp + 0x20u);
+	f1 = x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(g_esp + 0x50u));
+	t2 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(g_esp + 0x50u));
+	MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(g_esp + 0x50u));
+	MEMF(eax + 4u) = (float)f1;
+	MEMF(eax + 8u) = (float)t2;
+	MEM32(g_esp + 0x50u) = MEM32(esi_2 + 8u);
+	MEM32(g_esp + 0x28u) = g_esp + 0x38u;
+	MEM32(g_esp + 0x20u) = g_esp + 0x38u;
+	ebx_2 = MEM32(g_esp + 0x28u);
+	eax = MEM32(g_esp + 0x20u);
+	f1 = x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(g_esp + 0x50u));
+	t3 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(g_esp + 0x50u));
+	MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(g_esp + 0x50u));
+	MEMF(eax + 4u) = (float)f1;
+	MEMF(eax + 8u) = (float)t3;
+	ebx_2 = 0u;
+	MEM32(g_esp + 0x5Cu) = 0u;
+	ecx = MEM32(esi_2 + 0x3Cu);
+	edx = g_esp + 0x58u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edi_2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edx;
+	MEM32(g_esp + 0x60u) = ecx;
+	x86_call(sub_00127820, 0x001349C8u, 0);
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 0u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 0u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 0u;
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	sub_0013D320(arg0_2, arg1_2, arg2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+	g_esp = g_esp + 0x14u;
+	if (vcRenderStates(147) != ebx_2)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = ebx_2;
+		vcRenderStates(147) = ebx_2;
+		x86_call(D3DDevice_SetRenderState_CullMode, 0x001349E8u, 0);
+		g_esp = g_esp + 4u;
+	}
+	edx = 1u;
+	if (vcRenderStates(59) != 1u)
+	{
+		ecx = 0x40304u;
+		vcRenderStates(59) = edx;
+		g_ecx = ecx;
+		g_edx = edx;
+		x86_call(D3DDevice_SetRenderState_Simple, 0x00134A06u, 0);
+	}
+	eax = 2u;
+	ecx = 0x800u;
+	if (vcRenderTextureStageStates(18) != 2u)
+	{
+		edx = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(18) = eax;
+		D3D__DirtyFlags = edx;
+		D3D__TextureState(18) = eax;
+	}
+	if (vcRenderTextureStageStates(19) != ebx_2)
+	{
+		eax = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(19) = ebx_2;
+		D3D__DirtyFlags = eax;
+		D3D__TextureState(19) = ebx_2;
+	}
+	eax = 4u;
+	if (vcRenderTextureStageStates(16) != 4u)
+	{
+		edx = D3D__DirtyFlags | ecx;
+		vcRenderTextureStageStates(16) = eax;
+		D3D__DirtyFlags = edx;
+		D3D__TextureState(16) = eax;
+	}
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ebx_2;
+	arg0_2 = MEM32(g_esp);
+	sub_001175B0(arg0_2);
+	edx = MEM32(esi_2 + 0x14u);
+	MEM32(g_esp + 0x58u) = MEM32(esi_2 + 0x10u);
+	ecx = g_esp + 0x10u;
+	f0 = x87_round(FLOAT_AT(g_esp + 0x58u) * FLOAT_AT(0x18F41Cu));
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ecx;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = edx << 2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 2u;
+	MEMF(g_esp + 0x38u) = (float)f0;
+	arg0_2 = MEM32(g_esp);
+	arg1_2 = MEM32(g_esp + 4u);
+	arg2 = MEM32(g_esp + 8u);
+	eax = sub_0013D7E0(arg0_2, arg1_2, arg2);
+	MEM32(g_esp + 0x30u) = eax;
+	eax = MEM32(esi_2 + 0x14u);
+	g_esp = g_esp + 0x10u;
+	MEM32(g_esp + 0x50u) = ebx_2;
+	if ((int32_t)ebx_2 < (int32_t)eax)
+	{
+		f0 = x87_round(FLOAT_AT(g_esp + 0x28u) * FLOAT_AT(g_esp + 0x28u));
+		MEM32(g_esp + 0x98u) = g_esp + 0x14u;
+		f0 = x87_round(FLOAT_AT(0x18F408u) / f0);
+		MEM32(g_esp + 0xA4u) = g_esp + 0x44u;
+		MEM32(g_esp + 0xA0u) = g_esp + 0x44u;
+		MEM32(g_esp + 0xA8u) = g_esp + 0x44u;
+		MEM32(g_esp + 0x84u) = g_esp + 0x2Cu;
+		MEM32(g_esp + 0x7Cu) = g_esp + 0x14u;
+		MEM32(g_esp + 0x8Cu) = g_esp + 0x38u;
+		MEM32(g_esp + 0xB4u) = g_esp + 0x14u;
+		MEM32(g_esp + 0x94u) = g_esp + 0x2Cu;
+		MEM32(g_esp + 0xACu) = g_esp + 0x14u;
+		MEM32(g_esp + 0x9Cu) = g_esp + 0x38u;
+		MEM32(g_esp + 0xBCu) = g_esp + 0x14u;
+		MEM32(g_esp + 0x88u) = 0x60u;
+		MEM32(g_esp + 0x80u) = g_esp + 0xC0u;
+		MEMF(g_esp + 0xB8u) = (float)f0;
+		for (;;)
+		{
+			esi_2 = 0u;
+			do
+			{
+				f0 = x87_CIfmod(0x134B89u, x87_round(FLOAT_AT(ebx_2 + MEM32(MEM32(g_esp + 0x24u) + 0x40u)) - FLOAT_AT(edi_2 + esi_2 * 4u)), FLOAT_AT(g_esp + 0x54u));
+				MEMF(g_esp + 0x10u) = (float)f0;
+				MEMF(g_esp + esi_2 * 4u + 0x14u) = (float)f0;
+				if (FLOAT_AT(g_esp + 0x10u) < FLOAT_AT(0x18EEB8u))
+					MEMF(g_esp + esi_2 * 4u + 0x14u) = (float)x87_round(FLOAT_AT(g_esp + 0x10u) + FLOAT_AT(g_esp + 0x54u));
+				f0 = x87_round(FLOAT_AT(edi_2 + esi_2 * 4u) - FLOAT_AT(g_esp + 0x28u));
+				ebx_2 += 4u;
+				esi_2++;
+				MEMF(g_esp + esi_2 * 4u + 0x10u) = (float)x87_round(f0 + FLOAT_AT(g_esp + esi_2 * 4u + 0x10u));
+			} while ((int32_t)esi_2 < 3);
+			MEM32(g_esp + 0x90u) = ebx_2;
+			ebx_2 = MEM32(g_esp + 0x98u);
+			ecx = MEM32(ebp_2 + 0xCu);
+			eax = MEM32(g_esp + 0xA4u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+			t4 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t4;
+			ebx_2 = MEM32(g_esp + 0xA8u);
+			ecx = MEM32(g_esp + 0xA0u);
+			t5 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx + 8u));
+			MEMF(g_esp + 0xB0u) = (float)x87_round(t5 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx))));
+			f0 = x87_round(FLOAT_AT(0x18F408u) - x87_round(FLOAT_AT(g_esp + 0xB0u) * FLOAT_AT(g_esp + 0xB8u)));
+			if (!(f0 < FLOAT_AT(0x18EEB8u)))
+			{
+				if (f0 > FLOAT_AT(0x18F408u))
+					f0 = FLOAT_AT(0x18F408u);
+			}
+			else
+				f0 = FLOAT_AT(0x18EEB8u);
+			edx = (x87_ftol(x87_round(f0 * FLOAT_AT(0x18FED4u))) << 24) | 0xFFFFFFu;
+			MEM32(g_esp + 0x10u) = g_esp + 0xC0u;
+			ebx_2 = MEM32(g_esp + 0x7Cu);
+			ecx = MEM32(g_esp + 0x84u);
+			eax = MEM32(g_esp + 0x10u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) + FLOAT_AT(ecx + 4u));
+			t6 = x87_round(FLOAT_AT(ebx_2 + 8u) + FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) + FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t6;
+			MEM32(g_esp + 0xCCu) = edx;
+			MEM32(g_esp + 0xD0u) = 0u;
+			MEM32(g_esp + 0xD4u) = 0u;
+			MEM32(g_esp + 0x10u) = g_esp + 0xD8u;
+			ebx_2 = MEM32(g_esp + 0xB4u);
+			ecx = MEM32(g_esp + 0x8Cu);
+			eax = MEM32(g_esp + 0x10u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) + FLOAT_AT(ecx + 4u));
+			t7 = x87_round(FLOAT_AT(ebx_2 + 8u) + FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) + FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t7;
+			MEM32(g_esp + 0xE4u) = edx;
+			MEM32(g_esp + 0xE8u) = 0u;
+			MEM32(g_esp + 0xECu) = 0x3F800000u;
+			MEM32(g_esp + 0x10u) = g_esp + 0xF0u;
+			ebx_2 = MEM32(g_esp + 0xACu);
+			ecx = MEM32(g_esp + 0x94u);
+			eax = MEM32(g_esp + 0x10u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+			t8 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t8;
+			MEM32(g_esp + 0xFCu) = edx;
+			MEM32(g_esp + 0x100u) = 0x3F800000u;
+			MEM32(g_esp + 0x104u) = 0x3F800000u;
+			MEM32(g_esp + 0x10u) = g_esp + 0x108u;
+			ebx_2 = MEM32(g_esp + 0xBCu);
+			ecx = MEM32(g_esp + 0x9Cu);
+			eax = MEM32(g_esp + 0x10u);
+			f1 = x87_round(FLOAT_AT(ebx_2 + 4u) - FLOAT_AT(ecx + 4u));
+			t9 = x87_round(FLOAT_AT(ebx_2 + 8u) - FLOAT_AT(ecx + 8u));
+			MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) - FLOAT_AT(ecx));
+			MEMF(eax + 4u) = (float)f1;
+			MEMF(eax + 8u) = (float)t9;
+			MEM32(g_esp + 0x114u) = edx;
+			MEM32(g_esp + 0x118u) = 0x3F800000u;
+			MEM32(g_esp + 0x11Cu) = 0u;
+			x86_rep_movs32(MEM32(g_esp + 0x20u), MEM32(g_esp + 0x80u), MEM32(g_esp + 0x88u) >> 2);
+			edx = MEM32(g_esp + 0x24u);
+			ecx = MEM32(edx + 0x14u);
+			ebx_2 = MEM32(g_esp + 0x90u);
+			eax = MEM32(g_esp + 0x50u) + 1u;
+			MEM32(g_esp + 0x20u) = MEM32(g_esp + 0x20u) + 0x60u;
+			MEM32(g_esp + 0x50u) = eax;
+			if ((int32_t)ecx <= (int32_t)eax)
+				break;
+			edi_2 = MEM32(ebp_2 + 0xCu);
+		}
+		esi_2 = edx;
+	}
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 2u;
+	DoNothing();
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 2u;
+	arg0_2 = MEM32(g_esp);
+	sub_0013D790(arg0_2);
+	ecx = MEM32(g_esp + 0x14u);
+	g_esp = g_esp + 8u;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = MEM32(esi_2 + 0x14u) << 2;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = ecx;
+	g_esp = g_esp - 4u;
+	MEM32(g_esp) = 8u;
+	x86_call(D3DDevice_DrawVertices, 0x00134E2Du, 0);
+	eax = 0x901u;
+	g_esp = g_esp + 0xCu;
+	if (vcRenderStates(147) != 0x901u)
+	{
+		g_esp = g_esp - 4u;
+		MEM32(g_esp) = eax;
+		vcRenderStates(147) = eax;
+		eax = x86_call(D3DDevice_SetRenderState_CullMode, 0x00134E47u, 0);
+	}
+	g_esp = ebp_2;
+	g_esp = g_esp + 4u;
+	g_esp = g_esp + 0xCu;
+	return eax;
+}
+
 uint32_t vcSpaceScene_Create(uint32_t ecx, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, esi = 0;
@@ -336310,6 +337542,67 @@ uint32_t sub_00144FE0(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	return eax;
 }
 
+uint32_t sub_001452F0(uint32_t edi)
+{
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edx = 0, esi = 0;
+	uint32_t stack = 0, stack_8 = 0, stack_C = 0;
+	uint32_t t1 = 0;
+	double f0 = 0, f1 = 0;
+
+	eax = vcGameTime;
+	ecx = MEM32(edi + 0x4738u);
+	if (eax <= ecx)
+		return eax;
+	edx = eax - ecx;
+	stack = edx;
+	f0 = (double)(int32_t)stack;
+	if ((int32_t)edx < 0)
+		f0 = x87_round(f0 + FLOAT_AT(0x18F40Cu));
+	f0 = x87_round(f0 * FLOAT_AT(0x18F48Cu));
+	MEM32(edi + 0x4738u) = eax;
+	ebx = edi + 0x2728u;
+	esi = edi + 0x4728u;
+	stack_C = float_to_bits((float)f0);
+	ebp = 4u;
+	do
+	{
+		eax = MEM32(esi - 0x4418u);
+		if (eax != 0u)
+		{
+			if (eax != vcObjectCacheHandle)
+			{
+				if ((eax & ~0xFFFFFFu) != 0u)
+					eax = 0u;
+				else
+				{
+					vcObjectCacheHandle = eax;
+					eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(eax >> 16) + 0x6Cu));
+					vcObjectCacheData = eax;
+				}
+			}
+			else
+				eax = vcObjectCacheData;
+			f0 = x87_round(x87_round(x87_float(stack_C) * FLOAT_AT(eax + 8u)) + FLOAT_AT(esi));
+			stack_8 = float_to_bits((float)f0);
+			MEMF(esi) = (float)f0;
+			f1 = (double)(int32_t)MEM32(eax);
+			stack = float_to_bits((float)f1);
+			if (f1 <= f0)
+				MEMF(esi) = (float)x87_CIfmod(0x1453B9u, x87_float(stack_8), x87_float(stack));
+			arg3 = x87_ftol(FLOAT_AT(esi));
+			arg2 = ebx;
+			arg1 = MEM32(edi + 0xBCu);
+			arg0 = MEM32(esi - 0x4418u);
+			sub_0011CED0(arg0, arg1, arg2, arg3, &eax, &ebx, &ebp, &esi, &edi);
+		}
+		esi += 4u;
+		ebx += 0x800u;
+		t1 = ebp;
+		ebp = t1 - 1u;
+	} while (t1 != 1u);
+	return eax;
+}
+
 uint32_t sub_00145400(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint8_t eax_2 = 0;
@@ -337992,6 +339285,18 @@ void sub_0001B820_entry(void)
 	g_ebp = ebp_out;
 	g_esi = esi_out;
 	g_edi = edi_out;
+	g_esp += 4u;
+}
+
+void sub_0001BED0_entry(void)
+{
+	uint32_t eax_out = g_eax;
+	uint32_t ebx_out = g_ebx;
+	uint32_t ebp_out = g_ebp;
+	sub_0001BED0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out);
+	g_eax = eax_out;
+	g_ebx = ebx_out;
+	g_ebp = ebp_out;
 	g_esp += 4u;
 }
 
@@ -340869,13 +342174,11 @@ void sub_0002A6B0_entry(void)
 
 void sub_0002A6F0_entry(void)
 {
-	uint32_t edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	sub_0002A6F0(ARG32(0), ARG32(1), ARG32(2), &eax_out, &ebx_out, &ebp_out, &esi_out);
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -341062,10 +342365,21 @@ void sub_0002BCF0_entry(void)
 	g_esp += 4u;
 }
 
+void sub_0002BDA0_entry(void)
+{
+	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
+	sub_0002BDA0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_ebx = ebx_kept;
+	g_ebp = ebp_kept;
+	g_esi = esi_kept;
+	g_edi = edi_kept;
+	g_esp += 4u;
+}
+
 void PlayerProximityTrigger_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PlayerProximityTrigger_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = PlayerProximityTrigger_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -341356,12 +342670,10 @@ void sub_0002D610_entry(void)
 
 void sub_0002D650_entry(void)
 {
-	uint32_t edi_kept = g_edi;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	sub_0002D650(ARG32(0), ARG32(1), &ebx_out, &ebp_out, &esi_out);
-	g_edi = edi_kept;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
 	g_esi = esi_out;
@@ -341370,12 +342682,9 @@ void sub_0002D650_entry(void)
 
 void sub_0002D700_entry(void)
 {
-	uint32_t esi_kept = g_esi, edi_kept = g_edi;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	sub_0002D700(ARG32(0), ARG32(1), ARG32(2), &ebx_out, &ebp_out);
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
 	g_esp += 4u;
@@ -344386,23 +345695,13 @@ void sub_000412D0_entry(void)
 
 void sub_000412F0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000412F0(ARG32(0), ARG32(1));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00041360_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00041360(ARG32(0), ARG32(1));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -344463,23 +345762,13 @@ void sub_0004175C_entry(void)
 
 void sub_00041770_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00041770(ARG32(0), ARG32(1));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000417D0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000417D0(ARG32(0), ARG32(1));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -344562,12 +345851,7 @@ void sub_00041F70_entry(void)
 
 void sub_00042020_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00042020(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -345650,6 +346934,17 @@ void ZenHeavyMissileTurret_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = ZenHeavyMissileTurret_Shutdown();
+	g_ebx = ebx_kept;
+	g_ebp = ebp_kept;
+	g_esi = esi_kept;
+	g_edi = edi_kept;
+	g_esp += 4u;
+}
+
+void sub_00053550_entry(void)
+{
+	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
+	g_eax = sub_00053550(g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347147,13 +348442,9 @@ void sub_00069A20_entry(void)
 
 void sub_00069A90_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_00069A90(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -347161,12 +348452,7 @@ void sub_00069A90_entry(void)
 
 void sub_00069B00_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00069B00(g_eax, ARG32(0));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -347693,13 +348979,9 @@ void sub_0006F990_entry(void)
 
 void sub_0006F9B0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_0006F9B0(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -347707,12 +348989,7 @@ void sub_0006F9B0_entry(void)
 
 void sub_0006FA20_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0006FA20(g_eax, ARG32(0));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -347729,12 +349006,7 @@ void sub_0006FD60_entry(void)
 
 void sub_0006FE30_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0006FE30(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348020,13 +349292,9 @@ void sub_00074B20_entry(void)
 
 void sub_00074B40_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_00074B40(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -348034,12 +349302,7 @@ void sub_00074B40_entry(void)
 
 void sub_00074BB0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00074BB0(g_eax, g_ecx);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348177,23 +349440,13 @@ void sub_00075940_entry(void)
 
 void sub_000763C0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000763C0(g_eax, g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00076410_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00076410(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348243,12 +349496,7 @@ void sub_00076A60_entry(void)
 
 void sub_00076AD0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00076AD0(g_eax, g_edi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348332,24 +349580,15 @@ void PodOfficerSkarredDisabled_Register_entry(void)
 
 void sub_00078D70_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00078D70(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00078DC0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_00078DC0(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -348622,23 +349861,13 @@ void ZenReEntryPod_Register_entry(void)
 
 void sub_0007CB00_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0007CB00(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0007CB50_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0007CB50(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348744,23 +349973,13 @@ void sub_0007F2A0_entry(void)
 
 void sub_0007F2F0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0007F2F0(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0007F350_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0007F350(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -348860,24 +350079,15 @@ void sub_00080D20_entry(void)
 
 void sub_00080F60_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00080F60(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00080FC0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_00080FC0(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -349298,23 +350508,13 @@ void sub_00084760_entry(void)
 
 void sub_000847B0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000847B0(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00084800_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00084800(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349403,23 +350603,13 @@ void sub_00085D20_entry(void)
 
 void sub_00085D80_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00085D80(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00085DF0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00085DF0(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349486,23 +350676,13 @@ void sub_00086F60_entry(void)
 
 void sub_00086FC0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_00086FC0(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00087030_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_00087030(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349569,23 +350749,15 @@ void PodLightArtillerySpace_Register_entry(void)
 
 void sub_00088230_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	g_esi = sub_00088230(g_ecx, g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00088260_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_00088260(g_ecx, &eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -349676,23 +350848,13 @@ void sub_000890D0_entry(void)
 
 void sub_00089130_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00089130(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000891A0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000891A0(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349759,23 +350921,13 @@ void sub_0008A7C0_entry(void)
 
 void sub_0008A810_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0008A810(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0008A870_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0008A870(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349864,23 +351016,13 @@ void sub_0008B9C0_entry(void)
 
 void sub_0008BA10_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_0008BA10(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0008BA70_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_0008BA70(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -349969,23 +351111,13 @@ void sub_0008CBC0_entry(void)
 
 void sub_0008CC10_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0008CC10(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0008CC70_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0008CC70(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -350276,13 +351408,9 @@ void ZenShuttle_Register_entry(void)
 
 void sub_0008FB30_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_0008FB30(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -350290,13 +351418,9 @@ void sub_0008FB30_entry(void)
 
 void sub_0008FB70_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_0008FB70(&eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -350622,23 +351746,13 @@ void sub_00093070_entry(void)
 
 void sub_000930F0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000930F0(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00093180_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00093180(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -350711,23 +351825,13 @@ void sub_00094310_entry(void)
 
 void sub_00094360_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_00094360(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000943C0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_000943C0(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -350816,23 +351920,13 @@ void sub_00095510_entry(void)
 
 void sub_00095570_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00095570(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000955E0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000955E0(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -351032,23 +352126,13 @@ void sub_00098710_entry(void)
 
 void sub_00098790_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00098790(g_esi);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_00098820_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_00098820(g_eax);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -364439,12 +365523,7 @@ void sub_000EFAC0_entry(void)
 
 void sub_000EFEF0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000EFEF0(g_eax, g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), ARG32(6), ARG32(7), ARG32(8));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -364473,12 +365552,7 @@ void sub_000F0D10_entry(void)
 
 void sub_000F11E0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F11E0(g_eax, g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), ARG32(6), ARG32(7), ARG32(8));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -364736,12 +365810,7 @@ void sub_000F4B30_entry(void)
 
 void sub_000F4C40_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F4C40(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), ARG32(6), ARG32(7), ARG32(8));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -364864,56 +365933,31 @@ void sub_000F6070_entry(void)
 
 void sub_000F6180_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F6180(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000F6320_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F6320(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000F6350_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F6350(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000F6380_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F6380(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_000F63B0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_000F63B0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -372342,9 +373386,31 @@ void sub_00114E80_entry(void)
 	g_esp += 4u;
 }
 
+void sub_00114EA0_entry(void)
+{
+	g_eax = sub_00114EA0(ARG32(0), ARG32(1), ARG32(2));
+	g_esp += 4u;
+}
+
+void sub_00114ED0_entry(void)
+{
+	uint32_t eax_out = g_eax;
+	uint32_t ecx_out = g_ecx;
+	sub_00114ED0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ecx_out);
+	g_eax = eax_out;
+	g_ecx = ecx_out;
+	g_esp += 4u;
+}
+
 void sub_00114F20_entry(void)
 {
 	g_eax = sub_00114F20(ARG32(0), ARG32(1), ARG32(2));
+	g_esp += 4u;
+}
+
+void sub_00114F60_entry(void)
+{
+	g_eax = sub_00114F60(ARG32(0), ARG32(1), ARG32(2));
 	g_esp += 4u;
 }
 
@@ -372545,6 +373611,12 @@ void sub_001157E0_entry(void)
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
 	g_esi = esi_out;
+	g_esp += 4u;
+}
+
+void sub_00115960_entry(void)
+{
+	sub_00115960(ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_esp += 4u;
 }
 
@@ -373432,7 +374504,17 @@ void sub_0011CE80_entry(void)
 
 void sub_0011CED0_entry(void)
 {
-	g_eax = sub_0011CED0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	uint32_t eax_out = g_eax;
+	uint32_t ebx_out = g_ebx;
+	uint32_t ebp_out = g_ebp;
+	uint32_t esi_out = g_esi;
+	uint32_t edi_out = g_edi;
+	sub_0011CED0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	g_eax = eax_out;
+	g_ebx = ebx_out;
+	g_ebp = ebp_out;
+	g_esi = esi_out;
+	g_edi = edi_out;
 	g_esp += 4u;
 }
 
@@ -373664,13 +374746,9 @@ void sub_0011E7F0_entry(void)
 
 void sub_0011E860_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	sub_0011E860(ARG32(0), ARG32(1), ARG32(2), &eax_out, &esi_out);
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_eax = eax_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -373754,23 +374832,15 @@ void sub_0011F540_entry(void)
 
 void sub_0011F680_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_0011F680(g_edx, g_esi, ARG32(0));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
 void sub_0011F7A0_entry(void)
 {
-	uint32_t ebp_kept = g_ebp, edi_kept = g_edi;
 	uint32_t ebx_out = g_ebx;
 	uint32_t esi_out = g_esi;
 	sub_0011F7A0(g_eax, g_edx, g_edi, ARG32(0), ARG32(1), &ebx_out, &esi_out);
-	g_ebp = ebp_kept;
-	g_edi = edi_kept;
 	g_ebx = ebx_out;
 	g_esi = esi_out;
 	g_esp += 4u;
@@ -373778,12 +374848,7 @@ void sub_0011F7A0_entry(void)
 
 void sub_0011F890_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	g_eax = sub_0011F890(g_edx, g_esi, ARG32(0));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -373948,12 +375013,7 @@ void sub_00121720_entry(void)
 
 void sub_001218F0_entry(void)
 {
-	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	sub_001218F0(ARG32(0));
-	g_ebx = ebx_kept;
-	g_ebp = ebp_kept;
-	g_esi = esi_kept;
-	g_edi = edi_kept;
 	g_esp += 4u;
 }
 
@@ -376725,6 +377785,17 @@ void sub_00134030_entry(void)
 	g_esp += 4u;
 }
 
+void sub_001348B0_entry(void)
+{
+	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
+	g_eax = sub_001348B0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_ebx = ebx_kept;
+	g_ebp = ebp_kept;
+	g_esi = esi_kept;
+	g_edi = edi_kept;
+	g_esp += 4u;
+}
+
 void vcSpaceScene_Create_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
@@ -378952,6 +380023,12 @@ void sub_00144110_entry(void)
 void sub_00144FE0_entry(void)
 {
 	g_eax = sub_00144FE0(g_ecx, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_esp += 4u;
+}
+
+void sub_001452F0_entry(void)
+{
+	g_eax = sub_001452F0(g_edi);
 	g_esp += 4u;
 }
 

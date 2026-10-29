@@ -6,7 +6,7 @@ Description: how deep the x87's register stack is at each instruction of a funct
              hand back a value in st(0)
 Version:     0.1.0
 Created:     28-10-2026
-Modified:    28-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The x87 keeps its values on a stack of eight registers, st(0) its top. In compiled C the stack is empty
@@ -369,3 +369,16 @@ def lift_ftol(lifter, depth):
     converted = lifter.temp(ir.op("f.toint:x87_ftol", (st(depth, 0),), 64), "integer")
     lifter.emit(ir.SetReg(0, ir.trunc(converted, 32)))
     lifter.emit(ir.SetReg(2, ir.trunc(ir.op("shr", (converted, ir.const(32, 8)), 64), 32)))
+
+
+# The C runtime's x87 helpers the C calls by their contract (recompiled.CONTRACTS): x86.h's expression for
+# each, which hands the values to the recompiled helper on the recompiled code's stack
+CRT_HELPERS = {"crt_CIacos": "x87_CIacos", "crt_CIasin": "x87_CIasin", "crt_CIfmod": "x87_CIfmod"}
+
+
+def lift_crt(lifter, name, takes, depth, return_address):
+    """A call of one of the C runtime's x87 helpers, where the stack holds 'depth' values: the 'takes' on
+    its top are its arguments, the deepest first, and its result is st(0) after it, as an expression of
+    x86.h's (x87_CIacos(return address, x)), the return address the original's call pushes."""
+    args = (ir.const(return_address),) + tuple(st(depth, i) for i in reversed(range(takes)))
+    lifter.emit(ir.SetReg(register(depth - takes + 1, 0), ir.op("f.helper:" + CRT_HELPERS[name], args, 64)))
