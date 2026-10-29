@@ -276,6 +276,9 @@ licenses/               licenses of the code this project starts from
 - `CMakeLists.txt`, `src/main.c` and `src/recomp_manual.c` started from xboxrecomp's
   `templates/new-game` (MIT); see `licenses/xboxrecomp.txt`. xboxrecomp itself is not part of this
   repository.
+- `src/vertex_program_hlsl.c` translates the vertex programs to HLSL after XboxXBERecomp's
+  `runtime/gpu/shaders.cpp` (MIT); see `licenses/XboxXBERecomp.txt`. XboxXBERecomp itself is not part of
+  this repository.
 - `tools/reference/xemu/xemu-reference.patch` changes xemu and is licensed as xemu is, GPL-2.0-or-later;
   xemu itself is not part of this repository, and neither are the console's MCPX ROM, BIOS or hard disk
   it runs with.

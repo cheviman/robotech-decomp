@@ -2,9 +2,9 @@
  *    Name:        d3d11_bridge.c
  *    Description: routes the game's Direct3D (the XDK's, statically linked and recompiled) to Direct3D 11
  *                 through xboxrecomp's D3D8 layer
- *    Version:     0.2.0
+ *    Version:     0.3.0
  *    Created:     25-10-2026
- *    Modified:    28-10-2026
+ *    Modified:    29-10-2026
  *    Author:      Sebastian Toyos
  *
  *    On with ROBOTECH_D3D11=1. The game's own D3D keeps running, as the bookkeeping it is: it creates its
@@ -19,6 +19,7 @@
 #define COBJMACROS
 #include <windows.h>
 #include <d3d11.h>
+#include <d3dcompiler.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +29,7 @@
 #include <nv2a_vsh_interp.h>
 
 #include "d3d11_bridge.h"
+#include "vertex_program_hlsl.h"
 
 extern RECOMP_TLS uint32_t g_esp, g_eax, g_ecx, g_edx;
 extern ptrdiff_t g_xbox_mem_offset;
@@ -38,6 +40,10 @@ extern ID3D11DeviceContext *d3d8_GetD3D11Context(void);
 extern IDXGISwapChain *d3d8_GetSwapChain(void);
 extern UINT d3d8_GetBackbufferWidth(void);
 extern UINT d3d8_GetBackbufferHeight(void);
+/* and what its draws do before drawing: shaders, combiners, states (d3d8_device.c) */
+extern void d3d8_shaders_prepare_draw(DWORD handle);
+extern BOOL d3d8_combiners_prepare_draw(void);
+extern void d3d8_states_apply(void);
 
 /* The XDK's D3DCLEAR flags. Xbox splits the target into its four channels;
  * xboxrecomp's layer takes the PC values. */
@@ -123,6 +129,16 @@ static struct Vprog *vprog_find(uint32_t handle);
 static void vprog_load(struct Vprog *p, uint32_t at);
 static int vprog_transform(uint32_t first, uint32_t count, uint32_t base, uint32_t up_data, uint32_t up_stride);
 static void vprog_draw(D3DPRIMITIVETYPE pt, UINT count, UINT vertices, const uint16_t *idx);
+static int vprog_gpu_draw(D3DPRIMITIVETYPE pt, UINT prims, uint32_t first, uint32_t count, uint32_t base,
+                          const uint16_t *idx, uint32_t up_data, uint32_t up_stride);
+static int vprog_gpu_on(void);
+static unsigned s_vp_gpu_draws;        /* of those, on the GPU (ROBOTECH_VP_GPU) */
+/* The program memory and the constants as the bridge gives them to the interpreter, kept for the GPU */
+static uint32_t s_vsh_words[NV2A_VSH_SLOTS][4];
+static uint32_t s_vsh_start;           /* the slot programs run from */
+static int s_vsh_changed = 1;          /* either, or the program's inputs, since the last GPU draw */
+static float s_vsh_constants[NV2A_VSH_CONSTANTS][4];
+static int s_vsh_constants_changed = 1;
 static unsigned s_skipped_vp;          /* draws left out: vertex program set */
 static unsigned s_push_draws;          /* drawn from the game's own pushbuffer writes */
 static uint32_t s_pixel_shader;        /* the game's, not routed yet */
@@ -533,17 +549,21 @@ void d3d11_Swap(void)
     if (!last)
         last = now;
     if (now - last >= 2000) {
+        char gpu[32] = "";
+
+        if (vprog_gpu_on())
+            snprintf(gpu, sizeof gpu, "%u on the GPU, ", s_vp_gpu_draws);
         fprintf(stderr, "[D3D11] %.1f fps, %u clears, %u draws + %u pushed (%u with a pixel shader), "
-                "%u by vertex program (%u could not run), %u left out, %d textures\n",
+                "%u by vertex program (%s%u could not run), %u left out, %d textures\n",
                 s_presents * 1000.0 / (now - last), s_clears, s_draws, s_push_draws, s_ps_draws,
-                s_vp_draws, s_vp_failed, s_skipped_vp, s_tex_count);
+                s_vp_draws, gpu, s_vp_failed, s_skipped_vp, s_tex_count);
         if (getenv("ROBOTECH_D3D11_TRACE")) {
             fprintf(stderr, "[D3D11] transforms: view %u proj %u world %u world1-3 %u/%u/%u tex0 %u\n",
                     s_xforms[0], s_xforms[1], s_xforms[6], s_xforms[7], s_xforms[8], s_xforms[9], s_xforms[2]);
             memset(s_xforms, 0, sizeof s_xforms);
         }
         s_presents = s_clears = s_draws = s_push_draws = s_ps_draws = s_skipped_vp = 0;
-        s_vp_draws = s_vp_failed = 0;
+        s_vp_draws = s_vp_failed = s_vp_gpu_draws = 0;
         last = now;
     }
 }
@@ -1362,6 +1382,8 @@ void d3d11_SetVertexShader(void)
         s_vprog = vprog_find(handle);
         vprog_load(s_vprog, 0);
         nv2a_vsh_set_start_slot(0);
+        s_vsh_start = 0;
+        s_vsh_changed = 1;
         s_fvf = 0;
         return;
     }
@@ -1539,6 +1561,8 @@ void d3d11_DrawVerticesUP(void)
     if (!bridge_before_draw())
         return;
     if (s_vprog) {
+        if (vprog_gpu_draw(pt, count, 0, vertices, 0, NULL, data, stride))
+            return;
         if (vprog_transform(0, vertices, 0, data, stride))
             vprog_draw(pt, count, vertices, NULL);
         else
@@ -1589,9 +1613,7 @@ void d3d11_SetPixelShader(void)
  * (z, w) are not carried yet. */
 #define VPROG_FVF       (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_SPECULAR | D3DFVF_TEX4)
 
-typedef struct {
-    uint8_t reg, type, stream, offset;
-} VprogAttr;
+typedef VertexProgramInput VprogAttr;  /* reg, type, stream, offset */
 
 typedef struct Vprog {
     uint32_t handle;
@@ -1711,6 +1733,7 @@ void d3d11_CreateVertexShaderDone(void)
     }
     fprintf(stderr, "[D3D11] vertex program 0x%08X: %d instructions, %d inputs\n",
             handle, p->insns, p->nattr);
+    s_vsh_changed = 1;
     if (dump) {
         char path[512];
         FILE *f;
@@ -1728,8 +1751,11 @@ static void vprog_load(struct Vprog *p, uint32_t at)
 {
     int i;
 
-    for (i = 0; p && i < p->insns && at + (uint32_t)i < NV2A_VSH_SLOTS; i++)
+    for (i = 0; p && i < p->insns && at + (uint32_t)i < NV2A_VSH_SLOTS; i++) {
         nv2a_vsh_set_instruction(at + (uint32_t)i, &p->words[4 * i]);
+        memcpy(s_vsh_words[at + (uint32_t)i], &p->words[4 * i], sizeof s_vsh_words[0]);
+    }
+    s_vsh_changed = 1;
 }
 
 /* D3DDevice_LoadVertexShader(Handle, Address): the program into program
@@ -1748,6 +1774,8 @@ void d3d11_SelectVertexShader(void)
     if (arg(0))
         s_vprog = vprog_find(arg(0));
     nv2a_vsh_set_start_slot(arg(1));
+    s_vsh_start = arg(1);
+    s_vsh_changed = 1;
 }
 
 /* D3DDevice_SetVertexShaderInput(Handle, StreamCount, pStreamInputs): the
@@ -1763,8 +1791,10 @@ void d3d11_SetVertexShaderInput(void)
         s_vsi[i].stride = guest32(in + 12 * i + 4);
         s_vsi[i].offset = guest32(in + 12 * i + 8);
     }
-    if (arg(0) & 1u)
+    if (arg(0) & 1u) {
         s_vprog = vprog_find(arg(0));
+        s_vsh_changed = 1;
+    }
 }
 
 /* D3DDevice_SetVertexShaderConstant1/4/NotInline, fastcall: ecx the
@@ -1773,8 +1803,11 @@ void d3d11_SetVertexShaderConstant(int count)
 {
     uint32_t reg = g_ecx, data = g_edx, n = count ? (uint32_t)count : arg(0) / 4, i;
 
-    for (i = 0; i < n && reg + i < NV2A_VSH_CONSTANTS; i++)
+    for (i = 0; i < n && reg + i < NV2A_VSH_CONSTANTS; i++) {
         nv2a_vsh_set_constant(reg + i, (const float *)guest_ptr(data + 16 * i));
+        memcpy(s_vsh_constants[reg + i], guest_ptr(data + 16 * i), sizeof s_vsh_constants[0]);
+        s_vsh_constants_changed = 1;
+    }
     if (xform_frame()) {
         fprintf(stderr, "[XFORM] constants c%u..c%u:", reg, reg + n - 1);
         for (i = 0; i < n * 4 && i < 16; i++)
@@ -1965,6 +1998,384 @@ static void vprog_draw(D3DPRIMITIVETYPE pt, UINT count, UINT vertices, const uin
     bridge_pick(idx ? "indexed" : "vertices");
     s_vp_draws++;
 }
+
+/* ── Vertex programs on the GPU ────────────────────────────── */
+
+/* With ROBOTECH_VP_GPU=1 the programs run on the GPU instead. The program in program memory from the
+ * slot a draw runs it from, read with the selected declaration, becomes a vertex shader
+ * (vertex_program_hlsl.c) the first time it is drawn, and is kept. It fetches the draw's vertices from
+ * the guest's own bytes, copied into one buffer, and computes what the CPU path above hands the layer
+ * and what the layer's vertex shader makes of it; the pixel side is the layer's, prepared as its own
+ * draws prepare it (its shaders, its combiners, its states) for the pre-transformed layout the CPU path
+ * draws with. Only the vertex shader, its constants and its input are the bridge's.
+ *
+ * The game's vertices are copied as they are, each stream's range the draw reads; there is no input
+ * layout, the shader reads them by byte. A fan or a quad list is drawn through indices made here in the
+ * order the layer's own conversion takes (convert_fan_or_quad), indexed ones too (the layer draws the
+ * first indices of those as a list). A program whose shader does not compile is drawn on the CPU, as
+ * without the variable. ROBOTECH_VP_GPU_DUMP=<prefix> writes each shader's HLSL, <prefix>NN.hlsl. */
+#define VPROG_GPU_SHADERS       64
+#define VPROG_GPU_VERTEX_BYTES  (16u * 1024u * 1024u)
+#define VPROG_GPU_INDEX_BYTES   (4u * 1024u * 1024u)
+
+typedef struct {
+    uint32_t words[NV2A_VSH_SLOTS][4];  /* from the slot it runs from to the final instruction */
+    int insns;
+    VprogAttr attr[VPROG_ATTRS];
+    int nattr;
+    ID3D11VertexShader *shader;         /* NULL: it did not compile, and is drawn on the CPU */
+} VprogGpuShader;
+
+static VprogGpuShader s_gpu_shaders[VPROG_GPU_SHADERS];
+static int s_gpu_nshaders, s_gpu_next;      /* the next to replace once all are taken */
+static VprogGpuShader *s_gpu_current;       /* the program drawn last, while nothing changed */
+static ID3D11Buffer *s_gpu_vertices, *s_gpu_indices, *s_gpu_constants, *s_gpu_draws;
+static ID3D11ShaderResourceView *s_gpu_vertices_view;
+static UINT s_gpu_vertices_at, s_gpu_indices_at;
+static int s_gpu_no_overwrite;              /* the device maps a buffer read by shaders without discarding it */
+
+static int vprog_gpu_on(void)
+{
+    static int on = -1;
+
+    if (on < 0) {
+        const char *e = getenv("ROBOTECH_VP_GPU");
+        on = e && *e && *e != '0';
+    }
+    return on;
+}
+
+/* The buffers every GPU draw uses, made at the first. Returns 0 when they cannot be, and the programs
+ * stay on the CPU. */
+static int vprog_gpu_buffers(void)
+{
+    static int tried;
+    ID3D11Device *dev = d3d8_GetD3D11Device();
+    D3D11_BUFFER_DESC bd;
+    D3D11_SHADER_RESOURCE_VIEW_DESC sd;
+    D3D11_FEATURE_DATA_D3D11_OPTIONS options;
+    HRESULT hr;
+
+    if (s_gpu_draws)
+        return 1;
+    if (tried || !dev)
+        return 0;
+    tried = 1;
+    memset(&bd, 0, sizeof bd);
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.ByteWidth = VPROG_GPU_VERTEX_BYTES;
+    bd.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    bd.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
+    hr = ID3D11Device_CreateBuffer(dev, &bd, NULL, &s_gpu_vertices);
+    if (SUCCEEDED(hr)) {
+        memset(&sd, 0, sizeof sd);
+        sd.Format = DXGI_FORMAT_R32_TYPELESS;
+        sd.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
+        sd.BufferEx.NumElements = VPROG_GPU_VERTEX_BYTES / 4;
+        sd.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
+        hr = ID3D11Device_CreateShaderResourceView(dev, (ID3D11Resource *)s_gpu_vertices, &sd,
+                                                   &s_gpu_vertices_view);
+    }
+    if (SUCCEEDED(hr)) {
+        bd.ByteWidth = VPROG_GPU_INDEX_BYTES;
+        bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+        bd.MiscFlags = 0;
+        hr = ID3D11Device_CreateBuffer(dev, &bd, NULL, &s_gpu_indices);
+    }
+    if (SUCCEEDED(hr)) {
+        bd.ByteWidth = sizeof s_vsh_constants;
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        hr = ID3D11Device_CreateBuffer(dev, &bd, NULL, &s_gpu_constants);
+    }
+    if (SUCCEEDED(hr)) {
+        bd.ByteWidth = (sizeof(VertexProgramDraw) + 15u) & ~15u;
+        hr = ID3D11Device_CreateBuffer(dev, &bd, NULL, &s_gpu_draws);
+    }
+    if (FAILED(hr)) {
+        fprintf(stderr, "[D3D11] vertex programs on the GPU: buffers not created (0x%08lX), run on the CPU\n",
+                (unsigned long)hr);
+        s_gpu_draws = NULL;
+        return 0;
+    }
+    if (SUCCEEDED(ID3D11Device_CheckFeatureSupport(dev, D3D11_FEATURE_D3D11_OPTIONS, &options, sizeof options)))
+        s_gpu_no_overwrite = options.MapNoOverwriteOnDynamicBufferSRV;
+    fprintf(stderr, "[D3D11] vertex programs on the GPU%s\n",
+            s_gpu_no_overwrite ? "" : " (their vertices' buffer discarded at each draw)");
+    return 1;
+}
+
+/* `bytes` more of a ring buffer of `size`, mapped, at *offset; it starts over, discarded, when they do
+ * not fit, or every time when `discard` is set. NULL when it cannot be mapped. */
+static uint8_t *ring_map(ID3D11Buffer *b, UINT size, UINT *at, UINT bytes, int discard, UINT *offset)
+{
+    D3D11_MAPPED_SUBRESOURCE map;
+    D3D11_MAP how = D3D11_MAP_WRITE_NO_OVERWRITE;
+
+    if (bytes > size)
+        return NULL;
+    if (discard || *at + bytes > size) {
+        *at = 0;
+        how = D3D11_MAP_WRITE_DISCARD;
+    }
+    if (FAILED(ID3D11DeviceContext_Map(d3d8_GetD3D11Context(), (ID3D11Resource *)b, 0, how, 0, &map)))
+        return NULL;
+    *offset = *at;
+    *at = (*at + bytes + 15u) & ~15u;
+    return (uint8_t *)map.pData + *offset;
+}
+
+/* The shader of the program a draw runs: found by its instructions and inputs, else made. NULL when no
+ * instruction from the start slot on is final, and the interpreter would run nothing either. */
+static VprogGpuShader *vprog_gpu_shader(void)
+{
+    static const char *dump = (const char *)-1;
+    static Vprog *current_of;
+    ID3DBlob *code = NULL, *errors = NULL;
+    VprogGpuShader *g;
+    char *hlsl;
+    int n, i;
+
+    if (s_gpu_current && !s_vsh_changed && current_of == s_vprog)
+        return s_gpu_current;
+    for (n = 0; s_vsh_start + (uint32_t)n < NV2A_VSH_SLOTS && !(s_vsh_words[s_vsh_start + n][3] & 1u); n++)
+        ;
+    if (s_vsh_start + (uint32_t)n >= NV2A_VSH_SLOTS)
+        return NULL;
+    n++;
+    for (i = 0; i < s_gpu_nshaders; i++) {
+        g = &s_gpu_shaders[i];
+        if (g->insns == n && g->nattr == s_vprog->nattr
+                && !memcmp(g->words, s_vsh_words[s_vsh_start], (size_t)n * sizeof g->words[0])
+                && !memcmp(g->attr, s_vprog->attr, (size_t)g->nattr * sizeof g->attr[0]))
+            goto found;
+    }
+    if (s_gpu_nshaders < VPROG_GPU_SHADERS) {
+        g = &s_gpu_shaders[s_gpu_nshaders++];
+    } else {
+        g = &s_gpu_shaders[s_gpu_next];
+        s_gpu_next = (s_gpu_next + 1) % VPROG_GPU_SHADERS;
+        if (g->shader)
+            ID3D11VertexShader_Release(g->shader);
+    }
+    memset(g, 0, sizeof *g);
+    g->insns = n;
+    memcpy(g->words, s_vsh_words[s_vsh_start], (size_t)n * sizeof g->words[0]);
+    g->nattr = s_vprog->nattr;
+    memcpy(g->attr, s_vprog->attr, (size_t)g->nattr * sizeof g->attr[0]);
+    /* compiled as the layer compiles its own: what has to come out as the CPU's is marked precise in the
+     * HLSL, and the layer's part is left to be optimised as the layer's is */
+    hlsl = vertex_program_hlsl((const uint32_t (*)[4])g->words, n, g->attr, g->nattr);
+    if (hlsl && FAILED(D3DCompile(hlsl, strlen(hlsl), "vertex_program", NULL, NULL, "main", "vs_5_0", 0, 0,
+                                  &code, &errors))) {
+        fprintf(stderr, "[D3D11] vertex program 0x%08X from slot %u: its shader did not compile, run on the CPU\n%s",
+                s_vprog->handle, s_vsh_start, errors ? (const char *)ID3D10Blob_GetBufferPointer(errors) : "");
+    } else if (code && FAILED(ID3D11Device_CreateVertexShader(d3d8_GetD3D11Device(),
+                                                              ID3D10Blob_GetBufferPointer(code),
+                                                              ID3D10Blob_GetBufferSize(code), NULL, &g->shader))) {
+        g->shader = NULL;
+    }
+    fprintf(stderr, "[D3D11] vertex program 0x%08X from slot %u, %d instructions: %s\n", s_vprog->handle,
+            s_vsh_start, n, g->shader ? "on the GPU" : "on the CPU");
+    if (dump == (const char *)-1)
+        dump = getenv("ROBOTECH_VP_GPU_DUMP");
+    if (dump && hlsl) {
+        char path[512];
+        FILE *f;
+
+        snprintf(path, sizeof path, "%s%02d.hlsl", dump, (int)(g - s_gpu_shaders));
+        f = fopen(path, "w");
+        if (f) {
+            fputs(hlsl, f);
+            fclose(f);
+        }
+    }
+    free(hlsl);
+    if (code)
+        ID3D10Blob_Release(code);
+    if (errors)
+        ID3D10Blob_Release(errors);
+found:
+    s_gpu_current = g;
+    current_of = s_vprog;
+    s_vsh_changed = 0;
+    return g;
+}
+
+/* The index of a fan's or a quad list's i-th vertex as a triangle list, as convert_fan_or_quad lays them. */
+static uint32_t vprog_gpu_corner(D3DPRIMITIVETYPE pt, UINT i)
+{
+    static const uint8_t quad[6] = { 0, 1, 2, 0, 2, 3 };
+
+    if (pt == D3DPT_TRIANGLEFAN)
+        return i % 3 ? i / 3 + i % 3 : 0;
+    return 4 * (i / 6) + quad[i % 6];
+}
+
+/* Draws vertices [first, first + count) of the selected program's streams, offset by base, as
+ * vprog_transform reads them, as `prims` primitives of pt; through idx (indices from vertex 0, as
+ * vprog_draw's) when it is set. Returns 0 when the CPU path is to draw it: the variable is off, or the
+ * program's shader did not compile. */
+static int vprog_gpu_draw(D3DPRIMITIVETYPE pt, UINT prims, uint32_t first, uint32_t count, uint32_t base,
+                          const uint16_t *idx, uint32_t up_data, uint32_t up_stride)
+{
+    static ID3D11ShaderResourceView *const unbound;
+    ID3D11DeviceContext *ctx = d3d8_GetD3D11Context();
+    D3D11_PRIMITIVE_TOPOLOGY topology;
+    const uint8_t *src[16] = { 0 };
+    uint32_t stride[16] = { 0 }, span[16] = { 0 }, bytes[16] = { 0 }, placed[16] = { 0 };
+    UINT n, total = 0, offset, i, k;
+    VertexProgramDraw *d;
+    VprogGpuShader *g;
+    ID3D11Buffer *cbs[2];
+    uint8_t *dst;
+    int a, made = pt == D3DPT_TRIANGLEFAN || pt == D3DPT_QUADLIST;
+
+    if (!vprog_gpu_on() || !s_vprog || !vprog_gpu_buffers())
+        return 0;
+    g = vprog_gpu_shader();
+    if (!g) {
+        s_vp_failed++;
+        return 1;
+    }
+    if (!g->shader)
+        return 0;
+    /* each stream's bytes: up to the end of its last attribute in the last vertex */
+    for (a = 0; a < s_vprog->nattr; a++) {
+        const VprogAttr *in = &s_vprog->attr[a];
+        uint32_t st = in->stream, end = in->offset + vsdt_size(in->type);
+
+        if (!src[st] && !(src[st] = vprog_stream(st, up_data, up_stride, &stride[st]))) {
+            s_vp_failed++;
+            return 1;
+        }
+        if (end > span[st])
+            span[st] = end;
+    }
+    for (k = 0; k < 16; k++)
+        if (src[k]) {
+            bytes[k] = (count - 1) * stride[k] + span[k];
+            total += (bytes[k] + 15u) & ~15u;
+        }
+    if (total > VPROG_GPU_VERTEX_BYTES)
+        return 0;
+
+    /* the vertices, a stream after another */
+    dst = ring_map(s_gpu_vertices, VPROG_GPU_VERTEX_BYTES, &s_gpu_vertices_at, total ? total : 16u,
+                   !s_gpu_no_overwrite, &offset);
+    if (!dst) {
+        s_vp_failed++;
+        return 1;
+    }
+    for (k = 0, i = 0; k < 16; k++)
+        if (src[k]) {
+            placed[k] = offset + i;
+            memcpy(dst + i, src[k] + (size_t)(first + base) * stride[k], bytes[k]);
+            i += (bytes[k] + 15u) & ~15u;
+        }
+    ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)s_gpu_vertices, 0);
+
+    /* the constants when the game changed them, c-38 and c-37 at 1 and 0 as vprog_transform sets them */
+    if (s_vsh_constants_changed) {
+        D3D11_MAPPED_SUBRESOURCE map;
+
+        if (SUCCEEDED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)s_gpu_constants, 0, D3D11_MAP_WRITE_DISCARD,
+                                              0, &map))) {
+            float (*c)[4] = (float (*)[4])map.pData;
+
+            memcpy(c, s_vsh_constants, sizeof s_vsh_constants);
+            c[58][0] = c[58][1] = c[58][2] = c[58][3] = 1.0f;
+            c[59][0] = c[59][1] = c[59][2] = c[59][3] = 0.0f;
+            ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)s_gpu_constants, 0);
+            s_vsh_constants_changed = 0;
+        }
+    }
+
+    /* the draw's values: the viewport and the target as vprog_transform takes them, the back buffer as
+     * the layer does, the coordinate sets bridge_vertices divides, where each stream went */
+    {
+        D3D11_MAPPED_SUBRESOURCE map;
+
+        if (FAILED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)s_gpu_draws, 0, D3D11_MAP_WRITE_DISCARD, 0, &map))) {
+            s_vp_failed++;
+            return 1;
+        }
+        d = (VertexProgramDraw *)map.pData;
+        memset(d, 0, sizeof *d);
+        d->viewport[0] = (float)s_viewport.X;
+        d->viewport[1] = (float)s_viewport.Y;
+        d->viewport[2] = (float)s_viewport.Width;
+        d->viewport[3] = (float)s_viewport.Height;
+        d->depth[0] = s_viewport.MinZ;
+        d->depth[1] = s_viewport.MaxZ;
+        d->depth[2] = d->depth[3] = 1.0f;
+        if (s_target) {
+            d->depth[2] = (float)d3d8_GetBackbufferWidth() / (float)s_target->width;
+            d->depth[3] = (float)d3d8_GetBackbufferHeight() / (float)s_target->height;
+        }
+        d->screen[0] = (float)d3d8_GetBackbufferWidth();
+        d->screen[1] = (float)d3d8_GetBackbufferHeight();
+        for (k = 0; k < BRIDGE_STAGES; k++) {
+            BridgeTexture *t = s_stage[k];
+
+            d->texture_set[k] = s_tci[k] < 4 && t && t->pitch ? s_tci[k] : 4u;
+            d->texture_size[k][0] = t ? (float)t->width : 1.0f;
+            d->texture_size[k][1] = t ? (float)t->height : 1.0f;
+        }
+        d->first[0] = first;
+        for (k = 0; k < 16; k++) {
+            d->streams[k][0] = placed[k];
+            d->streams[k][1] = stride[k];
+        }
+        ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)s_gpu_draws, 0);
+    }
+
+    /* the pixel side as the layer's draws make it, for the layout the CPU path draws with */
+    s_dev->lpVtbl->SetVertexShader(s_dev, VPROG_FVF);
+    d3d8_shaders_prepare_draw(VPROG_FVF);
+    d3d8_combiners_prepare_draw();
+    d3d8_states_apply();
+
+    ID3D11DeviceContext_VSSetShader(ctx, g->shader, NULL, 0);
+    ID3D11DeviceContext_IASetInputLayout(ctx, NULL);
+    cbs[0] = s_gpu_constants;
+    cbs[1] = s_gpu_draws;
+    ID3D11DeviceContext_VSSetConstantBuffers(ctx, 0, 2, cbs);
+    ID3D11DeviceContext_VSSetShaderResources(ctx, 0, 1, &s_gpu_vertices_view);
+    switch (pt) {
+    case D3DPT_POINTLIST:     n = prims;     topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;     break;
+    case D3DPT_LINELIST:      n = prims * 2; topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;      break;
+    case D3DPT_LINESTRIP:     n = prims + 1; topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;     break;
+    case D3DPT_TRIANGLESTRIP: n = prims + 2; topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
+    case D3DPT_QUADLIST:      n = prims * 6; topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;  break;
+    default:                  n = prims * 3; topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;  break;
+    }
+    ID3D11DeviceContext_IASetPrimitiveTopology(ctx, topology);
+    if (idx || made) {
+        uint32_t *out = (uint32_t *)ring_map(s_gpu_indices, VPROG_GPU_INDEX_BYTES, &s_gpu_indices_at, n * 4u, 0,
+                                             &offset);
+
+        if (!out) {
+            s_vp_failed++;
+            return 1;
+        }
+        for (i = 0; i < n; i++) {
+            uint32_t v = made ? vprog_gpu_corner(pt, i) : i;
+            out[i] = idx ? idx[v] : v;
+        }
+        ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)s_gpu_indices, 0);
+        ID3D11DeviceContext_IASetIndexBuffer(ctx, s_gpu_indices, DXGI_FORMAT_R32_UINT, 0);
+        ID3D11DeviceContext_DrawIndexed(ctx, n, offset / 4u, 0);
+    } else {
+        ID3D11DeviceContext_Draw(ctx, n, 0);
+    }
+    ID3D11DeviceContext_VSSetShaderResources(ctx, 0, 1, &unbound);
+    bridge_pick(idx ? "indexed" : "vertices");
+    s_vp_draws++;
+    s_vp_gpu_draws++;
+    return 1;
+}
+
 /* ── The game's own pushbuffer writes ──────────────────────── */
 
 /* D3DDevice_BeginPush_4(Count) hands the game a pointer into the pushbuffer
@@ -2234,6 +2645,8 @@ void d3d11_DrawVertices(void)
         if (!bridge_before_draw())
             return;
         trace_draw("vertices (program)", xbtype, vertices, 0, NULL);
+        if (vprog_gpu_draw(pt, count, 0, vertices, start, NULL, 0, 0))
+            return;
         if (vprog_transform(0, vertices, start, 0, 0))
             vprog_draw(pt, count, vertices, NULL);
         else
@@ -2273,6 +2686,8 @@ void d3d11_DrawIndexedVertices(void)
     }
     if (s_vprog) {
         trace_draw("indexed (program)", xbtype, hi + 1, 0, NULL);
+        if (vprog_gpu_draw(pt, count, lo, hi - lo + 1, s_base_vertex, idx, 0, 0))
+            return;
         if (vprog_transform(lo, hi - lo + 1, s_base_vertex, 0, 0))
             vprog_draw(pt, count, hi + 1, idx);
         else

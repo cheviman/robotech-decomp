@@ -3,7 +3,7 @@
 #              toolkit's runtime libraries)
 # Version:     0.1.0
 # Created:     25-10-2026
-# Modified:    26-10-2026
+# Modified:    29-10-2026
 # Author:      Sebastian Toyos
 #
 # Started from xboxrecomp's templates/new-game/CMakeLists.txt (MIT, see licenses/xboxrecomp.txt). The
@@ -76,6 +76,7 @@ set(GAME_SOURCES
     src/main.c
     src/recomp_manual.c
     src/d3d11_bridge.c
+    src/vertex_program_hlsl.c
     src/input_bridge.c
     src/dsound_bridge.c
     src/sound_mixer.c
@@ -115,6 +116,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # Windows SDK libraries needed at link time
 target_link_libraries(${PROJECT_NAME} PRIVATE
     d3d11
+    # the vertex programs' shaders, compiled as the game draws them (ROBOTECH_VP_GPU)
+    d3dcompiler
     dxgi
     dxguid
     $<IF:$<BOOL:${MINGW}>,xinput1_4,xinput>   # see src/input/CMakeLists.txt
