@@ -29,11 +29,19 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
 1. **Fog drawn by a vertex program, and on pre-transformed vertices**: the bridge runs vertex programs on
    the CPU and hands the layer screen positions, which it fogs not at all (nor any XYZRHW draw: the
    layer's depth for them is 0); a program's oFog is dropped. The table fog of the fixed pipeline is
-   right since 28-10-2026.
-2. **Vertex programs run on the CPU** (the bridge, with xboxrecomp's NV2A interpreter), which drew the
-   Valkyrie whole in the menu and in the mission. Left: on the GPU instead (the layer's translator lays
-   the inputs out in a fixed order instead of by the declaration, and takes oPos as clip space while XDK
-   programs end in screen space); vertices behind the eye are not clipped (pre-transformed); the
+   right since 28-10-2026. With `ROBOTECH_VP_GPU=1` the program's oFog is in the shader
+   (`vertex_program_hlsl.c`, `finish`), dropped the same way, where it could go to the layer's fog.
+2. **Vertex programs run on the CPU by default** (the bridge, with xboxrecomp's NV2A interpreter), which
+   drew the Valkyrie whole in the menu and in the mission; **on the GPU with `ROBOTECH_VP_GPU=1`**
+   (29-10-2026, `src/vertex_program_hlsl.c`): every program of the nine scenarios on the GPU, the frames
+   as the CPU's but for a pixel here and there (0.0002 of 255 apart at most), each scenario within its
+   limit against the original. Measured in Goodbye Graystone, unpaced (`ROBOTECH_FPS=0`, the virtual
+   clock, 3,600 frames): the run in 48.0 s on the CPU, 42.1 s on the GPU (75.0 and 85.6 frames a
+   second); the two-second windows' median 47.5 and 61.5 fps, the heavy stretch 41 to 44 and 48 to 54
+   fps. Timed in the bridge (a QueryPerformanceCounter around each part, not kept): the vertex programs
+   from 4 to 5 ms a frame to 0.6 in that stretch; paced at 60, the scenario's worst windows went from
+   18.6, 33.2 and 36.7 fps to 27.8, 55.5 and 55.5. The programs were not what made the frame long (4).
+   Left: the GPU path as the default; vertices behind the eye are not clipped (pre-transformed); the
    coordinates' z and w are dropped (two floats a set: the layer reads the FVF's texture size field
    otherwise than the XDK, 1 = 3 floats, 2 = 4, 3 = 1). **Pixel shaders**: `SetPixelShader` is counted,
    0 draws with one so far.
@@ -44,6 +52,13 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
    transforms on pre-transformed vertices (the layer leaves them out). The camera-space normal the
    layer gives `TCI_CAMERASPACENORMAL` and `REFLECTIONVECTOR` still turns the wrong way on a rotated
    object (the bridge mends the world normals only).
+4. **The indexed draws without a program are what makes a heavy frame long**: Goodbye Graystone's heavy
+   stretch, 17 to 20 ms a frame with the programs on the GPU, spends 13 to 17 of them in
+   `D3DDevice_DrawIndexedVertices`, some 1,150 calls a frame of an FVF (about 12 us each; the programs'
+   draws 0.6 ms, the pushed ones and `DrawVertices` 0.2, `Present` 0.7; 29-10-2026, timed in the bridge).
+   Each goes to the layer's `DrawIndexedPrimitiveUP`, which makes an immutable vertex buffer and index
+   buffer a draw and prepares its shaders' constants (three maps) again; a ring of the bridge's own, as
+   the GPU path's vertices have, would leave the layer only its preparation.
 
 ### Sound
 
