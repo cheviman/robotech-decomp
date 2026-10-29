@@ -5,7 +5,7 @@ Name:        function.py
 Description: the game's x86 functions as control-flow graphs of IR blocks
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    28-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 Takes the functions disassembler.py decodes and lifts every instruction to IR (lift.py for data, here
@@ -22,8 +22,10 @@ stack is empty, has its floating-point code lifted; the float a function hands b
 it returns, FLOAT0 (decompile.py). The compare idiom "fcom; fnstsw ax; test ah, mask; j(n)e/j(n)p"
 becomes a branch on the compare's outcome.
 
-What is not translated yet raises lift.Unsupported: an SSE instruction, an x87 one past those, a call or a
-jump through a pointer, a branch on PF other than a compare's.
+A call through a pointer is a call of the code at the address its operand holds, where what it drops is
+certain (recompiled.py, Summaries.icalls). What is not translated yet raises lift.Unsupported: an SSE
+instruction, an x87 one past those, a call through a pointer whose drop is a guess, a jump through a
+pointer, a branch on PF other than a compare's.
 """
 from decompiler.function import Block, Function
 from v60 import ir
@@ -40,8 +42,9 @@ TAIL_FRAME = "x86_tail_frame"
 class Builder:
     """Lifts the functions of a disassembler.Program."""
 
-    def __init__(self, program):
+    def __init__(self, program, icalls=None):
         self.program = program
+        self.icalls = icalls or {}  # a call through a pointer's address -> (drops, registers read, words): recompiled.py
         self.dropped = {}
         self.x87 = x87.Depths(program)
         self.ftol = next((entry for entry, (end, name, section) in program.functions.items()
@@ -113,6 +116,22 @@ class Builder:
             if isinstance(block.end, ir.TailCall):
                 block.statements.append(ir.Effect(TAIL_FRAME, (ir.Load(ir.Reg(ESP), 32),)))
         return function
+
+    def lift_icall(self, block, instruction):
+        """A call through a pointer, where what it drops is certain (recompiled.py): a call of the code at the
+        address the operand holds, which the C makes as the recompiled code does (decompile.py, x86_icall);
+        its arguments and SP after it as the call of a function would have them."""
+        site = self.icalls.get(instruction.address)
+        if site is None:
+            raise lift.Unsupported(f"call {instruction.op_str}")
+        drops = site[0]
+        lifter = lift.Lifter(prefix=f"t{instruction.address:X}_")
+        address = lifter.read(instruction.operands[0], "callee")
+        block.statements.extend(lifter.statements)
+        block.statements.append(ir.Effect(CALL_FRAME, (ir.Load(ir.Reg(ESP), 32),)))
+        block.statements.append(ir.Call(address=address, return_address=instruction.next))
+        if drops:
+            block.statements.append(ir.SetReg(ESP, ir.op("add", (ir.Reg(ESP), ir.const(drops)), 32)))
 
     def leaves_floats(self, decoded, instruction):
         """Whether an instruction calls or jumps to a function that takes values from the x87's stack or
@@ -200,7 +219,8 @@ class Builder:
             return
         if flow == dis.FLOW_CALL:
             if not instruction.targets:
-                raise lift.Unsupported(f"call {instruction.op_str}")
+                self.lift_icall(block, instruction)
+                return
             target = instruction.targets[0]
             if self.depths is not None:
                 if target == self.ftol:

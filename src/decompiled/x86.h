@@ -3,9 +3,10 @@
  *    Description: what the decompiled C (tools/decompile.py) calls for the x86's own arithmetic: shifts
  *                 by a count the processor masks, the flags of an addition or a subtraction, the string
  *                 instructions, the 64-bit divisions, the calls of functions that stay recompiled
+ *                 and through a pointer
  *    Version:     0.3.0
  *    Created:     26-10-2026
- *    Modified:    28-10-2026
+ *    Modified:    29-10-2026
  *    Author:      Sebastian Toyos
  *
  *    Each does what the Pentium III does: a shift's count is taken modulo 32 (64 for a 64-bit value), a
@@ -155,6 +156,51 @@ static inline uint32_t x86_call(void (*function)(void), uint32_t return_address,
     g_esp -= 4u;
     MEM32(g_esp) = return_address;
     function();
+    g_esp = sp;
+    return g_eax;
+}
+
+/* A call through a pointer, as the recompiled code makes it (RECOMP_ICALL_SAFE_AT, recomp_types.h): the
+ * function at the guest's address by the recompiler's tables (one written by hand, recompiled or
+ * decompiled), or the kernel's; its arguments and return address as x86_call puts them. An address that
+ * is no code, or that no table has, calls nothing, with EAX 0, and is told as the recompiled code tells
+ * it. 'site' is the call's own address, for the record of where the game's calls go. */
+static inline uint32_t x86_icall(uint32_t address, uint32_t site, uint32_t return_address, int count, ...)
+{
+    uint32_t sp = g_esp;
+    recomp_func_t function = NULL;
+    va_list arguments;
+
+    (void)site;
+    va_start(arguments, count);
+    g_esp -= 4u * (uint32_t)count;
+    for (int n = 0; n < count; n++)
+        MEM32(g_esp + 4u * (uint32_t)n) = va_arg(arguments, uint32_t);
+    va_end(arguments);
+    g_esp -= 4u;
+    MEM32(g_esp) = return_address;
+    g_icall_trace[g_icall_trace_idx & (ICALL_TRACE_SIZE - 1)] = address;
+    g_icall_trace_idx++;
+    g_icall_count++;
+    if (!RECOMP_ICALL_IS_CODE(address)) {
+        recomp_icall_not_code_log(address);
+        g_eax = 0;
+    } else {
+        RECOMP_ICALL_OBSERVE_SITE(site, address);
+        function = recomp_lookup_manual(address);
+        if (!function)
+            function = recomp_lookup(address);
+        if (!function)
+            function = recomp_lookup_kernel(address);
+        if (function) {
+            RECOMP_ICALL_OBSERVE(address, RECOMP_ICALL_SEEN_RESOLVED);
+            RECOMP_ABI_CALL(address, function);
+        } else {
+            RECOMP_ICALL_OBSERVE(address, RECOMP_ICALL_SEEN_UNRESOLVED);
+            recomp_icall_fail_log(address);
+            g_eax = 0;
+        }
+    }
     g_esp = sp;
     return g_eax;
 }

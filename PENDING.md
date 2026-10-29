@@ -472,6 +472,24 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   stack (_CIacos, _CIpow and their kin), 22 that take floats on the stack themselves, 24 with an
   instruction the depth's walk does not reach, 7 with fnstsw outside a compare, 4 with fptan; the
   floats' names.
+- **3,762 in the build: the calls through a pointer** (29-10-2026, from 3,726; 4,896 of the game's 5,150
+  lift, from 4,789). A call through a pointer ("call [eax + 0x3A0]", the objects' callbacks and the
+  classes' functions) is a call of its own in the C, as the recompiled code makes it: x86_icall finds the
+  function at the address by the recompiler's tables (one written by hand, recompiled or decompiled, or
+  the kernel's), as RECOMP_ICALL_SAFE_AT does, with its arguments and return address on the guest's
+  stack; for the data flow it is code the compiler cannot see, with the convention that comes with it
+  (EAX, ECX and EDX written; ECX and EDX read where the functions a run saw it reach read them,
+  recompiled.py). It goes in only where what the callee drops is certain, which recompiled.py's
+  summaries now keep by the call's address: a kernel function's, the drop the functions a run saw it
+  reach agree on, or nothing where the caller drops the arguments itself right after it; a stdcall
+  guessed because the function comes out even that way would put the C's frame where the original may
+  not have it. Its words: what it drops, when it drops them; what its caller drops after it ("add esp,
+  N", "pop ecx"); or what was pushed for it, the registers the caller saved too when the functions seen
+  read more (a register passed as it came, ESI holding an object). 49 calls in the C; the recompiled
+  code's own, from 897 to 850. The nine scenarios frame for frame as their references. Left: 28
+  functions whose calls through a pointer drop what is only a guess, 17 that jump through one; of the
+  107 more that lift, 36 more in the build (the rest drop out in the analysis or with their callers, not
+  looked into yet).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

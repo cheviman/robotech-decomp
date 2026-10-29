@@ -5,7 +5,7 @@ Name:        lift.py
 Description: translates decoded x86 data instructions into IR statements that do what the Pentium III does
 Version:     0.2.0
 Created:     26-10-2026
-Modified:    27-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The registers are the decompiler's (profile.py): EAX to EDI are 32-bit registers whose parts AX, AL and AH
@@ -234,7 +234,8 @@ def lift_data(lifter, instruction):
         if name != "cmp":
             write(ops[0], result)
         return True
-    if name in ("or", "and") and ops[1].kind == "imm"             and (ops[1].imm & mask(ops[0].bits)) == (mask(ops[0].bits) if name == "or" else 0):
+    if name in ("or", "and") and ops[1].kind == "imm" \
+            and (ops[1].imm & mask(ops[0].bits)) == (mask(ops[0].bits) if name == "or" else 0):
         # or R, -1 and and R, 0 give -1 and 0 whatever R holds: R is not read
         result = ir.const(mask(ops[0].bits) if name == "or" else 0, ops[0].bits)
         write(ops[0], result)

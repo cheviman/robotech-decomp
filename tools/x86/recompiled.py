@@ -3,9 +3,9 @@
 """
 Name:        recompiled.py
 Description: what a function left recompiled reads, writes and takes, as the decompiled C that calls it sees it
-Version:     0.1.0
+Version:     0.2.0
 Created:     27-10-2026
-Modified:    27-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The decompiled C calls the functions that stay recompiled (the x87's, the ones that call through a
@@ -34,6 +34,11 @@ drops the arguments when it likes ("add esp, 8" or "pop ecx", a few instructions
 does not come out even that way, it is followed again with each such call dropping what was pushed for it
 (stdcall, as the kernel's functions are). A jump into another function's code that is not a call of it
 (the tail of memmove, the x87 control word put back) is followed as this function's own.
+
+Where what a call through a pointer drops is certain (the functions a run saw it reach agree, it is the
+kernel's, its caller drops the arguments right after it, or nothing was pushed for it), the decompiled C
+makes it as the recompiled code does (decompile.py): the site's drop, the registers it reads and the words
+pushed for it are kept by the call's address (Summaries.icalls).
 
 A function is not known, and the decompiled code does not call it, when ESP cannot be followed (it moves
 by a value, as _chkstk's does), when it reads its return address, when it jumps through a pointer, or
@@ -171,6 +176,7 @@ class Summaries:
         self.fragments = {}
         self.kernel = kernel_drops()
         self.site_pushes = {}   # a call's return address -> (bytes pushed for it without the registers saved, with them)
+        self.icalls = {}        # a call through a pointer's address -> (what it drops, the registers it reads, words pushed)
 
     def fragment(self, address):
         """Code no function's bounds hold (memmove's tails, past where the disassembler ends it), decoded
@@ -279,7 +285,10 @@ class Summaries:
         problem = None
         for mode in MODES:
             try:
-                return Scan(self, entry, mode).run()
+                scan = Scan(self, entry, mode)
+                found = scan.run()
+                self.icalls.update(scan.icalls)
+                return found
             except NotKnown as found:
                 problem = problem or found
                 if not getattr(found, "uneven", False):
@@ -308,6 +317,7 @@ class Scan:
         self.escapes = False
         self.exits = []
         self.drops = set()
+        self.icalls = {}
 
     def run(self):
         start = State((0, 0), None, [ORIG] * 24, {}, 0, 0, {})
@@ -645,6 +655,71 @@ class Scan:
             raise uneven("a call through a pointer whose arguments are not known")
         return pushed
 
+    def icall_site(self, instruction, state, drops, reads):
+        """A call through a pointer as the decompiled C makes it: (what it drops, the registers it reads, the
+        words of arguments it is handed), when both are certain; else None. What it drops is certain for a
+        function of the kernel's, where the functions a run saw it reach agree, or where its caller drops
+        the arguments itself right after it; a guess (stdcall because the function comes out even that
+        way) would put the C's frame where the original may not have it after the call. Its words: what it
+        drops, when it drops them; else what its caller drops after it ("add esp, N", "pop ecx"); else
+        what was pushed for it, with the registers the caller saved when the functions seen read more
+        (a register passed as it came, as decompile.site_count has it); nothing, when nothing was pushed."""
+        seen = [self.summaries.found[target] for target in self.summaries.targets.get(instruction.address, ())
+                if target in self.summaries.found and self.summaries.found[target].known]
+        operand = instruction.operands[0]
+        ordinal = None
+        if operand.kind == "mem" and operand.base is None and operand.index is None \
+                and KERNEL_THUNKS[0] <= operand.disp < KERNEL_THUNKS[1]:
+            ordinal = self.program.word(operand.disp)
+        elif operand.kind == "reg" and operand.reg in PARTS_OF:
+            ordinal = state.constants.get(("thunk", PARTS_OF[operand.reg][0]))   # mov edi, [thunk]; call edi
+        cleaned = self.cleaned_words(instruction)
+        if ordinal is not None:
+            if not (ordinal & 0x80000000 and (ordinal & 0xFFFF) in self.summaries.kernel):
+                return None
+        elif seen:
+            if {summary.drops for summary in seen} != {drops}:
+                return None
+        elif drops or cleaned is None and state.pushed_all != 0:
+            return None
+        if drops:
+            words = drops // 4
+        elif cleaned is not None:
+            words = cleaned
+        elif state.pushed_all == 0:
+            words = 0
+        elif not seen:
+            return None
+        else:
+            needed = max(summary.arguments for summary in seen)
+            words = next((pushed // 4 for pushed in (state.pushed, state.pushed_all)
+                          if pushed is not None and pushed // 4 >= needed), None)
+            if words is None:
+                return None
+        return drops, reads, words
+
+    def cleaned_words(self, instruction):
+        """The words a caller drops right after a call: "pop ecx" one at a time, or the first "add esp, N"
+        before the next jump or call; None when it drops none there."""
+        following = self.instructions.get(instruction.next)
+        words = 0
+        while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
+                and following.operands[0].reg == "ecx":
+            words += 1
+            following = self.instructions.get(following.next)
+        if words:
+            return words
+        at = instruction.next
+        for _ in range(12):
+            following = self.instructions.get(at)
+            if following is None or following.flow != dis.FLOW_NONE:
+                return None
+            if following.mnemonic == "add" and following.operands[0].kind == "reg" \
+                    and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
+                return following.operands[1].imm // 4
+            at = following.next
+        return None
+
     def unseen_reads(self, instruction, state):
         """The registers a call through a pointer reads: none for a function of the kernel's that takes
         its arguments on the stack; of ECX and EDX, the ones the functions a run saw it reach read; else
@@ -751,7 +826,9 @@ class Scan:
             for name in instruction.reads:
                 self.read(state, name)
             drops = self.unseen_drops(instruction, state)
-            self.take(state, Summary(self.unseen_reads(instruction, state), UNSEEN_CALLS_WRITE, UNSEEN_CALLS_WRITE), 0)
+            reads = self.unseen_reads(instruction, state)
+            self.icalls[instruction.address] = self.icall_site(instruction, state, drops, reads)
+            self.take(state, Summary(reads, UNSEEN_CALLS_WRITE, UNSEEN_CALLS_WRITE), 0)
         state.esp = moved(state.esp, drops)
         state.pushed = state.pushed_all = 0
         self.moved_up(state)

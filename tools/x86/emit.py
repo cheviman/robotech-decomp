@@ -5,7 +5,7 @@ Name:        emit.py
 Description: writes the game's functions as C, through the decompiler's writer
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    28-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
@@ -182,7 +182,7 @@ class X86Writer(emit.FunctionWriter):
 
     def call(self, statement):
         if statement.target is not None and statement.target in self.emitter.recompiled:
-            return self.recompiled_call(statement.target, statement.return_address)
+            return self.recompiled_call(statement.target, statement.return_address, address=statement.address)
         return super().call(statement)
 
     def ending(self, end):
@@ -200,12 +200,13 @@ class X86Writer(emit.FunctionWriter):
         declared = set(self.widths) | {self.emitter.param_name(self.entry, value) for value in self.params + self.results}
         return name if name in declared else "0u"
 
-    def recompiled_call(self, target, return_address, tail=False):
+    def recompiled_call(self, target, return_address, tail=False, address=None):
         """A call of a function left recompiled (decompile.py, recompiled.py): the registers it reads, and
         the ones it may leave as they were, into the register globals; its arguments on the guest's stack,
         under the return address the original pushes (x86_call); what it hands back from the globals. From
         a function whose stack stays in memory its arguments are there already: only the return address
-        goes on, and a jump to it pushes nothing (x86_jump)."""
+        goes on, and a jump to it pushes nothing (x86_jump). A call through a pointer is one of the code at
+        'address', which the recompiled code's tables find (x86_icall)."""
         emitter = self.emitter
         by_value, by_pointer, returned = emitter.by_value(target), emitter.by_pointer(target), emitter.returned(target)
         params = emitter.signatures[target].params
@@ -222,7 +223,11 @@ class X86Writer(emit.FunctionWriter):
                 handed.add(index)   # one it may leave as it was, which the caller reads afterwards
         lines = [f"{REGISTER_GLOBALS[index]} = {self.register_input(index)};" for index in sorted(handed)]
         values = "".join(", " + self.register_input(index) for index in sorted(arguments))
-        if tail and getattr(self.function, "memory_stack", False):
+        icalls = getattr(emitter, "icalls", {})
+        if target in icalls:
+            call = (f"x86_icall({self.exact(address)}, 0x{icalls[target]:08X}u, 0x{return_address:08X}u, "
+                    f"{len(arguments)}{values})")
+        elif tail and getattr(self.function, "memory_stack", False):
             call = f"x86_jump({emitter.names[target]})"
         else:
             call = f"x86_call({emitter.names[target]}, 0x{return_address or 0:08X}u, {len(arguments)}{values})"

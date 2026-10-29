@@ -4,7 +4,7 @@ Description: the game's functions decompiled to C by arcade-decomp's decompiler 
              x86 frontend (tools/x86)
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    28-10-2026
+Modified:    29-10-2026
 Author:      Sebastian Toyos
 
 The recompiled C (xboxrecomp) runs the game an instruction at a time; this is its way to C a person reads:
@@ -72,9 +72,12 @@ def game_entries(program):
 
 def check():
     cpu.use(X86)
-    names = symbols.load()["func"]
-    program = disassembler.Program(names)
-    builder = function.Builder(program)
+    sym = symbols.load()
+    program = disassembler.Program(sym["func"])
+    of_subject = left_alone(sym)[1]
+    summaries = recompiled.Summaries(program, call_targets_seen(),
+                                     lambda entry: of_subject(entry).startswith(("xdk/d3d8", "xdk/dsound")))
+    builder = function.Builder(program, certain_icalls(program, summaries))
     reasons = collections.Counter()
     examples = {}
     lifted, stacked, instructions = {}, 0, 0
@@ -104,9 +107,19 @@ def check():
         print("  %5d  %-40s e.g. %08X %s" % (count, key, entry, text[:70]))
 
 
+def certain_icalls(program, summaries):
+    """The calls through a pointer of the game's code whose drop is certain, from the summaries of the
+    functions that make them (recompiled.py): {the call's address: (what it drops, the registers it reads,
+    the words pushed for it)}."""
+    summaries.compute([entry for entry in game_entries(program)
+                       if any(instruction.flow == disassembler.FLOW_CALL and not instruction.targets
+                              for instruction in program.function(entry).instructions.values())])
+    return {address: site for address, site in summaries.icalls.items() if site is not None}
+
+
 class Analysis:
     """What the decompiler's data flow asks of the program's analysis: the code pointers the program stores
-    (none followed yet, so no call through a pointer lifts)."""
+    (none: a call through a pointer is a call of its own, made as the recompiled code makes it)."""
     pointer_writes = ()
     table_writes = ()
     pointer_tables = {}
@@ -158,11 +171,11 @@ def overlapping_slots(f):
     return False
 
 
-def lifted(program, chosen, skip=frozenset(), subject=None):
+def lifted(program, chosen, skip=frozenset(), subject=None, icalls=None):
     """The functions of 'chosen' (all of the game's code when None) lifted with their stack in slots:
     {entry: Function}, their stacks analysed; but for those in 'skip', and those 'subject' says are the
-    XDK's or Bink's."""
-    builder = function.Builder(program)
+    XDK's or Bink's. 'icalls': the calls through a pointer the C can make (recompiled.py)."""
+    builder = function.Builder(program, icalls)
     slotted = {}
     for entry in game_entries(program) if chosen is None else sorted(chosen):
         if entry in skip or (subject is not None and subject(entry).startswith(("xdk/", "bink/"))):
@@ -182,7 +195,7 @@ def lifted(program, chosen, skip=frozenset(), subject=None):
 def calls_of(f):
     """(the calls of a function, its tail calls): [(target, return address)], [target]."""
     calls = [(statement.target, statement.return_address) for block in f.blocks.values()
-             for statement in block.statements if isinstance(statement, ir.Call)]
+             for statement in block.statements if isinstance(statement, ir.Call) and statement.target is not None]
     tails = [block.end.target for block in f.blocks.values() if isinstance(block.end, ir.TailCall)]
     return calls, tails
 
@@ -214,10 +227,12 @@ def site_count(program, caller, return_address, summary):
             return words
     instructions = program.function(caller).instructions
     following = instructions.get(return_address)
-    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg"             and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
+    if following is not None and following.mnemonic == "add" and following.operands[0].kind == "reg" \
+            and following.operands[0].reg == "esp" and following.operands[1].kind == "imm":
         return following.operands[1].imm // 4
     words = 0
-    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg"             and following.operands[0].reg == "ecx":
+    while following is not None and following.mnemonic == "pop" and following.operands[0].kind == "reg" \
+            and following.operands[0].reg == "ecx":
         words += 1
         following = instructions.get(following.next)
     return words or None
@@ -371,9 +386,10 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
     SITE_PUSHES.clear()
     summaries.site_pushes = SITE_PUSHES
     builder = function.Builder(program)
+    icalls = certain_icalls(program, summaries)
     chosen = None
     while True:
-        built = lifted(program, chosen, skip, subject)
+        built = lifted(program, chosen, skip, subject, icalls)
         changed = True
         while changed:
             changed = False
@@ -400,21 +416,32 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                     del built[entry]
                     changed = True
         # the calls of the ones that count their arguments by their callers, each a target of its own
-        aliases, outside_counts = {}, {}
+        aliases, outside_counts, indirect = {}, {}, {}
         for entry, f in built.items():
             memory = getattr(f, "memory_stack", False)
             for block in f.blocks.values():
                 for statement in block.statements:
-                    if isinstance(statement, ir.Call) and statement.target not in built:
+                    if isinstance(statement, ir.Call) and statement.target is None and statement.address is not None:
+                        # a call through a pointer, a target of its own: the convention of code the compiler
+                        # cannot see (recompiled.py), its arguments the words pushed for it
+                        drops, reads, words = icalls[statement.origin]
+                        alias = SITES + len(aliases) + len(indirect)
+                        indirect[alias] = statement.origin
+                        summaries.found[alias] = recompiled.Summary(reads, recompiled.UNSEEN_CALLS_WRITE,
+                                                                    recompiled.UNSEEN_CALLS_WRITE, 0 if memory else words,
+                                                                    drops)
+                        outside_counts[alias] = 0 if memory else words
+                        statement.target = alias
+                    elif isinstance(statement, ir.Call) and statement.target not in built:
                         summary = summaries.found[statement.target]
                         if memory:
                             # from a function whose stack stays in memory: its arguments are there already
-                            alias = SITES + len(aliases)
+                            alias = SITES + len(aliases) + len(indirect)
                             aliases[alias] = statement.target
                             outside_counts[alias] = 0
                             statement.target = alias
                         elif summary.escapes:
-                            alias = SITES + len(aliases)
+                            alias = SITES + len(aliases) + len(indirect)
                             aliases[alias] = statement.target
                             outside_counts[alias] = max(summary.arguments,
                                                         site_count(program, entry, statement.return_address, summary))
@@ -423,7 +450,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                             outside_counts[statement.target] = summary.arguments
                 if isinstance(block.end, ir.TailCall) and block.end.target not in built:
                     if memory:
-                        alias = SITES + len(aliases)
+                        alias = SITES + len(aliases) + len(indirect)
                         aliases[alias] = block.end.target
                         outside_counts[alias] = 0
                         block.end.target = alias
@@ -442,6 +469,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                                                                 target in float_returns)
                                         for target, count in outside_counts.items()})
         flow.float_returns = float_returns
+        flow.icalls = indirect      # a call through a pointer's target of its own -> the call's address
         flow.float_results = {entry for entry in built if builder.x87.effect(entry) == (0, 1)}
         flow.aliases = aliases
         flow.recompiled = summaries
@@ -630,6 +658,9 @@ def write_once(out_dir, for_build, refused):
     # one written by hand, the recompiled function's own name
     hand = hand_functions.hand_functions()[0]
     for target in flow.outside:
+        if target in flow.icalls:
+            names[target] = "x86_icall"     # a call through a pointer (emit.py)
+            continue
         real = flow.aliases.get(target, target)
         names[target] = hand[real][0] if real in hand and real not in built else program.functions[real][1]
     arguments_by_value = {}
@@ -668,6 +699,7 @@ def write_once(out_dir, for_build, refused):
                       for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
     emitter.recompiled = set(flow.outside)
     emitter.float_returns = flow.float_returns
+    emitter.icalls = flow.icalls
     variables = {}
     for address, var in sym["vars"].items():
         found = symbols.TYPE_RE.match(var["type"])
@@ -719,7 +751,7 @@ def write_once(out_dir, for_build, refused):
                 "name": emitter.names[entry], "prototype": emitter.prototype(entry), "text": texts[entry],
                 "entry_text": entries.get(entry),
                 "calls": ["0x%08X" % c for c in sorted(targets & set(built))],
-                "recompiled": sorted({emitter.names[c] for c in targets if c in flow.outside}),
+                "recompiled": sorted({emitter.names[c] for c in targets if c in flow.outside and c not in flow.icalls}),
                 "registers": [REGISTER_GLOBALS[value[1]] for value in by_value if value[1] in REGISTER_GLOBALS],
                 "arguments": sum(1 for value in by_value if ARG0 <= value[1] < ARG0 + ARGUMENTS),
                 "by_pointer": len(emitter.by_pointer(entry)), "drops": f.drops or 0}
