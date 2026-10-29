@@ -38,7 +38,8 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 - [x] The logo movies through Direct3D 11 (`ROBOTECH_D3D11=1`): the device, `Clear`, `Swap`, textures and
       `DrawVerticesUP` routed, at the movies' speed
 - [x] The menu and the first mission through Direct3D 11: render states, vertex and index buffers, the
-      engine's own 2D draws, vertex programs (run on the CPU for now); sound, the pad and the keyboard,
+      engine's own 2D draws, vertex programs (on the CPU by default, on the GPU with
+      `ROBOTECH_VP_GPU=1`); sound, the pad and the keyboard,
       saves on the hard disk (`PENDING.md` has
       what is wrong and what is missing)
 - [x] The first of the engine decompiled into C (`src/game/engine/`): the object system (27 functions
@@ -64,7 +65,7 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       chapter as close (Force of Arms in space, Ambush Hills, Rebel Revenge, Goodbye Graystone,
       Besieged; their fog too)
 - [ ] The rest of Direct3D 8 routed to Direct3D 11 (`docs/d3d.md` maps how the game uses it): vertex
-      programs on the GPU, pixel shaders, render targets
+      programs on the GPU by default, pixel shaders, render targets
 - [ ] Higher resolutions, widescreen, frame rate
 - [ ] Xbox Series (UWP, Direct3D 11)
 - [ ] Vulkan, for Linux and Mac
@@ -122,6 +123,9 @@ Visual Studio Build Tools (MSVC, x64).
    ```bash
    ROBOTECH_D3D11=1 RECOMP_VBLANK=paced build/Release/robotech_battlecry.exe
    ```
+
+   `ROBOTECH_VP_GPU=1` runs the game's vertex programs on the GPU instead of the CPU (`PENDING.md` has
+   what it was measured at).
 
    The sound is the game's DirectSound answered on the host; `RECOMP_AC97_READY=1` plays it through
    xboxrecomp's emulated APU instead, and `RECOMP_AUDIO_WAV=<file>` records what is played.
