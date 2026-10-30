@@ -17,12 +17,12 @@ indirect_calls 838
 decompiled_functions 4374
 decompiled_unnamed 3376
 decompiled_uncommented 3579
-decompiled_registers 211454
+decompiled_registers 211444
 decompiled_flags 1277
 decompiled_arguments 88621
 decompiled_slots 11930
-decompiled_memory_by_address 23536
+decompiled_memory_by_address 19611
 decompiled_memory_computed 112884
-decompiled_float_registers 10949
+decompiled_float_registers 10681
 decompiled_float_bits 1467
 decompiled_gotos 0

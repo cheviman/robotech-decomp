@@ -571,6 +571,18 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   original's return address under it, its result taken off (x87.lift_crt). 9 calls in the C. _CIpow is
   in no function of the disassembler's own (crt_CIpow_default lies inside another's bounds), and its
   callers stay out. The nine scenarios frame for frame as their references.
+- **The data by name, before the functions' names** (30-10-2026; the order arcade-decomp's kit now
+  follows, Sebas: the data named and typed before the C, so that the C never reads the program's bytes
+  by their address). The decompiled C read 23,536 places at an address (12,974 of them): 17,550 words of
+  `.data` (the game's variables), 3,904 floats of `.rdata` (the compiler's constants), 1,014 floats of
+  `.data`, some 530 others. First step: a finite float or double the x87 loads from `.rdata`, which the
+  XBE's header marks read-only and nothing writes, is its value (`x87.READ_ONLY`), written as the C
+  literal in the fewest digits that make that float (`0.033f`; `0.5`, `255.0` without the f where the
+  digits are the float exactly, so that no two float literals are worked out as floats in one
+  expression: none are). Reads at an address: 23,536 to 19,611. The nine scenarios frame for frame as
+  their references. Next: the XBE's bytes classified (code, data, fill), then its tables and variables
+  named and typed (symbols.txt `var`, `struct`, `field`), the strings and the integer constants of
+  `.rdata`; the functions' names after that.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

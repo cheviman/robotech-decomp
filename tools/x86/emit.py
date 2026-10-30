@@ -5,7 +5,7 @@ Name:        emit.py
 Description: writes the game's functions as C, through the decompiler's writer
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    29-10-2026
+Modified:    30-10-2026
 Author:      Sebastian Toyos
 
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
@@ -18,11 +18,43 @@ name in the C yet. The string instructions' effects and the 64-bit divisions pri
 makes it: the registers it reads in the globals g_eax..., its arguments on the guest's stack
 (x86_call), what it hands back read from the globals after.
 """
+import decimal
+import fractions
+import struct
+
 from decompiler import emit
 from decompiler.stack import MEMORY_SP
 from v60 import ir
 
 from .profile import ARG0, ARGUMENTS, EAX, FLOAT0
+
+
+def float_literal(bits):
+    """C's float literal of a float's bits, in the fewest digits that make that float ("0.5f", "0.1f"); a
+    literal is rounded to the nearest float, so one between the halves to the float's neighbours is the
+    float, as loading its bits is. None for a NaN or an infinity."""
+    if (bits >> 23) & 0xFF == 0xFF:
+        return None
+    sign = "-" if bits & 0x80000000 else ""
+    magnitude = bits & 0x7FFFFFFF
+    if magnitude == 0:
+        return sign + "0.0f"
+
+    def value(of):
+        return fractions.Fraction(struct.unpack("<f", struct.pack("<I", of))[0])
+    exact = value(magnitude)
+    below = (exact + value(magnitude - 1)) / 2
+    above = (exact + value(magnitude + 1)) / 2 if magnitude + 1 < 0x7F800000 else exact + (exact - value(magnitude - 1)) / 2
+    for digits in range(1, 10):
+        text = format(float(exact), f".{digits}g")
+        near = fractions.Fraction(decimal.Decimal(text))
+        if below < near < above or (near in (below, above) and magnitude % 2 == 0):
+            if "." not in text and "e" not in text:
+                text += ".0"
+            # a float those digits are exactly (0.5, 255.0) is a double literal: C works out two float
+            # literals in the same expression as floats, the x87 as its doubles
+            return sign + text + ("" if near == exact else "f")
+    return None
 
 REGISTER_GLOBALS = {0: "g_eax", 1: "g_ecx", 2: "g_edx", 3: "g_ebx", 5: "g_ebp", 6: "g_esi", 7: "g_edi"}
 
@@ -166,6 +198,15 @@ class X86Printer(emit.Printer):
     def __init__(self, writer):
         super().__init__(writer)
         self.names = X86Names(writer)
+
+    def emit(self, node):
+        if isinstance(node, ir.Op) and node.name == "f.const32" and isinstance(node.args[0], ir.Const):
+            # a float of the program's constants, or of fld1 and fldz: its literal
+            literal = float_literal(node.args[0].value & 0xFFFFFFFF)
+            if literal is not None:
+                from decompiler.cprint import PRIMARY, UNARY, Value
+                return Value(literal, UNARY if literal.startswith("-") else PRIMARY, True, "f64")
+        return super().emit(node)
 
     def helper(self, name, args, bits):
         if name.startswith("x86_"):

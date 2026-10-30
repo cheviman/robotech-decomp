@@ -5,7 +5,7 @@ Name:        function.py
 Description: the game's x86 functions as control-flow graphs of IR blocks
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    29-10-2026
+Modified:    30-10-2026
 Author:      Sebastian Toyos
 
 Takes the functions disassembler.py decodes and lifts every instruction to IR (lift.py for data, here
@@ -49,6 +49,19 @@ class Builder:
         self.x87 = x87.Depths(program)
         self.ftol = next((entry for entry, (end, name, section) in program.functions.items()
                           if name == x87.FTOL), None)
+        x87.READ_ONLY = self.read_only
+
+    def read_only(self, address, bits):
+        """The bits of the finite float (32) or double (64) at 'address' in the XBE's .rdata, which its
+        header marks read-only (nothing ever writes a constant there); None elsewhere, or for a NaN or an
+        infinity."""
+        for name, base, size, raw_at, raw_size in self.program.sections:
+            if name == ".rdata" and base <= address and address + bits // 8 <= base + size:
+                data = self.program.read(address, bits // 8)
+                value = int.from_bytes(data, "little")
+                exponent = (value >> 23) & 0xFF if bits == 32 else (value >> 52) & 0x7FF
+                return None if exponent == (0xFF if bits == 32 else 0x7FF) else value
+        return None
 
     def drops(self, entry):
         """The bytes of arguments a function drops when it returns (its "ret N"); None for no function."""

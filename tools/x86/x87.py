@@ -6,7 +6,7 @@ Description: how deep the x87's register stack is at each instruction of a funct
              hand back a value in st(0)
 Version:     0.1.0
 Created:     28-10-2026
-Modified:    29-10-2026
+Modified:    30-10-2026
 Author:      Sebastian Toyos
 
 The x87 keeps its values on a stack of eight registers, st(0) its top. In compiled C the stack is empty
@@ -219,8 +219,16 @@ def memory_value(lifter, op, integer=False):
         return ir.op("f.int", (loaded, ir.const(op.bits, 8)), 64)
     if op.bits not in (32, 64):
         raise Unsupported(f"a floating-point value of {op.bits} bits")
+    if READ_ONLY is not None and op.base is None and op.index is None and op.segment is None:
+        bits = READ_ONLY(op.disp & 0xFFFFFFFF, op.bits)
+        if bits is not None:
+            # a constant of the program's: its value, as FLD loads it (a finite one, which FLD leaves as it is)
+            return ir.op("f.const32" if op.bits == 32 else "f.const64", (ir.const(bits, op.bits),), 64)
     loaded = lifter.load(lifter.address(op), op.bits, "float")
     return ir.op("f.from32" if op.bits == 32 else "f.from64", (loaded,), 64)
+
+
+READ_ONLY = None   # (address, bits) -> the bits of the finite constant there in memory nothing writes (function.py)
 
 
 def outcomes_where(mask, test):
