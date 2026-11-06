@@ -2,9 +2,9 @@
 Name:        noise_report.py
 Description: counts, in one pass over the generated C, every kind of noise that keeps it from reading
              as code a person wrote, and compares it with the baseline kept in the repo
-Version:     0.3.0
+Version:     0.4.0
 Created:     25-10-2026
-Modified:    28-10-2026
+Modified:    05-11-2026
 Author:      Sebastian Toyos
 
 The C under src/recomp/gen/ is a recompilation: xboxrecomp lifts each x86
@@ -17,6 +17,9 @@ The C under src/decompiled/ is the decompiler's (tools/decompile.py): structured
 variables, but with noise of its own, counted apart (the decompiled_ kinds): the registers and flags it
 keeps as variables by their names, its parameters and stack slots without names of their own, the
 memory it reaches by address, the functions with no name or description yet.
+
+The XBE's bytes of the game's own are counted too (tools/coverage.py, the xbe_ kinds): the ones not known
+to be code, data or fill, and the data the code reaches whose layout symbols.txt does not describe yet.
 
     py -3 tools/noise_report.py           # the table, against tools/noise_baseline.txt
     py -3 tools/noise_report.py --save    # the current counts become the baseline
@@ -34,6 +37,7 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "tools"))
+import coverage  # noqa: E402  (the XBE's bytes by class)
 import hand_functions  # noqa: E402  (the functions written by hand, by their entries)
 GEN = os.path.join(REPO, "src", "recomp", "gen")
 DECOMPILED = os.path.join(REPO, "src", "decompiled")
@@ -87,6 +91,16 @@ DECOMPILED_KINDS = [
     ("decompiled_float_bits", "floating-point values carried as their bits (x87_float(t), float_to_bits...)",
      re.compile(r"\b(?:x87_float|float_to_bits|float_from_bits|double_from_bits|double_to_bits)\(")),
     ("decompiled_gotos", "goto", re.compile(r"\bgoto\b")),
+    # where the structurer has no other C for a jump (Erosa-Hendren), a flag set before it and tested where
+    # it lands; one counted where it is declared
+    ("decompiled_control_flags", "control flags standing for a jump: bool L_<address>",
+     re.compile(r"\bL_[0-9A-F]{6} = false\b")),
+]
+# the XBE's bytes of the game's own (tools/coverage.py): what no analysis has told the class of, and the data
+# the code reaches whose layout is not described yet (no type, no name)
+COVERAGE_KINDS = [
+    ("xbe_unknown_bytes", "bytes of the game's code and data not known to be code, data or fill"),
+    ("xbe_untyped_bytes", "bytes of the game's data the code reaches, not described yet (no var line)"),
 ]
 NOT_NOISE = ("functions", "decompiled_functions")    # counts of work done, not of noise
 
@@ -158,10 +172,14 @@ def main():
 
     counts = measure()
     counts.update(measure_decompiled())
+    game = coverage.measure()
+    counts["xbe_unknown_bytes"] = game[coverage.UNKNOWN]
+    counts["xbe_untyped_bytes"] = game[coverage.DATA]
+    kinds = KINDS + DECOMPILED_KINDS + [(key, what, None) for key, what in COVERAGE_KINDS]
     base = load_baseline()
     worse = []
     print("%-28s %10s %10s  %s" % ("kind", "baseline", "now", "what"))
-    for key, what, _ in KINDS + DECOMPILED_KINDS:
+    for key, what, _ in kinds:
         now, was = counts[key], base.get(key)
         mark = ""
         if was is not None and key not in NOT_NOISE:
@@ -174,7 +192,7 @@ def main():
     if args.save:
         with open(BASELINE, "w", encoding="utf-8", newline="\n") as f:
             f.write("# tools/noise_report.py --save; one kind a line: key count\n")
-            for key, _, _ in KINDS + DECOMPILED_KINDS:
+            for key, _, _ in kinds:
                 f.write("%s %d\n" % (key, counts[key]))
         print("saved %s" % os.path.relpath(BASELINE, REPO))
     if worse and not args.save:

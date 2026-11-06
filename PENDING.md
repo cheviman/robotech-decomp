@@ -204,7 +204,10 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   up to the clock's own value for the frames now (clock_FramesTime). Whether that was Backlash's race is
   not shown: of nine runs of Backlash before the change one went its own way; after it, the survey's
   sixteen missions run again are as close to the original as before, Backlash's one run too; the
-  GPU's DPC still runs on another thread. Left: the date the
+  GPU's DPC still runs on another thread. Load brings it out: on 05-11-2026, with another heavy process
+  running beside them (tools/coverage.py), Besieged and Force of Arms both went their own way at frame
+  2880 (6 of 30 dumps each), and run again alone both were their references, as the other seven were.
+  Left: the date the
   kernel gives XAPI's own calls is still the console's in xemu (a save's folder times); xemu's sound
   keeps the emulator's clock, so a voice line, and the dialogue that waits for it, ends on frames that
   change from run to run.
@@ -583,6 +586,38 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   their references. Next: the XBE's bytes classified (code, data, fill), then its tables and variables
   named and typed (symbols.txt `var`, `struct`, `field`), the strings and the integer constants of
   `.rdata`; the functions' names after that.
+- **The XBE's bytes classified** (05-11-2026): `tools/coverage.py` gives every byte of every section, as the
+  loader lays it out, one class, as arcade-decomp's coverage does for a program ROM: code (the functions'
+  bytes), described data (symbols.txt's var lines, jump tables and the byte tables of sparse switches, the
+  strings, the constants the code loads from `.rdata` by address with the instruction's width, the words
+  that hold a function's entry or a string's start, the kernel's import table, the title's and the saves'
+  images and Dolby's program), referenced data (from a place the code reaches up to the next known thing),
+  fill (int3, nop, zeros and MSVC's multi-byte nops such as "lea ecx, [ecx+0]" between a function and its
+  jump table or the next function; zeros up to a word after described data) and unknown. The game's own is
+  its and the engine's code (symbols.txt's file lines: XAPI and the C runtime lie among it in `.text`) and
+  the part of `.rdata` and `.data` its code reaches, the linker having put each object's constants and
+  variables one after another: a place is the game's when its code (or symbols.txt) reaches it, the
+  libraries' when only theirs does, the bytes after it with it. The game's: 1,237,883 bytes of code, none
+  unknown; 64,267 described, 898,918 referenced (nearly all of `.data`'s uninitialised part, the game's
+  variables), 39,408 fill, 15,284 unknown (12,964 in `.rdata`, 2,320 in `.data`). The libraries': 34,730
+  unknown, most of it Bink's, DirectSound's and the C runtime's tables in `.rdata` that their code reaches
+  through a register. `tools/noise_report.py` counts the game's unknown and referenced bytes
+  (`xbe_unknown_bytes`, `xbe_untyped_bytes`). What the unknown data is: elements of tables the code walks by
+  an index (records of 0xA8 bytes from 0x1B00C0, each a mission's, "v602", "v103"...; a run of float
+  records in `.rdata` from 0x1922D8; pairs of halfwords from 0x1BA55C) after a string the scanner found
+  inside one of them, which ends the referenced run before it; they go once the tables are typed. Left in
+  the code: two pieces of XAPI that only an exception's scope table reaches (0x15E21, 0x1601B), counted
+  with the libraries. Next: the tables typed (their count and their record's structure), then the
+  variables, named in batches by the subsystem whose functions reach them.
+- **The core on arcade-decomp's c069e35** (05-11-2026, from a832d1d: the game's state as one structure,
+  pointers kept into it, tables by name, counted indexes, the other games' commits). For x86 the only change
+  is 16 `unreachable();` after a switch whose every case returns (`src/decompiled/x86.h` defines it as
+  `__assume(0)`, as the other games' support headers do); the game's state as a structure is a profile's
+  setting (`memory.STATE`) Robotech's does not set yet: the Xbox's memory left behind (below) is that step.
+  Counted now: the control flags the structurer keeps where a jump has no other C (`bool L_<address>`,
+  `decompiled_control_flags`), 206 in 81 functions; four of those end in a chain of ifs over their flags
+  after a switch, which MSVC warns can run off the end without a value (C4715: sub_000A2540,
+  sub_000CBD10, sub_000CC0A0, sub_000D4680), where the original's cases always set one of them.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

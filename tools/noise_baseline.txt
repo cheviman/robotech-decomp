@@ -26,3 +26,6 @@ decompiled_memory_computed 112884
 decompiled_float_registers 10681
 decompiled_float_bits 1467
 decompiled_gotos 0
+decompiled_control_flags 206
+xbe_unknown_bytes 15284
+xbe_untyped_bytes 898918

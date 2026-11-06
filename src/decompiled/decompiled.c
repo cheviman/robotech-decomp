@@ -20367,6 +20367,7 @@ uint32_t sub_00024720(uint32_t edx)
 		eax = 0x1E6298u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_00024830(uint32_t edx)
@@ -36150,6 +36151,7 @@ uint32_t sub_0002FAA0(uint32_t arg0)
 		eax = 1u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_0002FB20(uint32_t arg0)
@@ -36302,6 +36304,7 @@ uint32_t sub_0002FBA0(uint32_t arg0)
 		eax = 3u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_0002FC40(uint32_t arg0, uint32_t arg1)
@@ -36489,6 +36492,7 @@ uint32_t sub_0002FC40(uint32_t arg0, uint32_t arg1)
 		eax = 1u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_0002FDD0(uint32_t arg0, uint32_t arg1)
@@ -42925,6 +42929,7 @@ uint32_t sub_00034040(uint32_t arg0)
 		eax = x86_call(vcObjectGet_entry, 0x000340BDu, 2, arg0_2, arg1);
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000340E0(uint32_t arg0)
@@ -46232,6 +46237,7 @@ uint32_t sub_00038410(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		g_esp = g_esp + 0x10u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000385A0(uint32_t arg0)
@@ -68926,6 +68932,7 @@ uint32_t sub_0004CB20(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	case 0x04CBE9u:
 		return ebp;
 	}
+	unreachable();
 }
 
 void sub_0004CC10(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
@@ -146540,6 +146547,7 @@ uint32_t sub_000A57C0(uint32_t arg0)
 		eax = negative ^ overflow;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000A5880(uint32_t arg0)
@@ -146605,6 +146613,7 @@ uint32_t sub_000A5880(uint32_t arg0)
 		eax = negative ^ overflow;
 		return eax;
 	}
+	unreachable();
 }
 
 double sub_000A5960(uint32_t arg0)
@@ -146676,6 +146685,7 @@ double sub_000A5960(uint32_t arg0)
 			f0 = x87_round(f0 + 4.2949673e+09f);
 		return f0;
 	}
+	unreachable();
 }
 
 double sub_000A5A50(uint32_t arg0, uint32_t arg1)
@@ -146715,6 +146725,7 @@ double sub_000A5A50(uint32_t arg0, uint32_t arg1)
 		f0 = x87_float(arg1);
 		return f0;
 	}
+	unreachable();
 }
 
 double sub_000A5AC0(uint32_t arg0)
@@ -146786,6 +146797,7 @@ double sub_000A5AC0(uint32_t arg0)
 		f0 = x87_round(f0 + 4.2949673e+09f);
 		return f0;
 	}
+	unreachable();
 }
 
 uint32_t sub_000A5BD0(uint32_t arg0)
@@ -146818,6 +146830,7 @@ uint32_t sub_000A5BD0(uint32_t arg0)
 		eax = 2u;
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000A5C20(uint32_t arg0)
@@ -206306,6 +206319,7 @@ uint32_t sub_000D5480(uint32_t eax, uint32_t arg0)
 		eax = sub_000D5440(eax, arg0_2, arg1);
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000D5630(uint32_t arg1)
@@ -215339,6 +215353,7 @@ uint32_t sub_000DC320(uint32_t arg0)
 		eax = MEM32(eax + 0xB8u);
 		return eax;
 	}
+	unreachable();
 }
 
 uint32_t sub_000DC355(uint32_t eax)
@@ -234471,6 +234486,7 @@ uint32_t sub_000EA6C0(uint32_t eax)
 		eax_2 = 0xFFFFFFFFu;
 		return eax_2;
 	}
+	unreachable();
 }
 
 void sub_000EA850(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)

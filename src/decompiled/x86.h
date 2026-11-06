@@ -6,7 +6,7 @@
  *                 and through a pointer
  *    Version:     0.3.0
  *    Created:     26-10-2026
- *    Modified:    29-10-2026
+ *    Modified:    05-11-2026
  *    Author:      Sebastian Toyos
  *
  *    Each does what the Pentium III does: a shift's count is taken modulo 32 (64 for a 64-bit value), a
@@ -24,6 +24,16 @@
 #include <stdlib.h>
 
 #include "recomp_types.h"
+
+/* where the C never goes: past a switch over a jump table whose every case returns, which only an index
+   past the table would leave, and the original's guard never lets one through (C23's unreachable()) */
+#ifndef unreachable
+#if defined(_MSC_VER)
+#define unreachable() __assume(0)
+#else
+#define unreachable() __builtin_unreachable()
+#endif
+#endif
 
 /* ── Shifts by a count the processor masks ────────────────────────────────────────────────────────── */
 

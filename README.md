@@ -53,6 +53,11 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
       recompiled code does, their
       x87 floating point as C doubles rounded as the x87 rounds them, a float handed back a double
       returned; the nine scenarios frame for frame as before
+- [x] Every byte of the XBE classified (`tools/coverage.py`, `analysis/coverage.txt`): code, data whose
+      layout is known, data the code reaches, fill, unknown. Of the game's own (its and the engine's code,
+      and the data its code reaches in `.rdata` and `.data`), 1,237,883 bytes of code with none unknown;
+      64,267 of data described, 898,918 reached but not yet typed, 39,408 of fill and 15,284 unknown, all
+      of them in its data (5-11-2026)
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -189,8 +194,10 @@ hand.
   chapter, reached with the code that unlocks them) with every clock the game reads tied to the
   frames and an empty save folder of its own, so runs repeat frame for frame, and compares every dumped
   frame and saved file with the reference the build before wrote (`--save` records it). `noise_report.py`
-  counts what keeps the generated C from reading as written and fails if a count went up
-  (`--save` after a round that brought some down).
+  counts what keeps the generated C from reading as written, the XBE's bytes of the game's own that are
+  unknown or not yet typed among them (`tools/coverage.py`), and fails if a count went up (`--save` after a
+  round that brought some down). The scenarios run alone: under another heavy process, two of them
+  went their own way once at frame 2880 (the race the clock tied to the frames does not cover).
 - **Checking against the original**: the same scenarios run on the original game in xemu, patched to
   dump its frames with the port's numbers and to answer the game's clock and pad as the port does
   (`tools/reference/xemu/` has the patch, how to build it and what it needs of your own console), and
@@ -231,6 +238,7 @@ tools/apply_names.py    writes the names of symbols.txt into the disassembly bef
 tools/apply_files.py    tells the recompiler each function's file, from symbols.txt
 tools/organize_gen.py   lays the recompiled C out in its files, each function with its description
 tools/noise_report.py   counts what keeps the generated C from reading as written (baseline beside it)
+tools/coverage.py       classifies every byte of the XBE: code, data described or reached, fill, unknown
 tools/conformance.py    runs xboxrecomp's oracle: the game's machine code and the C side by side
 tools/hand_functions.py lists the functions written by hand (src/game/) and wrapped (src/recomp_manual.c),
                         for the recompiler
