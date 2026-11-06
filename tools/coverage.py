@@ -12,14 +12,15 @@ arcade-decomp's tools/core/coverage.py maps a program ROM this way; this is the 
 section, as the section lies in memory (its part past the raw data, which the loader zeroes, included),
 gets one class:
   code             the functions' bytes (analysis/disasm/functions.json), but for the tables in them
-  described data   data whose layout is known: symbols.txt's var lines (a type and a count), the jump
+  described data   data whose layout is known: symbols.txt's var lines (a type and a count; of records
+                   of a structure in place, their named fields), the jump
                    tables and the byte tables of sparse switches, the strings (analysis/disasm/strings.json),
                    the constants the code loads from .rdata by their address with a width the instruction
                    gives (the x87's floats, which the decompiled C writes as their values), the words that
                    hold a function's entry or a string's start, the kernel's import table, and the sections
                    that are one thing each: the title's image, the saves' image, the Dolby encoder's program
-  referenced data  from a place the code reads, writes or takes the address of, or a data line of
-                   symbols.txt, up to the next known thing
+  referenced data  from a place the code reads, writes or takes the address of, a data line of
+                   symbols.txt or a record of a structure in place, up to the next known thing
   fill             what lies between a function and the next function or jump table when it is only int3,
                    nop, zeros or MSVC's multi-byte nops ("lea ecx, [ecx+0]"); the zeros after described data
                    up to the next 4-byte word
@@ -44,6 +45,7 @@ from collections import Counter, defaultdict
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, TOOLS)
 
+import symbols  # noqa: E402
 from x86 import disassembler  # noqa: E402
 
 REPO = os.path.dirname(TOOLS)
@@ -83,28 +85,34 @@ def only_nops(data):
 TYPE_BYTES = {"u8": 1, "s8": 1, "char": 1, "u16": 2, "s16": 2, "u32": 4, "s32": 4, "f32": 4, "f64": 8}
 
 
-def symbols():
-    """symbols.txt's var lines as (address, bytes or None for a count not given) and its data lines'
-    addresses."""
-    variables, data = [], []
-    for line in open(SYMBOLS, encoding="utf-8"):
-        line = line.split("#")[0].split()
-        if len(line) < 3 or not re.fullmatch(r"[0-9A-Fa-f]{8}", line[0]):
-            continue
-        address = int(line[0], 16)
-        if line[1] == "data":
-            data.append(address)
-        elif line[1] == "var" and len(line) >= 4:
-            m = re.fullmatch(r"(\w+?)(?:\[(\d*)\])?", line[3])
-            size = TYPE_BYTES.get(m.group(1)) if m else None
-            if size is None:
+def symbols_places():
+    """symbols.txt's places: (variables as (address, bytes or None for a count not given), the stretches
+    of records of a structure in place whose layout is known (their named fields), the records as (start,
+    size), the data lines' addresses)."""
+    sym = symbols.load()
+    variables, fields, records = [], [], []
+    for address, var in sym["vars"].items():
+        if var.get("struct"):
+            st = sym["structs"].get(var["struct"])
+            if st is None or not st.get("size"):
                 continue
-            count = m.group(2)
-            if count == "":
-                variables.append((address, None))
-            else:
-                variables.append((address, size * int(count or 1)))
-    return variables, data
+            count = symbols.STRUCT_TYPE_RE.match(var["type"]).group(2)
+            number = int(count) if count else 1
+            for k in range(number):
+                first = address + k * st["size"]
+                records.append((first, st["size"]))
+                for fld in st["fields"]:
+                    m = symbols.TYPE_RE.match(fld["type"])
+                    one = TYPE_BYTES[m.group(1)]
+                    many = int(m.group(2)) if m.group(2) else 1
+                    fields.append((first + fld["offset"], one * many))
+            continue
+        m = symbols.TYPE_RE.match(var["type"])
+        size = TYPE_BYTES[m.group(1)]
+        count = m.group(2)
+        variables.append((address, None if count == "" else size * int(count or 1)))
+    data = [address for address in sym["data"] if address not in sym["vars"]]
+    return variables, fields, records, data
 
 
 class Image:
@@ -177,14 +185,16 @@ def classify(image):
                 if found is not None and found[1] <= 1024:
                     describe(*found)
             for operand in instruction.operands:
-                if operand.kind == "mem" and operand.base is None and not operand.segment:
+                if operand.kind == "mem" and not operand.segment:
+                    # a fixed place, or a table's start a register indexes ("[eax + table]"): a displacement
+                    # in a section of data (a structure's offsets are small numbers, below every section)
                     place = operand.disp
-                    if place in program.functions or image.section(place) is None:
+                    if place in program.functions or image.section(place) in (None, ".text"):
                         continue
                     references[place].append(instruction.address)
                     # a constant loaded by its address with the width the instruction gives
-                    if operand.index is None and image.section(place) in read_only and operand.bits in (32, 64, 80) \
-                            and instruction.mnemonic.startswith("f"):
+                    if operand.base is None and operand.index is None and image.section(place) in read_only \
+                            and operand.bits in (32, 64, 80) and instruction.mnemonic.startswith("f"):
                         describe(place, operand.bits // 8)
                 elif operand.kind == "imm" and operand.imm not in program.functions:
                     name = image.section(operand.imm)
@@ -202,7 +212,7 @@ def classify(image):
         strings[address] = s["length"] + 1
         describe(address, s["length"] + 1)
 
-    variables, data = symbols()
+    variables, fields, records, data = symbols_places()
     variable_starts = sorted(a for a, _ in variables)
     for address, size in variables:
         if size is None:
@@ -210,8 +220,16 @@ def classify(image):
             position = bisect.bisect_right(variable_starts, address)
             size = (variable_starts[position] - address) if position < len(variable_starts) else 4
         describe(address, size)
+    # records of a structure in place: their named fields described, the rest of each record reached
+    for address, size in fields:
+        describe(address, size)
+    for address, _ in records:
+        references.setdefault(address, [])
     for address in data:
         references.setdefault(address, [])
+    in_records = set()
+    for first, size in records:
+        in_records.update(range(first, first + size))
 
     # the kernel's import table: a word per import, then a zero
     thunk = int(json.load(open(disassembler.ANALYSIS_JSON))["kernel_thunk_addr"], 16)
@@ -255,7 +273,8 @@ def classify(image):
             else:
                 if address in references:
                     current = CLASSES.index(DATA)
-                row[address - start] = current
+                # a record's bytes no field names are still the record's
+                row[address - start] = CLASSES.index(DATA) if address in in_records else current
         # fill: what lies between a function and the next known thing (a function, its tables), when it is
         # only int3, nop or zeros; the zeros after described data up to the next 4-byte word
         unknown, known = CLASSES.index(UNKNOWN), (CLASSES.index(CODE), CLASSES.index(DESCRIBED))

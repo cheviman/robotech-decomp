@@ -56,8 +56,9 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 - [x] Every byte of the XBE classified (`tools/coverage.py`, `analysis/coverage.txt`): code, data whose
       layout is known, data the code reaches, fill, unknown. Of the game's own (its and the engine's code,
       and the data its code reaches in `.rdata` and `.data`), 1,237,883 bytes of code with none unknown;
-      64,267 of data described, 898,918 reached but not yet typed, 39,408 of fill and 15,284 unknown, all
-      of them in its data (5-11-2026)
+      90,520 of data described, 856,201 reached but not yet typed, 39,408 of fill and 14,448 unknown, all
+      of them in its data; tables of records in place by their fields in the decompiled C (`Levels`, the
+      pads, the object system's families and types) (5-11-2026)
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a
@@ -160,7 +161,9 @@ hand.
 
 - **Names, descriptions, files, types**: `symbols/symbols.txt`, the one place they live (its header says
   how to read it); `struct`, `field` and `var` lines become `symbols.h`'s accessors for the C written by
-  hand (`vcClassDesc_create(p)`, `vcClassByType(type)`). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
+  hand (`vcClassDesc_create(p)`, `vcClassByType(type)`). A `var` whose type is a structure is records of
+  it in place (`var Levels Level[76]`), which the decompiled C reads by field (`Level_chapter(Levels(level))`);
+  an address of a place with a name goes by it where the C uses it as a value (`ecx = Levels_VA;`). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
   a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C.
 - **A function written by hand**: C in `src/game/`, by its name in `symbols.txt` and with a signature
   of its own, the guest's memory read through `symbols.h`'s accessors. Beside it, its entry

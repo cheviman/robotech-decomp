@@ -14,7 +14,8 @@
 #            what the function NAME does, in the game's terms and with the C's names
 #   ADDRESS  var  NAME  TYPE [STRUCT]
 #            a variable: TYPE u8 s8 u16 s16 u32 s32 f32 f64 char, TYPE[N] an array of N, TYPE[] one of
-#            unknown length; a STRUCT after a u32 says it points at one
+#            unknown length; a STRUCT after a u32 says it points at one. TYPE a structure's name is a
+#            record of it in place, STRUCT[N] a table of N records (the C: STRUCT_field(NAME(i)))
 #   struct  NAME  SIZE                     a structure of the game (SIZE in hexadecimal)
 #   field   STRUCT  OFFSET  NAME  TYPE [STRUCT]
 #            one of its fields (OFFSET in hexadecimal); a field nobody has named is not listed
@@ -588,6 +589,7 @@ field   vcSceneObject  B8  hit_bounds_entry    u32      # its entry in vcSceneHi
 001B9AA0  var   vcTextShadowX  f32                    # how far right of the text its shadow is: 1 unless set
 001B9AA4  var   vcTextShadowY  f32                    # how far below it: 1 unless set
 001B9BA8  var   vcDefaultFontWidths  s8[256]          # the default font's width of each character, in 16ths of vcTextSize (never written)
+001B9AA8  var   vcDefaultFontLefts  s8[256]           # where each character starts in its 16-texel cell of the default font's texture, its quad's left (8 for every one; never written)
 001A8B30  data  vcDefaultFontName                     # "defaultfont.tga"
 
 # The game's objects (game/objects): the players, entities, weapons, effects, screens... of the game, each of a
@@ -1093,6 +1095,10 @@ comment vcRenderBuffersInit Makes the renderer's vertex buffers: four of 512 KB,
 00112690  func  vcPadRead
 comment vcPadCalibrate Widens a port's stick ranges to the furthest each stick has been seen to go, and zeroes a stick's axis within its dead zone.
 comment vcPadRead Reads a port's pad with XInputGetState into the engine's state of it: the sticks as bytes, the digital buttons as 0 or 255, an analog button under 30 as 0. Nothing for a port with no pad open.
+002BE140  var   vcPads  vcPad[4]                      # each port's pad as the game reads it
+struct  vcPad  210                                    # a port's pad as the game reads it: what it makes of the reads, and the last two reads
+field   vcPad  1E0  read_before  u8[24]               # the read before the last, which the next read moves here
+field   vcPad  1F8  read         u8[24]               # the pad as vcPadRead last read it: the sticks as bytes, the buttons 0 to 255
 
 # The cheats: a word of bits the game menu's codes set. With L and R held, left, up, down, A, right, B,
 # START open the code keyboard; its text is set against twelve codes (WEWILLWIN, WHERESMAX, SUPERMECH,
@@ -1121,13 +1127,15 @@ comment MainMenuEnterCode Sets the text entered on the code keyboard against the
 
 # The levels: a table of them in place (Levels), each a mission's part, a training or a versus arena,
 # with the chapter it is in and the levels that must be finished before it opens; the menus ask these.
-001AECB8  data  Levels                                # the levels, a Level (0x54 bytes) each, up to one whose flags are -1
+001AECB8  var   Levels  Level[76]                     # the 75 levels, and after them one whose flags are -1, which ends them
 001E639C  var   LevelCurrent  s32                     # the level being played, by its number in Levels
 001E6398  var   LevelsAllOpen  u32                    # while not 0, LevelIsOpen opens every level shown on its own
 struct  Level  54                                     # a level in Levels
 field   Level  00  flags          u32                 # 1 finished; 4 not shown on its own; 8 opens once the rest of its chapter is finished; 0x80000 a versus arena
 field   Level  04  requires       s16                 # a level that must be finished before it opens; -1 none
 field   Level  06  requires_also  s16                 # a second one; -1 none
+field   Level  08  file           char[32]            # the name of its level's file, which the game loads as NAME_f (m101_f.lvl)
+field   Level  28  title_string   u32                 # its title's number in the string table (vcStringManager), on its mission screen
 field   Level  50  chapter        u32                 # its chapter: 0 to 4 the story's five, then the other modes' (7 the versus arenas)
 00024FE0  func  LevelCount
 00025000  func  LevelGet
@@ -4132,4 +4140,258 @@ comment Building_Load Reads an object of the Building type from a file (GameObje
 comment Building_Register Registers the Building type (Structure 0), its asset building_explosion.wav: fills its GameObjectType and stores it in its family.
 0010AAF0  func  ReconLightEffect_StateMachine
 comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
+
+# ======== the game's object types' and families' records (generated by tools/symbols.py merge from symbols/registries.json and the type lines) ========
+001BC768  var   PlayerFamily                         GameObjectFamily # the Player family: its types by number, and how it is used
+001BC998  var   EntityFamily                         GameObjectFamily # the Entity family: its types by number, and how it is used
+001E5FC8  var   ScreenFamily                         GameObjectFamily # the Screen family: its types by number, and how it is used
+001E63A0  var   MissionFailedScreenType              GameObjectType   # the MissionFailedScreen type (Screen 27): what its registering function fills in, and its pool
+001E6840  var   WeaponFamily                         GameObjectFamily # the Weapon family: its types by number, and how it is used
+001E6A58  var   HUDScreenType                        GameObjectType   # the HUDScreen type (Screen 10): what its registering function fills in, and its pool
+001E6CD0  var   PlayerProximityTriggerType           GameObjectType   # the PlayerProximityTrigger type (Trigger 1): what its registering function fills in, and its pool
+001E6D18  var   EntityProximityTriggerType           GameObjectType   # the EntityProximityTrigger type (Trigger 3): what its registering function fills in, and its pool
+001EA648  var   MissionCompleteScreenType            GameObjectType   # the MissionCompleteScreen type (Screen 22): what its registering function fills in, and its pool
+001EAAD0  var   MainMenuScreenType                   GameObjectType   # the MainMenuScreen type (Screen 0): what its registering function fills in, and its pool
+001EAB48  var   NodeFamily                           GameObjectFamily # the Node family: its types by number, and how it is used
+001EAD60  var   ActionFamily                         GameObjectFamily # the Action family: its types by number, and how it is used
+001EAFC0  var   SplineNodeType                       GameObjectType   # the SplineNode type (Node 9): what its registering function fills in, and its pool
+001EB050  var   ScreenElementFamily                  GameObjectFamily # the ScreenElement family: its types by number, and how it is used
+001EB2F0  var   PlayerType                           GameObjectType   # the Player type (Player 0): what its registering function fills in, and its pool
+001EB958  var   PlayerStandInEntityNodeType          GameObjectType   # the PlayerStandInEntityNode type (Node 1): what its registering function fills in, and its pool
+001EB9A8  var   ZenRetrievalType                     GameObjectType   # the ZenRetrieval type (Entity 48): what its registering function fills in, and its pool
+001EBD00  var   CentipedeType                        GameObjectType   # the Centipede type (Entity 37): what its registering function fills in, and its pool
+001EC058  var   MilitaryTransportType                GameObjectType   # the MilitaryTransport type (Entity 36): what its registering function fills in, and its pool
+001EC3B0  var   MechHaulerType                       GameObjectType   # the MechHauler type (Entity 33): what its registering function fills in, and its pool
+001EC708  var   ZenHeavyMissileTurretType            GameObjectType   # the ZenHeavyMissileTurret type (Entity 46): what its registering function fills in, and its pool
+001ECBF8  var   ZenLightMissileTurretType            GameObjectType   # the ZenLightMissileTurret type (Entity 45): what its registering function fills in, and its pool
+001ED0E8  var   ZenCruiserTurret1Type                GameObjectType   # the ZenCruiserTurret1 type (Entity 44): what its registering function fills in, and its pool
+001ED2F0  var   VF1SXFighterType                     GameObjectType   # the VF1SXFighter type (Entity 43): what its registering function fills in, and its pool
+001ED790  var   VF1AXFighterType                     GameObjectType   # the VF1AXFighter type (Entity 42): what its registering function fills in, and its pool
+001EDC30  var   PodOfficerSledMissileType            GameObjectType   # the PodOfficerSledMissile type (Entity 77): what its registering function fills in, and its pool
+001EDE60  var   FPAMissileType                       GameObjectType   # the FPAMissile type (Entity 76): what its registering function fills in, and its pool
+001EE4F0  var   ZenHeavyMissileType                  GameObjectType   # the ZenHeavyMissile type (Entity 75): what its registering function fills in, and its pool
+001EE720  var   ZenLightMissileType                  GameObjectType   # the ZenLightMissile type (Entity 74): what its registering function fills in, and its pool
+001EEDC0  var   VF1SMType                            GameObjectType   # the VF1SM type (Entity 63): what its registering function fills in, and its pool
+001F0570  var   VF1JMType                            GameObjectType   # the VF1JM type (Entity 62): what its registering function fills in, and its pool
+001F1D20  var   VF1BMType                            GameObjectType   # the VF1BM type (Entity 61): what its registering function fills in, and its pool
+001F34D0  var   VF1AMType                            GameObjectType   # the VF1AM type (Entity 60): what its registering function fills in, and its pool
+001F4C80  var   VF1DMType                            GameObjectType   # the VF1DM type (Entity 59): what its registering function fills in, and its pool
+001FC2F0  var   VF1JXType                            GameObjectType   # the VF1JX type (Entity 28): what its registering function fills in, and its pool
+001FDAA0  var   VF1BXType                            GameObjectType   # the VF1BX type (Entity 27): what its registering function fills in, and its pool
+00200A00  var   VF1DXType                            GameObjectType   # the VF1DX type (Entity 0): what its registering function fills in, and its pool
+00203AB8  var   ExcaliburType                        GameObjectType   # the Excalibur type (Entity 12): what its registering function fills in, and its pool
+00204310  var   ZenReconCollisionType                GameObjectType   # the ZenReconCollision type (Entity 51): what its registering function fills in, and its pool
+00204460  var   ZenShuttleCollisionType              GameObjectType   # the ZenShuttleCollision type (Entity 50): what its registering function fills in, and its pool
+002045B0  var   SeaSergeantCollisionType             GameObjectType   # the SeaSergeantCollision type (Entity 49): what its registering function fills in, and its pool
+002061F8  var   MalePowerArmorType                   GameObjectType   # the MalePowerArmor type (Entity 41): what its registering function fills in, and its pool
+002068D0  var   PodOfficerSledType                   GameObjectType   # the PodOfficerSled type (Entity 47): what its registering function fills in, and its pool
+00206D80  var   PodOfficerSkarredDisabledType        GameObjectType   # the PodOfficerSkarredDisabled type (Entity 53): what its registering function fills in, and its pool
+002070D8  var   PodOfficerSkarredType                GameObjectType   # the PodOfficerSkarred type (Entity 52): what its registering function fills in, and its pool
+00207430  var   PodOfficerType                       GameObjectType   # the PodOfficer type (Entity 2): what its registering function fills in, and its pool
+00207818  var   ZenReEntryPodType                    GameObjectType   # the ZenReEntryPod type (Entity 32): what its registering function fills in, and its pool
+00207A68  var   SpartanType                          GameObjectType   # the Spartan type (Entity 40): what its registering function fills in, and its pool
+00208038  var   RaiderXType                          GameObjectType   # the RaiderX type (Entity 39): what its registering function fills in, and its pool
+00208390  var   MacIIType                            GameObjectType   # the MacII type (Entity 38): what its registering function fills in, and its pool
+00208728  var   ZenReconShipType                     GameObjectType   # the ZenReconShip type (Entity 25): what its registering function fills in, and its pool
+00208C20  var   FlareType                            GameObjectType   # the Flare type (Entity 69): what its registering function fills in, and its pool
+00208CD0  var   PodScoutSpaceType                    GameObjectType   # the PodScoutSpace type (Entity 23): what its registering function fills in, and its pool
+00208F48  var   GladiatorType                        GameObjectType   # the Gladiator type (Entity 22): what its registering function fills in, and its pool
+00209520  var   PodHeavyArtillerySpaceType           GameObjectType   # the PodHeavyArtillerySpace type (Entity 21): what its registering function fills in, and its pool
+002099D8  var   PodLightArtillerySpaceType           GameObjectType   # the PodLightArtillerySpace type (Entity 20): what its registering function fills in, and its pool
+00209E88  var   ZenCruiserMissileTurretType          GameObjectType   # the ZenCruiserMissileTurret type (Entity 19): what its registering function fills in, and its pool
+0020A308  var   PodHeavyArtilleryType                GameObjectType   # the PodHeavyArtillery type (Entity 18): what its registering function fills in, and its pool
+0020A938  var   ZenWarriorNoArmourType               GameObjectType   # the ZenWarriorNoArmour type (Entity 14): what its registering function fills in, and its pool
+0020AC90  var   ZenWarriorHeavyType                  GameObjectType   # the ZenWarriorHeavy type (Entity 17): what its registering function fills in, and its pool
+0020AFE8  var   ZenWarriorLiteType                   GameObjectType   # the ZenWarriorLite type (Entity 16): what its registering function fills in, and its pool
+0020B340  var   ZenScoutShipType                     GameObjectType   # the ZenScoutShip type (Entity 15): what its registering function fills in, and its pool
+0020B538  var   ZenShuttleType                       GameObjectType   # the ZenShuttle type (Entity 13): what its registering function fills in, and its pool
+0020B790  var   ARMDTurretType                       GameObjectType   # the ARMDTurret type (Entity 30): what its registering function fills in, and its pool
+0020B998  var   ZenCruiserTurretType                 GameObjectType   # the ZenCruiserTurret type (Entity 11): what its registering function fills in, and its pool
+0020BBA0  var   SeaSergeantType                      GameObjectType   # the SeaSergeant type (Entity 10): what its registering function fills in, and its pool
+0020C0B8  var   PodStandardWarriorSpaceType          GameObjectType   # the PodStandardWarriorSpace type (Entity 9): what its registering function fills in, and its pool
+0020C2F0  var   ZenWarriorScavengerType              GameObjectType   # the ZenWarriorScavenger type (Entity 8): what its registering function fills in, and its pool
+0020C648  var   PodLightArtilleryType                GameObjectType   # the PodLightArtillery type (Entity 7): what its registering function fills in, and its pool
+0020CC70  var   CatsEyeType                          GameObjectType   # the CatsEye type (Entity 6): what its registering function fills in, and its pool
+0020CE90  var   PodScoutType                         GameObjectType   # the PodScout type (Entity 5): what its registering function fills in, and its pool
+0020D280  var   PodStandardWarriorType               GameObjectType   # the PodStandardWarrior type (Entity 4): what its registering function fills in, and its pool
+0020D630  var   FighterPodType                       GameObjectType   # the FighterPod type (Entity 3): what its registering function fills in, and its pool
+0020DD40  var   OnWeaponHitTriggerType               GameObjectType   # the OnWeaponHitTrigger type (Trigger 12): what its registering function fills in, and its pool
+0020DD88  var   EffectFamily                         GameObjectFamily # the Effect family: its types by number, and how it is used
+0020F200  var   WaterNodeType                        GameObjectType   # the WaterNode type (Node 16): what its registering function fills in, and its pool
+0020F808  var   SteeringFamily                       GameObjectFamily # the Steering family: its types by number, and how it is used
+0020FB08  var   InterviewsScreenType                 GameObjectType   # the InterviewsScreen type (Screen 36): what its registering function fills in, and its pool
+0020FD88  var   MedalsScreenType                     GameObjectType   # the MedalsScreen type (Screen 30): what its registering function fills in, and its pool
+0020FE50  var   AwardsScreenType                     GameObjectType   # the AwardsScreen type (Screen 29): what its registering function fills in, and its pool
+00210348  var   CreditsScreenType                    GameObjectType   # the CreditsScreen type (Screen 28): what its registering function fills in, and its pool
+00219D28  var   ControllerScreenType                 GameObjectType   # the ControllerScreen type (Screen 21): what its registering function fills in, and its pool
+0021C728  var   SplashScreenType                     GameObjectType   # the SplashScreen type (Screen 14): what its registering function fills in, and its pool
+0021CA60  var   LoadingScreenType                    GameObjectType   # the LoadingScreen type (Screen 7): what its registering function fills in, and its pool
+0021CAF0  var   PauseScreenType                      GameObjectType   # the PauseScreen type (Screen 4): what its registering function fills in, and its pool
+0021CBC0  var   SniperScreenType                     GameObjectType   # the SniperScreen type (Screen 3): what its registering function fills in, and its pool
+0021D238  var   PodOfficerSledHeavyCannonWeaponType  GameObjectType   # the PodOfficerSledHeavyCannonWeapon type (Weapon 44): what its registering function fills in, and its pool
+0021D320  var   PodOfficerSkarredHeavyCannonWeaponType GameObjectType   # the PodOfficerSkarredHeavyCannonWeapon type (Weapon 43): what its registering function fills in, and its pool
+0021D4F0  var   PodOfficerHeavyCannonWeaponType      GameObjectType   # the PodOfficerHeavyCannonWeapon type (Weapon 40): what its registering function fills in, and its pool
+0021D5D8  var   MalePowerArmorRailgunWeaponType      GameObjectType   # the MalePowerArmorRailgunWeapon type (Weapon 39): what its registering function fills in, and its pool
+0021D6C0  var   MacIICannonWeaponType                GameObjectType   # the MacIICannonWeapon type (Weapon 33): what its registering function fills in, and its pool
+0021D770  var   SumoPackWeaponType                   GameObjectType   # the SumoPackWeapon type (Weapon 13): what its registering function fills in, and its pool
+0021E270  var   SuperVeritechPackWeaponType          GameObjectType   # the SuperVeritechPackWeapon type (Weapon 12): what its registering function fills in, and its pool
+0021ED70  var   PodOfficerArmCannonWeaponType        GameObjectType   # the PodOfficerArmCannonWeapon type (Weapon 31): what its registering function fills in, and its pool
+0021EE78  var   RaiderXMachineGunWeaponType          GameObjectType   # the RaiderXMachineGunWeapon type (Weapon 30): what its registering function fills in, and its pool
+0021EF80  var   MacIIArmWeaponType                   GameObjectType   # the MacIIArmWeapon type (Weapon 29): what its registering function fills in, and its pool
+0021F088  var   GladiatorMachineGunWeaponType        GameObjectType   # the GladiatorMachineGunWeapon type (Weapon 28): what its registering function fills in, and its pool
+0021F190  var   ExcaliburMachineGunWeaponType        GameObjectType   # the ExcaliburMachineGunWeapon type (Weapon 27): what its registering function fills in, and its pool
+0021F4A8  var   MalePowerArmorPulseRifleWeaponType   GameObjectType   # the MalePowerArmorPulseRifleWeapon type (Weapon 35): what its registering function fills in, and its pool
+0021F5B0  var   MalePowerArmorImpactCannonWeaponType GameObjectType   # the MalePowerArmorImpactCannonWeapon type (Weapon 22): what its registering function fills in, and its pool
+0021F6B8  var   FighterPodGunWeaponType              GameObjectType   # the FighterPodGunWeapon type (Weapon 21): what its registering function fills in, and its pool
+0021F7C0  var   ZenWarriorNoArmourPulseRifleWeaponType GameObjectType   # the ZenWarriorNoArmourPulseRifleWeapon type (Weapon 20): what its registering function fills in, and its pool
+0021F8C8  var   ZenWarriorScavengerPulseRifleWeaponType GameObjectType   # the ZenWarriorScavengerPulseRifleWeapon type (Weapon 19): what its registering function fills in, and its pool
+0021F9D0  var   ZenWarriorHeavyChaingunWeaponType    GameObjectType   # the ZenWarriorHeavyChaingunWeapon type (Weapon 18): what its registering function fills in, and its pool
+0021FAD8  var   ZenWarriorLitePulseRifleWeaponType   GameObjectType   # the ZenWarriorLitePulseRifleWeapon type (Weapon 17): what its registering function fills in, and its pool
+0021FBE0  var   PodAutoCannonWeaponType              GameObjectType   # the PodAutoCannonWeapon type (Weapon 16): what its registering function fills in, and its pool
+0021FCE8  var   PodParticleCannonWeaponType          GameObjectType   # the PodParticleCannonWeapon type (Weapon 15): what its registering function fills in, and its pool
+0021FDF0  var   PodOfficerSledMissileLauncherWeaponType GameObjectType   # the PodOfficerSledMissileLauncherWeapon type (Weapon 14): what its registering function fills in, and its pool
+0021FE50  var   FPAMissileLauncherWeaponType         GameObjectType   # the FPAMissileLauncherWeapon type (Weapon 11): what its registering function fills in, and its pool
+0021FF70  var   ZenHeavyMissileLauncherWeaponType    GameObjectType   # the ZenHeavyMissileLauncherWeapon type (Weapon 8): what its registering function fills in, and its pool
+0021FFD0  var   ZenLightMissileLauncherWeaponType    GameObjectType   # the ZenLightMissileLauncherWeapon type (Weapon 7): what its registering function fills in, and its pool
+002200F0  var   FlareWeaponType                      GameObjectType   # the FlareWeapon type (Weapon 4): what its registering function fills in, and its pool
+00220150  var   ARMDTurretCannonWeaponType           GameObjectType   # the ARMDTurretCannonWeapon type (Weapon 45): what its registering function fills in, and its pool
+00220240  var   ZenReconShipCannonWeaponType         GameObjectType   # the ZenReconShipCannonWeapon type (Weapon 38): what its registering function fills in, and its pool
+00220330  var   ZenCruiserTurret1CannonWeaponType    GameObjectType   # the ZenCruiserTurret1CannonWeapon type (Weapon 37): what its registering function fills in, and its pool
+00220420  var   ZenCruiserTurretCannonWeaponType     GameObjectType   # the ZenCruiserTurretCannonWeapon type (Weapon 36): what its registering function fills in, and its pool
+00220BD0  var   MessageBoxElementType                GameObjectType   # the MessageBoxElement type (ScreenElement 25): what its registering function fills in, and its pool
+00220CC8  var   TriggerFamily                        GameObjectFamily # the Trigger family: its types by number, and how it is used
+002210E8  var   ComponentFamily                      GameObjectFamily # the Component family: its types by number, and how it is used
+00221300  var   ItemFamily                           GameObjectFamily # the Item family: its types by number, and how it is used
+00221518  var   StructureFamily                      GameObjectFamily # the Structure family: its types by number, and how it is used
+002217C0  var   CiviliansNodeType                    GameObjectType   # the CiviliansNode type (Node 24): what its registering function fills in, and its pool
+00221B38  var   PlayerStandInMSONodeType             GameObjectType   # the PlayerStandInMSONode type (Node 3): what its registering function fills in, and its pool
+00221BC8  var   CyclopsDoorsActionType               GameObjectType   # the CyclopsDoorsAction type (Action 36): what its registering function fills in, and its pool
+00221C10  var   DisableControllerItemsActionType     GameObjectType   # the DisableControllerItemsAction type (Action 35): what its registering function fills in, and its pool
+00221C58  var   RumbleActionType                     GameObjectType   # the RumbleAction type (Action 34): what its registering function fills in, and its pool
+00221CA0  var   MovePlayerActionType                 GameObjectType   # the MovePlayerAction type (Action 32): what its registering function fills in, and its pool
+00221CE8  var   SetHealthActionType                  GameObjectType   # the SetHealthAction type (Action 31): what its registering function fills in, and its pool
+00221D30  var   AIActivateWeaponSetActionType        GameObjectType   # the AIActivateWeaponSetAction type (Action 30): what its registering function fills in, and its pool
+00221D78  var   AISetHUDVisibleActionType            GameObjectType   # the AISetHUDVisibleAction type (Action 29): what its registering function fills in, and its pool
+00221DC0  var   QueueIMusicActionType                GameObjectType   # the QueueIMusicAction type (Action 28): what its registering function fills in, and its pool
+00221E08  var   SetKeyValActionType                  GameObjectType   # the SetKeyValAction type (Action 26): what its registering function fills in, and its pool
+00221E50  var   AITakeOffActionType                  GameObjectType   # the AITakeOffAction type (Action 25): what its registering function fills in, and its pool
+00221E98  var   ResetSpawnActionType                 GameObjectType   # the ResetSpawnAction type (Action 24): what its registering function fills in, and its pool
+00221EE0  var   AILandActionType                     GameObjectType   # the AILandAction type (Action 22): what its registering function fills in, and its pool
+00221F28  var   AISetTransformActionType             GameObjectType   # the AISetTransformAction type (Action 23): what its registering function fills in, and its pool
+00221F70  var   SetCollisionActionType               GameObjectType   # the SetCollisionAction type (Action 21): what its registering function fills in, and its pool
+00221FB8  var   SetVisibilityActionType              GameObjectType   # the SetVisibilityAction type (Action 20): what its registering function fills in, and its pool
+00222000  var   AISetThemeActionType                 GameObjectType   # the AISetThemeAction type (Action 19): what its registering function fills in, and its pool
+00222048  var   AISetImmobileActionType              GameObjectType   # the AISetImmobileAction type (Action 18): what its registering function fills in, and its pool
+00222090  var   SpawnActionType                      GameObjectType   # the SpawnAction type (Action 17): what its registering function fills in, and its pool
+002220D8  var   AISetGridNavActionType               GameObjectType   # the AISetGridNavAction type (Action 16): what its registering function fills in, and its pool
+00222120  var   AIAssignBFOActionType                GameObjectType   # the AIAssignBFOAction type (Action 15): what its registering function fills in, and its pool
+00222168  var   KillAIChannelActionType              GameObjectType   # the KillAIChannelAction type (Action 14): what its registering function fills in, and its pool
+002221B0  var   EnableAIChannelActionType            GameObjectType   # the EnableAIChannelAction type (Action 13): what its registering function fills in, and its pool
+002221F8  var   SetObjectivePosActionType            GameObjectType   # the SetObjectivePosAction type (Action 12): what its registering function fills in, and its pool
+00222240  var   PlayerActionType                     GameObjectType   # the PlayerAction type (Action 11): what its registering function fills in, and its pool
+00222288  var   LoadMapActionType                    GameObjectType   # the LoadMapAction type (Action 10): what its registering function fills in, and its pool
+002222D0  var   FreezePlayerActionType               GameObjectType   # the FreezePlayerAction type (Action 9): what its registering function fills in, and its pool
+00222318  var   SetClearTimerActionType              GameObjectType   # the SetClearTimerAction type (Action 8): what its registering function fills in, and its pool
+00222360  var   CompleteObjectiveActionType          GameObjectType   # the CompleteObjectiveAction type (Action 7): what its registering function fills in, and its pool
+002223A8  var   PostObjectiveActionType              GameObjectType   # the PostObjectiveAction type (Action 6): what its registering function fills in, and its pool
+002223F0  var   ApplyDamageActionType                GameObjectType   # the ApplyDamageAction type (Action 5): what its registering function fills in, and its pool
+00222438  var   OrientSpawnActionType                GameObjectType   # the OrientSpawnAction type (Action 4): what its registering function fills in, and its pool
+00222480  var   LogTextActionType                    GameObjectType   # the LogTextAction type (Action 3): what its registering function fills in, and its pool
+002224C8  var   AIAssignPathActionType               GameObjectType   # the AIAssignPathAction type (Action 2): what its registering function fills in, and its pool
+00222510  var   AIEnabledActionType                  GameObjectType   # the AIEnabledAction type (Action 1): what its registering function fills in, and its pool
+00222558  var   NodeStateActionType                  GameObjectType   # the NodeStateAction type (Action 0): what its registering function fills in, and its pool
+002227F0  var   FriendlyReticleElementType           GameObjectType   # the FriendlyReticleElement type (ScreenElement 20): what its registering function fills in, and its pool
+002229A8  var   MissileLockElementType               GameObjectType   # the MissileLockElement type (ScreenElement 19): what its registering function fills in, and its pool
+00222F68  var   PickupReticleElementType             GameObjectType   # the PickupReticleElement type (ScreenElement 13): what its registering function fills in, and its pool
+00223400  var   IncomingMissileElementType           GameObjectType   # the IncomingMissileElement type (ScreenElement 10): what its registering function fills in, and its pool
+00224500  var   RadarElementType                     GameObjectType   # the RadarElement type (ScreenElement 0): what its registering function fills in, and its pool
+00224740  var   ReconLightEffectType                 GameObjectType   # the ReconLightEffect type (Effect 84): what its registering function fills in, and its pool
+00224788  var   SmokeLight02EffectType               GameObjectType   # the SmokeLight02Effect type (Effect 6): what its registering function fills in, and its pool
+00224818  var   CyclopsDamageChunkEffectType         GameObjectType   # the CyclopsDamageChunkEffect type (Effect 22): what its registering function fills in, and its pool
+00224898  var   CharacterDamageChunksLargeWEffectType GameObjectType   # the CharacterDamageChunksLargeWEffect type (Effect 21): what its registering function fills in, and its pool
+00224918  var   CharacterDamageChunksMedWEffectType  GameObjectType   # the CharacterDamageChunksMedWEffect type (Effect 20): what its registering function fills in, and its pool
+00224998  var   CharacterDamageChunksSmallWEffectType GameObjectType   # the CharacterDamageChunksSmallWEffect type (Effect 19): what its registering function fills in, and its pool
+00224A18  var   CharacterDamageChunksLargeGEffectType GameObjectType   # the CharacterDamageChunksLargeGEffect type (Effect 18): what its registering function fills in, and its pool
+00224A98  var   CharacterDamageChunksMedGEffectType  GameObjectType   # the CharacterDamageChunksMedGEffect type (Effect 17): what its registering function fills in, and its pool
+00224B18  var   CharacterDamageChunksSmallGEffectType GameObjectType   # the CharacterDamageChunksSmallGEffect type (Effect 16): what its registering function fills in, and its pool
+00224B98  var   CharacterDamageChunksLargeBEffectType GameObjectType   # the CharacterDamageChunksLargeBEffect type (Effect 15): what its registering function fills in, and its pool
+00224C18  var   CharacterDamageChunksMedBEffectType  GameObjectType   # the CharacterDamageChunksMedBEffect type (Effect 14): what its registering function fills in, and its pool
+00224C98  var   CharacterDamageChunksSmallBEffectType GameObjectType   # the CharacterDamageChunksSmallBEffect type (Effect 13): what its registering function fills in, and its pool
+00224D18  var   CharacterDamageChunksLargeEffectType GameObjectType   # the CharacterDamageChunksLargeEffect type (Effect 12): what its registering function fills in, and its pool
+00224D98  var   CharacterDamageChunksMedEffectType   GameObjectType   # the CharacterDamageChunksMedEffect type (Effect 11): what its registering function fills in, and its pool
+00224E18  var   CharacterDamageChunksSmallEffectType GameObjectType   # the CharacterDamageChunksSmallEffect type (Effect 10): what its registering function fills in, and its pool
+00224E98  var   Chunk1LargeEffectType                GameObjectType   # the Chunk1LargeEffect type (Effect 9): what its registering function fills in, and its pool
+00224F18  var   Chunk1MediumEffectType               GameObjectType   # the Chunk1MediumEffect type (Effect 8): what its registering function fills in, and its pool
+00224F98  var   Chunk1SmallEffectType                GameObjectType   # the Chunk1SmallEffect type (Effect 7): what its registering function fills in, and its pool
+00225018  var   BuildingSmoulderEffectType           GameObjectType   # the BuildingSmoulderEffect type (Effect 83): what its registering function fills in, and its pool
+00225068  var   ScoutPodRadarEffectType              GameObjectType   # the ScoutPodRadarEffect type (Effect 82): what its registering function fills in, and its pool
+002250B8  var   BuildingExplosion03EffectType        GameObjectType   # the BuildingExplosion03Effect type (Effect 81): what its registering function fills in, and its pool
+00225108  var   BuildingExplosion02EffectType        GameObjectType   # the BuildingExplosion02Effect type (Effect 80): what its registering function fills in, and its pool
+00225158  var   BuildingExplosion01EffectType        GameObjectType   # the BuildingExplosion01Effect type (Effect 79): what its registering function fills in, and its pool
+002251A8  var   BuildingGlass03EffectType            GameObjectType   # the BuildingGlass03Effect type (Effect 78): what its registering function fills in, and its pool
+002251F8  var   BuildingGlass02EffectType            GameObjectType   # the BuildingGlass02Effect type (Effect 77): what its registering function fills in, and its pool
+00225248  var   BuildingGlass01EffectType            GameObjectType   # the BuildingGlass01Effect type (Effect 76): what its registering function fills in, and its pool
+00225298  var   BuildingSmoke03EffectType            GameObjectType   # the BuildingSmoke03Effect type (Effect 75): what its registering function fills in, and its pool
+002252E8  var   BuildingSmoke02EffectType            GameObjectType   # the BuildingSmoke02Effect type (Effect 74): what its registering function fills in, and its pool
+00225338  var   BuildingSmoke01EffectType            GameObjectType   # the BuildingSmoke01Effect type (Effect 73): what its registering function fills in, and its pool
+00225388  var   DamageSmokeFastMediumEffectType      GameObjectType   # the DamageSmokeFastMediumEffect type (Effect 72): what its registering function fills in, and its pool
+002253D8  var   DamageSmokeFastSmallEffectType       GameObjectType   # the DamageSmokeFastSmallEffect type (Effect 71): what its registering function fills in, and its pool
+00225428  var   DamageSmokeZenLargeEffectType        GameObjectType   # the DamageSmokeZenLargeEffect type (Effect 70): what its registering function fills in, and its pool
+00225478  var   DamageSmokeEffectType                GameObjectType   # the DamageSmokeEffect type (Effect 69): what its registering function fills in, and its pool
+002254C8  var   DamageSmokeZenSmallEffectType        GameObjectType   # the DamageSmokeZenSmallEffect type (Effect 68): what its registering function fills in, and its pool
+00225518  var   DamageFireEffectType                 GameObjectType   # the DamageFireEffect type (Effect 67): what its registering function fills in, and its pool
+00225568  var   SparksEffectType                     GameObjectType   # the SparksEffect type (Effect 66): what its registering function fills in, and its pool
+002255B8  var   DustFlybyEffectType                  GameObjectType   # the DustFlybyEffect type (Effect 65): what its registering function fills in, and its pool
+00225650  var   VeritechBulletsEffectType            GameObjectType   # the VeritechBulletsEffect type (Effect 64): what its registering function fills in, and its pool
+002256E8  var   CrateExplosionEffectType             GameObjectType   # the CrateExplosionEffect type (Effect 63): what its registering function fills in, and its pool
+00225780  var   CyclopsExplosionEffectType           GameObjectType   # the CyclopsExplosionEffect type (Effect 62): what its registering function fills in, and its pool
+00225818  var   Explosion01LargeEffectType           GameObjectType   # the Explosion01LargeEffect type (Effect 61): what its registering function fills in, and its pool
+002258B0  var   Explosion01MedEffectType             GameObjectType   # the Explosion01MedEffect type (Effect 60): what its registering function fills in, and its pool
+00225948  var   Explosion01EffectType                GameObjectType   # the Explosion01Effect type (Effect 59): what its registering function fills in, and its pool
+002259E0  var   FootDustEffectType                   GameObjectType   # the FootDustEffect type (Effect 58): what its registering function fills in, and its pool
+00225A78  var   SmokeLightEffectType                 GameObjectType   # the SmokeLightEffect type (Effect 57): what its registering function fills in, and its pool
+00225B10  var   RockChunksEffectType                 GameObjectType   # the RockChunksEffect type (Effect 56): what its registering function fills in, and its pool
+00225BA8  var   WaterSplashEffectType                GameObjectType   # the WaterSplashEffect type (Effect 55): what its registering function fills in, and its pool
+00225C40  var   DustLaserHitEffectType               GameObjectType   # the DustLaserHitEffect type (Effect 54): what its registering function fills in, and its pool
+00225CD8  var   HitSpotBlueEffectType                GameObjectType   # the HitSpotBlueEffect type (Effect 53): what its registering function fills in, and its pool
+00225D70  var   HitSpotRedEffectType                 GameObjectType   # the HitSpotRedEffect type (Effect 52): what its registering function fills in, and its pool
+00225E68  var   ZenDestroidMuzzleEffectType          GameObjectType   # the ZenDestroidMuzzleEffect type (Effect 50): what its registering function fills in, and its pool
+00225EC8  var   CyclopsTurretMuzzleEffectType        GameObjectType   # the CyclopsTurretMuzzleEffect type (Effect 49): what its registering function fills in, and its pool
+00225F28  var   RDFTurretMuzzleEffectType            GameObjectType   # the RDFTurretMuzzleEffect type (Effect 48): what its registering function fills in, and its pool
+00225F88  var   MPASniperEffectType                  GameObjectType   # the MPASniperEffect type (Effect 47): what its registering function fills in, and its pool
+00225FE8  var   FPAMuzzleFlashEffectType             GameObjectType   # the FPAMuzzleFlashEffect type (Effect 46): what its registering function fills in, and its pool
+00226048  var   SpartanCannonEffectType              GameObjectType   # the SpartanCannonEffect type (Effect 45): what its registering function fills in, and its pool
+002260A8  var   MakkArmLaserEffectType               GameObjectType   # the MakkArmLaserEffect type (Effect 44): what its registering function fills in, and its pool
+00226108  var   MakkCannonEffectType                 GameObjectType   # the MakkCannonEffect type (Effect 43): what its registering function fills in, and its pool
+002261C8  var   MuzzleFlashBlueEffectType            GameObjectType   # the MuzzleFlashBlueEffect type (Effect 41): what its registering function fills in, and its pool
+00226228  var   RDFDestroidMuzzleFlashEffectType     GameObjectType   # the RDFDestroidMuzzleFlashEffect type (Effect 40): what its registering function fills in, and its pool
+00226288  var   VeritechMuzzleFlashEffectType        GameObjectType   # the VeritechMuzzleFlashEffect type (Effect 39): what its registering function fills in, and its pool
+002262E8  var   CatsEyeThrustEffectType              GameObjectType   # the CatsEyeThrustEffect type (Effect 38): what its registering function fills in, and its pool
+00226330  var   ZenMPALegThrustEffectType            GameObjectType   # the ZenMPALegThrustEffect type (Effect 37): what its registering function fills in, and its pool
+00226378  var   ZenMPABackThrustEffectType           GameObjectType   # the ZenMPABackThrustEffect type (Effect 36): what its registering function fills in, and its pool
+002263C0  var   FPAThrustersEffectType               GameObjectType   # the FPAThrustersEffect type (Effect 35): what its registering function fills in, and its pool
+00226408  var   CyclopsThrustEffectType              GameObjectType   # the CyclopsThrustEffect type (Effect 34): what its registering function fills in, and its pool
+00226450  var   ZenShuttleNewEffectType              GameObjectType   # the ZenShuttleNewEffect type (Effect 33): what its registering function fills in, and its pool
+00226498  var   ThrustRed01BigEffectType             GameObjectType   # the ThrustRed01BigEffect type (Effect 32): what its registering function fills in, and its pool
+002264E0  var   ThrustRed01EffectType                GameObjectType   # the ThrustRed01Effect type (Effect 31): what its registering function fills in, and its pool
+00226570  var   ThrustBPBlueEffectType               GameObjectType   # the ThrustBPBlueEffect type (Effect 29): what its registering function fills in, and its pool
+00226648  var   MotionTrailEffectType                GameObjectType   # the MotionTrailEffect type (Effect 26): what its registering function fills in, and its pool
+00226E60  var   HasLOSTriggerType                    GameObjectType   # the HasLOSTrigger type (Trigger 15): what its registering function fills in, and its pool
+00226EA8  var   OnRandomValueTriggerType             GameObjectType   # the OnRandomValueTrigger type (Trigger 14): what its registering function fills in, and its pool
+00226EF0  var   EntityToEntityProximityTriggerType   GameObjectType   # the EntityToEntityProximityTrigger type (Trigger 13): what its registering function fills in, and its pool
+00226F38  var   OnAITargetTriggerType                GameObjectType   # the OnAITargetTrigger type (Trigger 11): what its registering function fills in, and its pool
+00226F80  var   KeyValCompareTriggerType             GameObjectType   # the KeyValCompareTrigger type (Trigger 10): what its registering function fills in, and its pool
+00226FC8  var   SpawnLevelQuotaTriggerType           GameObjectType   # the SpawnLevelQuotaTrigger type (Trigger 9): what its registering function fills in, and its pool
+00227010  var   ItemHeldTriggerType                  GameObjectType   # the ItemHeldTrigger type (Trigger 8): what its registering function fills in, and its pool
+00227058  var   BooleanORTriggerType                 GameObjectType   # the BooleanORTrigger type (Trigger 7): what its registering function fills in, and its pool
+002270A0  var   EntityHealthTriggerType              GameObjectType   # the EntityHealthTrigger type (Trigger 6): what its registering function fills in, and its pool
+00227130  var   OnTimeTriggerType                    GameObjectType   # the OnTimeTrigger type (Trigger 4): what its registering function fills in, and its pool
+00227178  var   ObjectiveStateTriggerType            GameObjectType   # the ObjectiveStateTrigger type (Trigger 2): what its registering function fills in, and its pool
+002271C0  var   BooleanANDTriggerType                GameObjectType   # the BooleanANDTrigger type (Trigger 0): what its registering function fills in, and its pool
+00227250  var   TrainingBeaconType                   GameObjectType   # the TrainingBeacon type (Item 5): what its registering function fills in, and its pool
+00227320  var   ZenCratesMunitionsPickupType         GameObjectType   # the ZenCratesMunitionsPickup type (Item 3): what its registering function fills in, and its pool
+00227388  var   ZenCratesPickupType                  GameObjectType   # the ZenCratesPickup type (Item 2): what its registering function fills in, and its pool
+002273E8  var   NoseconePickupType                   GameObjectType   # the NoseconePickup type (Item 1): what its registering function fills in, and its pool
+00227440  var   SpyCapsuleType                       GameObjectType   # the SpyCapsule type (Item 0): what its registering function fills in, and its pool
+002275D0  var   BuildingType                         GameObjectType   # the Building type (Structure 0): what its registering function fills in, and its pool
 

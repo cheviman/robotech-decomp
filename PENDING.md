@@ -618,6 +618,38 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   `decompiled_control_flags`), 206 in 81 functions; four of those end in a chain of ifs over their flags
   after a switch, which MSVC warns can run off the end without a value (C4715: sub_000A2540,
   sub_000CBD10, sub_000CC0A0, sub_000D4680), where the original's cases always set one of them.
+- **Tables of records in place, by their fields** (05-11-2026). A `var` of symbols.txt takes a structure
+  for its type: one record in place (`var EntityFamily GameObjectFamily`) or a table of them (`var Levels
+  Level[76]`); symbols.h gives the table's address, `NAME_VA`, and each record's, `NAME(i)`, which the
+  fields' accessors take. The decompiled C reads a record's field by name where the code reaches it at a
+  fixed address or by an index times the record's size (`Level_chapter(Levels(level))`,
+  `GameObjectType_size(ReconLightEffectType_VA) = 0x70u;`), a record's address worked out from an index as
+  `Levels(level)`, and any address of a place symbols.txt names that the C uses as a value by that name
+  (`ecx = Levels_VA;`, `x86_rep_stos32(PlayerFamily_VA, 0u, 0x86u);`): tools/x86/emit.py's GuestNames, and
+  the X86Emitter's address_text, the core's hook for an address used as a value (the board's memories and
+  ROM of the core's are not the Xbox's). The macros are the numbers they replace, so the C does the same.
+  Typed so: the levels (75 and the one that ends them; a level's file, `m101`, which the game loads as
+  NAME_f, and its title's number in the string table); the four pads' records (0x210 bytes from 0x2BE140,
+  each ending in the pad's last two reads, `read` where vcPadRead writes and `read_before` where the read
+  before it is moved; the two arrays of 24 words at 0x60 and 0x120 and the floats before them not named
+  yet); the default font's character offsets in their texture cells (vcDefaultFontLefts); and the object
+  system's records, which `tools/symbols.py merge` now writes from symbols/registries.json and the type
+  lines in a section of its own: each family's GameObjectFamily (13, `EntityFamily`) and the GameObjectType
+  of each type with a name (239, `ReconLightEffectType`), which its registering function fills in.
+  tools/coverage.py counts a record's named fields as described and the rest of it as referenced; and it
+  counts a table a register indexes ("[eax + table]") as a reference too (the font's offsets were unknown
+  for that). Measured: reads and writes at a raw address 19,611 to 15,663; data addresses written as
+  numbers (a new kind, `decompiled_data_addresses`) 15,513 to 14,047; memory at a computed address
+  112,854 to 112,805 and at a named place no field names (a new kind, `decompiled_unnamed_fields`: what was
+  a raw address and is now `MEM32(vcPads(1) + 0x78u)`) 30 to 1,720; the XBE's unknown bytes of the game
+  15,284 to 14,448 (the levels' records went; the bytes after a typed record that only an earlier
+  reference had reached became unknown), untyped 898,918 to 856,201. The nine scenarios frame for frame as
+  their references. Left: the pads' other fields (the code sequence reads the words at 0x78 to 0xB4, a
+  button each, and the floats at 0x00 to 0x44, the sticks and the triggers), and the tables the unknown
+  bytes still are: the vehicles' parameters in `.rdata` (records of 0x12C bytes from 0x1922A4: a death
+  effect, a model, a shadow, dozens of floats), the effects' and sounds' references (a name in 64 bytes,
+  then -1) and the halfword pairs at 0x1BA518; and the 131 types without a name, whose records keep their
+  addresses.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

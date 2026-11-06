@@ -3,26 +3,30 @@
 """
 Name:        emit.py
 Description: writes the game's functions as C, through the decompiler's writer
-Version:     0.3.0
+Version:     0.4.0
 Created:     26-10-2026
-Modified:    30-10-2026
+Modified:    05-11-2026
 Author:      Sebastian Toyos
 
 The decompiler's FunctionWriter does the work (tools/core/decompiler/emit.py); this gives it the Xbox's
 memory and the x86's effects. The game's memory is the guest's, the one the recompiled C reads and
 writes: MEM8, MEM16 and MEM32 of an address (xboxrecomp's recomp_types.h), so that the C and the
 recompiled code share it. A place symbols.txt names goes by that name, as symbols.h spells it
-(GuestNames: vcGameTime, D3D__TextureState(3), MEM32(vcDataDir_VA + 0x4u)); no structure's field has a
-name in the C yet. The string instructions' effects and the 64-bit divisions print as the calls of x86.h
+(GuestNames: vcGameTime, D3D__TextureState(3), MEM32(vcDataDir_VA + 0x4u)); a field of a record of a
+structure in place by its name, the record by its table's index (Level_chapter(Levels(level))); and an
+address the C uses as a value by its name too (ecx = Levels_VA; eax = Levels(level)). A field a pointer
+reaches has no name in the C yet. The string instructions' effects and the 64-bit divisions print as the calls of x86.h
 (x86_rep_stos32, x86_udiv64...). A call of a function that stays recompiled goes as the recompiled code
 makes it: the registers it reads in the globals g_eax..., its arguments on the guest's stack
 (x86_call), what it hands back read from the globals after.
 """
+import bisect
 import decimal
 import fractions
+import re
 import struct
 
-from decompiler import emit
+from decompiler import cprint, emit
 from decompiler.stack import MEMORY_SP
 from v60 import ir
 
@@ -117,39 +121,121 @@ TYPE_BYTES = {"u8": 1, "s8": 1, "u16": 2, "s16": 2, "u32": 4, "s32": 4, "f32": 4
 
 class GuestNames:
     """The game's memory by the names symbols.txt gives it, as symbols.h spells them for C (tools/symbols.py
-    header): a variable NAME, an element of one NAME(i), and any other place in one, or at a data label,
-    by its address NAME_VA. 'variables': {address: (name, type, count: None for one, -1 for an array of a
-    count not given)}; 'labels': {address: name}."""
+    header): a variable NAME, an element of one NAME(i), a field of a record of a structure in place
+    STRUCT_field(NAME(i)) (STRUCT_field(NAME_VA) for one record), and any other place in one, or at a data
+    label, by its address NAME_VA. 'variables': {address: (name, type or structure, count: None for one, -1
+    for an array of a count not given)}; 'labels': {address: name}; 'structs': {name: (size, [(offset, field,
+    type, count)])}, its fields' types integers or floats as the variables' are."""
 
-    def __init__(self, variables, labels):
+    def __init__(self, variables, labels, structs=None):
         self.variables = variables
         self.labels = labels
+        self.structs = structs or {}
         self.starts = sorted(variables)
+
+    def containing(self, address):
+        """(start, name, type or structure, count, size of one) of the variable 'address' lies in, or None."""
+        position = bisect.bisect_right(self.starts, address) - 1
+        if position < 0:
+            return None
+        start = self.starts[position]
+        name, kind, count = self.variables[start]
+        size = TYPE_BYTES.get(kind) or self.structs.get(kind, (0,))[0]
+        if not size:
+            return None
+        # an array of a count not given (-1) goes on up to the next variable
+        end = (self.starts[position + 1] if position + 1 < len(self.starts) else start + 0x10000) \
+            if count == -1 else start + size * (count or 1)
+        return (start, name, kind, count, size) if address < end else None
+
+    @staticmethod
+    def record(name, count, number):
+        """C for the guest address of record 'number' (C text or a number) of the records in place NAME."""
+        return f"{name}_VA" if count is None else f"{name}({number})"
+
+    def field(self, struct, record, inner, bits):
+        """(C text, signed) of the memory 'bits' wide 'inner' bytes into the record of 'struct' whose guest
+        address is the C 'record': its field by name where one is there."""
+        size = self.structs[struct][0]
+        for offset, name, kind, count in self.structs[struct][1]:
+            one = TYPE_BYTES[kind]
+            extent = size - offset if count == -1 else one * (count or 1)
+            if not offset <= inner < offset + extent:
+                continue
+            within = inner - offset
+            integer = INTEGER_TYPES.get(kind)
+            if integer is not None and integer[0] == bits and within % one == 0:
+                accessor = f"{struct}_{name}({record})"
+                return (accessor if count is None else f"{accessor}[{within // one}]"), integer[1]
+            place = f"{struct}_{name}_VA({record})"
+            return (f"MEM{bits}({place} + 0x{within:X}u)" if within else f"MEM{bits}({place})"), False
+        return (f"MEM{bits}({record} + 0x{inner:X}u)" if inner else f"MEM{bits}({record})"), False
 
     def place(self, address, bits):
         """(C text, signed) of the memory at a constant address 'bits' wide, or None."""
-        import bisect
-        position = bisect.bisect_right(self.starts, address) - 1
-        if position >= 0:
-            start = self.starts[position]
-            name, kind, count = self.variables[start]
-            size = TYPE_BYTES[kind]
+        found = self.containing(address)
+        if found is not None:
+            start, name, kind, count, size = found
             offset = address - start
-            # an array of a count not given (-1) goes on up to the next variable
-            end = (self.starts[position + 1] if position + 1 < len(self.starts) else start + 0x10000) \
-                if count == -1 else start + size * (count or 1)
-            if address < end:
-                integer = INTEGER_TYPES.get(kind)
-                if integer is not None and integer[0] == bits and offset % size == 0:
-                    return (f"{name}({offset // size})" if count else name), integer[1]
-                return f"MEM{bits}({name}_VA + 0x{offset:X}u)" if offset else f"MEM{bits}({name}_VA)", False
+            if kind in self.structs:
+                number, inner = divmod(offset, size)
+                return self.field(kind, self.record(name, count, number), inner, bits)
+            integer = INTEGER_TYPES.get(kind)
+            if integer is not None and integer[0] == bits and offset % size == 0:
+                return (f"{name}({offset // size})" if count else name), integer[1]
+            return f"MEM{bits}({name}_VA + 0x{offset:X}u)" if offset else f"MEM{bits}({name}_VA)", False
         if address in self.labels:
             return f"MEM{bits}({self.labels[address]}_VA)", False
         return None
 
-    def element(self, address, bits):
-        """For an address "base + index * size": (name, signed) of the array of integers starting at base
-        whose elements are 'bits' wide and size bytes apart, and the index; None if it is not one."""
+    @staticmethod
+    def scaled(index, size):
+        """What 'index' multiplies by 'size' ("i * size", "i << n"), or None."""
+        if size == 1:
+            return index
+        if isinstance(index, ir.Op) and index.name in ("mul", "shl") and len(index.args) == 2:
+            for value, factor in (index.args, index.args[::-1]):
+                if isinstance(factor, ir.Const) and not isinstance(value, ir.Const) and \
+                        ((index.name == "mul" and factor.value == size) or
+                         (index.name == "shl" and factor is index.args[1] and 1 << factor.value == size)):
+                    return value
+        return None
+
+    def indexed(self, address):
+        """For an address "base + index * size" into a table of records in place: (name, structure, count,
+        the index, the records the base is past the table's start, the bytes into the record); else None."""
+        if not (isinstance(address, ir.Op) and address.name == "add"):
+            return None
+        left, right = address.args
+        base, index = (left, right) if isinstance(left, ir.Const) else (right, left)
+        if not isinstance(base, ir.Const) or isinstance(index, ir.Const):
+            return None
+        found = self.containing(base.value & 0xFFFFFFFF)
+        if found is None or found[2] not in self.structs or found[3] is None:
+            return None
+        start, name, kind, count, size = found
+        value = self.scaled(index, size)
+        if value is None:
+            return None
+        number, inner = divmod((base.value & 0xFFFFFFFF) - start, size)
+        return name, kind, count, value, number, inner
+
+    @staticmethod
+    def numbered(text, number):
+        """An index's C plus records more: "i", "i + 2", "(a - b) + 2"."""
+        if not number:
+            return text
+        simple = re.fullmatch(r"[\w.]+", text) is not None
+        return f"{text if simple else '(' + text + ')'} + {number}"
+
+    def element(self, address, bits, exact):
+        """For an address "base + index * size": (C text, signed) of the element of the array of integers
+        starting at base whose elements are 'bits' wide and size bytes apart, or of the field of the record
+        the index picks in a table of records in place; None if it is neither. 'exact' prints the index."""
+        table = self.indexed(address)
+        if table is not None:
+            name, kind, count, value, number, inner = table
+            return self.field(kind, self.record(name, count, self.numbered(exact(value), number)), inner, bits)
         if not (isinstance(address, ir.Op) and address.name == "add"):
             return None
         left, right = address.args
@@ -161,12 +247,50 @@ class GuestNames:
             return None
         size = TYPE_BYTES[found[1]]
         if size == 1:
-            return found[0], INTEGER_TYPES[found[1]][1], index
+            return f"{found[0]}({exact(index)})", INTEGER_TYPES[found[1]][1]
         if isinstance(index, ir.Op) and isinstance(index.args[1], ir.Const) and \
                 ((index.name == "mul" and index.args[1].value == size) or
                  (index.name == "shl" and 1 << index.args[1].value == size)):
-            return found[0], INTEGER_TYPES[found[1]][1], index.args[0]
+            return f"{found[0]}({exact(index.args[0])})", INTEGER_TYPES[found[1]][1]
         return None
+
+    def record_place(self, kind, record, inner):
+        """(C, precedence) of the guest address 'inner' bytes into the record of 'kind' at the C 'record':
+        the record's, a field's (STRUCT_field_VA(record)), or past one."""
+        if not inner:
+            return record, cprint.PRIMARY
+        for offset, name, _, _ in self.structs[kind][1]:
+            if offset == inner:
+                return f"{kind}_{name}_VA({record})", cprint.PRIMARY
+        return f"{record} + 0x{inner:X}u", cprint.ADD
+
+    def address(self, value):
+        """(C, precedence) of a constant that is the guest address of a place symbols.txt names, as the C
+        uses it for a value (a pointer handed on, a table to walk): NAME_VA, a record of a table NAME(i), a
+        field's address in one, NAME_VA + bytes into a variable; None for any other number."""
+        found = self.containing(value)
+        if found is not None:
+            start, name, kind, count, size = found
+            offset = value - start
+            if not offset:
+                return f"{name}_VA", cprint.PRIMARY
+            if kind in self.structs:
+                number, inner = divmod(offset, size)
+                return self.record_place(kind, self.record(name, count, number) if number else f"{name}_VA",
+                                         inner)
+            return f"{name}_VA + 0x{offset:X}u", cprint.ADD
+        if value in self.labels:
+            return f"{self.labels[value]}_VA", cprint.PRIMARY
+        return None
+
+    def sum(self, node, exact):
+        """(C, precedence) of "index * size + base" where base is in a table of records in place: the
+        address of the record the index picks (NAME(i)), or of a place in it; None otherwise."""
+        table = self.indexed(node)
+        if table is None:
+            return None
+        name, kind, count, value, number, inner = table
+        return self.record_place(kind, self.record(name, count, self.numbered(exact(value), number)), inner)
 
 
 class X86Names(emit.Names):
@@ -188,9 +312,9 @@ class X86Names(emit.Names):
             if named is not None:
                 return named
         if guest is not None:
-            element = guest.element(load.address, load.bits)
+            element = guest.element(load.address, load.bits, self.writer.exact)
             if element is not None:
-                return f"{element[0]}({self.writer.exact(element[2])})", element[1]
+                return element
         return f"MEM{load.bits}({self.writer.exact(load.address)})", False
 
 
@@ -200,6 +324,12 @@ class X86Printer(emit.Printer):
         self.names = X86Names(writer)
 
     def emit(self, node):
+        guest = getattr(self.writer.emitter, "guest", None)
+        if guest is not None and isinstance(node, ir.Op) and node.name == "add":
+            # the address of a record of a table in place, from its index: Levels(level)
+            found = guest.sum(node, self.writer.exact)
+            if found is not None:
+                return cprint.Value(found[0], found[1], True, "u32")
         if isinstance(node, ir.Op) and node.name == "f.const32" and isinstance(node.args[0], ir.Const):
             # a float of the program's constants, or of fld1 and fldz: its literal
             literal = float_literal(node.args[0].value & 0xFFFFFFFF)
@@ -298,9 +428,9 @@ class X86Writer(emit.FunctionWriter):
                 named = guest.place(statement.address.value & 0xFFFFFFFF, statement.bits)
                 if named is not None:
                     return [f"{named[0]} = {self.stored(statement.value, statement.bits)};"]
-            element = guest.element(statement.address, statement.bits) if guest is not None else None
+            element = guest.element(statement.address, statement.bits, self.exact) if guest is not None else None
             if element is not None:
-                return [f"{element[0]}({self.exact(element[2])}) = {self.stored(statement.value, statement.bits)};"]
+                return [f"{element[0]} = {self.stored(statement.value, statement.bits)};"]
             return [f"MEM{statement.bits}({self.exact(statement.address)}) = "
                     f"{self.stored(statement.value, statement.bits)};"]
         return super().statement(statement)
@@ -329,3 +459,8 @@ class X86Emitter(emit.Emitter):
 
     def restores_current(self, entry):
         return None, None
+
+    def address_text(self, value):
+        """(C, precedence) of a constant the C uses as a value that is the address of a place symbols.txt
+        names (GuestNames.address), or None: the board's memories and ROM of the core's are not the Xbox's."""
+        return self.guest.address(value & 0xFFFFFFFF) if self.guest is not None else None

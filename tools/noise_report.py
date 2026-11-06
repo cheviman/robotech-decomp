@@ -38,6 +38,7 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "tools"))
 import coverage  # noqa: E402  (the XBE's bytes by class)
+import symbols  # noqa: E402  (the names, for the places they name)
 import hand_functions  # noqa: E402  (the functions written by hand, by their entries)
 GEN = os.path.join(REPO, "src", "recomp", "gen")
 DECOMPILED = os.path.join(REPO, "src", "decompiled")
@@ -86,6 +87,8 @@ DECOMPILED_KINDS = [
      re.compile(r"\b(?:MEM(?:8|16|32|64|F|D)|FLOAT_AT)\(0x[0-9A-Fa-f]+u?\)")),
     ("decompiled_memory_computed", "memory at a computed address: MEM32(p + n)",
      re.compile(r"\b(?:MEM(?:8|16|32|64|F|D)|FLOAT_AT)\((?!0x[0-9A-Fa-f]+u?\))")),
+    # a place symbols.txt names, at bytes into it no field names (counted apart from the computed ones)
+    ("decompiled_unnamed_fields", "memory at a named place no field names: MEM32(vcPads(1) + 0x78u)", None),
     ("decompiled_float_registers", "x87 values named by their stack depth (f0, f1_2...)",
      re.compile(r"\bf[0-7](?:_\d+)?\b")),
     ("decompiled_float_bits", "floating-point values carried as their bits (x87_float(t), float_to_bits...)",
@@ -95,6 +98,11 @@ DECOMPILED_KINDS = [
     # it lands; one counted where it is declared
     ("decompiled_control_flags", "control flags standing for a jump: bool L_<address>",
      re.compile(r"\bL_[0-9A-F]{6} = false\b")),
+    # an address in the game's .rdata or .data the C uses as a value (a table to walk, a pointer handed on),
+    # not one it reads or writes there (decompiled_memory_by_address counts those)
+    ("decompiled_data_addresses", "addresses of the game's data written as numbers: ecx = 0x1AECB8u",
+     re.compile(r"(?<!MEM8\()(?<!MEM16\()(?<!MEM32\()(?<!MEM64\()(?<!MEMF\()(?<!MEMD\()(?<!FLOAT_AT\()"
+                r"\b0x(?:1[89A-F]|2[0-9AB])[0-9A-F]{4}u\b")),
 ]
 # the XBE's bytes of the game's own (tools/coverage.py): what no analysis has told the class of, and the data
 # the code reaches whose layout is not described yet (no type, no name)
@@ -132,8 +140,20 @@ def measure():
     return counts
 
 
+def named_places():
+    """The pattern of a read or write at a place symbols.txt names but at bytes into it no field names: an
+    address NAME_VA (a field's too, STRUCT_field_VA(...)) or a record of a table of them NAME(i), plus
+    bytes or not. An element of an array of values, NAME(i), is a value, not a place: not one of them."""
+    tables = sorted(v["name"] for v in symbols.load()["vars"].values() if v.get("struct"))
+    inner = r"(?:[^()]|\((?:[^()]|\([^()]*\))*\))*"
+    place = r"(?:\w+_VA(?:\(" + inner + r"\))?" + \
+        ((r"|(?:" + "|".join(tables) + r")\(" + inner + r"\)") if tables else "") + ")"
+    return re.compile(r"\b(?:MEM(?:8|16|32|64|F|D)|FLOAT_AT)\(" + place + r"(?: \+ 0x[0-9A-F]+u)?\)")
+
+
 def measure_decompiled():
     counts = {k: 0 for k, _, _ in DECOMPILED_KINDS}
+    unnamed_fields = named_places()
     for path in sorted(glob.glob(os.path.join(DECOMPILED, "*.c"))):
         text = open(path, encoding="utf-8", errors="replace").read()
         # the functions, but for the entries at the end
@@ -147,6 +167,9 @@ def measure_decompiled():
             for key, _, pattern in DECOMPILED_KINDS:
                 if pattern is not None:
                     counts[key] += len(pattern.findall(body))
+            named = len(unnamed_fields.findall(body))
+            counts["decompiled_unnamed_fields"] += named
+            counts["decompiled_memory_computed"] -= named
         # a description is the comment right above a function
         for m in re.finditer(r"(?m)(\*/\n)?^\w[\w \*]*?\b(\w+)\([^;\n]*\)\n\{", text):
             if not m.group(2).endswith("_entry") and not m.group(1):

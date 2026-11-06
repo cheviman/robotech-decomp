@@ -4,7 +4,7 @@ Description: the game's functions decompiled to C by arcade-decomp's decompiler 
              x86 frontend (tools/x86)
 Version:     0.3.0
 Created:     26-10-2026
-Modified:    29-10-2026
+Modified:    05-11-2026
 Author:      Sebastian Toyos
 
 The recompiled C (xboxrecomp) runs the game an instruction at a time; this is its way to C a person reads:
@@ -756,12 +756,21 @@ def write_once(out_dir, for_build, refused):
     emitter.icalls = flow.icalls
     variables = {}
     for address, var in sym["vars"].items():
-        found = symbols.TYPE_RE.match(var["type"])
+        found = (symbols.STRUCT_TYPE_RE if var.get("struct") else symbols.TYPE_RE).match(var["type"])
         count = found.group(2)
-        # an array of a count not given (u32[]) goes on up to the next variable
+        # an array of a count not given (u32[]) goes on up to the next variable; a variable whose type is a
+        # structure is records of it in place
         variables[address] = (var["name"], found.group(1), None if count is None else int(count) if count else -1)
+    # the structures, their size and named fields, for the tables of records in place
+    def field_type(text):
+        found = symbols.TYPE_RE.match(text)
+        count = found.group(2)
+        return found.group(1), None if count is None else int(count) if count else -1
+    structs = {name: (st.get("size", 0), [(fld["offset"], fld["name"]) + field_type(fld["type"])
+                                          for fld in sorted(st["fields"], key=lambda f: f["offset"])])
+               for name, st in sym["structs"].items()}
     emitter.guest = emit.GuestNames(variables, {address: name for address, name in sym["data"].items()
-                                                if address not in sym["vars"]})
+                                                if address not in sym["vars"]}, structs)
     # symbols.txt's param and local lines: a parameter by its function and register, a local by the
     # instruction that writes it (wherever that code now is), what a register holds as it starts by the
     # function
