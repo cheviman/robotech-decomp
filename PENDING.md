@@ -873,6 +873,45 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   last frames (ambush_hills, besieged, training so far) and comes out right when run again alone; and
   `verify_c.py` run right after another run of the title says "0 function vectors", which is no
   comparison, not a pass: run it again.
+- **The mechs' records of motions, looked at with Ghidra and not typed** (11-11-2026). `EntitySpec`'s
+  `motions` (+0xC0) does not always point at the record of 0x55 words: ZenReconShip, ZenShuttle and
+  SeaSergeant point it at one of two records of 0x30 bytes of their own, by their state; the one function
+  of the shared code that goes through it, sub_000417F0, plays the motion at its +0x28 or its +0x2C
+  (sub_001206A0) by whether the entity holds something (its +0x190). Of the mechs' record, the 36
+  handles from +0x58 are touched at a fixed address only by each type's Startup and Shutdown
+  (`tools/ghidra/through.py` and a search of Ghidra's C for each word: no function reads them by a number
+  times 4, nor through the entity's +0x27C but for Excalibur's alert pose, +0xD0, at +0x1D8 of what its
+  type's objects share): how the game reaches a motion when it plays one is not found yet, so the slots
+  have only the names of what the types load into them (17 of the 36 agree: slide back, run back, idle,
+  walk, run, slide forward, slide left, strafe left, strafe right, slide right, turn in place left, turn
+  in place, up, land soft, land, alert pose, alarm). Left as it is until the reader is found: a record
+  typed with the other 19 unnamed would only move 500 reads to "no field names". Where to look: what
+  sub_0011E770 and sub_0011E970 do with the model and the records Startup builds on its stack, and the
+  entity's +0x2C8 (`MEM32(eax + 0x2C8u) = ecx_2 + 0x8F4u` where a veritech is made).
+- **The Entity types without a name, looked at; one named** (11-11-2026). 17 of the family's 74 have none.
+  `RepCollisionHull` (Entity 34) is named as its three siblings are, by the scene it gets
+  (rep_collision_hull), with its record (`RepCollisionHullSpec`), its constants, laid out as most
+  (`RepCollisionHullConstants`) and its scene; the word between its type's record and its record
+  (0x204744), which nothing touches, is 4 more unknown bytes. The other 16, and why not yet: the
+  veritechs 26 and 58 (the model VF-1AX; 58's Startup also gets 491.wav) and 29, 56 and 57 (VF-1SX): their
+  registering functions are the same but for the type's number, its block of data and which of two
+  functions sets the block up (sub_0005C300 for the S ones, the M ones' too; sub_00061FA0 for the A
+  ones), and no code tests their type's number (26 once, in sub_00101A50): what tells them apart is which
+  level uses which, in the levels' files, whose format is not read (26 to 29 are registered as A, B, J, S,
+  by B's and J's names the X set's own A and S; not taken for certain). The Excaliburs 31, 54 and 64
+  beside Excalibur (12): the same Startup but for 520.wav in 54's. The female power armours 24 and 35
+  (the state machine `FemalePowerArmor_StateMachine`; 24's number is tested in 13 places) and a second
+  male one, 55. The missiles 70 and 72 (the scene rdf_light_missile) and 71 and 73 (rdf_heavy_missile),
+  two of each, to be named by what fires them, as their four named siblings were. And type 1 (the first
+  object of the scene rdf_heavy_missile, 620 bytes, a state machine of its own): the code tests for its
+  number in 32 places; where a mech takes hold of something (sub_000417F0) it is held by another node
+  than the rest (+0xFE4 of what the mech's type shares, not +0xFE0): something a mech carries, by its
+  looks. Measured: functions without a name in the decompiled C 3,366 to 3,362; reads at a raw address
+  11,519 to 11,442; data addresses written as numbers 11,430 to 11,366; memory at a named place no field
+  names 1,965 to 2,008 (its record's unread words); the XBE's unknown bytes 3,839 to 3,843. `verify_c.py`
+  209 vectors, 0 different; the nine scenarios frame for frame as their references, at the first run.
+  With a function named the analysis is worked out again: 13 minutes for `decompile.py build` with two
+  other decompilations running beside, 17 for the whole round.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

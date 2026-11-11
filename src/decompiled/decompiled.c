@@ -4010,7 +4010,7 @@ void sub_00018530(void)
 	arg0 = EntityFamily_VA;
 	sub_0006D720(arg0);
 	arg0 = EntityFamily_VA;
-	sub_0006C510(arg0);
+	RepCollisionHull_Register(arg0);
 	arg0 = EntityFamily_VA;
 	SeaSergeantCollision_Register(arg0);
 	arg0 = EntityFamily_VA;
@@ -93006,7 +93006,7 @@ void sub_0006BF40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg2 = ebx;
 	arg1 = esi;
 	arg0 = eax;
-	MEM32(esi) = 0x204748u;
+	MEM32(esi) = RepCollisionHullSpec_VA;
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	eax_2 = 0u;
 	MEM32(esi + 0xACu) = 0u;
@@ -93151,12 +93151,13 @@ uint32_t sub_0006C0B0(uint32_t ebx, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0006C100(void)
+/* The RepCollisionHull type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t RepCollisionHull_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x20484Cu);
+	eax = RepCollisionHullScene;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -93178,14 +93179,14 @@ void sub_0006C110(uint32_t ebx, uint32_t arg1)
 	eax = g_eax;
 	ignored = g_edx;
 	MEM32(ebx + 0x194u) = eax;
-	eax = MEM32(0x20484Cu);
+	eax = RepCollisionHullScene;
 	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x20484Eu));
+			edx = vcClassByType(((uint16_t)(RepCollisionHullScene >> 16)));
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -93226,7 +93227,9 @@ void sub_0006C110(uint32_t ebx, uint32_t arg1)
 	} while ((int32_t)edi < (int32_t)MEM32(ebx + 0x274u));
 }
 
-uint32_t sub_0006C1F0(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The RepCollisionHull type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t RepCollisionHull_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t saved_arg4 = 0;
@@ -93403,7 +93406,8 @@ uint32_t sub_0006C1F0(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 	return eax;
 }
 
-uint32_t sub_0006C470(void)
+/* The RepCollisionHull type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t RepCollisionHull_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -93411,7 +93415,7 @@ uint32_t sub_0006C470(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006C47Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x20484Cu) = eax;
+	RepCollisionHullScene = eax;
 	if (eax == ecx)
 	{
 		edi = vcObjectCacheData;
@@ -93448,7 +93452,7 @@ uint32_t sub_0006C470(void)
 		}
 		return eax;
 	}
-	ecx = MEM32(0x20484Cu);
+	ecx = RepCollisionHullScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -93469,82 +93473,84 @@ uint32_t sub_0006C470(void)
 	return eax;
 }
 
-void sub_0006C510(uint32_t arg0)
+/* Registers the RepCollisionHull type (Entity 34), its asset rep_collision_hull: fills its
+   GameObjectType and stores it in its family. */
+void RepCollisionHull_Register(uint32_t arg0)
 {
-	MEM32(0x204700u) = 0x27Cu;
-	MEM32(0x204704u) = 0x6C470u;
-	MEM32(0x204708u) = 0x6C100u;
-	MEM32(0x20470Cu) = 0x6C1F0u;
-	MEM32(0x204710u) = 0x19500u;
-	MEM32(0x204718u) = 0x196A0u;
-	MEM32(0x20471Cu) = 0u;
-	MEM32(0x204720u) = 1u;
-	MEM32(arg0 + 0x98u) = 0x204700u;
-	x86_rep_stos32(0x204748u, 0u, 0x41u);
-	MEM32(0x204778u) = 0x199A48u;
-	MEM32(0x20477Cu) = 0x1B1828u;
-	MEM32(0x204748u) = 0x199A4Cu;
-	MEM32(0x20474Cu) = 0x199A50u;
-	MEM32(0x204750u) = 0x199A54u;
-	MEM32(0x204754u) = 0x199A58u;
-	MEM32(0x204758u) = 0x199A5Cu;
-	MEM32(0x20475Cu) = 0x199A60u;
-	MEM32(0x204760u) = 0x199A64u;
-	MEM32(0x204764u) = 0x199A68u;
-	MEM32(0x204768u) = 0x199A6Cu;
-	MEM32(0x20476Cu) = 0x199A70u;
-	MEM32(0x204770u) = 0x199A74u;
-	MEM32(0x204774u) = 0x199A44u;
-	MEM32(0x204780u) = 0x199A78u;
-	MEM32(0x204784u) = 0x199A7Cu;
-	MEM32(0x204790u) = 0x199A80u;
-	MEM32(0x204794u) = 0x199A84u;
-	MEM32(0x204788u) = 0x199A88u;
-	MEM32(0x20478Cu) = 0x199A8Cu;
-	MEM32(0x204798u) = 0x199AC0u;
-	MEM32(0x20479Cu) = 0x199AC4u;
-	MEM32(0x2047A0u) = 0x199A90u;
-	MEM32(0x2047A4u) = 0x199A94u;
-	MEM32(0x2047A8u) = 0x199A98u;
-	MEM32(0x2047ACu) = 0x199A9Cu;
-	MEM32(0x2047B0u) = 0x199AA0u;
-	MEM32(0x2047B4u) = 0x199AA4u;
-	MEM32(0x2047BCu) = 0x199AA8u;
-	MEM32(0x2047B8u) = 0x199AACu;
-	MEM32(0x2047C0u) = 0x199AB0u;
-	MEM32(0x2047C4u) = 0x199AB4u;
-	MEM32(0x2047C8u) = 0x199AB8u;
-	MEM32(0x2047CCu) = 0x199ABCu;
-	MEM32(0x2047F8u) = 0x199AC8u;
-	MEM32(0x2047D0u) = 0x199ACCu;
-	MEM32(0x2047D8u) = 0x199AD0u;
-	MEM32(0x2047FCu) = 0x199AD4u;
-	MEM32(0x2047D4u) = 0x199AD8u;
-	MEM32(0x2047DCu) = 0x199ADCu;
-	MEM32(0x204800u) = 0x199AE0u;
-	MEM32(0x2047E0u) = 0x199AE4u;
-	MEM32(0x2047E4u) = 0x199AE8u;
-	MEM32(0x204804u) = 0x199AECu;
-	MEM32(0x2047E8u) = 0x199AF0u;
-	MEM32(0x2047ECu) = 0x199AF4u;
-	MEM32(0x2047F0u) = 0x199AF8u;
-	MEM32(0x2047F4u) = 0x199AFCu;
-	MEM32(0x204830u) = 0x199B28u;
-	MEM32(0x20480Cu) = 0x199B00u;
-	MEM32(0x204810u) = 0x199B04u;
-	MEM32(0x204814u) = 0x199B08u;
-	MEM32(0x204818u) = 0x199B0Cu;
-	MEM32(0x20481Cu) = 0x199B10u;
-	MEM32(0x204820u) = 0x199B14u;
-	MEM32(0x204824u) = 0x199B18u;
-	MEM32(0x204828u) = 0x199B1Cu;
-	MEM32(0x20482Cu) = 0x199B20u;
-	MEM32(0x204834u) = 0x199B24u;
-	MEM32(0x204838u) = 0x199B2Cu;
-	MEM32(0x20483Cu) = 0x199B30u;
-	MEM32(0x204840u) = 0x199B34u;
-	MEM32(0x204808u) = 0u;
-	MEM32(0x204844u) = 1u;
+	GameObjectType_size(RepCollisionHullType_VA) = 0x27Cu;
+	GameObjectType_startup(RepCollisionHullType_VA) = 0x6C470u;
+	GameObjectType_shutdown(RepCollisionHullType_VA) = 0x6C100u;
+	GameObjectType_state_machine(RepCollisionHullType_VA) = 0x6C1F0u;
+	GameObjectType_load(RepCollisionHullType_VA) = 0x19500u;
+	GameObjectType_collect(RepCollisionHullType_VA) = 0x196A0u;
+	GameObjectType_version(RepCollisionHullType_VA) = 0u;
+	GameObjectType_flags(RepCollisionHullType_VA) = 1u;
+	MEM32(arg0 + 0x98u) = RepCollisionHullType_VA;
+	x86_rep_stos32(RepCollisionHullSpec_VA, 0u, 0x41u);
+	EntitySpec_radius(RepCollisionHullSpec_VA) = EntityConstants_radius_VA(RepCollisionHullConstants_VA);
+	EntitySpec_target_node(RepCollisionHullSpec_VA) = 0x1B1828u;
+	EntitySpec_hit_points(RepCollisionHullSpec_VA) = EntityConstants_hit_points_VA(RepCollisionHullConstants_VA);
+	MEM32(RepCollisionHullSpec_VA + 0x4u) = RepCollisionHullConstants_VA + 0xCu;
+	MEM32(RepCollisionHullSpec_VA + 0x8u) = RepCollisionHullConstants_VA + 0x10u;
+	MEM32(RepCollisionHullSpec_VA + 0xCu) = RepCollisionHullConstants_VA + 0x14u;
+	MEM32(RepCollisionHullSpec_VA + 0x10u) = RepCollisionHullConstants_VA + 0x18u;
+	MEM32(RepCollisionHullSpec_VA + 0x14u) = RepCollisionHullConstants_VA + 0x1Cu;
+	MEM32(RepCollisionHullSpec_VA + 0x18u) = RepCollisionHullConstants_VA + 0x20u;
+	MEM32(RepCollisionHullSpec_VA + 0x1Cu) = RepCollisionHullConstants_VA + 0x24u;
+	MEM32(RepCollisionHullSpec_VA + 0x20u) = RepCollisionHullConstants_VA + 0x28u;
+	MEM32(RepCollisionHullSpec_VA + 0x24u) = RepCollisionHullConstants_VA + 0x2Cu;
+	MEM32(RepCollisionHullSpec_VA + 0x28u) = RepCollisionHullConstants_VA + 0x30u;
+	EntitySpec_mass(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA;
+	EntitySpec_thrust(RepCollisionHullSpec_VA) = EntityConstants_thrust_VA(RepCollisionHullConstants_VA);
+	EntitySpec_brake(RepCollisionHullSpec_VA) = EntityConstants_brake_VA(RepCollisionHullConstants_VA);
+	EntitySpec_thrust_sideways(RepCollisionHullSpec_VA) = EntityConstants_thrust_sideways_VA(RepCollisionHullConstants_VA);
+	EntitySpec_brake_sideways(RepCollisionHullSpec_VA) = EntityConstants_brake_sideways_VA(RepCollisionHullConstants_VA);
+	EntitySpec_thrust_vertical(RepCollisionHullSpec_VA) = EntityConstants_thrust_vertical_VA(RepCollisionHullConstants_VA);
+	EntitySpec_brake_vertical(RepCollisionHullSpec_VA) = EntityConstants_brake_vertical_VA(RepCollisionHullConstants_VA);
+	EntitySpec_boost(RepCollisionHullSpec_VA) = EntityConstants_boost_VA(RepCollisionHullConstants_VA);
+	EntitySpec_boost_force(RepCollisionHullSpec_VA) = EntityConstants_boost_force_VA(RepCollisionHullConstants_VA);
+	MEM32(RepCollisionHullSpec_VA + 0x58u) = RepCollisionHullConstants_VA + 0x4Cu;
+	MEM32(RepCollisionHullSpec_VA + 0x5Cu) = RepCollisionHullConstants_VA + 0x50u;
+	MEM32(RepCollisionHullSpec_VA + 0x60u) = RepCollisionHullConstants_VA + 0x54u;
+	MEM32(RepCollisionHullSpec_VA + 0x64u) = RepCollisionHullConstants_VA + 0x58u;
+	EntitySpec_speed_forward(RepCollisionHullSpec_VA) = EntityConstants_speed_forward_VA(RepCollisionHullConstants_VA);
+	EntitySpec_speed_backward(RepCollisionHullSpec_VA) = EntityConstants_speed_backward_VA(RepCollisionHullConstants_VA);
+	EntitySpec_speed_sideways(RepCollisionHullSpec_VA) = EntityConstants_speed_sideways_VA(RepCollisionHullConstants_VA);
+	EntitySpec_speed_vertical(RepCollisionHullSpec_VA) = EntityConstants_speed_vertical_VA(RepCollisionHullConstants_VA);
+	MEM32(RepCollisionHullSpec_VA + 0x78u) = RepCollisionHullConstants_VA + 0x6Cu;
+	MEM32(RepCollisionHullSpec_VA + 0x7Cu) = RepCollisionHullConstants_VA + 0x70u;
+	MEM32(RepCollisionHullSpec_VA + 0x80u) = RepCollisionHullConstants_VA + 0x74u;
+	MEM32(RepCollisionHullSpec_VA + 0x84u) = RepCollisionHullConstants_VA + 0x78u;
+	MEM32(RepCollisionHullSpec_VA + 0xB0u) = RepCollisionHullConstants_VA + 0x84u;
+	MEM32(RepCollisionHullSpec_VA + 0x88u) = RepCollisionHullConstants_VA + 0x88u;
+	MEM32(RepCollisionHullSpec_VA + 0x90u) = RepCollisionHullConstants_VA + 0x8Cu;
+	MEM32(RepCollisionHullSpec_VA + 0xB4u) = RepCollisionHullConstants_VA + 0x90u;
+	MEM32(RepCollisionHullSpec_VA + 0x8Cu) = RepCollisionHullConstants_VA + 0x94u;
+	MEM32(RepCollisionHullSpec_VA + 0x94u) = RepCollisionHullConstants_VA + 0x98u;
+	MEM32(RepCollisionHullSpec_VA + 0xB8u) = RepCollisionHullConstants_VA + 0x9Cu;
+	MEM32(RepCollisionHullSpec_VA + 0x98u) = RepCollisionHullConstants_VA + 0xA0u;
+	MEM32(RepCollisionHullSpec_VA + 0x9Cu) = RepCollisionHullConstants_VA + 0xA4u;
+	MEM32(RepCollisionHullSpec_VA + 0xBCu) = RepCollisionHullConstants_VA + 0xA8u;
+	MEM32(RepCollisionHullSpec_VA + 0xA0u) = RepCollisionHullConstants_VA + 0xACu;
+	MEM32(RepCollisionHullSpec_VA + 0xA4u) = RepCollisionHullConstants_VA + 0xB0u;
+	MEM32(RepCollisionHullSpec_VA + 0xA8u) = RepCollisionHullConstants_VA + 0xB4u;
+	MEM32(RepCollisionHullSpec_VA + 0xACu) = RepCollisionHullConstants_VA + 0xB8u;
+	MEM32(RepCollisionHullSpec_VA + 0xE8u) = RepCollisionHullConstants_VA + 0xE4u;
+	MEM32(RepCollisionHullSpec_VA + 0xC4u) = RepCollisionHullConstants_VA + 0xBCu;
+	MEM32(RepCollisionHullSpec_VA + 0xC8u) = RepCollisionHullConstants_VA + 0xC0u;
+	MEM32(RepCollisionHullSpec_VA + 0xCCu) = RepCollisionHullConstants_VA + 0xC4u;
+	MEM32(RepCollisionHullSpec_VA + 0xD0u) = RepCollisionHullConstants_VA + 0xC8u;
+	EntitySpec_camera_lag(RepCollisionHullSpec_VA) = EntityConstants_camera_lag_VA(RepCollisionHullConstants_VA);
+	MEM32(RepCollisionHullSpec_VA + 0xD8u) = RepCollisionHullConstants_VA + 0xD0u;
+	MEM32(RepCollisionHullSpec_VA + 0xDCu) = RepCollisionHullConstants_VA + 0xD4u;
+	MEM32(RepCollisionHullSpec_VA + 0xE0u) = RepCollisionHullConstants_VA + 0xD8u;
+	MEM32(RepCollisionHullSpec_VA + 0xE4u) = RepCollisionHullConstants_VA + 0xDCu;
+	MEM32(RepCollisionHullSpec_VA + 0xECu) = RepCollisionHullConstants_VA + 0xE0u;
+	EntitySpec_explode_chance(RepCollisionHullSpec_VA) = EntityConstants_explode_chance_VA(RepCollisionHullConstants_VA);
+	EntitySpec_death_wait(RepCollisionHullSpec_VA) = EntityConstants_death_wait_VA(RepCollisionHullConstants_VA);
+	EntitySpec_fade_time(RepCollisionHullSpec_VA) = EntityConstants_fade_time_VA(RepCollisionHullConstants_VA);
+	EntitySpec_motions(RepCollisionHullSpec_VA) = 0u;
+	MEM32(RepCollisionHullSpec_VA + 0xFCu) = 1u;
 }
 
 uint32_t sub_0006C800(void)
@@ -348661,10 +348667,10 @@ void sub_0006C0B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0006C100_entry(void)
+void RepCollisionHull_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0006C100();
+	g_eax = RepCollisionHull_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348683,10 +348689,10 @@ void sub_0006C110_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0006C1F0_entry(void)
+void RepCollisionHull_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0006C1F0(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = RepCollisionHull_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348694,10 +348700,10 @@ void sub_0006C1F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0006C470_entry(void)
+void RepCollisionHull_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0006C470();
+	g_eax = RepCollisionHull_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348705,9 +348711,9 @@ void sub_0006C470_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0006C510_entry(void)
+void RepCollisionHull_Register_entry(void)
 {
-	sub_0006C510(ARG32(0));
+	RepCollisionHull_Register(ARG32(0));
 	g_esp += 4u;
 }
 
