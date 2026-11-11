@@ -850,6 +850,29 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   on c069e35, which `tools/core` points at), for the other games, whose C has to come out the same before
   it joins arcade-decomp's main; Robotech's own Flow keeps only what is the x87's. Left: what is left of
   the analysis is the calls' summaries (91 s) and the data flow's three solves after the first.
+- **The entity types' constants: `EntityConstants`** (11-11-2026). What an `EntitySpec`'s words point at
+  is a record too: each type's file keeps its constants one after another in `.rdata` (the mass, the
+  radius, the hit points, the forces, the top speeds...), and 35 of the 40 types with a name and a whole
+  record lay them out the same where a field of the record has a name (0xF4 bytes from the mass; two
+  words nobody has read swap places in 8 of them). `EntityConstants`, 19 fields with `EntitySpec`'s names
+  and their own types (floats, but `death_wait`, `fade_time` and `camera_lag`, counts), and each of the 35
+  types' blocks in place (`MacIIConstants`): `EntitySpec_hit_points(MacIISpec_VA) =
+  EntityConstants_hit_points_VA(MacIIConstants_VA);`. Not typed: ZenCruiserTurret1, ZenReEntryPod,
+  ZenReconShip, ZenShuttle and SeaSergeant, which keep constants of their own among them (two after the
+  radius in four, three before the mass in one). Read with Ghidra and named in `EntitySpec`: `camera_lag`
+  (+0xD4), how many of the entity's last places the camera's is the mean of (sub_000213A0 keeps them, 60 at
+  most, in what the player's camera works on). Still not told apart there: +0xC4, +0xCC and +0xD0, three
+  values the camera's own move towards step by step (the first doubled with two players), and +0xD8 to
+  +0xE4, two pairs for the two angles it turns by towards what the entity aims at (sub_00021700).
+  Measured: data addresses written as numbers 13,565 to 11,430; memory at a named place no field names
+  2,009 to 1,965; the XBE's untyped bytes 847,773 to 845,024, its unknown bytes 3,845 to 3,839; reads at a
+  raw address 11,519, as before. `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios frame
+  for frame as their references, `training` (from frame 2400) only on a second run alone. The round took
+  6 minutes 22 seconds from symbols.txt to the executable (the analysis read from the build before).
+  Two things seen under another project's decompilation running beside: a scenario of play differs in its
+  last frames (ambush_hills, besieged, training so far) and comes out right when run again alone; and
+  `verify_c.py` run right after another run of the title says "0 function vectors", which is no
+  comparison, not a pass: run it again.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

@@ -1615,6 +1615,7 @@ field   EntitySpec  06C  speed_backward  u32         # points at its top speed b
 field   EntitySpec  070  speed_vertical  u32         # points at its top speed up and down: 0 for what stays on the ground
 field   EntitySpec  074  speed_sideways  u32         # points at its top speed sideways
 field   EntitySpec  0C0  motions         u32         # points at its record of motions (0x55 words); 0 for a type with none
+field   EntitySpec  0D4  camera_lag      u32         # points at how many of its last places the camera's is the mean of: 60 at most
 field   EntitySpec  0F0  explode_chance  u32         # points at the chance, 0 to 1, that it blows up when its death's motion ends; it fades otherwise
 field   EntitySpec  0F4  death_wait      u32         # points at the milliseconds it waits after its death's motion before either
 field   EntitySpec  0F8  fade_time       u32         # points at the milliseconds its remains take to fade
@@ -1667,6 +1668,67 @@ field   EntitySpec  100  death_motions   u32         # points at its record of d
 0020D170  var   PodScoutSpec                             EntitySpec
 0020D520  var   PodStandardWarriorSpec                   EntitySpec
 0020D9C8  var   FighterPodSpec                           EntitySpec
+
+# The constants an entity type's record points at (EntitySpec): each type's file keeps them one after
+# another in .rdata, a float or a count each, and its X_Register stores each one's address in its record. 35
+# types lay them out the same where a field of the record has a name, 0xF4 bytes from the mass; five more
+# (ZenCruiserTurret1, ZenReEntryPod, ZenReconShip, ZenShuttle, SeaSergeant) have constants of their own
+# among them and are not here, nor the vehicles' (VehicleParameters). A field is the constant EntitySpec's field of that name points at.
+struct  EntityConstants  F4                         # an entity type's constants: what its EntitySpec's words point at
+field   EntityConstants  000  mass             f32
+field   EntityConstants  004  radius           f32
+field   EntityConstants  008  hit_points       f32
+field   EntityConstants  034  thrust           f32
+field   EntityConstants  038  brake            f32
+field   EntityConstants  03C  thrust_sideways  f32
+field   EntityConstants  040  brake_sideways   f32
+field   EntityConstants  044  thrust_vertical  f32
+field   EntityConstants  048  brake_vertical   f32
+field   EntityConstants  05C  speed_forward    f32
+field   EntityConstants  060  speed_backward   f32
+field   EntityConstants  064  speed_sideways   f32
+field   EntityConstants  068  speed_vertical   f32
+field   EntityConstants  07C  boost            f32
+field   EntityConstants  080  boost_force      f32
+field   EntityConstants  0CC  camera_lag       s32
+field   EntityConstants  0E8  explode_chance   f32
+field   EntityConstants  0EC  death_wait       s32
+field   EntityConstants  0F0  fade_time        s32
+0019278C  var   ZenHeavyMissileTurretConstants           EntityConstants
+00192974  var   ZenLightMissileTurretConstants           EntityConstants
+00192D58  var   VF1SXFighterConstants                    EntityConstants
+00192F50  var   VF1AXFighterConstants                    EntityConstants
+001992B4  var   ExcaliburConstants                       EntityConstants
+00199724  var   ZenReconCollisionConstants               EntityConstants
+00199830  var   ZenShuttleCollisionConstants             EntityConstants
+0019993C  var   SeaSergeantCollisionConstants            EntityConstants
+0019B5F8  var   MalePowerArmorConstants                  EntityConstants
+0019BE2C  var   PodOfficerSledConstants                  EntityConstants
+0019C088  var   PodOfficerSkarredDisabledConstants       EntityConstants
+0019C56C  var   PodOfficerSkarredConstants               EntityConstants
+0019CA04  var   PodOfficerConstants                      EntityConstants
+0019D224  var   SpartanConstants                         EntityConstants
+0019D684  var   RaiderXConstants                         EntityConstants
+0019DB1C  var   MacIIConstants                           EntityConstants
+0019E3D8  var   PodScoutSpaceConstants                   EntityConstants
+0019E57C  var   GladiatorConstants                       EntityConstants
+0019E9A8  var   PodHeavyArtillerySpaceConstants          EntityConstants
+0019EC00  var   PodLightArtillerySpaceConstants          EntityConstants
+0019EE20  var   ZenCruiserMissileTurretConstants         EntityConstants
+0019F02C  var   PodHeavyArtilleryConstants               EntityConstants
+0019F400  var   ZenWarriorNoArmourConstants              EntityConstants
+0019F954  var   ZenWarriorHeavyConstants                 EntityConstants
+0019FEAC  var   ZenWarriorLiteConstants                  EntityConstants
+001A0400  var   ZenScoutShipConstants                    EntityConstants
+001A07FC  var   ARMDTurretConstants                      EntityConstants
+001A09FC  var   ZenCruiserTurretConstants                EntityConstants
+001A0FF8  var   PodStandardWarriorSpaceConstants         EntityConstants
+001A1260  var   ZenWarriorScavengerConstants             EntityConstants
+001A17A8  var   PodLightArtilleryConstants               EntityConstants
+001A1B7C  var   CatsEyeConstants                         EntityConstants
+001A1D3C  var   PodScoutConstants                        EntityConstants
+001A2090  var   PodStandardWarriorConstants              EntityConstants
+001A24B4  var   FighterPodConstants                      EntityConstants
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34

@@ -23,11 +23,11 @@ decompiled_arguments 88507
 decompiled_slots 11930
 decompiled_memory_by_address 11519
 decompiled_memory_computed 112779
-decompiled_unnamed_fields 2009
+decompiled_unnamed_fields 1965
 decompiled_float_registers 10681
 decompiled_float_bits 1467
 decompiled_gotos 0
 decompiled_control_flags 206
-decompiled_data_addresses 13565
-xbe_unknown_bytes 3845
-xbe_untyped_bytes 847773
+decompiled_data_addresses 11430
+xbe_unknown_bytes 3839
+xbe_untyped_bytes 845024
