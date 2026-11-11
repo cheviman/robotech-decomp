@@ -56,13 +56,13 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 - [x] Every byte of the XBE classified (`tools/coverage.py`, `analysis/coverage.txt`): code, data whose
       layout is known, data the code reaches, fill, unknown. Of the game's own (its and the engine's code,
       and the data its code reaches in `.rdata` and `.data`), 1,237,883 bytes of code with none unknown;
-      116,930 of data described, 841,723 reached but not yet typed, 38,093 of fill and 3,831 unknown, all
+      119,734 of data described, 838,919 reached but not yet typed, 38,093 of fill and 3,831 unknown, all
       of them in its data; tables of records in place by their fields in the decompiled C (`Levels`, the
       pads with a field for each control, the object system's families and types, the screens' sprites,
-      the entity types' records of where their constants are and the constants, the weapons', the guns'
-      and the missiles' records and constants), the players and what 82 types get by name
+      the entity types' records of where their constants are and the constants, the weapons', the guns',
+      the heavy cannons', the turret cannons', the missiles' and the chunks' records and constants), the players and what 82 types get by name
       (their models, nodes, scenes, materials and sounds) by name, a float with a name read and written
-      by it; the decompiled C reads or writes 10,899 places at a raw address; Ghidra, headless, as a
+      by it; the decompiled C reads or writes 10,579 places at a raw address; Ghidra, headless, as a
       second reading of the whole program with the project's names and types (`tools/ghidra`)
       (11-11-2026)
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host

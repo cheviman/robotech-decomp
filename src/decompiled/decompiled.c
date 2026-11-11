@@ -191172,11 +191172,11 @@ uint32_t PodOfficerSledHeavyCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A39A8u;
+	arg2 = HeavyCannonConstants_sound_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21D2CCu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A3968u;
+	arg1 = HeavyCannonConstants_material_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000C8757u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -191248,26 +191248,26 @@ void PodOfficerSledHeavyCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodOfficerSledHeavyCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodOfficerSledHeavyCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0xC0u) = PodOfficerSledHeavyCannonWeaponType_VA;
-	x86_rep_stos32(0x21D29Cu, 0u, 0xBu);
-	MEM32(0x21D29Cu) = 0x1A3930u;
-	MEM32(0x21D2A0u) = 0x1A3934u;
-	MEM32(0x21D2A4u) = 0x1A3938u;
-	MEM32(0x21D2A8u) = 0x1A393Cu;
-	MEM32(0x21D2ACu) = 0x1A3940u;
-	MEM32(0x21D2B0u) = 0x1A3944u;
-	MEM32(0x21D2B4u) = 0x1A3948u;
-	MEM32(0x21D2B8u) = 0x1A394Cu;
-	MEM32(0x21D2BCu) = 0x1A3950u;
-	MEM32(0x21D2C0u) = 0x1A3958u;
-	MEM32(0x21D2C4u) = 0x1A395Cu;
+	x86_rep_stos32(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA, 0u, 0xBu);
+	HeavyCannonSpec_aim_angle(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = PodOfficerSledHeavyCannonWeaponConstants_VA;
+	HeavyCannonSpec_damage(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_cost(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA + 0xCu) = PodOfficerSledHeavyCannonWeaponConstants_VA + 0xCu;
+	HeavyCannonSpec_range(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_reload(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_life(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_life_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_fade(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_fade_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_shot_delay(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_shot_delay_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_width(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_width_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_color(PodOfficerSledHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_color_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
 	x86_rep_stos32(PodOfficerSledHeavyCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_damage(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3934u;
-	WeaponSpec_cost(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3938u;
-	WeaponSpec_reload(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3944u;
-	MEM32(PodOfficerSledHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A393Cu;
-	WeaponSpec_range(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3940u;
-	WeaponSpec_speed(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3954u;
-	WeaponSpec_alert_radius(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A39E8u;
+	WeaponSpec_damage(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerSledHeavyCannonWeaponSpec_VA + 0x4u) = PodOfficerSledHeavyCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_speed_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodOfficerSledHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_alert_radius_VA(PodOfficerSledHeavyCannonWeaponConstants_VA);
 	PodOfficerSledHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191287,11 +191287,11 @@ uint32_t PodOfficerSkarredHeavyCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A3A68u;
+	arg2 = HeavyCannonConstants_sound_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21D3B4u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A3A28u;
+	arg1 = HeavyCannonConstants_material_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000C8957u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -191363,26 +191363,26 @@ void PodOfficerSkarredHeavyCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodOfficerSkarredHeavyCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodOfficerSkarredHeavyCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0xBCu) = PodOfficerSkarredHeavyCannonWeaponType_VA;
-	x86_rep_stos32(0x21D384u, 0u, 0xBu);
-	MEM32(0x21D384u) = 0x1A39F0u;
-	MEM32(0x21D388u) = 0x1A39F4u;
-	MEM32(0x21D38Cu) = 0x1A39F8u;
-	MEM32(0x21D390u) = 0x1A39FCu;
-	MEM32(0x21D394u) = 0x1A3A00u;
-	MEM32(0x21D398u) = 0x1A3A04u;
-	MEM32(0x21D39Cu) = 0x1A3A08u;
-	MEM32(0x21D3A0u) = 0x1A3A0Cu;
-	MEM32(0x21D3A4u) = 0x1A3A10u;
-	MEM32(0x21D3A8u) = 0x1A3A18u;
-	MEM32(0x21D3ACu) = 0x1A3A1Cu;
+	x86_rep_stos32(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA, 0u, 0xBu);
+	HeavyCannonSpec_aim_angle(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = PodOfficerSkarredHeavyCannonWeaponConstants_VA;
+	HeavyCannonSpec_damage(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_cost(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA + 0xCu) = PodOfficerSkarredHeavyCannonWeaponConstants_VA + 0xCu;
+	HeavyCannonSpec_range(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_reload(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_life(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_life_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_fade(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_fade_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_shot_delay(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_shot_delay_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_width(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_width_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_color(PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_color_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
 	x86_rep_stos32(PodOfficerSkarredHeavyCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_damage(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A39F4u;
-	WeaponSpec_cost(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A39F8u;
-	WeaponSpec_reload(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A04u;
-	MEM32(PodOfficerSkarredHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A39FCu;
-	WeaponSpec_range(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A00u;
-	WeaponSpec_speed(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A14u;
-	WeaponSpec_alert_radius(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3AA8u;
+	WeaponSpec_damage(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerSkarredHeavyCannonWeaponSpec_VA + 0x4u) = PodOfficerSkarredHeavyCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_speed_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_alert_radius_VA(PodOfficerSkarredHeavyCannonWeaponConstants_VA);
 	PodOfficerSkarredHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191509,11 +191509,11 @@ uint32_t PodOfficerHeavyCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A3BE8u;
+	arg2 = HeavyCannonConstants_sound_VA(PodOfficerHeavyCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21D584u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A3BA8u;
+	arg1 = HeavyCannonConstants_material_VA(PodOfficerHeavyCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000C8D57u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -191584,26 +191584,26 @@ void PodOfficerHeavyCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodOfficerHeavyCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodOfficerHeavyCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0xB0u) = PodOfficerHeavyCannonWeaponType_VA;
-	x86_rep_stos32(0x21D554u, 0u, 0xBu);
-	MEM32(0x21D554u) = 0x1A3B70u;
-	MEM32(0x21D558u) = 0x1A3B74u;
-	MEM32(0x21D55Cu) = 0x1A3B78u;
-	MEM32(0x21D560u) = 0x1A3B7Cu;
-	MEM32(0x21D564u) = 0x1A3B80u;
-	MEM32(0x21D568u) = 0x1A3B84u;
-	MEM32(0x21D56Cu) = 0x1A3B88u;
-	MEM32(0x21D570u) = 0x1A3B8Cu;
-	MEM32(0x21D574u) = 0x1A3B90u;
-	MEM32(0x21D578u) = 0x1A3B98u;
-	MEM32(0x21D57Cu) = 0x1A3B9Cu;
+	x86_rep_stos32(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA, 0u, 0xBu);
+	HeavyCannonSpec_aim_angle(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = PodOfficerHeavyCannonWeaponConstants_VA;
+	HeavyCannonSpec_damage(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_cost(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA + 0xCu) = PodOfficerHeavyCannonWeaponConstants_VA + 0xCu;
+	HeavyCannonSpec_range(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_reload(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_life(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_life_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_fade(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_fade_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_shot_delay(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_shot_delay_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_trail_width(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_width_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	HeavyCannonSpec_color(PodOfficerHeavyCannonWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_color_VA(PodOfficerHeavyCannonWeaponConstants_VA);
 	x86_rep_stos32(PodOfficerHeavyCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_damage(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B74u;
-	WeaponSpec_cost(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B78u;
-	WeaponSpec_reload(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B84u;
-	MEM32(PodOfficerHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A3B7Cu;
-	WeaponSpec_range(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B80u;
-	WeaponSpec_speed(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B94u;
-	WeaponSpec_alert_radius(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3C28u;
+	WeaponSpec_damage(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_damage_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_cost_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_reload_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	MEM32(PodOfficerHeavyCannonWeaponSpec_VA + 0x4u) = PodOfficerHeavyCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_range_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_speed_VA(PodOfficerHeavyCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodOfficerHeavyCannonWeaponSpec_VA) = HeavyCannonConstants_alert_radius_VA(PodOfficerHeavyCannonWeaponConstants_VA);
 	PodOfficerHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191622,11 +191622,11 @@ uint32_t MalePowerArmorRailgunWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A3CA8u;
+	arg2 = HeavyCannonConstants_sound_VA(MalePowerArmorRailgunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21D66Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A3C68u;
+	arg1 = HeavyCannonConstants_material_VA(MalePowerArmorRailgunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000C8F57u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -191697,26 +191697,26 @@ void MalePowerArmorRailgunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(MalePowerArmorRailgunWeaponType_VA) = 0u;
 	GameObjectType_flags(MalePowerArmorRailgunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0xACu) = MalePowerArmorRailgunWeaponType_VA;
-	x86_rep_stos32(0x21D63Cu, 0u, 0xBu);
-	MEM32(0x21D63Cu) = 0x1A3C30u;
-	MEM32(0x21D640u) = 0x1A3C34u;
-	MEM32(0x21D644u) = 0x1A3C38u;
-	MEM32(0x21D648u) = 0x1A3C3Cu;
-	MEM32(0x21D64Cu) = 0x1A3C40u;
-	MEM32(0x21D650u) = 0x1A3C44u;
-	MEM32(0x21D654u) = 0x1A3C48u;
-	MEM32(0x21D658u) = 0x1A3C4Cu;
-	MEM32(0x21D65Cu) = 0x1A3C50u;
-	MEM32(0x21D660u) = 0x1A3C58u;
-	MEM32(0x21D664u) = 0x1A3C5Cu;
+	x86_rep_stos32(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA, 0u, 0xBu);
+	HeavyCannonSpec_aim_angle(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = MalePowerArmorRailgunWeaponConstants_VA;
+	HeavyCannonSpec_damage(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_damage_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_cost(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_cost_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	MEM32(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA + 0xCu) = MalePowerArmorRailgunWeaponConstants_VA + 0xCu;
+	HeavyCannonSpec_range(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_range_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_reload(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_reload_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_trail_life(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_life_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_trail_fade(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_fade_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_shot_delay(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_shot_delay_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_trail_width(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_trail_width_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	HeavyCannonSpec_color(MalePowerArmorRailgunWeaponHeavyCannonSpec_VA) = HeavyCannonConstants_color_VA(MalePowerArmorRailgunWeaponConstants_VA);
 	x86_rep_stos32(MalePowerArmorRailgunWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_damage(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C34u;
-	WeaponSpec_cost(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C38u;
-	WeaponSpec_reload(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C44u;
-	MEM32(MalePowerArmorRailgunWeaponSpec_VA + 0x4u) = 0x1A3C3Cu;
-	WeaponSpec_range(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C40u;
-	WeaponSpec_speed(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C54u;
-	WeaponSpec_alert_radius(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3CE8u;
+	WeaponSpec_damage(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_damage_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	WeaponSpec_cost(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_cost_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	WeaponSpec_reload(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_reload_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	MEM32(MalePowerArmorRailgunWeaponSpec_VA + 0x4u) = MalePowerArmorRailgunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_range_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	WeaponSpec_speed(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_speed_VA(MalePowerArmorRailgunWeaponConstants_VA);
+	WeaponSpec_alert_radius(MalePowerArmorRailgunWeaponSpec_VA) = HeavyCannonConstants_alert_radius_VA(MalePowerArmorRailgunWeaponConstants_VA);
 	MalePowerArmorRailgunWeaponMaterial = 0u;
 }
 
@@ -197874,12 +197874,12 @@ void PodOfficerSledMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(PodOfficerSledMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x48u) = PodOfficerSledMissileLauncherWeaponType_VA;
 	x86_rep_stos32(PodOfficerSledMissileLauncherWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53A4u;
-	WeaponSpec_reload(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53B0u;
-	MEM32(PodOfficerSledMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A53A8u;
-	WeaponSpec_range(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53ACu;
-	WeaponSpec_damage(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53A0u;
-	WeaponSpec_alert_radius(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53B4u;
+	WeaponSpec_cost(PodOfficerSledMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(PodOfficerSledMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(PodOfficerSledMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(PodOfficerSledMissileLauncherWeaponConstants_VA);
+	MEM32(PodOfficerSledMissileLauncherWeaponSpec_VA + 0x4u) = PodOfficerSledMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(PodOfficerSledMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(PodOfficerSledMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(PodOfficerSledMissileLauncherWeaponSpec_VA) = PodOfficerSledMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(PodOfficerSledMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(PodOfficerSledMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF0E0(void)
@@ -197929,12 +197929,12 @@ void FPAMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(FPAMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x3Cu) = FPAMissileLauncherWeaponType_VA;
 	x86_rep_stos32(FPAMissileLauncherWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(FPAMissileLauncherWeaponSpec_VA) = 0x1A53BCu;
-	WeaponSpec_reload(FPAMissileLauncherWeaponSpec_VA) = 0x1A53C8u;
-	MEM32(FPAMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A53C0u;
-	WeaponSpec_range(FPAMissileLauncherWeaponSpec_VA) = 0x1A53C4u;
-	WeaponSpec_damage(FPAMissileLauncherWeaponSpec_VA) = 0x1A53B8u;
-	WeaponSpec_alert_radius(FPAMissileLauncherWeaponSpec_VA) = 0x1A53CCu;
+	WeaponSpec_cost(FPAMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(FPAMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(FPAMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(FPAMissileLauncherWeaponConstants_VA);
+	MEM32(FPAMissileLauncherWeaponSpec_VA + 0x4u) = FPAMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(FPAMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(FPAMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(FPAMissileLauncherWeaponSpec_VA) = FPAMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(FPAMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(FPAMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF1B0(void)
@@ -198085,12 +198085,12 @@ void ZenHeavyMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ZenHeavyMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x30u) = ZenHeavyMissileLauncherWeaponType_VA;
 	x86_rep_stos32(ZenHeavyMissileLauncherWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5404u;
-	WeaponSpec_reload(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5410u;
-	MEM32(ZenHeavyMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A5408u;
-	WeaponSpec_range(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A540Cu;
-	WeaponSpec_damage(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5400u;
-	WeaponSpec_alert_radius(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5414u;
+	WeaponSpec_cost(ZenHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(ZenHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(ZenHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(ZenHeavyMissileLauncherWeaponConstants_VA);
+	MEM32(ZenHeavyMissileLauncherWeaponSpec_VA + 0x4u) = ZenHeavyMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ZenHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(ZenHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(ZenHeavyMissileLauncherWeaponSpec_VA) = ZenHeavyMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(ZenHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(ZenHeavyMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF420(void)
@@ -198140,12 +198140,12 @@ void ZenLightMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ZenLightMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x2Cu) = ZenLightMissileLauncherWeaponType_VA;
 	x86_rep_stos32(ZenLightMissileLauncherWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A541Cu;
-	WeaponSpec_reload(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5428u;
-	MEM32(ZenLightMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A5420u;
-	WeaponSpec_range(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5424u;
-	WeaponSpec_damage(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5418u;
-	WeaponSpec_alert_radius(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A542Cu;
+	WeaponSpec_cost(ZenLightMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(ZenLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(ZenLightMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(ZenLightMissileLauncherWeaponConstants_VA);
+	MEM32(ZenLightMissileLauncherWeaponSpec_VA + 0x4u) = ZenLightMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ZenLightMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(ZenLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(ZenLightMissileLauncherWeaponSpec_VA) = ZenLightMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(ZenLightMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(ZenLightMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF4F0(void)
@@ -198449,12 +198449,12 @@ void FlareWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(FlareWeaponType_VA) = 0xCF790u;
 	MEM32(arg0 + 0x20u) = FlareWeaponType_VA;
 	x86_rep_stos32(FlareWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(FlareWeaponSpec_VA) = 0x1A5464u;
-	WeaponSpec_reload(FlareWeaponSpec_VA) = 0x1A5470u;
-	MEM32(FlareWeaponSpec_VA + 0x4u) = 0x1A5468u;
-	WeaponSpec_range(FlareWeaponSpec_VA) = 0x1A546Cu;
-	WeaponSpec_damage(FlareWeaponSpec_VA) = 0x1A5460u;
-	WeaponSpec_alert_radius(FlareWeaponSpec_VA) = 0x1A5474u;
+	WeaponSpec_cost(FlareWeaponSpec_VA) = LauncherConstants_cost_VA(FlareWeaponConstants_VA);
+	WeaponSpec_reload(FlareWeaponSpec_VA) = LauncherConstants_reload_VA(FlareWeaponConstants_VA);
+	MEM32(FlareWeaponSpec_VA + 0x4u) = FlareWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(FlareWeaponSpec_VA) = LauncherConstants_range_VA(FlareWeaponConstants_VA);
+	WeaponSpec_damage(FlareWeaponSpec_VA) = FlareWeaponConstants_VA;
+	WeaponSpec_alert_radius(FlareWeaponSpec_VA) = LauncherConstants_alert_radius_VA(FlareWeaponConstants_VA);
 }
 
 uint32_t sub_000CF8F0(void)
@@ -198470,12 +198470,12 @@ uint32_t ARMDTurretCannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
-	arg1 = 0x1A54B8u;
+	arg1 = TurretCannonConstants_material_VA(ARMDTurretCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CF90Cu, 2, arg0, arg1);
 	arg4 = 0x453B8000u;
 	arg3 = 0x44160000u;
-	arg2 = 0x1A54F8u;
+	arg2 = TurretCannonConstants_sound_VA(ARMDTurretCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x2201ECu;
 	ARMDTurretCannonWeaponMaterial = eax;
@@ -198548,27 +198548,27 @@ void ARMDTurretCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ARMDTurretCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xC4u) = ARMDTurretCannonWeaponType_VA;
 	x86_rep_stos32(ARMDTurretCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ARMDTurretCannonWeaponSpec_VA) = 0x1A547Cu;
-	WeaponSpec_reload(ARMDTurretCannonWeaponSpec_VA) = 0x1A5488u;
-	MEM32(ARMDTurretCannonWeaponSpec_VA + 0x4u) = 0x1A5480u;
-	WeaponSpec_range(ARMDTurretCannonWeaponSpec_VA) = 0x1A5484u;
-	WeaponSpec_damage(ARMDTurretCannonWeaponSpec_VA) = 0x1A5478u;
-	WeaponSpec_speed(ARMDTurretCannonWeaponSpec_VA) = 0x1A549Cu;
-	WeaponSpec_alert_radius(ARMDTurretCannonWeaponSpec_VA) = 0x1A5538u;
-	x86_rep_stos32(0x2201B4u, 0u, 0xDu);
-	MEM32(0x2201B4u) = 0x1A5490u;
-	MEM32(0x2201B8u) = 0x1A5478u;
-	MEM32(0x2201BCu) = 0x1A547Cu;
-	MEM32(0x2201C0u) = 0x1A5480u;
-	MEM32(0x2201C4u) = 0x1A5484u;
-	MEM32(0x2201C8u) = 0x1A5488u;
-	MEM32(0x2201CCu) = 0x1A548Cu;
-	MEM32(0x2201D0u) = 0x1A5494u;
-	MEM32(0x2201D4u) = 0x1A5498u;
-	MEM32(0x2201D8u) = 0x1A549Cu;
-	MEM32(0x2201DCu) = 0x1A54ACu;
-	MEM32(0x2201E0u) = 0x1A54B0u;
-	MEM32(0x2201E4u) = 0x1A54A0u;
+	WeaponSpec_cost(ARMDTurretCannonWeaponSpec_VA) = TurretCannonConstants_cost_VA(ARMDTurretCannonWeaponConstants_VA);
+	WeaponSpec_reload(ARMDTurretCannonWeaponSpec_VA) = TurretCannonConstants_reload_VA(ARMDTurretCannonWeaponConstants_VA);
+	MEM32(ARMDTurretCannonWeaponSpec_VA + 0x4u) = ARMDTurretCannonWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ARMDTurretCannonWeaponSpec_VA) = TurretCannonConstants_range_VA(ARMDTurretCannonWeaponConstants_VA);
+	WeaponSpec_damage(ARMDTurretCannonWeaponSpec_VA) = ARMDTurretCannonWeaponConstants_VA;
+	WeaponSpec_speed(ARMDTurretCannonWeaponSpec_VA) = TurretCannonConstants_speed_VA(ARMDTurretCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(ARMDTurretCannonWeaponSpec_VA) = TurretCannonConstants_alert_radius_VA(ARMDTurretCannonWeaponConstants_VA);
+	x86_rep_stos32(ARMDTurretCannonWeaponTurretCannonSpec_VA, 0u, 0xDu);
+	TurretCannonSpec_aim_angle(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_aim_angle_VA(ARMDTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_damage(ARMDTurretCannonWeaponTurretCannonSpec_VA) = ARMDTurretCannonWeaponConstants_VA;
+	TurretCannonSpec_cost(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_cost_VA(ARMDTurretCannonWeaponConstants_VA);
+	MEM32(ARMDTurretCannonWeaponTurretCannonSpec_VA + 0xCu) = ARMDTurretCannonWeaponConstants_VA + 0x8u;
+	TurretCannonSpec_range(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_range_VA(ARMDTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_reload(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_reload_VA(ARMDTurretCannonWeaponConstants_VA);
+	MEM32(ARMDTurretCannonWeaponTurretCannonSpec_VA + 0x18u) = ARMDTurretCannonWeaponConstants_VA + 0x14u;
+	TurretCannonSpec_shots(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_shots_VA(ARMDTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_life(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_life_VA(ARMDTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_speed(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_speed_VA(ARMDTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_length(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_length_VA(ARMDTurretCannonWeaponConstants_VA);
+	MEM32(ARMDTurretCannonWeaponTurretCannonSpec_VA + 0x2Cu) = ARMDTurretCannonWeaponConstants_VA + 0x38u;
+	TurretCannonSpec_color(ARMDTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_color_VA(ARMDTurretCannonWeaponConstants_VA);
 }
 
 uint32_t sub_000CFAF0(void)
@@ -198584,12 +198584,12 @@ uint32_t ZenReconShipCannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
-	arg1 = 0x1A5580u;
+	arg1 = TurretCannonConstants_material_VA(ZenReconShipCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CFB0Cu, 2, arg0, arg1);
 	arg4 = 0x453B8000u;
 	arg3 = 0x44160000u;
-	arg2 = 0x1A55C0u;
+	arg2 = TurretCannonConstants_sound_VA(ZenReconShipCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x2202DCu;
 	ZenReconShipCannonWeaponMaterial = eax;
@@ -198662,27 +198662,27 @@ void ZenReconShipCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ZenReconShipCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA8u) = ZenReconShipCannonWeaponType_VA;
 	x86_rep_stos32(ZenReconShipCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ZenReconShipCannonWeaponSpec_VA) = 0x1A5544u;
-	WeaponSpec_reload(ZenReconShipCannonWeaponSpec_VA) = 0x1A5550u;
-	MEM32(ZenReconShipCannonWeaponSpec_VA + 0x4u) = 0x1A5548u;
-	WeaponSpec_range(ZenReconShipCannonWeaponSpec_VA) = 0x1A554Cu;
-	WeaponSpec_damage(ZenReconShipCannonWeaponSpec_VA) = 0x1A5540u;
-	WeaponSpec_speed(ZenReconShipCannonWeaponSpec_VA) = 0x1A5564u;
-	WeaponSpec_alert_radius(ZenReconShipCannonWeaponSpec_VA) = 0x1A5600u;
-	x86_rep_stos32(0x2202A4u, 0u, 0xDu);
-	MEM32(0x2202A4u) = 0x1A5558u;
-	MEM32(0x2202A8u) = 0x1A5540u;
-	MEM32(0x2202ACu) = 0x1A5544u;
-	MEM32(0x2202B0u) = 0x1A5548u;
-	MEM32(0x2202B4u) = 0x1A554Cu;
-	MEM32(0x2202B8u) = 0x1A5550u;
-	MEM32(0x2202BCu) = 0x1A5554u;
-	MEM32(0x2202C0u) = 0x1A555Cu;
-	MEM32(0x2202C4u) = 0x1A5560u;
-	MEM32(0x2202C8u) = 0x1A5564u;
-	MEM32(0x2202CCu) = 0x1A5574u;
-	MEM32(0x2202D0u) = 0x1A5578u;
-	MEM32(0x2202D4u) = 0x1A5568u;
+	WeaponSpec_cost(ZenReconShipCannonWeaponSpec_VA) = TurretCannonConstants_cost_VA(ZenReconShipCannonWeaponConstants_VA);
+	WeaponSpec_reload(ZenReconShipCannonWeaponSpec_VA) = TurretCannonConstants_reload_VA(ZenReconShipCannonWeaponConstants_VA);
+	MEM32(ZenReconShipCannonWeaponSpec_VA + 0x4u) = ZenReconShipCannonWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ZenReconShipCannonWeaponSpec_VA) = TurretCannonConstants_range_VA(ZenReconShipCannonWeaponConstants_VA);
+	WeaponSpec_damage(ZenReconShipCannonWeaponSpec_VA) = ZenReconShipCannonWeaponConstants_VA;
+	WeaponSpec_speed(ZenReconShipCannonWeaponSpec_VA) = TurretCannonConstants_speed_VA(ZenReconShipCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenReconShipCannonWeaponSpec_VA) = TurretCannonConstants_alert_radius_VA(ZenReconShipCannonWeaponConstants_VA);
+	x86_rep_stos32(ZenReconShipCannonWeaponTurretCannonSpec_VA, 0u, 0xDu);
+	TurretCannonSpec_aim_angle(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_aim_angle_VA(ZenReconShipCannonWeaponConstants_VA);
+	TurretCannonSpec_damage(ZenReconShipCannonWeaponTurretCannonSpec_VA) = ZenReconShipCannonWeaponConstants_VA;
+	TurretCannonSpec_cost(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_cost_VA(ZenReconShipCannonWeaponConstants_VA);
+	MEM32(ZenReconShipCannonWeaponTurretCannonSpec_VA + 0xCu) = ZenReconShipCannonWeaponConstants_VA + 0x8u;
+	TurretCannonSpec_range(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_range_VA(ZenReconShipCannonWeaponConstants_VA);
+	TurretCannonSpec_reload(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_reload_VA(ZenReconShipCannonWeaponConstants_VA);
+	MEM32(ZenReconShipCannonWeaponTurretCannonSpec_VA + 0x18u) = ZenReconShipCannonWeaponConstants_VA + 0x14u;
+	TurretCannonSpec_shots(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_shots_VA(ZenReconShipCannonWeaponConstants_VA);
+	TurretCannonSpec_life(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_life_VA(ZenReconShipCannonWeaponConstants_VA);
+	TurretCannonSpec_speed(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_speed_VA(ZenReconShipCannonWeaponConstants_VA);
+	TurretCannonSpec_length(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_length_VA(ZenReconShipCannonWeaponConstants_VA);
+	MEM32(ZenReconShipCannonWeaponTurretCannonSpec_VA + 0x2Cu) = ZenReconShipCannonWeaponConstants_VA + 0x38u;
+	TurretCannonSpec_color(ZenReconShipCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_color_VA(ZenReconShipCannonWeaponConstants_VA);
 }
 
 uint32_t sub_000CFCF0(void)
@@ -198698,12 +198698,12 @@ uint32_t ZenCruiserTurret1CannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
-	arg1 = 0x1A5648u;
+	arg1 = TurretCannonConstants_material_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CFD0Cu, 2, arg0, arg1);
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A5688u;
+	arg2 = TurretCannonConstants_sound_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x2203CCu;
 	ZenCruiserTurret1CannonWeaponMaterial = eax;
@@ -198776,27 +198776,27 @@ void ZenCruiserTurret1CannonWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ZenCruiserTurret1CannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA4u) = ZenCruiserTurret1CannonWeaponType_VA;
 	x86_rep_stos32(ZenCruiserTurret1CannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A560Cu;
-	WeaponSpec_reload(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5618u;
-	MEM32(ZenCruiserTurret1CannonWeaponSpec_VA + 0x4u) = 0x1A5610u;
-	WeaponSpec_range(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5614u;
-	WeaponSpec_damage(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5608u;
-	WeaponSpec_speed(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A562Cu;
-	WeaponSpec_alert_radius(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A56C8u;
-	x86_rep_stos32(0x220394u, 0u, 0xDu);
-	MEM32(0x220394u) = 0x1A5620u;
-	MEM32(0x220398u) = 0x1A5608u;
-	MEM32(0x22039Cu) = 0x1A560Cu;
-	MEM32(0x2203A0u) = 0x1A5610u;
-	MEM32(0x2203A4u) = 0x1A5614u;
-	MEM32(0x2203A8u) = 0x1A5618u;
-	MEM32(0x2203ACu) = 0x1A561Cu;
-	MEM32(0x2203B0u) = 0x1A5624u;
-	MEM32(0x2203B4u) = 0x1A5628u;
-	MEM32(0x2203B8u) = 0x1A562Cu;
-	MEM32(0x2203BCu) = 0x1A563Cu;
-	MEM32(0x2203C0u) = 0x1A5640u;
-	MEM32(0x2203C4u) = 0x1A5630u;
+	WeaponSpec_cost(ZenCruiserTurret1CannonWeaponSpec_VA) = TurretCannonConstants_cost_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	WeaponSpec_reload(ZenCruiserTurret1CannonWeaponSpec_VA) = TurretCannonConstants_reload_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurret1CannonWeaponSpec_VA + 0x4u) = ZenCruiserTurret1CannonWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ZenCruiserTurret1CannonWeaponSpec_VA) = TurretCannonConstants_range_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	WeaponSpec_damage(ZenCruiserTurret1CannonWeaponSpec_VA) = ZenCruiserTurret1CannonWeaponConstants_VA;
+	WeaponSpec_speed(ZenCruiserTurret1CannonWeaponSpec_VA) = TurretCannonConstants_speed_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenCruiserTurret1CannonWeaponSpec_VA) = TurretCannonConstants_alert_radius_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	x86_rep_stos32(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA, 0u, 0xDu);
+	TurretCannonSpec_aim_angle(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_aim_angle_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	TurretCannonSpec_damage(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = ZenCruiserTurret1CannonWeaponConstants_VA;
+	TurretCannonSpec_cost(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_cost_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA + 0xCu) = ZenCruiserTurret1CannonWeaponConstants_VA + 0x8u;
+	TurretCannonSpec_range(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_range_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	TurretCannonSpec_reload(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_reload_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA + 0x18u) = ZenCruiserTurret1CannonWeaponConstants_VA + 0x14u;
+	TurretCannonSpec_shots(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_shots_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	TurretCannonSpec_life(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_life_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	TurretCannonSpec_speed(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_speed_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	TurretCannonSpec_length(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_length_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA + 0x2Cu) = ZenCruiserTurret1CannonWeaponConstants_VA + 0x38u;
+	TurretCannonSpec_color(ZenCruiserTurret1CannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_color_VA(ZenCruiserTurret1CannonWeaponConstants_VA);
 }
 
 uint32_t sub_000CFEF0(void)
@@ -198812,12 +198812,12 @@ uint32_t ZenCruiserTurretCannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
-	arg1 = 0x1A5710u;
+	arg1 = TurretCannonConstants_material_VA(ZenCruiserTurretCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CFF0Cu, 2, arg0, arg1);
 	arg4 = 0x453B8000u;
 	arg3 = 0x44160000u;
-	arg2 = 0x1A5750u;
+	arg2 = TurretCannonConstants_sound_VA(ZenCruiserTurretCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x2204BCu;
 	ZenCruiserTurretCannonWeaponMaterial = eax;
@@ -198890,27 +198890,27 @@ void ZenCruiserTurretCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_state_machine(ZenCruiserTurretCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA0u) = ZenCruiserTurretCannonWeaponType_VA;
 	x86_rep_stos32(ZenCruiserTurretCannonWeaponSpec_VA, 0u, 7u);
-	WeaponSpec_cost(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56D4u;
-	WeaponSpec_reload(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56E0u;
-	MEM32(ZenCruiserTurretCannonWeaponSpec_VA + 0x4u) = 0x1A56D8u;
-	WeaponSpec_range(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56DCu;
-	WeaponSpec_damage(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56D0u;
-	WeaponSpec_speed(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56F4u;
-	WeaponSpec_alert_radius(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A5790u;
-	x86_rep_stos32(0x220484u, 0u, 0xDu);
-	MEM32(0x220484u) = 0x1A56E8u;
-	MEM32(0x220488u) = 0x1A56D0u;
-	MEM32(0x22048Cu) = 0x1A56D4u;
-	MEM32(0x220490u) = 0x1A56D8u;
-	MEM32(0x220494u) = 0x1A56DCu;
-	MEM32(0x220498u) = 0x1A56E0u;
-	MEM32(0x22049Cu) = 0x1A56E4u;
-	MEM32(0x2204A0u) = 0x1A56ECu;
-	MEM32(0x2204A4u) = 0x1A56F0u;
-	MEM32(0x2204A8u) = 0x1A56F4u;
-	MEM32(0x2204ACu) = 0x1A5704u;
-	MEM32(0x2204B0u) = 0x1A5708u;
-	MEM32(0x2204B4u) = 0x1A56F8u;
+	WeaponSpec_cost(ZenCruiserTurretCannonWeaponSpec_VA) = TurretCannonConstants_cost_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	WeaponSpec_reload(ZenCruiserTurretCannonWeaponSpec_VA) = TurretCannonConstants_reload_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurretCannonWeaponSpec_VA + 0x4u) = ZenCruiserTurretCannonWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(ZenCruiserTurretCannonWeaponSpec_VA) = TurretCannonConstants_range_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	WeaponSpec_damage(ZenCruiserTurretCannonWeaponSpec_VA) = ZenCruiserTurretCannonWeaponConstants_VA;
+	WeaponSpec_speed(ZenCruiserTurretCannonWeaponSpec_VA) = TurretCannonConstants_speed_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenCruiserTurretCannonWeaponSpec_VA) = TurretCannonConstants_alert_radius_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	x86_rep_stos32(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA, 0u, 0xDu);
+	TurretCannonSpec_aim_angle(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_aim_angle_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_damage(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = ZenCruiserTurretCannonWeaponConstants_VA;
+	TurretCannonSpec_cost(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_cost_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA + 0xCu) = ZenCruiserTurretCannonWeaponConstants_VA + 0x8u;
+	TurretCannonSpec_range(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_range_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_reload(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_reload_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA + 0x18u) = ZenCruiserTurretCannonWeaponConstants_VA + 0x14u;
+	TurretCannonSpec_shots(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_shots_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_life(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_life_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_speed(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_speed_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	TurretCannonSpec_length(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_length_VA(ZenCruiserTurretCannonWeaponConstants_VA);
+	MEM32(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA + 0x2Cu) = ZenCruiserTurretCannonWeaponConstants_VA + 0x38u;
+	TurretCannonSpec_color(ZenCruiserTurretCannonWeaponTurretCannonSpec_VA) = TurretCannonConstants_color_VA(ZenCruiserTurretCannonWeaponConstants_VA);
 }
 
 uint32_t sub_000D00F0(void)
@@ -248654,7 +248654,7 @@ uint32_t sub_000F7240(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x22485Cu;
+	eax = CyclopsDamageChunkEffectPieces_VA;
 	return eax;
 }
 
@@ -248671,7 +248671,7 @@ uint32_t CyclopsDamageChunkEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6918u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x22485Cu) = 8u;
+	CyclopsDamageChunkEffectPieces = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7268u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -248767,20 +248767,20 @@ uint32_t CyclopsDamageChunkEffect_Register(uint32_t arg0)
 	GameObjectType_version(CyclopsDamageChunkEffectType_VA) = 0u;
 	GameObjectType_flags(CyclopsDamageChunkEffectType_VA) = 0u;
 	MEM32(arg0 + 0x68u) = CyclopsDamageChunkEffectType_VA;
-	x86_rep_stos32(0x224864u, 0u, 0xDu);
-	MEM32(0x224864u) = 0x1A6934u;
-	MEM32(0x224868u) = 0x1A6938u;
-	MEM32(0x22486Cu) = 0x1A693Cu;
-	MEM32(0x224870u) = 0x1A6940u;
-	MEM32(0x224874u) = 0x1A6944u;
-	MEM32(0x224878u) = 0x1A6948u;
-	MEM32(0x22487Cu) = 0x1A694Cu;
-	MEM32(0x224880u) = 0x1A6958u;
-	MEM32(0x224884u) = 0x1A6964u;
-	MEM32(0x224888u) = 0x1A6970u;
-	MEM32(0x22488Cu) = 0x1A6974u;
-	MEM32(0x224890u) = 0x1A6978u;
-	MEM32(0x224894u) = 0x1A697Cu;
+	x86_rep_stos32(CyclopsDamageChunkEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CyclopsDamageChunkEffectChunksSpec_VA) = CyclopsDamageChunkEffectConstants_VA;
+	ChunksSpec_throw_time(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_throw_gap(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_end_wait(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_throw_count(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_life(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_life_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_spin(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_spin_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_spin_random(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_gravity(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_speed(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_speed_VA(CyclopsDamageChunkEffectConstants_VA);
+	ChunksSpec_speed_random(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CyclopsDamageChunkEffectConstants_VA);
+	MEM32(CyclopsDamageChunkEffectChunksSpec_VA + 0x2Cu) = CyclopsDamageChunkEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CyclopsDamageChunkEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CyclopsDamageChunkEffectConstants_VA);
 	CyclopsDamageChunkEffectScene = 0u;
 	return edx;
 }
@@ -248806,7 +248806,7 @@ uint32_t sub_000F7410(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x2248DCu;
+	eax = CharacterDamageChunksLargeWEffectPieces_VA;
 	return eax;
 }
 
@@ -248824,7 +248824,7 @@ uint32_t CharacterDamageChunksLargeWEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6980u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x2248DCu) = 0x10u;
+	CharacterDamageChunksLargeWEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7438u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -248917,20 +248917,20 @@ void CharacterDamageChunksLargeWEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksLargeWEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksLargeWEffectType_VA) = 0u;
 	MEM32(arg0 + 0x64u) = CharacterDamageChunksLargeWEffectType_VA;
-	x86_rep_stos32(0x2248E4u, 0u, 0xDu);
-	MEM32(0x2248E4u) = 0x1A69A8u;
-	MEM32(0x2248E8u) = 0x1A69ACu;
-	MEM32(0x2248ECu) = 0x1A69B0u;
-	MEM32(0x2248F0u) = 0x1A69B4u;
-	MEM32(0x2248F4u) = 0x1A69B8u;
-	MEM32(0x2248F8u) = 0x1A69BCu;
-	MEM32(0x2248FCu) = 0x1A69C0u;
-	MEM32(0x224900u) = 0x1A69CCu;
-	MEM32(0x224904u) = 0x1A69D8u;
-	MEM32(0x224908u) = 0x1A69E4u;
-	MEM32(0x22490Cu) = 0x1A69E8u;
-	MEM32(0x224910u) = 0x1A69ECu;
-	MEM32(0x224914u) = 0x1A69F0u;
+	x86_rep_stos32(CharacterDamageChunksLargeWEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksLargeWEffectChunksSpec_VA) = CharacterDamageChunksLargeWEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksLargeWEffectConstants_VA);
+	MEM32(CharacterDamageChunksLargeWEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksLargeWEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksLargeWEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksLargeWEffectConstants_VA);
 	CharacterDamageChunksLargeWEffectScene = 0u;
 }
 
@@ -248955,7 +248955,7 @@ uint32_t sub_000F75E0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x22495Cu;
+	eax = CharacterDamageChunksMedWEffectPieces_VA;
 	return eax;
 }
 
@@ -248972,7 +248972,7 @@ uint32_t CharacterDamageChunksMedWEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A69F4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x22495Cu) = 0x10u;
+	CharacterDamageChunksMedWEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7608u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249065,20 +249065,20 @@ void CharacterDamageChunksMedWEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksMedWEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksMedWEffectType_VA) = 0u;
 	MEM32(arg0 + 0x60u) = CharacterDamageChunksMedWEffectType_VA;
-	x86_rep_stos32(0x224964u, 0u, 0xDu);
-	MEM32(0x224964u) = 0x1A6A1Cu;
-	MEM32(0x224968u) = 0x1A6A20u;
-	MEM32(0x22496Cu) = 0x1A6A24u;
-	MEM32(0x224970u) = 0x1A6A28u;
-	MEM32(0x224974u) = 0x1A6A2Cu;
-	MEM32(0x224978u) = 0x1A6A30u;
-	MEM32(0x22497Cu) = 0x1A6A34u;
-	MEM32(0x224980u) = 0x1A6A40u;
-	MEM32(0x224984u) = 0x1A6A4Cu;
-	MEM32(0x224988u) = 0x1A6A58u;
-	MEM32(0x22498Cu) = 0x1A6A5Cu;
-	MEM32(0x224990u) = 0x1A6A60u;
-	MEM32(0x224994u) = 0x1A6A64u;
+	x86_rep_stos32(CharacterDamageChunksMedWEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksMedWEffectChunksSpec_VA) = CharacterDamageChunksMedWEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksMedWEffectConstants_VA);
+	MEM32(CharacterDamageChunksMedWEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksMedWEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksMedWEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksMedWEffectConstants_VA);
 	CharacterDamageChunksMedWEffectScene = 0u;
 }
 
@@ -249103,7 +249103,7 @@ uint32_t sub_000F77B0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x2249DCu;
+	eax = CharacterDamageChunksSmallWEffectPieces_VA;
 	return eax;
 }
 
@@ -249121,7 +249121,7 @@ uint32_t CharacterDamageChunksSmallWEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6A68u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x2249DCu) = 0x10u;
+	CharacterDamageChunksSmallWEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F77D8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249214,20 +249214,20 @@ void CharacterDamageChunksSmallWEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksSmallWEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksSmallWEffectType_VA) = 0u;
 	MEM32(arg0 + 0x5Cu) = CharacterDamageChunksSmallWEffectType_VA;
-	x86_rep_stos32(0x2249E4u, 0u, 0xDu);
-	MEM32(0x2249E4u) = 0x1A6A90u;
-	MEM32(0x2249E8u) = 0x1A6A94u;
-	MEM32(0x2249ECu) = 0x1A6A98u;
-	MEM32(0x2249F0u) = 0x1A6A9Cu;
-	MEM32(0x2249F4u) = 0x1A6AA0u;
-	MEM32(0x2249F8u) = 0x1A6AA4u;
-	MEM32(0x2249FCu) = 0x1A6AA8u;
-	MEM32(0x224A00u) = 0x1A6AB4u;
-	MEM32(0x224A04u) = 0x1A6AC0u;
-	MEM32(0x224A08u) = 0x1A6ACCu;
-	MEM32(0x224A0Cu) = 0x1A6AD0u;
-	MEM32(0x224A10u) = 0x1A6AD4u;
-	MEM32(0x224A14u) = 0x1A6AD8u;
+	x86_rep_stos32(CharacterDamageChunksSmallWEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksSmallWEffectChunksSpec_VA) = CharacterDamageChunksSmallWEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksSmallWEffectConstants_VA);
+	MEM32(CharacterDamageChunksSmallWEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksSmallWEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksSmallWEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksSmallWEffectConstants_VA);
 	CharacterDamageChunksSmallWEffectScene = 0u;
 }
 
@@ -249252,7 +249252,7 @@ uint32_t sub_000F7980(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224A5Cu;
+	eax = CharacterDamageChunksLargeGEffectPieces_VA;
 	return eax;
 }
 
@@ -249270,7 +249270,7 @@ uint32_t CharacterDamageChunksLargeGEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6ADCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224A5Cu) = 0x10u;
+	CharacterDamageChunksLargeGEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F79A8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249363,20 +249363,20 @@ void CharacterDamageChunksLargeGEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksLargeGEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksLargeGEffectType_VA) = 0u;
 	MEM32(arg0 + 0x58u) = CharacterDamageChunksLargeGEffectType_VA;
-	x86_rep_stos32(0x224A64u, 0u, 0xDu);
-	MEM32(0x224A64u) = 0x1A6B04u;
-	MEM32(0x224A68u) = 0x1A6B08u;
-	MEM32(0x224A6Cu) = 0x1A6B0Cu;
-	MEM32(0x224A70u) = 0x1A6B10u;
-	MEM32(0x224A74u) = 0x1A6B14u;
-	MEM32(0x224A78u) = 0x1A6B18u;
-	MEM32(0x224A7Cu) = 0x1A6B1Cu;
-	MEM32(0x224A80u) = 0x1A6B28u;
-	MEM32(0x224A84u) = 0x1A6B34u;
-	MEM32(0x224A88u) = 0x1A6B40u;
-	MEM32(0x224A8Cu) = 0x1A6B44u;
-	MEM32(0x224A90u) = 0x1A6B48u;
-	MEM32(0x224A94u) = 0x1A6B4Cu;
+	x86_rep_stos32(CharacterDamageChunksLargeGEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksLargeGEffectChunksSpec_VA) = CharacterDamageChunksLargeGEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksLargeGEffectConstants_VA);
+	MEM32(CharacterDamageChunksLargeGEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksLargeGEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksLargeGEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksLargeGEffectConstants_VA);
 	CharacterDamageChunksLargeGEffectScene = 0u;
 }
 
@@ -249401,7 +249401,7 @@ uint32_t sub_000F7B50(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224ADCu;
+	eax = CharacterDamageChunksMedGEffectPieces_VA;
 	return eax;
 }
 
@@ -249418,7 +249418,7 @@ uint32_t CharacterDamageChunksMedGEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6B50u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224ADCu) = 0x10u;
+	CharacterDamageChunksMedGEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7B78u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249511,20 +249511,20 @@ void CharacterDamageChunksMedGEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksMedGEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksMedGEffectType_VA) = 0u;
 	MEM32(arg0 + 0x54u) = CharacterDamageChunksMedGEffectType_VA;
-	x86_rep_stos32(0x224AE4u, 0u, 0xDu);
-	MEM32(0x224AE4u) = 0x1A6B78u;
-	MEM32(0x224AE8u) = 0x1A6B7Cu;
-	MEM32(0x224AECu) = 0x1A6B80u;
-	MEM32(0x224AF0u) = 0x1A6B84u;
-	MEM32(0x224AF4u) = 0x1A6B88u;
-	MEM32(0x224AF8u) = 0x1A6B8Cu;
-	MEM32(0x224AFCu) = 0x1A6B90u;
-	MEM32(0x224B00u) = 0x1A6B9Cu;
-	MEM32(0x224B04u) = 0x1A6BA8u;
-	MEM32(0x224B08u) = 0x1A6BB4u;
-	MEM32(0x224B0Cu) = 0x1A6BB8u;
-	MEM32(0x224B10u) = 0x1A6BBCu;
-	MEM32(0x224B14u) = 0x1A6BC0u;
+	x86_rep_stos32(CharacterDamageChunksMedGEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksMedGEffectChunksSpec_VA) = CharacterDamageChunksMedGEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksMedGEffectConstants_VA);
+	MEM32(CharacterDamageChunksMedGEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksMedGEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksMedGEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksMedGEffectConstants_VA);
 	CharacterDamageChunksMedGEffectScene = 0u;
 }
 
@@ -249549,7 +249549,7 @@ uint32_t sub_000F7D20(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224B5Cu;
+	eax = CharacterDamageChunksSmallGEffectPieces_VA;
 	return eax;
 }
 
@@ -249567,7 +249567,7 @@ uint32_t CharacterDamageChunksSmallGEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6BC4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224B5Cu) = 0x10u;
+	CharacterDamageChunksSmallGEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7D48u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249660,20 +249660,20 @@ void CharacterDamageChunksSmallGEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksSmallGEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksSmallGEffectType_VA) = 0u;
 	MEM32(arg0 + 0x50u) = CharacterDamageChunksSmallGEffectType_VA;
-	x86_rep_stos32(0x224B64u, 0u, 0xDu);
-	MEM32(0x224B64u) = 0x1A6BECu;
-	MEM32(0x224B68u) = 0x1A6BF0u;
-	MEM32(0x224B6Cu) = 0x1A6BF4u;
-	MEM32(0x224B70u) = 0x1A6BF8u;
-	MEM32(0x224B74u) = 0x1A6BFCu;
-	MEM32(0x224B78u) = 0x1A6C00u;
-	MEM32(0x224B7Cu) = 0x1A6C04u;
-	MEM32(0x224B80u) = 0x1A6C10u;
-	MEM32(0x224B84u) = 0x1A6C1Cu;
-	MEM32(0x224B88u) = 0x1A6C28u;
-	MEM32(0x224B8Cu) = 0x1A6C2Cu;
-	MEM32(0x224B90u) = 0x1A6C30u;
-	MEM32(0x224B94u) = 0x1A6C34u;
+	x86_rep_stos32(CharacterDamageChunksSmallGEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksSmallGEffectChunksSpec_VA) = CharacterDamageChunksSmallGEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksSmallGEffectConstants_VA);
+	MEM32(CharacterDamageChunksSmallGEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksSmallGEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksSmallGEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksSmallGEffectConstants_VA);
 	CharacterDamageChunksSmallGEffectScene = 0u;
 }
 
@@ -249698,7 +249698,7 @@ uint32_t sub_000F7EF0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224BDCu;
+	eax = CharacterDamageChunksLargeBEffectPieces_VA;
 	return eax;
 }
 
@@ -249716,7 +249716,7 @@ uint32_t CharacterDamageChunksLargeBEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6C38u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224BDCu) = 0x10u;
+	CharacterDamageChunksLargeBEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F7F18u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249809,20 +249809,20 @@ void CharacterDamageChunksLargeBEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksLargeBEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksLargeBEffectType_VA) = 0u;
 	MEM32(arg0 + 0x4Cu) = CharacterDamageChunksLargeBEffectType_VA;
-	x86_rep_stos32(0x224BE4u, 0u, 0xDu);
-	MEM32(0x224BE4u) = 0x1A6C60u;
-	MEM32(0x224BE8u) = 0x1A6C64u;
-	MEM32(0x224BECu) = 0x1A6C68u;
-	MEM32(0x224BF0u) = 0x1A6C6Cu;
-	MEM32(0x224BF4u) = 0x1A6C70u;
-	MEM32(0x224BF8u) = 0x1A6C74u;
-	MEM32(0x224BFCu) = 0x1A6C78u;
-	MEM32(0x224C00u) = 0x1A6C84u;
-	MEM32(0x224C04u) = 0x1A6C90u;
-	MEM32(0x224C08u) = 0x1A6C9Cu;
-	MEM32(0x224C0Cu) = 0x1A6CA0u;
-	MEM32(0x224C10u) = 0x1A6CA4u;
-	MEM32(0x224C14u) = 0x1A6CA8u;
+	x86_rep_stos32(CharacterDamageChunksLargeBEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksLargeBEffectChunksSpec_VA) = CharacterDamageChunksLargeBEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksLargeBEffectConstants_VA);
+	MEM32(CharacterDamageChunksLargeBEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksLargeBEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksLargeBEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksLargeBEffectConstants_VA);
 	CharacterDamageChunksLargeBEffectScene = 0u;
 }
 
@@ -249847,7 +249847,7 @@ uint32_t sub_000F80C0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224C5Cu;
+	eax = CharacterDamageChunksMedBEffectPieces_VA;
 	return eax;
 }
 
@@ -249864,7 +249864,7 @@ uint32_t CharacterDamageChunksMedBEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6CACu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224C5Cu) = 0x10u;
+	CharacterDamageChunksMedBEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F80E8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -249957,20 +249957,20 @@ void CharacterDamageChunksMedBEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksMedBEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksMedBEffectType_VA) = 0u;
 	MEM32(arg0 + 0x48u) = CharacterDamageChunksMedBEffectType_VA;
-	x86_rep_stos32(0x224C64u, 0u, 0xDu);
-	MEM32(0x224C64u) = 0x1A6CD4u;
-	MEM32(0x224C68u) = 0x1A6CD8u;
-	MEM32(0x224C6Cu) = 0x1A6CDCu;
-	MEM32(0x224C70u) = 0x1A6CE0u;
-	MEM32(0x224C74u) = 0x1A6CE4u;
-	MEM32(0x224C78u) = 0x1A6CE8u;
-	MEM32(0x224C7Cu) = 0x1A6CECu;
-	MEM32(0x224C80u) = 0x1A6CF8u;
-	MEM32(0x224C84u) = 0x1A6D04u;
-	MEM32(0x224C88u) = 0x1A6D10u;
-	MEM32(0x224C8Cu) = 0x1A6D14u;
-	MEM32(0x224C90u) = 0x1A6D18u;
-	MEM32(0x224C94u) = 0x1A6D1Cu;
+	x86_rep_stos32(CharacterDamageChunksMedBEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksMedBEffectChunksSpec_VA) = CharacterDamageChunksMedBEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksMedBEffectConstants_VA);
+	MEM32(CharacterDamageChunksMedBEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksMedBEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksMedBEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksMedBEffectConstants_VA);
 	CharacterDamageChunksMedBEffectScene = 0u;
 }
 
@@ -249995,7 +249995,7 @@ uint32_t sub_000F8290(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224CDCu;
+	eax = CharacterDamageChunksSmallBEffectPieces_VA;
 	return eax;
 }
 
@@ -250013,7 +250013,7 @@ uint32_t CharacterDamageChunksSmallBEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6D20u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224CDCu) = 0x10u;
+	CharacterDamageChunksSmallBEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F82B8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250106,20 +250106,20 @@ void CharacterDamageChunksSmallBEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksSmallBEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksSmallBEffectType_VA) = 0u;
 	MEM32(arg0 + 0x44u) = CharacterDamageChunksSmallBEffectType_VA;
-	x86_rep_stos32(0x224CE4u, 0u, 0xDu);
-	MEM32(0x224CE4u) = 0x1A6D48u;
-	MEM32(0x224CE8u) = 0x1A6D4Cu;
-	MEM32(0x224CECu) = 0x1A6D50u;
-	MEM32(0x224CF0u) = 0x1A6D54u;
-	MEM32(0x224CF4u) = 0x1A6D58u;
-	MEM32(0x224CF8u) = 0x1A6D5Cu;
-	MEM32(0x224CFCu) = 0x1A6D60u;
-	MEM32(0x224D00u) = 0x1A6D6Cu;
-	MEM32(0x224D04u) = 0x1A6D78u;
-	MEM32(0x224D08u) = 0x1A6D84u;
-	MEM32(0x224D0Cu) = 0x1A6D88u;
-	MEM32(0x224D10u) = 0x1A6D8Cu;
-	MEM32(0x224D14u) = 0x1A6D90u;
+	x86_rep_stos32(CharacterDamageChunksSmallBEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksSmallBEffectChunksSpec_VA) = CharacterDamageChunksSmallBEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksSmallBEffectConstants_VA);
+	MEM32(CharacterDamageChunksSmallBEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksSmallBEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksSmallBEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksSmallBEffectConstants_VA);
 	CharacterDamageChunksSmallBEffectScene = 0u;
 }
 
@@ -250144,7 +250144,7 @@ uint32_t sub_000F8460(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224D5Cu;
+	eax = CharacterDamageChunksLargeEffectPieces_VA;
 	return eax;
 }
 
@@ -250162,7 +250162,7 @@ uint32_t CharacterDamageChunksLargeEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6D94u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224D5Cu) = 0x10u;
+	CharacterDamageChunksLargeEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F8488u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250255,20 +250255,20 @@ void CharacterDamageChunksLargeEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksLargeEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksLargeEffectType_VA) = 0u;
 	MEM32(arg0 + 0x40u) = CharacterDamageChunksLargeEffectType_VA;
-	x86_rep_stos32(0x224D64u, 0u, 0xDu);
-	MEM32(0x224D64u) = 0x1A6DBCu;
-	MEM32(0x224D68u) = 0x1A6DC0u;
-	MEM32(0x224D6Cu) = 0x1A6DC4u;
-	MEM32(0x224D70u) = 0x1A6DC8u;
-	MEM32(0x224D74u) = 0x1A6DCCu;
-	MEM32(0x224D78u) = 0x1A6DD0u;
-	MEM32(0x224D7Cu) = 0x1A6DD4u;
-	MEM32(0x224D80u) = 0x1A6DE0u;
-	MEM32(0x224D84u) = 0x1A6DECu;
-	MEM32(0x224D88u) = 0x1A6DF8u;
-	MEM32(0x224D8Cu) = 0x1A6DFCu;
-	MEM32(0x224D90u) = 0x1A6E00u;
-	MEM32(0x224D94u) = 0x1A6E04u;
+	x86_rep_stos32(CharacterDamageChunksLargeEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksLargeEffectChunksSpec_VA) = CharacterDamageChunksLargeEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksLargeEffectConstants_VA);
+	MEM32(CharacterDamageChunksLargeEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksLargeEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksLargeEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksLargeEffectConstants_VA);
 	CharacterDamageChunksLargeEffectScene = 0u;
 }
 
@@ -250293,7 +250293,7 @@ uint32_t sub_000F8630(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224DDCu;
+	eax = CharacterDamageChunksMedEffectPieces_VA;
 	return eax;
 }
 
@@ -250310,7 +250310,7 @@ uint32_t CharacterDamageChunksMedEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6E08u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224DDCu) = 0x10u;
+	CharacterDamageChunksMedEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F8658u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250403,20 +250403,20 @@ void CharacterDamageChunksMedEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksMedEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksMedEffectType_VA) = 0u;
 	MEM32(arg0 + 0x3Cu) = CharacterDamageChunksMedEffectType_VA;
-	x86_rep_stos32(0x224DE4u, 0u, 0xDu);
-	MEM32(0x224DE4u) = 0x1A6E2Cu;
-	MEM32(0x224DE8u) = 0x1A6E30u;
-	MEM32(0x224DECu) = 0x1A6E34u;
-	MEM32(0x224DF0u) = 0x1A6E38u;
-	MEM32(0x224DF4u) = 0x1A6E3Cu;
-	MEM32(0x224DF8u) = 0x1A6E40u;
-	MEM32(0x224DFCu) = 0x1A6E44u;
-	MEM32(0x224E00u) = 0x1A6E50u;
-	MEM32(0x224E04u) = 0x1A6E5Cu;
-	MEM32(0x224E08u) = 0x1A6E68u;
-	MEM32(0x224E0Cu) = 0x1A6E6Cu;
-	MEM32(0x224E10u) = 0x1A6E70u;
-	MEM32(0x224E14u) = 0x1A6E74u;
+	x86_rep_stos32(CharacterDamageChunksMedEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksMedEffectChunksSpec_VA) = CharacterDamageChunksMedEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksMedEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksMedEffectConstants_VA);
+	MEM32(CharacterDamageChunksMedEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksMedEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksMedEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksMedEffectConstants_VA);
 	CharacterDamageChunksMedEffectScene = 0u;
 }
 
@@ -250441,7 +250441,7 @@ uint32_t sub_000F8800(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224E5Cu;
+	eax = CharacterDamageChunksSmallEffectPieces_VA;
 	return eax;
 }
 
@@ -250459,7 +250459,7 @@ uint32_t CharacterDamageChunksSmallEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6E78u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224E5Cu) = 0x10u;
+	CharacterDamageChunksSmallEffectPieces = 0x10u;
 	eax = x86_call(vcObjectGet_entry, 0x000F8828u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250552,20 +250552,20 @@ void CharacterDamageChunksSmallEffect_Register(uint32_t arg0)
 	GameObjectType_version(CharacterDamageChunksSmallEffectType_VA) = 0u;
 	GameObjectType_flags(CharacterDamageChunksSmallEffectType_VA) = 0u;
 	MEM32(arg0 + 0x38u) = CharacterDamageChunksSmallEffectType_VA;
-	x86_rep_stos32(0x224E64u, 0u, 0xDu);
-	MEM32(0x224E64u) = 0x1A6EA0u;
-	MEM32(0x224E68u) = 0x1A6EA4u;
-	MEM32(0x224E6Cu) = 0x1A6EA8u;
-	MEM32(0x224E70u) = 0x1A6EACu;
-	MEM32(0x224E74u) = 0x1A6EB0u;
-	MEM32(0x224E78u) = 0x1A6EB4u;
-	MEM32(0x224E7Cu) = 0x1A6EB8u;
-	MEM32(0x224E80u) = 0x1A6EC4u;
-	MEM32(0x224E84u) = 0x1A6ED0u;
-	MEM32(0x224E88u) = 0x1A6EDCu;
-	MEM32(0x224E8Cu) = 0x1A6EE0u;
-	MEM32(0x224E90u) = 0x1A6EE4u;
-	MEM32(0x224E94u) = 0x1A6EE8u;
+	x86_rep_stos32(CharacterDamageChunksSmallEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(CharacterDamageChunksSmallEffectChunksSpec_VA) = CharacterDamageChunksSmallEffectConstants_VA;
+	ChunksSpec_throw_time(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_throw_gap(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_end_wait(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_throw_count(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_life(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_life_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_spin(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_spin_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_spin_random(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_gravity(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_gravity_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_speed(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_speed_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	ChunksSpec_speed_random(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(CharacterDamageChunksSmallEffectConstants_VA);
+	MEM32(CharacterDamageChunksSmallEffectChunksSpec_VA + 0x2Cu) = CharacterDamageChunksSmallEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(CharacterDamageChunksSmallEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(CharacterDamageChunksSmallEffectConstants_VA);
 	CharacterDamageChunksSmallEffectScene = 0u;
 }
 
@@ -250589,7 +250589,7 @@ uint32_t sub_000F89D0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224EDCu;
+	eax = Chunk1LargeEffectPieces_VA;
 	return eax;
 }
 
@@ -250606,7 +250606,7 @@ uint32_t Chunk1LargeEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6EECu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224EDCu) = 6u;
+	Chunk1LargeEffectPieces = 6u;
 	eax = x86_call(vcObjectGet_entry, 0x000F89F8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250699,20 +250699,20 @@ void Chunk1LargeEffect_Register(uint32_t arg0)
 	GameObjectType_version(Chunk1LargeEffectType_VA) = 0u;
 	GameObjectType_flags(Chunk1LargeEffectType_VA) = 0u;
 	MEM32(arg0 + 0x34u) = Chunk1LargeEffectType_VA;
-	x86_rep_stos32(0x224EE4u, 0u, 0xDu);
-	MEM32(0x224EE4u) = 0x1A6EFCu;
-	MEM32(0x224EE8u) = 0x1A6F00u;
-	MEM32(0x224EECu) = 0x1A6F04u;
-	MEM32(0x224EF0u) = 0x1A6F08u;
-	MEM32(0x224EF4u) = 0x1A6F0Cu;
-	MEM32(0x224EF8u) = 0x1A6F10u;
-	MEM32(0x224EFCu) = 0x1A6F14u;
-	MEM32(0x224F00u) = 0x1A6F20u;
-	MEM32(0x224F04u) = 0x1A6F2Cu;
-	MEM32(0x224F08u) = 0x1A6F38u;
-	MEM32(0x224F0Cu) = 0x1A6F3Cu;
-	MEM32(0x224F10u) = 0x1A6F40u;
-	MEM32(0x224F14u) = 0x1A6F44u;
+	x86_rep_stos32(Chunk1LargeEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(Chunk1LargeEffectChunksSpec_VA) = Chunk1LargeEffectConstants_VA;
+	ChunksSpec_throw_time(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_throw_gap(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_end_wait(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_throw_count(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_life(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_life_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_spin(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_spin_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_spin_random(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_gravity(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_gravity_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_speed(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_speed_VA(Chunk1LargeEffectConstants_VA);
+	ChunksSpec_speed_random(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(Chunk1LargeEffectConstants_VA);
+	MEM32(Chunk1LargeEffectChunksSpec_VA + 0x2Cu) = Chunk1LargeEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(Chunk1LargeEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(Chunk1LargeEffectConstants_VA);
 	Chunk1LargeEffectScene = 0u;
 }
 
@@ -250736,7 +250736,7 @@ uint32_t sub_000F8BA0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224F5Cu;
+	eax = Chunk1MediumEffectPieces_VA;
 	return eax;
 }
 
@@ -250753,7 +250753,7 @@ uint32_t Chunk1MediumEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6F48u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224F5Cu) = 6u;
+	Chunk1MediumEffectPieces = 6u;
 	eax = x86_call(vcObjectGet_entry, 0x000F8BC8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250846,20 +250846,20 @@ void Chunk1MediumEffect_Register(uint32_t arg0)
 	GameObjectType_version(Chunk1MediumEffectType_VA) = 0u;
 	GameObjectType_flags(Chunk1MediumEffectType_VA) = 0u;
 	MEM32(arg0 + 0x30u) = Chunk1MediumEffectType_VA;
-	x86_rep_stos32(0x224F64u, 0u, 0xDu);
-	MEM32(0x224F64u) = 0x1A6F58u;
-	MEM32(0x224F68u) = 0x1A6F5Cu;
-	MEM32(0x224F6Cu) = 0x1A6F60u;
-	MEM32(0x224F70u) = 0x1A6F64u;
-	MEM32(0x224F74u) = 0x1A6F68u;
-	MEM32(0x224F78u) = 0x1A6F6Cu;
-	MEM32(0x224F7Cu) = 0x1A6F70u;
-	MEM32(0x224F80u) = 0x1A6F7Cu;
-	MEM32(0x224F84u) = 0x1A6F88u;
-	MEM32(0x224F88u) = 0x1A6F94u;
-	MEM32(0x224F8Cu) = 0x1A6F98u;
-	MEM32(0x224F90u) = 0x1A6F9Cu;
-	MEM32(0x224F94u) = 0x1A6FA0u;
+	x86_rep_stos32(Chunk1MediumEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(Chunk1MediumEffectChunksSpec_VA) = Chunk1MediumEffectConstants_VA;
+	ChunksSpec_throw_time(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_throw_gap(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_end_wait(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_throw_count(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_life(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_life_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_spin(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_spin_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_spin_random(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_gravity(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_gravity_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_speed(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_speed_VA(Chunk1MediumEffectConstants_VA);
+	ChunksSpec_speed_random(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(Chunk1MediumEffectConstants_VA);
+	MEM32(Chunk1MediumEffectChunksSpec_VA + 0x2Cu) = Chunk1MediumEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(Chunk1MediumEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(Chunk1MediumEffectConstants_VA);
 	Chunk1MediumEffectScene = 0u;
 }
 
@@ -250883,7 +250883,7 @@ uint32_t sub_000F8D70(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x224FDCu;
+	eax = Chunk1SmallEffectPieces_VA;
 	return eax;
 }
 
@@ -250900,7 +250900,7 @@ uint32_t Chunk1SmallEffect_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A6FA4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 8u;
-	MEM32(0x224FDCu) = 6u;
+	Chunk1SmallEffectPieces = 6u;
 	eax = x86_call(vcObjectGet_entry, 0x000F8D98u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
@@ -250993,20 +250993,20 @@ void Chunk1SmallEffect_Register(uint32_t arg0)
 	GameObjectType_version(Chunk1SmallEffectType_VA) = 0u;
 	GameObjectType_flags(Chunk1SmallEffectType_VA) = 0u;
 	MEM32(arg0 + 0x2Cu) = Chunk1SmallEffectType_VA;
-	x86_rep_stos32(0x224FE4u, 0u, 0xDu);
-	MEM32(0x224FE4u) = 0x1A6FB4u;
-	MEM32(0x224FE8u) = 0x1A6FB8u;
-	MEM32(0x224FECu) = 0x1A6FBCu;
-	MEM32(0x224FF0u) = 0x1A6FC0u;
-	MEM32(0x224FF4u) = 0x1A6FC4u;
-	MEM32(0x224FF8u) = 0x1A6FC8u;
-	MEM32(0x224FFCu) = 0x1A6FCCu;
-	MEM32(0x225000u) = 0x1A6FD8u;
-	MEM32(0x225004u) = 0x1A6FE4u;
-	MEM32(0x225008u) = 0x1A6FF0u;
-	MEM32(0x22500Cu) = 0x1A6FF4u;
-	MEM32(0x225010u) = 0x1A6FF8u;
-	MEM32(0x225014u) = 0x1A6FFCu;
+	x86_rep_stos32(Chunk1SmallEffectChunksSpec_VA, 0u, 0xDu);
+	ChunksSpec_delay(Chunk1SmallEffectChunksSpec_VA) = Chunk1SmallEffectConstants_VA;
+	ChunksSpec_throw_time(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_throw_time_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_throw_gap(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_throw_gap_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_end_wait(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_end_wait_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_throw_count(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_throw_count_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_life(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_life_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_spin(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_spin_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_spin_random(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_spin_random_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_gravity(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_gravity_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_speed(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_speed_VA(Chunk1SmallEffectConstants_VA);
+	ChunksSpec_speed_random(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_speed_random_VA(Chunk1SmallEffectConstants_VA);
+	MEM32(Chunk1SmallEffectChunksSpec_VA + 0x2Cu) = Chunk1SmallEffectConstants_VA + 0x44u;
+	ChunksSpec_throw_angle(Chunk1SmallEffectChunksSpec_VA) = ChunksConstants_throw_angle_VA(Chunk1SmallEffectConstants_VA);
 	Chunk1SmallEffectScene = 0u;
 }
 

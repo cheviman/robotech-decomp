@@ -1898,6 +1898,189 @@ field   MissileConstants  048  alert_radius         f32
 00193518  var   ZenHeavyMissileMissileConstants                  MissileConstants
 0019361C  var   ZenLightMissileMissileConstants                  MissileConstants
 
+# The heavy cannons: the five weapon types (Weapon 39, 40, 42, 43, 44; the railgun is one) whose shot hits
+# at once along a ray, a while after it is fired, and leaves a trail (a vcGeometryTrail), with one state
+# machine (0x100A10). After its WeaponSpec each keeps a record of 11 words; five of them point at the
+# constants its WeaponSpec points at. Not read: +0x0C (the constant of the WeaponSpec's second word). Here
+# the 4 with a name.
+struct  HeavyCannonSpec  2C                         # a heavy cannon type's own record of where its constants are, after its WeaponSpec
+field   HeavyCannonSpec  000  aim_angle     u32      # points at the degrees either side of where it points within which it turns a shot towards its target
+field   HeavyCannonSpec  004  damage        u32      # points at the damage a hit does (WeaponSpec's)
+field   HeavyCannonSpec  008  cost          u32      # points at what a shot takes from its energy (WeaponSpec's)
+field   HeavyCannonSpec  010  range         u32      # points at how far a shot reaches (WeaponSpec's)
+field   HeavyCannonSpec  014  reload        u32      # points at the milliseconds from a shot to the next (WeaponSpec's)
+field   HeavyCannonSpec  018  trail_life    u32      # points at the milliseconds each point of its shot's trail lasts
+field   HeavyCannonSpec  01C  trail_fade    u32      # points at the last milliseconds of those, over which the point fades
+field   HeavyCannonSpec  020  shot_delay    u32      # points at the milliseconds from when it is fired to the shot: the ray is tested and the trail shown then
+field   HeavyCannonSpec  024  trail_width   u32      # points at how far each edge of the trail is from its middle
+field   HeavyCannonSpec  028  color         u32      # points at the trail's colour: three floats, red, green and blue, 0 to 255
+0021D29C  var   PodOfficerSledHeavyCannonWeaponHeavyCannonSpec   HeavyCannonSpec
+0021D384  var   PodOfficerSkarredHeavyCannonWeaponHeavyCannonSpec HeavyCannonSpec
+0021D554  var   PodOfficerHeavyCannonWeaponHeavyCannonSpec       HeavyCannonSpec
+0021D63C  var   MalePowerArmorRailgunWeaponHeavyCannonSpec       HeavyCannonSpec
+# The constants a heavy cannon type's two records point at: 0xC0 bytes in .rdata, laid out the same in the
+# five types, with the names of its trail's material and of its sound among them.
+struct  HeavyCannonConstants  C0                    # a heavy cannon type's constants: what its WeaponSpec's and its HeavyCannonSpec's words point at
+field   HeavyCannonConstants  000  aim_angle     f32
+field   HeavyCannonConstants  004  damage        f32
+field   HeavyCannonConstants  008  cost          f32
+field   HeavyCannonConstants  010  range         f32
+field   HeavyCannonConstants  014  reload        u32
+field   HeavyCannonConstants  018  trail_life    s32
+field   HeavyCannonConstants  01C  trail_fade    s32
+field   HeavyCannonConstants  020  shot_delay    s32
+field   HeavyCannonConstants  024  speed         f32
+field   HeavyCannonConstants  028  trail_width   f32
+field   HeavyCannonConstants  02C  color         f32[3]
+field   HeavyCannonConstants  038  material      char[64]   # the name of its trail's material: its X_Startup gets it
+field   HeavyCannonConstants  078  sound         char[64]   # the name of its sound: its X_Startup makes it
+field   HeavyCannonConstants  0B8  alert_radius  f32
+001A3930  var   PodOfficerSledHeavyCannonWeaponConstants         HeavyCannonConstants
+001A39F0  var   PodOfficerSkarredHeavyCannonWeaponConstants      HeavyCannonConstants
+001A3B70  var   PodOfficerHeavyCannonWeaponConstants             HeavyCannonConstants
+001A3C30  var   MalePowerArmorRailgunWeaponConstants             HeavyCannonConstants
+# The turret cannons: the four weapon types (Weapon 36, 37, 38, 45) of the turrets and the recon ship,
+# whose shots are the particles of a beam system as the guns', one a shot, with one state machine
+# (0xF43F0). After its WeaponSpec each keeps a record of 13 words; six of them point at the constants its
+# WeaponSpec points at. Not read: +0x0C (the constant of the WeaponSpec's second word), +0x18 (250 to 1500:
+# what its owner adds to the time when it has fired, for a time of its own) and +0x2C (0.75 to 2: handed
+# over with each shot, kept in the particle, as GunSpec's +0x28).
+struct  TurretCannonSpec  34                        # a turret cannon type's own record of where its constants are, after its WeaponSpec
+field   TurretCannonSpec  000  aim_angle  u32        # points at the degrees either side of where it points within which it turns a shot towards its target
+field   TurretCannonSpec  004  damage     u32        # points at the damage a shot does in all: a hit takes the part of it that a frame is of the time the streak takes to pass (WeaponSpec's)
+field   TurretCannonSpec  008  cost       u32        # points at what a shot takes from its energy (WeaponSpec's)
+field   TurretCannonSpec  010  range      u32        # points at how far a shot reaches (WeaponSpec's)
+field   TurretCannonSpec  014  reload     u32        # points at the milliseconds from a shot to the next (WeaponSpec's)
+field   TurretCannonSpec  01C  shots      u32        # points at how many of its shots can be in the air at once: the beam system's particles
+field   TurretCannonSpec  020  life       u32        # points at the milliseconds a shot lasts
+field   TurretCannonSpec  024  speed      u32        # points at its shots' speed (WeaponSpec's)
+field   TurretCannonSpec  028  length     u32        # points at how long a shot's streak grows
+field   TurretCannonSpec  030  color      u32        # points at its shots' colour: three floats, red, green and blue, 0 to 255
+002201B4  var   ARMDTurretCannonWeaponTurretCannonSpec           TurretCannonSpec
+002202A4  var   ZenReconShipCannonWeaponTurretCannonSpec         TurretCannonSpec
+00220394  var   ZenCruiserTurret1CannonWeaponTurretCannonSpec    TurretCannonSpec
+00220484  var   ZenCruiserTurretCannonWeaponTurretCannonSpec     TurretCannonSpec
+# The constants a turret cannon type's two records point at: 0xC8 bytes in .rdata, laid out the same in the
+# four types, with the names of its shots' material and of its sound among them.
+struct  TurretCannonConstants  C8                   # a turret cannon type's constants: what its WeaponSpec's and its TurretCannonSpec's words point at
+field   TurretCannonConstants  000  damage        f32
+field   TurretCannonConstants  004  cost          f32
+field   TurretCannonConstants  00C  range         f32
+field   TurretCannonConstants  010  reload        u32
+field   TurretCannonConstants  018  aim_angle     f32
+field   TurretCannonConstants  01C  shots         s32
+field   TurretCannonConstants  020  life          u32
+field   TurretCannonConstants  024  speed         f32
+field   TurretCannonConstants  028  color         f32[3]
+field   TurretCannonConstants  034  length        f32
+field   TurretCannonConstants  040  material      char[64]   # the name of its shots' material: its X_Startup gets it
+field   TurretCannonConstants  080  sound         char[64]   # the name of its sound: its X_Startup makes it
+field   TurretCannonConstants  0C0  alert_radius  f32
+001A5478  var   ARMDTurretCannonWeaponConstants                  TurretCannonConstants
+001A5540  var   ZenReconShipCannonWeaponConstants                TurretCannonConstants
+001A5608  var   ZenCruiserTurret1CannonWeaponConstants           TurretCannonConstants
+001A56D0  var   ZenCruiserTurretCannonWeaponConstants            TurretCannonConstants
+# The constants a missile launcher type's WeaponSpec points at, its only record: six words in .rdata, laid
+# out the same in the eight launchers and in the flares' weapon, which follow one another there. The damage
+# is its missile's (MissileConstants has it too); the third word is the constant of the WeaponSpec's second
+# word, not read. Here the 4 launchers with a name and the flares'.
+struct  LauncherConstants  18                       # a launcher type's constants: what its WeaponSpec's words point at
+field   LauncherConstants  000  damage        f32
+field   LauncherConstants  004  cost          f32
+field   LauncherConstants  00C  range         f32
+field   LauncherConstants  010  reload        u32
+field   LauncherConstants  014  alert_radius  f32
+001A53A0  var   PodOfficerSledMissileLauncherWeaponConstants     LauncherConstants
+001A53B8  var   FPAMissileLauncherWeaponConstants                LauncherConstants
+001A5400  var   ZenHeavyMissileLauncherWeaponConstants           LauncherConstants
+001A5418  var   ZenLightMissileLauncherWeaponConstants           LauncherConstants
+001A5460  var   FlareWeaponConstants                             LauncherConstants
+
+# The chunks: the 16 effect types that throw pieces of a scene (the damage chunks of the characters and of
+# the Cyclops, the three sizes of Chunk1), with one state machine (ChunksEffect_StateMachine). What a type's
+# objects share starts with how many pieces an effect of it has and its scene (a piece is a copy of one of
+# the scene's objects, picked at random), then a record of 13 words its X_Register clears and fills, each
+# pointing at one of the type's constants in .rdata; an effect keeps the record's address at its +0xD64.
+# Read with Ghidra in the chunks' code (0x10ABE0 to 0x10B680; PENDING.md has how each was told). Not read:
+# +0x2C (1.6, or 3 for Chunk1's).
+struct  ChunksSpec  34                              # a chunks effect type's record of where its constants are
+field   ChunksSpec  000  delay         u32           # points at the milliseconds before it throws its first pieces
+field   ChunksSpec  004  throw_time    u32           # points at the milliseconds from when it was set up after which it throws no more
+field   ChunksSpec  008  throw_gap     u32           # points at the milliseconds from a throw to the next
+field   ChunksSpec  00C  end_wait      u32           # points at the milliseconds from its last throw to its end
+field   ChunksSpec  010  throw_count   u32           # points at how many pieces it throws at a time
+field   ChunksSpec  014  life          u32           # points at the milliseconds a piece lasts
+field   ChunksSpec  018  spin          u32           # points at how fast a piece turns about each of its three axes: three floats
+field   ChunksSpec  01C  spin_random   u32           # points at how much more or less than that, at random: three floats
+field   ChunksSpec  020  gravity       u32           # points at what pulls a piece where there is gravity, three floats: its place gains this times the square of its time
+field   ChunksSpec  024  speed         u32           # points at the speed a piece is thrown with
+field   ChunksSpec  028  speed_random  u32           # points at how much more or less than that, at random
+field   ChunksSpec  030  throw_angle   u32           # points at the degrees off the effect's direction, at most, a piece is thrown
+00224864  var   CyclopsDamageChunkEffectChunksSpec               ChunksSpec
+002248E4  var   CharacterDamageChunksLargeWEffectChunksSpec      ChunksSpec
+00224964  var   CharacterDamageChunksMedWEffectChunksSpec        ChunksSpec
+002249E4  var   CharacterDamageChunksSmallWEffectChunksSpec      ChunksSpec
+00224A64  var   CharacterDamageChunksLargeGEffectChunksSpec      ChunksSpec
+00224AE4  var   CharacterDamageChunksMedGEffectChunksSpec        ChunksSpec
+00224B64  var   CharacterDamageChunksSmallGEffectChunksSpec      ChunksSpec
+00224BE4  var   CharacterDamageChunksLargeBEffectChunksSpec      ChunksSpec
+00224C64  var   CharacterDamageChunksMedBEffectChunksSpec        ChunksSpec
+00224CE4  var   CharacterDamageChunksSmallBEffectChunksSpec      ChunksSpec
+00224D64  var   CharacterDamageChunksLargeEffectChunksSpec       ChunksSpec
+00224DE4  var   CharacterDamageChunksMedEffectChunksSpec         ChunksSpec
+00224E64  var   CharacterDamageChunksSmallEffectChunksSpec       ChunksSpec
+00224EE4  var   Chunk1LargeEffectChunksSpec                      ChunksSpec
+00224F64  var   Chunk1MediumEffectChunksSpec                     ChunksSpec
+00224FE4  var   Chunk1SmallEffectChunksSpec                      ChunksSpec
+# The constants a chunks effect type's ChunksSpec points at: 0x4C bytes in .rdata, laid out the same in
+# the 16 types. A field is the constant ChunksSpec's field of that name points at.
+struct  ChunksConstants  4C                         # a chunks effect type's constants: what its ChunksSpec's words point at
+field   ChunksConstants  000  delay         u32
+field   ChunksConstants  004  throw_time    u32
+field   ChunksConstants  008  throw_gap     u32
+field   ChunksConstants  00C  end_wait      u32
+field   ChunksConstants  010  throw_count   u32
+field   ChunksConstants  014  life          u32
+field   ChunksConstants  018  spin          f32[3]
+field   ChunksConstants  024  spin_random   f32[3]
+field   ChunksConstants  030  gravity       f32[3]
+field   ChunksConstants  03C  speed         f32
+field   ChunksConstants  040  speed_random  f32
+field   ChunksConstants  048  throw_angle   f32
+001A6934  var   CyclopsDamageChunkEffectConstants                ChunksConstants
+001A69A8  var   CharacterDamageChunksLargeWEffectConstants       ChunksConstants
+001A6A1C  var   CharacterDamageChunksMedWEffectConstants         ChunksConstants
+001A6A90  var   CharacterDamageChunksSmallWEffectConstants       ChunksConstants
+001A6B04  var   CharacterDamageChunksLargeGEffectConstants       ChunksConstants
+001A6B78  var   CharacterDamageChunksMedGEffectConstants         ChunksConstants
+001A6BEC  var   CharacterDamageChunksSmallGEffectConstants       ChunksConstants
+001A6C60  var   CharacterDamageChunksLargeBEffectConstants       ChunksConstants
+001A6CD4  var   CharacterDamageChunksMedBEffectConstants         ChunksConstants
+001A6D48  var   CharacterDamageChunksSmallBEffectConstants       ChunksConstants
+001A6DBC  var   CharacterDamageChunksLargeEffectConstants        ChunksConstants
+001A6E2C  var   CharacterDamageChunksMedEffectConstants          ChunksConstants
+001A6EA0  var   CharacterDamageChunksSmallEffectConstants        ChunksConstants
+001A6EFC  var   Chunk1LargeEffectConstants                       ChunksConstants
+001A6F58  var   Chunk1MediumEffectConstants                      ChunksConstants
+001A6FB4  var   Chunk1SmallEffectConstants                       ChunksConstants
+# How many pieces an effect of each chunks type has: its X_Startup sets it, just before its scene.
+0022485C  var   CyclopsDamageChunkEffectPieces                   u32   # 8
+002248DC  var   CharacterDamageChunksLargeWEffectPieces          u32   # 16
+0022495C  var   CharacterDamageChunksMedWEffectPieces            u32   # 16
+002249DC  var   CharacterDamageChunksSmallWEffectPieces          u32   # 16
+00224A5C  var   CharacterDamageChunksLargeGEffectPieces          u32   # 16
+00224ADC  var   CharacterDamageChunksMedGEffectPieces            u32   # 16
+00224B5C  var   CharacterDamageChunksSmallGEffectPieces          u32   # 16
+00224BDC  var   CharacterDamageChunksLargeBEffectPieces          u32   # 16
+00224C5C  var   CharacterDamageChunksMedBEffectPieces            u32   # 16
+00224CDC  var   CharacterDamageChunksSmallBEffectPieces          u32   # 16
+00224D5C  var   CharacterDamageChunksLargeEffectPieces           u32   # 16
+00224DDC  var   CharacterDamageChunksMedEffectPieces             u32   # 16
+00224E5C  var   CharacterDamageChunksSmallEffectPieces           u32   # 16
+00224EDC  var   Chunk1LargeEffectPieces                          u32   # 6
+00224F5C  var   Chunk1MediumEffectPieces                         u32   # 6
+00224FDC  var   Chunk1SmallEffectPieces                          u32   # 6
+
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
 00026E80  func  gcLevel_Destroy                     # gcLevel's slot +38

@@ -978,6 +978,71 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   `WeaponSpec` words still point at numbers); the two guns and four missiles without a name; the words
   above; what follows the records in what a type's objects share (a gun's sound at +0x6C and the two
   effect types it makes at +0xB4 and +0xB8, a missile's at +0x150 on).
+- **The heavy cannons', the turret cannons' and the launchers'** (11-11-2026). The other weapon kinds'
+  own records, read the same way. The five heavy cannons (Weapon 39, 40, 42, 43, 44; the railgun is one;
+  creation sub_00100880, state machine 0x100A10) keep 11 words after their `WeaponSpec`:
+  `HeavyCannonSpec`. Their shot is a ray, not a particle: fired (sub_00100360: the muzzle's effect, the
+  energy taken), the weapon waits `shot_delay` (+0x20) milliseconds as its state's timer and then tests
+  the ray and shows the trail (sub_00100820, sub_00100460). The trail is a vcGeometryTrail whose +0xE4,
+  +0xE8 and +0xF0 the creation fills from the record: `trail_life` (+0x18), the milliseconds each of its
+  points starts with and loses as time passes (vcGeometryTrail_InUse); `trail_fade` (+0x1C), below which a
+  point's time left makes it fainter, and `trail_width` (+0x24), how far each edge is put from the middle
+  (the drawing, sub_001465B0); `color` (+0x28) three floats packed into its +0x118; `aim_angle` (+0x00) as
+  the guns', handed to sub_000286B0. The four turret cannons (Weapon 36, 37, 38, 45; creation sub_000F4030,
+  state machine 0xF43F0) keep 13: `TurretCannonSpec`. Their shots are a beam system's particles as the
+  guns', one a shot: `shots` (+0x1C), `life` (+0x20), `length` (+0x28) and `color` (+0x30) go where the
+  guns' go (sub_00139780, the system's +0x110, +0x160 and +0x138), `speed` (+0x24) times the aim plus
+  the owner's velocity is the shot's (sub_000F4210), `aim_angle` (+0x00) in sub_000F3EA0; a hit of theirs
+  does not carry the whole damage but the damage over the frames the streak takes to pass (`length` over
+  `speed` times 0.033; sub_000F3D10). Both kinds' constants are laid out the same in all of the kind (0xC0
+  bytes in the five, 0xC8 in the four), with the material's and the sound's names: `HeavyCannonConstants`,
+  `TurretCannonConstants`. The eight launchers and the flares' weapon have no record but the `WeaponSpec`
+  and six constants each, one type after another: `LauncherConstants`. In place for the types with a name:
+  4 heavy cannons, 4 turret cannons, 4 launchers and the flares' (21 lines); every word of a named gun's,
+  heavy cannon's, turret cannon's and launcher's `WeaponSpec` now points at a place with a name. Measured:
+  reads at a raw address 10,899 to 10,803; data addresses written as numbers 10,816 to 10,610; memory at
+  a named place no field names 2,100 to 2,116, the 16 words not read: `HeavyCannonSpec`'s +0x0C in 4 (the
+  constant of `WeaponSpec`'s second word), `TurretCannonSpec`'s +0x0C (the same), +0x18 (250 to 1500
+  milliseconds: sub_000F3F40 hands it to the weapon's owner, which adds it to the time when the cannon
+  has fired and keeps it at its +0x270) and +0x2C (0.75 to 2, kept in the particle as `GunSpec`'s +0x28)
+  in 4; the XBE's untyped bytes 841,723 to 840,874, its unknown bytes 3,831, as before.
+  `tools/verify_c.py` 209 vectors, 0 different, twice. The nine scenarios frame for frame as their references, at the first
+  run. Left: `WeaponSpec`'s second word,
+  which no reader of a weapon's was found for (the two found at that offset walk the Item family); the
+  six types without a name with 12 words of their own (records at 0x220574 to 0x2209D4, creation
+  sub_000D16B0) and the fifth heavy cannon, the two guns and the four launchers without one; MacIICannon,
+  whose code reads its constants at their addresses (0x1A3CF0 on: 60 and 180 at +0xBC and +0xC0 are the
+  radii sub_0001B3E0 gets), and the two packs, whose constants are many more than the five their
+  `WeaponSpec` points at.
+- **The chunks' record: `ChunksSpec`** (11-11-2026). Measured first where the reads at a raw address
+  are (10,803): 7,102 in functions without a name; of the types with one, Entity 2,372 (1,110 in the
+  Startups and 1,026 in the Shutdowns: the mechs' motions), Effect 620, Weapon 427 (380 of them in the two
+  packs' Startups, which fill by hand two records of where each pack's missiles leave from: nodes, counts
+  and three floats a tube), the rest under 50 each. Of the effects' 620, 208 were one record: the 16
+  types of ChunksEffect_StateMachine (the characters' and the Cyclops's damage chunks, Chunk1's three
+  sizes) clear and fill 13 words each. What a type's objects share is how many pieces an effect has (its
+  Startup sets it: 6, 8 or 16), its scene and that record; the type's own function hands back its address
+  and the effect's creation keeps it at +0xD68, the record's at +0xD64 (sub_0010AFE0, by the type's
+  number, which also makes each piece as a copy of one of the scene's objects at random). How each field
+  was told: `delay` (+0x00) is the timer of the effect's first state, at whose end it throws
+  (ChunksEffect_StateMachine, sub_0010B160); each throw sets the timer to `throw_gap` (+0x08) and throws
+  `throw_count` (+0x10) of the pieces not in the air, and when more than `throw_time` (+0x04) has passed
+  since the effect was set up it goes to its second state, whose timer is `end_wait` (+0x0C) and whose end
+  is the effect's; a piece thrown gets `life` (+0x14) as the milliseconds after which it is hidden
+  and counted back (sub_0010AC80), a direction at random within `throw_angle` (+0x30) degrees of the
+  effect's (sub_00115BD0), a speed of `speed` (+0x24) more or less `speed_random` (+0x28), a turning rate
+  about each axis of `spin` (+0x18) more or less `spin_random` (+0x1C) (sub_00115490: the first plus the
+  second times a random number from -1 to 1), and, where the level's gravity (0x1B7708) is not 0,
+  `gravity` (+0x20), three floats its place gains times the square of its time. `ChunksConstants`, 0x4C
+  bytes the same in the 16, and each type's `ChunksSpec`, its constants and its count of pieces
+  (`Chunk1SmallEffectPieces`) in place: 48 lines. Measured: reads at a raw address 10,803 to 10,579; data
+  addresses written as numbers 10,610 to 10,370; memory at a named place no field names 2,116 to 2,132,
+  the one word not read in 16 records (+0x2C: 1.6, or 3 for Chunk1's); the XBE's untyped bytes 840,874 to
+  838,919, its unknown bytes 3,831, as before. `tools/verify_c.py` 209 vectors, 0 different, twice.
+  The nine scenarios frame for frame as their references, `training` (8 of its 30 frames, from frame
+  2640) only run again alone, twice: another project's decompilation was running beside. Left of the effects: MotionTrailEffect's record of 9 words; the eleven muzzle flashes, each
+  with five words its Register clears one by one; what the Startups get (219 reads) and the Shutdowns let
+  go of (86).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the
