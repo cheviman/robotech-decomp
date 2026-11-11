@@ -188,6 +188,19 @@ class GuestNames:
             return f"MEM{bits}({self.labels[address]}_VA)", False
         return None
 
+    def half(self, address, bits):
+        """(C text, signed) of a 16-bit read of the low or the high half of a 32-bit variable (a handle's
+        class is its high half: NAME >> 16), or None."""
+        found = self.containing(address) if bits == 16 else None
+        if found is None or INTEGER_TYPES.get(found[2], (0,))[0] != 32:
+            return None
+        start, name, _, count, _ = found
+        number, inner = divmod(address - start, 4)
+        if inner not in (0, 2):
+            return None
+        whole = f"{name}({number})" if count else name
+        return (f"((uint16_t)({whole} >> 16))" if inner else f"((uint16_t){whole})"), False
+
     @staticmethod
     def scaled(index, size):
         """What 'index' multiplies by 'size' ("i * size", "i << n"), or None."""
@@ -256,12 +269,17 @@ class GuestNames:
 
     def record_place(self, kind, record, inner):
         """(C, precedence) of the guest address 'inner' bytes into the record of 'kind' at the C 'record':
-        the record's, a field's (STRUCT_field_VA(record)), or past one."""
+        the record's, a field's (STRUCT_field_VA(record)), a place inside an array field from the field's
+        (STRUCT_field_VA(record) + bytes), or past the record's."""
         if not inner:
             return record, cprint.PRIMARY
-        for offset, name, _, _ in self.structs[kind][1]:
+        size = self.structs[kind][0]
+        for offset, name, of, count in self.structs[kind][1]:
             if offset == inner:
                 return f"{kind}_{name}_VA({record})", cprint.PRIMARY
+            extent = size - offset if count == -1 else TYPE_BYTES[of] * (count or 1)
+            if count is not None and offset < inner < offset + extent:
+                return f"{kind}_{name}_VA({record}) + 0x{inner - offset:X}u", cprint.ADD
         return f"{record} + 0x{inner:X}u", cprint.ADD
 
     def address(self, value):
@@ -308,6 +326,9 @@ class X86Names(emit.Names):
             return found
         guest = getattr(self.writer.emitter, "guest", None)
         if guest is not None and isinstance(load.address, ir.Const):
+            half = guest.half(load.address.value & 0xFFFFFFFF, load.bits)
+            if half is not None:
+                return half
             named = guest.place(load.address.value & 0xFFFFFFFF, load.bits)
             if named is not None:
                 return named

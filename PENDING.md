@@ -683,6 +683,50 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   between the points of rings of 5 and of 9; the function is not read yet), the tables of words at
   0x1B9974 and 0x1B99D8, and constants nothing reaches by an address after a name (0x18FF60, the runs of
   33 to 37 bytes from 0x1930C1 and 0x19394D).
+- **What the types get by name, and the players** (10-11-2026). Measured first: of the decompiled C's 15,654
+  reads and writes at a raw address (10,523 addresses), 7,281 are in game/entities' functions, 2,279 in
+  game/unsorted's, 1,521 in the weapons', 1,310 in the screens' and under 500 in all the engine's; 4,171 in
+  the types' `X_Register` and 2,197 in their `X_Startup`. Named in this round, 179 `var` lines: what 82
+  types get by name in their `X_Startup` and keep at a fixed place until their `X_Shutdown` (176: 78 numbers
+  of a model's node, 24 scenes, 22 materials, 16 objects of a model, 10 sounds, 10 first objects of a scene,
+  6 motions, 4 textures, 3 particle systems, and three tables the type walks as one: `SumoPackWeaponModels`
+  15, `SuperVeritechPackWeaponModels` 5, `CiviliansNodeMotions` 4), by the type, the name asked for and what
+  it is (`MacIIModel`, `FighterPodFrontGunNode`, `PauseScreenCursorSound`); and the players: `Players` (each
+  player's object, a handle of the Player family; 201 places in the C), `PlayerCount` (38) and `PlayerPorts`
+  (the pad's port each plays with; 27). Read for it: what the object system's classes are by number (1
+  vcTexture, 2 vcMaterial, 8 vcSceneExport, 9 vcMotionFiles, 10 vcMultiSub, 11 vcParticleSystem, 12
+  vcMultiSubObject, 15 vcSnd, 29 vcSound) and the four functions that get these, not named yet: sub_00121DF0
+  (a new vcMultiSubObject from the vcMultiSub of a name), sub_0011EA70 (the number of a model's node, by its
+  name; -1 for none), sub_0010E920 (a new vcSound from the vcSnd of a name), sub_00133CF0 (the first object
+  of a scene). Left without a line, 95 of the 292 found: the first word of something larger, which is
+  whatever the C hands on the address of or has bytes after it nothing else reaches (the screens' textures,
+  each the start of a record of 0x3C bytes that sub_00126A10, sub_00126CE0 and sub_00126D00 take; the
+  effects' particle systems and the veritechs' models, each the start of what the type's objects share,
+  which a function of the type hands back the address of; the turrets' four motions, the record their
+  parameters point at); a name a type stores at several places; and what functions without a name get (193
+  places). The emitter (`tools/x86/emit.py`, GuestNames): a place inside an array field goes by the field
+  (`MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u))`, 77 places), and a 16-bit read of the high half
+  of a 32-bit variable is the variable shifted (`vcClassByType(((uint16_t)(ZenScoutShipScene >> 16)))`: a
+  handle's class). Measured: reads and writes at a raw address 15,654 to 14,778; data addresses written as
+  numbers 13,773 to 13,736; memory at a computed address 112,797 to 112,779; memory at a named place no
+  field names 684, as before; the XBE's untyped bytes of the game 853,701 to 852,889, its unknown bytes
+  3,841 to 3,845: the word at 0x1BC994, between `PlayerCount` and `EntityFamily`, which no instruction of
+  the program touches and was counted as reached only for lying after 0x1BC990. The nine scenarios frame for
+  frame as their references; `tools/verify_c.py` 209 vectors, 0 different. `tools/decompile.py build` twice, 28 minutes each (the first with the 292, which
+  made 12,672 bytes unknown after the words that start something larger). Left, by what removes the most:
+  the entities' records of 65 pointers (61 types' `X_Register` clear and fill one, 0x104 bytes: 62 pointers
+  to the type's constants in `.rdata`, +0x34 to its target node's number, +0xC0 to its record of motions,
+  +0x100 to another record of its own; an entity's first word points at its type's; about 3,900 reads; some
+  35 of the 65 offsets have a reader in the decompiled C and no more than a dozen say what the constant is:
+  hit points at +0x00 by its looks, 1000, 100 and 250 at +0x18 to +0x20 for every type), which wants the
+  mechs' state machine (0x6A180, not lifted) read; the mechs' records of motions (0x55 words, 36 handles
+  from +0x58, each stored and released by a statement of its own: slide back, run back, idle, idle or alarm,
+  walk, run, slide forward, slide left, strafe left, strafe right, slide right, turn in place left, turn in
+  place, up, land soft, land, five more "up", five "fall", run back, run, strafe left, strafe right, alert
+  pose, alarm, the two turns in alarm, two with no name; about 2,300 reads with the Shutdowns); the weapons'
+  records (27 words a type) and the effects' (14); the screens' records of 0x3C bytes; and the most-read
+  addresses still raw: 0x1EAB20 to 0x1EAB2C (205 reads, the main menu's state), 0x1EA7F4 (96, floats),
+  0x2B5E60 (38), 0x219A04 (36), 0x1BC760 (35), 0x1EA5F8 (32), 0x1B0A64 (30).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

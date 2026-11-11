@@ -1335,6 +1335,204 @@ comment LevelsSetAllOpen Sets LevelsAllOpen.
 comment LevelGetChapter A level's chapter.
 comment LevelCountsAsFinished Whether a level is finished, or every one is with the code that unlocks every mission (Cheats' 2).
 
+# The players: up to two, each an object of the Player family made from the level's file, with the pad's port
+# it plays with (the game asks for the pad again when vcPadIsOpen says it is gone).
+001BC980  var   Players  u32[2]                       # each player's object, a handle of the Player family, by the player's number; 0 for none
+001BC990  var   PlayerCount  s32                      # the players the level has: gcLevel_Load starts it at 0, each one made from the level's file adds one
+001AECA0  var   PlayerPorts  u32[2]                   # the pad's port each player plays with
+
+# What the types get by name at their first use and keep at a fixed place until their last release (each
+# X_Startup stores it, X_Shutdown lets go of it): a texture, a material, a motion, a particle system or a
+# scene the object system finds by its class and name (vcObjectGet: classes 1, 2, 9, 11 and 8); an object
+# of a model, made new from the vcMultiSub of that name (sub_00121DF0: class 10, into a vcMultiSubObject,
+# class 12); a sound made of the vcSnd of that name (sub_0010E920: class 15, into a vcSound, class 29); the
+# first object of a scene (sub_00133CF0); and the number of a model's node, by the node's name
+# (sub_0011EA70: -1 for none). Named by the type, the name asked for and what it is; the type alone where
+# it keeps one of the kind; a table where the type walks them as one. Not here: the first word of something
+# larger not typed yet, which is whatever the C hands on the address of or has bytes after it that nothing
+# else reaches (a screen's texture starts a record of 0x3C bytes its drawing functions take, sub_00126A10,
+# sub_00126CE0 and sub_00126D00; a veritech's model and an effect's particle system start what the type's
+# objects share, which a function of the type hands back the address of; a turret's four motions are the
+# record its parameters point at); a name a type stores at several places (the role of each is not read
+# yet); the mechs' records of motions (0x55 words each, to be typed whole); and what functions without a
+# name get.
+0021D7D8  var   SumoPackWeaponModels  u32[15]                  # an object of each model of the armour's pieces: sumo_backpack, sumo_chest, sumo_crotchpiece, the shoulders, the thighs, the legs' and the arms' fronts and backs, left before right
+0021E2D8  var   SuperVeritechPackWeaponModels  u32[5]          # an object of each model of the pack's pieces: sv_backboosters, sv_legbooster_l, sv_legbooster_r, sv_armbooster_l, sv_armbooster_r
+00221844  var   CiviliansNodeMotions  u32[4]                   # the civilians' motions, by what one is doing: "ph idle", "ph walk", "ph run", "ph die"
+001B16C4  var   ZenLightMissileTurretTargetNode                u32   # the number of the node "target" ZenLightMissileTurret_Startup gets
+001B16C8  var   ZenCruiserTurret1TargetNode                    u32   # the number of the node "target" ZenCruiserTurret1_Startup gets
+001B1848  var   MacIITargetNode                                u32   # the number of the node "target" MacII_Startup gets
+001B1854  var   GladiatorTargetNode                            u32   # the number of the node "target" Gladiator_Startup gets
+001B1868  var   ZenWarriorNoArmourTargetNode                   u32   # the number of the node "target" ZenWarriorNoArmour_Startup gets
+001B186C  var   ZenWarriorHeavyTargetNode                      u32   # the number of the node "target" ZenWarriorHeavy_Startup gets
+001B1870  var   ZenWarriorLiteTargetNode                       u32   # the number of the node "target" ZenWarriorLite_Startup gets
+001B187C  var   ARMDTurretTargetNode                           u32   # the number of the node "target" ARMDTurret_Startup gets
+001B1880  var   ZenCruiserTurretTargetNode                     u32   # the number of the node "target" ZenCruiserTurret_Startup gets
+001B1884  var   SeaSergeantTargetNode                          u32   # the number of the node "target" SeaSergeant_Startup gets
+001B1890  var   ZenWarriorScavengerTargetNode                  u32   # the number of the node "target" ZenWarriorScavenger_Startup gets
+001EA7F0  var   MissionCompleteScreenCancelBackSSound          u32   # a sound made of the vcSnd "Cancel_Back_S.wav" MissionCompleteScreen_Startup gets
+001EAB14  var   MainMenuScreenCursorSound                      u32   # a sound made of the vcSnd "cursor.wav" MainMenuScreen_Startup gets
+001EAB18  var   MainMenuScreenCancelBackSSound                 u32   # a sound made of the vcSnd "Cancel_Back_S.wav" MainMenuScreen_Startup gets
+001EAB1C  var   MainMenuScreenConfirmSSound                    u32   # a sound made of the vcSnd "Confirm_S.wav" MainMenuScreen_Startup gets
+001EB3E0  var   PlayerCameraSound                              u32   # a sound made of the vcSnd "camera.wav" Player_Startup gets
+001EB3E8  var   PlayerClickSound                               u32   # a sound made of the vcSnd "click.wav" Player_Startup gets
+001EC74C  var   ZenHeavyMissileTurretHeavyMissleLauncherLeftnodeNode u32   # the number of the node "Heavy_missle_launcher_leftnode" ZenHeavyMissileTurret_Startup gets
+001ECBEC  var   ZenHeavyMissileTurretModel                     u32   # an object of the model "zen_heavy_missle_turrett" ZenHeavyMissileTurret_Startup gets
+001ECC3C  var   ZenLightMissileTurretLightMissleLauncherLeftnodeNode u32   # the number of the node "light_missle_launcher_leftnode" ZenLightMissileTurret_Startup gets
+001ED0DC  var   ZenLightMissileTurretModel                     u32   # an object of the model "zen_light_missle_turrett_1" ZenLightMissileTurret_Startup gets
+001ED12C  var   ZenCruiserTurret1ZenTurretLazerNode01Node      u32   # the number of the node "zen_turret_lazer_node01" ZenCruiserTurret1_Startup gets
+001ED2EC  var   ZenCruiserTurret1Model                         u32   # an object of the model "zen_cruiser_turret_1" ZenCruiserTurret1_Startup gets
+001ED334  var   VF1SXFighterExhaustEffectLeft01Node            u32   # the number of the node "exhaust effect left01" VF1SXFighter_Startup gets
+001ED338  var   VF1SXFighterExhaustEffectRight01Node           u32   # the number of the node "exhaust effect right01" VF1SXFighter_Startup gets
+001ED33C  var   VF1SXFighterWingtipEffectLeft01Node            u32   # the number of the node "wingtip effect left01" VF1SXFighter_Startup gets
+001ED340  var   VF1SXFighterWingtipEffectRight01Node           u32   # the number of the node "wingtip effect right01" VF1SXFighter_Startup gets
+001ED344  var   VF1SXFighterGunEffects01Node                   u32   # the number of the node "gun effects01" VF1SXFighter_Startup gets
+001ED348  var   VF1SXFighterMisslesLeft01Node                  u32   # the number of the node "missles left01" VF1SXFighter_Startup gets
+001ED34C  var   VF1SXFighterMisslesRight01Node                 u32   # the number of the node "missles right01" VF1SXFighter_Startup gets
+001ED7D4  var   VF1AXFighterExhaustEffectLeft01Node            u32   # the number of the node "exhaust effect left01" VF1AXFighter_Startup gets
+001ED7D8  var   VF1AXFighterExhaustEffectRight01Node           u32   # the number of the node "exhaust effect right01" VF1AXFighter_Startup gets
+001ED7DC  var   VF1AXFighterWingtipEffectLeft01Node            u32   # the number of the node "wingtip effect left01" VF1AXFighter_Startup gets
+001ED7E0  var   VF1AXFighterWingtipEffectRight01Node           u32   # the number of the node "wingtip effect right01" VF1AXFighter_Startup gets
+001ED7E4  var   VF1AXFighterGunEffects01Node                   u32   # the number of the node "gun effects01" VF1AXFighter_Startup gets
+001ED7E8  var   VF1AXFighterMisslesLeft01Node                  u32   # the number of the node "missles left01" VF1AXFighter_Startup gets
+001ED7EC  var   VF1AXFighterMisslesRight01Node                 u32   # the number of the node "missles right01" VF1AXFighter_Startup gets
+001EDDC8  var   PodOfficerSledMissileScene                     u32   # the scene "zen_heavy_missile" PodOfficerSledMissile_Startup gets
+001EDFF8  var   FPAMissileScene                                u32   # the scene "zen_light_missile" FPAMissile_Startup gets
+001EE688  var   ZenHeavyMissileScene                           u32   # the scene "zen_heavy_missile" ZenHeavyMissile_Startup gets
+001EE8B8  var   ZenLightMissileScene                           u32   # the scene "zen_light_missile" ZenLightMissile_Startup gets
+0020445C  var   ZenReconCollisionScene                         u32   # the scene "zen_recon_collision" ZenReconCollision_Startup gets
+002045AC  var   ZenShuttleCollisionScene                       u32   # the scene "zen_shuttle_collision" ZenShuttleCollision_Startup gets
+002046FC  var   SeaSergeantCollisionScene                      u32   # the scene "sea_sergeant_collision" SeaSergeantCollision_Startup gets
+002083D4  var   MacIIMak2FireMotion                            u32   # the motion "Mak2 fire" MacII_Startup gets
+002083D8  var   MacIIExhaust02Node                             u32   # the number of the node "exhaust02" MacII_Startup gets
+002083DC  var   MacIIExhaust01Node                             u32   # the number of the node "exhaust01" MacII_Startup gets
+002083F0  var   MacIIGunvent01Node                             u32   # the number of the node "gunvent01" MacII_Startup gets
+002083F4  var   MacIIGunvent02Node                             u32   # the number of the node "gunvent02" MacII_Startup gets
+002083F8  var   MacIIGunvent03Node                             u32   # the number of the node "gunvent03" MacII_Startup gets
+002083FC  var   MacIIGunvent04Node                             u32   # the number of the node "gunvent04" MacII_Startup gets
+00208410  var   MacIIGunArmLeftNode                            u32   # the number of the node "gun_arm_left" MacII_Startup gets
+00208414  var   MacIIGunArmRightNode                           u32   # the number of the node "gun_arm_right" MacII_Startup gets
+0020871C  var   MacIIModel                                     u32   # an object of the model "Mak2" MacII_Startup gets
+00208CB0  var   FlareFxFlareParticles                          u32   # the particle system "fx_flare" Flare_Startup gets
+00208CB4  var   FlareFxFlareExplosionParticles                 u32   # the particle system "fx_flare_explosion" Flare_Startup gets
+00208CB8  var   FlareSceneObject                               u32   # the first object of the scene "fx_flare_capsule" Flare_Startup gets
+00208D60  var   PodScoutSpaceFootjetLNode                      u32   # the number of the node "footjet_L" PodScoutSpace_Startup gets
+00208D64  var   PodScoutSpaceFootjetRNode                      u32   # the number of the node "footjet_R" PodScoutSpace_Startup gets
+00208D68  var   PodScoutSpaceEarjetLNode                       u32   # the number of the node "earjet_L" PodScoutSpace_Startup gets
+00208D6C  var   PodScoutSpaceEarjetRNode                       u32   # the number of the node "earjet_R" PodScoutSpace_Startup gets
+00208D70  var   PodScoutSpaceDummyScoutBeaconNode              u32   # the number of the node "dummy scout_beacon" PodScoutSpace_Startup gets
+00208D74  var   PodScoutSpaceTargetNode                        u32   # the number of the node "target" PodScoutSpace_Startup gets
+00208F8C  var   GladiatorChestGunNode                          u32   # the number of the node "chest_gun" Gladiator_Startup gets
+00209514  var   GladiatorModel                                 u32   # an object of the model "gladiator" Gladiator_Startup gets
+0020A304  var   ZenCruiserMissileTurretModel                   u32   # an object of the model "Zen_cruiser_turret_missile02" ZenCruiserMissileTurret_Startup gets
+0020A97C  var   ZenWarriorNoArmourLiteWeaponNode               u32   # the number of the node "lite weapon" ZenWarriorNoArmour_Startup gets
+0020AC84  var   ZenWarriorNoArmourModel                        u32   # an object of the model "Zen_warrior_noarmour" ZenWarriorNoArmour_Startup gets
+0020ACD4  var   ZenWarriorHeavyHeavyWeaponNode                 u32   # the number of the node "heavy weapon" ZenWarriorHeavy_Startup gets
+0020AFDC  var   ZenWarriorHeavyModel                           u32   # an object of the model "Zen_warrior_heavy" ZenWarriorHeavy_Startup gets
+0020B02C  var   ZenWarriorLiteMediumWeaponNode                 u32   # the number of the node "medium weapon" ZenWarriorLite_Startup gets
+0020B334  var   ZenWarriorLiteModel                            u32   # an object of the model "Zen_warrior_lite" ZenWarriorLite_Startup gets
+0020B534  var   ZenScoutShipScene                              u32   # the scene "Zen_scout_ship" ZenScoutShip_Startup gets
+0020B7D4  var   ARMDTurretLazerNode01Node                      u32   # the number of the node "armd_turret_lazer_node01" ARMDTurret_Startup gets
+0020B880  var   ARMDTurretZenCruiserTurretCloseMotion          u32   # the motion "zen_cruiser_turret_close" ARMDTurret_Startup gets
+0020B884  var   ARMDTurretIdleMotion                           u32   # the motion "armd_turret_idle" ARMDTurret_Startup gets
+0020B994  var   ARMDTurretModel                                u32   # an object of the model "ARMD_turret" ARMDTurret_Startup gets
+0020B9DC  var   ZenCruiserTurretZenTurretLazerNode01Node       u32   # the number of the node "zen_turret_lazer_node01" ZenCruiserTurret_Startup gets
+0020BA88  var   ZenCruiserTurretCloseMotion                    u32   # the motion "zen_cruiser_turret_close" ZenCruiserTurret_Startup gets
+0020BA8C  var   ZenCruiserTurretIdleMotion                     u32   # the motion "zen_cruiser_turret_idle" ZenCruiserTurret_Startup gets
+0020BB9C  var   ZenCruiserTurretModel                          u32   # an object of the model "Zen_cruiser_turret" ZenCruiserTurret_Startup gets
+0020BBE4  var   SeaSergeantSSLeftMissileNode                   u32   # the number of the node "SS_left_missile" SeaSergeant_Startup gets
+0020BF60  var   SeaSergeantVehicleMilSeaSergeantBackMotion     u32   # the motion "vehicle_mil_sea_sergeant_back" SeaSergeant_Startup gets
+0020C0A4  var   SeaSergeantModel                               u32   # an object of the model "vehicle_mil_sea_sergeant" SeaSergeant_Startup gets
+0020C334  var   ZenWarriorScavengerLiteWeaponNode              u32   # the number of the node "lite weapon" ZenWarriorScavenger_Startup gets
+0020C63C  var   ZenWarriorScavengerModel                       u32   # an object of the model "Zen_warrior_scavenger" ZenWarriorScavenger_Startup gets
+0020CCB4  var   CatsEyeExhaustL01Node                          u32   # the number of the node "catseye_exhaust L01" CatsEye_Startup gets
+0020CCB8  var   CatsEyeExhaustL02Node                          u32   # the number of the node "catseye_exhaust L02" CatsEye_Startup gets
+0020CCBC  var   CatsEyeExhaustR01Node                          u32   # the number of the node "catseye_exhaust R01" CatsEye_Startup gets
+0020CCC0  var   CatsEyeExhaustR02Node                          u32   # the number of the node "catseye_exhaust R02" CatsEye_Startup gets
+0020CCC4  var   CatsEyeTargetNode                              u32   # the number of the node "target" CatsEye_Startup gets
+0020D674  var   FighterPodThruster1Node                        u32   # the number of the node "thruster1" FighterPod_Startup gets
+0020D678  var   FighterPodThruster2Node                        u32   # the number of the node "thruster2" FighterPod_Startup gets
+0020D67C  var   FighterPodThruster3Node                        u32   # the number of the node "thruster3" FighterPod_Startup gets
+0020D680  var   FighterPodTargetNode                           u32   # the number of the node "target" FighterPod_Startup gets
+0020D684  var   FighterPodFrontGunNode                         u32   # the number of the node "front gun" FighterPod_Startup gets
+0020D688  var   FighterPodMissileLNode                         u32   # the number of the node "missile L" FighterPod_Startup gets
+00219A0C  var   CreditsScreenModel                             u32   # an object of the model "rdf_tp_test" CreditsScreen_Startup gets
+0021CBAC  var   PauseScreenCursorSound                         u32   # a sound made of the vcSnd "cursor.wav" PauseScreen_Startup gets
+0021CBB0  var   PauseScreenCancelBackSSound                    u32   # a sound made of the vcSnd "Cancel_Back_S.wav" PauseScreen_Startup gets
+0021CBB4  var   PauseScreenConfirmSSound                       u32   # a sound made of the vcSnd "Confirm_S.wav" PauseScreen_Startup gets
+0021CCB8  var   SniperScreenSniperSideTopTexture               u32   # the texture "sniper_side_top.tga" SniperScreen_Startup gets
+0021CCBC  var   SniperScreenSniperSideBottomTexture            u32   # the texture "sniper_side_bottom.tga" SniperScreen_Startup gets
+0021CCC0  var   SniperScreenSniperSideMiddleTexture            u32   # the texture "sniper_side_middle.tga" SniperScreen_Startup gets
+0021CCC4  var   SniperScreenSniperCenterTexture                u32   # the texture "sniper_center.tga" SniperScreen_Startup gets
+0021D2C8  var   PodOfficerSledHeavyCannonWeaponMaterial        u32   # the material "fx_missile_contrail_anim" PodOfficerSledHeavyCannonWeapon_Startup gets
+0021D3B0  var   PodOfficerSkarredHeavyCannonWeaponMaterial     u32   # the material "fx_missile_contrail_anim" PodOfficerSkarredHeavyCannonWeapon_Startup gets
+0021D580  var   PodOfficerHeavyCannonWeaponMaterial            u32   # the material "fx_missile_contrail_anim" PodOfficerHeavyCannonWeapon_Startup gets
+0021D668  var   MalePowerArmorRailgunWeaponMaterial            u32   # the material "fx_missile_contrail_anim" MalePowerArmorRailgunWeapon_Startup gets
+0021D814  var   SumoPackWeaponSumoJetpackEffectLNode           u32   # the number of the node "sumo jetpack effect L" SumoPackWeapon_Startup gets
+0021D824  var   SumoPackWeaponSumoChestLNode                   u32   # the number of the node "sumo chest L" SumoPackWeapon_Startup gets
+0021D828  var   SumoPackWeaponSumoChestRNode                   u32   # the number of the node "sumo chest R" SumoPackWeapon_Startup gets
+0021D82C  var   SumoPackWeaponSumoShoulderLNode                u32   # the number of the node "sumo shoulder L" SumoPackWeapon_Startup gets
+0021D830  var   SumoPackWeaponSumoShoulderRNode                u32   # the number of the node "sumo shoulder R" SumoPackWeapon_Startup gets
+0021D834  var   SumoPackWeaponSumoHipLNode                     u32   # the number of the node "sumo hip L" SumoPackWeapon_Startup gets
+0021D838  var   SumoPackWeaponSumoHipRNode                     u32   # the number of the node "sumo hip R" SumoPackWeapon_Startup gets
+0021D83C  var   SumoPackWeaponSumoLegL01Node                   u32   # the number of the node "sumo leg L01" SumoPackWeapon_Startup gets
+0021D840  var   SumoPackWeaponSumoLegL03Node                   u32   # the number of the node "sumo leg L03" SumoPackWeapon_Startup gets
+0021D844  var   SumoPackWeaponSumoLegR01Node                   u32   # the number of the node "sumo leg R01" SumoPackWeapon_Startup gets
+0021D848  var   SumoPackWeaponSumoLegR03Node                   u32   # the number of the node "sumo leg R03" SumoPackWeapon_Startup gets
+0021D84C  var   SumoPackWeaponSumoWristLNode                   u32   # the number of the node "sumo wrist L" SumoPackWeapon_Startup gets
+0021D850  var   SumoPackWeaponSumoWristRNode                   u32   # the number of the node "sumo wrist R" SumoPackWeapon_Startup gets
+0021E314  var   SuperVeritechPackWeaponSVExhaustEffectLNode    u32   # the number of the node "SV_exhaust effect L" SuperVeritechPackWeapon_Startup gets
+0021E318  var   SuperVeritechPackWeaponSVExhaustEffectRNode    u32   # the number of the node "SV_exhaust effect R" SuperVeritechPackWeapon_Startup gets
+0021E31C  var   SuperVeritechPackWeaponSVBackMissileLNode      u32   # the number of the node "SV_back_missile_L" SuperVeritechPackWeapon_Startup gets
+0021EE20  var   PodOfficerArmCannonWeaponMaterial              u32   # the material "FX_Lazer Dot" PodOfficerArmCannonWeapon_Startup gets
+0021EF28  var   RaiderXMachineGunWeaponMaterial                u32   # the material "FX_Lazer Dot" RaiderXMachineGunWeapon_Startup gets
+0021F030  var   MacIIArmWeaponMaterial                         u32   # the material "FX_Lazer Dot" MacIIArmWeapon_Startup gets
+0021F138  var   GladiatorMachineGunWeaponMaterial              u32   # the material "FX_Lazer Dot" GladiatorMachineGunWeapon_Startup gets
+0021F240  var   ExcaliburMachineGunWeaponMaterial              u32   # the material "FX_Lazer Dot" ExcaliburMachineGunWeapon_Startup gets
+0021F558  var   MalePowerArmorPulseRifleWeaponMaterial         u32   # the material "FX_Lazer Dot" MalePowerArmorPulseRifleWeapon_Startup gets
+0021F660  var   MalePowerArmorImpactCannonWeaponMaterial       u32   # the material "FX_Lazer Dot" MalePowerArmorImpactCannonWeapon_Startup gets
+0021F768  var   FighterPodGunWeaponMaterial                    u32   # the material "FX_Lazer Dot" FighterPodGunWeapon_Startup gets
+0021F870  var   ZenWarriorNoArmourPulseRifleWeaponMaterial     u32   # the material "FX_Lazer Dot" ZenWarriorNoArmourPulseRifleWeapon_Startup gets
+0021F978  var   ZenWarriorScavengerPulseRifleWeaponMaterial    u32   # the material "FX_Lazer Dot" ZenWarriorScavengerPulseRifleWeapon_Startup gets
+0021FA80  var   ZenWarriorHeavyChaingunWeaponMaterial          u32   # the material "FX_Lazer Dot" ZenWarriorHeavyChaingunWeapon_Startup gets
+0021FB88  var   ZenWarriorLitePulseRifleWeaponMaterial         u32   # the material "FX_Lazer Dot" ZenWarriorLitePulseRifleWeapon_Startup gets
+0021FC90  var   PodAutoCannonWeaponMaterial                    u32   # the material "FX_Lazer Dot" PodAutoCannonWeapon_Startup gets
+0021FD98  var   PodParticleCannonWeaponMaterial                u32   # the material "FX_Lazer Dot" PodParticleCannonWeapon_Startup gets
+002201E8  var   ARMDTurretCannonWeaponMaterial                 u32   # the material "FX_Lazer Dot" ARMDTurretCannonWeapon_Startup gets
+002202D8  var   ZenReconShipCannonWeaponMaterial               u32   # the material "FX_Lazer Dot" ZenReconShipCannonWeapon_Startup gets
+002203C8  var   ZenCruiserTurret1CannonWeaponMaterial          u32   # the material "FX_Lazer Dot" ZenCruiserTurret1CannonWeapon_Startup gets
+002204B8  var   ZenCruiserTurretCannonWeaponMaterial           u32   # the material "FX_Lazer Dot" ZenCruiserTurretCannonWeapon_Startup gets
+002223A4  var   CompleteObjectiveActionSound                   u32   # a sound made of the vcSnd "LoadSave_Complete_S.wav" CompleteObjectiveAction_Startup gets
+00224554  var   RadarElementGuiBlipRedSceneObject              u32   # the first object of the scene "gui_blip_red" RadarElement_Startup gets
+00224558  var   RadarElementGuiBlipBlueSceneObject             u32   # the first object of the scene "gui_blip_blue" RadarElement_Startup gets
+0022455C  var   RadarElementGuiBlipGreenSceneObject            u32   # the first object of the scene "gui_blip_green" RadarElement_Startup gets
+00224560  var   RadarElementGuiBlipShadowSceneObject           u32   # the first object of the scene "gui_blip_shadow" RadarElement_Startup gets
+00224564  var   RadarElementFxStaticSceneObject                u32   # the first object of the scene "fx_static" RadarElement_Startup gets
+00224568  var   RadarElementGuiBlipYellowSceneObject           u32   # the first object of the scene "gui_blip_yellow" RadarElement_Startup gets
+002247CC  var   SmokeLight02EffectParticles                    u32   # the particle system "fx_smoke_light02" SmokeLight02Effect_Startup gets
+00224860  var   CyclopsDamageChunkEffectScene                  u32   # the scene "fx_cyclops_damage_chunk" CyclopsDamageChunkEffect_Startup gets
+002248E0  var   CharacterDamageChunksLargeWEffectScene         u32   # the scene "fx_character damage chunks_large_w" CharacterDamageChunksLargeWEffect_Startup gets
+00224960  var   CharacterDamageChunksMedWEffectScene           u32   # the scene "fx_character damage chunks_med_w" CharacterDamageChunksMedWEffect_Startup gets
+002249E0  var   CharacterDamageChunksSmallWEffectScene         u32   # the scene "fx_character damage chunks_small_w" CharacterDamageChunksSmallWEffect_Startup gets
+00224A60  var   CharacterDamageChunksLargeGEffectScene         u32   # the scene "fx_character damage chunks_large_g" CharacterDamageChunksLargeGEffect_Startup gets
+00224AE0  var   CharacterDamageChunksMedGEffectScene           u32   # the scene "fx_character damage chunks_med_g" CharacterDamageChunksMedGEffect_Startup gets
+00224B60  var   CharacterDamageChunksSmallGEffectScene         u32   # the scene "fx_character damage chunks_small_g" CharacterDamageChunksSmallGEffect_Startup gets
+00224BE0  var   CharacterDamageChunksLargeBEffectScene         u32   # the scene "fx_character damage chunks_large_b" CharacterDamageChunksLargeBEffect_Startup gets
+00224C60  var   CharacterDamageChunksMedBEffectScene           u32   # the scene "fx_character damage chunks_med_b" CharacterDamageChunksMedBEffect_Startup gets
+00224CE0  var   CharacterDamageChunksSmallBEffectScene         u32   # the scene "fx_character damage chunks_small_b" CharacterDamageChunksSmallBEffect_Startup gets
+00224D60  var   CharacterDamageChunksLargeEffectScene          u32   # the scene "fx_character damage chunks_large" CharacterDamageChunksLargeEffect_Startup gets
+00224DE0  var   CharacterDamageChunksMedEffectScene            u32   # the scene "fx_character damage chunks_med" CharacterDamageChunksMedEffect_Startup gets
+00224E60  var   CharacterDamageChunksSmallEffectScene          u32   # the scene "fx_character damage chunks_small" CharacterDamageChunksSmallEffect_Startup gets
+00224EE0  var   Chunk1LargeEffectScene                         u32   # the scene "Chunk1_lg" Chunk1LargeEffect_Startup gets
+00224F60  var   Chunk1MediumEffectScene                        u32   # the scene "Chunk1_md" Chunk1MediumEffect_Startup gets
+00224FE0  var   Chunk1SmallEffectScene                         u32   # the scene "Chunk1_sm" Chunk1SmallEffect_Startup gets
+002272A4  var   TrainingBeaconSceneObject                      u32   # the first object of the scene "training beacon" TrainingBeacon_Startup gets
+00227380  var   ZenCratesMunitionsPickupModel                  u32   # an object of the model "zen_crates_munitions_pickup" ZenCratesMunitionsPickup_Startup gets
+00227384  var   ZenCratesMunitionsPickupPickupNode             u32   # the number of the node "pickup node" ZenCratesMunitionsPickup_Startup gets
+002273DC  var   ZenCratesPickupModel                           u32   # an object of the model "zen_crates_pickup" ZenCratesPickup_Startup gets
+0022743C  var   NoseconePickupSceneObject                      u32   # the first object of the scene "nosecone_pickup" NoseconePickup_Startup gets
+00227494  var   SpyCapsuleSceneObject                          u32   # the first object of the scene "spy_capsule" SpyCapsule_Startup gets
+
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
 00026E80  func  gcLevel_Destroy                     # gcLevel's slot +38

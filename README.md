@@ -56,9 +56,11 @@ hand as it is decompiled (`src/game/`) and the names of `symbols/symbols.txt`.
 - [x] Every byte of the XBE classified (`tools/coverage.py`, `analysis/coverage.txt`): code, data whose
       layout is known, data the code reaches, fill, unknown. Of the game's own (its and the engine's code,
       and the data its code reaches in `.rdata` and `.data`), 1,237,883 bytes of code with none unknown;
-      104,939 of data described, 853,701 reached but not yet typed, 38,096 of fill and 3,841 unknown, all
+      105,747 of data described, 852,889 reached but not yet typed, 38,096 of fill and 3,845 unknown, all
       of them in its data; tables of records in place by their fields in the decompiled C (`Levels`, the
-      pads with a field for each control, the object system's families and types) (10-11-2026)
+      pads with a field for each control, the object system's families and types), the players and what
+      82 types get by name (their models, nodes, scenes, materials and sounds) by name; the decompiled C
+      reads or writes 14,778 places at a raw address (10-11-2026)
 - [x] Native sound: the 29 DirectSound entries the game and its Bink call answered on the host
       (`src/dsound_bridge.c`, with the XDK's own behaviour), the Xbox ADPCM decoded and mixed to 48 kHz
       stereo (`src/sound_mixer.c`) and played through xboxrecomp's audio output (XAudio2); the 3D is a

@@ -68,14 +68,14 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	sub_00024940(&ignored, &esi, &edi);
 	eax = sub_000248B0();
 	esi_2 = eax;
-	if (MEM32(0x1BC980u) != 0u)
+	if (Players(0) != 0u)
 	{
-		port = MEM32(0x1AECA0u);
+		port = PlayerPorts(0);
 		eax = vcPadIsOpen(port);
 		if (eax == 0u)
 		{
 			arg2 = eax;
-			arg1 = MEM32(0x1AECA0u);
+			arg1 = PlayerPorts(0);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
 			arg1 = 0x7EEu;
@@ -90,20 +90,20 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			arg1 = 0x1BC300u;
 			arg0 = 0u;
 			sub_00024460(arg0, arg1, arg2, arg3, &eax, &ebx, &ebp, &esi_2, &edi);
-			arg1 = MEM32(0x1AECA0u);
+			arg1 = PlayerPorts(0);
 			arg0 = eax;
 			MEM32(0x1E61F0u) = eax;
 			sub_00020950(arg0, arg1);
 		}
 	}
-	if (MEM32(0x1BC984u) != 0u)
+	if (Players(1) != 0u)
 	{
-		port = MEM32(0x1AECA4u);
+		port = PlayerPorts(1);
 		eax = vcPadIsOpen(port);
 		if (eax == 0u)
 		{
 			arg2 = eax;
-			arg1 = MEM32(0x1AECA4u);
+			arg1 = PlayerPorts(1);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
 			arg1 = 0x7EEu;
@@ -118,7 +118,7 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			arg1 = 0x1BC300u;
 			arg0 = 0u;
 			sub_00024460(arg0, arg1, arg2, arg3, &eax, &ebx, &ebp, &esi_2, &edi);
-			arg1 = MEM32(0x1AECA4u);
+			arg1 = PlayerPorts(1);
 			arg0 = eax;
 			MEM32(0x1E61F0u) = eax;
 			sub_00020950(arg0, arg1);
@@ -130,9 +130,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	{
 		if (MEM32(0x1BC470u) != 1u)
 		{
-			arg0 = MEM32(0x1BC980u);
+			arg0 = Players(0);
 			sub_000177B0(arg0);
-			eax = MEM32(0x1BC984u);
+			eax = Players(1);
 			if (eax != 0u)
 			{
 				arg0 = eax;
@@ -150,9 +150,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			if (MEM32(0x1BC760u) == 0u)
 			{
-				arg0 = MEM32(0x1BC980u);
+				arg0 = Players(0);
 				sub_000177B0(arg0);
-				eax = MEM32(0x1BC984u);
+				eax = Players(1);
 				if (eax != 0u)
 				{
 					arg0 = eax;
@@ -163,7 +163,7 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	}
 	else
 	{
-		eax = MEM32(0x1AECA0u);
+		eax = PlayerPorts(0);
 		MEM32(0x1BC414u) = 0u;
 		if ((int32_t)eax < 0)
 		{
@@ -175,9 +175,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				{
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax = MEM32(0x1BC984u);
+						eax = Players(1);
 						if (eax != 0u)
 						{
 							arg0 = eax;
@@ -191,9 +191,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 					sub_00011000(arg0);
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax = MEM32(0x1BC984u);
+						eax = Players(1);
 						if (eax != 0u)
 						{
 							arg0 = eax;
@@ -209,9 +209,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				{
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax = MEM32(0x1BC984u);
+						eax = Players(1);
 						if (eax != 0u)
 						{
 							arg0 = eax;
@@ -230,9 +230,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 					}
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax = MEM32(0x1BC984u);
+						eax = Players(1);
 						if (eax != 0u)
 						{
 							arg0 = eax;
@@ -256,9 +256,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				}
 				if (MEM32(0x1BC760u) == 0u)
 				{
-					arg0 = MEM32(0x1BC980u);
+					arg0 = Players(0);
 					sub_000177B0(arg0);
-					eax = MEM32(0x1BC984u);
+					eax = Players(1);
 					if (eax != 0u)
 					{
 						arg0 = eax;
@@ -281,9 +281,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				}
 				if (MEM32(0x1BC760u) == 0u)
 				{
-					arg0 = MEM32(0x1BC980u);
+					arg0 = Players(0);
 					sub_000177B0(arg0);
-					eax = MEM32(0x1BC984u);
+					eax = Players(1);
 					if (eax != 0u)
 					{
 						arg0 = eax;
@@ -304,13 +304,13 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	sub_000199C0(ecx);
 	x86_call(vcObjectReleaseQueued_entry, 0x000112D5u, 0);
 	ignored_3 = g_edx;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != 0u)
 	{
 		arg0 = eax;
 		sub_00017870(arg0, &ignored, &ebx, &ebp, &esi_2, &edi);
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != 0u)
 	{
 		arg0 = eax;
@@ -341,14 +341,14 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	sub_00024940(&ignored, &esi, &edi);
 	eax_2 = sub_000248B0();
 	esi_2 = eax_2;
-	if (MEM32(0x1BC980u) != 0u)
+	if (Players(0) != 0u)
 	{
-		port = MEM32(0x1AECA0u);
+		port = PlayerPorts(0);
 		eax_2 = vcPadIsOpen(port);
 		if (eax_2 == 0u)
 		{
 			arg2 = eax_2;
-			arg1 = MEM32(0x1AECA0u);
+			arg1 = PlayerPorts(0);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
 			arg1 = 0x7EEu;
@@ -363,20 +363,20 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			arg1 = 0x1BC300u;
 			arg0 = 0u;
 			sub_00024460(arg0, arg1, arg2, arg3, &eax_2, &ebx, &ebp, &esi_2, &edi);
-			arg1 = MEM32(0x1AECA0u);
+			arg1 = PlayerPorts(0);
 			arg0 = eax_2;
 			MEM32(0x1E61F0u) = eax_2;
 			sub_00020950(arg0, arg1);
 		}
 	}
-	if (MEM32(0x1BC984u) != 0u)
+	if (Players(1) != 0u)
 	{
-		port = MEM32(0x1AECA4u);
+		port = PlayerPorts(1);
 		eax_2 = vcPadIsOpen(port);
 		if (eax_2 == 0u)
 		{
 			arg2 = eax_2;
-			arg1 = MEM32(0x1AECA4u);
+			arg1 = PlayerPorts(1);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
 			arg1 = 0x7EEu;
@@ -391,7 +391,7 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			arg1 = 0x1BC300u;
 			arg0 = 0u;
 			sub_00024460(arg0, arg1, arg2, arg3, &eax_2, &ebx, &ebp, &esi_2, &edi);
-			arg1 = MEM32(0x1AECA4u);
+			arg1 = PlayerPorts(1);
 			arg0 = eax_2;
 			MEM32(0x1E61F0u) = eax_2;
 			sub_00020950(arg0, arg1);
@@ -403,9 +403,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	{
 		if (MEM32(0x1BC470u) != 1u)
 		{
-			arg0 = MEM32(0x1BC980u);
+			arg0 = Players(0);
 			sub_000177B0(arg0);
-			eax_2 = MEM32(0x1BC984u);
+			eax_2 = Players(1);
 			if (eax_2 != 0u)
 			{
 				arg0 = eax_2;
@@ -423,9 +423,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			if (MEM32(0x1BC760u) == 0u)
 			{
-				arg0 = MEM32(0x1BC980u);
+				arg0 = Players(0);
 				sub_000177B0(arg0);
-				eax_2 = MEM32(0x1BC984u);
+				eax_2 = Players(1);
 				if (eax_2 != 0u)
 				{
 					arg0 = eax_2;
@@ -436,7 +436,7 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	}
 	else
 	{
-		eax_2 = MEM32(0x1AECA0u);
+		eax_2 = PlayerPorts(0);
 		MEM32(0x1BC414u) = 0u;
 		if ((int32_t)eax_2 < 0)
 		{
@@ -448,9 +448,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				{
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax_2 = MEM32(0x1BC984u);
+						eax_2 = Players(1);
 						if (eax_2 != 0u)
 						{
 							arg0 = eax_2;
@@ -464,9 +464,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 					sub_00011000(arg0);
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax_2 = MEM32(0x1BC984u);
+						eax_2 = Players(1);
 						if (eax_2 != 0u)
 						{
 							arg0 = eax_2;
@@ -482,9 +482,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				{
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax_2 = MEM32(0x1BC984u);
+						eax_2 = Players(1);
 						if (eax_2 != 0u)
 						{
 							arg0 = eax_2;
@@ -503,9 +503,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 					}
 					if (MEM32(0x1BC760u) == 0u)
 					{
-						arg0 = MEM32(0x1BC980u);
+						arg0 = Players(0);
 						sub_000177B0(arg0);
-						eax_2 = MEM32(0x1BC984u);
+						eax_2 = Players(1);
 						if (eax_2 != 0u)
 						{
 							arg0 = eax_2;
@@ -529,9 +529,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				}
 				if (MEM32(0x1BC760u) == 0u)
 				{
-					arg0 = MEM32(0x1BC980u);
+					arg0 = Players(0);
 					sub_000177B0(arg0);
-					eax_2 = MEM32(0x1BC984u);
+					eax_2 = Players(1);
 					if (eax_2 != 0u)
 					{
 						arg0 = eax_2;
@@ -554,9 +554,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				}
 				if (MEM32(0x1BC760u) == 0u)
 				{
-					arg0 = MEM32(0x1BC980u);
+					arg0 = Players(0);
 					sub_000177B0(arg0);
-					eax_2 = MEM32(0x1BC984u);
+					eax_2 = Players(1);
 					if (eax_2 != 0u)
 					{
 						arg0 = eax_2;
@@ -577,13 +577,13 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	sub_000199C0(ecx);
 	x86_call(vcObjectReleaseQueued_entry, 0x000112D5u, 0);
 	ignored_3 = g_edx;
-	eax_2 = MEM32(0x1BC980u);
+	eax_2 = Players(0);
 	if (eax_2 != 0u)
 	{
 		arg0 = eax_2;
 		sub_00017870(arg0, &ignored, &ebx, &ebp, &esi_2, &edi);
 	}
-	eax_2 = MEM32(0x1BC984u);
+	eax_2 = Players(1);
 	if (eax_2 != 0u)
 	{
 		arg0 = eax_2;
@@ -663,19 +663,19 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	}
 	arg0 = esi;
 	sub_00112D70(arg0);
-	eax = MEM32(0x1BC990u);
+	eax = PlayerCount;
 	MEM32(0x1BC470u) = esi;
 	MEM32(0x1E6308u) = esi;
 	MEM32(0x1B09B0u) = 1u;
 	MEM32(0x1AEC8Cu) = 0xFFFFFFFFu;
-	if (eax != 2u || MEM32(0x1BC984u) == esi)
+	if (eax != 2u || Players(1) == esi)
 	{
 		arg0 = 1u;
 		sub_0010E490(arg0);
 	}
 	else
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax != GameObjectLastHandle)
 		{
 			handle = eax;
@@ -686,7 +686,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg1 = esi;
 		arg0 = eax + 0x50u;
 		sub_00022910(arg0, arg1, &ignored, &ebx, &ebp, &esi, &edi);
-		eax = MEM32(0x1BC984u);
+		eax = Players(1);
 		if (eax != GameObjectLastHandle)
 		{
 			handle = eax;
@@ -697,7 +697,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg1 = esi;
 		arg0 = eax + 0x50u;
 		sub_00022910(arg0, arg1, &ignored, &ebx, &ebp, &esi, &edi);
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax != GameObjectLastHandle)
 		{
 			handle = eax;
@@ -708,7 +708,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg1 = esi;
 		arg0 = MEM32(eax + 0x39Cu);
 		sub_0002A270(arg0, arg1);
-		eax = MEM32(0x1BC984u);
+		eax = Players(1);
 		if (eax != GameObjectLastHandle)
 		{
 			handle = eax;
@@ -772,8 +772,8 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	g_edi = edi;
 	x86_call(GameObjectsDestroyAll, 0x000118C5u, 0);
 	GameObjectClearQueue();
-	MEM32(0x1BC984u) = esi;
-	MEM32(0x1BC980u) = esi;
+	Players(1) = esi;
+	Players(0) = esi;
 	sub_00027BA0();
 	return sub_0001E6E0();
 }
@@ -1880,14 +1880,14 @@ void sub_00016EF0(uint32_t arg0)
 	sub_0010F9C0(&ignored_3, &ignored_2);
 	arg0_2 = ebp;
 	sub_0010F9F0(arg0_2, &ignored_3, &ignored, &ignored_2);
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	if (ecx == ebp)
 		return;
 	if (ecx != GameObjectLastHandle)
 	{
 		handle = ecx;
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 	}
 	else
 		eax = GameObjectLastObject;
@@ -2613,7 +2613,7 @@ void sub_00017700(void)
 	Player_Register(arg0);
 	arg1 = PlayerFamily_VA;
 	arg0 = 1u;
-	MEM32(0x1BC990u) = 0u;
+	PlayerCount = 0u;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &ignored_2);
 }
 
@@ -2678,7 +2678,7 @@ uint32_t sub_000177E0(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 	else
 		edi = GameObjectLastObject;
 	esi = 0u;
-	if ((int32_t)MEM32(0x1BC990u) <= 1 || MEM32(edi + 0x54u) != 3u)
+	if (PlayerCount <= 1 || MEM32(edi + 0x54u) != 3u)
 	{
 		edi += 0x50u;
 		arg0_2 = edi;
@@ -2931,7 +2931,7 @@ void sub_000179E0(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 	g_esp = g_esp + 4u;
 	if (eax != 0u)
 	{
-		MEM32(0x1BC990u) = MEM32(0x1BC990u) + 1u;
+		PlayerCount = PlayerCount + 1u;
 		g_esp = g_esp + 0x48u;
 		g_esp = g_esp + 0xCu;
 		*p_eax = eax;
@@ -3072,7 +3072,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		MEM32(g_esp) = edx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		MEM32(ebx_2 * 4u + 0x1BC980u) = eax;
+		Players(ebx_2) = eax;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2 = MEM32(g_esp + 8u);
@@ -3096,7 +3096,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		MEM32(g_esp) = *p_edi;
 		x86_rep_stos32(g_esp + 0x1Cu, 0u, 0x17u);
 		MEM32(g_esp + 0x50u) = 0u;
-		MEM32(g_esp + 0x58u) = MEM32(ebx_2 * 4u + 0x1BC980u);
+		MEM32(g_esp + 0x58u) = Players(ebx_2);
 		eax = MEM32(ebx_2 * 4u + 0x1EB94Cu);
 		MEM32(g_esp + 0x7Cu) = ebp_2;
 		MEM32(g_esp + 0x64u) = eax;
@@ -3298,7 +3298,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		else
 			edi = GameObjectLastObject;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(ebx_2 * 4u + 0x1BC980u);
+		MEM32(g_esp) = Players(ebx_2);
 		arg0_2 = MEM32(g_esp);
 		f0 = sub_0003E8C0(arg0_2);
 		MEMF(edi + 0x260u) = (float)f0;
@@ -3321,9 +3321,9 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		eax = sub_000269D0();
 		if (eax == 0u)
 		{
-			ecx = MEM32(ebx_2 * 4u + 0x1BC980u);
+			ecx = Players(ebx_2);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(ebx_2 * 4u + 0x1AECA0u);
+			MEM32(g_esp) = PlayerPorts(ebx_2);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2;
 			g_esp = g_esp - 4u;
@@ -3331,9 +3331,9 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		}
 		else
 		{
-			edx = MEM32(ebx_2 * 4u + 0x1BC980u);
+			edx = Players(ebx_2);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(ebx_2 * 4u + 0x1AECA0u) + 4u;
+			MEM32(g_esp) = PlayerPorts(ebx_2) + 4u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2;
 			g_esp = g_esp - 4u;
@@ -3389,7 +3389,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2 = MEM32(g_esp + 8u);
 		sub_0002A490(arg1_2, arg2);
-		eax = MEM32(ebx_2 * 4u + 0x1BC980u);
+		eax = Players(ebx_2);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
@@ -3408,7 +3408,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		g_esp = g_esp + 4u;
 		if (eax != 0u)
 			MEM32(ebx_2 * 4u + 0x1BC988u) = eax;
-		ecx = MEM32(ebx_2 * 4u + 0x1BC980u);
+		ecx = Players(ebx_2);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
@@ -3416,7 +3416,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_00022E00(edx, ebp_2, arg0_2, arg1_2, &ebx_2, &esi_2, p_edi);
-		ebx_2 = MEM32(ebx_2 * 4u + 0x1BC980u);
+		ebx_2 = Players(ebx_2);
 		g_esp = g_esp + 8u;
 		if (ebx_2 != GameObjectLastHandle)
 		{
@@ -4394,7 +4394,7 @@ uint32_t sub_00018C10(uint32_t eax)
 	if (esi == 0u)
 		return eax;
 	edi = MEM32(esi);
-	if ((int32_t)MEM32(0x1BC990u) <= 1)
+	if (PlayerCount <= 1)
 	{
 		f0 = x87_round(x87_round(FLOAT_AT(MEM32(edi + 4u)) * 0.033f) + FLOAT_AT(esi + 0x174u));
 		MEMF(esi + 0x174u) = (float)f0;
@@ -5304,7 +5304,7 @@ void sub_000197D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					*p_eax = eax;
 					return;
 				}
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 				if (ecx != 0u)
 				{
 					if (ecx != GameObjectLastHandle)
@@ -5313,7 +5313,7 @@ void sub_000197D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 						MEM32(g_esp) = ecx;
 						handle = MEM32(g_esp);
 						GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-						ecx = MEM32(0x1BC980u);
+						ecx = Players(0);
 						g_esp = g_esp + 4u;
 					}
 					else
@@ -6407,7 +6407,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	MEM32(g_esp + 0x24u) = ebx_2;
 	MEM32(g_esp + 0x18u) = 0u;
 	MEMF(g_esp + 0x1Cu) = (float)f0;
-	if (edx == 0x40000u && (int32_t)MEM32(0x1BC990u) < 2)
+	if (edx == 0x40000u && PlayerCount < 2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 1u;
@@ -6427,7 +6427,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(esi_2 + 8u) = ebp_2;
 		}
 	}
-	if ((int32_t)MEM32(0x1BC990u) <= 1 || MEM32(0x1BC6C0u) == ebp_2 || MEM32(esi_2 + 4u) == MEM32(g_esp + 0x60u))
+	if (PlayerCount <= 1 || MEM32(0x1BC6C0u) == ebp_2 || MEM32(esi_2 + 4u) == MEM32(g_esp + 0x60u))
 	{
 		if ((int8_t)(MEM32(edi_2 + 4u) >> 8) < 0)
 		{
@@ -6656,8 +6656,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		esi_2 = MEM32(g_esp + 0x68u);
 		ebx_2 = MEM32(g_esp + 0x70u);
 		g_esp = g_esp + 8u;
-		edx = MEM32(0x1BC984u);
-		ecx = MEM32(0x1BC980u);
+		edx = Players(1);
+		ecx = Players(0);
 	}
 	else
 	{
@@ -6717,7 +6717,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				g_esp = g_esp + 0xCu;
 			}
 		}
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		if (ecx != 0u)
 		{
 			if (ecx != GameObjectLastHandle)
@@ -6726,7 +6726,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = ecx;
 				handle = MEM32(g_esp);
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 				g_esp = g_esp + 4u;
 			}
 			else
@@ -6746,7 +6746,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					arg1_2 = MEM32(g_esp + 4u);
 					arg2_2 = MEM32(g_esp + 8u);
 					sub_000305E0(arg0_2, arg1_2, arg2_2);
-					ecx = MEM32(0x1BC980u);
+					ecx = Players(0);
 					g_esp = g_esp + 0xCu;
 				}
 			}
@@ -6758,7 +6758,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 			MEM32(g_esp) = eax;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			g_esp = g_esp + 4u;
 		}
 		else
@@ -6772,7 +6772,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = eax;
 				handle = MEM32(g_esp);
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 				g_esp = g_esp + 4u;
 			}
 			else
@@ -6792,12 +6792,12 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					arg1_2 = MEM32(g_esp + 4u);
 					arg2_2 = MEM32(g_esp + 8u);
 					sub_000305E0(arg0_2, arg1_2, arg2_2);
-					ecx = MEM32(0x1BC980u);
+					ecx = Players(0);
 					g_esp = g_esp + 0xCu;
 				}
 			}
 		}
-		edx = MEM32(0x1BC984u);
+		edx = Players(1);
 		if (ecx != 0u && edx != 0u && MEM32(ebx_2 + 4u) != esi_2)
 		{
 			if (ecx != GameObjectLastHandle)
@@ -6806,8 +6806,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = ecx;
 				handle = MEM32(g_esp);
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1BC984u);
-				ecx = MEM32(0x1BC980u);
+				edx = Players(1);
+				ecx = Players(0);
 				g_esp = g_esp + 4u;
 			}
 			else
@@ -6820,8 +6820,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = edx;
 					handle = MEM32(g_esp);
 					GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-					edx = MEM32(0x1BC984u);
-					ecx = MEM32(0x1BC980u);
+					edx = Players(1);
+					ecx = Players(0);
 					g_esp = g_esp + 4u;
 				}
 				else
@@ -6860,8 +6860,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					arg2_2 = MEM32(g_esp + 8u);
 					sub_000305E0(arg0_2, arg1_2, arg2_2);
 					g_esp = g_esp + 0xCu;
-					edx = MEM32(0x1BC984u);
-					ecx = MEM32(0x1BC980u);
+					edx = Players(1);
+					ecx = Players(0);
 				}
 			}
 			else
@@ -6898,15 +6898,15 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				arg2_2 = MEM32(g_esp + 8u);
 				sub_000305E0(arg0_2, arg1_2, arg2_2);
 				g_esp = g_esp + 0xCu;
-				edx = MEM32(0x1BC984u);
-				ecx = MEM32(0x1BC980u);
+				edx = Players(1);
+				ecx = Players(0);
 			}
 		}
 	}
 	eax = MEM32(g_esp + 0x24u);
 	if ((eax != 0u && MEM32(g_esp + 0x14u) == MEM32(eax)) || (MEM32(g_esp + 0x18u) != 0u && (MEM8(ebx_2) & 2u) != 0u))
 	{
-		if ((int32_t)MEM32(0x1BC990u) > 1)
+		if (PlayerCount > 1)
 		{
 			eax = MEM32(edi_2 + 0x18Cu);
 			if (eax != ecx)
@@ -6948,8 +6948,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		MEM32(g_esp) = esi_2;
 		handle = MEM32(g_esp);
 		GameObjectDestroy(handle, &ignored_3, &ignored, &ignored_2);
-		edx = MEM32(0x1BC984u);
-		ecx = MEM32(0x1BC980u);
+		edx = Players(1);
+		ecx = Players(0);
 		g_esp = g_esp + 4u;
 	}
 	eax_2 = (uint8_t)MEM32(ebx_2);
@@ -6993,7 +6993,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = ecx;
 				handle = MEM32(g_esp);
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1BC984u);
+				edx = Players(1);
 				g_esp = g_esp + 4u;
 			}
 			else
@@ -7084,7 +7084,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = ecx;
 				handle = MEM32(g_esp);
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-				edx = MEM32(0x1BC984u);
+				edx = Players(1);
 				g_esp = g_esp + 4u;
 			}
 			else
@@ -8225,7 +8225,7 @@ void sub_0001B820(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	}
 	if ((MEM32(esi_2 + 4u) & ebx_2) != 0u && MEM32(0x2AEB34u) == 0u && edi_2 == 0u)
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax == 0u)
 			eax = 0u;
 		else if (eax != GameObjectLastHandle)
@@ -8241,7 +8241,7 @@ void sub_0001B820(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 			eax = MEM32(GameObjectLastObject + 0x44u);
 		zero = MEM32(g_esp + 0x88u) - eax == 0u;
 		f0 = x87_cos(x87_round(7e+01 * 0.017453292f));
-		ecx = MEM32((zero == 0u) * 4u + 0x1BC980u);
+		ecx = Players(zero == 0u);
 		if (!(x87_cos(x87_round(8e+01 * 0.017453292f)) < FLOAT_AT(g_esp + 0x14u)))
 		{
 			if (FLOAT_AT(g_esp + 0x14u) > f0)
@@ -8395,7 +8395,7 @@ void sub_0001B820(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 			sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6_2, &ignored_3, &ignored, &edi_2);
 			g_esp = g_esp + 0x1Cu;
 		}
-		if (MEM32(g_esp + 0x18u) != 0u && (int32_t)MEM32(0x1BC990u) < (int32_t)ebx_2)
+		if (MEM32(g_esp + 0x18u) != 0u && PlayerCount < (int32_t)ebx_2)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
@@ -13092,12 +13092,12 @@ void sub_0001F820(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 				}
 			}
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1BC980u);
+			MEM32(g_esp) = Players(0);
 			eax_2 = x86_call(sub_0009C6E0, 0x0001F895u, 0);
 			g_esp = g_esp + 4u;
 			if (eax_2 != 0u)
 			{
-				eax_2 = MEM32(0x1BC980u);
+				eax_2 = Players(0);
 				if (eax_2 != GameObjectLastHandle)
 				{
 					g_esp = g_esp - 4u;
@@ -13132,12 +13132,12 @@ void sub_0001F820(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 				g_esp = g_esp + 8u;
 			}
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1BC984u);
+			MEM32(g_esp) = Players(1);
 			eax_2 = x86_call(sub_0009C6E0, 0x0001F8FDu, 0);
 			g_esp = g_esp + 4u;
 			if (eax_2 != 0u)
 			{
-				eax_2 = MEM32(0x1BC984u);
+				eax_2 = Players(1);
 				if (eax_2 != GameObjectLastHandle)
 				{
 					g_esp = g_esp - 4u;
@@ -13708,8 +13708,8 @@ uint32_t sub_0001FEF0(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_edi = edi;
 	x86_call(GameObjectsDestroyAll, 0x0001FF49u, 0);
 	GameObjectClearQueue();
-	MEM32(0x1BC984u) = 0u;
-	MEM32(0x1BC980u) = 0u;
+	Players(1) = 0u;
+	Players(0) = 0u;
 	sub_00027BA0();
 	sub_0001E6E0();
 	return edi;
@@ -13723,7 +13723,7 @@ uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 0x24u;
 	vcPadUpdate(ebx, ebp, esi, edi);
 	sub_00024940(&ignored, &esi, &edi);
-	if (MEM32(0x1BC980u) == 0u)
+	if (Players(0) == 0u)
 		GameObjectsUpdate(&ignored, &ignored_2, &ignored_3, &ebx, &ebp, &esi, &edi);
 	else
 	{
@@ -13733,7 +13733,7 @@ uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		else
 		{
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1BC980u);
+			MEM32(g_esp) = Players(0);
 			arg0 = MEM32(g_esp);
 			sub_000177B0(arg0);
 			g_esp = g_esp + 4u;
@@ -13777,13 +13777,13 @@ uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			MEM32(0x23A488u) = eax;
 	}
 	x86_call(vcObjectReleaseQueued_entry, 0x0002000Cu, 0);
-	if (MEM32(0x1BC980u) != 0u)
+	if (Players(0) != 0u)
 	{
 		eax = sub_000269D0();
 		if (eax != 0u)
 		{
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1BC980u);
+			MEM32(g_esp) = Players(0);
 			arg0 = MEM32(g_esp);
 			sub_00017870(arg0, &ignored, &ebx, &ebp, &esi, &edi);
 			ecx = MEM32(0x1E61E4u);
@@ -13796,7 +13796,7 @@ uint32_t sub_0001FF70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				sub_0010EA80(ebx, ebp, esi_2, edi, &eax, &ignored_3);
 				return eax;
 			}
-			eax = MEM32(0x1BC980u);
+			eax = Players(0);
 			if (eax != GameObjectLastHandle)
 			{
 				g_esp = g_esp - 4u;
@@ -13913,7 +13913,7 @@ uint32_t sub_00020120(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	}
 	if (MEM32(esi + 0x18u) != 0xFFFFFFFFu)
 		sub_000358A0(&ignored_3, &ebx, &ebp, &edi);
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != 0u)
 	{
 		arg0 = eax;
@@ -15305,7 +15305,7 @@ void sub_00021080(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	arg0_2 = MEM32(g_esp);
 	sub_00113ED0(arg0_2);
 	g_esp = g_esp + 0xCu;
-	if ((int32_t)MEM32(0x1BC990u) <= 1)
+	if (PlayerCount <= 1)
 	{
 		edx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
@@ -15359,7 +15359,7 @@ void sub_00021080(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 				arg3 = MEM32(g_esp + 0xCu);
 				arg4 = MEM32(g_esp + 0x10u);
 				sub_00112FF0(arg0_2, arg1, arg2, arg3, arg4);
-				eax = MEM32(0x1BC984u);
+				eax = Players(1);
 				g_esp = g_esp + 0x14u;
 				if (MEM32(esi_2 + 8u) != eax)
 				{
@@ -15438,7 +15438,7 @@ void sub_00021080(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	if (MEM32(esi_2 + 4u) != 3u)
 	{
 		eax = MEM32(esi_2 + 0x344u);
-		if (eax != 0u && MEM32(0x1BC984u) == 0u)
+		if (eax != 0u && Players(1) == 0u)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
@@ -15583,7 +15583,7 @@ void sub_00021080(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	{
 		if (MEM32(0x1E61ECu) != 0u)
 		{
-			eax = MEM32(0x1BC984u);
+			eax = Players(1);
 			if (eax == 0u || MEM32(esi_2 + 8u) == eax)
 			{
 				edx = g_esp + 0xCu;
@@ -15655,7 +15655,7 @@ void sub_00021080(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2);
 	sub_00113110();
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	g_esp = g_esp + 0xCu;
 	if (eax == 0u || MEM32(esi_2 + 8u) == eax)
 	{
@@ -15831,7 +15831,7 @@ void sub_000213A0(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t *p_ebp, u
 	MEMF(eax + 4u) = (float)f1;
 	MEMF(eax + 8u) = (float)t2;
 	f0 = x87_round(FLOAT_AT(MEM32(MEM32(edx) + 0xC4u)) + FLOAT_AT(ebp_2 + 0xCu));
-	if (MEM32(0x1BC984u) != 0u)
+	if (Players(1) != 0u)
 		f0 = x87_round(f0 + f0);
 	if (fabs(x87_round(FLOAT_AT(ebp_2 + 0x2ECu) - f0)) > 1.0)
 	{
@@ -17418,7 +17418,7 @@ void sub_00022910(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 			eax = edx;
 		if (eax != ebx_2)
 		{
-			if ((int32_t)MEM32(0x1BC990u) > 1)
+			if (PlayerCount > 1)
 			{
 				ecx = g_esp + 0x18u;
 				g_esp = g_esp - 4u;
@@ -17426,7 +17426,7 @@ void sub_00022910(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 				x86_call(vcScreenGetRect_entry, 0x00022998u, 0);
 				edx = MEM32(esi_2 + 8u);
 				g_esp = g_esp + 4u;
-				if (edx == MEM32(0x1BC980u))
+				if (edx == Players(0))
 				{
 					ecx = MEM32(esi_2);
 					eax = MEM32(ecx + 0x2CCu);
@@ -17437,7 +17437,7 @@ void sub_00022910(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 						L_0229EB = true;
 					}
 				}
-				if (L_0229EB || edx == MEM32(0x1BC984u))
+				if (L_0229EB || edx == Players(1))
 				{
 					if (!L_0229EB)
 					{
@@ -17555,7 +17555,7 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
-	eax = MEM32(0x1BC990u);
+	eax = PlayerCount;
 	g_esp = g_esp - 0x88u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
@@ -17567,7 +17567,7 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		MEM32(g_esp) = eax;
 		x86_call(vcScreenGetRect_entry, 0x00022AE0u, 0);
 		g_esp = g_esp + 4u;
-		t1 = MEM32(MEM32(0x1AEC8Cu) * 4u + 0x1BC980u);
+		t1 = Players(MEM32(0x1AEC8Cu));
 		eax = MEM32(esi_2);
 		if (MEM32(esi_2 + 8u) != t1)
 		{
@@ -17834,7 +17834,7 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			esi_2 = MEM32(esi_2 + 8u);
 			g_esp = g_esp + 0xCu;
 			eax = 0u;
-			if (esi_2 != MEM32(0x1BC980u) && esi_2 == MEM32(0x1BC984u))
+			if (esi_2 != Players(0) && esi_2 == Players(1))
 				eax = 1u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -17998,11 +17998,11 @@ void sub_00022E00(uint32_t edx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		x86_call(vcScreenGetRect_entry, 0x00022F0Bu, 0);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		g_esp = g_esp + 4u;
 		if (ecx != edi)
 		{
-			edx_2 = MEM32(0x1BC984u);
+			edx_2 = Players(1);
 			if (edx_2 != edi)
 			{
 				eax = MEM32(esi + 8u);
@@ -19546,7 +19546,7 @@ void sub_00024060(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx)
 	}
 	if (MEM32(0x20FAB8u) == 0u)
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax != 0u)
 		{
 			if (eax != GameObjectLastHandle)
@@ -19570,7 +19570,7 @@ void sub_00024060(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx)
 			arg1 = edi;
 			arg0_2 = ebx;
 			sub_0010E4A0(arg0_2, arg1, arg2);
-			eax = MEM32(0x1BC980u);
+			eax = Players(0);
 			*p_ebx = stack;
 			if (eax != GameObjectLastHandle)
 			{
@@ -20247,7 +20247,7 @@ void sub_000245D0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		x86_rep_stos32(g_esp + 0xCu, 0u, 9u);
 		*p_edi = MEM32(g_esp);
 		g_esp = g_esp + 4u;
-		if ((int32_t)MEM32(0x1BC990u) <= 1)
+		if (PlayerCount <= 1)
 		{
 			esi_2 = MEM32(g_esp + 0x38u);
 			carry = esi_2 != 0u;
@@ -20623,7 +20623,7 @@ uint32_t sub_00024AB0(uint32_t arg0, uint32_t arg1)
 	eax = arg1;
 	if ((int32_t)eax < 0)
 	{
-		edx = MEM32(0x1BC990u);
+		edx = PlayerCount;
 		overflow = x86_overflow_sub32(edx, 2u, 0u);
 		negative = (edx - 2u) >> 31;
 		eax = ((((negative ^ overflow) == 0u) - 1u) & ~0x6D5u) + 0x128Eu;
@@ -20750,7 +20750,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 	uint32_t arg0 = 0, eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	if ((int32_t)MEM32(0x1BC990u) >= 2)
+	if (PlayerCount >= 2)
 	{
 		arg0 = 0x41u;
 		eax = sub_000304F0(arg0);
@@ -20766,7 +20766,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 				*p_ecx = ecx;
 				return;
 			}
-			eax = MEM32(0x1BC984u);
+			eax = Players(1);
 			MEM32(0x1AEC8Cu) = 1u;
 			if (eax == 0u)
 				eax = 0u;
@@ -20792,7 +20792,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 		}
 		else
 		{
-			eax = MEM32(0x1BC980u);
+			eax = Players(0);
 			MEM32(0x1AEC8Cu) = 0u;
 			if (eax == 0u)
 				eax = 0u;
@@ -20825,7 +20825,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 		*p_ecx = ecx;
 		return;
 	}
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -20855,7 +20855,7 @@ uint32_t sub_00024BB9(void)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -20905,7 +20905,7 @@ uint32_t sub_00024CD0(void)
 {
 	uint32_t arg0 = 0, eax = 0, ebx = 0, ecx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
-	esi = 0x1BC980u;
+	esi = Players_VA;
 	ebx = 0u;
 	do
 	{
@@ -20965,14 +20965,14 @@ uint32_t sub_00024D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
 		MEM32(0x1E62F4u) = esi;
 		MEM32(0x1E6310u) = esi;
 	}
-	if ((int32_t)MEM32(0x1BC990u) >= 2)
+	if (PlayerCount >= 2)
 	{
 		if (eax != esi)
 		{
 			eax = MEM32(0x1E62F8u);
 			if (eax < vcGameTime)
 			{
-				eax = MEM32(0x1BC984u);
+				eax = Players(1);
 				if (eax == esi || MEM32(arg0 + 8u) == eax)
 				{
 					paused = esi;
@@ -20986,7 +20986,7 @@ uint32_t sub_00024D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
 		}
 		return eax;
 	}
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -21016,7 +21016,7 @@ uint32_t sub_00024D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
 		MEM32(0x1E62F0u) = esi;
 		return eax;
 	}
-	arg0_2 = MEM32(0x1BC980u);
+	arg0_2 = Players(0);
 	x86_call(sub_0009C6E0, 0x00024DF5u, 1, arg0_2);
 	eax = g_eax;
 	ignored = g_ecx;
@@ -21040,7 +21040,7 @@ uint32_t sub_00024D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
 	MEM32(0x1E6310u) = 1u;
 	GameObjectPauseFamily(family, paused, &ignored_3, &ignored_2);
 	arg2 = 1u;
-	arg1 = MEM32(0x1AECA0u);
+	arg1 = PlayerPorts(0);
 	arg0_2 = 1u;
 	sub_000245D0(arg0_2, arg1, arg2, &eax, &ebx, &esi, &edi);
 	return eax;
@@ -21067,7 +21067,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 		*p_ecx = ecx_2;
 		return;
 	}
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -21082,7 +21082,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	MEM32(g_esp) = eax;
 	arg0_2 = MEM32(g_esp);
 	sub_00024B00(arg0_2, &ignored_3, p_ebx, p_ebp, p_esi, p_edi);
-	ecx_2 = MEM32(0x1BC980u);
+	ecx_2 = Players(0);
 	g_esp = g_esp + 4u;
 	MEM32(g_esp) = 0u;
 	if (ecx_2 == 0u)
@@ -21093,7 +21093,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 		MEM32(g_esp) = ecx_2;
 		handle = MEM32(g_esp);
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-		ecx_2 = MEM32(0x1BC980u);
+		ecx_2 = Players(0);
 		eax = MEM32(eax + 0x44u);
 		g_esp = g_esp + 4u;
 	}
@@ -21111,7 +21111,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x3E8u;
 	x86_call(GameObjectSendMessage, 0x00024F31u, 0);
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	g_esp = g_esp + 0x14u;
 	if (eax != 0u)
 	{
@@ -21129,7 +21129,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
 		sub_00024B00(arg0_2, &ignored_3, p_ebx, p_ebp, p_esi, p_edi);
-		ecx_2 = MEM32(0x1BC984u);
+		ecx_2 = Players(1);
 		g_esp = g_esp + 4u;
 		if (ecx_2 == 0u)
 			eax = 0u;
@@ -21139,7 +21139,7 @@ void sub_00024EB0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 			MEM32(g_esp) = ecx_2;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-			ecx_2 = MEM32(0x1BC984u);
+			ecx_2 = Players(1);
 			eax = MEM32(eax + 0x44u);
 			g_esp = g_esp + 4u;
 		}
@@ -21856,7 +21856,7 @@ void sub_00025720(uint32_t *p_eax, uint32_t *p_edx)
 			} while (ecx != 0u);
 		}
 	}
-	arg0 = MEM32(0x1BC980u);
+	arg0 = Players(0);
 	g_edx = *p_edx;
 	x86_call(sub_0009C6E0, 0x00025778u, 1, arg0);
 	eax = g_eax;
@@ -22925,7 +22925,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 0xCu;
 	MEM32(g_esp + 4u) = arg0;
 	MEM32(g_esp + 8u) = arg1;
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
@@ -22936,7 +22936,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		MEM32(g_esp) = ecx;
 		handle = MEM32(g_esp);
 		GameObjectFromHandle(handle, &eax_2, &ignored, &ignored_2);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		g_esp = g_esp + 4u;
 	}
 	else
@@ -22949,7 +22949,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		MEM32(g_esp) = ecx;
 		handle = MEM32(g_esp);
 		GameObjectFromHandle(handle, &eax_2, &ignored, &ignored_2);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		g_esp = g_esp + 4u;
 	}
 	else
@@ -24375,7 +24375,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	MEM32(0x1E64F0u) = esi_2;
-	MEM32(0x1BC990u) = esi_2;
+	PlayerCount = esi_2;
 	x86_call(vcRandomReset_entry, 0x000273F5u, 0);
 	sub_0002D4B0();
 	edi_2 = MEM32(g_esp + 0xD0u);
@@ -25802,7 +25802,7 @@ void sub_00028180(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 		if (ebp_2 != 0u)
 		{
 			eax = MEM32(ebp_2 + 0x18Cu);
-			if (eax == MEM32(0x1BC980u))
+			if (eax == Players(0))
 			{
 				eax = MEM32(0x1E6824u) + esi_2;
 				ebp_2 = MEM32(g_esp);
@@ -25820,7 +25820,7 @@ void sub_00028180(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 				*p_esi = esi_2;
 				return;
 			}
-			if (eax == MEM32(0x1BC984u))
+			if (eax == Players(1))
 			{
 				eax = MEM32(0x1E6828u) + esi_2;
 				ebp_2 = MEM32(g_esp);
@@ -26141,9 +26141,9 @@ void sub_00028510(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint
 				ecx = GameObjectLastObject;
 			if (ecx != 0u)
 			{
-				if (MEM32(ecx + 0x18Cu) == MEM32(0x1BC980u))
+				if (MEM32(ecx + 0x18Cu) == Players(0))
 					MEM32(0x1E6834u) = MEM32(0x1E6834u) + esi_2;
-				if (MEM32(ecx + 0x18Cu) == MEM32(0x1BC984u))
+				if (MEM32(ecx + 0x18Cu) == Players(1))
 					MEM32(0x1E6838u) = MEM32(0x1E6838u) + esi_2;
 			}
 		}
@@ -26212,9 +26212,9 @@ void sub_00028510(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint
 					ecx = GameObjectLastObject;
 				if (ecx != 0u)
 				{
-					if (MEM32(ecx + 0x18Cu) == MEM32(0x1BC980u))
+					if (MEM32(ecx + 0x18Cu) == Players(0))
 						MEM32(0x1E6834u) = MEM32(0x1E6834u) + esi_2;
-					if (MEM32(ecx + 0x18Cu) == MEM32(0x1BC984u))
+					if (MEM32(ecx + 0x18Cu) == Players(1))
 						MEM32(0x1E6838u) = MEM32(0x1E6838u) + esi_2;
 				}
 			}
@@ -27901,7 +27901,7 @@ void sub_00029A20(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	saved_arg4 = arg4;
-	eax = MEM32(arg0 * 4u + 0x1BC980u);
+	eax = Players(arg0);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -27943,7 +27943,7 @@ void sub_00029A80(uint32_t arg0, uint32_t arg1)
 	uint32_t saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	eax = MEM32(arg0 * 4u + 0x1BC980u);
+	eax = Players(arg0);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -28056,7 +28056,7 @@ void sub_00029AE0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	MEM32(g_esp) = edx;
 	x86_call(vcRectCopy_entry, 0x00029B2Au, 0);
 	g_esp = g_esp + 0x10u;
-	if (MEM32(ebp_2 + 0x17Cu) == MEM32(0x1BC980u))
+	if (MEM32(ebp_2 + 0x17Cu) == Players(0))
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(0x2BF2F4u) - 0xAu;
@@ -29677,11 +29677,11 @@ void sub_0002AA00(uint32_t *p_eax, uint32_t *p_edx)
 						}
 						else
 						{
-							eax = MEM32(0x1BC980u);
+							eax = Players(0);
 							edi = 0u;
 							if (eax != 0u && MEM32(ebx + 0x18Cu) == eax)
 								edi = 1u;
-							eax = MEM32(0x1BC984u);
+							eax = Players(1);
 							if (eax != 0u && MEM32(ebx + 0x18Cu) == eax)
 								edi = 1u;
 							arg0 = esi;
@@ -30058,7 +30058,7 @@ void sub_0002AE30(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		return;
 	}
 	eax = 1u;
-	if ((int32_t)MEM32(0x1BC990u) <= 1 || MEM32(0x1BC6B0u) == 0u)
+	if (PlayerCount <= 1 || MEM32(0x1BC6B0u) == 0u)
 	{
 		if (MEM32(edi_2 + 0x184u) != eax)
 		{
@@ -30516,7 +30516,7 @@ void sub_0002B240(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 		*p_edi = edi_2;
 		return;
 	}
-	eax = MEM32(0x1BC990u);
+	eax = PlayerCount;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
 	ebx_2 = 1u;
@@ -31081,7 +31081,7 @@ void sub_0002B880(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		*p_eax = eax;
 		return;
 	}
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -31099,7 +31099,7 @@ void sub_0002B880(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		sub_0002B790(arg0_2, arg2, p_eax, p_ebx, p_ebp);
 		return;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -31167,7 +31167,7 @@ void sub_0002B900(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		*p_edi = edi_2;
 		return;
 	}
-	eax = MEM32(0x1BC990u);
+	eax = PlayerCount;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
 	ebx_2 = 1u;
@@ -31641,7 +31641,7 @@ void sub_0002BDA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	MEM32(g_esp + 8u) = arg1;
 	MEM32(g_esp + 0xCu) = arg2;
 	MEM32(MEM32(g_esp + 0xCu)) = MEM32(esi + 0x2Cu);
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	g_esp = g_esp - 0x6Cu;
 	if (eax == 0u)
 	{
@@ -31661,7 +31661,7 @@ void sub_0002BDA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 		g_esp = g_esp + 0x10u;
 		return;
 	}
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	edx = GameObjectLastHandle;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
@@ -31673,7 +31673,7 @@ void sub_0002BDA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 		MEM32(g_esp) = ecx;
 		handle = MEM32(g_esp);
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		edx = GameObjectLastHandle;
 		edi_2 = GameObjectLastObject;
 		g_esp = g_esp + 4u;
@@ -33083,14 +33083,14 @@ uint32_t sub_0002D380(uint32_t ebx, uint32_t ebp)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1BC980u);
+	arg0 = Players(0);
 	x86_call(sub_0009C6E0, 0x0002D38Cu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
 	if (eax != 0u)
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax != GameObjectLastHandle)
 		{
 			handle = eax;
@@ -33111,14 +33111,14 @@ uint32_t sub_0002D380(uint32_t ebx, uint32_t ebp)
 		arg0 = MEM32(esi + 0x44u);
 		sub_0002B880(arg0, arg1, &ignored_3, &ebx, &ebp);
 	}
-	arg0 = MEM32(0x1BC984u);
+	arg0 = Players(1);
 	x86_call(sub_0009C6E0, 0x0002D3E7u, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
 	if (eax == 0u)
 		return ebp;
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -40618,7 +40618,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 	if (MEM32(0x1EAB28u) != ebp_2)
 	{
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(0x1EA7F0u);
+		MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
 		arg0_2 = MEM32(g_esp);
 		sub_0010E770(arg0_2);
 		g_esp = g_esp + 4u;
@@ -40631,7 +40631,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 			if (vcPad_pressed_a(vcPads(0)) != ebp_2 || vcPad_pressed_start(vcPads(0)) != ebp_2 || vcPad_pressed_a(vcPads(1)) != ebp_2 || vcPad_pressed_start(vcPads(1)) != ebp_2 || vcPad_pressed_a(vcPads(2)) != ebp_2 || vcPad_pressed_start(vcPads(2)) != ebp_2 || vcPad_pressed_a(vcPads(3)) != ebp_2)
 			{
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(0x1EA7F0u);
+				MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
 				arg0_2 = MEM32(g_esp);
 				sub_0010E770(arg0_2);
 				g_esp = g_esp + 4u;
@@ -40642,7 +40642,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 				if (zero == 0u)
 				{
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = MEM32(0x1EA7F0u);
+					MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
 					arg0_2 = MEM32(g_esp);
 					sub_0010E770(arg0_2);
 					g_esp = g_esp + 4u;
@@ -40655,7 +40655,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 			if (MEM32(eax + vcPad_pressed_a_VA(vcPads_VA)) != ebp_2)
 			{
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(0x1EA7F0u);
+				MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
 				arg0_2 = MEM32(g_esp);
 				sub_0010E770(arg0_2);
 				g_esp = g_esp + 4u;
@@ -40666,7 +40666,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 				if (zero == 0u)
 				{
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = MEM32(0x1EA7F0u);
+					MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
 					arg0_2 = MEM32(g_esp);
 					sub_0010E770(arg0_2);
 					g_esp = g_esp + 4u;
@@ -41091,7 +41091,7 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x18F9CCu;
-	MEM32(0x1EA7F0u) = eax;
+	MissionCompleteScreenCancelBackSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	MEM32(0x1EA7ECu) = eax;
@@ -41122,7 +41122,7 @@ uint32_t MissionCompleteScreen_Shutdown(void)
 	x86_call(GameObjectTypeRelease, 0x00032F75u, 2, arg0, arg1);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	eax = MEM32(0x1EA7F0u);
+	eax = MissionCompleteScreenCancelBackSSound;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x00032F80u, 1, arg0);
@@ -44704,13 +44704,13 @@ uint32_t MainMenuScreen_Startup(uint32_t esi)
 	arg0 = 0x18FC38u;
 	eax = sub_0010E920(arg0);
 	arg0 = 0x18FBF8u;
-	MEM32(0x1EAB1Cu) = eax;
+	MainMenuScreenConfirmSSound = eax;
 	eax = sub_0010E920(arg0);
 	arg0 = 0x18FC78u;
-	MEM32(0x1EAB18u) = eax;
+	MainMenuScreenCancelBackSSound = eax;
 	eax = sub_0010E920(arg0);
 	arg0 = 0xFFFFFFFFu;
-	MEM32(0x1EAB14u) = eax;
+	MainMenuScreenCursorSound = eax;
 	sub_00044530(esi, arg0);
 	eax = sub_000A52C0();
 	DoNothing();
@@ -44762,17 +44762,17 @@ uint32_t MainMenuScreen_Shutdown(void)
 	x86_call(GameObjectTypeRelease, 0x00035708u, 2, arg0, arg1);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x1EAB1Cu);
+	arg0 = MainMenuScreenConfirmSSound;
 	x86_call(vcObjectRelease_entry, 0x00035716u, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x1EAB18u);
+	arg0 = MainMenuScreenCancelBackSSound;
 	x86_call(vcObjectRelease_entry, 0x00035722u, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x1EAB14u);
+	arg0 = MainMenuScreenCursorSound;
 	x86_call(vcObjectRelease_entry, 0x0003572Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
@@ -44911,7 +44911,7 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	esi = eax;
 	if (MEM32(0x1BC6C4u) != 0u)
 	{
-		port = MEM32(0x1AECA0u);
+		port = PlayerPorts(0);
 		eax = vcPadIsOpen(port);
 		if (eax == 0u)
 		{
@@ -44922,7 +44922,7 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			arg0 = 0x1EA9D0u;
 			g_edx = edx;
 			x86_call(crt_sprintf, 0x000358E6u, 2, arg0, arg1);
-			edx = MEM32(0x1AECA0u);
+			edx = PlayerPorts(0);
 			arg5 = edx;
 			arg4 = 1u;
 			arg3 = 0u;
@@ -44940,7 +44940,7 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_eax = eax;
 		return;
 	}
-	port = MEM32(0x1AECA4u);
+	port = PlayerPorts(1);
 	eax = vcPadIsOpen(port);
 	if (eax != 0u)
 	{
@@ -44954,7 +44954,7 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	arg0 = 0x1EA9D0u;
 	g_edx = edx;
 	x86_call(crt_sprintf, 0x0003592Cu, 2, arg0, arg1);
-	edx = MEM32(0x1AECA4u);
+	edx = PlayerPorts(1);
 	arg5 = edx;
 	arg4 = 1u;
 	arg3 = 0u;
@@ -52669,7 +52669,7 @@ uint32_t sub_0003D1D0(uint32_t esi, uint32_t edi)
 		MEM32(g_esp + 4u) = 0xC2700000u;
 	f0 = x87_round(FLOAT_AT(g_esp + 4u) * 0.016666668f);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1EB3E0u);
+	MEM32(g_esp) = PlayerCameraSound;
 	MEMF(esi + 0x3C0u) = (float)f0;
 	arg0 = MEM32(g_esp);
 	sub_0010E770(arg0);
@@ -54118,14 +54118,14 @@ uint32_t Player_Startup(void)
 	arg0 = 0x18FEE0u;
 	eax = sub_0010E920(arg0);
 	arg0 = 0x18FFB8u;
-	MEM32(0x1EB3E0u) = eax;
+	PlayerCameraSound = eax;
 	eax = sub_0010E920(arg0);
 	arg4 = 0x43480000u;
 	arg3 = 0x42C80000u;
 	arg2 = 0x18FFF8u;
 	arg1 = 8u;
 	arg0 = 0x1EB350u;
-	MEM32(0x1EB3E8u) = eax;
+	PlayerClickSound = eax;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x447A0000u;
 	arg3 = 0x43FA0000u;
@@ -54147,25 +54147,25 @@ uint32_t Player_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1EB3E0u);
+	arg0 = PlayerCameraSound;
 	x86_call(vcObjectRelease_entry, 0x0003E81Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = MEM32(0x1EB3E4u);
-	MEM32(0x1EB3E0u) = 0u;
+	PlayerCameraSound = 0u;
 	x86_call(vcObjectRelease_entry, 0x0003E831u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x1EB3E8u);
+	arg0 = PlayerClickSound;
 	MEM32(0x1EB3E4u) = 0u;
 	x86_call(vcObjectRelease_entry, 0x0003E847u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x1EB398u;
-	MEM32(0x1EB3E8u) = 0u;
+	PlayerClickSound = 0u;
 	sub_0010E340(arg0);
 	arg0 = 0x1EB350u;
 	eax = sub_0010E340(arg0);
@@ -54587,7 +54587,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			}
 			else
 			{
-				arg0_2 = MEM32(0x1EB3E8u);
+				arg0_2 = PlayerClickSound;
 				sub_0010E7E0(arg0_2, &ignored, &ignored_2);
 				ecx_2 = saved_ecx;
 			}
@@ -55223,7 +55223,7 @@ uint32_t sub_0003F270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp + 0x28u) = 0u;
 	if (eax_2 != 0u && esi_2 != 0u)
 	{
-		if (MEM32(0x1BC984u) == esi_2)
+		if (Players(1) == esi_2)
 		{
 			MEM32(g_esp + 0x24u) = 1u;
 			ebx_2 = MEM32(g_esp + 0x24u);
@@ -55485,10 +55485,10 @@ uint32_t sub_0003F270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 					if (x87_round(FLOAT_AT(edi_2 + 0xCu) - f0_2) < FLOAT_AT(g_esp + 0x14u))
 						MEMF(edi_2 + 0xCu) = (float)x87_round(f0_2 + FLOAT_AT(g_esp + 0x14u));
 				}
-				edx = MEM32(ebx_2 * 4u + 0x1BC980u);
+				edx = Players(ebx_2);
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(ebx_2 * 4u + 0x1AECA0u);
-				ebp_2 = ebx_2 * 4u + 0x1BC980u;
+				MEM32(g_esp) = PlayerPorts(ebx_2);
+				ebp_2 = ebx_2 * 4u + Players_VA;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
 				g_esp = g_esp - 4u;
@@ -55650,7 +55650,7 @@ uint32_t sub_0003F270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 				zero = MEM32(g_esp + 0x24u) - 1u == 0u;
 				eax_2 = zero == 0u;
 				MEM32(ebp_2 + 0x3B8u) = vcGameTime + 0xBB8u;
-				esi_2 = MEM32(eax_2 * 4u + 0x1BC980u);
+				esi_2 = Players(eax_2);
 				if (esi_2 != 0u)
 				{
 					ecx = GameObjectLastHandle;
@@ -56905,7 +56905,7 @@ uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0x400u) = ebx_2;
 		g_esp = g_esp + 8u;
 	}
-	if ((int32_t)MEM32(0x1BC990u) > 1)
+	if (PlayerCount > 1)
 	{
 		eax = MEM32(esi_2 + 0x3B8u);
 		if (eax != 0u && eax < ebx_2)
@@ -56922,7 +56922,7 @@ uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			g_esp = g_esp + 0xCu;
 		}
 	}
-	if ((int32_t)MEM32(0x1BC990u) >= 2)
+	if (PlayerCount >= 2)
 	{
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -57511,7 +57511,7 @@ uint32_t sub_000415C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	uint32_t stack = 0;
 
 	eax = MEM32(arg1 + 0x18Cu);
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	if (eax == ecx)
 	{
 		if (ecx != GameObjectLastHandle)
@@ -57526,7 +57526,7 @@ uint32_t sub_000415C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		sub_00024B00(arg0, &eax, &ebx, &ebp, &esi, &edi);
 		return eax;
 	}
-	ecx = MEM32(0x1BC984u);
+	ecx = Players(1);
 	if (eax != ecx)
 		return eax;
 	if (ecx == GameObjectLastHandle)
@@ -58136,7 +58136,7 @@ uint32_t sub_00042020(uint32_t esi)
 	eax = MEM32(esi + 4u);
 	if ((int8_t)(eax >> 8) >= 0)
 		return eax;
-	if (MEM32(0x1BC980u) == MEM32(esi + 0x18Cu))
+	if (Players(0) == MEM32(esi + 0x18Cu))
 	{
 		arg1 = MEM32(esi + 0x194u);
 		arg0 = 0x2AEB00u;
@@ -62692,21 +62692,21 @@ void sub_00045A50(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	MEMF(ebp_2 + 0x48u) = (float)f0;
 	if (eax == 0u)
 	{
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		if (ecx != GameObjectLastHandle)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			g_esp = g_esp + 4u;
 		}
 		else
 			eax = GameObjectLastObject;
 		if (MEM32(ebp_2 + 0x74u) != MEM32(eax + 0x44u))
 		{
-			eax = MEM32(0x1BC984u);
+			eax = Players(1);
 			if (eax != GameObjectLastHandle)
 			{
 				g_esp = g_esp - 4u;
@@ -63852,7 +63852,7 @@ uint32_t sub_00047550(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 		g_esp = g_esp + 0x14u;
 		return eax;
 	}
-	if (MEM32(0x1BC980u) != MEM32(esi + 0x18Cu))
+	if (Players(0) != MEM32(esi + 0x18Cu))
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(esi + 0x194u);
@@ -65230,7 +65230,7 @@ uint32_t sub_00049D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg1)
 		eax = sub_000248E0();
 		if ((int32_t)eax < 2)
 		{
-			port = MEM32(0x1AECA0u);
+			port = PlayerPorts(0);
 			eax = vcPadIsOpen(port);
 			if (eax == 0u)
 			{
@@ -66866,7 +66866,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		esi_2 = 0u;
 		do
 		{
-			if (esi_2 != MEM32(0x1AECA0u))
+			if (esi_2 != PlayerPorts(0))
 			{
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
@@ -66880,7 +66880,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	else
 	{
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(0x1AECA0u);
+		MEM32(g_esp) = PlayerPorts(0);
 		port = MEM32(g_esp);
 		vcPadReset(port);
 		g_esp = g_esp + 4u;
@@ -67020,7 +67020,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				g_esp = g_esp + 4u;
 				if (eax != 0u && MEM32(ebp_2 + 0x12Cu) == esi_2)
 				{
-					MEM32(0x1AECA4u) = MEM32(g_esp + 0x20u);
+					PlayerPorts(1) = MEM32(g_esp + 0x20u);
 					MEM32(0x1BC6C8u) = esi_2;
 				}
 				ecx_2 = MEM32(g_esp + 0x10u);
@@ -67717,7 +67717,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			else
 			{
 				eax = eax * 0x210u;
-				if (MEM8(eax + (vcPads_VA + 0x1E9u)) == 0u)
+				if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) == 0u)
 				{
 					f0 = FLOAT_AT(eax + vcPads_VA);
 					L_04BF47 = true;
@@ -67765,7 +67765,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		else
 		{
 			eax = eax * 0x210u;
-			if (MEM8(eax + (vcPads_VA + 0x1E8u)) == 0u)
+			if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) == 0u)
 			{
 				f0 = FLOAT_AT(eax + vcPads_VA);
 				if (!(f0 < 0.0f))
@@ -68137,7 +68137,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		else
 		{
 			eax = eax * 0x210u;
-			if (MEM8(eax + (vcPads_VA + 0x1E9u)) == 0u)
+			if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) == 0u)
 			{
 				f0 = FLOAT_AT(eax + vcPads_VA);
 				L_04B5C8 = true;
@@ -68185,7 +68185,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	else
 	{
 		eax = eax * 0x210u;
-		if (MEM8(eax + (vcPads_VA + 0x1E8u)) == 0u)
+		if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) == 0u)
 		{
 			f0 = FLOAT_AT(eax + vcPads_VA);
 			if (!(f0 < 0.0f))
@@ -73645,7 +73645,7 @@ void sub_00053120(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1ECBECu);
+	MEM32(g_esp) = ZenHeavyMissileTurretModel;
 	eax = x86_call(vcObjectClone_entry, 0x0005312Eu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -73718,9 +73718,9 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x1ECBECu) = eax;
+	ZenHeavyMissileTurretModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000531E1u, 0);
-	eax = MEM32(0x1ECBECu);
+	eax = ZenHeavyMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x192924u;
 	g_esp = g_esp - 4u;
@@ -73728,7 +73728,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x1ECBECu);
+	ecx = ZenHeavyMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19290Cu;
 	g_esp = g_esp - 4u;
@@ -73737,7 +73737,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EB70(arg0, arg1);
-	ebp_2 = MEM32(0x1ECBECu);
+	ebp_2 = ZenHeavyMissileTurretModel;
 	MEM32(0x1ECBF0u) = eax;
 	x86_rep_stos32(0x1ECA40u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ECA40u) * 3u * 4u + 0x1ECA4Cu;
@@ -73779,7 +73779,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x1ECBECu);
+	edx = ZenHeavyMissileTurretModel;
 	MEM16(esi_2 + 8u) = eax;
 	ecx = MEM32(0x1ECA40u);
 	g_esp = g_esp - 4u;
@@ -73790,8 +73790,8 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1EC74Cu) = eax;
-	eax = MEM32(0x1ECBECu);
+	ZenHeavyMissileTurretHeavyMissleLauncherLeftnodeNode = eax;
+	eax = ZenHeavyMissileTurretModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1928ECu;
@@ -73827,7 +73827,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 		} while (t1 != 1u);
 		edx += 4u;
 	} while ((int32_t)edx < 0x1EC784);
-	ecx = MEM32(0x1EC74Cu);
+	ecx = ZenHeavyMissileTurretHeavyMissleLauncherLeftnodeNode;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	g_esp = g_esp - 4u;
@@ -73875,7 +73875,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg2 = MEM32(g_esp + 8u);
 	sub_00114D30(arg0, arg1, arg2, &ignored, &ignored_2);
 	eax = MEM32(0x1ECBF0u);
-	ecx = MEM32(0x1ECBECu);
+	ecx = ZenHeavyMissileTurretModel;
 	edx = g_esp + 0x28u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
@@ -73934,7 +73934,7 @@ uint32_t ZenHeavyMissileTurret_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1ECBECu);
+	arg0 = ZenHeavyMissileTurretModel;
 	x86_call(vcObjectRelease_entry, 0x000534BDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -74768,7 +74768,7 @@ void sub_00054090(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1ED0DCu);
+	MEM32(g_esp) = ZenLightMissileTurretModel;
 	eax = x86_call(vcObjectClone_entry, 0x0005409Eu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -74826,9 +74826,9 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x1ED0DCu) = eax;
+	ZenLightMissileTurretModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00054121u, 0);
-	eax = MEM32(0x1ED0DCu);
+	eax = ZenLightMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -74836,16 +74836,16 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x1ED0DCu);
+	ecx = ZenLightMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x192AC0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	MEM32(0x1B16C4u) = eax;
+	ZenLightMissileTurretTargetNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EB70(arg0, arg1);
-	ebp_2 = MEM32(0x1ED0DCu);
+	ebp_2 = ZenLightMissileTurretModel;
 	MEM32(0x1ED0E0u) = eax;
 	x86_rep_stos32(0x1ECF30u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ECF30u) * 3u * 4u + 0x1ECF3Cu;
@@ -74887,7 +74887,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x1ED0DCu);
+	edx = ZenLightMissileTurretModel;
 	MEM16(esi_2 + 8u) = eax;
 	ecx = MEM32(0x1ECF30u);
 	g_esp = g_esp - 4u;
@@ -74898,8 +74898,8 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ECC3Cu) = eax;
-	eax = MEM32(0x1ED0DCu);
+	ZenLightMissileTurretLightMissleLauncherLeftnodeNode = eax;
+	eax = ZenLightMissileTurretModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x192AD8u;
@@ -74935,7 +74935,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 		} while (t1 != 1u);
 		edx += 4u;
 	} while ((int32_t)edx < 0x1ECC74);
-	ecx = MEM32(0x1ECC3Cu);
+	ecx = ZenLightMissileTurretLightMissleLauncherLeftnodeNode;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	g_esp = g_esp - 4u;
@@ -74983,7 +74983,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	arg2 = MEM32(g_esp + 8u);
 	sub_00114D30(arg0, arg1, arg2, &ignored, &ignored_2);
 	eax = MEM32(0x1ED0E0u);
-	ecx = MEM32(0x1ED0DCu);
+	ecx = ZenLightMissileTurretModel;
 	edx = g_esp + 0x28u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
@@ -75042,7 +75042,7 @@ uint32_t ZenLightMissileTurret_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1ED0DCu);
+	arg0 = ZenLightMissileTurretModel;
 	x86_call(vcObjectRelease_entry, 0x000543FDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -75738,7 +75738,7 @@ void ZenLightMissileTurret_Register(uint32_t arg0)
 	MEM32(arg0 + 0xC4u) = ZenLightMissileTurretType_VA;
 	x86_rep_stos32(0x1ECFD8u, 0u, 0x41u);
 	MEM32(0x1ED008u) = 0x192978u;
-	MEM32(0x1ED00Cu) = 0x1B16C4u;
+	MEM32(0x1ED00Cu) = ZenLightMissileTurretTargetNode_VA;
 	MEM32(0x1ECFD8u) = 0x19297Cu;
 	MEM32(0x1ECFDCu) = 0x192980u;
 	MEM32(0x1ECFE0u) = 0x192984u;
@@ -75940,7 +75940,7 @@ void sub_00055050(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x1ED12Cu);
+	arg3 = ZenCruiserTurret1ZenTurretLazerNode01Node;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = ebx;
 	arg0 = 0x25u;
@@ -75973,7 +75973,7 @@ void sub_000550F0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1ED2ECu);
+	MEM32(g_esp) = ZenCruiserTurret1Model;
 	eax = x86_call(vcObjectClone_entry, 0x000550FEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -76385,10 +76385,10 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x1ED2ECu) = eax;
+	ZenCruiserTurret1Model = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00055656u, 0);
 	edx = MEM32(0x192C50u);
-	esi_2 = MEM32(0x1ED2ECu);
+	esi_2 = ZenCruiserTurret1Model;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x192C4Cu);
 	MEM32(g_esp + 0x34u) = MEM32(0x192C48u);
@@ -76474,12 +76474,12 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1ED2ECu);
+	MEM32(g_esp) = ZenCruiserTurret1Model;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ebx_2 = MEM32(0x1ED2ECu);
-	MEM32(0x1B16C8u) = eax;
+	ebx_2 = ZenCruiserTurret1Model;
+	ZenCruiserTurret1TargetNode = eax;
 	x86_rep_stos32(0x1ED130u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ED130u) * 3u * 4u + 0x1ED13Cu;
 	g_esp = g_esp - 4u;
@@ -76522,7 +76522,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(esi_2 + 8u) = eax;
 	edi_2 = MEM32(0x1ED130u);
-	eax = MEM32(0x1ED2ECu);
+	eax = ZenCruiserTurret1Model;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x192D18u;
 	g_esp = g_esp - 4u;
@@ -76535,7 +76535,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	MEM32(g_esp) = 0x25u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x1ED12Cu) = eax;
+	ZenCruiserTurret1ZenTurretLazerNode01Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
@@ -76571,7 +76571,7 @@ uint32_t ZenCruiserTurret1_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1ED2ECu);
+	arg0 = ZenCruiserTurret1Model;
 	x86_call(vcObjectRelease_entry, 0x000558BDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -76671,7 +76671,7 @@ void ZenCruiserTurret1_Register(uint32_t arg0)
 	MEM32(arg0 + 0xC0u) = ZenCruiserTurret1Type_VA;
 	x86_rep_stos32(0x1ED1E8u, 0u, 0x41u);
 	MEM32(0x1ED218u) = 0x192B50u;
-	MEM32(0x1ED21Cu) = 0x1B16C8u;
+	MEM32(0x1ED21Cu) = ZenCruiserTurret1TargetNode_VA;
 	MEM32(0x1ED1E8u) = 0x192B54u;
 	MEM32(0x1ED1ECu) = 0x192B58u;
 	MEM32(0x1ED1F0u) = 0x192B5Cu;
@@ -76989,29 +76989,29 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192EFCu;
 	arg0 = MEM32(0x1ED78Cu);
-	MEM32(0x1ED344u) = eax;
+	VF1SXFighterGunEffects01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED348u) = eax;
+	VF1SXFighterMisslesLeft01Node = eax;
 	arg1 = 0x192EECu;
 	arg0 = MEM32(0x1ED78Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192ED4u;
 	arg0 = MEM32(0x1ED78Cu);
-	MEM32(0x1ED34Cu) = eax;
+	VF1SXFighterMisslesRight01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192EBCu;
 	arg0 = MEM32(0x1ED78Cu);
-	MEM32(0x1ED334u) = eax;
+	VF1SXFighterExhaustEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED338u) = eax;
+	VF1SXFighterExhaustEffectRight01Node = eax;
 	arg1 = 0x192EA4u;
 	arg0 = MEM32(0x1ED78Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192E8Cu;
 	arg0 = MEM32(0x1ED78Cu);
-	MEM32(0x1ED33Cu) = eax;
+	VF1SXFighterWingtipEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED340u) = eax;
+	VF1SXFighterWingtipEffectRight01Node = eax;
 	eax = 0x1ED384u;
 	ecx = 0x1ED36Cu;
 	esi = 0x3F800000u;
@@ -77037,8 +77037,8 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 		} while (t1 != 1u);
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x1ED37C);
-	edx = MEM32(0x1ED348u);
-	eax = MEM32(0x1ED34Cu);
+	edx = VF1SXFighterMisslesLeft01Node;
+	eax = VF1SXFighterMisslesRight01Node;
 	arg1 = 0x22u;
 	arg0 = 3u;
 	MEM32(0x1ED350u) = ebx_2;
@@ -77227,7 +77227,7 @@ void sub_00056670(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x1ED344u);
+	arg3 = VF1SXFighterGunEffects01Node;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = edi;
 	arg0 = 0x22u;
@@ -77268,7 +77268,7 @@ void sub_00056670(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x1ED334u);
+	arg2 = VF1SXFighterExhaustEffectLeft01Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x1Bu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -77278,7 +77278,7 @@ void sub_00056670(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x26Cu) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x1ED338u);
+	arg2 = VF1SXFighterExhaustEffectRight01Node;
 	arg1 = edx;
 	arg0 = 0x1Bu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -77797,29 +77797,29 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192EFCu;
 	arg0 = MEM32(0x1EDC2Cu);
-	MEM32(0x1ED7E4u) = eax;
+	VF1AXFighterGunEffects01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED7E8u) = eax;
+	VF1AXFighterMisslesLeft01Node = eax;
 	arg1 = 0x192EECu;
 	arg0 = MEM32(0x1EDC2Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192ED4u;
 	arg0 = MEM32(0x1EDC2Cu);
-	MEM32(0x1ED7ECu) = eax;
+	VF1AXFighterMisslesRight01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192EBCu;
 	arg0 = MEM32(0x1EDC2Cu);
-	MEM32(0x1ED7D4u) = eax;
+	VF1AXFighterExhaustEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED7D8u) = eax;
+	VF1AXFighterExhaustEffectRight01Node = eax;
 	arg1 = 0x192EA4u;
 	arg0 = MEM32(0x1EDC2Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x192E8Cu;
 	arg0 = MEM32(0x1EDC2Cu);
-	MEM32(0x1ED7DCu) = eax;
+	VF1AXFighterWingtipEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1ED7E0u) = eax;
+	VF1AXFighterWingtipEffectRight01Node = eax;
 	eax = 0x1ED824u;
 	ecx = 0x1ED80Cu;
 	esi = 0x3F800000u;
@@ -77845,8 +77845,8 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 		} while (t1 != 1u);
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x1ED81C);
-	edx = MEM32(0x1ED7E8u);
-	eax = MEM32(0x1ED7ECu);
+	edx = VF1AXFighterMisslesLeft01Node;
+	eax = VF1AXFighterMisslesRight01Node;
 	arg1 = 0x22u;
 	arg0 = 3u;
 	MEM32(0x1ED7F0u) = ebx_2;
@@ -78035,7 +78035,7 @@ void sub_000576E0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x1ED7E4u);
+	arg3 = VF1AXFighterGunEffects01Node;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = edi;
 	arg0 = 0x22u;
@@ -78076,7 +78076,7 @@ void sub_000576E0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x1ED7D4u);
+	arg2 = VF1AXFighterExhaustEffectLeft01Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x1Bu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -78086,7 +78086,7 @@ void sub_000576E0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x26Cu) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x1ED7D8u);
+	arg2 = VF1AXFighterExhaustEffectRight01Node;
 	arg1 = edx;
 	arg0 = 0x1Bu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -78401,13 +78401,13 @@ uint32_t PodOfficerSledMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1EDDC8u);
+	arg0 = PodOfficerSledMissileScene;
 	x86_call(vcObjectRelease_entry, 0x00057E6Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = MEM32(0x1EDDCCu);
-	MEM32(0x1EDDC8u) = 0u;
+	PodOfficerSledMissileScene = 0u;
 	x86_call(vcObjectRelease_entry, 0x00057E81u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -78449,14 +78449,14 @@ uint32_t PodOfficerSledMissile_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x00057EDEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x1EDDC8u) = eax;
+	PodOfficerSledMissileScene = eax;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			ecx = MEM32(0x1EDDC8u);
+			ecx = PodOfficerSledMissileScene;
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -78556,13 +78556,13 @@ uint32_t FPAMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1EDFF8u);
+	arg0 = FPAMissileScene;
 	x86_call(vcObjectRelease_entry, 0x0005814Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = MEM32(0x1EDFFCu);
-	MEM32(0x1EDFF8u) = 0u;
+	FPAMissileScene = 0u;
 	x86_call(vcObjectRelease_entry, 0x00058161u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -78604,14 +78604,14 @@ uint32_t FPAMissile_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000581BEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x1EDFF8u) = eax;
+	FPAMissileScene = eax;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			ecx = MEM32(0x1EDFF8u);
+			ecx = FPAMissileScene;
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -79013,13 +79013,13 @@ uint32_t ZenHeavyMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1EE688u);
+	arg0 = ZenHeavyMissileScene;
 	x86_call(vcObjectRelease_entry, 0x000589EBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = MEM32(0x1EE68Cu);
-	MEM32(0x1EE688u) = 0u;
+	ZenHeavyMissileScene = 0u;
 	x86_call(vcObjectRelease_entry, 0x00058A01u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -79061,14 +79061,14 @@ uint32_t ZenHeavyMissile_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x00058A5Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x1EE688u) = eax;
+	ZenHeavyMissileScene = eax;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			ecx = MEM32(0x1EE688u);
+			ecx = ZenHeavyMissileScene;
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -79168,13 +79168,13 @@ uint32_t ZenLightMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x1EE8B8u);
+	arg0 = ZenLightMissileScene;
 	x86_call(vcObjectRelease_entry, 0x00058CCBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = MEM32(0x1EE8BCu);
-	MEM32(0x1EE8B8u) = 0u;
+	ZenLightMissileScene = 0u;
 	x86_call(vcObjectRelease_entry, 0x00058CE1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -79216,14 +79216,14 @@ uint32_t ZenLightMissile_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x00058D3Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x1EE8B8u) = eax;
+	ZenLightMissileScene = eax;
 	if (eax != ecx)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			edi = 0u;
 		else
 		{
-			ecx = MEM32(0x1EE8B8u);
+			ecx = ZenLightMissileScene;
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -79815,7 +79815,7 @@ void sub_00059620(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 			if (eax == 0x48u || eax == 0x49u)
 			{
 				ebp_2 = 1u;
-				if ((int32_t)MEM32(0x1BC990u) <= 1 || MEM32(ebx + 0x2ACu) != 0xFFFFFFFFu)
+				if (PlayerCount <= 1 || MEM32(ebx + 0x2ACu) != 0xFFFFFFFFu)
 				{
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x8000u;
@@ -82206,7 +82206,7 @@ void sub_0005B610(uint32_t edi, uint32_t arg1, uint32_t arg2)
 	esi = saved_arg2;
 	if (esi != 0u)
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax == 0u)
 		{
 			handle = saved_arg1;
@@ -91605,7 +91605,7 @@ uint32_t ZenReconCollision_Shutdown(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x20445Cu);
+	eax = ZenReconCollisionScene;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -91627,14 +91627,14 @@ void sub_0006A7F0(uint32_t ebx, uint32_t arg1)
 	eax = g_eax;
 	ignored = g_edx;
 	MEM32(ebx + 0x194u) = eax;
-	eax = MEM32(0x20445Cu);
+	eax = ZenReconCollisionScene;
 	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x20445Eu));
+			edx = vcClassByType(((uint16_t)(ZenReconCollisionScene >> 16)));
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -91863,7 +91863,7 @@ uint32_t ZenReconCollision_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006AB5Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x20445Cu) = eax;
+	ZenReconCollisionScene = eax;
 	if (eax == ecx)
 	{
 		edi = vcObjectCacheData;
@@ -91900,7 +91900,7 @@ uint32_t ZenReconCollision_Startup(void)
 		}
 		return eax;
 	}
-	ecx = MEM32(0x20445Cu);
+	ecx = ZenReconCollisionScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -92105,7 +92105,7 @@ uint32_t ZenShuttleCollision_Shutdown(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x2045ACu);
+	eax = ZenShuttleCollisionScene;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -92127,14 +92127,14 @@ void sub_0006B020(uint32_t ebx, uint32_t arg1)
 	eax = g_eax;
 	ignored = g_edx;
 	MEM32(ebx + 0x194u) = eax;
-	eax = MEM32(0x2045ACu);
+	eax = ZenShuttleCollisionScene;
 	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x2045AEu));
+			edx = vcClassByType(((uint16_t)(ZenShuttleCollisionScene >> 16)));
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -92363,7 +92363,7 @@ uint32_t ZenShuttleCollision_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006B38Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x2045ACu) = eax;
+	ZenShuttleCollisionScene = eax;
 	if (eax == ecx)
 	{
 		edi = vcObjectCacheData;
@@ -92400,7 +92400,7 @@ uint32_t ZenShuttleCollision_Startup(void)
 		}
 		return eax;
 	}
-	ecx = MEM32(0x2045ACu);
+	ecx = ZenShuttleCollisionScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -92601,7 +92601,7 @@ uint32_t SeaSergeantCollision_Shutdown(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x2046FCu);
+	eax = SeaSergeantCollisionScene;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -92623,14 +92623,14 @@ void sub_0006B850(uint32_t ebx, uint32_t arg1)
 	eax = g_eax;
 	ignored = g_edx;
 	MEM32(ebx + 0x194u) = eax;
-	eax = MEM32(0x2046FCu);
+	eax = SeaSergeantCollisionScene;
 	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x2046FEu));
+			edx = vcClassByType(((uint16_t)(SeaSergeantCollisionScene >> 16)));
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -92859,7 +92859,7 @@ uint32_t SeaSergeantCollision_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006BBBEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x2046FCu) = eax;
+	SeaSergeantCollisionScene = eax;
 	if (eax == ecx)
 	{
 		edi = vcObjectCacheData;
@@ -92896,7 +92896,7 @@ uint32_t SeaSergeantCollision_Startup(void)
 		}
 		return eax;
 	}
-	ecx = MEM32(0x2046FCu);
+	ecx = SeaSergeantCollisionScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -95761,7 +95761,7 @@ void sub_00070500(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	g_esp = g_esp - 0x90u;
 	if (eax == 0u)
 	{
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax != GameObjectLastHandle)
 		{
 			g_esp = g_esp - 4u;
@@ -103352,7 +103352,7 @@ void sub_0007B6A0(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(g_esp + 8u) = arg1;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -103361,7 +103361,7 @@ void sub_0007B6A0(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -103406,7 +103406,7 @@ void sub_0007B740(uint32_t esi, uint32_t edi, uint32_t arg0)
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	g_esp = g_esp - 8u;
 	if (eax != GameObjectLastHandle)
 	{
@@ -103416,7 +103416,7 @@ void sub_0007B740(uint32_t esi, uint32_t edi, uint32_t arg0)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -106026,7 +106026,7 @@ uint32_t sub_0007F4F0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20871Cu);
+	MEM32(g_esp) = MacIIModel;
 	eax = x86_call(vcObjectClone_entry, 0x0007F4FEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -106109,10 +106109,10 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20871Cu) = eax;
+	MacIIModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0007F5DBu, 0);
 	edx = MEM32(0x19DC24u);
-	esi_2 = MEM32(0x20871Cu);
+	esi_2 = MacIIModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x19DC20u);
 	MEM32(g_esp + 0x34u) = MEM32(0x19DC1Cu);
@@ -106166,7 +106166,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20871Cu);
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -106174,7 +106174,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1848u) = eax;
+	MacIITargetNode = eax;
 	x86_rep_stos32(0x2084C0u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DC6Cu;
@@ -106415,8 +106415,8 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 9u;
 	MEM32(0x208720u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F9A2u, 0);
-	esi_2 = MEM32(0x20871Cu);
-	MEM32(0x2083D4u) = eax;
+	esi_2 = MacIIModel;
+	MacIIMak2FireMotion = eax;
 	x86_rep_stos32(0x208418u, 0u, 0x29u);
 	edi_2 = MEM32(0x208418u) * 3u * 4u + 0x208424u;
 	MEM16(edi_2 + 4u) = 0x42u;
@@ -106523,7 +106523,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 9u;
 	esi_2 = esi_2 * 8u + 0x20849Cu;
 	eax = x86_call(vcObjectGet_entry, 0x0007FB50u, 0);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	ecx = MEM32(0x20841Cu);
@@ -106536,7 +106536,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x208400u) = eax;
-	eax = MEM32(0x20871Cu);
+	eax = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEB8u;
 	g_esp = g_esp - 4u;
@@ -106544,7 +106544,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x20871Cu);
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEB0u;
 	g_esp = g_esp - 4u;
@@ -106553,7 +106553,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEA8u;
 	g_esp = g_esp - 4u;
@@ -106563,7 +106563,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x20840Cu) = eax;
-	eax = MEM32(0x20871Cu);
+	eax = MacIIModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE98u;
@@ -106572,26 +106572,26 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x20871Cu);
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE88u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	MEM32(0x208410u) = eax;
+	MacIIGunArmLeftNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEC8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x208414u) = eax;
+	MacIIGunArmRightNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x2083D8u) = eax;
-	eax = MEM32(0x20871Cu);
+	MacIIExhaust02Node = eax;
+	eax = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DED4u;
 	g_esp = g_esp - 4u;
@@ -106599,16 +106599,16 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x20871Cu);
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEC0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	MEM32(0x2083DCu) = eax;
+	MacIIExhaust01Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEB8u;
 	g_esp = g_esp - 4u;
@@ -106618,7 +106618,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x2083E4u) = eax;
-	eax = MEM32(0x20871Cu);
+	eax = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEB0u;
 	g_esp = g_esp - 4u;
@@ -106626,7 +106626,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	ecx = MEM32(0x20871Cu);
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DEA8u;
 	g_esp = g_esp - 4u;
@@ -106635,7 +106635,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE7Cu;
@@ -106645,8 +106645,8 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x2083F0u) = eax;
-	eax = MEM32(0x20871Cu);
+	MacIIGunvent01Node = eax;
+	eax = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE70u;
 	g_esp = g_esp - 4u;
@@ -106654,8 +106654,8 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x2083F4u) = eax;
-	ecx = MEM32(0x20871Cu);
+	MacIIGunvent02Node = eax;
+	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE64u;
 	g_esp = g_esp - 4u;
@@ -106663,12 +106663,12 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20871Cu);
+	edx = MacIIModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE58u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x2083F8u) = eax;
+	MacIIGunvent03Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
@@ -106676,7 +106676,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x21u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x2083FCu) = eax;
+	MacIIGunvent04Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
@@ -106755,7 +106755,7 @@ uint32_t MacII_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20871Cu);
+	arg0 = MacIIModel;
 	x86_call(vcObjectRelease_entry, 0x0007FD42u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -106950,7 +106950,7 @@ uint32_t MacII_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2083D4u);
+	arg0 = MacIIMak2FireMotion;
 	x86_call(vcObjectRelease_entry, 0x0007FF26u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -107156,7 +107156,7 @@ uint32_t sub_000803A0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t esi, ui
 		} while (t2 != 1u);
 		MEM32(eax_2 + 0x3Cu) = 4u;
 		MEM32(eax_2 + 0x48u) = 2u;
-		MEM32(eax_2 + 0x40u) = MEM32(0x208410u);
+		MEM32(eax_2 + 0x40u) = MacIIGunArmLeftNode;
 		MEM32(ebp) = edx;
 		MEM32(eax_2 + 0x4Cu) = 3u;
 		MEM32(eax_2 + 0x54u) = 0xBF400000u;
@@ -107167,7 +107167,7 @@ uint32_t sub_000803A0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t esi, ui
 		MEM32(eax_2 + 0x6Cu) = 0x3F400000u;
 		MEM32(eax_2 + 0x70u) = 0xBFA00000u;
 		MEM32(eax_2 + 0x74u) = edx;
-		MEM32(eax_2 + 0x44u) = MEM32(0x208414u);
+		MEM32(eax_2 + 0x44u) = MacIIGunArmRightNode;
 		ebp = saved_arg0;
 		MEM32(eax_2 + 0x50u) = 3u;
 		MEM32(eax_2 + 0x78u) = 0x3F400000u;
@@ -107210,7 +107210,7 @@ void MacII_Register(uint32_t arg0)
 	MEM32(arg0 + 0xA8u) = MacIIType_VA;
 	x86_rep_stos32(0x208618u, 0u, 0x41u);
 	MEM32(0x208648u) = 0x19DB20u;
-	MEM32(0x20864Cu) = 0x1B1848u;
+	MEM32(0x20864Cu) = MacIITargetNode_VA;
 	MEM32(0x208618u) = 0x19DB24u;
 	MEM32(0x20861Cu) = 0x19DB28u;
 	MEM32(0x208620u) = 0x19DB2Cu;
@@ -109582,7 +109582,7 @@ void sub_00083010(uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(g_esp + 8u) = arg1;
 	g_esp = g_esp - 0x18u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x208CB8u);
+	MEM32(g_esp) = FlareSceneObject;
 	MEM32(esi + 0x26Cu) = 0x208CBCu;
 	eax = x86_call(vcObjectClone_entry, 0x00083028u, 0);
 	g_esp = g_esp - 4u;
@@ -109592,7 +109592,7 @@ void sub_00083010(uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(esi + 0x270u) = eax;
 	x86_call(vcSceneObjectSetFlags_entry, 0x00083036u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x208CB4u);
+	MEM32(g_esp) = FlareFxFlareExplosionParticles;
 	eax = x86_call(vcObjectClone_entry, 0x00083042u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x16u;
@@ -109601,7 +109601,7 @@ void sub_00083010(uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(esi + 0x274u) = eax;
 	x86_call(vcSceneObjectSetFlags_entry, 0x00083050u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x208CB0u);
+	MEM32(g_esp) = FlareFxFlareParticles;
 	eax = x86_call(vcObjectClone_entry, 0x0008305Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x16u;
@@ -109692,25 +109692,25 @@ uint32_t Flare_Startup(void)
 	eax = sub_00133CF0(arg0);
 	arg1 = 0x19E2D8u;
 	arg0 = 0xBu;
-	MEM32(0x208CB8u) = eax;
+	FlareSceneObject = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008315Bu, 2, arg0, arg1);
 	arg0 = eax;
-	MEM32(0x208CB4u) = eax;
+	FlareFxFlareExplosionParticles = eax;
 	sub_001334F0(arg0);
 	arg1 = 0x19E318u;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x00083172u, 2, arg0, arg1);
 	arg0 = eax;
-	MEM32(0x208CB0u) = eax;
+	FlareFxFlareParticles = eax;
 	sub_001334F0(arg0);
 	arg1 = 0x16u;
-	arg0 = MEM32(0x208CB8u);
+	arg0 = FlareSceneObject;
 	ignored = x86_call(vcSceneObjectSetFlags_entry, 0x0008318Au, 2, arg0, arg1);
 	arg1 = 0x16u;
-	arg0 = MEM32(0x208CB4u);
+	arg0 = FlareFxFlareExplosionParticles;
 	ignored = x86_call(vcSceneObjectSetFlags_entry, 0x00083198u, 2, arg0, arg1);
 	arg1 = 0x16u;
-	arg0 = MEM32(0x208CB0u);
+	arg0 = FlareFxFlareParticles;
 	ignored = x86_call(vcSceneObjectSetFlags_entry, 0x000831A6u, 2, arg0, arg1);
 	arg4 = 0x447A0000u;
 	arg3 = 0x43480000u;
@@ -109729,25 +109729,25 @@ uint32_t Flare_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x208CB8u);
+	arg0 = FlareSceneObject;
 	x86_call(vcObjectRelease_entry, 0x000831EBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208CB4u);
-	MEM32(0x208CB8u) = 0u;
+	arg0 = FlareFxFlareExplosionParticles;
+	FlareSceneObject = 0u;
 	x86_call(vcObjectRelease_entry, 0x00083201u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208CB0u);
-	MEM32(0x208CB4u) = 0u;
+	arg0 = FlareFxFlareParticles;
+	FlareFxFlareExplosionParticles = 0u;
 	x86_call(vcObjectRelease_entry, 0x00083217u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x208C68u;
-	MEM32(0x208CB0u) = 0u;
+	FlareFxFlareParticles = 0u;
 	sub_0010E340(arg0);
 	arg1 = 6u;
 	arg0 = 4u;
@@ -110480,7 +110480,7 @@ void sub_00083AA0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D70u);
+	arg2 = PodScoutSpaceDummyScoutBeaconNode;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x52u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored_2, &edi);
@@ -110507,7 +110507,7 @@ void sub_00083B40(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D60u);
+	arg2 = PodScoutSpaceFootjetLNode;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x20u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -110517,7 +110517,7 @@ void sub_00083B40(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x26Cu) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D64u);
+	arg2 = PodScoutSpaceFootjetRNode;
 	arg1 = edx;
 	arg0 = 0x20u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -110527,7 +110527,7 @@ void sub_00083B40(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x270u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D68u);
+	arg2 = PodScoutSpaceEarjetLNode;
 	arg1 = ecx_2;
 	arg0 = 0x1Fu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -110536,7 +110536,7 @@ void sub_00083B40(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x274u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D6Cu);
+	arg2 = PodScoutSpaceEarjetRNode;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x1Fu;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -110546,7 +110546,7 @@ void sub_00083B40(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x278u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x208D74u);
+	arg2 = PodScoutSpaceTargetNode;
 	arg1 = edx;
 	arg0 = 0x1Au;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -110880,26 +110880,26 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x19E548u;
 	arg0 = MEM32(0x208F3Cu);
-	MEM32(0x208D60u) = eax;
+	PodScoutSpaceFootjetLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x208D64u) = eax;
+	PodScoutSpaceFootjetRNode = eax;
 	arg1 = 0x19E53Cu;
 	arg0 = MEM32(0x208F3Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x19E530u;
 	arg0 = MEM32(0x208F3Cu);
-	MEM32(0x208D68u) = eax;
+	PodScoutSpaceEarjetLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x19E51Cu;
 	arg0 = MEM32(0x208F3Cu);
-	MEM32(0x208D6Cu) = eax;
+	PodScoutSpaceEarjetRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x208D70u) = eax;
+	PodScoutSpaceDummyScoutBeaconNode = eax;
 	arg1 = 0x191C70u;
 	arg0 = MEM32(0x208F3Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	esi = MEM32(0x208F3Cu);
-	MEM32(0x208D74u) = eax;
+	PodScoutSpaceTargetNode = eax;
 	x86_rep_stos32(0x208D78u, 0u, 0x29u);
 	edi = MEM32(0x208D78u) * 3u * 4u + 0x208D84u;
 	stack = 0x19C548u;
@@ -111431,7 +111431,7 @@ uint32_t sub_00084A10(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, ui
 	sub_00019A30(arg0_2, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x208F8Cu);
+	arg3 = GladiatorChestGunNode;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = edi;
 	arg0_2 = 0x1Cu;
@@ -111528,7 +111528,7 @@ uint32_t sub_00084B90(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x209514u);
+	MEM32(g_esp) = GladiatorModel;
 	eax = x86_call(vcObjectClone_entry, 0x00084B9Eu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -111588,9 +111588,9 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x209514u) = eax;
+	GladiatorModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00085006u, 0);
-	edx = MEM32(0x209514u);
+	edx = GladiatorModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0xFu);
 	ecx = MEM32(0x19E67Cu);
 	MEM32(g_esp + 0x34u) = MEM32(0x19E678u);
@@ -111625,7 +111625,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	eax = MEM32(0x209514u);
+	eax = GladiatorModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -111633,7 +111633,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1854u) = eax;
+	GladiatorTargetNode = eax;
 	x86_rep_stos32(0x2092B8u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E6A0u;
@@ -111868,7 +111868,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp) = 9u;
 	MEM32(0x20939Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085360u, 0);
-	esi_2 = MEM32(0x209514u);
+	esi_2 = GladiatorModel;
 	MEM32(0x209518u) = eax;
 	x86_rep_stos32(0x209210u, 0u, 0x29u);
 	edi_2 = MEM32(0x209210u) * 3u * 4u + 0x20921Cu;
@@ -111988,7 +111988,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209214u) = eax;
 	esi_2 = eax * 8u + 0x209294u;
 	eax = x86_call(vcObjectGet_entry, 0x00085527u, 0);
-	ecx = MEM32(0x209514u);
+	ecx = GladiatorModel;
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x209214u) = MEM32(0x209214u) + 1u;
@@ -111999,17 +111999,17 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x209514u);
+	edx = GladiatorModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x198964u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x208F8Cu) = eax;
+	GladiatorChestGunNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x208F90u) = eax;
-	eax = MEM32(0x209514u);
+	eax = GladiatorModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x198950u;
 	g_esp = g_esp - 4u;
@@ -112044,7 +112044,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 		} while (t1 != 1u);
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x208FC4);
-	ecx = MEM32(0x209514u);
+	ecx = GladiatorModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x198964u;
 	g_esp = g_esp - 4u;
@@ -112058,7 +112058,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x209514u);
+	edx = GladiatorModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x198950u;
 	g_esp = g_esp - 4u;
@@ -112164,7 +112164,7 @@ uint32_t Gladiator_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x209514u);
+	arg0 = GladiatorModel;
 	x86_call(vcObjectRelease_entry, 0x00085792u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -112449,7 +112449,7 @@ void Gladiator_Register(uint32_t arg0)
 	MEM32(arg0 + 0x68u) = GladiatorType_VA;
 	x86_rep_stos32(0x209410u, 0u, 0x41u);
 	MEM32(0x209440u) = 0x19E580u;
-	MEM32(0x209444u) = 0x1B1854u;
+	MEM32(0x209444u) = GladiatorTargetNode_VA;
 	MEM32(0x209410u) = 0x19E584u;
 	MEM32(0x209414u) = 0x19E588u;
 	MEM32(0x209418u) = 0x19E58Cu;
@@ -114455,7 +114455,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 	eax = MEM32(eax);
 	if (eax == 0xFFFFu)
 	{
-		arg0_2 = MEM32(0x20A304u);
+		arg0_2 = ZenCruiserMissileTurretModel;
 		eax = x86_call(vcObjectClone_entry, 0x000884C5u, 1, arg0_2);
 		MEM32(saved_arg1 + 0x194u) = eax;
 		eax = 1u;
@@ -114541,9 +114541,9 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20A304u) = eax;
+	ZenCruiserMissileTurretModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00088A21u, 0);
-	edx = MEM32(0x20A304u);
+	edx = ZenCruiserMissileTurretModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0xFu);
 	ecx = MEM32(0x19EF30u);
 	MEM32(g_esp + 0x34u) = MEM32(0x19EF2Cu);
@@ -114578,7 +114578,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	eax = MEM32(0x20A304u);
+	eax = ZenCruiserMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19EFF8u;
 	g_esp = g_esp - 4u;
@@ -114615,7 +114615,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp) = 9u;
 	MEM32(0x20A1F4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00088B08u, 0);
-	edx = MEM32(0x20A304u);
+	edx = ZenCruiserMissileTurretModel;
 	MEM32(0x20A1F8u) = eax;
 	x86_rep_stos32(0x20A148u, 0u, 0x29u);
 	esi_2 = MEM32(0x20A148u) * 3u * 4u + 0x20A154u;
@@ -114654,7 +114654,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(0x20A148u) = eax + 1u;
 	esi_2 = esi_2 * 8u + 0x20A1CCu;
 	eax = x86_call(vcObjectGet_entry, 0x00088BA6u, 0);
-	edx = MEM32(0x20A304u);
+	edx = ZenCruiserMissileTurretModel;
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20A14Cu);
@@ -114694,7 +114694,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 		} while (t1 != 1u);
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x209EFC);
-	eax = MEM32(0x20A304u);
+	eax = ZenCruiserMissileTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19EFF8u;
 	g_esp = g_esp - 4u;
@@ -114754,7 +114754,7 @@ uint32_t ZenCruiserMissileTurret_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x20A304u);
+	arg0 = ZenCruiserMissileTurretModel;
 	x86_call(vcObjectRelease_entry, 0x00088CFDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -115665,7 +115665,7 @@ void sub_0008A8A0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20AC84u);
+	MEM32(g_esp) = ZenWarriorNoArmourModel;
 	eax = x86_call(vcObjectClone_entry, 0x0008A8AEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -115724,10 +115724,10 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20AC84u) = eax;
+	ZenWarriorNoArmourModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0008A93Bu, 0);
 	edx = MEM32(0x19F508u);
-	esi_2 = MEM32(0x20AC84u);
+	esi_2 = ZenWarriorNoArmourModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x19F504u);
 	MEM32(g_esp + 0x34u) = MEM32(0x19F500u);
@@ -115781,7 +115781,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20AC84u);
+	ecx = ZenWarriorNoArmourModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -115789,7 +115789,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1868u) = eax;
+	ZenWarriorNoArmourTargetNode = eax;
 	x86_rep_stos32(0x20AA28u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F54Cu;
@@ -116024,7 +116024,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AB0Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACF5u, 0);
-	edx = MEM32(0x20AC84u);
+	edx = ZenWarriorNoArmourModel;
 	MEM32(0x20AC88u) = eax;
 	x86_rep_stos32(0x20A980u, 0u, 0x29u);
 	esi_2 = MEM32(0x20A980u) * 3u * 4u + 0x20A98Cu;
@@ -116062,7 +116062,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x20A984u) = MEM32(0x20A984u) + 1u;
-	eax = MEM32(0x20AC84u);
+	eax = ZenWarriorNoArmourModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F924u;
 	g_esp = g_esp - 4u;
@@ -116074,7 +116074,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20A97Cu) = eax;
+	ZenWarriorNoArmourLiteWeaponNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = GameObjectTypeUse(arg0, arg1);
@@ -116089,7 +116089,7 @@ uint32_t ZenWarriorNoArmour_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20AC84u);
+	arg0 = ZenWarriorNoArmourModel;
 	x86_call(vcObjectRelease_entry, 0x0008ADD2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -116466,7 +116466,7 @@ uint32_t sub_0008B020(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	sub_0011EC90(arg0_2, arg1, arg2, arg3);
-	eax = MEM32(0x20A97Cu);
+	eax = ZenWarriorNoArmourLiteWeaponNode;
 	ecx = g_esp + 0x5Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
@@ -116565,7 +116565,7 @@ uint32_t sub_0008B1E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, ui
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_00019A30(arg0_2, arg1, arg2, &ebx, &ebp, &esi, &edi_2);
-	edx = MEM32(0x20A97Cu);
+	edx = ZenWarriorNoArmourLiteWeaponNode;
 	eax_2 = MEM32(esi + 0x194u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi + 0xA8u;
@@ -116935,7 +116935,7 @@ void ZenWarriorNoArmour_Register(uint32_t arg0)
 	MEM32(arg0 + 0x48u) = ZenWarriorNoArmourType_VA;
 	x86_rep_stos32(0x20AB80u, 0u, 0x41u);
 	MEM32(0x20ABB0u) = 0x19F404u;
-	MEM32(0x20ABB4u) = 0x1B1868u;
+	MEM32(0x20ABB4u) = ZenWarriorNoArmourTargetNode_VA;
 	MEM32(0x20AB80u) = 0x19F408u;
 	MEM32(0x20AB84u) = 0x19F40Cu;
 	MEM32(0x20AB88u) = 0x19F410u;
@@ -117064,7 +117064,7 @@ void sub_0008BAA0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20AFDCu);
+	MEM32(g_esp) = ZenWarriorHeavyModel;
 	eax = x86_call(vcObjectClone_entry, 0x0008BAAEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -117123,10 +117123,10 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20AFDCu) = eax;
+	ZenWarriorHeavyModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0008BB3Bu, 0);
 	edx = MEM32(0x19FA5Cu);
-	esi_2 = MEM32(0x20AFDCu);
+	esi_2 = ZenWarriorHeavyModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x19FA58u);
 	MEM32(g_esp + 0x34u) = MEM32(0x19FA54u);
@@ -117180,7 +117180,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20AFDCu);
+	ecx = ZenWarriorHeavyModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -117188,7 +117188,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B186Cu) = eax;
+	ZenWarriorHeavyTargetNode = eax;
 	x86_rep_stos32(0x20AD80u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FAA0u;
@@ -117423,7 +117423,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEF5u, 0);
-	edx = MEM32(0x20AFDCu);
+	edx = ZenWarriorHeavyModel;
 	MEM32(0x20AFE0u) = eax;
 	x86_rep_stos32(0x20ACD8u, 0u, 0x29u);
 	esi_2 = MEM32(0x20ACD8u) * 3u * 4u + 0x20ACE4u;
@@ -117461,7 +117461,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x20ACDCu) = MEM32(0x20ACDCu) + 1u;
-	eax = MEM32(0x20AFDCu);
+	eax = ZenWarriorHeavyModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FE78u;
 	g_esp = g_esp - 4u;
@@ -117473,7 +117473,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = 0x12u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20ACD4u) = eax;
+	ZenWarriorHeavyHeavyWeaponNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = GameObjectTypeUse(arg0, arg1);
@@ -117488,7 +117488,7 @@ uint32_t ZenWarriorHeavy_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20AFDCu);
+	arg0 = ZenWarriorHeavyModel;
 	x86_call(vcObjectRelease_entry, 0x0008BFD2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -117865,7 +117865,7 @@ uint32_t sub_0008C220(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	sub_0011EC90(arg0_2, arg1, arg2, arg3);
-	eax = MEM32(0x20ACD4u);
+	eax = ZenWarriorHeavyHeavyWeaponNode;
 	ecx = g_esp + 0x5Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
@@ -117964,7 +117964,7 @@ void sub_0008C3E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_00019A30(arg0_2, arg1, arg2, &ebx, &ebp, &esi, &edi_2);
-	edx = MEM32(0x20ACD4u);
+	edx = ZenWarriorHeavyHeavyWeaponNode;
 	eax_2 = MEM32(esi + 0x194u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi + 0xA8u;
@@ -118333,7 +118333,7 @@ void ZenWarriorHeavy_Register(uint32_t arg0)
 	MEM32(arg0 + 0x54u) = ZenWarriorHeavyType_VA;
 	x86_rep_stos32(0x20AED8u, 0u, 0x41u);
 	MEM32(0x20AF08u) = 0x19F958u;
-	MEM32(0x20AF0Cu) = 0x1B186Cu;
+	MEM32(0x20AF0Cu) = ZenWarriorHeavyTargetNode_VA;
 	MEM32(0x20AED8u) = 0x19F95Cu;
 	MEM32(0x20AEDCu) = 0x19F960u;
 	MEM32(0x20AEE0u) = 0x19F964u;
@@ -118465,7 +118465,7 @@ void sub_0008CCA0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20B334u);
+	MEM32(g_esp) = ZenWarriorLiteModel;
 	eax = x86_call(vcObjectClone_entry, 0x0008CCAEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -118524,10 +118524,10 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20B334u) = eax;
+	ZenWarriorLiteModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0008CD3Bu, 0);
 	edx = MEM32(0x19FFB4u);
-	esi_2 = MEM32(0x20B334u);
+	esi_2 = ZenWarriorLiteModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x19FFB0u);
 	MEM32(g_esp + 0x34u) = MEM32(0x19FFACu);
@@ -118581,7 +118581,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20B334u);
+	ecx = ZenWarriorLiteModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -118589,7 +118589,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1870u) = eax;
+	ZenWarriorLiteTargetNode = eax;
 	x86_rep_stos32(0x20B0D8u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FFF8u;
@@ -118824,7 +118824,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1BCu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0F5u, 0);
-	edx = MEM32(0x20B334u);
+	edx = ZenWarriorLiteModel;
 	MEM32(0x20B338u) = eax;
 	x86_rep_stos32(0x20B030u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B030u) * 3u * 4u + 0x20B03Cu;
@@ -118862,7 +118862,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x20B034u) = MEM32(0x20B034u) + 1u;
-	eax = MEM32(0x20B334u);
+	eax = ZenWarriorLiteModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A03D0u;
 	g_esp = g_esp - 4u;
@@ -118874,7 +118874,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = 0x11u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20B02Cu) = eax;
+	ZenWarriorLiteMediumWeaponNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = GameObjectTypeUse(arg0, arg1);
@@ -118889,7 +118889,7 @@ uint32_t ZenWarriorLite_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20B334u);
+	arg0 = ZenWarriorLiteModel;
 	x86_call(vcObjectRelease_entry, 0x0008D1D2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -119266,7 +119266,7 @@ uint32_t sub_0008D420(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	sub_0011EC90(arg0_2, arg1, arg2, arg3);
-	eax = MEM32(0x20B02Cu);
+	eax = ZenWarriorLiteMediumWeaponNode;
 	ecx = g_esp + 0x5Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
@@ -119365,7 +119365,7 @@ void sub_0008D5E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_00019A30(arg0_2, arg1, arg2, &ebx, &ebp, &esi, &edi_2);
-	edx = MEM32(0x20B02Cu);
+	edx = ZenWarriorLiteMediumWeaponNode;
 	eax_2 = MEM32(esi + 0x194u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi + 0xA8u;
@@ -119734,7 +119734,7 @@ void ZenWarriorLite_Register(uint32_t arg0)
 	MEM32(arg0 + 0x50u) = ZenWarriorLiteType_VA;
 	x86_rep_stos32(0x20B230u, 0u, 0x41u);
 	MEM32(0x20B260u) = 0x19FEB0u;
-	MEM32(0x20B264u) = 0x1B1870u;
+	MEM32(0x20B264u) = ZenWarriorLiteTargetNode_VA;
 	MEM32(0x20B230u) = 0x19FEB4u;
 	MEM32(0x20B234u) = 0x19FEB8u;
 	MEM32(0x20B238u) = 0x19FEBCu;
@@ -119860,7 +119860,7 @@ uint32_t ZenScoutShip_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x20B534u);
+	arg0 = ZenScoutShipScene;
 	x86_call(vcObjectRelease_entry, 0x0008DE8Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -119930,14 +119930,14 @@ void sub_0008DF00(uint32_t ebx, uint32_t arg1)
 	eax = g_eax;
 	ignored = g_edx;
 	MEM32(ebx + 0x194u) = eax;
-	eax = MEM32(0x20B534u);
+	eax = ZenScoutShipScene;
 	if (eax != vcObjectCacheHandle)
 	{
 		if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 			ebp = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x20B536u));
+			edx = vcClassByType(((uint16_t)(ZenScoutShipScene >> 16)));
 			vcObjectCacheHandle = eax;
 			eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = eax;
@@ -120160,7 +120160,7 @@ uint32_t ZenScoutShip_Startup(void)
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0008E28Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
-	MEM32(0x20B534u) = eax;
+	ZenScoutShipScene = eax;
 	if (eax == ecx)
 	{
 		edi = vcObjectCacheData;
@@ -120209,7 +120209,7 @@ uint32_t ZenScoutShip_Startup(void)
 		MEM32(0x20B388u) = eax;
 		return eax;
 	}
-	ecx = MEM32(0x20B534u);
+	ecx = ZenScoutShipScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -120392,7 +120392,7 @@ void sub_0008E6C0(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(g_esp + 8u) = arg1;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -120401,7 +120401,7 @@ void sub_0008E6C0(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -120447,7 +120447,7 @@ uint32_t sub_0008E770(uint32_t esi, uint32_t edi, uint32_t arg0)
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	g_esp = g_esp - 8u;
 	if (eax != GameObjectLastHandle)
 	{
@@ -120457,7 +120457,7 @@ uint32_t sub_0008E770(uint32_t esi, uint32_t edi, uint32_t arg0)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -121837,7 +121837,7 @@ void sub_0008FDD0(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t esi, uint32
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x20B7D4u);
+	arg3 = ARMDTurretLazerNode01Node;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = ebx;
 	arg0 = 0x2Du;
@@ -122049,10 +122049,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 					arg4_2 = 1u;
 					arg3_2 = 0xFAu;
 					arg2_2 = 0u;
-					arg1_2 = MEM32(0x20B880u);
+					arg1_2 = ARMDTurretZenCruiserTurretCloseMotion;
 					arg0_2 = MEM32(esi_2 + 0x194u);
 					sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
-					arg0_2 = MEM32(0x20B880u);
+					arg0_2 = ARMDTurretZenCruiserTurretCloseMotion;
 					eax = sub_0011CE20(arg0_2);
 					MEM32(edi + 0x18u) = eax;
 					eax = 1u;
@@ -122195,7 +122195,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			esi_2 = arg1;
 			MEM32(esi_2 + 0x278u) = 1u;
 			sub_0008FB30(&ignored, &esi_2);
-			edx = MEM32(0x20B884u);
+			edx = ARMDTurretIdleMotion;
 			arg5_2 = 0u;
 			arg4_2 = 1u;
 			arg3_2 = 0xFAu;
@@ -122296,7 +122296,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 	ecx = MEM32(ecx);
 	if (ecx == 0xFFFFu)
 	{
-		arg0_2 = MEM32(0x20B994u);
+		arg0_2 = ARMDTurretModel;
 		eax = x86_call(vcObjectClone_entry, 0x0008FEB5u, 1, arg0_2);
 		MEM32(saved_arg1 + 0x194u) = eax;
 		eax = 1u;
@@ -122383,10 +122383,10 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20B994u) = eax;
+	ARMDTurretModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000904B6u, 0);
 	edx = MEM32(0x1A0904u);
-	esi_2 = MEM32(0x20B994u);
+	esi_2 = ARMDTurretModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x1A0900u);
 	MEM32(g_esp + 0x34u) = MEM32(0x1A08FCu);
@@ -122440,7 +122440,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20B994u);
+	ecx = ARMDTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -122449,13 +122449,13 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x20B87Cu) = 0u;
-	MEM32(0x20B880u) = 0u;
-	MEM32(0x20B884u) = 0u;
+	ARMDTurretZenCruiserTurretCloseMotion = 0u;
+	ARMDTurretIdleMotion = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0938u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x1B187Cu) = eax;
+	ARMDTurretTargetNode = eax;
 	MEM32(0x20B888u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000905CBu, 0);
 	g_esp = g_esp - 4u;
@@ -122469,15 +122469,15 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(g_esp) = 0x1A096Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B880u) = eax;
+	ARMDTurretZenCruiserTurretCloseMotion = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000905F0u, 0);
-	MEM32(0x20B884u) = eax;
+	ARMDTurretIdleMotion = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0980u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x00090601u, 0);
-	edx = MEM32(0x20B994u);
+	edx = ARMDTurretModel;
 	MEM32(0x20B888u) = eax;
 	x86_rep_stos32(0x20B7D8u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B7D8u) * 3u * 4u + 0x20B7E4u;
@@ -122517,7 +122517,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	esi_2 = esi_2 * 8u + 0x20B85Cu;
 	eax = x86_call(vcObjectGet_entry, 0x000906A9u, 0);
 	MEM32(esi_2) = eax;
-	eax = MEM32(0x20B994u);
+	eax = ARMDTurretModel;
 	MEM32(esi_2 + 4u) = 1u;
 	ecx = MEM32(0x20B7DCu);
 	g_esp = g_esp - 4u;
@@ -122532,7 +122532,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(g_esp) = 0x2Du;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20B7D4u) = eax;
+	ARMDTurretLazerNode01Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
@@ -122561,7 +122561,7 @@ uint32_t ARMDTurret_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x20B994u);
+	arg0 = ARMDTurretModel;
 	x86_call(vcObjectRelease_entry, 0x0009070Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -122571,12 +122571,12 @@ uint32_t ARMDTurret_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B880u);
+	arg0 = ARMDTurretZenCruiserTurretCloseMotion;
 	x86_call(vcObjectRelease_entry, 0x00090725u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B884u);
+	arg0 = ARMDTurretIdleMotion;
 	x86_call(vcObjectRelease_entry, 0x00090730u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -122588,8 +122588,8 @@ uint32_t ARMDTurret_Shutdown(void)
 	ignored_3 = g_edx;
 	eax = MEM32(0x20B7DCu);
 	MEM32(0x20B87Cu) = 0u;
-	MEM32(0x20B880u) = 0u;
-	MEM32(0x20B884u) = 0u;
+	ARMDTurretZenCruiserTurretCloseMotion = 0u;
+	ARMDTurretIdleMotion = 0u;
 	edi = 0u;
 	MEM32(0x20B888u) = 0u;
 	if ((int32_t)eax > 0)
@@ -122656,7 +122656,7 @@ void ARMDTurret_Register(uint32_t arg0)
 	MEM32(arg0 + 0x88u) = ARMDTurretType_VA;
 	x86_rep_stos32(0x20B890u, 0u, 0x41u);
 	MEM32(0x20B8C0u) = 0x1A0800u;
-	MEM32(0x20B8C4u) = 0x1B187Cu;
+	MEM32(0x20B8C4u) = ARMDTurretTargetNode_VA;
 	MEM32(0x20B890u) = 0x1A0804u;
 	MEM32(0x20B894u) = 0x1A0808u;
 	MEM32(0x20B898u) = 0x1A080Cu;
@@ -122733,7 +122733,7 @@ void sub_00090BD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	sub_00019A30(arg0, arg1, arg2, &ebx, &ebp, &esi, &edi);
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x20B9DCu);
+	arg3 = ZenCruiserTurretZenTurretLazerNode01Node;
 	arg2 = MEM32(esi + 0x194u);
 	arg1 = ebx;
 	arg0 = 0x24u;
@@ -122944,10 +122944,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 					arg4_2 = 1u;
 					arg3_2 = 0xFAu;
 					arg2_2 = 0u;
-					arg1_2 = MEM32(0x20BA88u);
+					arg1_2 = ZenCruiserTurretCloseMotion;
 					arg0_2 = MEM32(esi_2 + 0x194u);
 					sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
-					arg0_2 = MEM32(0x20BA88u);
+					arg0_2 = ZenCruiserTurretCloseMotion;
 					eax = sub_0011CE20(arg0_2);
 					MEM32(edi + 0x18u) = eax;
 					eax = 1u;
@@ -123090,7 +123090,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			esi_2 = arg1;
 			MEM32(esi_2 + 0x278u) = 1u;
 			sub_0008FB30(&ignored, &esi_2);
-			edx = MEM32(0x20BA8Cu);
+			edx = ZenCruiserTurretIdleMotion;
 			arg5_2 = 0u;
 			arg4_2 = 1u;
 			arg3_2 = 0xFAu;
@@ -123191,7 +123191,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 	ecx = MEM32(ecx);
 	if (ecx == 0xFFFFu)
 	{
-		arg0_2 = MEM32(0x20BB9Cu);
+		arg0_2 = ZenCruiserTurretModel;
 		eax = x86_call(vcObjectClone_entry, 0x00090CA5u, 1, arg0_2);
 		MEM32(saved_arg1 + 0x194u) = eax;
 		eax = 1u;
@@ -123282,10 +123282,10 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20BB9Cu) = eax;
+	ZenCruiserTurretModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000912A6u, 0);
 	edx = MEM32(0x1A0B08u);
-	esi_2 = MEM32(0x20BB9Cu);
+	esi_2 = ZenCruiserTurretModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x1A0B04u);
 	MEM32(g_esp + 0x34u) = MEM32(0x1A0B00u);
@@ -123339,7 +123339,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20BB9Cu);
+	ecx = ZenCruiserTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -123348,13 +123348,13 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x20BA84u) = 0u;
-	MEM32(0x20BA88u) = 0u;
-	MEM32(0x20BA8Cu) = 0u;
+	ZenCruiserTurretCloseMotion = 0u;
+	ZenCruiserTurretIdleMotion = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0B44u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x1B1880u) = eax;
+	ZenCruiserTurretTargetNode = eax;
 	MEM32(0x20BA90u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000913BBu, 0);
 	g_esp = g_esp - 4u;
@@ -123368,15 +123368,15 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(g_esp) = 0x1A0B78u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20BA88u) = eax;
+	ZenCruiserTurretCloseMotion = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000913E0u, 0);
-	MEM32(0x20BA8Cu) = eax;
+	ZenCruiserTurretIdleMotion = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0B90u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x000913F1u, 0);
-	edx = MEM32(0x20BB9Cu);
+	edx = ZenCruiserTurretModel;
 	MEM32(0x20BA90u) = eax;
 	x86_rep_stos32(0x20B9E0u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B9E0u) * 3u * 4u + 0x20B9ECu;
@@ -123418,7 +123418,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x20B9E4u) = MEM32(0x20B9E4u) + 1u;
-	eax = MEM32(0x20BB9Cu);
+	eax = ZenCruiserTurretModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x192D18u;
 	g_esp = g_esp - 4u;
@@ -123430,7 +123430,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(g_esp) = 0x24u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20B9DCu) = eax;
+	ZenCruiserTurretZenTurretLazerNode01Node = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
@@ -123459,7 +123459,7 @@ uint32_t ZenCruiserTurret_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x20BB9Cu);
+	arg0 = ZenCruiserTurretModel;
 	x86_call(vcObjectRelease_entry, 0x000914FDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -123469,12 +123469,12 @@ uint32_t ZenCruiserTurret_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20BA88u);
+	arg0 = ZenCruiserTurretCloseMotion;
 	x86_call(vcObjectRelease_entry, 0x00091515u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20BA8Cu);
+	arg0 = ZenCruiserTurretIdleMotion;
 	x86_call(vcObjectRelease_entry, 0x00091520u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -123486,8 +123486,8 @@ uint32_t ZenCruiserTurret_Shutdown(void)
 	ignored_3 = g_edx;
 	eax = MEM32(0x20B9E4u);
 	MEM32(0x20BA84u) = 0u;
-	MEM32(0x20BA88u) = 0u;
-	MEM32(0x20BA8Cu) = 0u;
+	ZenCruiserTurretCloseMotion = 0u;
+	ZenCruiserTurretIdleMotion = 0u;
 	edi = 0u;
 	MEM32(0x20BA90u) = 0u;
 	if ((int32_t)eax > 0)
@@ -123554,7 +123554,7 @@ void ZenCruiserTurret_Register(uint32_t arg0)
 	MEM32(arg0 + 0x3Cu) = ZenCruiserTurretType_VA;
 	x86_rep_stos32(0x20BA98u, 0u, 0x41u);
 	MEM32(0x20BAC8u) = 0x1A0A00u;
-	MEM32(0x20BACCu) = 0x1B1880u;
+	MEM32(0x20BACCu) = ZenCruiserTurretTargetNode_VA;
 	MEM32(0x20BA98u) = 0x1A0A04u;
 	MEM32(0x20BA9Cu) = 0x1A0A08u;
 	MEM32(0x20BAA0u) = 0x1A0A0Cu;
@@ -123734,7 +123734,7 @@ void sub_00091A50(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 	MEM32(g_esp + 8u) = arg1;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -123743,7 +123743,7 @@ void sub_00091A50(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t arg1)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -123789,7 +123789,7 @@ uint32_t sub_00091B00(uint32_t esi, uint32_t edi, uint32_t arg0)
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	g_esp = g_esp - 8u;
 	if (eax != GameObjectLastHandle)
 	{
@@ -123799,7 +123799,7 @@ uint32_t sub_00091B00(uint32_t esi, uint32_t edi, uint32_t arg0)
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
 		g_esp = g_esp + 4u;
 	}
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -124040,7 +124040,7 @@ void sub_00091DE0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20C0A4u);
+	MEM32(g_esp) = SeaSergeantModel;
 	eax = x86_call(vcObjectClone_entry, 0x00091DEEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -124148,9 +124148,9 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20C0A4u) = eax;
+	SeaSergeantModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00091F23u, 0);
-	eax = MEM32(0x20C0A4u);
+	eax = SeaSergeantModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -124158,7 +124158,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1884u) = eax;
+	SeaSergeantTargetNode = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0CF4u;
 	g_esp = g_esp - 4u;
@@ -124231,7 +124231,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(g_esp) = 0x1A0DE8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20BF60u) = eax;
+	SeaSergeantVehicleMilSeaSergeantBackMotion = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009201Eu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0E08u;
@@ -124295,7 +124295,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C0ACu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000920CEu, 0);
-	esi_2 = MEM32(0x20C0A4u);
+	esi_2 = SeaSergeantModel;
 	MEM32(0x20C0B0u) = eax;
 	x86_rep_stos32(0x20BEB0u, 0u, 0x29u);
 	edi_2 = MEM32(0x20BEB0u) * 3u * 4u + 0x20BEBCu;
@@ -124389,7 +124389,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = edx + 1u;
 	esi_2 = esi_2 * 8u + 0x20BF34u;
 	eax = x86_call(vcObjectGet_entry, 0x00092240u, 0);
-	ecx = MEM32(0x20C0A4u);
+	ecx = SeaSergeantModel;
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	edx = MEM32(0x20BEB4u) + 1u;
@@ -124402,12 +124402,12 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x20C0A4u);
+	edx = SeaSergeantModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0F9Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x20BBE4u) = eax;
+	SeaSergeantSSLeftMissileNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
@@ -124440,7 +124440,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	} while ((int32_t)edx < 0x20BC1C);
 	MEM32(0x20BBF4u) = 2u;
 	MEM32(0x20BBF8u) = 2u;
-	ecx = MEM32(0x20BBE4u);
+	ecx = SeaSergeantSSLeftMissileNode;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 5u;
 	g_esp = g_esp - 4u;
@@ -124532,7 +124532,7 @@ uint32_t SeaSergeant_Shutdown(void)
 	uint32_t stack_1C = 0, stack_2C = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20C0A4u);
+	arg0 = SeaSergeantModel;
 	x86_call(vcObjectRelease_entry, 0x00092412u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -124589,7 +124589,7 @@ uint32_t SeaSergeant_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20BF60u);
+	arg0 = SeaSergeantVehicleMilSeaSergeantBackMotion;
 	x86_call(vcObjectRelease_entry, 0x000924A1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -125344,7 +125344,7 @@ void SeaSergeant_Register(uint32_t arg0)
 	MEM32(arg0 + 0x38u) = SeaSergeantType_VA;
 	x86_rep_stos32(0x20BFA0u, 0u, 0x41u);
 	MEM32(0x20BFD0u) = 0x1A0BFCu;
-	MEM32(0x20BFD4u) = 0x1B1884u;
+	MEM32(0x20BFD4u) = SeaSergeantTargetNode_VA;
 	MEM32(0x20BFA0u) = 0x1A0C08u;
 	MEM32(0x20BFA4u) = 0x1A0C0Cu;
 	MEM32(0x20BFA8u) = 0x1A0C10u;
@@ -126342,7 +126342,7 @@ void sub_000943F0(uint32_t esi)
 
 	g_esp = g_esp - 0xCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x20C63Cu);
+	MEM32(g_esp) = ZenWarriorScavengerModel;
 	eax = x86_call(vcObjectClone_entry, 0x000943FEu, 0);
 	f0 = FLOAT_AT(esi + 0xCu);
 	ecx = MEM32(esi + 8u);
@@ -126401,10 +126401,10 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20C63Cu) = eax;
+	ZenWarriorScavengerModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0009448Bu, 0);
 	edx = MEM32(0x1A1368u);
-	esi_2 = MEM32(0x20C63Cu);
+	esi_2 = ZenWarriorScavengerModel;
 	x86_rep_stos32(g_esp + 0x20u, 0u, 0x1Eu);
 	ecx = MEM32(0x1A1364u);
 	MEM32(g_esp + 0x34u) = MEM32(0x1A1360u);
@@ -126458,7 +126458,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0011E770(arg0, arg1, arg2);
-	ecx = MEM32(0x20C63Cu);
+	ecx = ZenWarriorScavengerModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x191C70u;
 	g_esp = g_esp - 4u;
@@ -126466,7 +126466,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x1B1890u) = eax;
+	ZenWarriorScavengerTargetNode = eax;
 	x86_rep_stos32(0x20C3E0u, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A13ACu;
@@ -126701,7 +126701,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4C4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094845u, 0);
-	edx = MEM32(0x20C63Cu);
+	edx = ZenWarriorScavengerModel;
 	MEM32(0x20C640u) = eax;
 	x86_rep_stos32(0x20C338u, 0u, 0x29u);
 	esi_2 = MEM32(0x20C338u) * 3u * 4u + 0x20C344u;
@@ -126739,7 +126739,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(esi_2) = eax;
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x20C33Cu) = MEM32(0x20C33Cu) + 1u;
-	eax = MEM32(0x20C63Cu);
+	eax = ZenWarriorScavengerModel;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F924u;
 	g_esp = g_esp - 4u;
@@ -126751,7 +126751,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = 0x13u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 3u;
-	MEM32(0x20C334u) = eax;
+	ZenWarriorScavengerLiteWeaponNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = GameObjectTypeUse(arg0, arg1);
@@ -126767,7 +126767,7 @@ uint32_t ZenWarriorScavenger_Shutdown(void)
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	sub_00018A40();
-	arg0 = MEM32(0x20C63Cu);
+	arg0 = ZenWarriorScavengerModel;
 	x86_call(vcObjectRelease_entry, 0x00094922u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
@@ -127144,7 +127144,7 @@ uint32_t sub_00094B70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	sub_0011EC90(arg0_2, arg1, arg2, arg3);
-	eax = MEM32(0x20C334u);
+	eax = ZenWarriorScavengerLiteWeaponNode;
 	ecx = g_esp + 0x5Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
@@ -127243,7 +127243,7 @@ void sub_00094D30(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_00019A30(arg0_2, arg1, arg2, &ebx, &ebp, &esi, &edi_2);
-	edx = MEM32(0x20C334u);
+	edx = ZenWarriorScavengerLiteWeaponNode;
 	eax_2 = MEM32(esi + 0x194u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi + 0xA8u;
@@ -127612,7 +127612,7 @@ void ZenWarriorScavenger_Register(uint32_t arg0)
 	MEM32(arg0 + 0x30u) = ZenWarriorScavengerType_VA;
 	x86_rep_stos32(0x20C538u, 0u, 0x41u);
 	MEM32(0x20C568u) = 0x1A1264u;
-	MEM32(0x20C56Cu) = 0x1B1890u;
+	MEM32(0x20C56Cu) = ZenWarriorScavengerTargetNode_VA;
 	MEM32(0x20C538u) = 0x1A1268u;
 	MEM32(0x20C53Cu) = 0x1A126Cu;
 	MEM32(0x20C540u) = 0x1A1270u;
@@ -128264,7 +128264,7 @@ void sub_00096A50(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x20CCB4u);
+	arg2 = CatsEyeExhaustL01Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x26u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -128274,7 +128274,7 @@ void sub_00096A50(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x26Cu) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20CCB8u);
+	arg2 = CatsEyeExhaustL02Node;
 	arg1 = edx;
 	arg0 = 0x26u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -128284,7 +128284,7 @@ void sub_00096A50(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x270u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20CCBCu);
+	arg2 = CatsEyeExhaustR01Node;
 	arg1 = ecx_2;
 	arg0 = 0x26u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -128293,7 +128293,7 @@ void sub_00096A50(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x274u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20CCC0u);
+	arg2 = CatsEyeExhaustR02Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0 = 0x26u;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -128303,7 +128303,7 @@ void sub_00096A50(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x278u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20CCC4u);
+	arg2 = CatsEyeTargetNode;
 	arg1 = edx;
 	arg0 = 0x1Au;
 	sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -128702,24 +128702,24 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A1CF8u;
 	arg0 = MEM32(0x20CE8Cu);
-	MEM32(0x20CCB4u) = eax;
+	CatsEyeExhaustL01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x20CCB8u) = eax;
+	CatsEyeExhaustL02Node = eax;
 	arg1 = 0x1A1CE4u;
 	arg0 = MEM32(0x20CE8Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A1CD0u;
 	arg0 = MEM32(0x20CE8Cu);
-	MEM32(0x20CCBCu) = eax;
+	CatsEyeExhaustR01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MEM32(0x20CE8Cu);
 	arg1 = 0x191C70u;
-	MEM32(0x20CCC0u) = eax;
+	CatsEyeExhaustR02Node = eax;
 	arg0 = edx;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x26u;
 	arg0 = 4u;
-	MEM32(0x20CCC4u) = eax;
+	CatsEyeTargetNode = eax;
 	GameObjectTypeUse(arg0, arg1);
 	arg1 = 0x42u;
 	arg0 = 4u;
@@ -130845,7 +130845,7 @@ void sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg5 = 0u;
 	arg4 = 0u;
 	arg3 = 0u;
-	arg2 = MEM32(0x20D674u);
+	arg2 = FighterPodThruster1Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0_2 = 0x20u;
 	sub_000A1560(arg0_2, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -130855,7 +130855,7 @@ void sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x26Cu) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20D678u);
+	arg2 = FighterPodThruster2Node;
 	arg1 = ecx_2;
 	arg0_2 = 0x20u;
 	sub_000A1560(arg0_2, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -130864,7 +130864,7 @@ void sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x270u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20D67Cu);
+	arg2 = FighterPodThruster3Node;
 	arg1 = MEM32(esi + 0x194u);
 	arg0_2 = 0x20u;
 	sub_000A1560(arg0_2, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -130874,7 +130874,7 @@ void sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	arg4 = 0u;
 	MEM32(esi + 0x274u) = eax_2;
 	arg3 = 0u;
-	arg2 = MEM32(0x20D680u);
+	arg2 = FighterPodTargetNode;
 	arg1 = edx;
 	arg0_2 = 0x1Au;
 	sub_000A1560(arg0_2, arg1, arg2, arg3, arg4, arg5, arg6, &eax_2, &ignored, &edi);
@@ -130882,7 +130882,7 @@ void sub_0009A050(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 	MEM32(esi + 0x278u) = eax_2;
 	arg5 = esi + 0xA8u;
 	arg4 = 0xFFFFFFFFu;
-	arg3 = MEM32(0x20D684u);
+	arg3 = FighterPodFrontGunNode;
 	arg2 = edx;
 	arg1 = edi;
 	arg0_2 = 0x15u;
@@ -131442,26 +131442,26 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A2624u;
 	arg0 = MEM32(0x20DACCu);
-	MEM32(0x20D674u) = eax;
+	FighterPodThruster1Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x20D678u) = eax;
+	FighterPodThruster2Node = eax;
 	arg1 = 0x1A2618u;
 	arg0 = MEM32(0x20DACCu);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x191C70u;
 	arg0 = MEM32(0x20DACCu);
-	MEM32(0x20D67Cu) = eax;
+	FighterPodThruster3Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A260Cu;
 	arg0 = MEM32(0x20DACCu);
-	MEM32(0x20D680u) = eax;
+	FighterPodTargetNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x20D684u) = eax;
+	FighterPodFrontGunNode = eax;
 	arg1 = 0x1A2600u;
 	arg0 = MEM32(0x20DACCu);
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MEM32(0x20DACCu);
-	MEM32(0x20D688u) = eax;
+	FighterPodMissileLNode = eax;
 	arg1 = 0x1A25F4u;
 	arg0 = ecx;
 	eax = sub_0011EA70(arg0, arg1);
@@ -131491,7 +131491,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 		} while (t1 != 1u);
 		edx += 4u;
 	} while ((int32_t)edx < 0x20D6BC);
-	edx = MEM32(0x20D688u);
+	edx = FighterPodMissileLNode;
 	arg1 = 0x15u;
 	arg0 = ebp_2;
 	MEM32(0x20D8FCu) = ebx_2;
@@ -138608,12 +138608,12 @@ void sub_0009F990(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		if (MEM32(esi_2 + 0x410u) == 0u)
 		{
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1BC980u);
+			MEM32(g_esp) = Players(0);
 			eax = x86_call(sub_0009C6E0, 0x0009FDAFu, 0);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
 			{
-				eax = MEM32(0x1BC980u);
+				eax = Players(0);
 				if (eax != GameObjectLastHandle)
 				{
 					g_esp = g_esp - 4u;
@@ -142731,7 +142731,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						MEM32(esi_2 + 0x1Cu) = eax_2;
 						MEM32(0x1BC6C4u) = edi_2;
 						g_esp = g_esp + 4u;
-						MEM32(0x1AECA0u) = eax_2;
+						PlayerPorts(0) = eax_2;
 						g_esp = g_esp + 4u;
 						g_esp = g_esp + 4u;
 						g_esp = g_esp + 4u;
@@ -142952,7 +142952,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								else
 								{
 									eax_2 = eax_2 * 0x210u;
-									if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u)
+									if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u)
 										MEM32(g_esp + 0x14u) = 1u;
 									else
 									{
@@ -142979,7 +142979,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								else
 								{
 									eax_2 = ecx * 0x210u;
-									if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u)
+									if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u)
 										MEM32(g_esp + 0x10u) = 1u;
 									else
 									{
@@ -143005,7 +143005,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								else
 								{
 									eax_2 = ecx * 0x210u;
-									if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u)
+									if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u)
 										ebp_2 = 1u;
 									else
 									{
@@ -143030,7 +143030,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								else
 								{
 									eax_2 = ecx * 0x210u;
-									if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u)
+									if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u)
 										ebx_2 = 1u;
 									else
 									{
@@ -157504,7 +157504,7 @@ void sub_000AD190(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		MEM32(0x20FAB4u) = esi;
 		if (eax_2 != 0u)
 			edi = sub_000C6410(edi);
-		eax_2 = MEM32(0x1BC980u);
+		eax_2 = Players(0);
 		if (eax_2 == 0u)
 			return;
 		if (eax_2 != GameObjectLastHandle)
@@ -157757,7 +157757,7 @@ void sub_000AD4E0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t *p_ebx, ui
 			*p_edi = edi_2;
 			return;
 		}
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		if (ecx == 0u)
 		{
 			MEM32(0x24EC0Cu) = MEM32(esi_2 + 0x88u);
@@ -157789,7 +157789,7 @@ void sub_000AD4E0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t *p_ebx, ui
 			MEM32(g_esp) = ecx;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax_2, &ignored, &ignored_2);
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			edx = GameObjectLastHandle;
 			edi_2 = GameObjectLastObject;
 			g_esp = g_esp + 4u;
@@ -157829,7 +157829,7 @@ void sub_000AD4E0(uint32_t eax, uint32_t esi, uint32_t arg0, uint32_t *p_ebx, ui
 			MEM32(g_esp) = ecx;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax_2, &ignored, &ignored_2);
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			edx = GameObjectLastHandle;
 			edi_2 = GameObjectLastObject;
 			g_esp = g_esp + 4u;
@@ -160885,7 +160885,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 								stack = 1u;
 							else
 								stack = 0u;
@@ -160909,7 +160909,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 									stack = 1u;
 								else
 									stack = 0u;
@@ -160935,7 +160935,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 								stack = 1u;
 							else
 								stack = 0u;
@@ -160959,7 +160959,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 									stack = 1u;
 								else
 									stack = 0u;
@@ -160990,7 +160990,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 								stack_8 = 1u;
 							else
 								stack_8 = 0u;
@@ -161014,7 +161014,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 									stack_8 = 1u;
 								else
 									stack_8 = 0u;
@@ -161040,7 +161040,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 								stack_8 = 1u;
 							else
 								stack_8 = 0u;
@@ -161064,7 +161064,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 									stack_8 = 1u;
 								else
 									stack_8 = 0u;
@@ -161099,7 +161099,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
 								edi = 1u;
 							else
 								edi = 0u;
@@ -161123,7 +161123,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
 									edi = 1u;
 								else
 									edi = 0u;
@@ -161149,7 +161149,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
 								edi = 1u;
 							else
 								edi = 0u;
@@ -161173,7 +161173,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax + vcPads_VA) > 0.0f)
 									edi = 1u;
 								else
 									edi = 0u;
@@ -161204,7 +161204,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
 								edx = 1u;
 							else
 								edx = 0u;
@@ -161228,7 +161228,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
 									edx = 1u;
 								else
 									edx = 0u;
@@ -161254,7 +161254,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						else
 						{
 							eax = eax * 0x210u;
-							if (MEM8(eax + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
+							if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
 								edx = 1u;
 							else
 								edx = 0u;
@@ -161278,7 +161278,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							else
 							{
 								eax = eax * 0x210u;
-								if (MEM8(eax + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
+								if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax + vcPads_VA) < 0.0f)
 									edx = 1u;
 								else
 									edx = 0u;
@@ -162190,7 +162190,7 @@ void sub_000B0970(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	}
 	if ((int32_t)ebp_2 <= (int32_t)MEM32(esi + 0x18u))
 	{
-		eax = MEM32(0x1BC984u);
+		eax = Players(1);
 		if (eax != ebp_2)
 		{
 			g_esp = g_esp - 4u;
@@ -162862,7 +162862,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162883,7 +162883,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162907,7 +162907,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162928,7 +162928,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162953,7 +162953,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -162974,7 +162974,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -162998,7 +162998,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -163019,7 +163019,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -163048,7 +163048,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163069,7 +163069,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163093,7 +163093,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163114,7 +163114,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = esi * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163219,7 +163219,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				return;
 			}
 			eax_2 = esi * 0x210u;
-			if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+			if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 			{
 				edi = 1u;
 				if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
@@ -163267,7 +163267,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		return;
 	}
 	eax_2 = esi * 0x210u;
-	if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+	if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 	{
 		edi = 1u;
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
@@ -163621,7 +163621,7 @@ void sub_000B1CE0(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	}
 	if ((int32_t)ebp_2 <= (int32_t)MEM32(esi + 0x18u))
 	{
-		eax = MEM32(0x1BC984u);
+		eax = Players(1);
 		if (eax != ebp_2)
 		{
 			g_esp = g_esp - 4u;
@@ -164432,7 +164432,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164453,7 +164453,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164477,7 +164477,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164498,7 +164498,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164523,7 +164523,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164544,7 +164544,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164568,7 +164568,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164589,7 +164589,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164618,7 +164618,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164639,7 +164639,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164663,7 +164663,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164684,7 +164684,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164709,7 +164709,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164730,7 +164730,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164754,7 +164754,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164775,7 +164775,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = ebp * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164809,7 +164809,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				else
 				{
 					eax_2 = ebp * 0x210u;
-					if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u)
+					if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u)
 					{
 						arg0 = MEM32(0x20FC2Cu);
 						sub_0010E7E0(arg0, &ignored, &ignored_3);
@@ -164828,7 +164828,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			else
 			{
 				eax_2 = ebp * 0x210u;
-				if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+				if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 				{
 					arg0 = MEM32(0x20FC2Cu);
 					sub_0010E7E0(arg0, &ignored, &ignored_3);
@@ -164853,7 +164853,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				else
 				{
 					eax_2 = ebp * 0x210u;
-					if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u)
+					if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u)
 					{
 						arg0 = MEM32(0x20FC2Cu);
 						sub_0010E7E0(arg0, &ignored, &ignored_3);
@@ -165690,7 +165690,7 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	}
 	if ((int32_t)MEM32(esi + 0x18u) >= 0)
 	{
-		eax = MEM32(0x1BC984u);
+		eax = Players(1);
 		if (eax != 0u)
 		{
 			g_esp = g_esp - 4u;
@@ -166932,7 +166932,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166953,7 +166953,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166977,7 +166977,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166998,7 +166998,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -167023,7 +167023,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167044,7 +167044,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167068,7 +167068,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167089,7 +167089,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax_2 + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167118,7 +167118,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167139,7 +167139,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167163,7 +167163,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167184,7 +167184,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x9u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167209,7 +167209,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167230,7 +167230,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167254,7 +167254,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167275,7 +167275,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 					else
 					{
 						eax_2 = edi * 0x210u;
-						if (MEM8(eax_2 + (vcPads_VA + 0x1E8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
+						if (MEM8(eax_2 + (vcPad_read_before_VA(vcPads_VA) + 0x8u)) != 0u || FLOAT_AT(eax_2 + vcPads_VA) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -171365,7 +171365,7 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	MEM32(g_esp) = 0x1A35D8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x219A0Cu) = eax;
+	CreditsScreenModel = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000B8307u, 0);
 	MEM32(0x219A10u) = eax;
 	g_esp = g_esp + 0x50u;
@@ -171381,7 +171381,7 @@ uint32_t CreditsScreen_Shutdown(void)
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = 0x2199C8u;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = MEM32(0x219A0Cu);
+	arg0 = CreditsScreenModel;
 	x86_call(vcObjectRelease_entry, 0x000B832Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
@@ -171392,7 +171392,7 @@ uint32_t CreditsScreen_Shutdown(void)
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
 	eax = 0u;
-	MEM32(0x219A0Cu) = 0u;
+	CreditsScreenModel = 0u;
 	MEM32(0x219A10u) = 0u;
 	return eax;
 }
@@ -173159,7 +173159,7 @@ void sub_000B9790(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	}
 	if ((int32_t)ebp_2 <= (int32_t)MEM32(esi + 0x18u))
 	{
-		eax_2 = MEM32(0x1BC984u);
+		eax_2 = Players(1);
 		if (eax_2 != ebp_2)
 		{
 			g_esp = g_esp - 4u;
@@ -180543,7 +180543,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 				else
 				{
 					eax = eax * 0x210u;
-					if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
+					if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f)
 						ecx = 1u;
 					else
 						ecx = 0u;
@@ -180565,7 +180565,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 				else
 				{
 					eax = eax * 0x210u;
-					if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
+					if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u || FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f)
 						edx = 1u;
 					else
 						edx = 0u;
@@ -180704,7 +180704,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	else
 	{
 		eax = eax * 0x210u;
-		if (MEM8(eax + (vcPads_VA + 0x1E6u)) != 0u)
+		if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x6u)) != 0u)
 		{
 			arg1_2 = MEM32(esi + 0x358u);
 			arg0 = ebx;
@@ -180744,7 +180744,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	else
 	{
 		eax = eax * 0x210u;
-		if (MEM8(eax + (vcPads_VA + 0x1E7u)) != 0u)
+		if (MEM8(eax + (vcPad_read_before_VA(vcPads_VA) + 0x7u)) != 0u)
 		{
 			arg1_2 = MEM32(esi + 0x35Cu);
 			arg0 = ebx;
@@ -185532,19 +185532,19 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 	uint32_t jump_target = 0, jump_target_2 = 0;
 
 	esi = eax;
-	eax_2 = MEM32(0x1BC980u);
+	eax_2 = Players(0);
 	ebx = ecx;
 	if (eax_2 != GameObjectLastHandle)
 	{
 		handle = eax_2;
 		GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
-		eax_2 = MEM32(0x1BC980u);
+		eax_2 = Players(0);
 		ecx = GameObjectLastHandle;
 		if (eax_2 != ecx)
 		{
 			handle = eax_2;
 			GameObjectFromHandle(handle, &ignored, &ignored_2, &ignored_3);
-			eax_2 = MEM32(0x1BC980u);
+			eax_2 = Players(0);
 			ecx = GameObjectLastHandle;
 			if (eax_2 != ecx)
 			{
@@ -185557,17 +185557,17 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 	sub_0010C9C0(&ignored, &ecx, &ebx, &esi, &edi);
 	if (MEM32(0x1EAB28u) != 0u)
 	{
-		arg0 = MEM32(0x21CBB4u);
+		arg0 = PauseScreenConfirmSSound;
 		sub_0010E770(arg0);
 	}
 	if (MEM32(0x1EAB24u) != 0u)
 	{
-		arg0 = MEM32(0x21CBB0u);
+		arg0 = PauseScreenCancelBackSSound;
 		sub_0010E7E0(arg0, &ignored, &ignored_2);
 	}
 	if (MEM32(0x1EAB20u) != 0u)
 	{
-		arg0 = MEM32(0x21CBACu);
+		arg0 = PauseScreenCursorSound;
 		sub_0010E7E0(arg0, &ignored, &ignored_2);
 	}
 	MEM32(0x1EAB28u) = 0u;
@@ -186058,16 +186058,16 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A37D0u;
-	MEM32(0x21CBB4u) = eax;
+	PauseScreenConfirmSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A3850u;
-	MEM32(0x21CBB0u) = eax;
+	PauseScreenCancelBackSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp + 0x40u;
-	MEM32(0x21CBACu) = eax;
+	PauseScreenCursorSound = eax;
 	eax = sub_000A52C0();
 	g_esp = g_esp + 0x10u;
 	DoNothing();
@@ -186098,17 +186098,17 @@ uint32_t PauseScreen_Shutdown(void)
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = 0x21CB34u;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = MEM32(0x21CBB4u);
+	arg0 = PauseScreenConfirmSSound;
 	x86_call(vcObjectRelease_entry, 0x000C4C0Au, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x21CBB0u);
+	arg0 = PauseScreenCancelBackSSound;
 	x86_call(vcObjectRelease_entry, 0x000C4C16u, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x21CBACu);
+	arg0 = PauseScreenCursorSound;
 	x86_call(vcObjectRelease_entry, 0x000C4C22u, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
@@ -186140,7 +186140,7 @@ uint32_t sub_000C4C80(uint32_t eax, uint32_t arg1)
 
 	ecx = arg1;
 	f0 = FLOAT_AT(ecx + 0x128u);
-	if (MEM32(0x1BC990u) == 1u)
+	if ((uint32_t)PlayerCount == 1u)
 		f0 = x87_round(f0 + 4.0);
 	else
 		f0 = x87_round(f0 + 2.0);
@@ -186183,7 +186183,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	f0 = (double)(int32_t)MEM32(g_esp + 0x10u);
 	MEM32(g_esp + 0x10u) = edx - MEM32(esi_2 + 4u);
 	MEM32(g_esp + 0xCu) = eax_2;
-	eax_2 = MEM32(0x1BC990u);
+	eax_2 = PlayerCount;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
 	MEMF(g_esp + 8u) = (float)x87_round(0.5 * f0);
@@ -186215,7 +186215,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcRectSet_entry, 0x000C4D83u, 0);
-	eax_2 = MEM32(0x21CCC4u);
+	eax_2 = SniperScreenSniperCenterTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186233,7 +186233,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi);
-	t1 = MEM32(0x1BC990u);
+	t1 = PlayerCount;
 	eax_2 = MEM32(esi_2);
 	g_esp = g_esp + 0x34u;
 	if (t1 != ebx_2)
@@ -186280,7 +186280,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_ecx = ecx;
 	x86_call(vcRectSet_entry, 0x000C4E2Cu, 0);
 	ecx = g_ecx;
-	eax_2 = MEM32(0x21CCB8u);
+	eax_2 = SniperScreenSniperSideTopTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186298,7 +186298,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ecx, &esi_2, &edi);
-	t2 = MEM32(0x1BC990u);
+	t2 = PlayerCount;
 	eax_2 = MEM32(esi_2);
 	g_esp = g_esp + 0x34u;
 	if (t2 != ebx_2)
@@ -186342,7 +186342,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcRectSet_entry, 0x000C4ECEu, 0);
-	eax_2 = MEM32(0x21CCC0u);
+	eax_2 = SniperScreenSniperSideMiddleTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186360,7 +186360,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
-	t3 = MEM32(0x1BC990u);
+	t3 = PlayerCount;
 	eax_2 = MEM32(esi_2);
 	g_esp = g_esp + 0x34u;
 	if (t3 != ebx_2)
@@ -186404,7 +186404,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	x86_call(vcRectSet_entry, 0x000C4F8Eu, 0);
-	ecx = MEM32(0x21CCBCu);
+	ecx = SniperScreenSniperSideBottomTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186423,7 +186423,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
 	g_esp = g_esp + 0x34u;
-	if (MEM32(0x1BC990u) != ebx_2)
+	if ((uint32_t)PlayerCount != ebx_2)
 	{
 		MEM32(g_esp + 0x20u) = MEM32(esi_2 + 8u) - MEM32(esi_2);
 		f0 = x87_round((double)(int32_t)MEM32(g_esp + 0x20u) * 0.25);
@@ -186466,7 +186466,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcRectSet_entry, 0x000C5053u, 0);
-	edx = MEM32(0x21CCB8u);
+	edx = SniperScreenSniperSideTopTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186484,7 +186484,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
-	eax_2 = MEM32(0x1BC990u);
+	eax_2 = PlayerCount;
 	g_esp = g_esp + 0x34u;
 	if (eax_2 != ebx_2)
 	{
@@ -186530,7 +186530,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcRectSet_entry, 0x000C5123u, 0);
-	eax_2 = MEM32(0x21CCC0u);
+	eax_2 = SniperScreenSniperSideMiddleTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186548,7 +186548,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
-	eax_2 = MEM32(0x1BC990u);
+	eax_2 = PlayerCount;
 	g_esp = g_esp + 0x34u;
 	if (eax_2 != ebx_2)
 	{
@@ -186602,7 +186602,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	x86_call(vcRectSet_entry, 0x000C522Du, 0);
-	ecx = MEM32(0x21CCBCu);
+	ecx = SniperScreenSniperSideBottomTexture;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186620,7 +186620,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
-	eax_2 = MEM32(0x1BC990u);
+	eax_2 = PlayerCount;
 	g_esp = g_esp + 0x34u;
 	if (eax_2 != ebx_2)
 	{
@@ -186662,7 +186662,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg2 = MEM32(g_esp + 8u);
 	sub_00126890(arg0_2, arg1_2, arg2, &ignored_3, &ecx, &ignored_2);
 	g_esp = g_esp + 0xCu;
-	if (MEM32(0x1BC990u) != ebx_2)
+	if ((uint32_t)PlayerCount != ebx_2)
 	{
 		ecx = MEM32(esi_2 + 8u) - MEM32(esi_2);
 		MEM32(g_esp + 0x1Cu) = ecx;
@@ -186697,7 +186697,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp + 0x10u;
 	ebp_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
-	if (MEM32(0x1BC990u) != ebx_2)
+	if ((uint32_t)PlayerCount != ebx_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 3u;
@@ -186711,7 +186711,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		x86_call(vcRectSet_entry, 0x000C53B9u, 0);
-		eax_2 = MEM32(0x21CCB8u);
+		eax_2 = SniperScreenSniperSideTopTexture;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
@@ -186729,7 +186729,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		sub_00126D90(arg0_2, arg1_2, arg2, arg3, arg4, &ignored_3, &ignored, &esi_2, &edi_2);
-		t4 = MEM32(0x1BC990u);
+		t4 = PlayerCount;
 		eax_2 = MEM32(esi_2);
 		g_esp = g_esp + 0x28u;
 		if (t4 != ebx_2)
@@ -186759,7 +186759,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2 = MEM32(g_esp + 8u);
 		sub_00126890(arg0_2, arg1_2, arg2, &ignored_3, &ignored, &ignored_2);
-		t5 = MEM32(0x1BC990u);
+		t5 = PlayerCount;
 		eax_2 = MEM32(esi_2);
 		g_esp = g_esp + 0xCu;
 		if (t5 != ebx_2)
@@ -186930,21 +186930,21 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x1A38ECu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x21CCB8u) = eax;
+	SniperScreenSniperSideTopTexture = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000C5620u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A38D4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x21CCBCu) = eax;
+	SniperScreenSniperSideBottomTexture = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000C5631u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A38C0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x21CCC0u) = eax;
+	SniperScreenSniperSideMiddleTexture = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000C5642u, 0);
-	MEM32(0x21CCC4u) = eax;
+	SniperScreenSniperCenterTexture = eax;
 	eax = g_esp + 0x24u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -187036,31 +187036,31 @@ uint32_t SniperScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21CCB8u);
+	arg0 = SniperScreenSniperSideTopTexture;
 	x86_call(vcObjectRelease_entry, 0x000C571Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x21CCBCu);
+	arg0 = SniperScreenSniperSideBottomTexture;
 	x86_call(vcObjectRelease_entry, 0x000C5727u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x21CCC0u);
+	arg0 = SniperScreenSniperSideMiddleTexture;
 	x86_call(vcObjectRelease_entry, 0x000C5733u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x21CCC4u);
+	arg0 = SniperScreenSniperCenterTexture;
 	x86_call(vcObjectRelease_entry, 0x000C573Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21CC7Cu;
-	MEM32(0x21CCB8u) = 0u;
-	MEM32(0x21CCBCu) = 0u;
-	MEM32(0x21CCC0u) = 0u;
-	MEM32(0x21CCC4u) = 0u;
+	SniperScreenSniperSideTopTexture = 0u;
+	SniperScreenSniperSideBottomTexture = 0u;
+	SniperScreenSniperSideMiddleTexture = 0u;
+	SniperScreenSniperCenterTexture = 0u;
 	sub_00126C70(arg0, &ignored, &ignored_3);
 	arg0 = 0x21CC40u;
 	sub_00126C70(arg0, &eax, &ignored_3);
@@ -189977,7 +189977,7 @@ void sub_000C7670(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	stack_1FFFF0 = arg4;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	esi = stack_1FFFFC;
 	f0 = FLOAT_AT(esi + 0x6Cu);
 	stack_1FFFFC = float_to_bits((float)f0);
@@ -189991,7 +189991,7 @@ void sub_000C7670(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	}
 	else
 		edi = GameObjectLastObject;
-	eax = MEM32(0x1BC984u);
+	eax = Players(1);
 	if (eax != GameObjectLastHandle)
 	{
 		handle = eax;
@@ -191175,7 +191175,7 @@ uint32_t PodOfficerSledHeavyCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000C8757u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21D2C8u) = eax;
+	PodOfficerSledHeavyCannonWeaponMaterial = eax;
 	MEM32(0x21D314u) = 0x2Fu;
 	MEM32(0x21D318u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -191197,13 +191197,13 @@ uint32_t PodOfficerSledHeavyCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21D2C8u);
+	arg0 = PodOfficerSledHeavyCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000C87ABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21D2CCu;
-	MEM32(0x21D2C8u) = 0u;
+	PodOfficerSledHeavyCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -191262,7 +191262,7 @@ void PodOfficerSledHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D288u) = 0x1A3940u;
 	MEM32(0x21D294u) = 0x1A3954u;
 	MEM32(0x21D298u) = 0x1A39E8u;
-	MEM32(0x21D2C8u) = 0u;
+	PodOfficerSledHeavyCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000C8920(void)
@@ -191290,7 +191290,7 @@ uint32_t PodOfficerSkarredHeavyCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000C8957u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21D3B0u) = eax;
+	PodOfficerSkarredHeavyCannonWeaponMaterial = eax;
 	MEM32(0x21D3FCu) = 0x2Fu;
 	MEM32(0x21D400u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -191312,13 +191312,13 @@ uint32_t PodOfficerSkarredHeavyCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21D3B0u);
+	arg0 = PodOfficerSkarredHeavyCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000C89ABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21D3B4u;
-	MEM32(0x21D3B0u) = 0u;
+	PodOfficerSkarredHeavyCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -191377,7 +191377,7 @@ void PodOfficerSkarredHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D370u) = 0x1A3A00u;
 	MEM32(0x21D37Cu) = 0x1A3A14u;
 	MEM32(0x21D380u) = 0x1A3AA8u;
-	MEM32(0x21D3B0u) = 0u;
+	PodOfficerSkarredHeavyCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000C8B20(void)
@@ -191512,7 +191512,7 @@ uint32_t PodOfficerHeavyCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000C8D57u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21D580u) = eax;
+	PodOfficerHeavyCannonWeaponMaterial = eax;
 	MEM32(0x21D5CCu) = 0x2Fu;
 	MEM32(0x21D5D0u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -191534,13 +191534,13 @@ uint32_t PodOfficerHeavyCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21D580u);
+	arg0 = PodOfficerHeavyCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000C8DABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21D584u;
-	MEM32(0x21D580u) = 0u;
+	PodOfficerHeavyCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -191598,7 +191598,7 @@ void PodOfficerHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D540u) = 0x1A3B80u;
 	MEM32(0x21D54Cu) = 0x1A3B94u;
 	MEM32(0x21D550u) = 0x1A3C28u;
-	MEM32(0x21D580u) = 0u;
+	PodOfficerHeavyCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000C8F20(void)
@@ -191625,7 +191625,7 @@ uint32_t MalePowerArmorRailgunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000C8F57u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21D668u) = eax;
+	MalePowerArmorRailgunWeaponMaterial = eax;
 	MEM32(0x21D6B4u) = 0x2Fu;
 	MEM32(0x21D6B8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -191647,13 +191647,13 @@ uint32_t MalePowerArmorRailgunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21D668u);
+	arg0 = MalePowerArmorRailgunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000C8FABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21D66Cu;
-	MEM32(0x21D668u) = 0u;
+	MalePowerArmorRailgunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -191711,7 +191711,7 @@ void MalePowerArmorRailgunWeapon_Register(uint32_t arg0)
 	MEM32(0x21D628u) = 0x1A3C40u;
 	MEM32(0x21D634u) = 0x1A3C54u;
 	MEM32(0x21D638u) = 0x1A3CE8u;
-	MEM32(0x21D668u) = 0u;
+	MalePowerArmorRailgunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000C9120(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
@@ -192481,7 +192481,7 @@ uint32_t SumoPackWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	esi = 0x21D7D8u;
+	esi = SumoPackWeaponModels_VA;
 	do
 	{
 		arg0 = MEM32(esi);
@@ -192585,49 +192585,49 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x21D7D4u) = 0xFu;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3E50u;
-	MEM32(0x21D7D8u) = eax;
+	SumoPackWeaponModels(0) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3E90u;
-	MEM32(0x21D7DCu) = eax;
+	SumoPackWeaponModels(1) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3ED0u;
-	MEM32(0x21D7E0u) = eax;
+	SumoPackWeaponModels(2) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3F10u;
-	MEM32(0x21D7E4u) = eax;
+	SumoPackWeaponModels(3) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3F50u;
-	MEM32(0x21D7E8u) = eax;
+	SumoPackWeaponModels(4) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3F90u;
-	MEM32(0x21D7ECu) = eax;
+	SumoPackWeaponModels(5) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A3FD0u;
-	MEM32(0x21D7F0u) = eax;
+	SumoPackWeaponModels(6) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4010u;
-	MEM32(0x21D7F4u) = eax;
+	SumoPackWeaponModels(7) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4050u;
-	MEM32(0x21D7F8u) = eax;
+	SumoPackWeaponModels(8) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4090u;
-	MEM32(0x21D7FCu) = eax;
+	SumoPackWeaponModels(9) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A40D0u;
-	MEM32(0x21D800u) = eax;
+	SumoPackWeaponModels(10) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4110u;
-	MEM32(0x21D804u) = eax;
+	SumoPackWeaponModels(11) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4150u;
-	MEM32(0x21D808u) = eax;
+	SumoPackWeaponModels(12) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg0 = 0x1A4190u;
-	MEM32(0x21D80Cu) = eax;
+	SumoPackWeaponModels(13) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	MEM32(0x21D810u) = eax;
-	edi_2 = 0x21D7D8u;
+	SumoPackWeaponModels(14) = eax;
+	edi_2 = SumoPackWeaponModels_VA;
 	esi_2 = 0u;
 	ebx_2 = 4u;
 	do
@@ -192651,53 +192651,53 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
 	arg1 = 0x1A43C0u;
-	arg0 = MEM32(0x21D7DCu);
+	arg0 = SumoPackWeaponModels(1);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A43B0u;
-	arg0 = MEM32(0x21D7DCu);
-	MEM32(0x21D824u) = eax;
+	arg0 = SumoPackWeaponModels(1);
+	SumoPackWeaponSumoChestLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21D828u) = eax;
+	SumoPackWeaponSumoChestRNode = eax;
 	arg1 = 0x1A43A0u;
-	arg0 = MEM32(0x21D7E4u);
+	arg0 = SumoPackWeaponModels(3);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4390u;
-	arg0 = MEM32(0x21D7E8u);
-	MEM32(0x21D82Cu) = eax;
+	arg0 = SumoPackWeaponModels(4);
+	SumoPackWeaponSumoShoulderLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4384u;
-	arg0 = MEM32(0x21D7ECu);
-	MEM32(0x21D830u) = eax;
+	arg0 = SumoPackWeaponModels(5);
+	SumoPackWeaponSumoShoulderRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21D834u) = eax;
+	SumoPackWeaponSumoHipLNode = eax;
 	arg1 = 0x1A4378u;
-	arg0 = MEM32(0x21D7F0u);
+	arg0 = SumoPackWeaponModels(6);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4368u;
-	arg0 = MEM32(0x21D7F4u);
-	MEM32(0x21D838u) = eax;
+	arg0 = SumoPackWeaponModels(7);
+	SumoPackWeaponSumoHipRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4358u;
-	arg0 = MEM32(0x21D7F8u);
-	MEM32(0x21D83Cu) = eax;
+	arg0 = SumoPackWeaponModels(8);
+	SumoPackWeaponSumoLegL01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21D840u) = eax;
+	SumoPackWeaponSumoLegL03Node = eax;
 	arg1 = 0x1A4348u;
-	arg0 = MEM32(0x21D7FCu);
+	arg0 = SumoPackWeaponModels(9);
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4338u;
-	arg0 = MEM32(0x21D800u);
-	MEM32(0x21D844u) = eax;
+	arg0 = SumoPackWeaponModels(10);
+	SumoPackWeaponSumoLegR01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A4328u;
-	arg0 = MEM32(0x21D808u);
-	MEM32(0x21D848u) = eax;
+	arg0 = SumoPackWeaponModels(12);
+	SumoPackWeaponSumoLegR03Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21D84Cu) = eax;
+	SumoPackWeaponSumoWristLNode = eax;
 	arg1 = 0x1A4318u;
-	arg0 = MEM32(0x21D810u);
+	arg0 = SumoPackWeaponModels(14);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21D850u) = eax;
+	SumoPackWeaponSumoWristRNode = eax;
 	eax = 0x21D8C4u;
 	ecx = 0x21D8ACu;
 	edi_2 = 0x3F800000u;
@@ -192723,10 +192723,10 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		} while (t1 != 1u);
 		ecx += ebx_2;
 	} while ((int32_t)ecx < 0x21D8BC);
-	eax = MEM32(0x21D83Cu);
-	edx = MEM32(0x21D830u);
-	MEM32(0x21D8ACu) = MEM32(0x21D82Cu);
-	ecx = MEM32(0x21D844u);
+	eax = SumoPackWeaponSumoLegL01Node;
+	edx = SumoPackWeaponSumoShoulderRNode;
+	MEM32(0x21D8ACu) = SumoPackWeaponSumoShoulderLNode;
+	ecx = SumoPackWeaponSumoLegR01Node;
 	MEM32(0x21D8B4u) = eax;
 	MEM32(0x21D8B8u) = ecx;
 	MEM32(0x21DAFCu) = esi_2;
@@ -192808,10 +192808,10 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		} while (t2 != 1u);
 		ecx += ebx_2;
 	} while ((int32_t)ecx < 0x21DB34);
-	eax = MEM32(0x21D828u);
-	ecx = MEM32(0x21D840u);
-	MEM32(0x21DB24u) = MEM32(0x21D824u);
-	edx = MEM32(0x21D848u);
+	eax = SumoPackWeaponSumoChestRNode;
+	ecx = SumoPackWeaponSumoLegL03Node;
+	MEM32(0x21DB24u) = SumoPackWeaponSumoChestLNode;
+	edx = SumoPackWeaponSumoLegR03Node;
 	MEM32(0x21DB28u) = eax;
 	MEM32(0x21DB2Cu) = ecx;
 	MEM32(0x21DD74u) = esi_2;
@@ -192893,12 +192893,12 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		} while (t3 != 1u);
 		ecx += ebx_2;
 	} while ((int32_t)ecx < 0x21DDAC);
-	eax = MEM32(0x21D82Cu);
-	edx = MEM32(0x21D834u);
-	MEM32(0x21DDA0u) = MEM32(0x21D830u);
-	ecx = MEM32(0x21D7D8u);
+	eax = SumoPackWeaponSumoShoulderLNode;
+	edx = SumoPackWeaponSumoHipLNode;
+	MEM32(0x21DDA0u) = SumoPackWeaponSumoShoulderRNode;
+	ecx = SumoPackWeaponModels(0);
 	MEM32(0x21DD9Cu) = eax;
-	eax = MEM32(0x21D838u);
+	eax = SumoPackWeaponSumoHipRNode;
 	arg1 = 0x1A4300u;
 	arg0 = ecx;
 	MEM32(0x21DFECu) = esi_2;
@@ -192959,8 +192959,8 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x21DE68u) = 0u;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 0x1A42E8u;
-	arg0 = MEM32(0x21D7D8u);
-	MEM32(0x21D814u) = eax;
+	arg0 = SumoPackWeaponModels(0);
+	SumoPackWeaponSumoJetpackEffectLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x21D818u) = eax;
 	if (saved_eax == 8u)
@@ -193015,7 +193015,7 @@ uint32_t SuperVeritechPackWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	esi = 0x21E2D8u;
+	esi = SuperVeritechPackWeaponModels_VA;
 	do
 	{
 		arg0 = MEM32(esi);
@@ -193114,27 +193114,27 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A4470u;
-	MEM32(0x21E2D8u) = eax;
+	SuperVeritechPackWeaponModels(0) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A44B0u;
-	MEM32(0x21E2DCu) = eax;
+	SuperVeritechPackWeaponModels(1) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A44F0u;
-	MEM32(0x21E2E0u) = eax;
+	SuperVeritechPackWeaponModels(2) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A4530u;
-	MEM32(0x21E2E4u) = eax;
+	SuperVeritechPackWeaponModels(3) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	MEM32(0x21E2E8u) = eax;
+	SuperVeritechPackWeaponModels(4) = eax;
 	esi_2 = 0u;
-	edi_2 = 0x21E2D8u;
+	edi_2 = SuperVeritechPackWeaponModels_VA;
 	g_esp = g_esp + 0x14u;
 	do
 	{
@@ -193159,7 +193159,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp + 0x14u) = edi_2;
 	arg0 = MEM32(g_esp);
 	sub_000CA590(arg0);
-	ecx = MEM32(0x21E2D8u);
+	ecx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A45FCu;
 	g_esp = g_esp - 4u;
@@ -193167,12 +193167,12 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x21E2D8u);
+	edx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A45E8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x21E31Cu) = eax;
+	SuperVeritechPackWeaponSVBackMissileLNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
@@ -193300,7 +193300,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	} while ((int32_t)ecx < 0x21E634);
 	ecx = MEM32(0x21E320u);
 	edi_2 = 2u;
-	MEM32(0x21E624u) = MEM32(0x21E31Cu);
+	MEM32(0x21E624u) = SuperVeritechPackWeaponSVBackMissileLNode;
 	MEM32(0x21E628u) = ecx;
 	MEM32(0x21E608u) = esi_2;
 	MEM32(0x21E60Cu) = 2u;
@@ -193467,7 +193467,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x21EB24);
 	eax = MEM32(g_esp + 0xCu);
-	ecx = MEM32(0x21E31Cu);
+	ecx = SuperVeritechPackWeaponSVBackMissileLNode;
 	edx = MEM32(0x21E320u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -193516,7 +193516,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(0x21ECF0u) = 0x40A00000u;
 	MEM32(0x21ECF4u) = 0u;
 	x86_call(vcObjectRelease_entry, 0x000CB05Bu, 0);
-	ecx = MEM32(0x21E2D8u);
+	ecx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A45D4u;
 	g_esp = g_esp - 4u;
@@ -193524,16 +193524,16 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	edx = MEM32(0x21E2D8u);
+	edx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A45C0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x21E314u) = eax;
+	SuperVeritechPackWeaponSVExhaustEffectLNode = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
-	MEM32(0x21E318u) = eax;
+	SuperVeritechPackWeaponSVExhaustEffectRNode = eax;
 	eax = MEM32(g_esp + 0x24u);
 	g_esp = g_esp + 0x14u;
 	if (eax != 8u)
@@ -195916,7 +195916,7 @@ uint32_t PodOfficerArmCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CCB47u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21EE20u) = eax;
+	PodOfficerArmCannonWeaponMaterial = eax;
 	MEM32(0x21EE6Cu) = 0x29u;
 	MEM32(0x21EE70u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -195938,13 +195938,13 @@ uint32_t PodOfficerArmCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21EE20u);
+	arg0 = PodOfficerArmCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CCB9Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21EE24u;
-	MEM32(0x21EE20u) = 0u;
+	PodOfficerArmCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -196010,7 +196010,7 @@ void PodOfficerArmCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21EDC0u) = 0x1A4630u;
 	MEM32(0x21EDCCu) = 0x1A4640u;
 	MEM32(0x21EDD0u) = 0x1A46D8u;
-	MEM32(0x21EE20u) = 0u;
+	PodOfficerArmCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CCD60(void)
@@ -196037,7 +196037,7 @@ uint32_t RaiderXMachineGunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CCD97u, 2, arg0, arg1);
 	arg1 = 0x34u;
 	arg0 = 4u;
-	MEM32(0x21EF28u) = eax;
+	RaiderXMachineGunWeaponMaterial = eax;
 	MEM32(0x21EF74u) = 0x28u;
 	MEM32(0x21EF78u) = 0x34u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196059,13 +196059,13 @@ uint32_t RaiderXMachineGunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21EF28u);
+	arg0 = RaiderXMachineGunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CCDEBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21EF2Cu;
-	MEM32(0x21EF28u) = 0u;
+	RaiderXMachineGunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x34u;
 	arg0 = 4u;
@@ -196131,7 +196131,7 @@ void RaiderXMachineGunWeapon_Register(uint32_t arg0)
 	MEM32(0x21EEC8u) = 0x1A4708u;
 	MEM32(0x21EED4u) = 0x1A4718u;
 	MEM32(0x21EED8u) = 0x1A47B0u;
-	MEM32(0x21EF28u) = 0u;
+	RaiderXMachineGunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CCFB0(void)
@@ -196158,7 +196158,7 @@ uint32_t MacIIArmWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CCFE7u, 2, arg0, arg1);
 	arg1 = 0x34u;
 	arg0 = 4u;
-	MEM32(0x21F030u) = eax;
+	MacIIArmWeaponMaterial = eax;
 	MEM32(0x21F07Cu) = 0x2Cu;
 	MEM32(0x21F080u) = 0x34u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196179,13 +196179,13 @@ uint32_t MacIIArmWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F030u);
+	arg0 = MacIIArmWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CD03Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F034u;
-	MEM32(0x21F030u) = 0u;
+	MacIIArmWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x34u;
 	arg0 = 4u;
@@ -196251,7 +196251,7 @@ void MacIIArmWeapon_Register(uint32_t arg0)
 	MEM32(0x21EFD0u) = 0x1A47E0u;
 	MEM32(0x21EFDCu) = 0x1A47F0u;
 	MEM32(0x21EFE0u) = 0x1A4888u;
-	MEM32(0x21F030u) = 0u;
+	MacIIArmWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CD200(void)
@@ -196278,7 +196278,7 @@ uint32_t GladiatorMachineGunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CD237u, 2, arg0, arg1);
 	arg1 = 0x34u;
 	arg0 = 4u;
-	MEM32(0x21F138u) = eax;
+	GladiatorMachineGunWeaponMaterial = eax;
 	MEM32(0x21F184u) = 0x28u;
 	MEM32(0x21F188u) = 0x34u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196300,13 +196300,13 @@ uint32_t GladiatorMachineGunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F138u);
+	arg0 = GladiatorMachineGunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CD28Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F13Cu;
-	MEM32(0x21F138u) = 0u;
+	GladiatorMachineGunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x34u;
 	arg0 = 4u;
@@ -196372,7 +196372,7 @@ void GladiatorMachineGunWeapon_Register(uint32_t arg0)
 	MEM32(0x21F0D8u) = 0x1A48B8u;
 	MEM32(0x21F0E4u) = 0x1A48C8u;
 	MEM32(0x21F0E8u) = 0x1A4960u;
-	MEM32(0x21F138u) = 0u;
+	GladiatorMachineGunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CD450(void)
@@ -196399,7 +196399,7 @@ uint32_t ExcaliburMachineGunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CD487u, 2, arg0, arg1);
 	arg1 = 0x34u;
 	arg0 = 4u;
-	MEM32(0x21F240u) = eax;
+	ExcaliburMachineGunWeaponMaterial = eax;
 	MEM32(0x21F28Cu) = 0x28u;
 	MEM32(0x21F290u) = 0x34u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196421,13 +196421,13 @@ uint32_t ExcaliburMachineGunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F240u);
+	arg0 = ExcaliburMachineGunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CD4DBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F244u;
-	MEM32(0x21F240u) = 0u;
+	ExcaliburMachineGunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x34u;
 	arg0 = 4u;
@@ -196493,7 +196493,7 @@ void ExcaliburMachineGunWeapon_Register(uint32_t arg0)
 	MEM32(0x21F1E0u) = 0x1A4990u;
 	MEM32(0x21F1ECu) = 0x1A49A0u;
 	MEM32(0x21F1F0u) = 0x1A4A38u;
-	MEM32(0x21F240u) = 0u;
+	ExcaliburMachineGunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CD6A0(void)
@@ -196752,7 +196752,7 @@ uint32_t MalePowerArmorPulseRifleWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CDB77u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21F558u) = eax;
+	MalePowerArmorPulseRifleWeaponMaterial = eax;
 	MEM32(0x21F5A4u) = 0x29u;
 	MEM32(0x21F5A8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196774,13 +196774,13 @@ uint32_t MalePowerArmorPulseRifleWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F558u);
+	arg0 = MalePowerArmorPulseRifleWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CDBCBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F55Cu;
-	MEM32(0x21F558u) = 0u;
+	MalePowerArmorPulseRifleWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -196846,7 +196846,7 @@ void MalePowerArmorPulseRifleWeapon_Register(uint32_t arg0)
 	MEM32(0x21F4F8u) = 0x1A4C18u;
 	MEM32(0x21F504u) = 0x1A4C28u;
 	MEM32(0x21F508u) = 0x1A4CC0u;
-	MEM32(0x21F558u) = 0u;
+	MalePowerArmorPulseRifleWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CDD90(void)
@@ -196874,7 +196874,7 @@ uint32_t MalePowerArmorImpactCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CDDC7u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21F660u) = eax;
+	MalePowerArmorImpactCannonWeaponMaterial = eax;
 	MEM32(0x21F6ACu) = 0x29u;
 	MEM32(0x21F6B0u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -196896,13 +196896,13 @@ uint32_t MalePowerArmorImpactCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F660u);
+	arg0 = MalePowerArmorImpactCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CDE1Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F664u;
-	MEM32(0x21F660u) = 0u;
+	MalePowerArmorImpactCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -196968,7 +196968,7 @@ void MalePowerArmorImpactCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21F600u) = 0x1A4CF0u;
 	MEM32(0x21F60Cu) = 0x1A4D00u;
 	MEM32(0x21F610u) = 0x1A4D98u;
-	MEM32(0x21F660u) = 0u;
+	MalePowerArmorImpactCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CDFE0(void)
@@ -196995,7 +196995,7 @@ uint32_t FighterPodGunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CE017u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21F768u) = eax;
+	FighterPodGunWeaponMaterial = eax;
 	MEM32(0x21F7B4u) = 0x32u;
 	MEM32(0x21F7B8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197017,13 +197017,13 @@ uint32_t FighterPodGunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F768u);
+	arg0 = FighterPodGunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CE06Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F76Cu;
-	MEM32(0x21F768u) = 0u;
+	FighterPodGunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197089,7 +197089,7 @@ void FighterPodGunWeapon_Register(uint32_t arg0)
 	MEM32(0x21F708u) = 0x1A4DC8u;
 	MEM32(0x21F714u) = 0x1A4DD8u;
 	MEM32(0x21F718u) = 0x1A4E70u;
-	MEM32(0x21F768u) = 0u;
+	FighterPodGunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CE230(void)
@@ -197117,7 +197117,7 @@ uint32_t ZenWarriorNoArmourPulseRifleWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CE267u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21F870u) = eax;
+	ZenWarriorNoArmourPulseRifleWeaponMaterial = eax;
 	MEM32(0x21F8BCu) = 0x29u;
 	MEM32(0x21F8C0u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197139,13 +197139,13 @@ uint32_t ZenWarriorNoArmourPulseRifleWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F870u);
+	arg0 = ZenWarriorNoArmourPulseRifleWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CE2BBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F874u;
-	MEM32(0x21F870u) = 0u;
+	ZenWarriorNoArmourPulseRifleWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197211,7 +197211,7 @@ void ZenWarriorNoArmourPulseRifleWeapon_Register(uint32_t arg0)
 	MEM32(0x21F810u) = 0x1A4EA0u;
 	MEM32(0x21F81Cu) = 0x1A4EB0u;
 	MEM32(0x21F820u) = 0x1A4F48u;
-	MEM32(0x21F870u) = 0u;
+	ZenWarriorNoArmourPulseRifleWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CE480(void)
@@ -197239,7 +197239,7 @@ uint32_t ZenWarriorScavengerPulseRifleWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CE4B7u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21F978u) = eax;
+	ZenWarriorScavengerPulseRifleWeaponMaterial = eax;
 	MEM32(0x21F9C4u) = 0x29u;
 	MEM32(0x21F9C8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197261,13 +197261,13 @@ uint32_t ZenWarriorScavengerPulseRifleWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21F978u);
+	arg0 = ZenWarriorScavengerPulseRifleWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CE50Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21F97Cu;
-	MEM32(0x21F978u) = 0u;
+	ZenWarriorScavengerPulseRifleWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197333,7 +197333,7 @@ void ZenWarriorScavengerPulseRifleWeapon_Register(uint32_t arg0)
 	MEM32(0x21F918u) = 0x1A4F78u;
 	MEM32(0x21F924u) = 0x1A4F88u;
 	MEM32(0x21F928u) = 0x1A5020u;
-	MEM32(0x21F978u) = 0u;
+	ZenWarriorScavengerPulseRifleWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CE6D0(void)
@@ -197360,7 +197360,7 @@ uint32_t ZenWarriorHeavyChaingunWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CE707u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21FA80u) = eax;
+	ZenWarriorHeavyChaingunWeaponMaterial = eax;
 	MEM32(0x21FACCu) = 0x29u;
 	MEM32(0x21FAD0u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197382,13 +197382,13 @@ uint32_t ZenWarriorHeavyChaingunWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21FA80u);
+	arg0 = ZenWarriorHeavyChaingunWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CE75Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21FA84u;
-	MEM32(0x21FA80u) = 0u;
+	ZenWarriorHeavyChaingunWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197454,7 +197454,7 @@ void ZenWarriorHeavyChaingunWeapon_Register(uint32_t arg0)
 	MEM32(0x21FA20u) = 0x1A5050u;
 	MEM32(0x21FA2Cu) = 0x1A5060u;
 	MEM32(0x21FA30u) = 0x1A50F8u;
-	MEM32(0x21FA80u) = 0u;
+	ZenWarriorHeavyChaingunWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CE920(void)
@@ -197481,7 +197481,7 @@ uint32_t ZenWarriorLitePulseRifleWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CE957u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21FB88u) = eax;
+	ZenWarriorLitePulseRifleWeaponMaterial = eax;
 	MEM32(0x21FBD4u) = 0x29u;
 	MEM32(0x21FBD8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197503,13 +197503,13 @@ uint32_t ZenWarriorLitePulseRifleWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21FB88u);
+	arg0 = ZenWarriorLitePulseRifleWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CE9ABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21FB8Cu;
-	MEM32(0x21FB88u) = 0u;
+	ZenWarriorLitePulseRifleWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197575,7 +197575,7 @@ void ZenWarriorLitePulseRifleWeapon_Register(uint32_t arg0)
 	MEM32(0x21FB28u) = 0x1A5128u;
 	MEM32(0x21FB34u) = 0x1A5138u;
 	MEM32(0x21FB38u) = 0x1A51D0u;
-	MEM32(0x21FB88u) = 0u;
+	ZenWarriorLitePulseRifleWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CEB70(void)
@@ -197602,7 +197602,7 @@ uint32_t PodAutoCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CEBA7u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21FC90u) = eax;
+	PodAutoCannonWeaponMaterial = eax;
 	MEM32(0x21FCDCu) = 0x29u;
 	MEM32(0x21FCE0u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197624,13 +197624,13 @@ uint32_t PodAutoCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21FC90u);
+	arg0 = PodAutoCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CEBFBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21FC94u;
-	MEM32(0x21FC90u) = 0u;
+	PodAutoCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197696,7 +197696,7 @@ void PodAutoCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21FC30u) = 0x1A5200u;
 	MEM32(0x21FC3Cu) = 0x1A5210u;
 	MEM32(0x21FC40u) = 0x1A52A8u;
-	MEM32(0x21FC90u) = 0u;
+	PodAutoCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CEDC0(void)
@@ -197723,7 +197723,7 @@ uint32_t PodParticleCannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000CEDF7u, 2, arg0, arg1);
 	arg1 = 0x35u;
 	arg0 = 4u;
-	MEM32(0x21FD98u) = eax;
+	PodParticleCannonWeaponMaterial = eax;
 	MEM32(0x21FDE4u) = 0x29u;
 	MEM32(0x21FDE8u) = 0x35u;
 	GameObjectTypeUse(arg0, arg1);
@@ -197745,13 +197745,13 @@ uint32_t PodParticleCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x21FD98u);
+	arg0 = PodParticleCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CEE4Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x21FD9Cu;
-	MEM32(0x21FD98u) = 0u;
+	PodParticleCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -197817,7 +197817,7 @@ void PodParticleCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21FD38u) = 0x1A52D8u;
 	MEM32(0x21FD44u) = 0x1A52E8u;
 	MEM32(0x21FD48u) = 0x1A5380u;
-	MEM32(0x21FD98u) = 0u;
+	PodParticleCannonWeaponMaterial = 0u;
 }
 
 uint32_t sub_000CF010(void)
@@ -198472,7 +198472,7 @@ uint32_t ARMDTurretCannonWeapon_Startup(void)
 	arg2 = 0x1A54F8u;
 	arg1 = 8u;
 	arg0 = 0x2201ECu;
-	MEM32(0x2201E8u) = eax;
+	ARMDTurretCannonWeaponMaterial = eax;
 	MEM32(0x220234u) = 0x30u;
 	MEM32(0x220238u) = 0x35u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -198497,13 +198497,13 @@ uint32_t ARMDTurretCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x2201E8u);
+	arg0 = ARMDTurretCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CF97Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x2201ECu;
-	MEM32(0x2201E8u) = 0u;
+	ARMDTurretCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -198586,7 +198586,7 @@ uint32_t ZenReconShipCannonWeapon_Startup(void)
 	arg2 = 0x1A55C0u;
 	arg1 = 8u;
 	arg0 = 0x2202DCu;
-	MEM32(0x2202D8u) = eax;
+	ZenReconShipCannonWeaponMaterial = eax;
 	MEM32(0x220324u) = 0x31u;
 	MEM32(0x220328u) = 0x35u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -198611,13 +198611,13 @@ uint32_t ZenReconShipCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x2202D8u);
+	arg0 = ZenReconShipCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CFB7Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x2202DCu;
-	MEM32(0x2202D8u) = 0u;
+	ZenReconShipCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -198700,7 +198700,7 @@ uint32_t ZenCruiserTurret1CannonWeapon_Startup(void)
 	arg2 = 0x1A5688u;
 	arg1 = 8u;
 	arg0 = 0x2203CCu;
-	MEM32(0x2203C8u) = eax;
+	ZenCruiserTurret1CannonWeaponMaterial = eax;
 	MEM32(0x220414u) = 0x33u;
 	MEM32(0x220418u) = 0x35u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -198725,13 +198725,13 @@ uint32_t ZenCruiserTurret1CannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x2203C8u);
+	arg0 = ZenCruiserTurret1CannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CFD7Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x2203CCu;
-	MEM32(0x2203C8u) = 0u;
+	ZenCruiserTurret1CannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -198814,7 +198814,7 @@ uint32_t ZenCruiserTurretCannonWeapon_Startup(void)
 	arg2 = 0x1A5750u;
 	arg1 = 8u;
 	arg0 = 0x2204BCu;
-	MEM32(0x2204B8u) = eax;
+	ZenCruiserTurretCannonWeaponMaterial = eax;
 	MEM32(0x220504u) = 0x2Au;
 	MEM32(0x220508u) = 0x35u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -198839,13 +198839,13 @@ uint32_t ZenCruiserTurretCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x2204B8u);
+	arg0 = ZenCruiserTurretCannonWeaponMaterial;
 	x86_call(vcObjectRelease_entry, 0x000CFF7Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg0 = 0x2204BCu;
-	MEM32(0x2204B8u) = 0u;
+	ZenCruiserTurretCannonWeaponMaterial = 0u;
 	sub_0010E340(arg0);
 	arg1 = 0x35u;
 	arg0 = 4u;
@@ -200188,7 +200188,7 @@ uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	g_esp = g_esp + 4u;
 	if (esi_2 != 0u)
 	{
-		if ((int32_t)MEM32(0x1BC990u) < 2 || MEM32(0x1BC6B4u) == 0u)
+		if (PlayerCount < 2 || MEM32(0x1BC6B4u) == 0u)
 			f0 = FLOAT_AT(ebp_2 + 0x2Cu);
 		else
 		{
@@ -211065,7 +211065,7 @@ uint32_t sub_000D8E90(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t edi, ui
 		return eax_2;
 	}
 	ecx_2 = saved_arg1;
-	if (MEM32(ecx_2 * 4u + 0x221844u) == 0u)
+	if (CiviliansNodeMotions(ecx_2) == 0u)
 	{
 		eax_2 = 0u;
 		return eax_2;
@@ -211368,18 +211368,18 @@ uint32_t CiviliansNode_Startup(uint32_t ebx, uint32_t ebp)
 	eax = x86_call(vcObjectGet_entry, 0x000D92A0u, 2, arg0, arg1);
 	arg1 = 0x1A5CCCu;
 	arg0 = 9u;
-	MEM32(0x221844u) = eax;
+	CiviliansNodeMotions(0) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92B1u, 2, arg0, arg1);
 	arg1 = 0x1A5CD4u;
 	arg0 = 9u;
-	MEM32(0x221848u) = eax;
+	CiviliansNodeMotions(1) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92C2u, 2, arg0, arg1);
 	arg1 = 0x1A5CDCu;
 	arg0 = 9u;
-	MEM32(0x22184Cu) = eax;
+	CiviliansNodeMotions(2) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92D3u, 2, arg0, arg1);
 	arg0 = 0x1A5C5Cu;
-	MEM32(0x221850u) = eax;
+	CiviliansNodeMotions(3) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -211419,7 +211419,7 @@ uint32_t CiviliansNode_Shutdown(void)
 		MEM32(esi) = 0u;
 		esi += 4u;
 	} while ((int32_t)esi < 0x221844);
-	esi = 0x221844u;
+	esi = CiviliansNodeMotions_VA;
 	do
 	{
 		eax = MEM32(esi);
@@ -211514,7 +211514,7 @@ uint32_t sub_000D93F0(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	{
 		if (MEM32(ebp_2 + 0xD0u) == esi_2)
 		{
-			eax = MEM32(0x1BC980u);
+			eax = Players(0);
 			if (eax != GameObjectLastHandle)
 			{
 				g_esp = g_esp - 4u;
@@ -212319,19 +212319,19 @@ void sub_000D9CD0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 		edi++;
 	} while ((int32_t)edi < 4);
 	arg2 = ebx;
-	arg1 = MEM32(0x221844u);
+	arg1 = CiviliansNodeMotions(0);
 	arg0_2 = MEM32(esi + 0x598u);
 	sub_0013A240(arg0_2, arg1, arg2);
 	arg2 = 1u;
-	arg1 = MEM32(0x221848u);
+	arg1 = CiviliansNodeMotions(1);
 	arg0_2 = MEM32(esi + 0x598u);
 	sub_0013A240(arg0_2, arg1, arg2);
 	arg2 = 2u;
-	arg1 = MEM32(0x22184Cu);
+	arg1 = CiviliansNodeMotions(2);
 	arg0_2 = MEM32(esi + 0x598u);
 	sub_0013A240(arg0_2, arg1, arg2);
 	arg2 = 3u;
-	arg1 = MEM32(0x221850u);
+	arg1 = CiviliansNodeMotions(3);
 	arg0_2 = MEM32(esi + 0x598u);
 	sub_0013A240(arg0_2, arg1, arg2);
 	eax_2 = MEM32(0x221830u);
@@ -219468,7 +219468,7 @@ void sub_000DEF10(uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x30u;
 		return;
 	}
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	t1 = MEM32(edi + 0x4Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
@@ -219481,7 +219481,7 @@ void sub_000DEF10(uint32_t ebx, uint32_t esi, uint32_t edi)
 			MEM32(g_esp) = ecx;
 			handle = MEM32(g_esp);
 			GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			edx = GameObjectLastHandle;
 			esi_2 = GameObjectLastObject;
 			g_esp = g_esp + 4u;
@@ -223021,7 +223021,7 @@ void sub_000E1EC0(uint32_t edi)
 		eax = MEM32(edi + 0x48u);
 		if (eax == 0u)
 		{
-			ecx = MEM32(0x1BC980u);
+			ecx = Players(0);
 			if (ecx == 0u)
 			{
 				MEM32(edi + 0x40u) = 1u;
@@ -223034,7 +223034,7 @@ void sub_000E1EC0(uint32_t edi)
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
 				edx = GameObjectLastHandle;
 				esi = GameObjectLastObject;
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 			}
 			else
 			{
@@ -223054,7 +223054,7 @@ void sub_000E1EC0(uint32_t edi)
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
 				edx = GameObjectLastHandle;
 				esi = GameObjectLastObject;
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 			}
 			else
 				eax = esi;
@@ -223069,7 +223069,7 @@ void sub_000E1EC0(uint32_t edi)
 				GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
 				edx = GameObjectLastHandle;
 				esi = GameObjectLastObject;
-				ecx = MEM32(0x1BC980u);
+				ecx = Players(0);
 			}
 			else
 				eax = esi;
@@ -223364,7 +223364,7 @@ void sub_000E2340(uint32_t ebx)
 		eax = MEM32(ebx + 0x48u);
 		if (eax == 0u || (eax & 0x7C0000u) != 0x2C0000u || (eax & 0x3F800u) != 0x800u)
 		{
-			edi = 0x1BC980u;
+			edi = Players_VA;
 			do
 			{
 				eax = MEM32(edi);
@@ -223473,7 +223473,7 @@ void sub_000E2340(uint32_t ebx)
 			MEM32(ebx + 0x40u) = 1u;
 			return;
 		}
-		eax = MEM32(0x1BC980u);
+		eax = Players(0);
 		if (eax == 0u)
 		{
 			MEM32(ebx + 0x40u) = 1u;
@@ -223926,7 +223926,7 @@ void sub_000E2A60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		g_edi = edi;
 		x86_call(sub_0001C670, 0x000E2AB6u, 5, arg0, arg1, arg2, arg3, arg4);
 		edi = g_edi;
-		ecx = MEM32(0x2223A4u);
+		ecx = CompleteObjectiveActionSound;
 		arg0 = ecx;
 		sub_0010E7E0(arg0, &ignored, &ecx);
 	}
@@ -224275,7 +224275,7 @@ uint32_t CompleteObjectiveAction_Startup(void)
 
 	arg0 = 0x1A60A8u;
 	eax = sub_0010E920(arg0);
-	MEM32(0x2223A4u) = eax;
+	CompleteObjectiveActionSound = eax;
 	return eax;
 }
 
@@ -224286,7 +224286,7 @@ uint32_t CompleteObjectiveAction_Shutdown(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x2223A4u);
+	eax = CompleteObjectiveActionSound;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -225022,7 +225022,7 @@ void sub_000E3570(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x54u;
 		return;
 	}
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax != GameObjectLastHandle)
 	{
 		g_esp = g_esp - 4u;
@@ -226865,7 +226865,7 @@ void sub_000E4BD0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	}
 	else
 		eax_2 = edi;
-	if (eax_2 != 0u && MEM32(eax_2) != 0u && MEM32(0x1BC984u) == 0u)
+	if (eax_2 != 0u && MEM32(eax_2) != 0u && Players(1) == 0u)
 	{
 		ecx_2 = MEM32(eax_2 + 0x180u);
 		if (FLOAT_AT(ecx_2 * 4u + 0x2A7200u) > 2.5e+04)
@@ -226926,7 +226926,7 @@ void sub_000E4CB0(uint32_t eax, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x24u;
 		return;
 	}
-	if (MEM32(0x1BC984u) != 0u)
+	if (Players(1) != 0u)
 		MEMF(esi + 0x34u) = (float)x87_round(FLOAT_AT(0x2226B0u) + 75.0);
 	f0 = x87_round(x87_round(FLOAT_AT(ecx + 0x17Cu) / FLOAT_AT(MEM32(ecx + 0x180u) * 4u + 0x2A7200u)) * FLOAT_AT(esi + 0x34u));
 	MEMF(g_esp + 4u) = (float)f0;
@@ -231131,7 +231131,7 @@ void sub_000E8070(uint32_t eax, uint32_t esi)
 	ecx = MEM32(esi_2 + 0x28u);
 	MEM32(g_esp + 0xAu) = 0u;
 	MEM32(g_esp + 0xEu) = 0u;
-	t1 = MEM32(0x1BC980u);
+	t1 = Players(0);
 	MEM16(g_esp + 8u) = 0x30u;
 	if (ecx != t1)
 	{
@@ -236067,7 +236067,7 @@ void sub_000EB7D0(uint32_t eax, uint32_t esi, uint32_t edi)
 		MEM32(g_esp + 4u) = MEM32(ecx + 0x174u);
 	else
 		MEM32(g_esp + 4u) = 0u;
-	if (MEM32(0x1BC984u) != 0u)
+	if (Players(1) != 0u)
 		MEMF(esi + 0x34u) = (float)x87_round(FLOAT_AT(0x223E60u) + 75.0);
 	f0 = x87_round(x87_round(FLOAT_AT(g_esp + 4u) / FLOAT_AT(MEM32(MEM32(ecx)))) * FLOAT_AT(esi + 0x34u));
 	MEMF(g_esp + 8u) = (float)f0;
@@ -240391,7 +240391,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x224554u) = eax;
+	RadarElementGuiBlipRedSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EEFD5u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
@@ -240400,7 +240400,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x224558u) = eax;
+	RadarElementGuiBlipBlueSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EEFEEu, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
@@ -240409,7 +240409,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x22455Cu) = eax;
+	RadarElementGuiBlipGreenSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF007u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
@@ -240418,7 +240418,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x224560u) = eax;
+	RadarElementGuiBlipShadowSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF020u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
@@ -240427,7 +240427,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x224564u) = eax;
+	RadarElementFxStaticSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF03Cu, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
@@ -240436,7 +240436,7 @@ uint32_t RadarElement_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x14u;
 	arg0 = eax;
-	MEM32(0x224568u) = eax;
+	RadarElementGuiBlipYellowSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF055u, 3, arg0, arg1, arg2);
 	eax = g_eax;
 	ignored = g_edx;
@@ -248004,7 +248004,7 @@ uint32_t SmokeLight02Effect_Startup(void)
 	arg1 = 0x1A68C8u;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F69FCu, 2, arg0, arg1);
-	MEM32(0x2247CCu) = eax;
+	SmokeLight02EffectParticles = eax;
 	return eax;
 }
 
@@ -248013,14 +248013,14 @@ uint32_t SmokeLight02Effect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x2247CCu);
+	eax = SmokeLight02EffectParticles;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F6A1Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x2247CCu) = 0u;
+	SmokeLight02EffectParticles = 0u;
 	return eax;
 }
 
@@ -248030,7 +248030,7 @@ void sub_000F6A30(uint32_t arg2)
 	uint32_t saved_arg2 = 0;
 
 	saved_arg2 = arg2;
-	arg0 = MEM32(0x2247CCu);
+	arg0 = SmokeLight02EffectParticles;
 	eax = x86_call(vcObjectClone_entry, 0x000F6A3Bu, 1, arg0);
 	MEM32(saved_arg2 + 0x58u) = eax;
 	if (eax == vcObjectCacheHandle)
@@ -248633,14 +248633,14 @@ uint32_t CyclopsDamageChunkEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224860u);
+	eax = CyclopsDamageChunkEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F722Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224860u) = 0u;
+	CyclopsDamageChunkEffectScene = 0u;
 	return eax;
 }
 
@@ -248669,7 +248669,7 @@ uint32_t CyclopsDamageChunkEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7268u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224860u) = eax;
+	CyclopsDamageChunkEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -248718,7 +248718,7 @@ uint32_t CyclopsDamageChunkEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224860u);
+	ecx = CyclopsDamageChunkEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -248775,7 +248775,7 @@ uint32_t CyclopsDamageChunkEffect_Register(uint32_t arg0)
 	MEM32(0x22488Cu) = 0x1A6974u;
 	MEM32(0x224890u) = 0x1A6978u;
 	MEM32(0x224894u) = 0x1A697Cu;
-	MEM32(0x224860u) = 0u;
+	CyclopsDamageChunkEffectScene = 0u;
 	return edx;
 }
 
@@ -248785,14 +248785,14 @@ uint32_t CharacterDamageChunksLargeWEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x2248E0u);
+	eax = CharacterDamageChunksLargeWEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F73FBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x2248E0u) = 0u;
+	CharacterDamageChunksLargeWEffectScene = 0u;
 	return eax;
 }
 
@@ -248822,7 +248822,7 @@ uint32_t CharacterDamageChunksLargeWEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7438u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x2248E0u) = eax;
+	CharacterDamageChunksLargeWEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -248871,7 +248871,7 @@ uint32_t CharacterDamageChunksLargeWEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x2248E0u);
+	ecx = CharacterDamageChunksLargeWEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -248925,7 +248925,7 @@ void CharacterDamageChunksLargeWEffect_Register(uint32_t arg0)
 	MEM32(0x22490Cu) = 0x1A69E8u;
 	MEM32(0x224910u) = 0x1A69ECu;
 	MEM32(0x224914u) = 0x1A69F0u;
-	MEM32(0x2248E0u) = 0u;
+	CharacterDamageChunksLargeWEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksMedWEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -248934,14 +248934,14 @@ uint32_t CharacterDamageChunksMedWEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224960u);
+	eax = CharacterDamageChunksMedWEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F75CBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224960u) = 0u;
+	CharacterDamageChunksMedWEffectScene = 0u;
 	return eax;
 }
 
@@ -248970,7 +248970,7 @@ uint32_t CharacterDamageChunksMedWEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7608u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224960u) = eax;
+	CharacterDamageChunksMedWEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249019,7 +249019,7 @@ uint32_t CharacterDamageChunksMedWEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224960u);
+	ecx = CharacterDamageChunksMedWEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249073,7 +249073,7 @@ void CharacterDamageChunksMedWEffect_Register(uint32_t arg0)
 	MEM32(0x22498Cu) = 0x1A6A5Cu;
 	MEM32(0x224990u) = 0x1A6A60u;
 	MEM32(0x224994u) = 0x1A6A64u;
-	MEM32(0x224960u) = 0u;
+	CharacterDamageChunksMedWEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksSmallWEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249082,14 +249082,14 @@ uint32_t CharacterDamageChunksSmallWEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x2249E0u);
+	eax = CharacterDamageChunksSmallWEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F779Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x2249E0u) = 0u;
+	CharacterDamageChunksSmallWEffectScene = 0u;
 	return eax;
 }
 
@@ -249119,7 +249119,7 @@ uint32_t CharacterDamageChunksSmallWEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F77D8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x2249E0u) = eax;
+	CharacterDamageChunksSmallWEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249168,7 +249168,7 @@ uint32_t CharacterDamageChunksSmallWEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x2249E0u);
+	ecx = CharacterDamageChunksSmallWEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249222,7 +249222,7 @@ void CharacterDamageChunksSmallWEffect_Register(uint32_t arg0)
 	MEM32(0x224A0Cu) = 0x1A6AD0u;
 	MEM32(0x224A10u) = 0x1A6AD4u;
 	MEM32(0x224A14u) = 0x1A6AD8u;
-	MEM32(0x2249E0u) = 0u;
+	CharacterDamageChunksSmallWEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksLargeGEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249231,14 +249231,14 @@ uint32_t CharacterDamageChunksLargeGEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224A60u);
+	eax = CharacterDamageChunksLargeGEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F796Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224A60u) = 0u;
+	CharacterDamageChunksLargeGEffectScene = 0u;
 	return eax;
 }
 
@@ -249268,7 +249268,7 @@ uint32_t CharacterDamageChunksLargeGEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F79A8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224A60u) = eax;
+	CharacterDamageChunksLargeGEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249317,7 +249317,7 @@ uint32_t CharacterDamageChunksLargeGEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224A60u);
+	ecx = CharacterDamageChunksLargeGEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249371,7 +249371,7 @@ void CharacterDamageChunksLargeGEffect_Register(uint32_t arg0)
 	MEM32(0x224A8Cu) = 0x1A6B44u;
 	MEM32(0x224A90u) = 0x1A6B48u;
 	MEM32(0x224A94u) = 0x1A6B4Cu;
-	MEM32(0x224A60u) = 0u;
+	CharacterDamageChunksLargeGEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksMedGEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249380,14 +249380,14 @@ uint32_t CharacterDamageChunksMedGEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224AE0u);
+	eax = CharacterDamageChunksMedGEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F7B3Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224AE0u) = 0u;
+	CharacterDamageChunksMedGEffectScene = 0u;
 	return eax;
 }
 
@@ -249416,7 +249416,7 @@ uint32_t CharacterDamageChunksMedGEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7B78u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224AE0u) = eax;
+	CharacterDamageChunksMedGEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249465,7 +249465,7 @@ uint32_t CharacterDamageChunksMedGEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224AE0u);
+	ecx = CharacterDamageChunksMedGEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249519,7 +249519,7 @@ void CharacterDamageChunksMedGEffect_Register(uint32_t arg0)
 	MEM32(0x224B0Cu) = 0x1A6BB8u;
 	MEM32(0x224B10u) = 0x1A6BBCu;
 	MEM32(0x224B14u) = 0x1A6BC0u;
-	MEM32(0x224AE0u) = 0u;
+	CharacterDamageChunksMedGEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksSmallGEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249528,14 +249528,14 @@ uint32_t CharacterDamageChunksSmallGEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224B60u);
+	eax = CharacterDamageChunksSmallGEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F7D0Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224B60u) = 0u;
+	CharacterDamageChunksSmallGEffectScene = 0u;
 	return eax;
 }
 
@@ -249565,7 +249565,7 @@ uint32_t CharacterDamageChunksSmallGEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7D48u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224B60u) = eax;
+	CharacterDamageChunksSmallGEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249614,7 +249614,7 @@ uint32_t CharacterDamageChunksSmallGEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224B60u);
+	ecx = CharacterDamageChunksSmallGEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249668,7 +249668,7 @@ void CharacterDamageChunksSmallGEffect_Register(uint32_t arg0)
 	MEM32(0x224B8Cu) = 0x1A6C2Cu;
 	MEM32(0x224B90u) = 0x1A6C30u;
 	MEM32(0x224B94u) = 0x1A6C34u;
-	MEM32(0x224B60u) = 0u;
+	CharacterDamageChunksSmallGEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksLargeBEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249677,14 +249677,14 @@ uint32_t CharacterDamageChunksLargeBEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224BE0u);
+	eax = CharacterDamageChunksLargeBEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F7EDBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224BE0u) = 0u;
+	CharacterDamageChunksLargeBEffectScene = 0u;
 	return eax;
 }
 
@@ -249714,7 +249714,7 @@ uint32_t CharacterDamageChunksLargeBEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F7F18u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224BE0u) = eax;
+	CharacterDamageChunksLargeBEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249763,7 +249763,7 @@ uint32_t CharacterDamageChunksLargeBEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224BE0u);
+	ecx = CharacterDamageChunksLargeBEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249817,7 +249817,7 @@ void CharacterDamageChunksLargeBEffect_Register(uint32_t arg0)
 	MEM32(0x224C0Cu) = 0x1A6CA0u;
 	MEM32(0x224C10u) = 0x1A6CA4u;
 	MEM32(0x224C14u) = 0x1A6CA8u;
-	MEM32(0x224BE0u) = 0u;
+	CharacterDamageChunksLargeBEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksMedBEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249826,14 +249826,14 @@ uint32_t CharacterDamageChunksMedBEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224C60u);
+	eax = CharacterDamageChunksMedBEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F80ABu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224C60u) = 0u;
+	CharacterDamageChunksMedBEffectScene = 0u;
 	return eax;
 }
 
@@ -249862,7 +249862,7 @@ uint32_t CharacterDamageChunksMedBEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F80E8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224C60u) = eax;
+	CharacterDamageChunksMedBEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -249911,7 +249911,7 @@ uint32_t CharacterDamageChunksMedBEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224C60u);
+	ecx = CharacterDamageChunksMedBEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -249965,7 +249965,7 @@ void CharacterDamageChunksMedBEffect_Register(uint32_t arg0)
 	MEM32(0x224C8Cu) = 0x1A6D14u;
 	MEM32(0x224C90u) = 0x1A6D18u;
 	MEM32(0x224C94u) = 0x1A6D1Cu;
-	MEM32(0x224C60u) = 0u;
+	CharacterDamageChunksMedBEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksSmallBEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -249974,14 +249974,14 @@ uint32_t CharacterDamageChunksSmallBEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224CE0u);
+	eax = CharacterDamageChunksSmallBEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F827Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224CE0u) = 0u;
+	CharacterDamageChunksSmallBEffectScene = 0u;
 	return eax;
 }
 
@@ -250011,7 +250011,7 @@ uint32_t CharacterDamageChunksSmallBEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F82B8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224CE0u) = eax;
+	CharacterDamageChunksSmallBEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250060,7 +250060,7 @@ uint32_t CharacterDamageChunksSmallBEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224CE0u);
+	ecx = CharacterDamageChunksSmallBEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250114,7 +250114,7 @@ void CharacterDamageChunksSmallBEffect_Register(uint32_t arg0)
 	MEM32(0x224D0Cu) = 0x1A6D88u;
 	MEM32(0x224D10u) = 0x1A6D8Cu;
 	MEM32(0x224D14u) = 0x1A6D90u;
-	MEM32(0x224CE0u) = 0u;
+	CharacterDamageChunksSmallBEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksLargeEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -250123,14 +250123,14 @@ uint32_t CharacterDamageChunksLargeEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224D60u);
+	eax = CharacterDamageChunksLargeEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F844Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224D60u) = 0u;
+	CharacterDamageChunksLargeEffectScene = 0u;
 	return eax;
 }
 
@@ -250160,7 +250160,7 @@ uint32_t CharacterDamageChunksLargeEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F8488u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224D60u) = eax;
+	CharacterDamageChunksLargeEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250209,7 +250209,7 @@ uint32_t CharacterDamageChunksLargeEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224D60u);
+	ecx = CharacterDamageChunksLargeEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250263,7 +250263,7 @@ void CharacterDamageChunksLargeEffect_Register(uint32_t arg0)
 	MEM32(0x224D8Cu) = 0x1A6DFCu;
 	MEM32(0x224D90u) = 0x1A6E00u;
 	MEM32(0x224D94u) = 0x1A6E04u;
-	MEM32(0x224D60u) = 0u;
+	CharacterDamageChunksLargeEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksMedEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -250272,14 +250272,14 @@ uint32_t CharacterDamageChunksMedEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224DE0u);
+	eax = CharacterDamageChunksMedEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F861Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224DE0u) = 0u;
+	CharacterDamageChunksMedEffectScene = 0u;
 	return eax;
 }
 
@@ -250308,7 +250308,7 @@ uint32_t CharacterDamageChunksMedEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F8658u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224DE0u) = eax;
+	CharacterDamageChunksMedEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250357,7 +250357,7 @@ uint32_t CharacterDamageChunksMedEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224DE0u);
+	ecx = CharacterDamageChunksMedEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250411,7 +250411,7 @@ void CharacterDamageChunksMedEffect_Register(uint32_t arg0)
 	MEM32(0x224E0Cu) = 0x1A6E6Cu;
 	MEM32(0x224E10u) = 0x1A6E70u;
 	MEM32(0x224E14u) = 0x1A6E74u;
-	MEM32(0x224DE0u) = 0u;
+	CharacterDamageChunksMedEffectScene = 0u;
 }
 
 /* The CharacterDamageChunksSmallEffect type's last release (GameObjectTypeRelease): lets go of what its
@@ -250420,14 +250420,14 @@ uint32_t CharacterDamageChunksSmallEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224E60u);
+	eax = CharacterDamageChunksSmallEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F87EBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224E60u) = 0u;
+	CharacterDamageChunksSmallEffectScene = 0u;
 	return eax;
 }
 
@@ -250457,7 +250457,7 @@ uint32_t CharacterDamageChunksSmallEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F8828u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224E60u) = eax;
+	CharacterDamageChunksSmallEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250506,7 +250506,7 @@ uint32_t CharacterDamageChunksSmallEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224E60u);
+	ecx = CharacterDamageChunksSmallEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250560,7 +250560,7 @@ void CharacterDamageChunksSmallEffect_Register(uint32_t arg0)
 	MEM32(0x224E8Cu) = 0x1A6EE0u;
 	MEM32(0x224E90u) = 0x1A6EE4u;
 	MEM32(0x224E94u) = 0x1A6EE8u;
-	MEM32(0x224E60u) = 0u;
+	CharacterDamageChunksSmallEffectScene = 0u;
 }
 
 /* The Chunk1LargeEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
@@ -250568,14 +250568,14 @@ uint32_t Chunk1LargeEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224EE0u);
+	eax = Chunk1LargeEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F89BBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224EE0u) = 0u;
+	Chunk1LargeEffectScene = 0u;
 	return eax;
 }
 
@@ -250604,7 +250604,7 @@ uint32_t Chunk1LargeEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F89F8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224EE0u) = eax;
+	Chunk1LargeEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250653,7 +250653,7 @@ uint32_t Chunk1LargeEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224EE0u);
+	ecx = Chunk1LargeEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250707,7 +250707,7 @@ void Chunk1LargeEffect_Register(uint32_t arg0)
 	MEM32(0x224F0Cu) = 0x1A6F3Cu;
 	MEM32(0x224F10u) = 0x1A6F40u;
 	MEM32(0x224F14u) = 0x1A6F44u;
-	MEM32(0x224EE0u) = 0u;
+	Chunk1LargeEffectScene = 0u;
 }
 
 /* The Chunk1MediumEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
@@ -250715,14 +250715,14 @@ uint32_t Chunk1MediumEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224F60u);
+	eax = Chunk1MediumEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F8B8Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224F60u) = 0u;
+	Chunk1MediumEffectScene = 0u;
 	return eax;
 }
 
@@ -250751,7 +250751,7 @@ uint32_t Chunk1MediumEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F8BC8u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224F60u) = eax;
+	Chunk1MediumEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250800,7 +250800,7 @@ uint32_t Chunk1MediumEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224F60u);
+	ecx = Chunk1MediumEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -250854,7 +250854,7 @@ void Chunk1MediumEffect_Register(uint32_t arg0)
 	MEM32(0x224F8Cu) = 0x1A6F98u;
 	MEM32(0x224F90u) = 0x1A6F9Cu;
 	MEM32(0x224F94u) = 0x1A6FA0u;
-	MEM32(0x224F60u) = 0u;
+	Chunk1MediumEffectScene = 0u;
 }
 
 /* The Chunk1SmallEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
@@ -250862,14 +250862,14 @@ uint32_t Chunk1SmallEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x224FE0u);
+	eax = Chunk1SmallEffectScene;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000F8D5Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x224FE0u) = 0u;
+	Chunk1SmallEffectScene = 0u;
 	return eax;
 }
 
@@ -250898,7 +250898,7 @@ uint32_t Chunk1SmallEffect_Startup(uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x000F8D98u, 0);
 	ecx = vcObjectCacheHandle;
 	g_esp = g_esp + 8u;
-	MEM32(0x224FE0u) = eax;
+	Chunk1SmallEffectScene = eax;
 	if (eax == ecx)
 	{
 		edi_2 = vcObjectCacheData;
@@ -250947,7 +250947,7 @@ uint32_t Chunk1SmallEffect_Startup(uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		return eax;
 	}
-	ecx = MEM32(0x224FE0u);
+	ecx = Chunk1SmallEffectScene;
 	vcObjectCacheHandle = eax;
 	eax = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(vcClassByType(ecx >> 16) + 0x6Cu));
 	vcObjectCacheData = eax;
@@ -251001,7 +251001,7 @@ void Chunk1SmallEffect_Register(uint32_t arg0)
 	MEM32(0x22500Cu) = 0x1A6FF4u;
 	MEM32(0x225010u) = 0x1A6FF8u;
 	MEM32(0x225014u) = 0x1A6FFCu;
-	MEM32(0x224FE0u) = 0u;
+	Chunk1SmallEffectScene = 0u;
 }
 
 uint32_t sub_000F8F20(void)
@@ -265163,7 +265163,7 @@ void sub_001039F0(uint32_t edi, uint32_t arg2)
 	uint32_t saved_edi = 0, saved_arg2 = 0;
 
 	saved_arg2 = arg2;
-	eax = MEM32(0x1BC980u);
+	eax = Players(0);
 	if (eax == 0u)
 	{
 		MEM32(saved_arg2) = MEM32(edi + 0x2Cu);
@@ -265179,13 +265179,13 @@ void sub_001039F0(uint32_t edi, uint32_t arg2)
 		MEM32(saved_arg2) = MEM32(edi + 0x2Cu);
 		return;
 	}
-	ecx = MEM32(0x1BC980u);
+	ecx = Players(0);
 	edx = GameObjectLastHandle;
 	if (ecx != edx)
 	{
 		handle = ecx;
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-		ecx = MEM32(0x1BC980u);
+		ecx = Players(0);
 		edx = GameObjectLastHandle;
 		esi = GameObjectLastObject;
 	}
@@ -268378,7 +268378,7 @@ uint32_t TrainingBeacon_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2
 		eax = ebx;
 		return eax;
 	}
-	arg0_2 = MEM32(0x2272A4u);
+	arg0_2 = TrainingBeaconSceneObject;
 	eax = x86_call(vcObjectClone_entry, 0x001057B6u, 1, arg0_2);
 	ecx = saved_arg1;
 	MEM32(ecx + 0x54u) = eax;
@@ -268397,7 +268397,7 @@ uint32_t TrainingBeacon_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x1014u;
 	arg0 = eax;
-	MEM32(0x2272A4u) = eax;
+	TrainingBeaconSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x001059CCu, 3, arg0, arg1, arg2);
 	eax = g_eax;
 	ignored = g_edx;
@@ -268409,14 +268409,14 @@ uint32_t TrainingBeacon_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x2272A4u);
+	eax = TrainingBeaconSceneObject;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x001059DBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x2272A4u) = 0u;
+	TrainingBeaconSceneObject = 0u;
 	return eax;
 }
 
@@ -268863,16 +268863,16 @@ uint32_t ZenCratesMunitionsPickup_Startup(uint32_t ebx, uint32_t ebp)
 	arg2 = 0u;
 	arg1 = 0x1014u;
 	arg0 = eax;
-	MEM32(0x227380u) = eax;
+	ZenCratesMunitionsPickupModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00105FACu, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
 	arg1 = 0x1A8880u;
-	arg0 = MEM32(0x227380u);
+	arg0 = ZenCratesMunitionsPickupModel;
 	eax = sub_0011EA70(arg0, arg1);
 	arg1 = 4u;
 	arg0 = 4u;
-	MEM32(0x227384u) = eax;
+	ZenCratesMunitionsPickupPickupNode = eax;
 	eax = GameObjectTypeUse(arg0, arg1);
 	return eax;
 }
@@ -268883,14 +268883,14 @@ uint32_t ZenCratesMunitionsPickup_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x227380u);
+	arg0 = ZenCratesMunitionsPickupModel;
 	x86_call(vcObjectRelease_entry, 0x00105FDBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
 	arg1 = 4u;
 	arg0 = 4u;
-	MEM32(0x227380u) = 0u;
+	ZenCratesMunitionsPickupModel = 0u;
 	x86_call(GameObjectTypeRelease, 0x00105FEEu, 2, arg0, arg1);
 	eax = g_eax;
 	ignored_3 = g_edx;
@@ -268939,7 +268939,7 @@ uint32_t sub_00106000(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx_2;
 	x86_call(vcSceneObjectSetUser_entry, 0x00106050u, 0);
-	ecx_2 = MEM32(0x227384u);
+	ecx_2 = ZenCratesMunitionsPickupPickupNode;
 	edx_2 = g_esp + 0x1Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
@@ -269169,7 +269169,7 @@ uint32_t ZenCratesMunitionsPickup_StateMachine(uint32_t ebp, uint32_t arg0, uint
 		eax = ebx;
 		return eax;
 	}
-	arg0_2 = MEM32(0x227380u);
+	arg0_2 = ZenCratesMunitionsPickupModel;
 	eax = x86_call(vcObjectClone_entry, 0x001060F9u, 1, arg0_2);
 	ecx = saved_arg1;
 	MEM32(ecx + 0x54u) = eax;
@@ -269217,12 +269217,12 @@ uint32_t ZenCratesPickup_Startup(uint32_t ebx, uint32_t ebp)
 	arg2 = 0u;
 	arg1 = 0x1014u;
 	arg0 = eax;
-	MEM32(0x2273DCu) = eax;
+	ZenCratesPickupModel = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0010641Cu, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
 	arg1 = 0x1A8880u;
-	arg0 = MEM32(0x2273DCu);
+	arg0 = ZenCratesPickupModel;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x2273E0u) = eax;
 	return eax;
@@ -269233,14 +269233,14 @@ uint32_t ZenCratesPickup_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x2273DCu);
+	eax = ZenCratesPickupModel;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x0010644Bu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x2273DCu) = 0u;
+	ZenCratesPickupModel = 0u;
 	return eax;
 }
 
@@ -269469,7 +269469,7 @@ uint32_t ZenCratesPickup_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg
 		eax = ebx;
 		return eax;
 	}
-	arg0_2 = MEM32(0x2273DCu);
+	arg0_2 = ZenCratesPickupModel;
 	eax = x86_call(vcObjectClone_entry, 0x00106549u, 1, arg0_2);
 	ecx = saved_arg1;
 	MEM32(ecx + 0x54u) = eax;
@@ -269717,7 +269717,7 @@ uint32_t NoseconePickup_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2
 		eax = 1u;
 		return eax;
 	}
-	arg0_2 = MEM32(0x22743Cu);
+	arg0_2 = NoseconePickupSceneObject;
 	eax = x86_call(vcObjectClone_entry, 0x001068B4u, 1, arg0_2);
 	ecx = saved_arg1;
 	MEM32(ecx + 0x54u) = eax;
@@ -269736,7 +269736,7 @@ uint32_t NoseconePickup_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x1014u;
 	arg0 = eax;
-	MEM32(0x22743Cu) = eax;
+	NoseconePickupSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00106ABCu, 3, arg0, arg1, arg2);
 	eax = g_eax;
 	ignored = g_edx;
@@ -269748,14 +269748,14 @@ uint32_t NoseconePickup_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x22743Cu);
+	eax = NoseconePickupSceneObject;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x00106ACBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x22743Cu) = 0u;
+	NoseconePickupSceneObject = 0u;
 	return eax;
 }
 
@@ -269956,7 +269956,7 @@ uint32_t SpyCapsule_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, ui
 		eax = ebx;
 		return eax;
 	}
-	arg0_2 = MEM32(0x227494u);
+	arg0_2 = SpyCapsuleSceneObject;
 	eax = x86_call(vcObjectClone_entry, 0x00106BF9u, 1, arg0_2);
 	ecx = saved_arg1;
 	MEM32(ecx + 0x54u) = eax;
@@ -269975,7 +269975,7 @@ uint32_t SpyCapsule_Startup(void)
 	arg2 = 0u;
 	arg1 = 0x1014u;
 	arg0 = eax;
-	MEM32(0x227494u) = eax;
+	SpyCapsuleSceneObject = eax;
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00106DECu, 3, arg0, arg1, arg2);
 	eax = g_eax;
 	ignored = g_edx;
@@ -269987,14 +269987,14 @@ uint32_t SpyCapsule_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x227494u);
+	eax = SpyCapsuleSceneObject;
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x00106DFBu, 1, arg0);
 	eax = g_eax;
 	ignored = g_ecx;
 	ignored_2 = g_edx;
-	MEM32(0x227494u) = 0u;
+	SpyCapsuleSceneObject = 0u;
 	return eax;
 }
 
@@ -271852,7 +271852,7 @@ void sub_00108170(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		eax_2 = MEM32(edi_2 + 0x10u) | 1u;
 		MEM16(edi_2 + 0xEu) = 2u;
 		MEM32(edi_2 + 0x10u) = eax_2;
-		eax_2 = MEM32(0x1BC980u);
+		eax_2 = Players(0);
 		if (eax_2 != 0u)
 		{
 			if (eax_2 != GameObjectLastHandle)
