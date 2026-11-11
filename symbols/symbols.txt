@@ -1734,6 +1734,170 @@ field   EntityConstants  0F0  fade_time        s32
 001A24B4  var   FighterPodConstants                      EntityConstants
 00199A44  var   RepCollisionHullConstants                EntityConstants
 
+# What a weapon type's objects are made to: a record of 7 words that every type of the Weapon family clears
+# and fills in its X_Register, at the start of what the type's objects share, and that a weapon's first word
+# points at (the type's own function hands its address to the weapon's creation). Each word points at one of
+# the type's constants in .rdata. Read with Ghidra, in the family's shared code (PENDING.md has how each was
+# told); the second word (0 for the guns, 300 for the heavy cannons, 150 for the launchers) nobody has read.
+# The packs fill the first five words, the launchers and the flares all but speed.
+struct  WeaponSpec  1C                              # a weapon type's record of where its constants are
+field   WeaponSpec  000  cost            u32         # points at what a shot takes from the energy the weapon draws on: no shot with less left
+field   WeaponSpec  008  range           u32         # points at how far a shot of it reaches
+field   WeaponSpec  00C  reload          u32         # points at the milliseconds from a shot to the next
+field   WeaponSpec  010  damage          u32         # points at the damage a hit of it does: what the message to what it hits carries
+field   WeaponSpec  014  speed           u32         # points at its shots' speed: the aim leads the target by it, and a shot leaves with it added to its owner's
+field   WeaponSpec  018  alert_radius    u32         # points at how near to where it hits the AIs of the other side are told of the hit
+0021D280  var   PodOfficerSledHeavyCannonWeaponSpec              WeaponSpec
+0021D368  var   PodOfficerSkarredHeavyCannonWeaponSpec           WeaponSpec
+0021D538  var   PodOfficerHeavyCannonWeaponSpec                  WeaponSpec
+0021D620  var   MalePowerArmorRailgunWeaponSpec                  WeaponSpec
+0021D704  var   MacIICannonWeaponSpec                            WeaponSpec
+0021D7B8  var   SumoPackWeaponSpec                               WeaponSpec
+0021E2B8  var   SuperVeritechPackWeaponSpec                      WeaponSpec
+0021EDB8  var   PodOfficerArmCannonWeaponSpec                    WeaponSpec
+0021EEC0  var   RaiderXMachineGunWeaponSpec                      WeaponSpec
+0021EFC8  var   MacIIArmWeaponSpec                               WeaponSpec
+0021F0D0  var   GladiatorMachineGunWeaponSpec                    WeaponSpec
+0021F1D8  var   ExcaliburMachineGunWeaponSpec                    WeaponSpec
+0021F4F0  var   MalePowerArmorPulseRifleWeaponSpec               WeaponSpec
+0021F5F8  var   MalePowerArmorImpactCannonWeaponSpec             WeaponSpec
+0021F700  var   FighterPodGunWeaponSpec                          WeaponSpec
+0021F808  var   ZenWarriorNoArmourPulseRifleWeaponSpec           WeaponSpec
+0021F910  var   ZenWarriorScavengerPulseRifleWeaponSpec          WeaponSpec
+0021FA18  var   ZenWarriorHeavyChaingunWeaponSpec                WeaponSpec
+0021FB20  var   ZenWarriorLitePulseRifleWeaponSpec               WeaponSpec
+0021FC28  var   PodAutoCannonWeaponSpec                          WeaponSpec
+0021FD30  var   PodParticleCannonWeaponSpec                      WeaponSpec
+0021FE34  var   PodOfficerSledMissileLauncherWeaponSpec          WeaponSpec
+0021FE94  var   FPAMissileLauncherWeaponSpec                     WeaponSpec
+0021FFB4  var   ZenHeavyMissileLauncherWeaponSpec                WeaponSpec
+00220014  var   ZenLightMissileLauncherWeaponSpec                WeaponSpec
+00220134  var   FlareWeaponSpec                                  WeaponSpec
+00220198  var   ARMDTurretCannonWeaponSpec                       WeaponSpec
+00220288  var   ZenReconShipCannonWeaponSpec                     WeaponSpec
+00220378  var   ZenCruiserTurret1CannonWeaponSpec                WeaponSpec
+00220468  var   ZenCruiserTurretCannonWeaponSpec                 WeaponSpec
+# The guns: the 16 weapon types whose shots are the particles of a beam system (vcBeamParticleSystem), fired
+# in bursts, with one state machine (0x101DD0). After its WeaponSpec each keeps a second record, of 19
+# words, cleared and filled the same way; seven of its words point at the constants its WeaponSpec points at.
+# Not read: +0x0C (the constant of the WeaponSpec's second word), +0x28 (0.2 to 0.4: handed over with each
+# shot, kept in the particle) and +0x30 (250 or 500). Here the 14 with a name.
+struct  GunSpec  4C                                 # a gun type's own record of where its constants are, after its WeaponSpec
+field   GunSpec  000  aim_angle           u32        # points at the degrees either side of where it points within which it turns a shot towards its target
+field   GunSpec  004  damage              u32        # points at the damage a hit does (WeaponSpec's)
+field   GunSpec  008  cost                u32        # points at what a shot takes from its energy (WeaponSpec's)
+field   GunSpec  010  range               u32        # points at how far a shot reaches (WeaponSpec's)
+field   GunSpec  014  reload              u32        # points at the milliseconds from a shot to the next (WeaponSpec's)
+field   GunSpec  018  shots               u32        # points at how many of its shots can be in the air at once: the beam system's particles
+field   GunSpec  01C  life                u32        # points at the milliseconds a shot lasts: its range over its speed in 13 of the 16, near it in the rest
+field   GunSpec  020  speed               u32        # points at its shots' speed (WeaponSpec's)
+field   GunSpec  024  length              u32        # points at how long a shot's streak grows
+field   GunSpec  02C  color               u32        # points at its shots' colour: three floats, red, green and blue, 0 to 255
+field   GunSpec  034  shot_gap            u32        # points at the milliseconds between the shots of a burst
+field   GunSpec  038  shot_gap_random     u32        # points at how many milliseconds more or less, at random
+field   GunSpec  03C  burst_gap           u32        # points at the milliseconds from a burst's last shot to the next burst
+field   GunSpec  040  burst_gap_random    u32        # points at how many milliseconds more or less, at random
+field   GunSpec  044  burst_shots         u32        # points at the shots of a burst
+field   GunSpec  048  burst_shots_random  u32        # points at how many shots more or less, at random
+0021EDD4  var   PodOfficerArmCannonWeaponGunSpec                 GunSpec
+0021EEDC  var   RaiderXMachineGunWeaponGunSpec                   GunSpec
+0021EFE4  var   MacIIArmWeaponGunSpec                            GunSpec
+0021F0EC  var   GladiatorMachineGunWeaponGunSpec                 GunSpec
+0021F1F4  var   ExcaliburMachineGunWeaponGunSpec                 GunSpec
+0021F50C  var   MalePowerArmorPulseRifleWeaponGunSpec            GunSpec
+0021F614  var   MalePowerArmorImpactCannonWeaponGunSpec          GunSpec
+0021F71C  var   FighterPodGunWeaponGunSpec                       GunSpec
+0021F824  var   ZenWarriorNoArmourPulseRifleWeaponGunSpec        GunSpec
+0021F92C  var   ZenWarriorScavengerPulseRifleWeaponGunSpec       GunSpec
+0021FA34  var   ZenWarriorHeavyChaingunWeaponGunSpec             GunSpec
+0021FB3C  var   ZenWarriorLitePulseRifleWeaponGunSpec            GunSpec
+0021FC44  var   PodAutoCannonWeaponGunSpec                       GunSpec
+0021FD4C  var   PodParticleCannonWeaponGunSpec                   GunSpec
+# The constants a gun type's two records point at: each type's file keeps them in .rdata, 0xD8 bytes laid
+# out the same in the 16 types, with the names of its shots' material and of its sound among them. A field
+# is the constant the WeaponSpec's or the GunSpec's field of that name points at.
+struct  GunConstants  D8                            # a gun type's constants: what its WeaponSpec's and its GunSpec's words point at
+field   GunConstants  000  aim_angle           f32
+field   GunConstants  004  damage              f32
+field   GunConstants  008  cost                f32
+field   GunConstants  010  range               f32
+field   GunConstants  014  reload              u32
+field   GunConstants  018  shots               s32
+field   GunConstants  01C  life                u32
+field   GunConstants  020  speed               f32
+field   GunConstants  024  length              f32
+field   GunConstants  02C  color               f32[3]
+field   GunConstants  038  material            char[64]   # the name of its shots' material: its X_Startup gets it
+field   GunConstants  078  sound               char[64]   # the name of its sound: its X_Startup makes it
+field   GunConstants  0B8  alert_radius        f32
+field   GunConstants  0C0  shot_gap            s32
+field   GunConstants  0C4  shot_gap_random     s32
+field   GunConstants  0C8  burst_gap           s32
+field   GunConstants  0CC  burst_gap_random    s32
+field   GunConstants  0D0  burst_shots         s32
+field   GunConstants  0D4  burst_shots_random  s32
+001A4620  var   PodOfficerArmCannonWeaponConstants               GunConstants
+001A46F8  var   RaiderXMachineGunWeaponConstants                 GunConstants
+001A47D0  var   MacIIArmWeaponConstants                          GunConstants
+001A48A8  var   GladiatorMachineGunWeaponConstants               GunConstants
+001A4980  var   ExcaliburMachineGunWeaponConstants               GunConstants
+001A4C08  var   MalePowerArmorPulseRifleWeaponConstants          GunConstants
+001A4CE0  var   MalePowerArmorImpactCannonWeaponConstants        GunConstants
+001A4DB8  var   FighterPodGunWeaponConstants                     GunConstants
+001A4E90  var   ZenWarriorNoArmourPulseRifleWeaponConstants      GunConstants
+001A4F68  var   ZenWarriorScavengerPulseRifleWeaponConstants     GunConstants
+001A5040  var   ZenWarriorHeavyChaingunWeaponConstants           GunConstants
+001A5118  var   ZenWarriorLitePulseRifleWeaponConstants          GunConstants
+001A51F0  var   PodAutoCannonWeaponConstants                     GunConstants
+001A52C8  var   PodParticleCannonWeaponConstants                 GunConstants
+# What a missile is made to, besides its EntitySpec: a record of 19 words that each of the 8 missile types
+# clears and fills in its X_Register just before its EntitySpec, at the start of what the type's objects
+# share; a missile keeps its address (its +0x26C and +0x274) and its first word points 0x4C bytes on, at the
+# EntitySpec. Each word points at one of the type's constants. Read with Ghidra in the missiles' shared code
+# (0x59620 to 0x5B850). Not read: +0x0C (150 to 400), +0x2C, +0x24 and +0x28 (kept in the missile when it
+# is set up, the same values as swing and swing_time) and +0x44 (0.25: what its steering is scaled by, with
+# a push sideways, while its target is behind it). Here the 4 with a name.
+struct  MissileSpec  4C                             # a missile type's record of where its constants are
+field   MissileSpec  000  speed                u32   # points at its top speed: what it steers to reach towards its target, and the most it flies at
+field   MissileSpec  004  mass                 u32   # points at its mass: the force that steers it over this is what its speed changes by
+field   MissileSpec  008  thrust               u32   # points at the most force that steers it; with no target, the force that pushes it straight on
+field   MissileSpec  010  damage               u32   # points at the damage it does to what it hits, and at most to what is near
+field   MissileSpec  014  life                 u32   # points at the milliseconds it flies before it ends by itself
+field   MissileSpec  018  steer_interval       u32   # points at the milliseconds between two times it works out where to steer
+field   MissileSpec  01C  launch_speed         u32   # points at the part of its top speed it leaves its launcher with
+field   MissileSpec  020  launch_speed_random  u32   # points at how much more or less than that, at random
+field   MissileSpec  030  swing                u32   # points at how far off its path each of its warheads swings: half to all of it, at random
+field   MissileSpec  034  swing_time           u32   # points at the milliseconds a swing out and back takes
+field   MissileSpec  038  turn_time            u32   # points at the milliseconds a warhead takes to go once round the path, either way
+field   MissileSpec  03C  blast_inner          u32   # points at how near to where it hits an entity takes all its damage
+field   MissileSpec  040  blast_outer          u32   # points at how far from where it hits its damage falls to nothing
+field   MissileSpec  048  alert_radius         u32   # points at how near to where it hits the AIs of the other side are told of the hit
+001EDC78  var   PodOfficerSledMissileMissileSpec                 MissileSpec
+001EDEA8  var   FPAMissileMissileSpec                            MissileSpec
+001EE538  var   ZenHeavyMissileMissileSpec                       MissileSpec
+001EE768  var   ZenLightMissileMissileSpec                       MissileSpec
+# The constants a missile type's MissileSpec points at: 19 words one after another in .rdata, laid out the
+# same in the 8 types. A field is the constant MissileSpec's field of that name points at.
+struct  MissileConstants  4C                        # a missile type's constants: what its MissileSpec's words point at
+field   MissileConstants  000  thrust               f32
+field   MissileConstants  008  mass                 f32
+field   MissileConstants  00C  speed                f32
+field   MissileConstants  010  damage               f32
+field   MissileConstants  014  life                 s32
+field   MissileConstants  018  steer_interval       s32
+field   MissileConstants  01C  launch_speed         f32
+field   MissileConstants  020  launch_speed_random  f32
+field   MissileConstants  030  swing                f32
+field   MissileConstants  034  swing_time           f32
+field   MissileConstants  038  turn_time            f32
+field   MissileConstants  03C  blast_inner          f32
+field   MissileConstants  040  blast_outer          f32
+field   MissileConstants  048  alert_radius         f32
+00193108  var   PodOfficerSledMissileMissileConstants            MissileConstants
+0019320C  var   FPAMissileMissileConstants                       MissileConstants
+00193518  var   ZenHeavyMissileMissileConstants                  MissileConstants
+0019361C  var   ZenLightMissileMissileConstants                  MissileConstants
+
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
 00026E80  func  gcLevel_Destroy                     # gcLevel's slot +38

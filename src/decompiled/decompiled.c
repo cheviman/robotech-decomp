@@ -78391,7 +78391,7 @@ uint32_t sub_00057E50(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EDC78u;
+	eax = PodOfficerSledMissileMissileSpec_VA;
 	return eax;
 }
 
@@ -78516,26 +78516,26 @@ void PodOfficerSledMissile_Register(uint32_t arg0)
 	GameObjectType_load(PodOfficerSledMissileType_VA) = 0x19500u;
 	GameObjectType_collect(PodOfficerSledMissileType_VA) = 0x196A0u;
 	MEM32(arg0 + 0x144u) = PodOfficerSledMissileType_VA;
-	x86_rep_stos32(0x1EDC78u, 0u, 0x13u);
-	MEM32(0x1EDC78u) = 0x193114u;
-	MEM32(0x1EDC80u) = 0x193108u;
-	MEM32(0x1EDC84u) = 0x19310Cu;
-	MEM32(0x1EDC7Cu) = 0x193110u;
-	MEM32(0x1EDC88u) = 0x193118u;
-	MEM32(0x1EDC8Cu) = 0x19311Cu;
-	MEM32(0x1EDC90u) = 0x193120u;
-	MEM32(0x1EDC94u) = 0x193124u;
-	MEM32(0x1EDC98u) = 0x193128u;
-	MEM32(0x1EDC9Cu) = 0x19312Cu;
-	MEM32(0x1EDCA0u) = 0x193130u;
-	MEM32(0x1EDCA4u) = 0x193134u;
-	MEM32(0x1EDCA8u) = 0x193138u;
-	MEM32(0x1EDCACu) = 0x19313Cu;
-	MEM32(0x1EDCB0u) = 0x193140u;
-	MEM32(0x1EDCB4u) = 0x193144u;
-	MEM32(0x1EDCB8u) = 0x193148u;
-	MEM32(0x1EDCBCu) = 0x19314Cu;
-	MEM32(0x1EDCC0u) = 0x193150u;
+	x86_rep_stos32(PodOfficerSledMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_speed_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_thrust(PodOfficerSledMissileMissileSpec_VA) = PodOfficerSledMissileMissileConstants_VA;
+	MEM32(PodOfficerSledMissileMissileSpec_VA + 0xCu) = PodOfficerSledMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_mass_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_damage(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_damage_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_life(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_life_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_steer_interval(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_launch_speed(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(PodOfficerSledMissileMissileConstants_VA);
+	MEM32(PodOfficerSledMissileMissileSpec_VA + 0x24u) = PodOfficerSledMissileMissileConstants_VA + 0x24u;
+	MEM32(PodOfficerSledMissileMissileSpec_VA + 0x28u) = PodOfficerSledMissileMissileConstants_VA + 0x28u;
+	MEM32(PodOfficerSledMissileMissileSpec_VA + 0x2Cu) = PodOfficerSledMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_swing_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_swing_time(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_swing_time_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_turn_time(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_turn_time_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_blast_inner(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(PodOfficerSledMissileMissileConstants_VA);
+	MissileSpec_blast_outer(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(PodOfficerSledMissileMissileConstants_VA);
+	MEM32(PodOfficerSledMissileMissileSpec_VA + 0x44u) = PodOfficerSledMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(PodOfficerSledMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(PodOfficerSledMissileMissileConstants_VA);
 	x86_rep_stos32(PodOfficerSledMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(PodOfficerSledMissileSpec_VA) = 0x193184u;
 	EntitySpec_hit_points(PodOfficerSledMissileSpec_VA) = 0x1930E4u;
@@ -78547,7 +78547,7 @@ uint32_t sub_00058130(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EDEA8u;
+	eax = FPAMissileMissileSpec_VA;
 	return eax;
 }
 
@@ -78671,26 +78671,26 @@ void FPAMissile_Register(uint32_t arg0)
 	GameObjectType_load(FPAMissileType_VA) = 0x19500u;
 	GameObjectType_collect(FPAMissileType_VA) = 0x196A0u;
 	MEM32(arg0 + 0x140u) = FPAMissileType_VA;
-	x86_rep_stos32(0x1EDEA8u, 0u, 0x13u);
-	MEM32(0x1EDEA8u) = 0x193218u;
-	MEM32(0x1EDEB0u) = 0x19320Cu;
-	MEM32(0x1EDEB4u) = 0x193210u;
-	MEM32(0x1EDEACu) = 0x193214u;
-	MEM32(0x1EDEB8u) = 0x19321Cu;
-	MEM32(0x1EDEBCu) = 0x193220u;
-	MEM32(0x1EDEC0u) = 0x193224u;
-	MEM32(0x1EDEC4u) = 0x193228u;
-	MEM32(0x1EDEC8u) = 0x19322Cu;
-	MEM32(0x1EDECCu) = 0x193230u;
-	MEM32(0x1EDED0u) = 0x193234u;
-	MEM32(0x1EDED4u) = 0x193238u;
-	MEM32(0x1EDED8u) = 0x19323Cu;
-	MEM32(0x1EDEDCu) = 0x193240u;
-	MEM32(0x1EDEE0u) = 0x193244u;
-	MEM32(0x1EDEE4u) = 0x193248u;
-	MEM32(0x1EDEE8u) = 0x19324Cu;
-	MEM32(0x1EDEECu) = 0x193250u;
-	MEM32(0x1EDEF0u) = 0x193254u;
+	x86_rep_stos32(FPAMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(FPAMissileMissileSpec_VA) = MissileConstants_speed_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_thrust(FPAMissileMissileSpec_VA) = FPAMissileMissileConstants_VA;
+	MEM32(FPAMissileMissileSpec_VA + 0xCu) = FPAMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(FPAMissileMissileSpec_VA) = MissileConstants_mass_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_damage(FPAMissileMissileSpec_VA) = MissileConstants_damage_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_life(FPAMissileMissileSpec_VA) = MissileConstants_life_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_steer_interval(FPAMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_launch_speed(FPAMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(FPAMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(FPAMissileMissileConstants_VA);
+	MEM32(FPAMissileMissileSpec_VA + 0x24u) = FPAMissileMissileConstants_VA + 0x24u;
+	MEM32(FPAMissileMissileSpec_VA + 0x28u) = FPAMissileMissileConstants_VA + 0x28u;
+	MEM32(FPAMissileMissileSpec_VA + 0x2Cu) = FPAMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(FPAMissileMissileSpec_VA) = MissileConstants_swing_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_swing_time(FPAMissileMissileSpec_VA) = MissileConstants_swing_time_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_turn_time(FPAMissileMissileSpec_VA) = MissileConstants_turn_time_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_blast_inner(FPAMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(FPAMissileMissileConstants_VA);
+	MissileSpec_blast_outer(FPAMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(FPAMissileMissileConstants_VA);
+	MEM32(FPAMissileMissileSpec_VA + 0x44u) = FPAMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(FPAMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(FPAMissileMissileConstants_VA);
 	x86_rep_stos32(FPAMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(FPAMissileSpec_VA) = 0x193288u;
 	EntitySpec_hit_points(FPAMissileSpec_VA) = 0x1931E8u;
@@ -79004,7 +79004,7 @@ uint32_t sub_000589D0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EE538u;
+	eax = ZenHeavyMissileMissileSpec_VA;
 	return eax;
 }
 
@@ -79128,26 +79128,26 @@ void ZenHeavyMissile_Register(uint32_t arg0)
 	GameObjectType_load(ZenHeavyMissileType_VA) = 0x19500u;
 	GameObjectType_collect(ZenHeavyMissileType_VA) = 0x196A0u;
 	MEM32(arg0 + 0x13Cu) = ZenHeavyMissileType_VA;
-	x86_rep_stos32(0x1EE538u, 0u, 0x13u);
-	MEM32(0x1EE538u) = 0x193524u;
-	MEM32(0x1EE540u) = 0x193518u;
-	MEM32(0x1EE544u) = 0x19351Cu;
-	MEM32(0x1EE53Cu) = 0x193520u;
-	MEM32(0x1EE548u) = 0x193528u;
-	MEM32(0x1EE54Cu) = 0x19352Cu;
-	MEM32(0x1EE550u) = 0x193530u;
-	MEM32(0x1EE554u) = 0x193534u;
-	MEM32(0x1EE558u) = 0x193538u;
-	MEM32(0x1EE55Cu) = 0x19353Cu;
-	MEM32(0x1EE560u) = 0x193540u;
-	MEM32(0x1EE564u) = 0x193544u;
-	MEM32(0x1EE568u) = 0x193548u;
-	MEM32(0x1EE56Cu) = 0x19354Cu;
-	MEM32(0x1EE570u) = 0x193550u;
-	MEM32(0x1EE574u) = 0x193554u;
-	MEM32(0x1EE578u) = 0x193558u;
-	MEM32(0x1EE57Cu) = 0x19355Cu;
-	MEM32(0x1EE580u) = 0x193560u;
+	x86_rep_stos32(ZenHeavyMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(ZenHeavyMissileMissileSpec_VA) = MissileConstants_speed_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_thrust(ZenHeavyMissileMissileSpec_VA) = ZenHeavyMissileMissileConstants_VA;
+	MEM32(ZenHeavyMissileMissileSpec_VA + 0xCu) = ZenHeavyMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(ZenHeavyMissileMissileSpec_VA) = MissileConstants_mass_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_damage(ZenHeavyMissileMissileSpec_VA) = MissileConstants_damage_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_life(ZenHeavyMissileMissileSpec_VA) = MissileConstants_life_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_steer_interval(ZenHeavyMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed(ZenHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(ZenHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(ZenHeavyMissileMissileConstants_VA);
+	MEM32(ZenHeavyMissileMissileSpec_VA + 0x24u) = ZenHeavyMissileMissileConstants_VA + 0x24u;
+	MEM32(ZenHeavyMissileMissileSpec_VA + 0x28u) = ZenHeavyMissileMissileConstants_VA + 0x28u;
+	MEM32(ZenHeavyMissileMissileSpec_VA + 0x2Cu) = ZenHeavyMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(ZenHeavyMissileMissileSpec_VA) = MissileConstants_swing_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_swing_time(ZenHeavyMissileMissileSpec_VA) = MissileConstants_swing_time_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_turn_time(ZenHeavyMissileMissileSpec_VA) = MissileConstants_turn_time_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_inner(ZenHeavyMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(ZenHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_outer(ZenHeavyMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(ZenHeavyMissileMissileConstants_VA);
+	MEM32(ZenHeavyMissileMissileSpec_VA + 0x44u) = ZenHeavyMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(ZenHeavyMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(ZenHeavyMissileMissileConstants_VA);
 	x86_rep_stos32(ZenHeavyMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(ZenHeavyMissileSpec_VA) = 0x193594u;
 	EntitySpec_hit_points(ZenHeavyMissileSpec_VA) = 0x1934F4u;
@@ -79159,7 +79159,7 @@ uint32_t sub_00058CB0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EE768u;
+	eax = ZenLightMissileMissileSpec_VA;
 	return eax;
 }
 
@@ -79283,26 +79283,26 @@ void ZenLightMissile_Register(uint32_t arg0)
 	GameObjectType_load(ZenLightMissileType_VA) = 0x19500u;
 	GameObjectType_collect(ZenLightMissileType_VA) = 0x196A0u;
 	MEM32(arg0 + 0x138u) = ZenLightMissileType_VA;
-	x86_rep_stos32(0x1EE768u, 0u, 0x13u);
-	MEM32(0x1EE768u) = 0x193628u;
-	MEM32(0x1EE770u) = 0x19361Cu;
-	MEM32(0x1EE774u) = 0x193620u;
-	MEM32(0x1EE76Cu) = 0x193624u;
-	MEM32(0x1EE778u) = 0x19362Cu;
-	MEM32(0x1EE77Cu) = 0x193630u;
-	MEM32(0x1EE780u) = 0x193634u;
-	MEM32(0x1EE784u) = 0x193638u;
-	MEM32(0x1EE788u) = 0x19363Cu;
-	MEM32(0x1EE78Cu) = 0x193640u;
-	MEM32(0x1EE790u) = 0x193644u;
-	MEM32(0x1EE794u) = 0x193648u;
-	MEM32(0x1EE798u) = 0x19364Cu;
-	MEM32(0x1EE79Cu) = 0x193650u;
-	MEM32(0x1EE7A0u) = 0x193654u;
-	MEM32(0x1EE7A4u) = 0x193658u;
-	MEM32(0x1EE7A8u) = 0x19365Cu;
-	MEM32(0x1EE7ACu) = 0x193660u;
-	MEM32(0x1EE7B0u) = 0x193664u;
+	x86_rep_stos32(ZenLightMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(ZenLightMissileMissileSpec_VA) = MissileConstants_speed_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_thrust(ZenLightMissileMissileSpec_VA) = ZenLightMissileMissileConstants_VA;
+	MEM32(ZenLightMissileMissileSpec_VA + 0xCu) = ZenLightMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(ZenLightMissileMissileSpec_VA) = MissileConstants_mass_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_damage(ZenLightMissileMissileSpec_VA) = MissileConstants_damage_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_life(ZenLightMissileMissileSpec_VA) = MissileConstants_life_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_steer_interval(ZenLightMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed(ZenLightMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(ZenLightMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(ZenLightMissileMissileConstants_VA);
+	MEM32(ZenLightMissileMissileSpec_VA + 0x24u) = ZenLightMissileMissileConstants_VA + 0x24u;
+	MEM32(ZenLightMissileMissileSpec_VA + 0x28u) = ZenLightMissileMissileConstants_VA + 0x28u;
+	MEM32(ZenLightMissileMissileSpec_VA + 0x2Cu) = ZenLightMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(ZenLightMissileMissileSpec_VA) = MissileConstants_swing_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_swing_time(ZenLightMissileMissileSpec_VA) = MissileConstants_swing_time_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_turn_time(ZenLightMissileMissileSpec_VA) = MissileConstants_turn_time_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_blast_inner(ZenLightMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(ZenLightMissileMissileConstants_VA);
+	MissileSpec_blast_outer(ZenLightMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(ZenLightMissileMissileConstants_VA);
+	MEM32(ZenLightMissileMissileSpec_VA + 0x44u) = ZenLightMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(ZenLightMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(ZenLightMissileMissileConstants_VA);
 	x86_rep_stos32(ZenLightMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(ZenLightMissileSpec_VA) = 0x193698u;
 	EntitySpec_hit_points(ZenLightMissileSpec_VA) = 0x1935F8u;
@@ -191161,7 +191161,7 @@ uint32_t sub_000C8720(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21D280u;
+	eax = PodOfficerSledHeavyCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -191260,14 +191260,14 @@ void PodOfficerSledHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D2BCu) = 0x1A3950u;
 	MEM32(0x21D2C0u) = 0x1A3958u;
 	MEM32(0x21D2C4u) = 0x1A395Cu;
-	x86_rep_stos32(0x21D280u, 0u, 7u);
-	MEM32(0x21D290u) = 0x1A3934u;
-	MEM32(0x21D280u) = 0x1A3938u;
-	MEM32(0x21D28Cu) = 0x1A3944u;
-	MEM32(0x21D284u) = 0x1A393Cu;
-	MEM32(0x21D288u) = 0x1A3940u;
-	MEM32(0x21D294u) = 0x1A3954u;
-	MEM32(0x21D298u) = 0x1A39E8u;
+	x86_rep_stos32(PodOfficerSledHeavyCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3934u;
+	WeaponSpec_cost(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3938u;
+	WeaponSpec_reload(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3944u;
+	MEM32(PodOfficerSledHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A393Cu;
+	WeaponSpec_range(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3940u;
+	WeaponSpec_speed(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A3954u;
+	WeaponSpec_alert_radius(PodOfficerSledHeavyCannonWeaponSpec_VA) = 0x1A39E8u;
 	PodOfficerSledHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191275,7 +191275,7 @@ uint32_t sub_000C8920(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21D368u;
+	eax = PodOfficerSkarredHeavyCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -191375,14 +191375,14 @@ void PodOfficerSkarredHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D3A4u) = 0x1A3A10u;
 	MEM32(0x21D3A8u) = 0x1A3A18u;
 	MEM32(0x21D3ACu) = 0x1A3A1Cu;
-	x86_rep_stos32(0x21D368u, 0u, 7u);
-	MEM32(0x21D378u) = 0x1A39F4u;
-	MEM32(0x21D368u) = 0x1A39F8u;
-	MEM32(0x21D374u) = 0x1A3A04u;
-	MEM32(0x21D36Cu) = 0x1A39FCu;
-	MEM32(0x21D370u) = 0x1A3A00u;
-	MEM32(0x21D37Cu) = 0x1A3A14u;
-	MEM32(0x21D380u) = 0x1A3AA8u;
+	x86_rep_stos32(PodOfficerSkarredHeavyCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A39F4u;
+	WeaponSpec_cost(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A39F8u;
+	WeaponSpec_reload(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A04u;
+	MEM32(PodOfficerSkarredHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A39FCu;
+	WeaponSpec_range(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A00u;
+	WeaponSpec_speed(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3A14u;
+	WeaponSpec_alert_radius(PodOfficerSkarredHeavyCannonWeaponSpec_VA) = 0x1A3AA8u;
 	PodOfficerSkarredHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191498,7 +191498,7 @@ uint32_t sub_000C8D20(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21D538u;
+	eax = PodOfficerHeavyCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -191596,14 +191596,14 @@ void PodOfficerHeavyCannonWeapon_Register(uint32_t arg0)
 	MEM32(0x21D574u) = 0x1A3B90u;
 	MEM32(0x21D578u) = 0x1A3B98u;
 	MEM32(0x21D57Cu) = 0x1A3B9Cu;
-	x86_rep_stos32(0x21D538u, 0u, 7u);
-	MEM32(0x21D548u) = 0x1A3B74u;
-	MEM32(0x21D538u) = 0x1A3B78u;
-	MEM32(0x21D544u) = 0x1A3B84u;
-	MEM32(0x21D53Cu) = 0x1A3B7Cu;
-	MEM32(0x21D540u) = 0x1A3B80u;
-	MEM32(0x21D54Cu) = 0x1A3B94u;
-	MEM32(0x21D550u) = 0x1A3C28u;
+	x86_rep_stos32(PodOfficerHeavyCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B74u;
+	WeaponSpec_cost(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B78u;
+	WeaponSpec_reload(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B84u;
+	MEM32(PodOfficerHeavyCannonWeaponSpec_VA + 0x4u) = 0x1A3B7Cu;
+	WeaponSpec_range(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B80u;
+	WeaponSpec_speed(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3B94u;
+	WeaponSpec_alert_radius(PodOfficerHeavyCannonWeaponSpec_VA) = 0x1A3C28u;
 	PodOfficerHeavyCannonWeaponMaterial = 0u;
 }
 
@@ -191611,7 +191611,7 @@ uint32_t sub_000C8F20(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21D620u;
+	eax = MalePowerArmorRailgunWeaponSpec_VA;
 	return eax;
 }
 
@@ -191709,14 +191709,14 @@ void MalePowerArmorRailgunWeapon_Register(uint32_t arg0)
 	MEM32(0x21D65Cu) = 0x1A3C50u;
 	MEM32(0x21D660u) = 0x1A3C58u;
 	MEM32(0x21D664u) = 0x1A3C5Cu;
-	x86_rep_stos32(0x21D620u, 0u, 7u);
-	MEM32(0x21D630u) = 0x1A3C34u;
-	MEM32(0x21D620u) = 0x1A3C38u;
-	MEM32(0x21D62Cu) = 0x1A3C44u;
-	MEM32(0x21D624u) = 0x1A3C3Cu;
-	MEM32(0x21D628u) = 0x1A3C40u;
-	MEM32(0x21D634u) = 0x1A3C54u;
-	MEM32(0x21D638u) = 0x1A3CE8u;
+	x86_rep_stos32(MalePowerArmorRailgunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C34u;
+	WeaponSpec_cost(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C38u;
+	WeaponSpec_reload(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C44u;
+	MEM32(MalePowerArmorRailgunWeaponSpec_VA + 0x4u) = 0x1A3C3Cu;
+	WeaponSpec_range(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C40u;
+	WeaponSpec_speed(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3C54u;
+	WeaponSpec_alert_radius(MalePowerArmorRailgunWeaponSpec_VA) = 0x1A3CE8u;
 	MalePowerArmorRailgunWeaponMaterial = 0u;
 }
 
@@ -192145,7 +192145,7 @@ void sub_000C9470(uint32_t edi, uint32_t arg1)
 
 	saved_arg1 = arg1;
 	arg0 = 0x1Eu;
-	MEM32(edi) = 0x21D704u;
+	MEM32(edi) = MacIICannonWeaponSpec_VA;
 	x86_call(vcObjectCreate_entry, 0x000C9480u, 1, arg0);
 	eax = g_eax;
 	ignored = g_edx;
@@ -192464,21 +192464,21 @@ void MacIICannonWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(MacIICannonWeaponType_VA) = 0xC9360u;
 	GameObjectType_state_machine(MacIICannonWeaponType_VA) = 0xC9760u;
 	MEM32(arg0 + 0x94u) = MacIICannonWeaponType_VA;
-	x86_rep_stos32(0x21D704u, 0u, 7u);
-	MEM32(0x21D704u) = 0x1A3CF4u;
-	MEM32(0x21D710u) = 0x1A3D00u;
-	MEM32(0x21D708u) = 0x1A3CF8u;
-	MEM32(0x21D70Cu) = 0x1A3CFCu;
-	MEM32(0x21D714u) = 0x1A3CF0u;
-	MEM32(0x21D718u) = 0x1A3D10u;
-	MEM32(0x21D71Cu) = 0x1A3DA8u;
+	x86_rep_stos32(MacIICannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(MacIICannonWeaponSpec_VA) = 0x1A3CF4u;
+	WeaponSpec_reload(MacIICannonWeaponSpec_VA) = 0x1A3D00u;
+	MEM32(MacIICannonWeaponSpec_VA + 0x4u) = 0x1A3CF8u;
+	WeaponSpec_range(MacIICannonWeaponSpec_VA) = 0x1A3CFCu;
+	WeaponSpec_damage(MacIICannonWeaponSpec_VA) = 0x1A3CF0u;
+	WeaponSpec_speed(MacIICannonWeaponSpec_VA) = 0x1A3D10u;
+	WeaponSpec_alert_radius(MacIICannonWeaponSpec_VA) = 0x1A3DA8u;
 }
 
 uint32_t sub_000C98F0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21D7B8u;
+	eax = SumoPackWeaponSpec_VA;
 	return eax;
 }
 
@@ -192999,19 +192999,19 @@ void SumoPackWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(SumoPackWeaponType_VA) = 0xC9900u;
 	GameObjectType_state_machine(SumoPackWeaponType_VA) = 0xCC970u;
 	MEM32(arg0 + 0x44u) = SumoPackWeaponType_VA;
-	x86_rep_stos32(0x21D7B8u, 0u, 7u);
-	MEM32(0x21D7B8u) = 0x1A3DBCu;
-	MEM32(0x21D7C4u) = 0x1A3DC8u;
-	MEM32(0x21D7BCu) = 0x1A3DC0u;
-	MEM32(0x21D7C0u) = 0x1A3DC4u;
-	MEM32(0x21D7C8u) = 0x1A3DB8u;
+	x86_rep_stos32(SumoPackWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(SumoPackWeaponSpec_VA) = 0x1A3DBCu;
+	WeaponSpec_reload(SumoPackWeaponSpec_VA) = 0x1A3DC8u;
+	MEM32(SumoPackWeaponSpec_VA + 0x4u) = 0x1A3DC0u;
+	WeaponSpec_range(SumoPackWeaponSpec_VA) = 0x1A3DC4u;
+	WeaponSpec_damage(SumoPackWeaponSpec_VA) = 0x1A3DB8u;
 }
 
 uint32_t sub_000CA530(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21E2B8u;
+	eax = SuperVeritechPackWeaponSpec_VA;
 	return eax;
 }
 
@@ -193622,12 +193622,12 @@ void SuperVeritechPackWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(SuperVeritechPackWeaponType_VA) = 0xCA540u;
 	GameObjectType_state_machine(SuperVeritechPackWeaponType_VA) = 0xCC970u;
 	MEM32(arg0 + 0x40u) = SuperVeritechPackWeaponType_VA;
-	x86_rep_stos32(0x21E2B8u, 0u, 7u);
-	MEM32(0x21E2B8u) = 0x1A43D4u;
-	MEM32(0x21E2C4u) = 0x1A43E0u;
-	MEM32(0x21E2BCu) = 0x1A43D8u;
-	MEM32(0x21E2C0u) = 0x1A43DCu;
-	MEM32(0x21E2C8u) = 0x1A43D0u;
+	x86_rep_stos32(SuperVeritechPackWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(SuperVeritechPackWeaponSpec_VA) = 0x1A43D4u;
+	WeaponSpec_reload(SuperVeritechPackWeaponSpec_VA) = 0x1A43E0u;
+	MEM32(SuperVeritechPackWeaponSpec_VA + 0x4u) = 0x1A43D8u;
+	WeaponSpec_range(SuperVeritechPackWeaponSpec_VA) = 0x1A43DCu;
+	WeaponSpec_damage(SuperVeritechPackWeaponSpec_VA) = 0x1A43D0u;
 }
 
 uint32_t sub_000CB180(uint32_t arg0)
@@ -195902,7 +195902,7 @@ uint32_t sub_000CCB10(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21EDB8u;
+	eax = PodOfficerArmCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -195913,11 +195913,11 @@ uint32_t PodOfficerArmCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4698u;
+	arg2 = GunConstants_sound_VA(PodOfficerArmCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21EE24u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4658u;
+	arg1 = GunConstants_material_VA(PodOfficerArmCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CCB47u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -195988,34 +195988,34 @@ void PodOfficerArmCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodOfficerArmCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodOfficerArmCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x8Cu) = PodOfficerArmCannonWeaponType_VA;
-	x86_rep_stos32(0x21EDD4u, 0u, 0x13u);
-	MEM32(0x21EDD4u) = 0x1A4620u;
-	MEM32(0x21EDD8u) = 0x1A4624u;
-	MEM32(0x21EDDCu) = 0x1A4628u;
-	MEM32(0x21EDE0u) = 0x1A462Cu;
-	MEM32(0x21EDE4u) = 0x1A4630u;
-	MEM32(0x21EDE8u) = 0x1A4634u;
-	MEM32(0x21EDECu) = 0x1A4638u;
-	MEM32(0x21EDF0u) = 0x1A463Cu;
-	MEM32(0x21EDF4u) = 0x1A4640u;
-	MEM32(0x21EDF8u) = 0x1A4644u;
-	MEM32(0x21EDFCu) = 0x1A4648u;
-	MEM32(0x21EE00u) = 0x1A464Cu;
-	MEM32(0x21EE04u) = 0x1A46DCu;
-	MEM32(0x21EE08u) = 0x1A46E0u;
-	MEM32(0x21EE0Cu) = 0x1A46E4u;
-	MEM32(0x21EE10u) = 0x1A46E8u;
-	MEM32(0x21EE14u) = 0x1A46ECu;
-	MEM32(0x21EE18u) = 0x1A46F0u;
-	MEM32(0x21EE1Cu) = 0x1A46F4u;
-	x86_rep_stos32(0x21EDB8u, 0u, 7u);
-	MEM32(0x21EDC8u) = 0x1A4624u;
-	MEM32(0x21EDB8u) = 0x1A4628u;
-	MEM32(0x21EDC4u) = 0x1A4634u;
-	MEM32(0x21EDBCu) = 0x1A462Cu;
-	MEM32(0x21EDC0u) = 0x1A4630u;
-	MEM32(0x21EDCCu) = 0x1A4640u;
-	MEM32(0x21EDD0u) = 0x1A46D8u;
+	x86_rep_stos32(PodOfficerArmCannonWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(PodOfficerArmCannonWeaponGunSpec_VA) = PodOfficerArmCannonWeaponConstants_VA;
+	GunSpec_damage(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_damage_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_cost(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_cost_VA(PodOfficerArmCannonWeaponConstants_VA);
+	MEM32(PodOfficerArmCannonWeaponGunSpec_VA + 0xCu) = PodOfficerArmCannonWeaponConstants_VA + 0xCu;
+	GunSpec_range(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_range_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_reload(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_reload_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_shots(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_shots_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_life(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_life_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_speed(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_speed_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_length(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_length_VA(PodOfficerArmCannonWeaponConstants_VA);
+	MEM32(PodOfficerArmCannonWeaponGunSpec_VA + 0x28u) = PodOfficerArmCannonWeaponConstants_VA + 0x28u;
+	GunSpec_color(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_color_VA(PodOfficerArmCannonWeaponConstants_VA);
+	MEM32(PodOfficerArmCannonWeaponGunSpec_VA + 0x30u) = PodOfficerArmCannonWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_shot_gap_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_shot_gap_random(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_burst_gap(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_burst_gap_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_burst_gap_random(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_burst_shots(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_burst_shots_VA(PodOfficerArmCannonWeaponConstants_VA);
+	GunSpec_burst_shots_random(PodOfficerArmCannonWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(PodOfficerArmCannonWeaponConstants_VA);
+	x86_rep_stos32(PodOfficerArmCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_damage_VA(PodOfficerArmCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_cost_VA(PodOfficerArmCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_reload_VA(PodOfficerArmCannonWeaponConstants_VA);
+	MEM32(PodOfficerArmCannonWeaponSpec_VA + 0x4u) = PodOfficerArmCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_range_VA(PodOfficerArmCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_speed_VA(PodOfficerArmCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodOfficerArmCannonWeaponSpec_VA) = GunConstants_alert_radius_VA(PodOfficerArmCannonWeaponConstants_VA);
 	PodOfficerArmCannonWeaponMaterial = 0u;
 }
 
@@ -196023,7 +196023,7 @@ uint32_t sub_000CCD60(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21EEC0u;
+	eax = RaiderXMachineGunWeaponSpec_VA;
 	return eax;
 }
 
@@ -196034,11 +196034,11 @@ uint32_t RaiderXMachineGunWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4770u;
+	arg2 = GunConstants_sound_VA(RaiderXMachineGunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21EF2Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4730u;
+	arg1 = GunConstants_material_VA(RaiderXMachineGunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CCD97u, 2, arg0, arg1);
 	arg1 = 0x34u;
@@ -196109,34 +196109,34 @@ void RaiderXMachineGunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(RaiderXMachineGunWeaponType_VA) = 0u;
 	GameObjectType_flags(RaiderXMachineGunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x88u) = RaiderXMachineGunWeaponType_VA;
-	x86_rep_stos32(0x21EEDCu, 0u, 0x13u);
-	MEM32(0x21EEDCu) = 0x1A46F8u;
-	MEM32(0x21EEE0u) = 0x1A46FCu;
-	MEM32(0x21EEE4u) = 0x1A4700u;
-	MEM32(0x21EEE8u) = 0x1A4704u;
-	MEM32(0x21EEECu) = 0x1A4708u;
-	MEM32(0x21EEF0u) = 0x1A470Cu;
-	MEM32(0x21EEF4u) = 0x1A4710u;
-	MEM32(0x21EEF8u) = 0x1A4714u;
-	MEM32(0x21EEFCu) = 0x1A4718u;
-	MEM32(0x21EF00u) = 0x1A471Cu;
-	MEM32(0x21EF04u) = 0x1A4720u;
-	MEM32(0x21EF08u) = 0x1A4724u;
-	MEM32(0x21EF0Cu) = 0x1A47B4u;
-	MEM32(0x21EF10u) = 0x1A47B8u;
-	MEM32(0x21EF14u) = 0x1A47BCu;
-	MEM32(0x21EF18u) = 0x1A47C0u;
-	MEM32(0x21EF1Cu) = 0x1A47C4u;
-	MEM32(0x21EF20u) = 0x1A47C8u;
-	MEM32(0x21EF24u) = 0x1A47CCu;
-	x86_rep_stos32(0x21EEC0u, 0u, 7u);
-	MEM32(0x21EED0u) = 0x1A46FCu;
-	MEM32(0x21EEC0u) = 0x1A4700u;
-	MEM32(0x21EECCu) = 0x1A470Cu;
-	MEM32(0x21EEC4u) = 0x1A4704u;
-	MEM32(0x21EEC8u) = 0x1A4708u;
-	MEM32(0x21EED4u) = 0x1A4718u;
-	MEM32(0x21EED8u) = 0x1A47B0u;
+	x86_rep_stos32(RaiderXMachineGunWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(RaiderXMachineGunWeaponGunSpec_VA) = RaiderXMachineGunWeaponConstants_VA;
+	GunSpec_damage(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_damage_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_cost(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_cost_VA(RaiderXMachineGunWeaponConstants_VA);
+	MEM32(RaiderXMachineGunWeaponGunSpec_VA + 0xCu) = RaiderXMachineGunWeaponConstants_VA + 0xCu;
+	GunSpec_range(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_range_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_reload(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_reload_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_shots(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_shots_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_life(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_life_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_speed(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_speed_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_length(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_length_VA(RaiderXMachineGunWeaponConstants_VA);
+	MEM32(RaiderXMachineGunWeaponGunSpec_VA + 0x28u) = RaiderXMachineGunWeaponConstants_VA + 0x28u;
+	GunSpec_color(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_color_VA(RaiderXMachineGunWeaponConstants_VA);
+	MEM32(RaiderXMachineGunWeaponGunSpec_VA + 0x30u) = RaiderXMachineGunWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_shot_gap_random(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap_random(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_VA(RaiderXMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots_random(RaiderXMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(RaiderXMachineGunWeaponConstants_VA);
+	x86_rep_stos32(RaiderXMachineGunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(RaiderXMachineGunWeaponSpec_VA) = GunConstants_damage_VA(RaiderXMachineGunWeaponConstants_VA);
+	WeaponSpec_cost(RaiderXMachineGunWeaponSpec_VA) = GunConstants_cost_VA(RaiderXMachineGunWeaponConstants_VA);
+	WeaponSpec_reload(RaiderXMachineGunWeaponSpec_VA) = GunConstants_reload_VA(RaiderXMachineGunWeaponConstants_VA);
+	MEM32(RaiderXMachineGunWeaponSpec_VA + 0x4u) = RaiderXMachineGunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(RaiderXMachineGunWeaponSpec_VA) = GunConstants_range_VA(RaiderXMachineGunWeaponConstants_VA);
+	WeaponSpec_speed(RaiderXMachineGunWeaponSpec_VA) = GunConstants_speed_VA(RaiderXMachineGunWeaponConstants_VA);
+	WeaponSpec_alert_radius(RaiderXMachineGunWeaponSpec_VA) = GunConstants_alert_radius_VA(RaiderXMachineGunWeaponConstants_VA);
 	RaiderXMachineGunWeaponMaterial = 0u;
 }
 
@@ -196144,7 +196144,7 @@ uint32_t sub_000CCFB0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21EFC8u;
+	eax = MacIIArmWeaponSpec_VA;
 	return eax;
 }
 
@@ -196155,11 +196155,11 @@ uint32_t MacIIArmWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4848u;
+	arg2 = GunConstants_sound_VA(MacIIArmWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F034u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4808u;
+	arg1 = GunConstants_material_VA(MacIIArmWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CCFE7u, 2, arg0, arg1);
 	arg1 = 0x34u;
@@ -196229,34 +196229,34 @@ void MacIIArmWeapon_Register(uint32_t arg0)
 	GameObjectType_version(MacIIArmWeaponType_VA) = 0u;
 	GameObjectType_flags(MacIIArmWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x84u) = MacIIArmWeaponType_VA;
-	x86_rep_stos32(0x21EFE4u, 0u, 0x13u);
-	MEM32(0x21EFE4u) = 0x1A47D0u;
-	MEM32(0x21EFE8u) = 0x1A47D4u;
-	MEM32(0x21EFECu) = 0x1A47D8u;
-	MEM32(0x21EFF0u) = 0x1A47DCu;
-	MEM32(0x21EFF4u) = 0x1A47E0u;
-	MEM32(0x21EFF8u) = 0x1A47E4u;
-	MEM32(0x21EFFCu) = 0x1A47E8u;
-	MEM32(0x21F000u) = 0x1A47ECu;
-	MEM32(0x21F004u) = 0x1A47F0u;
-	MEM32(0x21F008u) = 0x1A47F4u;
-	MEM32(0x21F00Cu) = 0x1A47F8u;
-	MEM32(0x21F010u) = 0x1A47FCu;
-	MEM32(0x21F014u) = 0x1A488Cu;
-	MEM32(0x21F018u) = 0x1A4890u;
-	MEM32(0x21F01Cu) = 0x1A4894u;
-	MEM32(0x21F020u) = 0x1A4898u;
-	MEM32(0x21F024u) = 0x1A489Cu;
-	MEM32(0x21F028u) = 0x1A48A0u;
-	MEM32(0x21F02Cu) = 0x1A48A4u;
-	x86_rep_stos32(0x21EFC8u, 0u, 7u);
-	MEM32(0x21EFD8u) = 0x1A47D4u;
-	MEM32(0x21EFC8u) = 0x1A47D8u;
-	MEM32(0x21EFD4u) = 0x1A47E4u;
-	MEM32(0x21EFCCu) = 0x1A47DCu;
-	MEM32(0x21EFD0u) = 0x1A47E0u;
-	MEM32(0x21EFDCu) = 0x1A47F0u;
-	MEM32(0x21EFE0u) = 0x1A4888u;
+	x86_rep_stos32(MacIIArmWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(MacIIArmWeaponGunSpec_VA) = MacIIArmWeaponConstants_VA;
+	GunSpec_damage(MacIIArmWeaponGunSpec_VA) = GunConstants_damage_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_cost(MacIIArmWeaponGunSpec_VA) = GunConstants_cost_VA(MacIIArmWeaponConstants_VA);
+	MEM32(MacIIArmWeaponGunSpec_VA + 0xCu) = MacIIArmWeaponConstants_VA + 0xCu;
+	GunSpec_range(MacIIArmWeaponGunSpec_VA) = GunConstants_range_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_reload(MacIIArmWeaponGunSpec_VA) = GunConstants_reload_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_shots(MacIIArmWeaponGunSpec_VA) = GunConstants_shots_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_life(MacIIArmWeaponGunSpec_VA) = GunConstants_life_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_speed(MacIIArmWeaponGunSpec_VA) = GunConstants_speed_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_length(MacIIArmWeaponGunSpec_VA) = GunConstants_length_VA(MacIIArmWeaponConstants_VA);
+	MEM32(MacIIArmWeaponGunSpec_VA + 0x28u) = MacIIArmWeaponConstants_VA + 0x28u;
+	GunSpec_color(MacIIArmWeaponGunSpec_VA) = GunConstants_color_VA(MacIIArmWeaponConstants_VA);
+	MEM32(MacIIArmWeaponGunSpec_VA + 0x30u) = MacIIArmWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(MacIIArmWeaponGunSpec_VA) = GunConstants_shot_gap_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_shot_gap_random(MacIIArmWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_burst_gap(MacIIArmWeaponGunSpec_VA) = GunConstants_burst_gap_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_burst_gap_random(MacIIArmWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_burst_shots(MacIIArmWeaponGunSpec_VA) = GunConstants_burst_shots_VA(MacIIArmWeaponConstants_VA);
+	GunSpec_burst_shots_random(MacIIArmWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(MacIIArmWeaponConstants_VA);
+	x86_rep_stos32(MacIIArmWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(MacIIArmWeaponSpec_VA) = GunConstants_damage_VA(MacIIArmWeaponConstants_VA);
+	WeaponSpec_cost(MacIIArmWeaponSpec_VA) = GunConstants_cost_VA(MacIIArmWeaponConstants_VA);
+	WeaponSpec_reload(MacIIArmWeaponSpec_VA) = GunConstants_reload_VA(MacIIArmWeaponConstants_VA);
+	MEM32(MacIIArmWeaponSpec_VA + 0x4u) = MacIIArmWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(MacIIArmWeaponSpec_VA) = GunConstants_range_VA(MacIIArmWeaponConstants_VA);
+	WeaponSpec_speed(MacIIArmWeaponSpec_VA) = GunConstants_speed_VA(MacIIArmWeaponConstants_VA);
+	WeaponSpec_alert_radius(MacIIArmWeaponSpec_VA) = GunConstants_alert_radius_VA(MacIIArmWeaponConstants_VA);
 	MacIIArmWeaponMaterial = 0u;
 }
 
@@ -196264,7 +196264,7 @@ uint32_t sub_000CD200(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F0D0u;
+	eax = GladiatorMachineGunWeaponSpec_VA;
 	return eax;
 }
 
@@ -196275,11 +196275,11 @@ uint32_t GladiatorMachineGunWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4920u;
+	arg2 = GunConstants_sound_VA(GladiatorMachineGunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F13Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A48E0u;
+	arg1 = GunConstants_material_VA(GladiatorMachineGunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CD237u, 2, arg0, arg1);
 	arg1 = 0x34u;
@@ -196350,34 +196350,34 @@ void GladiatorMachineGunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(GladiatorMachineGunWeaponType_VA) = 0u;
 	GameObjectType_flags(GladiatorMachineGunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x80u) = GladiatorMachineGunWeaponType_VA;
-	x86_rep_stos32(0x21F0ECu, 0u, 0x13u);
-	MEM32(0x21F0ECu) = 0x1A48A8u;
-	MEM32(0x21F0F0u) = 0x1A48ACu;
-	MEM32(0x21F0F4u) = 0x1A48B0u;
-	MEM32(0x21F0F8u) = 0x1A48B4u;
-	MEM32(0x21F0FCu) = 0x1A48B8u;
-	MEM32(0x21F100u) = 0x1A48BCu;
-	MEM32(0x21F104u) = 0x1A48C0u;
-	MEM32(0x21F108u) = 0x1A48C4u;
-	MEM32(0x21F10Cu) = 0x1A48C8u;
-	MEM32(0x21F110u) = 0x1A48CCu;
-	MEM32(0x21F114u) = 0x1A48D0u;
-	MEM32(0x21F118u) = 0x1A48D4u;
-	MEM32(0x21F11Cu) = 0x1A4964u;
-	MEM32(0x21F120u) = 0x1A4968u;
-	MEM32(0x21F124u) = 0x1A496Cu;
-	MEM32(0x21F128u) = 0x1A4970u;
-	MEM32(0x21F12Cu) = 0x1A4974u;
-	MEM32(0x21F130u) = 0x1A4978u;
-	MEM32(0x21F134u) = 0x1A497Cu;
-	x86_rep_stos32(0x21F0D0u, 0u, 7u);
-	MEM32(0x21F0E0u) = 0x1A48ACu;
-	MEM32(0x21F0D0u) = 0x1A48B0u;
-	MEM32(0x21F0DCu) = 0x1A48BCu;
-	MEM32(0x21F0D4u) = 0x1A48B4u;
-	MEM32(0x21F0D8u) = 0x1A48B8u;
-	MEM32(0x21F0E4u) = 0x1A48C8u;
-	MEM32(0x21F0E8u) = 0x1A4960u;
+	x86_rep_stos32(GladiatorMachineGunWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(GladiatorMachineGunWeaponGunSpec_VA) = GladiatorMachineGunWeaponConstants_VA;
+	GunSpec_damage(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_damage_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_cost(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_cost_VA(GladiatorMachineGunWeaponConstants_VA);
+	MEM32(GladiatorMachineGunWeaponGunSpec_VA + 0xCu) = GladiatorMachineGunWeaponConstants_VA + 0xCu;
+	GunSpec_range(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_range_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_reload(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_reload_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_shots(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_shots_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_life(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_life_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_speed(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_speed_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_length(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_length_VA(GladiatorMachineGunWeaponConstants_VA);
+	MEM32(GladiatorMachineGunWeaponGunSpec_VA + 0x28u) = GladiatorMachineGunWeaponConstants_VA + 0x28u;
+	GunSpec_color(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_color_VA(GladiatorMachineGunWeaponConstants_VA);
+	MEM32(GladiatorMachineGunWeaponGunSpec_VA + 0x30u) = GladiatorMachineGunWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_shot_gap_random(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap_random(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_VA(GladiatorMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots_random(GladiatorMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(GladiatorMachineGunWeaponConstants_VA);
+	x86_rep_stos32(GladiatorMachineGunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(GladiatorMachineGunWeaponSpec_VA) = GunConstants_damage_VA(GladiatorMachineGunWeaponConstants_VA);
+	WeaponSpec_cost(GladiatorMachineGunWeaponSpec_VA) = GunConstants_cost_VA(GladiatorMachineGunWeaponConstants_VA);
+	WeaponSpec_reload(GladiatorMachineGunWeaponSpec_VA) = GunConstants_reload_VA(GladiatorMachineGunWeaponConstants_VA);
+	MEM32(GladiatorMachineGunWeaponSpec_VA + 0x4u) = GladiatorMachineGunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(GladiatorMachineGunWeaponSpec_VA) = GunConstants_range_VA(GladiatorMachineGunWeaponConstants_VA);
+	WeaponSpec_speed(GladiatorMachineGunWeaponSpec_VA) = GunConstants_speed_VA(GladiatorMachineGunWeaponConstants_VA);
+	WeaponSpec_alert_radius(GladiatorMachineGunWeaponSpec_VA) = GunConstants_alert_radius_VA(GladiatorMachineGunWeaponConstants_VA);
 	GladiatorMachineGunWeaponMaterial = 0u;
 }
 
@@ -196385,7 +196385,7 @@ uint32_t sub_000CD450(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F1D8u;
+	eax = ExcaliburMachineGunWeaponSpec_VA;
 	return eax;
 }
 
@@ -196396,11 +196396,11 @@ uint32_t ExcaliburMachineGunWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A49F8u;
+	arg2 = GunConstants_sound_VA(ExcaliburMachineGunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F244u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A49B8u;
+	arg1 = GunConstants_material_VA(ExcaliburMachineGunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CD487u, 2, arg0, arg1);
 	arg1 = 0x34u;
@@ -196471,34 +196471,34 @@ void ExcaliburMachineGunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(ExcaliburMachineGunWeaponType_VA) = 0u;
 	GameObjectType_flags(ExcaliburMachineGunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x7Cu) = ExcaliburMachineGunWeaponType_VA;
-	x86_rep_stos32(0x21F1F4u, 0u, 0x13u);
-	MEM32(0x21F1F4u) = 0x1A4980u;
-	MEM32(0x21F1F8u) = 0x1A4984u;
-	MEM32(0x21F1FCu) = 0x1A4988u;
-	MEM32(0x21F200u) = 0x1A498Cu;
-	MEM32(0x21F204u) = 0x1A4990u;
-	MEM32(0x21F208u) = 0x1A4994u;
-	MEM32(0x21F20Cu) = 0x1A4998u;
-	MEM32(0x21F210u) = 0x1A499Cu;
-	MEM32(0x21F214u) = 0x1A49A0u;
-	MEM32(0x21F218u) = 0x1A49A4u;
-	MEM32(0x21F21Cu) = 0x1A49A8u;
-	MEM32(0x21F220u) = 0x1A49ACu;
-	MEM32(0x21F224u) = 0x1A4A3Cu;
-	MEM32(0x21F228u) = 0x1A4A40u;
-	MEM32(0x21F22Cu) = 0x1A4A44u;
-	MEM32(0x21F230u) = 0x1A4A48u;
-	MEM32(0x21F234u) = 0x1A4A4Cu;
-	MEM32(0x21F238u) = 0x1A4A50u;
-	MEM32(0x21F23Cu) = 0x1A4A54u;
-	x86_rep_stos32(0x21F1D8u, 0u, 7u);
-	MEM32(0x21F1E8u) = 0x1A4984u;
-	MEM32(0x21F1D8u) = 0x1A4988u;
-	MEM32(0x21F1E4u) = 0x1A4994u;
-	MEM32(0x21F1DCu) = 0x1A498Cu;
-	MEM32(0x21F1E0u) = 0x1A4990u;
-	MEM32(0x21F1ECu) = 0x1A49A0u;
-	MEM32(0x21F1F0u) = 0x1A4A38u;
+	x86_rep_stos32(ExcaliburMachineGunWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(ExcaliburMachineGunWeaponGunSpec_VA) = ExcaliburMachineGunWeaponConstants_VA;
+	GunSpec_damage(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_damage_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_cost(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_cost_VA(ExcaliburMachineGunWeaponConstants_VA);
+	MEM32(ExcaliburMachineGunWeaponGunSpec_VA + 0xCu) = ExcaliburMachineGunWeaponConstants_VA + 0xCu;
+	GunSpec_range(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_range_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_reload(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_reload_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_shots(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_shots_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_life(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_life_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_speed(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_speed_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_length(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_length_VA(ExcaliburMachineGunWeaponConstants_VA);
+	MEM32(ExcaliburMachineGunWeaponGunSpec_VA + 0x28u) = ExcaliburMachineGunWeaponConstants_VA + 0x28u;
+	GunSpec_color(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_color_VA(ExcaliburMachineGunWeaponConstants_VA);
+	MEM32(ExcaliburMachineGunWeaponGunSpec_VA + 0x30u) = ExcaliburMachineGunWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_shot_gap_random(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_burst_gap_random(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_VA(ExcaliburMachineGunWeaponConstants_VA);
+	GunSpec_burst_shots_random(ExcaliburMachineGunWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(ExcaliburMachineGunWeaponConstants_VA);
+	x86_rep_stos32(ExcaliburMachineGunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_damage_VA(ExcaliburMachineGunWeaponConstants_VA);
+	WeaponSpec_cost(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_cost_VA(ExcaliburMachineGunWeaponConstants_VA);
+	WeaponSpec_reload(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_reload_VA(ExcaliburMachineGunWeaponConstants_VA);
+	MEM32(ExcaliburMachineGunWeaponSpec_VA + 0x4u) = ExcaliburMachineGunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_range_VA(ExcaliburMachineGunWeaponConstants_VA);
+	WeaponSpec_speed(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_speed_VA(ExcaliburMachineGunWeaponConstants_VA);
+	WeaponSpec_alert_radius(ExcaliburMachineGunWeaponSpec_VA) = GunConstants_alert_radius_VA(ExcaliburMachineGunWeaponConstants_VA);
 	ExcaliburMachineGunWeaponMaterial = 0u;
 }
 
@@ -196738,7 +196738,7 @@ uint32_t sub_000CDB40(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F4F0u;
+	eax = MalePowerArmorPulseRifleWeaponSpec_VA;
 	return eax;
 }
 
@@ -196749,11 +196749,11 @@ uint32_t MalePowerArmorPulseRifleWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4C80u;
+	arg2 = GunConstants_sound_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F55Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4C40u;
+	arg1 = GunConstants_material_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CDB77u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -196824,34 +196824,34 @@ void MalePowerArmorPulseRifleWeapon_Register(uint32_t arg0)
 	GameObjectType_version(MalePowerArmorPulseRifleWeaponType_VA) = 0u;
 	GameObjectType_flags(MalePowerArmorPulseRifleWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x9Cu) = MalePowerArmorPulseRifleWeaponType_VA;
-	x86_rep_stos32(0x21F50Cu, 0u, 0x13u);
-	MEM32(0x21F50Cu) = 0x1A4C08u;
-	MEM32(0x21F510u) = 0x1A4C0Cu;
-	MEM32(0x21F514u) = 0x1A4C10u;
-	MEM32(0x21F518u) = 0x1A4C14u;
-	MEM32(0x21F51Cu) = 0x1A4C18u;
-	MEM32(0x21F520u) = 0x1A4C1Cu;
-	MEM32(0x21F524u) = 0x1A4C20u;
-	MEM32(0x21F528u) = 0x1A4C24u;
-	MEM32(0x21F52Cu) = 0x1A4C28u;
-	MEM32(0x21F530u) = 0x1A4C2Cu;
-	MEM32(0x21F534u) = 0x1A4C30u;
-	MEM32(0x21F538u) = 0x1A4C34u;
-	MEM32(0x21F53Cu) = 0x1A4CC4u;
-	MEM32(0x21F540u) = 0x1A4CC8u;
-	MEM32(0x21F544u) = 0x1A4CCCu;
-	MEM32(0x21F548u) = 0x1A4CD0u;
-	MEM32(0x21F54Cu) = 0x1A4CD4u;
-	MEM32(0x21F550u) = 0x1A4CD8u;
-	MEM32(0x21F554u) = 0x1A4CDCu;
-	x86_rep_stos32(0x21F4F0u, 0u, 7u);
-	MEM32(0x21F500u) = 0x1A4C0Cu;
-	MEM32(0x21F4F0u) = 0x1A4C10u;
-	MEM32(0x21F4FCu) = 0x1A4C1Cu;
-	MEM32(0x21F4F4u) = 0x1A4C14u;
-	MEM32(0x21F4F8u) = 0x1A4C18u;
-	MEM32(0x21F504u) = 0x1A4C28u;
-	MEM32(0x21F508u) = 0x1A4CC0u;
+	x86_rep_stos32(MalePowerArmorPulseRifleWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(MalePowerArmorPulseRifleWeaponGunSpec_VA) = MalePowerArmorPulseRifleWeaponConstants_VA;
+	GunSpec_damage(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_damage_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_cost(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_cost_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	MEM32(MalePowerArmorPulseRifleWeaponGunSpec_VA + 0xCu) = MalePowerArmorPulseRifleWeaponConstants_VA + 0xCu;
+	GunSpec_range(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_range_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_reload(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_reload_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_shots(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_shots_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_life(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_life_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_speed(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_speed_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_length(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_length_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	MEM32(MalePowerArmorPulseRifleWeaponGunSpec_VA + 0x28u) = MalePowerArmorPulseRifleWeaponConstants_VA + 0x28u;
+	GunSpec_color(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_color_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	MEM32(MalePowerArmorPulseRifleWeaponGunSpec_VA + 0x30u) = MalePowerArmorPulseRifleWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_shot_gap_random(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap_random(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots_random(MalePowerArmorPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	x86_rep_stos32(MalePowerArmorPulseRifleWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_damage_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	WeaponSpec_cost(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_cost_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	WeaponSpec_reload(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_reload_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	MEM32(MalePowerArmorPulseRifleWeaponSpec_VA + 0x4u) = MalePowerArmorPulseRifleWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_range_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	WeaponSpec_speed(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_speed_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
+	WeaponSpec_alert_radius(MalePowerArmorPulseRifleWeaponSpec_VA) = GunConstants_alert_radius_VA(MalePowerArmorPulseRifleWeaponConstants_VA);
 	MalePowerArmorPulseRifleWeaponMaterial = 0u;
 }
 
@@ -196859,7 +196859,7 @@ uint32_t sub_000CDD90(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F5F8u;
+	eax = MalePowerArmorImpactCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -196871,11 +196871,11 @@ uint32_t MalePowerArmorImpactCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4D58u;
+	arg2 = GunConstants_sound_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F664u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4D18u;
+	arg1 = GunConstants_material_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CDDC7u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -196946,34 +196946,34 @@ void MalePowerArmorImpactCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(MalePowerArmorImpactCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(MalePowerArmorImpactCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x68u) = MalePowerArmorImpactCannonWeaponType_VA;
-	x86_rep_stos32(0x21F614u, 0u, 0x13u);
-	MEM32(0x21F614u) = 0x1A4CE0u;
-	MEM32(0x21F618u) = 0x1A4CE4u;
-	MEM32(0x21F61Cu) = 0x1A4CE8u;
-	MEM32(0x21F620u) = 0x1A4CECu;
-	MEM32(0x21F624u) = 0x1A4CF0u;
-	MEM32(0x21F628u) = 0x1A4CF4u;
-	MEM32(0x21F62Cu) = 0x1A4CF8u;
-	MEM32(0x21F630u) = 0x1A4CFCu;
-	MEM32(0x21F634u) = 0x1A4D00u;
-	MEM32(0x21F638u) = 0x1A4D04u;
-	MEM32(0x21F63Cu) = 0x1A4D08u;
-	MEM32(0x21F640u) = 0x1A4D0Cu;
-	MEM32(0x21F644u) = 0x1A4D9Cu;
-	MEM32(0x21F648u) = 0x1A4DA0u;
-	MEM32(0x21F64Cu) = 0x1A4DA4u;
-	MEM32(0x21F650u) = 0x1A4DA8u;
-	MEM32(0x21F654u) = 0x1A4DACu;
-	MEM32(0x21F658u) = 0x1A4DB0u;
-	MEM32(0x21F65Cu) = 0x1A4DB4u;
-	x86_rep_stos32(0x21F5F8u, 0u, 7u);
-	MEM32(0x21F608u) = 0x1A4CE4u;
-	MEM32(0x21F5F8u) = 0x1A4CE8u;
-	MEM32(0x21F604u) = 0x1A4CF4u;
-	MEM32(0x21F5FCu) = 0x1A4CECu;
-	MEM32(0x21F600u) = 0x1A4CF0u;
-	MEM32(0x21F60Cu) = 0x1A4D00u;
-	MEM32(0x21F610u) = 0x1A4D98u;
+	x86_rep_stos32(MalePowerArmorImpactCannonWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(MalePowerArmorImpactCannonWeaponGunSpec_VA) = MalePowerArmorImpactCannonWeaponConstants_VA;
+	GunSpec_damage(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_damage_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_cost(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_cost_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	MEM32(MalePowerArmorImpactCannonWeaponGunSpec_VA + 0xCu) = MalePowerArmorImpactCannonWeaponConstants_VA + 0xCu;
+	GunSpec_range(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_range_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_reload(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_reload_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_shots(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_shots_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_life(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_life_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_speed(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_speed_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_length(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_length_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	MEM32(MalePowerArmorImpactCannonWeaponGunSpec_VA + 0x28u) = MalePowerArmorImpactCannonWeaponConstants_VA + 0x28u;
+	GunSpec_color(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_color_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	MEM32(MalePowerArmorImpactCannonWeaponGunSpec_VA + 0x30u) = MalePowerArmorImpactCannonWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_shot_gap_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_shot_gap_random(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_burst_gap(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_burst_gap_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_burst_gap_random(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_burst_shots(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_burst_shots_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	GunSpec_burst_shots_random(MalePowerArmorImpactCannonWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	x86_rep_stos32(MalePowerArmorImpactCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_damage_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	WeaponSpec_cost(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_cost_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	WeaponSpec_reload(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_reload_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	MEM32(MalePowerArmorImpactCannonWeaponSpec_VA + 0x4u) = MalePowerArmorImpactCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_range_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	WeaponSpec_speed(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_speed_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(MalePowerArmorImpactCannonWeaponSpec_VA) = GunConstants_alert_radius_VA(MalePowerArmorImpactCannonWeaponConstants_VA);
 	MalePowerArmorImpactCannonWeaponMaterial = 0u;
 }
 
@@ -196981,7 +196981,7 @@ uint32_t sub_000CDFE0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F700u;
+	eax = FighterPodGunWeaponSpec_VA;
 	return eax;
 }
 
@@ -196992,11 +196992,11 @@ uint32_t FighterPodGunWeapon_Startup(void)
 
 	arg4 = 0x451C4000u;
 	arg3 = 0x43FA0000u;
-	arg2 = 0x1A4E30u;
+	arg2 = GunConstants_sound_VA(FighterPodGunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F76Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4DF0u;
+	arg1 = GunConstants_material_VA(FighterPodGunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CE017u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197067,34 +197067,34 @@ void FighterPodGunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(FighterPodGunWeaponType_VA) = 0u;
 	GameObjectType_flags(FighterPodGunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x64u) = FighterPodGunWeaponType_VA;
-	x86_rep_stos32(0x21F71Cu, 0u, 0x13u);
-	MEM32(0x21F71Cu) = 0x1A4DB8u;
-	MEM32(0x21F720u) = 0x1A4DBCu;
-	MEM32(0x21F724u) = 0x1A4DC0u;
-	MEM32(0x21F728u) = 0x1A4DC4u;
-	MEM32(0x21F72Cu) = 0x1A4DC8u;
-	MEM32(0x21F730u) = 0x1A4DCCu;
-	MEM32(0x21F734u) = 0x1A4DD0u;
-	MEM32(0x21F738u) = 0x1A4DD4u;
-	MEM32(0x21F73Cu) = 0x1A4DD8u;
-	MEM32(0x21F740u) = 0x1A4DDCu;
-	MEM32(0x21F744u) = 0x1A4DE0u;
-	MEM32(0x21F748u) = 0x1A4DE4u;
-	MEM32(0x21F74Cu) = 0x1A4E74u;
-	MEM32(0x21F750u) = 0x1A4E78u;
-	MEM32(0x21F754u) = 0x1A4E7Cu;
-	MEM32(0x21F758u) = 0x1A4E80u;
-	MEM32(0x21F75Cu) = 0x1A4E84u;
-	MEM32(0x21F760u) = 0x1A4E88u;
-	MEM32(0x21F764u) = 0x1A4E8Cu;
-	x86_rep_stos32(0x21F700u, 0u, 7u);
-	MEM32(0x21F710u) = 0x1A4DBCu;
-	MEM32(0x21F700u) = 0x1A4DC0u;
-	MEM32(0x21F70Cu) = 0x1A4DCCu;
-	MEM32(0x21F704u) = 0x1A4DC4u;
-	MEM32(0x21F708u) = 0x1A4DC8u;
-	MEM32(0x21F714u) = 0x1A4DD8u;
-	MEM32(0x21F718u) = 0x1A4E70u;
+	x86_rep_stos32(FighterPodGunWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(FighterPodGunWeaponGunSpec_VA) = FighterPodGunWeaponConstants_VA;
+	GunSpec_damage(FighterPodGunWeaponGunSpec_VA) = GunConstants_damage_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_cost(FighterPodGunWeaponGunSpec_VA) = GunConstants_cost_VA(FighterPodGunWeaponConstants_VA);
+	MEM32(FighterPodGunWeaponGunSpec_VA + 0xCu) = FighterPodGunWeaponConstants_VA + 0xCu;
+	GunSpec_range(FighterPodGunWeaponGunSpec_VA) = GunConstants_range_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_reload(FighterPodGunWeaponGunSpec_VA) = GunConstants_reload_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_shots(FighterPodGunWeaponGunSpec_VA) = GunConstants_shots_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_life(FighterPodGunWeaponGunSpec_VA) = GunConstants_life_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_speed(FighterPodGunWeaponGunSpec_VA) = GunConstants_speed_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_length(FighterPodGunWeaponGunSpec_VA) = GunConstants_length_VA(FighterPodGunWeaponConstants_VA);
+	MEM32(FighterPodGunWeaponGunSpec_VA + 0x28u) = FighterPodGunWeaponConstants_VA + 0x28u;
+	GunSpec_color(FighterPodGunWeaponGunSpec_VA) = GunConstants_color_VA(FighterPodGunWeaponConstants_VA);
+	MEM32(FighterPodGunWeaponGunSpec_VA + 0x30u) = FighterPodGunWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(FighterPodGunWeaponGunSpec_VA) = GunConstants_shot_gap_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_shot_gap_random(FighterPodGunWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_burst_gap(FighterPodGunWeaponGunSpec_VA) = GunConstants_burst_gap_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_burst_gap_random(FighterPodGunWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_burst_shots(FighterPodGunWeaponGunSpec_VA) = GunConstants_burst_shots_VA(FighterPodGunWeaponConstants_VA);
+	GunSpec_burst_shots_random(FighterPodGunWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(FighterPodGunWeaponConstants_VA);
+	x86_rep_stos32(FighterPodGunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(FighterPodGunWeaponSpec_VA) = GunConstants_damage_VA(FighterPodGunWeaponConstants_VA);
+	WeaponSpec_cost(FighterPodGunWeaponSpec_VA) = GunConstants_cost_VA(FighterPodGunWeaponConstants_VA);
+	WeaponSpec_reload(FighterPodGunWeaponSpec_VA) = GunConstants_reload_VA(FighterPodGunWeaponConstants_VA);
+	MEM32(FighterPodGunWeaponSpec_VA + 0x4u) = FighterPodGunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(FighterPodGunWeaponSpec_VA) = GunConstants_range_VA(FighterPodGunWeaponConstants_VA);
+	WeaponSpec_speed(FighterPodGunWeaponSpec_VA) = GunConstants_speed_VA(FighterPodGunWeaponConstants_VA);
+	WeaponSpec_alert_radius(FighterPodGunWeaponSpec_VA) = GunConstants_alert_radius_VA(FighterPodGunWeaponConstants_VA);
 	FighterPodGunWeaponMaterial = 0u;
 }
 
@@ -197102,7 +197102,7 @@ uint32_t sub_000CE230(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F808u;
+	eax = ZenWarriorNoArmourPulseRifleWeaponSpec_VA;
 	return eax;
 }
 
@@ -197114,11 +197114,11 @@ uint32_t ZenWarriorNoArmourPulseRifleWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4F08u;
+	arg2 = GunConstants_sound_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F874u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4EC8u;
+	arg1 = GunConstants_material_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CE267u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197189,34 +197189,34 @@ void ZenWarriorNoArmourPulseRifleWeapon_Register(uint32_t arg0)
 	GameObjectType_version(ZenWarriorNoArmourPulseRifleWeaponType_VA) = 0u;
 	GameObjectType_flags(ZenWarriorNoArmourPulseRifleWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x60u) = ZenWarriorNoArmourPulseRifleWeaponType_VA;
-	x86_rep_stos32(0x21F824u, 0u, 0x13u);
-	MEM32(0x21F824u) = 0x1A4E90u;
-	MEM32(0x21F828u) = 0x1A4E94u;
-	MEM32(0x21F82Cu) = 0x1A4E98u;
-	MEM32(0x21F830u) = 0x1A4E9Cu;
-	MEM32(0x21F834u) = 0x1A4EA0u;
-	MEM32(0x21F838u) = 0x1A4EA4u;
-	MEM32(0x21F83Cu) = 0x1A4EA8u;
-	MEM32(0x21F840u) = 0x1A4EACu;
-	MEM32(0x21F844u) = 0x1A4EB0u;
-	MEM32(0x21F848u) = 0x1A4EB4u;
-	MEM32(0x21F84Cu) = 0x1A4EB8u;
-	MEM32(0x21F850u) = 0x1A4EBCu;
-	MEM32(0x21F854u) = 0x1A4F4Cu;
-	MEM32(0x21F858u) = 0x1A4F50u;
-	MEM32(0x21F85Cu) = 0x1A4F54u;
-	MEM32(0x21F860u) = 0x1A4F58u;
-	MEM32(0x21F864u) = 0x1A4F5Cu;
-	MEM32(0x21F868u) = 0x1A4F60u;
-	MEM32(0x21F86Cu) = 0x1A4F64u;
-	x86_rep_stos32(0x21F808u, 0u, 7u);
-	MEM32(0x21F818u) = 0x1A4E94u;
-	MEM32(0x21F808u) = 0x1A4E98u;
-	MEM32(0x21F814u) = 0x1A4EA4u;
-	MEM32(0x21F80Cu) = 0x1A4E9Cu;
-	MEM32(0x21F810u) = 0x1A4EA0u;
-	MEM32(0x21F81Cu) = 0x1A4EB0u;
-	MEM32(0x21F820u) = 0x1A4F48u;
+	x86_rep_stos32(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = ZenWarriorNoArmourPulseRifleWeaponConstants_VA;
+	GunSpec_damage(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_damage_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_cost(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_cost_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA + 0xCu) = ZenWarriorNoArmourPulseRifleWeaponConstants_VA + 0xCu;
+	GunSpec_range(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_range_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_reload(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_reload_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_shots(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_shots_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_life(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_life_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_speed(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_speed_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_length(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_length_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA + 0x28u) = ZenWarriorNoArmourPulseRifleWeaponConstants_VA + 0x28u;
+	GunSpec_color(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_color_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA + 0x30u) = ZenWarriorNoArmourPulseRifleWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_shot_gap_random(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap_random(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots_random(ZenWarriorNoArmourPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	x86_rep_stos32(ZenWarriorNoArmourPulseRifleWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_damage_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	WeaponSpec_cost(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_cost_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	WeaponSpec_reload(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_reload_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorNoArmourPulseRifleWeaponSpec_VA + 0x4u) = ZenWarriorNoArmourPulseRifleWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_range_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	WeaponSpec_speed(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_speed_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenWarriorNoArmourPulseRifleWeaponSpec_VA) = GunConstants_alert_radius_VA(ZenWarriorNoArmourPulseRifleWeaponConstants_VA);
 	ZenWarriorNoArmourPulseRifleWeaponMaterial = 0u;
 }
 
@@ -197224,7 +197224,7 @@ uint32_t sub_000CE480(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21F910u;
+	eax = ZenWarriorScavengerPulseRifleWeaponSpec_VA;
 	return eax;
 }
 
@@ -197236,11 +197236,11 @@ uint32_t ZenWarriorScavengerPulseRifleWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A4FE0u;
+	arg2 = GunConstants_sound_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21F97Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A4FA0u;
+	arg1 = GunConstants_material_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CE4B7u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197311,34 +197311,34 @@ void ZenWarriorScavengerPulseRifleWeapon_Register(uint32_t arg0)
 	GameObjectType_version(ZenWarriorScavengerPulseRifleWeaponType_VA) = 0u;
 	GameObjectType_flags(ZenWarriorScavengerPulseRifleWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x5Cu) = ZenWarriorScavengerPulseRifleWeaponType_VA;
-	x86_rep_stos32(0x21F92Cu, 0u, 0x13u);
-	MEM32(0x21F92Cu) = 0x1A4F68u;
-	MEM32(0x21F930u) = 0x1A4F6Cu;
-	MEM32(0x21F934u) = 0x1A4F70u;
-	MEM32(0x21F938u) = 0x1A4F74u;
-	MEM32(0x21F93Cu) = 0x1A4F78u;
-	MEM32(0x21F940u) = 0x1A4F7Cu;
-	MEM32(0x21F944u) = 0x1A4F80u;
-	MEM32(0x21F948u) = 0x1A4F84u;
-	MEM32(0x21F94Cu) = 0x1A4F88u;
-	MEM32(0x21F950u) = 0x1A4F8Cu;
-	MEM32(0x21F954u) = 0x1A4F90u;
-	MEM32(0x21F958u) = 0x1A4F94u;
-	MEM32(0x21F95Cu) = 0x1A5024u;
-	MEM32(0x21F960u) = 0x1A5028u;
-	MEM32(0x21F964u) = 0x1A502Cu;
-	MEM32(0x21F968u) = 0x1A5030u;
-	MEM32(0x21F96Cu) = 0x1A5034u;
-	MEM32(0x21F970u) = 0x1A5038u;
-	MEM32(0x21F974u) = 0x1A503Cu;
-	x86_rep_stos32(0x21F910u, 0u, 7u);
-	MEM32(0x21F920u) = 0x1A4F6Cu;
-	MEM32(0x21F910u) = 0x1A4F70u;
-	MEM32(0x21F91Cu) = 0x1A4F7Cu;
-	MEM32(0x21F914u) = 0x1A4F74u;
-	MEM32(0x21F918u) = 0x1A4F78u;
-	MEM32(0x21F924u) = 0x1A4F88u;
-	MEM32(0x21F928u) = 0x1A5020u;
+	x86_rep_stos32(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = ZenWarriorScavengerPulseRifleWeaponConstants_VA;
+	GunSpec_damage(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_damage_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_cost(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_cost_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA + 0xCu) = ZenWarriorScavengerPulseRifleWeaponConstants_VA + 0xCu;
+	GunSpec_range(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_range_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_reload(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_reload_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_shots(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_shots_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_life(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_life_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_speed(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_speed_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_length(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_length_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA + 0x28u) = ZenWarriorScavengerPulseRifleWeaponConstants_VA + 0x28u;
+	GunSpec_color(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_color_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA + 0x30u) = ZenWarriorScavengerPulseRifleWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_shot_gap_random(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap_random(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots_random(ZenWarriorScavengerPulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	x86_rep_stos32(ZenWarriorScavengerPulseRifleWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_damage_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	WeaponSpec_cost(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_cost_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	WeaponSpec_reload(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_reload_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorScavengerPulseRifleWeaponSpec_VA + 0x4u) = ZenWarriorScavengerPulseRifleWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_range_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	WeaponSpec_speed(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_speed_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenWarriorScavengerPulseRifleWeaponSpec_VA) = GunConstants_alert_radius_VA(ZenWarriorScavengerPulseRifleWeaponConstants_VA);
 	ZenWarriorScavengerPulseRifleWeaponMaterial = 0u;
 }
 
@@ -197346,7 +197346,7 @@ uint32_t sub_000CE6D0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FA18u;
+	eax = ZenWarriorHeavyChaingunWeaponSpec_VA;
 	return eax;
 }
 
@@ -197357,11 +197357,11 @@ uint32_t ZenWarriorHeavyChaingunWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A50B8u;
+	arg2 = GunConstants_sound_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21FA84u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A5078u;
+	arg1 = GunConstants_material_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CE707u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197432,34 +197432,34 @@ void ZenWarriorHeavyChaingunWeapon_Register(uint32_t arg0)
 	GameObjectType_version(ZenWarriorHeavyChaingunWeaponType_VA) = 0u;
 	GameObjectType_flags(ZenWarriorHeavyChaingunWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x58u) = ZenWarriorHeavyChaingunWeaponType_VA;
-	x86_rep_stos32(0x21FA34u, 0u, 0x13u);
-	MEM32(0x21FA34u) = 0x1A5040u;
-	MEM32(0x21FA38u) = 0x1A5044u;
-	MEM32(0x21FA3Cu) = 0x1A5048u;
-	MEM32(0x21FA40u) = 0x1A504Cu;
-	MEM32(0x21FA44u) = 0x1A5050u;
-	MEM32(0x21FA48u) = 0x1A5054u;
-	MEM32(0x21FA4Cu) = 0x1A5058u;
-	MEM32(0x21FA50u) = 0x1A505Cu;
-	MEM32(0x21FA54u) = 0x1A5060u;
-	MEM32(0x21FA58u) = 0x1A5064u;
-	MEM32(0x21FA5Cu) = 0x1A5068u;
-	MEM32(0x21FA60u) = 0x1A506Cu;
-	MEM32(0x21FA64u) = 0x1A50FCu;
-	MEM32(0x21FA68u) = 0x1A5100u;
-	MEM32(0x21FA6Cu) = 0x1A5104u;
-	MEM32(0x21FA70u) = 0x1A5108u;
-	MEM32(0x21FA74u) = 0x1A510Cu;
-	MEM32(0x21FA78u) = 0x1A5110u;
-	MEM32(0x21FA7Cu) = 0x1A5114u;
-	x86_rep_stos32(0x21FA18u, 0u, 7u);
-	MEM32(0x21FA28u) = 0x1A5044u;
-	MEM32(0x21FA18u) = 0x1A5048u;
-	MEM32(0x21FA24u) = 0x1A5054u;
-	MEM32(0x21FA1Cu) = 0x1A504Cu;
-	MEM32(0x21FA20u) = 0x1A5050u;
-	MEM32(0x21FA2Cu) = 0x1A5060u;
-	MEM32(0x21FA30u) = 0x1A50F8u;
+	x86_rep_stos32(ZenWarriorHeavyChaingunWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = ZenWarriorHeavyChaingunWeaponConstants_VA;
+	GunSpec_damage(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_damage_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_cost(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_cost_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	MEM32(ZenWarriorHeavyChaingunWeaponGunSpec_VA + 0xCu) = ZenWarriorHeavyChaingunWeaponConstants_VA + 0xCu;
+	GunSpec_range(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_range_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_reload(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_reload_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_shots(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_shots_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_life(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_life_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_speed(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_speed_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_length(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_length_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	MEM32(ZenWarriorHeavyChaingunWeaponGunSpec_VA + 0x28u) = ZenWarriorHeavyChaingunWeaponConstants_VA + 0x28u;
+	GunSpec_color(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_color_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	MEM32(ZenWarriorHeavyChaingunWeaponGunSpec_VA + 0x30u) = ZenWarriorHeavyChaingunWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_shot_gap_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_shot_gap_random(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_burst_gap(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_burst_gap_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_burst_gap_random(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_burst_shots(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_burst_shots_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	GunSpec_burst_shots_random(ZenWarriorHeavyChaingunWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	x86_rep_stos32(ZenWarriorHeavyChaingunWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_damage_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	WeaponSpec_cost(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_cost_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	WeaponSpec_reload(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_reload_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	MEM32(ZenWarriorHeavyChaingunWeaponSpec_VA + 0x4u) = ZenWarriorHeavyChaingunWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_range_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	WeaponSpec_speed(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_speed_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenWarriorHeavyChaingunWeaponSpec_VA) = GunConstants_alert_radius_VA(ZenWarriorHeavyChaingunWeaponConstants_VA);
 	ZenWarriorHeavyChaingunWeaponMaterial = 0u;
 }
 
@@ -197467,7 +197467,7 @@ uint32_t sub_000CE920(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FB20u;
+	eax = ZenWarriorLitePulseRifleWeaponSpec_VA;
 	return eax;
 }
 
@@ -197478,11 +197478,11 @@ uint32_t ZenWarriorLitePulseRifleWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A5190u;
+	arg2 = GunConstants_sound_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21FB8Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A5150u;
+	arg1 = GunConstants_material_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CE957u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197553,34 +197553,34 @@ void ZenWarriorLitePulseRifleWeapon_Register(uint32_t arg0)
 	GameObjectType_version(ZenWarriorLitePulseRifleWeaponType_VA) = 0u;
 	GameObjectType_flags(ZenWarriorLitePulseRifleWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x54u) = ZenWarriorLitePulseRifleWeaponType_VA;
-	x86_rep_stos32(0x21FB3Cu, 0u, 0x13u);
-	MEM32(0x21FB3Cu) = 0x1A5118u;
-	MEM32(0x21FB40u) = 0x1A511Cu;
-	MEM32(0x21FB44u) = 0x1A5120u;
-	MEM32(0x21FB48u) = 0x1A5124u;
-	MEM32(0x21FB4Cu) = 0x1A5128u;
-	MEM32(0x21FB50u) = 0x1A512Cu;
-	MEM32(0x21FB54u) = 0x1A5130u;
-	MEM32(0x21FB58u) = 0x1A5134u;
-	MEM32(0x21FB5Cu) = 0x1A5138u;
-	MEM32(0x21FB60u) = 0x1A513Cu;
-	MEM32(0x21FB64u) = 0x1A5140u;
-	MEM32(0x21FB68u) = 0x1A5144u;
-	MEM32(0x21FB6Cu) = 0x1A51D4u;
-	MEM32(0x21FB70u) = 0x1A51D8u;
-	MEM32(0x21FB74u) = 0x1A51DCu;
-	MEM32(0x21FB78u) = 0x1A51E0u;
-	MEM32(0x21FB7Cu) = 0x1A51E4u;
-	MEM32(0x21FB80u) = 0x1A51E8u;
-	MEM32(0x21FB84u) = 0x1A51ECu;
-	x86_rep_stos32(0x21FB20u, 0u, 7u);
-	MEM32(0x21FB30u) = 0x1A511Cu;
-	MEM32(0x21FB20u) = 0x1A5120u;
-	MEM32(0x21FB2Cu) = 0x1A512Cu;
-	MEM32(0x21FB24u) = 0x1A5124u;
-	MEM32(0x21FB28u) = 0x1A5128u;
-	MEM32(0x21FB34u) = 0x1A5138u;
-	MEM32(0x21FB38u) = 0x1A51D0u;
+	x86_rep_stos32(ZenWarriorLitePulseRifleWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = ZenWarriorLitePulseRifleWeaponConstants_VA;
+	GunSpec_damage(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_damage_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_cost(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_cost_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorLitePulseRifleWeaponGunSpec_VA + 0xCu) = ZenWarriorLitePulseRifleWeaponConstants_VA + 0xCu;
+	GunSpec_range(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_range_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_reload(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_reload_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_shots(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_shots_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_life(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_life_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_speed(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_speed_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_length(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_length_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorLitePulseRifleWeaponGunSpec_VA + 0x28u) = ZenWarriorLitePulseRifleWeaponConstants_VA + 0x28u;
+	GunSpec_color(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_color_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorLitePulseRifleWeaponGunSpec_VA + 0x30u) = ZenWarriorLitePulseRifleWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_shot_gap_random(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_burst_gap_random(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	GunSpec_burst_shots_random(ZenWarriorLitePulseRifleWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	x86_rep_stos32(ZenWarriorLitePulseRifleWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_damage_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	WeaponSpec_cost(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_cost_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	WeaponSpec_reload(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_reload_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	MEM32(ZenWarriorLitePulseRifleWeaponSpec_VA + 0x4u) = ZenWarriorLitePulseRifleWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_range_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	WeaponSpec_speed(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_speed_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
+	WeaponSpec_alert_radius(ZenWarriorLitePulseRifleWeaponSpec_VA) = GunConstants_alert_radius_VA(ZenWarriorLitePulseRifleWeaponConstants_VA);
 	ZenWarriorLitePulseRifleWeaponMaterial = 0u;
 }
 
@@ -197588,7 +197588,7 @@ uint32_t sub_000CEB70(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FC28u;
+	eax = PodAutoCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -197599,11 +197599,11 @@ uint32_t PodAutoCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A5268u;
+	arg2 = GunConstants_sound_VA(PodAutoCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21FC94u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A5228u;
+	arg1 = GunConstants_material_VA(PodAutoCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CEBA7u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197674,34 +197674,34 @@ void PodAutoCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodAutoCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodAutoCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x50u) = PodAutoCannonWeaponType_VA;
-	x86_rep_stos32(0x21FC44u, 0u, 0x13u);
-	MEM32(0x21FC44u) = 0x1A51F0u;
-	MEM32(0x21FC48u) = 0x1A51F4u;
-	MEM32(0x21FC4Cu) = 0x1A51F8u;
-	MEM32(0x21FC50u) = 0x1A51FCu;
-	MEM32(0x21FC54u) = 0x1A5200u;
-	MEM32(0x21FC58u) = 0x1A5204u;
-	MEM32(0x21FC5Cu) = 0x1A5208u;
-	MEM32(0x21FC60u) = 0x1A520Cu;
-	MEM32(0x21FC64u) = 0x1A5210u;
-	MEM32(0x21FC68u) = 0x1A5214u;
-	MEM32(0x21FC6Cu) = 0x1A5218u;
-	MEM32(0x21FC70u) = 0x1A521Cu;
-	MEM32(0x21FC74u) = 0x1A52ACu;
-	MEM32(0x21FC78u) = 0x1A52B0u;
-	MEM32(0x21FC7Cu) = 0x1A52B4u;
-	MEM32(0x21FC80u) = 0x1A52B8u;
-	MEM32(0x21FC84u) = 0x1A52BCu;
-	MEM32(0x21FC88u) = 0x1A52C0u;
-	MEM32(0x21FC8Cu) = 0x1A52C4u;
-	x86_rep_stos32(0x21FC28u, 0u, 7u);
-	MEM32(0x21FC38u) = 0x1A51F4u;
-	MEM32(0x21FC28u) = 0x1A51F8u;
-	MEM32(0x21FC34u) = 0x1A5204u;
-	MEM32(0x21FC2Cu) = 0x1A51FCu;
-	MEM32(0x21FC30u) = 0x1A5200u;
-	MEM32(0x21FC3Cu) = 0x1A5210u;
-	MEM32(0x21FC40u) = 0x1A52A8u;
+	x86_rep_stos32(PodAutoCannonWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(PodAutoCannonWeaponGunSpec_VA) = PodAutoCannonWeaponConstants_VA;
+	GunSpec_damage(PodAutoCannonWeaponGunSpec_VA) = GunConstants_damage_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_cost(PodAutoCannonWeaponGunSpec_VA) = GunConstants_cost_VA(PodAutoCannonWeaponConstants_VA);
+	MEM32(PodAutoCannonWeaponGunSpec_VA + 0xCu) = PodAutoCannonWeaponConstants_VA + 0xCu;
+	GunSpec_range(PodAutoCannonWeaponGunSpec_VA) = GunConstants_range_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_reload(PodAutoCannonWeaponGunSpec_VA) = GunConstants_reload_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_shots(PodAutoCannonWeaponGunSpec_VA) = GunConstants_shots_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_life(PodAutoCannonWeaponGunSpec_VA) = GunConstants_life_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_speed(PodAutoCannonWeaponGunSpec_VA) = GunConstants_speed_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_length(PodAutoCannonWeaponGunSpec_VA) = GunConstants_length_VA(PodAutoCannonWeaponConstants_VA);
+	MEM32(PodAutoCannonWeaponGunSpec_VA + 0x28u) = PodAutoCannonWeaponConstants_VA + 0x28u;
+	GunSpec_color(PodAutoCannonWeaponGunSpec_VA) = GunConstants_color_VA(PodAutoCannonWeaponConstants_VA);
+	MEM32(PodAutoCannonWeaponGunSpec_VA + 0x30u) = PodAutoCannonWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(PodAutoCannonWeaponGunSpec_VA) = GunConstants_shot_gap_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_shot_gap_random(PodAutoCannonWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_burst_gap(PodAutoCannonWeaponGunSpec_VA) = GunConstants_burst_gap_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_burst_gap_random(PodAutoCannonWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_burst_shots(PodAutoCannonWeaponGunSpec_VA) = GunConstants_burst_shots_VA(PodAutoCannonWeaponConstants_VA);
+	GunSpec_burst_shots_random(PodAutoCannonWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(PodAutoCannonWeaponConstants_VA);
+	x86_rep_stos32(PodAutoCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodAutoCannonWeaponSpec_VA) = GunConstants_damage_VA(PodAutoCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodAutoCannonWeaponSpec_VA) = GunConstants_cost_VA(PodAutoCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodAutoCannonWeaponSpec_VA) = GunConstants_reload_VA(PodAutoCannonWeaponConstants_VA);
+	MEM32(PodAutoCannonWeaponSpec_VA + 0x4u) = PodAutoCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodAutoCannonWeaponSpec_VA) = GunConstants_range_VA(PodAutoCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodAutoCannonWeaponSpec_VA) = GunConstants_speed_VA(PodAutoCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodAutoCannonWeaponSpec_VA) = GunConstants_alert_radius_VA(PodAutoCannonWeaponConstants_VA);
 	PodAutoCannonWeaponMaterial = 0u;
 }
 
@@ -197709,7 +197709,7 @@ uint32_t sub_000CEDC0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FD30u;
+	eax = PodParticleCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -197720,11 +197720,11 @@ uint32_t PodParticleCannonWeapon_Startup(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A5340u;
+	arg2 = GunConstants_sound_VA(PodParticleCannonWeaponConstants_VA);
 	arg1 = 8u;
 	arg0 = 0x21FD9Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A5300u;
+	arg1 = GunConstants_material_VA(PodParticleCannonWeaponConstants_VA);
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000CEDF7u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -197795,34 +197795,34 @@ void PodParticleCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_version(PodParticleCannonWeaponType_VA) = 0u;
 	GameObjectType_flags(PodParticleCannonWeaponType_VA) = 0u;
 	MEM32(arg0 + 0x4Cu) = PodParticleCannonWeaponType_VA;
-	x86_rep_stos32(0x21FD4Cu, 0u, 0x13u);
-	MEM32(0x21FD4Cu) = 0x1A52C8u;
-	MEM32(0x21FD50u) = 0x1A52CCu;
-	MEM32(0x21FD54u) = 0x1A52D0u;
-	MEM32(0x21FD58u) = 0x1A52D4u;
-	MEM32(0x21FD5Cu) = 0x1A52D8u;
-	MEM32(0x21FD60u) = 0x1A52DCu;
-	MEM32(0x21FD64u) = 0x1A52E0u;
-	MEM32(0x21FD68u) = 0x1A52E4u;
-	MEM32(0x21FD6Cu) = 0x1A52E8u;
-	MEM32(0x21FD70u) = 0x1A52ECu;
-	MEM32(0x21FD74u) = 0x1A52F0u;
-	MEM32(0x21FD78u) = 0x1A52F4u;
-	MEM32(0x21FD7Cu) = 0x1A5384u;
-	MEM32(0x21FD80u) = 0x1A5388u;
-	MEM32(0x21FD84u) = 0x1A538Cu;
-	MEM32(0x21FD88u) = 0x1A5390u;
-	MEM32(0x21FD8Cu) = 0x1A5394u;
-	MEM32(0x21FD90u) = 0x1A5398u;
-	MEM32(0x21FD94u) = 0x1A539Cu;
-	x86_rep_stos32(0x21FD30u, 0u, 7u);
-	MEM32(0x21FD40u) = 0x1A52CCu;
-	MEM32(0x21FD30u) = 0x1A52D0u;
-	MEM32(0x21FD3Cu) = 0x1A52DCu;
-	MEM32(0x21FD34u) = 0x1A52D4u;
-	MEM32(0x21FD38u) = 0x1A52D8u;
-	MEM32(0x21FD44u) = 0x1A52E8u;
-	MEM32(0x21FD48u) = 0x1A5380u;
+	x86_rep_stos32(PodParticleCannonWeaponGunSpec_VA, 0u, 0x13u);
+	GunSpec_aim_angle(PodParticleCannonWeaponGunSpec_VA) = PodParticleCannonWeaponConstants_VA;
+	GunSpec_damage(PodParticleCannonWeaponGunSpec_VA) = GunConstants_damage_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_cost(PodParticleCannonWeaponGunSpec_VA) = GunConstants_cost_VA(PodParticleCannonWeaponConstants_VA);
+	MEM32(PodParticleCannonWeaponGunSpec_VA + 0xCu) = PodParticleCannonWeaponConstants_VA + 0xCu;
+	GunSpec_range(PodParticleCannonWeaponGunSpec_VA) = GunConstants_range_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_reload(PodParticleCannonWeaponGunSpec_VA) = GunConstants_reload_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_shots(PodParticleCannonWeaponGunSpec_VA) = GunConstants_shots_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_life(PodParticleCannonWeaponGunSpec_VA) = GunConstants_life_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_speed(PodParticleCannonWeaponGunSpec_VA) = GunConstants_speed_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_length(PodParticleCannonWeaponGunSpec_VA) = GunConstants_length_VA(PodParticleCannonWeaponConstants_VA);
+	MEM32(PodParticleCannonWeaponGunSpec_VA + 0x28u) = PodParticleCannonWeaponConstants_VA + 0x28u;
+	GunSpec_color(PodParticleCannonWeaponGunSpec_VA) = GunConstants_color_VA(PodParticleCannonWeaponConstants_VA);
+	MEM32(PodParticleCannonWeaponGunSpec_VA + 0x30u) = PodParticleCannonWeaponConstants_VA + 0xBCu;
+	GunSpec_shot_gap(PodParticleCannonWeaponGunSpec_VA) = GunConstants_shot_gap_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_shot_gap_random(PodParticleCannonWeaponGunSpec_VA) = GunConstants_shot_gap_random_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_burst_gap(PodParticleCannonWeaponGunSpec_VA) = GunConstants_burst_gap_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_burst_gap_random(PodParticleCannonWeaponGunSpec_VA) = GunConstants_burst_gap_random_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_burst_shots(PodParticleCannonWeaponGunSpec_VA) = GunConstants_burst_shots_VA(PodParticleCannonWeaponConstants_VA);
+	GunSpec_burst_shots_random(PodParticleCannonWeaponGunSpec_VA) = GunConstants_burst_shots_random_VA(PodParticleCannonWeaponConstants_VA);
+	x86_rep_stos32(PodParticleCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_damage(PodParticleCannonWeaponSpec_VA) = GunConstants_damage_VA(PodParticleCannonWeaponConstants_VA);
+	WeaponSpec_cost(PodParticleCannonWeaponSpec_VA) = GunConstants_cost_VA(PodParticleCannonWeaponConstants_VA);
+	WeaponSpec_reload(PodParticleCannonWeaponSpec_VA) = GunConstants_reload_VA(PodParticleCannonWeaponConstants_VA);
+	MEM32(PodParticleCannonWeaponSpec_VA + 0x4u) = PodParticleCannonWeaponConstants_VA + 0xCu;
+	WeaponSpec_range(PodParticleCannonWeaponSpec_VA) = GunConstants_range_VA(PodParticleCannonWeaponConstants_VA);
+	WeaponSpec_speed(PodParticleCannonWeaponSpec_VA) = GunConstants_speed_VA(PodParticleCannonWeaponConstants_VA);
+	WeaponSpec_alert_radius(PodParticleCannonWeaponSpec_VA) = GunConstants_alert_radius_VA(PodParticleCannonWeaponConstants_VA);
 	PodParticleCannonWeaponMaterial = 0u;
 }
 
@@ -197830,7 +197830,7 @@ uint32_t sub_000CF010(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FE34u;
+	eax = PodOfficerSledMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
@@ -197873,20 +197873,20 @@ void PodOfficerSledMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(PodOfficerSledMissileLauncherWeaponType_VA) = 0xCF030u;
 	GameObjectType_state_machine(PodOfficerSledMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x48u) = PodOfficerSledMissileLauncherWeaponType_VA;
-	x86_rep_stos32(0x21FE34u, 0u, 7u);
-	MEM32(0x21FE34u) = 0x1A53A4u;
-	MEM32(0x21FE40u) = 0x1A53B0u;
-	MEM32(0x21FE38u) = 0x1A53A8u;
-	MEM32(0x21FE3Cu) = 0x1A53ACu;
-	MEM32(0x21FE44u) = 0x1A53A0u;
-	MEM32(0x21FE4Cu) = 0x1A53B4u;
+	x86_rep_stos32(PodOfficerSledMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53A4u;
+	WeaponSpec_reload(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53B0u;
+	MEM32(PodOfficerSledMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A53A8u;
+	WeaponSpec_range(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53ACu;
+	WeaponSpec_damage(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53A0u;
+	WeaponSpec_alert_radius(PodOfficerSledMissileLauncherWeaponSpec_VA) = 0x1A53B4u;
 }
 
 uint32_t sub_000CF0E0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FE94u;
+	eax = FPAMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
@@ -197928,13 +197928,13 @@ void FPAMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(FPAMissileLauncherWeaponType_VA) = 0xCF100u;
 	GameObjectType_state_machine(FPAMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x3Cu) = FPAMissileLauncherWeaponType_VA;
-	x86_rep_stos32(0x21FE94u, 0u, 7u);
-	MEM32(0x21FE94u) = 0x1A53BCu;
-	MEM32(0x21FEA0u) = 0x1A53C8u;
-	MEM32(0x21FE98u) = 0x1A53C0u;
-	MEM32(0x21FE9Cu) = 0x1A53C4u;
-	MEM32(0x21FEA4u) = 0x1A53B8u;
-	MEM32(0x21FEACu) = 0x1A53CCu;
+	x86_rep_stos32(FPAMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(FPAMissileLauncherWeaponSpec_VA) = 0x1A53BCu;
+	WeaponSpec_reload(FPAMissileLauncherWeaponSpec_VA) = 0x1A53C8u;
+	MEM32(FPAMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A53C0u;
+	WeaponSpec_range(FPAMissileLauncherWeaponSpec_VA) = 0x1A53C4u;
+	WeaponSpec_damage(FPAMissileLauncherWeaponSpec_VA) = 0x1A53B8u;
+	WeaponSpec_alert_radius(FPAMissileLauncherWeaponSpec_VA) = 0x1A53CCu;
 }
 
 uint32_t sub_000CF1B0(void)
@@ -198041,7 +198041,7 @@ uint32_t sub_000CF350(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FFB4u;
+	eax = ZenHeavyMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
@@ -198084,20 +198084,20 @@ void ZenHeavyMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ZenHeavyMissileLauncherWeaponType_VA) = 0xCF370u;
 	GameObjectType_state_machine(ZenHeavyMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x30u) = ZenHeavyMissileLauncherWeaponType_VA;
-	x86_rep_stos32(0x21FFB4u, 0u, 7u);
-	MEM32(0x21FFB4u) = 0x1A5404u;
-	MEM32(0x21FFC0u) = 0x1A5410u;
-	MEM32(0x21FFB8u) = 0x1A5408u;
-	MEM32(0x21FFBCu) = 0x1A540Cu;
-	MEM32(0x21FFC4u) = 0x1A5400u;
-	MEM32(0x21FFCCu) = 0x1A5414u;
+	x86_rep_stos32(ZenHeavyMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5404u;
+	WeaponSpec_reload(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5410u;
+	MEM32(ZenHeavyMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A5408u;
+	WeaponSpec_range(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A540Cu;
+	WeaponSpec_damage(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5400u;
+	WeaponSpec_alert_radius(ZenHeavyMissileLauncherWeaponSpec_VA) = 0x1A5414u;
 }
 
 uint32_t sub_000CF420(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220014u;
+	eax = ZenLightMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
@@ -198139,13 +198139,13 @@ void ZenLightMissileLauncherWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ZenLightMissileLauncherWeaponType_VA) = 0xCF440u;
 	GameObjectType_state_machine(ZenLightMissileLauncherWeaponType_VA) = 0xEF760u;
 	MEM32(arg0 + 0x2Cu) = ZenLightMissileLauncherWeaponType_VA;
-	x86_rep_stos32(0x220014u, 0u, 7u);
-	MEM32(0x220014u) = 0x1A541Cu;
-	MEM32(0x220020u) = 0x1A5428u;
-	MEM32(0x220018u) = 0x1A5420u;
-	MEM32(0x22001Cu) = 0x1A5424u;
-	MEM32(0x220024u) = 0x1A5418u;
-	MEM32(0x22002Cu) = 0x1A542Cu;
+	x86_rep_stos32(ZenLightMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A541Cu;
+	WeaponSpec_reload(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5428u;
+	MEM32(ZenLightMissileLauncherWeaponSpec_VA + 0x4u) = 0x1A5420u;
+	WeaponSpec_range(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5424u;
+	WeaponSpec_damage(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A5418u;
+	WeaponSpec_alert_radius(ZenLightMissileLauncherWeaponSpec_VA) = 0x1A542Cu;
 }
 
 uint32_t sub_000CF4F0(void)
@@ -198375,7 +198375,7 @@ uint32_t FlareWeapon_StateMachine(uint32_t ebp, uint32_t edi, uint32_t arg0, uin
 	eax = MEM32(eax);
 	if (eax == 0xFFFFu)
 	{
-		MEM32(arg1) = 0x220134u;
+		MEM32(arg1) = FlareWeaponSpec_VA;
 		eax = 1u;
 		return eax;
 	}
@@ -198448,20 +198448,20 @@ void FlareWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(FlareWeaponType_VA) = 0xCF840u;
 	GameObjectType_state_machine(FlareWeaponType_VA) = 0xCF790u;
 	MEM32(arg0 + 0x20u) = FlareWeaponType_VA;
-	x86_rep_stos32(0x220134u, 0u, 7u);
-	MEM32(0x220134u) = 0x1A5464u;
-	MEM32(0x220140u) = 0x1A5470u;
-	MEM32(0x220138u) = 0x1A5468u;
-	MEM32(0x22013Cu) = 0x1A546Cu;
-	MEM32(0x220144u) = 0x1A5460u;
-	MEM32(0x22014Cu) = 0x1A5474u;
+	x86_rep_stos32(FlareWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(FlareWeaponSpec_VA) = 0x1A5464u;
+	WeaponSpec_reload(FlareWeaponSpec_VA) = 0x1A5470u;
+	MEM32(FlareWeaponSpec_VA + 0x4u) = 0x1A5468u;
+	WeaponSpec_range(FlareWeaponSpec_VA) = 0x1A546Cu;
+	WeaponSpec_damage(FlareWeaponSpec_VA) = 0x1A5460u;
+	WeaponSpec_alert_radius(FlareWeaponSpec_VA) = 0x1A5474u;
 }
 
 uint32_t sub_000CF8F0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220198u;
+	eax = ARMDTurretCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -198547,14 +198547,14 @@ void ARMDTurretCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ARMDTurretCannonWeaponType_VA) = 0xCF970u;
 	GameObjectType_state_machine(ARMDTurretCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xC4u) = ARMDTurretCannonWeaponType_VA;
-	x86_rep_stos32(0x220198u, 0u, 7u);
-	MEM32(0x220198u) = 0x1A547Cu;
-	MEM32(0x2201A4u) = 0x1A5488u;
-	MEM32(0x22019Cu) = 0x1A5480u;
-	MEM32(0x2201A0u) = 0x1A5484u;
-	MEM32(0x2201A8u) = 0x1A5478u;
-	MEM32(0x2201ACu) = 0x1A549Cu;
-	MEM32(0x2201B0u) = 0x1A5538u;
+	x86_rep_stos32(ARMDTurretCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ARMDTurretCannonWeaponSpec_VA) = 0x1A547Cu;
+	WeaponSpec_reload(ARMDTurretCannonWeaponSpec_VA) = 0x1A5488u;
+	MEM32(ARMDTurretCannonWeaponSpec_VA + 0x4u) = 0x1A5480u;
+	WeaponSpec_range(ARMDTurretCannonWeaponSpec_VA) = 0x1A5484u;
+	WeaponSpec_damage(ARMDTurretCannonWeaponSpec_VA) = 0x1A5478u;
+	WeaponSpec_speed(ARMDTurretCannonWeaponSpec_VA) = 0x1A549Cu;
+	WeaponSpec_alert_radius(ARMDTurretCannonWeaponSpec_VA) = 0x1A5538u;
 	x86_rep_stos32(0x2201B4u, 0u, 0xDu);
 	MEM32(0x2201B4u) = 0x1A5490u;
 	MEM32(0x2201B8u) = 0x1A5478u;
@@ -198575,7 +198575,7 @@ uint32_t sub_000CFAF0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220288u;
+	eax = ZenReconShipCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -198661,14 +198661,14 @@ void ZenReconShipCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ZenReconShipCannonWeaponType_VA) = 0xCFB70u;
 	GameObjectType_state_machine(ZenReconShipCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA8u) = ZenReconShipCannonWeaponType_VA;
-	x86_rep_stos32(0x220288u, 0u, 7u);
-	MEM32(0x220288u) = 0x1A5544u;
-	MEM32(0x220294u) = 0x1A5550u;
-	MEM32(0x22028Cu) = 0x1A5548u;
-	MEM32(0x220290u) = 0x1A554Cu;
-	MEM32(0x220298u) = 0x1A5540u;
-	MEM32(0x22029Cu) = 0x1A5564u;
-	MEM32(0x2202A0u) = 0x1A5600u;
+	x86_rep_stos32(ZenReconShipCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ZenReconShipCannonWeaponSpec_VA) = 0x1A5544u;
+	WeaponSpec_reload(ZenReconShipCannonWeaponSpec_VA) = 0x1A5550u;
+	MEM32(ZenReconShipCannonWeaponSpec_VA + 0x4u) = 0x1A5548u;
+	WeaponSpec_range(ZenReconShipCannonWeaponSpec_VA) = 0x1A554Cu;
+	WeaponSpec_damage(ZenReconShipCannonWeaponSpec_VA) = 0x1A5540u;
+	WeaponSpec_speed(ZenReconShipCannonWeaponSpec_VA) = 0x1A5564u;
+	WeaponSpec_alert_radius(ZenReconShipCannonWeaponSpec_VA) = 0x1A5600u;
 	x86_rep_stos32(0x2202A4u, 0u, 0xDu);
 	MEM32(0x2202A4u) = 0x1A5558u;
 	MEM32(0x2202A8u) = 0x1A5540u;
@@ -198689,7 +198689,7 @@ uint32_t sub_000CFCF0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220378u;
+	eax = ZenCruiserTurret1CannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -198775,14 +198775,14 @@ void ZenCruiserTurret1CannonWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ZenCruiserTurret1CannonWeaponType_VA) = 0xCFD70u;
 	GameObjectType_state_machine(ZenCruiserTurret1CannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA4u) = ZenCruiserTurret1CannonWeaponType_VA;
-	x86_rep_stos32(0x220378u, 0u, 7u);
-	MEM32(0x220378u) = 0x1A560Cu;
-	MEM32(0x220384u) = 0x1A5618u;
-	MEM32(0x22037Cu) = 0x1A5610u;
-	MEM32(0x220380u) = 0x1A5614u;
-	MEM32(0x220388u) = 0x1A5608u;
-	MEM32(0x22038Cu) = 0x1A562Cu;
-	MEM32(0x220390u) = 0x1A56C8u;
+	x86_rep_stos32(ZenCruiserTurret1CannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A560Cu;
+	WeaponSpec_reload(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5618u;
+	MEM32(ZenCruiserTurret1CannonWeaponSpec_VA + 0x4u) = 0x1A5610u;
+	WeaponSpec_range(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5614u;
+	WeaponSpec_damage(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A5608u;
+	WeaponSpec_speed(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A562Cu;
+	WeaponSpec_alert_radius(ZenCruiserTurret1CannonWeaponSpec_VA) = 0x1A56C8u;
 	x86_rep_stos32(0x220394u, 0u, 0xDu);
 	MEM32(0x220394u) = 0x1A5620u;
 	MEM32(0x220398u) = 0x1A5608u;
@@ -198803,7 +198803,7 @@ uint32_t sub_000CFEF0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220468u;
+	eax = ZenCruiserTurretCannonWeaponSpec_VA;
 	return eax;
 }
 
@@ -198889,14 +198889,14 @@ void ZenCruiserTurretCannonWeapon_Register(uint32_t arg0)
 	GameObjectType_shutdown(ZenCruiserTurretCannonWeaponType_VA) = 0xCFF70u;
 	GameObjectType_state_machine(ZenCruiserTurretCannonWeaponType_VA) = 0xF43F0u;
 	MEM32(arg0 + 0xA0u) = ZenCruiserTurretCannonWeaponType_VA;
-	x86_rep_stos32(0x220468u, 0u, 7u);
-	MEM32(0x220468u) = 0x1A56D4u;
-	MEM32(0x220474u) = 0x1A56E0u;
-	MEM32(0x22046Cu) = 0x1A56D8u;
-	MEM32(0x220470u) = 0x1A56DCu;
-	MEM32(0x220478u) = 0x1A56D0u;
-	MEM32(0x22047Cu) = 0x1A56F4u;
-	MEM32(0x220480u) = 0x1A5790u;
+	x86_rep_stos32(ZenCruiserTurretCannonWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56D4u;
+	WeaponSpec_reload(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56E0u;
+	MEM32(ZenCruiserTurretCannonWeaponSpec_VA + 0x4u) = 0x1A56D8u;
+	WeaponSpec_range(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56DCu;
+	WeaponSpec_damage(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56D0u;
+	WeaponSpec_speed(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A56F4u;
+	WeaponSpec_alert_radius(ZenCruiserTurretCannonWeaponSpec_VA) = 0x1A5790u;
 	x86_rep_stos32(0x220484u, 0u, 0xDu);
 	MEM32(0x220484u) = 0x1A56E8u;
 	MEM32(0x220488u) = 0x1A56D0u;

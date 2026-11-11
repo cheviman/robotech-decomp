@@ -912,6 +912,72 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   209 vectors, 0 different; the nine scenarios frame for frame as their references, at the first run.
   With a function named the analysis is worked out again: 13 minutes for `decompile.py build` with two
   other decompilations running beside, 17 for the whole round.
+- **The weapons' records and the missiles': `WeaponSpec`, `GunSpec`, `MissileSpec`** (11-11-2026). Checked
+  first, over the decompiled C: 24 functions clear a record of 19 words, and they are two records. What
+  was not as it looked: a weapon's first word does not point at the record of 19 but at the 7 words before
+  it. Every type of the Weapon family (43 registered) starts what its objects share with those 7 words,
+  each pointing at a constant of the type: the family's own record, `WeaponSpec`. The type's own function
+  hands back its address (sub_000CCD60 for RaiderXMachineGunWeapon) and the weapon's creation stores it in
+  the weapon's first word and its +0x1C (sub_00101B70 for the guns, by the type's number; sub_00100880 for
+  the heavy cannons). After it each kind of weapon keeps a record of its own: 19 words in the 16 guns
+  (`GunSpec`: their shots are the particles of a vcBeamParticleSystem, fired in bursts; one state machine,
+  0x101DD0), 11 in the five heavy cannons, 13 in the four turret cannons, 12 in six types without a name,
+  none in the launchers, the packs and the flares. A missile's record of 19 words (`MissileSpec`) lies
+  just before its `EntitySpec`: the missile keeps its address at +0x26C and +0x274 (sub_0005B460, by the
+  type's number) and its first word points 0x4C bytes on (sub_00059620). How each field was told, with
+  Ghidra's C: `WeaponSpec` `cost` (+0x00) and `reload` (+0x0C) in sub_00028320, which lets a shot go when
+  more than `reload` milliseconds have passed since the weapon's last and the energy the weapon draws on,
+  less `cost` times a factor, is not below 0 (the callers take it away: sub_00100360, sub_00100CF0);
+  `range` (+0x08) is the length of the ray a heavy cannon's shot is tested along (sub_00100460); `damage`
+  (+0x10) is the third word of the message 0xF001 to what a shot hits (sub_00100460, sub_00100B70,
+  sub_000C9120) and what sub_0001B3E0 shares out around; `speed` (+0x14) is what sub_00019D60 leads the
+  target by (it solves for when a shot of that speed meets a target at its velocity; sub_000286B0) and
+  what a gun's shot leaves with, along the aim, added to its owner's velocity (sub_00100DC0 and the three
+  after it); `alert_radius` (+0x18) is handed to sub_0001B230, which sends a record of kind 3 with where
+  the shot hit to every entity of the other side with an AI (the list at 0x2AEB60) nearer than it.
+  `GunSpec`: `aim_angle` (+0x00) is the angle in degrees whose tangent, times the distance, bounds how far
+  from where the gun points sub_000286B0 turns the shot towards the target; `shots` (+0x18) is how many
+  particles the beam system is made for (sub_00139780), `life` (+0x1C) its +0x110, which a new particle's
+  time left starts from (sub_00137C50), `length` (+0x24) its +0x160, where a particle's streak stops
+  growing, `color` (+0x2C) three floats sub_00101B70 packs into the system's colour; `shot_gap`, `burst_gap`
+  and `burst_shots` (+0x34, +0x3C, +0x44) with a `_random` after each (a random amount up to it, more or
+  less) are the time to the burst's next shot, the time to the next burst and the shots of a burst
+  (sub_001018E0, sub_00101A00); `damage`, `cost`, `range`, `reload` and `speed` point at the constants
+  `WeaponSpec`'s do. `MissileSpec`: `speed`, `mass` and `thrust` (+0x00, +0x04, +0x08) in sub_00059B60 and
+  sub_0005A250 (it steers with the force that takes its velocity to `speed` towards where it will meet its
+  target, at most `thrust`; a force over `mass` is what its velocity changes by; over `speed` it is cut to
+  it; with no target `thrust` pushes it straight on); `damage` (+0x10) the message's third word and
+  `blast_inner`, `blast_outer` (+0x3C, +0x40) what sub_0001B3E0 gets with it: every entity nearer than the
+  outer one gets the damage, all of it within the inner one, falling to nothing between them
+  (sub_0005A410); `life` (+0x14) is the timer of its flying state, at whose end it goes (sub_0005B6D0);
+  `steer_interval` (+0x18) the milliseconds to the next time it works out its steering (sub_0005AB50);
+  `launch_speed` and `launch_speed_random` (+0x1C, +0x20) the part of `speed` it is given forward when
+  launched (sub_0005AC60); `swing`, `swing_time` and `turn_time` (+0x30 to +0x38) how far each warhead
+  goes off the path, the time of a swing and of a turn round it (set in sub_0005AFB0, used in
+  sub_0005A410); `alert_radius` (+0x48) as the weapons'. The constants: a gun type's are 0xD8 bytes laid
+  out the same in the 16 (`GunConstants`, with the names of its material and its sound, 64 bytes each,
+  among them: `GunConstants_sound_VA(RaiderXMachineGunWeaponConstants_VA)` where the Startup had
+  0x1A4770), a missile type's 19 words one after another, the same in the 8 (`MissileConstants`). In
+  place: the `WeaponSpec` of the 30 weapon types with a name, the `GunSpec` and `GunConstants` of the 14
+  guns with one, the `MissileSpec` and `MissileConstants` of the 4 missiles with one (66 lines). Measured:
+  reads at a raw address 11,442 to 10,899; data addresses written as numbers 11,366 to 10,816; memory at a
+  named place no field names 2,008 to 2,100, the 92 words not read: `WeaponSpec`'s +0x04 in 30 records (0
+  for the guns, 300 for the heavy cannons, 150 or 750 for the launchers), `GunSpec`'s +0x0C (the same
+  constant), +0x28 (0.2 to 0.4, handed over with each shot and kept in the particle) and +0x30 (250 or
+  500) in 14, `MissileSpec`'s +0x0C (150 to 400), +0x24, +0x28 and +0x2C (16, 1600 and 4500 as `swing`,
+  `swing_time` and `turn_time`; the first two are kept in the missile at +0x280 and +0x288, whose reader
+  was not found) and +0x44 (0.25: what its steering is scaled by, with a push sideways, while its target is behind
+  it) in 4; the XBE's untyped bytes 844,788 to 841,723, its unknown bytes 3,843 to 3,831 (three bytes of a
+  constant in each of the four missiles, now inside a record). `tools/verify_c.py` 209 vectors, 0
+  different, at the second and third runs: the first after the build said 176 vectors with 32 different
+  (another flavour of the fluke: fewer vectors from the title, not 0). The nine scenarios frame for frame
+  as their references, `training` (17 of its 30 frames, from frame 1560) only on a second run alone:
+  another project's decompilation was running beside. The round took 2 minutes 56 seconds of
+  `decompile.py build` (the analysis read from the build before) and 3 minutes 13 of compiling. Left: the heavy cannons', the
+  turret cannons' and the six unnamed types' own records; the other weapon types' constants (their
+  `WeaponSpec` words still point at numbers); the two guns and four missiles without a name; the words
+  above; what follows the records in what a type's objects share (a gun's sound at +0x6C and the two
+  effect types it makes at +0xB4 and +0xB8, a missile's at +0x150 on).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the
