@@ -1533,6 +1533,63 @@ comment LevelCountsAsFinished Whether a level is finished, or every one is with 
 0022743C  var   NoseconePickupSceneObject                      u32   # the first object of the scene "nosecone_pickup" NoseconePickup_Startup gets
 00227494  var   SpyCapsuleSceneObject                          u32   # the first object of the scene "spy_capsule" SpyCapsule_Startup gets
 
+# The sprites: an image drawn on the screen is a record of 0x3C bytes, a texture or a part of one with its
+# size, where it hangs from the place it is drawn at, a scale and a colour for each corner. Ten functions of
+# the engine take one, not named yet: sub_00126D20 (sets it up whole: a texture, a width and a height, the
+# whole texture, white), sub_00126D90 (a part of a texture, from a rectangle in texels, flipped across or
+# down if asked), sub_00126C90 (its texture), sub_00126CC0 (its offset), sub_00126CE0 (its offset to half
+# its size back: centred), sub_00126D00 (its four colours the same), sub_00126C40 (a copy, with a reference
+# of its own to the texture), sub_00126C70 (lets go of its texture), sub_00126890 (draws it at a place, if
+# any of it is on the screen) and sub_00126A10 (draws it turned by an angle in degrees). Here the sprites
+# of the types with a name whose texture, got by name, says which each is; a screen's others (several cut
+# from one texture) wait for what each one shows, and so do the two headings with a word after their
+# sprite that nothing reaches (MissionFailedScreen's at 0x1E6420, AwardsScreen's at 0x20FED0).
+struct  vcSprite  3C                                # an image drawn on the screen
+field   vcSprite  00  texture              u32     # its texture's handle (a vcTexture), with a reference of the sprite's own; 0 for none
+field   vcSprite  08  width                f32     # its width in pixels, before the scale
+field   vcSprite  0C  height               f32     # its height
+field   vcSprite  10  offset_x             f32     # where its left edge is from the place it is drawn at: 0, or half its width back when centred
+field   vcSprite  14  offset_y             f32     # where its top edge is
+field   vcSprite  18  scale                f32     # what its size and its offset are multiplied by: 1 unless set
+field   vcSprite  1C  u_left               f32     # the texture's coordinates of its edges: 0 to 1 for the whole texture
+field   vcSprite  20  v_top                f32
+field   vcSprite  24  u_right              f32
+field   vcSprite  28  v_bottom             f32
+field   vcSprite  2C  colour_top_left      u32     # the colour of each corner: white unless set
+field   vcSprite  30  colour_top_right     u32
+field   vcSprite  34  colour_bottom_left   u32
+field   vcSprite  38  colour_bottom_right  u32
+001E63E4  var   MissionFailedScreenGUIMainMenuSprite                 vcSprite   # its texture "GUI_main_menu.tga", which MissionFailedScreen_Startup gets
+001EA700  var   MissionCompleteScreenGUIHeadingsMissioncompleteSprite vcSprite   # its texture "GUI_headings_missioncomplete.tga", which MissionCompleteScreen_Startup gets
+0020FDCC  var   MedalsScreenHudMedalStarSprite                       vcSprite   # its texture "hud_medal_star.tga", which MedalsScreen_Startup gets
+0020FE94  var   AwardsScreenGUIMissionMenuSprite                     vcSprite   # its texture "GUI_mission_menu.tga", which AwardsScreen_Startup gets
+0021038C  var   CreditsScreenGUIHeadingsCreditsSprite                vcSprite   # its texture "GUI_headings_credits.tga", which CreditsScreen_Startup gets
+002199C8  var   CreditsScreenGUIMainMenuSprite                       vcSprite   # its texture "GUI_main_menu.tga", which CreditsScreen_Startup gets
+0021CB34  var   PauseScreenGUIMainMenuSprite                         vcSprite   # its texture "GUI_main_menu.tga", which PauseScreen_Startup gets
+0021CB70  var   PauseScreenGUIPauseHeaderSprite                      vcSprite   # its texture "GUI_pause_header.tga", which PauseScreen_Startup gets
+0021CC40  var   SniperScreenSniperRotateSprite                       vcSprite   # its texture "sniper_rotate.tga", which SniperScreen_Startup gets
+002228B0  var   FriendlyReticleElementRetFriendly04Sprite            vcSprite   # its texture "ret_friendly_04.tga", which FriendlyReticleElement_Startup gets
+002228EC  var   FriendlyReticleElementRetFriendly02Sprite            vcSprite   # its texture "ret_friendly_02.tga", which FriendlyReticleElement_Startup gets
+00222928  var   FriendlyReticleElementRetFriendly01Sprite            vcSprite   # its texture "ret_friendly_01.tga", which FriendlyReticleElement_Startup gets
+00222964  var   FriendlyReticleElementRetFriendly03Sprite            vcSprite   # its texture "ret_friendly_03.tga", which FriendlyReticleElement_Startup gets
+002229F4  var   MissileLockElementMissLock01Sprite                   vcSprite   # its texture "miss_lock01.tga", which MissileLockElement_Startup gets
+002232D0  var   PickupReticleElementPickUpRet04Sprite                vcSprite   # its texture "pick_up_ret_04.tga", which PickupReticleElement_Startup gets
+0022330C  var   PickupReticleElementPickUpRet02Sprite                vcSprite   # its texture "pick_up_ret_02.tga", which PickupReticleElement_Startup gets
+00223348  var   PickupReticleElementPickUpRet01Sprite                vcSprite   # its texture "pick_up_ret_01.tga", which PickupReticleElement_Startup gets
+00223384  var   PickupReticleElementPickUpRet03Sprite                vcSprite   # its texture "pick_up_ret_03.tga", which PickupReticleElement_Startup gets
+002233C0  var   PickupReticleElementPickUpRet05Sprite                vcSprite   # its texture "pick_up_ret_05.tga", which PickupReticleElement_Startup gets
+
+# The menus' sounds: a screen's code asks for one by setting a word, and the screen on top plays its own
+# sound for it (cursor.wav, Cancel_Back_S.wav, Confirm_S.wav) and clears the word.
+001EAB20  var   MenuCursorSoundAsked   u32            # set where a menu's choice moves
+001EAB24  var   MenuCancelSoundAsked   u32            # set where a menu is left for the one before
+001EAB28  var   MenuConfirmSoundAsked  u32            # set where a menu's choice is taken
+
+# The mission complete screen writes its lines one under another: each sets its rectangle from these and
+# moves the next down by its height.
+001EA7F4  var   MissionCompleteScreenLineY  f32       # the top of the next line, in pixels
+001EA7F8  var   MissionCompleteScreenLineX  f32       # the left of the lines
+
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
 00026E80  func  gcLevel_Destroy                     # gcLevel's slot +38

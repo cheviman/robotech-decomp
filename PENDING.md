@@ -727,6 +727,40 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   records (27 words a type) and the effects' (14); the screens' records of 0x3C bytes; and the most-read
   addresses still raw: 0x1EAB20 to 0x1EAB2C (205 reads, the main menu's state), 0x1EA7F4 (96, floats),
   0x2B5E60 (38), 0x219A04 (36), 0x1BC760 (35), 0x1EA5F8 (32), 0x1B0A64 (30).
+- **The sprites, the menus' sounds and the floats by name** (11-11-2026). An image drawn on the screen is a
+  record of 0x3C bytes, read whole from the ten functions of the engine that take one and typed as
+  `vcSprite`: its texture, its width and height, where it hangs from the place it is drawn at (`offset_x`,
+  `offset_y`: half its size back when centred), a scale, the texture's coordinates of its four edges and a
+  colour for each corner; the word at +4 nothing reads. The functions, not named yet: sub_00126D20 (sets
+  one up: a texture, a width, a height, the whole texture, white), sub_00126D90 (a part of a texture, from a
+  rectangle in texels, flipped across or down if asked), sub_00126C90 (its texture), sub_00126CC0 (its
+  offset), sub_00126CE0 (centred), sub_00126D00 (its four colours the same), sub_00126C40 (a copy),
+  sub_00126C70 (lets go of its texture), sub_00126890 (draws it at a place, if any of it is on the screen),
+  sub_00126A10 (draws it turned by an angle in degrees). 200 sprites lie at fixed addresses (624 reads at a
+  raw address inside them); 19 have a line, the ones of types with a name whose texture, got by name, says
+  which each is (`PauseScreenGUIPauseHeaderSprite`, `PickupReticleElementPickUpRet04Sprite`). The menus'
+  sounds: the screens' code asks for one by setting a word, and the screen on top plays its own sound for it
+  and clears the word: `MenuCursorSoundAsked`, `MenuCancelSoundAsked`, `MenuConfirmSoundAsked` (55, 76 and
+  59 places in the C; each screen keeps cursor.wav, Cancel_Back_S.wav and Confirm_S.wav in that order).
+  The mission complete screen's `MissionCompleteScreenLineY` and `MissionCompleteScreenLineX`: where it
+  writes its next line, each line moving the next down by its height. The emitter
+  (`tools/x86/emit.py`, GuestNames.float_place): a float symbols.txt names (a variable or an element of an
+  array of f32, an f32 field of a record in place, at a fixed address or by a table's index) is read as its
+  value, `(double)vcPad_left_x(vcPads(0))`, and written by its name, `MissionCompleteScreenLineY =
+  (float)x87_round(...)`, where it was `FLOAT_AT(vcPad_left_x_VA(vcPads(0)))` and `MEMF(...)`: the
+  conversion to a double makes a signaling NaN quiet as FLD does (x86.h's x87_float), and the value goes
+  into the arithmetic as a double, as before. 708 reads of a float by name, 647 of them the pads'.
+  Measured: reads and writes at a raw address 14,778 to 14,392; memory at a named place no field names 684
+  to 65 (what is left: a float's bits moved as a word, `MEM32(vcSprite_width_VA(...))`, and the screen's
+  and the viewport's rectangles reached past their first word); data addresses written as numbers 13,736
+  to 13,651; the XBE's untyped bytes of the game 852,889 to 851,805, its unknown bytes 3,845, as before.
+  The nine scenarios frame for frame as their references; `tools/verify_c.py` 209 vectors, 0 different.
+  Left: the other 181 sprites (a screen's several cut from one texture, each to be named for what it
+  shows; the ones of types without a name; the two headings with a word after their sprite that nothing
+  reaches, at 0x1E6420 and 0x20FED0); the mission complete screen's other statics (two tables of 7 words
+  from 0x1EA7B4 and 0x1EA7D0, a float at 0x1EA7FC it prints); 0x2BF2F4 and 0x2BF2F8 (45 reads: the right
+  edge its lines end 5 pixels before, by its looks); and the floats of `.data` to name now that a float
+  goes by its name (about 1,000 reads through `FLOAT_AT` of a raw address).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

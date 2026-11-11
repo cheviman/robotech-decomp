@@ -201,6 +201,41 @@ class GuestNames:
         whole = f"{name}({number})" if count else name
         return (f"((uint16_t)({whole} >> 16))" if inner else f"((uint16_t){whole})"), False
 
+    def float_field(self, struct, record, inner):
+        """C for the float 'inner' bytes into the record of 'struct' at the C 'record', by its field's
+        accessor (a volatile float), or None where no f32 field lies there."""
+        size = self.structs[struct][0]
+        for offset, name, kind, count in self.structs[struct][1]:
+            extent = size - offset if count == -1 else TYPE_BYTES[kind] * (count or 1)
+            if offset <= inner < offset + extent:
+                if kind != "f32" or (inner - offset) % 4:
+                    return None
+                accessor = f"{struct}_{name}({record})"
+                return accessor if count is None else f"{accessor}[{(inner - offset) // 4}]"
+        return None
+
+    def float_place(self, address, exact):
+        """C for the float at 'address' (a constant, or "base + index * size" into a table of records in
+        place) where symbols.txt gives it a name: a variable or an element of an array of f32, or an f32
+        field of a record in place; None otherwise. An lvalue of type float."""
+        if isinstance(address, ir.Const):
+            found = self.containing(address.value & 0xFFFFFFFF)
+            if found is None:
+                return None
+            start, name, kind, count, size = found
+            offset = (address.value & 0xFFFFFFFF) - start
+            if kind in self.structs:
+                number, inner = divmod(offset, size)
+                return self.float_field(kind, self.record(name, count, number), inner)
+            if kind != "f32" or offset % 4:
+                return None
+            return f"{name}({offset // 4})" if count else name
+        table = self.indexed(address)
+        if table is None:
+            return None
+        name, kind, count, value, number, inner = table
+        return self.float_field(kind, self.record(name, count, self.numbered(exact(value), number)), inner)
+
     @staticmethod
     def scaled(index, size):
         """What 'index' multiplies by 'size' ("i * size", "i << n"), or None."""
@@ -351,6 +386,13 @@ class X86Printer(emit.Printer):
             found = guest.sum(node, self.writer.exact)
             if found is not None:
                 return cprint.Value(found[0], found[1], True, "u32")
+        if guest is not None and isinstance(node, ir.Op) and node.name == "f.from32" \
+                and isinstance(node.args[0], ir.Load) and node.args[0].bits == 32:
+            # a float symbols.txt names, as FLD loads it: its value as a double (the conversion makes a
+            # signaling NaN quiet, as x87_float does)
+            place = guest.float_place(node.args[0].address, self.writer.exact)
+            if place is not None:
+                return cprint.Value(f"(double){place}", cprint.UNARY, True, "f64")
         if isinstance(node, ir.Op) and node.name == "f.const32" and isinstance(node.args[0], ir.Const):
             # a float of the program's constants, or of fld1 and fldz: its literal
             literal = float_literal(node.args[0].value & 0xFFFFFFFF)
@@ -439,6 +481,13 @@ class X86Writer(emit.FunctionWriter):
     def statement(self, statement):
         if isinstance(statement, ir.Store) and isinstance(statement.value, ir.Op) \
                 and statement.value.name in ("f.bits32", "f.bits64"):
+            guest = getattr(self.emitter, "guest", None)
+            if guest is not None and statement.value.name == "f.bits32" and statement.bits == 32:
+                # a float symbols.txt names: NAME = value, rounded to a float as MEMF's is
+                place = guest.float_place(statement.address, self.exact)
+                if place is not None:
+                    stored = ir.op("f.round32", (statement.value.args[0],), 64)
+                    return [f"{place} = {self.expr(stored)};"]
             return super().statement(statement)     # a float or a double: MEMF(address) = value
         if isinstance(statement, ir.Store):
             target = self.memory(statement.address, statement.bits, id(statement))

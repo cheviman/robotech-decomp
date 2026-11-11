@@ -18852,7 +18852,7 @@ void sub_000237F0(uint32_t esi, uint32_t edi)
 			port = ecx;
 			MEM32(edi + 0x164u) = 1u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			return;
 		}
 		zero = MEM32(eax + vcPad_pressed_start_VA(vcPads_VA)) == 0u;
@@ -18861,7 +18861,7 @@ void sub_000237F0(uint32_t esi, uint32_t edi)
 			port = ecx;
 			MEM32(edi + 0x164u) = 1u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		return;
 	}
@@ -18870,7 +18870,7 @@ void sub_000237F0(uint32_t esi, uint32_t edi)
 		port = ecx;
 		MEM32(edi + 0x164u) = 1u;
 		vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 	}
 	else
 	{
@@ -18880,7 +18880,7 @@ void sub_000237F0(uint32_t esi, uint32_t edi)
 			port = ecx;
 			MEM32(edi + 0x164u) = 1u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			return;
 		}
 	}
@@ -18900,7 +18900,7 @@ void sub_00023890(uint32_t esi)
 			port = eax;
 			MEM32(esi + 0x164u) = 1u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		return;
 	}
@@ -18909,7 +18909,7 @@ void sub_00023890(uint32_t esi)
 		port = eax;
 		MEM32(esi + 0x164u) = 1u;
 		vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 		return;
 	}
 	ecx = vcPad_pressed_start(vcPads(3));
@@ -18918,7 +18918,7 @@ void sub_00023890(uint32_t esi)
 		port = eax;
 		MEM32(esi + 0x164u) = 1u;
 		vcPadClearPresses(port, &ignored, &ignored_2, &esi, &ignored_3);
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 	}
 }
 
@@ -18941,7 +18941,7 @@ void sub_00023900(uint32_t esi)
 				MEM32(esi + 0x164u) = edi;
 				port = stack;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB28u) = edi;
+				MenuConfirmSoundAsked = edi;
 			}
 			else
 			{
@@ -18952,7 +18952,7 @@ void sub_00023900(uint32_t esi)
 					MEM32(esi + 0x164u) = edi;
 					port = stack;
 					vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-					MEM32(0x1EAB28u) = edi;
+					MenuConfirmSoundAsked = edi;
 				}
 			}
 		}
@@ -18965,7 +18965,7 @@ void sub_00023900(uint32_t esi)
 				MEM32(esi + 0x164u) = edi;
 				port = stack;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB28u) = edi;
+				MenuConfirmSoundAsked = edi;
 			}
 		}
 	}
@@ -18980,7 +18980,7 @@ void sub_00023900(uint32_t esi)
 				MEM32(esi + 0x164u) = edi;
 				port = stack;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB28u) = edi;
+				MenuConfirmSoundAsked = edi;
 			}
 			else
 			{
@@ -18991,7 +18991,7 @@ void sub_00023900(uint32_t esi)
 					MEM32(esi + 0x164u) = edi;
 					port = stack;
 					vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-					MEM32(0x1EAB28u) = edi;
+					MenuConfirmSoundAsked = edi;
 				}
 			}
 		}
@@ -19004,7 +19004,7 @@ void sub_00023900(uint32_t esi)
 				MEM32(esi + 0x164u) = edi;
 				port = stack;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB28u) = edi;
+				MenuConfirmSoundAsked = edi;
 			}
 			else
 			{
@@ -19015,7 +19015,7 @@ void sub_00023900(uint32_t esi)
 					MEM32(esi + 0x164u) = edi;
 					port = stack;
 					vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-					MEM32(0x1EAB28u) = edi;
+					MenuConfirmSoundAsked = edi;
 				}
 			}
 		}
@@ -19030,7 +19030,7 @@ void sub_00023900(uint32_t esi)
 				port = ecx;
 				MEM32(esi + 0x164u) = 2u;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB24u) = edi;
+				MenuCancelSoundAsked = edi;
 				return;
 			}
 			eax = vcPad_pressed_back(vcPads(3));
@@ -19040,7 +19040,7 @@ void sub_00023900(uint32_t esi)
 				port = ecx;
 				MEM32(esi + 0x164u) = 2u;
 				vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-				MEM32(0x1EAB24u) = edi;
+				MenuCancelSoundAsked = edi;
 			}
 			return;
 		}
@@ -19050,7 +19050,7 @@ void sub_00023900(uint32_t esi)
 			port = ecx;
 			MEM32(esi + 0x164u) = 2u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 			return;
 		}
 		zero = MEM32(eax + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -19059,7 +19059,7 @@ void sub_00023900(uint32_t esi)
 			port = ecx;
 			MEM32(esi + 0x164u) = 2u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 		}
 		return;
 	}
@@ -19071,7 +19071,7 @@ void sub_00023900(uint32_t esi)
 			port = ecx;
 			MEM32(esi + 0x164u) = 2u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 			return;
 		}
 		zero = MEM32(eax + vcPad_pressed_start_VA(vcPads_VA)) == 0u;
@@ -19080,7 +19080,7 @@ void sub_00023900(uint32_t esi)
 			port = ecx;
 			MEM32(esi + 0x164u) = 2u;
 			vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 		}
 		return;
 	}
@@ -19089,7 +19089,7 @@ void sub_00023900(uint32_t esi)
 		port = ecx;
 		MEM32(esi + 0x164u) = 2u;
 		vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-		MEM32(0x1EAB24u) = edi;
+		MenuCancelSoundAsked = edi;
 		return;
 	}
 	eax = vcPad_pressed_start(vcPads(3));
@@ -19099,7 +19099,7 @@ void sub_00023900(uint32_t esi)
 		port = ecx;
 		MEM32(esi + 0x164u) = 2u;
 		vcPadClearPresses(port, &ignored, &ignored_2, &esi, &edi);
-		MEM32(0x1EAB24u) = edi;
+		MenuCancelSoundAsked = edi;
 		return;
 	}
 }
@@ -22586,7 +22586,7 @@ void sub_00025DF0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	{
 		arg2 = float_to_bits((float)x87_round(x87_round((double)(int32_t)MEM32(esi + 0x140u) - 16.0) + 2.0));
 		arg1 = float_to_bits((float)x87_round(x87_round((double)(int32_t)MEM32(esi + 0x13Cu) + 16.0) - 0.6f));
-		arg0 = 0x1E63E4u;
+		arg0 = MissionFailedScreenGUIMainMenuSprite_VA;
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 	}
 }
@@ -22604,7 +22604,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 	edi = MEM32(esi + 0x164u);
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) > 0.0f))
+		if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 		{
 			eax_2 = edi + 1u;
 			MEM32(esi + 0x164u) = eax_2;
@@ -22613,7 +22613,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 		}
 		else if ((int32_t)ecx < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 			{
 				eax_2 = edi - 1u;
 				MEM32(esi + 0x164u) = eax_2;
@@ -22645,7 +22645,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 		}
 		else if ((int32_t)ecx < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 			{
 				eax_2 = edi - 1u;
 				MEM32(esi + 0x164u) = eax_2;
@@ -22683,7 +22683,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 	ecx = MEM32(esi + 0x18u);
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_right(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
+		if (vcPad_pressed_right(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
 		{
 			t1 = MEM32(esi + 0x164u);
 			eax_2 = t1;
@@ -22698,7 +22698,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 		{
 			if ((int32_t)ecx < 0)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 				{
 					t1 = MEM32(esi + 0x164u);
 					eax_2 = t1;
@@ -22728,7 +22728,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 		}
 		else
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (f0 > 0.0f)
 			{
 				t1 = MEM32(esi + 0x164u);
@@ -22742,7 +22742,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 			}
 			else if ((int32_t)ecx < 0)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 				{
 					t1 = MEM32(esi + 0x164u);
 					eax_2 = t1;
@@ -22789,7 +22789,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 		{
 			if ((int32_t)ecx < 0)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 				{
 					t1 = MEM32(esi + 0x164u);
 					eax_2 = t1;
@@ -22833,7 +22833,7 @@ void sub_00025ED0(uint32_t eax, uint32_t ebx, uint32_t ebp)
 			}
 			else if ((int32_t)ecx < 0)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+				if (vcPad_pressed_left(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 				{
 					t1 = MEM32(esi + 0x164u);
 					eax_2 = t1;
@@ -23038,7 +23038,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (L_0265E0 || L_0265CF || (int32_t)ecx < 0)
 			{
-				if (!L_0265E0 && !L_0265CF && (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u))
+				if (!L_0265E0 && !L_0265CF && (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u))
 				{
 					ecx = g_esp + 0x10u;
 					g_esp = g_esp - 4u;
@@ -23061,7 +23061,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					if (!L_0265E0)
 					{
 						if (!L_0265CF)
-							f0 = FLOAT_AT(vcPads(3));
+							f0 = (double)vcPad_left_x(vcPads(3));
 						L_0265CF = false;
 						L_0265E0 = !(f0 < 0.0f);
 						if (!L_0265E0)
@@ -23087,7 +23087,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						L_0265E0 = false;
 						if ((int32_t)ecx < 0)
 						{
-							if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (ebp_2 != 0u && FLOAT_AT(vcPads(3)) > 0.0f))
+							if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (ebp_2 != 0u && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 							{
 								ecx = g_esp + 0x10u;
 								g_esp = g_esp - 4u;
@@ -23356,14 +23356,14 @@ uint32_t MissionFailedScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xE3u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 5u;
-	MEM32(0x1E63E4u) = eax;
+	vcSprite_texture(MissionFailedScreenGUIMainMenuSprite_VA) = eax;
 	eax = g_esp + 0x18u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 2u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000268B1u, 0);
-	edx = MEM32(0x1E63E4u);
+	edx = vcSprite_texture(MissionFailedScreenGUIMainMenuSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
@@ -23374,18 +23374,18 @@ uint32_t MissionFailedScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1E63E4u;
+	MEM32(g_esp) = MissionFailedScreenGUIMainMenuSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
-	f0 = x87_round(FLOAT_AT(0x1E63F0u) + 3.0);
+	f0 = x87_round((double)vcSprite_height(MissionFailedScreenGUIMainMenuSprite_VA) + 3.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x18F760u;
-	MEM32(0x1E63ECu) = 0x43950000u;
-	MEMF(0x1E63F0u) = (float)f0;
+	MEM32(vcSprite_width_VA(MissionFailedScreenGUIMainMenuSprite_VA)) = 0x43950000u;
+	vcSprite_height(MissionFailedScreenGUIMainMenuSprite_VA) = (float)f0;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
@@ -23433,7 +23433,7 @@ uint32_t MissionFailedScreen_Shutdown(void)
 	ignored_2 = g_edx;
 	arg0 = 0x1E6420u;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = 0x1E63E4u;
+	arg0 = MissionFailedScreenGUIMainMenuSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = MEM32(0x1E64A8u);
 	x86_call(vcObjectRelease_entry, 0x0002695Au, 1, arg0);
@@ -37726,8 +37726,8 @@ void sub_00030CA0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcFormat_entry, 0x00030CD1u, 0);
-	eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-	f0 = FLOAT_AT(0x1EA7F8u);
+	eax = x87_ftol((double)MissionCompleteScreenLineY);
+	f0 = (double)MissionCompleteScreenLineX;
 	edx = MEM32(0x2BF2F8u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax + 0x12u;
@@ -37759,7 +37759,7 @@ void sub_00030CA0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	eax = x86_call(vcTextDrawInRect_entry, 0x00030D29u, 0);
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 3e+01);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 3e+01);
 	g_esp = g_esp + 0x124u;
 	*p_eax = eax;
 }
@@ -37775,8 +37775,8 @@ uint32_t sub_00030D50(uint32_t eax)
 	x86_call(vcTextSetSize_entry, 0x00030D5Du, 0);
 	f0 = x87_pop();
 	MEMF(g_esp + 4u) = (float)f0;
-	eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-	f0_2 = FLOAT_AT(0x1EA7F8u);
+	eax = x87_ftol((double)MissionCompleteScreenLineY);
+	f0_2 = (double)MissionCompleteScreenLineX;
 	edx = MEM32(0x2BF2F8u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax + 0x12u;
@@ -37815,11 +37815,11 @@ uint32_t sub_00030D50(uint32_t eax)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcTextDrawInRect_entry, 0x00030DC9u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 16.0);
+	MissionCompleteScreenLineY = (float)f0_2;
 	eax = x87_ftol(f0_2);
 	ecx = MEM32(0x2BF2F8u);
-	f0_2 = FLOAT_AT(0x1EA7F8u);
+	f0_2 = (double)MissionCompleteScreenLineX;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax + 0x10u;
 	g_esp = g_esp - 4u;
@@ -37911,10 +37911,10 @@ uint32_t sub_00030D50(uint32_t eax)
 			MEM32(0x1EA7E4u) = 0u;
 	}
 	eax = MEM32(g_esp);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 2e+01);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 2e+01);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	g_eax = eax;
 	eax = x86_call(vcTextSetSize_entry, 0x00030F32u, 0);
 	x87_pop();
@@ -37936,7 +37936,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEMF(g_esp + 8u) = (float)f0;
 	eax = MEM32(0x1EA6D8u);
 	g_esp = g_esp + 4u;
-	MEMF(g_esp) = (float)x87_round(FLOAT_AT(0x1EA7F8u) + 1e+01);
+	MEMF(g_esp) = (float)x87_round((double)MissionCompleteScreenLineX + 1e+01);
 	if (eax != 0u)
 	{
 		if (eax == 1u)
@@ -37964,8 +37964,8 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	}
 	if ((int32_t)MEM32(0x1EA6D8u) >= 0)
 	{
-		eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-		f0_2 = FLOAT_AT(0x1EA7F8u);
+		eax = x87_ftol((double)MissionCompleteScreenLineY);
+		f0_2 = (double)MissionCompleteScreenLineX;
 		edx = MEM32(0x2BF2F8u);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax + 0x12u;
@@ -38002,14 +38002,14 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		x86_call(vcRectOffset_entry, 0x00031001u, 0);
-		f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+		f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 		ecx = MEM32(0x1B0A74u);
 		g_esp = g_esp + 0x20u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 3u;
-		MEMF(0x1EA7F4u) = (float)f0_2;
+		MissionCompleteScreenLineY = (float)f0_2;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0 = MEM32(g_esp);
@@ -38032,7 +38032,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		MEM32(g_esp) = eax;
 		x86_call(vcRectOffset_entry, 0x00031047u, 0);
 		g_esp = g_esp + 0x20u;
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 18.0);
 	}
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(0x1BC494u);
@@ -38068,10 +38068,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcTextDrawInRect_entry, 0x000310A4u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 36.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 36.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x6EBu;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	arg0 = MEM32(g_esp);
 	sub_00111FC0(arg0, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 0x18u;
@@ -38117,10 +38117,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
 	eax = x86_call(vcFormatLast_entry, 0x00031118u, 0);
-	edx = MEM32(0x1EA7F4u);
+	edx = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F8u);
+	eax = MEM32(MissionCompleteScreenLineX_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFFC4CAD0u;
 	g_esp = g_esp - 4u;
@@ -38128,10 +38128,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextDrawAligned_entry, 0x00031130u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41600000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x0003114Cu, 0);
 	x87_pop();
 	g_esp = g_esp - 4u;
@@ -38146,7 +38146,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	ebx_2 = MEM32(g_esp + 0x30u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFF92BAE2u;
 	g_esp = g_esp - 4u;
@@ -38166,7 +38166,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	eax = x86_call(vcFormatLast_entry, 0x000311A0u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFF92BAE2u;
 	g_esp = g_esp - 4u;
@@ -38174,10 +38174,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43D20000u;
 	x86_call(vcTextDraw_entry, 0x000311B6u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 24.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 24.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41800000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x000311D2u, 0);
 	x87_pop();
 	g_esp = g_esp - 4u;
@@ -38191,8 +38191,8 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
 	eax = x86_call(vcFormatLast_entry, 0x000311EEu, 0);
-	ecx = MEM32(0x1EA7F4u);
-	edx = MEM32(0x1EA7F8u);
+	ecx = MEM32(MissionCompleteScreenLineY_VA);
+	edx = MEM32(MissionCompleteScreenLineX_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
@@ -38202,10 +38202,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	x86_call(vcTextDrawAligned_entry, 0x00031207u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41600000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x00031223u, 0);
 	x87_pop();
 	g_esp = g_esp - 4u;
@@ -38217,7 +38217,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x18F998u;
 	x86_call(vcFormat_entry, 0x0003123Au, 0);
 	eax = x86_call(vcFormatLast_entry, 0x0003123Fu, 0);
-	edx = MEM32(0x1EA7F4u);
+	edx = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
@@ -38237,7 +38237,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	x86_call(vcFormat_entry, 0x0003126Au, 0);
 	g_esp = g_esp + 0x40u;
 	eax = x86_call(vcFormatLast_entry, 0x00031272u, 0);
-	edx = MEM32(0x1EA7F4u);
+	edx = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
@@ -38247,10 +38247,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43D20000u;
 	x86_call(vcTextDraw_entry, 0x00031289u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 24.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 24.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41800000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x000312A5u, 0);
 	x87_pop();
 	g_esp = g_esp - 4u;
@@ -38264,10 +38264,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
 	eax = x86_call(vcFormatLast_entry, 0x000312C1u, 0);
-	ecx = MEM32(0x1EA7F8u);
+	ecx = MEM32(MissionCompleteScreenLineX_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFFC4CAD0u;
 	g_esp = g_esp - 4u;
@@ -38275,10 +38275,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcTextDrawAligned_entry, 0x000312D9u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41600000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x000312F5u, 0);
 	x87_pop();
 	ecx = MEM32(0x1EA6D8u);
@@ -38318,7 +38318,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	eax = x86_call(vcFormatLast_entry, 0x000313CAu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
 	g_esp = g_esp - 4u;
@@ -38335,7 +38335,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x18F988u;
 	x86_call(vcFormat_entry, 0x000313F6u, 0);
 	eax = x86_call(vcFormatLast_entry, 0x000313FBu, 0);
-	edx = MEM32(0x1EA7F4u);
+	edx = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
@@ -38345,10 +38345,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43D20000u;
 	x86_call(vcTextDraw_entry, 0x0003140Eu, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 24.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 24.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41800000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x0003142Au, 0);
 	x87_pop();
 	g_esp = g_esp - 4u;
@@ -38362,10 +38362,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
 	eax = x86_call(vcFormatLast_entry, 0x00031446u, 0);
-	ecx = MEM32(0x1EA7F8u);
+	ecx = MEM32(MissionCompleteScreenLineX_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFFC4CAD0u;
 	g_esp = g_esp - 4u;
@@ -38373,10 +38373,10 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	x86_call(vcTextDrawAligned_entry, 0x0003145Eu, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41600000u;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	x86_call(vcTextSetSize_entry, 0x0003147Au, 0);
 	x87_pop();
 	ecx = MEM32(0x1EA6D8u);
@@ -38416,7 +38416,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	eax = x86_call(vcFormatLast_entry, 0x0003154Fu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = MEM32(0x1EA7F4u);
+	eax = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
 	g_esp = g_esp - 4u;
@@ -38433,7 +38433,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x18F988u;
 	x86_call(vcFormat_entry, 0x0003157Bu, 0);
 	eax = x86_call(vcFormatLast_entry, 0x00031580u, 0);
-	edx = MEM32(0x1EA7F4u);
+	edx = MEM32(MissionCompleteScreenLineY_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
@@ -38443,11 +38443,11 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43D20000u;
 	x86_call(vcTextDraw_entry, 0x00031593u, 0);
-	f0_2 = x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
 	eax = MEM32(g_esp + 0x30u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEMF(0x1EA7F4u) = (float)f0_2;
+	MissionCompleteScreenLineY = (float)f0_2;
 	g_eax = eax;
 	eax = x86_call(vcTextSetSize_entry, 0x000315AFu, 0);
 	x87_pop();
@@ -38596,8 +38596,8 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				*p_eax = eax;
 				return;
 			}
-			eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-			f0 = FLOAT_AT(0x1EA7F8u);
+			eax = x87_ftol((double)MissionCompleteScreenLineY);
+			f0 = (double)MissionCompleteScreenLineX;
 			edx = MEM32(0x2BF2F8u);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax + 0x12u;
@@ -38668,7 +38668,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			x86_call(vcRectOffset_entry, 0x000317EAu, 0);
 			ecx = MEM32(0x1EA68Cu);
 			eax = MEM32(0x1EA7D0u);
-			MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 18.0);
 			g_esp = g_esp + 0x20u;
 			if ((int32_t)ecx > 0)
 			{
@@ -38732,7 +38732,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			if (MEM32(0x1EA690u) == 0u || eax == 0xFFFFFFFEu)
 			{
 				*p_esi = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				*p_ebp = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -38798,7 +38798,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			if (eax != 0u)
 			{
 				*p_esi = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				*p_ebp = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -38810,7 +38810,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			if (eax != 0u)
 			{
 				*p_esi = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				*p_ebp = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -38822,7 +38822,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			if (eax == 0xFFFFFF9Cu || *p_ebp != 0u)
 			{
 				*p_esi = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				*p_ebp = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -38836,7 +38836,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			if ((int32_t)eax < (int32_t)ecx)
 			{
 				*p_esi = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				*p_ebp = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -38846,7 +38846,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			}
 			MEM32(0x1EA7D0u) = 0xFFFFFFFFu;
 			*p_esi = MEM32(g_esp);
-			MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 			g_esp = g_esp + 4u;
 			*p_ebp = MEM32(g_esp);
 			g_esp = g_esp + 4u;
@@ -38911,8 +38911,8 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_eax = eax;
 		return;
 	}
-	eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-	f0 = FLOAT_AT(0x1EA7F8u);
+	eax = x87_ftol((double)MissionCompleteScreenLineY);
+	f0 = (double)MissionCompleteScreenLineX;
 	edx = MEM32(0x2BF2F8u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax + 0x12u;
@@ -38984,11 +38984,11 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	eax = MEM32(0x2B5E60u);
 	g_esp = g_esp + 0x20u;
 	ebx = 0u;
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 18.0);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 18.0);
 	if ((int32_t)eax <= 0)
 	{
 		*p_ebx = MEM32(g_esp);
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 0x10u;
 		*p_eax = eax;
@@ -39084,7 +39084,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	*p_ebp = MEM32(g_esp);
 	g_esp = g_esp + 4u;
 	*p_ebx = MEM32(g_esp);
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x10u;
 	*p_eax = eax;
@@ -39138,8 +39138,8 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 		*p_eax = eax;
 		return;
 	}
-	eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-	f0 = FLOAT_AT(0x1EA7F8u);
+	eax = x87_ftol((double)MissionCompleteScreenLineY);
+	f0 = (double)MissionCompleteScreenLineX;
 	edx = MEM32(0x2BF2F8u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax + 0x12u;
@@ -39211,10 +39211,10 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 	eax = MEM32(0x2B5E60u);
 	g_esp = g_esp + 0x20u;
 	ebx_2 = 0u;
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 	if ((int32_t)eax <= 0)
 	{
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 0x10u;
 		*p_eax = eax;
@@ -39299,7 +39299,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 	*p_esi = MEM32(g_esp);
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x10u;
 	*p_eax = eax;
@@ -39354,8 +39354,8 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 				g_esp = g_esp + 4u;
 				if (eax != 0u)
 				{
-					eax_2 = x87_ftol(FLOAT_AT(0x1EA7F4u));
-					f0 = FLOAT_AT(0x1EA7F8u);
+					eax_2 = x87_ftol((double)MissionCompleteScreenLineY);
+					f0 = (double)MissionCompleteScreenLineX;
 					edx = MEM32(0x2BF2F8u);
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = eax_2 + 0x12u;
@@ -39412,12 +39412,12 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = edx;
 					x86_call(vcRectOffset_entry, 0x00031EEDu, 0);
-					f0 = x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
+					f0 = x87_round((double)MissionCompleteScreenLineY + 16.0);
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x41600000u;
 					MEM32(0x1EA7E8u) = 0xFFFFFF9Cu;
 					edi_2 = esi_2 + 0x754u;
-					MEMF(0x1EA7F4u) = (float)f0;
+					MissionCompleteScreenLineY = (float)f0;
 					x86_call(vcTextSetSize_entry, 0x00031F19u, 0);
 					x87_pop();
 					g_esp = g_esp + 0x24u;
@@ -39451,7 +39451,7 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 					break;
 			}
 			g_esp = g_esp + 4u;
-			MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 			g_esp = g_esp + 4u;
 		}
 	}
@@ -39535,8 +39535,8 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 	MEM32(g_esp + 8u) = 0u;
 	if (eax != 0xFFFFFF9Bu && MEM32(0x1BC498u) == esi_2 && MEM32(0x1E6308u) != esi_2)
 	{
-		eax = x87_ftol(FLOAT_AT(0x1EA7F4u));
-		f0 = FLOAT_AT(0x1EA7F8u);
+		eax = x87_ftol((double)MissionCompleteScreenLineY);
+		f0 = (double)MissionCompleteScreenLineX;
 		edx = MEM32(0x2BF2F8u);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax + 0x12u;
@@ -39629,7 +39629,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		x86_call(vcRectOffset_entry, 0x00032138u, 0);
 		ecx = MEM32(g_esp + 0x50u);
 		eax = MEM32(ecx + 0x13Cu);
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 		ebx = 0xFFFFFF9Cu;
 		g_esp = g_esp + 0x20u;
 		if (eax == 0x1Du || eax == 0x23u)
@@ -39791,7 +39791,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 					*p_edi = MEM32(g_esp);
 					g_esp = g_esp + 4u;
 					*p_ebx = MEM32(g_esp);
-					MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+					MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 					g_esp = g_esp + 4u;
 					esi_2 = MEM32(g_esp);
 					g_esp = g_esp + 4u;
@@ -39810,7 +39810,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 				*p_edi = MEM32(g_esp);
 				g_esp = g_esp + 4u;
 				*p_ebx = MEM32(g_esp);
-				MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+				MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 				g_esp = g_esp + 4u;
 				esi_2 = MEM32(g_esp);
 				g_esp = g_esp + 4u;
@@ -39826,7 +39826,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		*p_edi = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 		*p_ebx = MEM32(g_esp);
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 		g_esp = g_esp + 4u;
 		esi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
@@ -39901,7 +39901,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_eax = eax;
 		return;
 	}
-	f0 = FLOAT_AT(0x1EA7F4u);
+	f0 = (double)MissionCompleteScreenLineY;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = *p_ebx;
 	g_esp = g_esp - 4u;
@@ -39909,7 +39909,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = *p_edi;
 	eax_2 = x87_ftol(f0);
-	f0 = FLOAT_AT(0x1EA7F8u);
+	f0 = (double)MissionCompleteScreenLineX;
 	edx = MEM32(0x2BF2F8u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2 + 0x12u;
@@ -39997,7 +39997,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			MEM32(g_esp) = edx;
 			x86_call(vcRectOffset_entry, 0x00032529u, 0);
 			eax = MEM32(0x1EA7E0u);
-			MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
+			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 			g_esp = g_esp + 0x20u;
 			if (eax != 0xFFFFFFFEu)
 			{
@@ -40116,7 +40116,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		g_esp = g_esp + 4u;
 		if (t3 == ecx && eax == 0xFFFFFFFFu)
 			MEM32(0x1EA7E0u) = 0xFFFFFFFEu;
-		MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 		g_esp = g_esp + 0x14u;
 		*p_eax = eax;
 		return;
@@ -40192,7 +40192,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			MEM32(g_esp) = eax_2;
 			x86_call(vcRectOffset_entry, 0x0003271Eu, 0);
 			eax = MEM32(0x1EA7E0u);
-			MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 16.0);
+			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 			g_esp = g_esp + 0x20u;
 		}
 		if (eax != 0xFFFFFFFFu)
@@ -40264,7 +40264,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	g_esp = g_esp + 4u;
 	if (t3 == ecx && eax == 0xFFFFFFFFu)
 		MEM32(0x1EA7E0u) = 0xFFFFFFFEu;
-	MEMF(0x1EA7F4u) = (float)x87_round(FLOAT_AT(0x1EA7F4u) + 22.0);
+	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 	g_esp = g_esp + 0x14u;
 	*p_eax = eax;
 }
@@ -40460,7 +40460,7 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0xFF000000u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1EA700u;
+			MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_00126D00(arg0, arg1);
@@ -40469,7 +40469,7 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			MEMF(g_esp + 4u) = (float)x87_round(FLOAT_AT(g_esp + 0x10u) + 1.0);
 			MEMF(g_esp) = (float)x87_round(FLOAT_AT(g_esp + 0xCu) + 1.0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1EA700u;
+			MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
@@ -40477,7 +40477,7 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0xFFFFFFFFu;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1EA700u;
+			MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_00126D00(arg0, arg1);
@@ -40488,7 +40488,7 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1EA700u;
+			MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
@@ -40501,8 +40501,8 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		x87_pop();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x80000000u;
-		MEM32(0x1EA7F8u) = 0x43760000u;
-		MEM32(0x1EA7F4u) = 0x42E00000u;
+		MEM32(MissionCompleteScreenLineX_VA) = 0x43760000u;
+		MEM32(MissionCompleteScreenLineY_VA) = 0x42E00000u;
 		x86_call(vcTextSetShadowColor_entry, 0x00032AB8u, 0);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x40000000u;
@@ -40615,7 +40615,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		g_esp = g_esp + 0xCu;
 		return eax;
 	}
-	if (MEM32(0x1EAB28u) != ebp_2)
+	if (MenuConfirmSoundAsked != ebp_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MissionCompleteScreenCancelBackSSound;
@@ -40674,7 +40674,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 			}
 		}
 	}
-	if (MEM32(0x1EAB20u) != ebp_2)
+	if (MenuCursorSoundAsked != ebp_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(0x1EA7ECu);
@@ -40682,8 +40682,8 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		sub_0010E7E0(arg0_2, &ignored, &ignored_2);
 		g_esp = g_esp + 4u;
 	}
-	MEM32(0x1EAB20u) = ebp_2;
-	MEM32(0x1EAB28u) = ebp_2;
+	MenuCursorSoundAsked = ebp_2;
+	MenuConfirmSoundAsked = ebp_2;
 	if (MEM32(esi + 0x140u) != 7u)
 	{
 		t1 = MEM32(esi + 0x138u);
@@ -40978,7 +40978,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 			}
 		}
 	}
-	MEM32(0x1EAB28u) = 1u;
+	MenuConfirmSoundAsked = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi + 0x134u);
 	arg0_2 = MEM32(g_esp);
@@ -41055,14 +41055,14 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xFFu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
-	MEM32(0x1EA700u) = eax;
+	vcSprite_texture(MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA) = eax;
 	eax = g_esp + 0x2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x00032F04u, 0);
-	edx = MEM32(0x1EA700u);
+	edx = vcSprite_texture(MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -41073,7 +41073,7 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1EA700u;
+	MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -41082,7 +41082,7 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1EA700u;
+	MEM32(g_esp) = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -41105,7 +41105,7 @@ uint32_t MissionCompleteScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = 0x1EA700u;
+	arg0 = MissionCompleteScreenGUIHeadingsMissioncompleteSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg1 = 2u;
 	arg0 = 0xCu;
@@ -43484,11 +43484,11 @@ uint32_t MainMenuCodeSequence(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 	MEM32(g_esp + 0x40u) = 1u;
 	MEM32(g_esp + 0x44u) = 5u;
 	MEM32(g_esp + 0x48u) = 6u;
-	if (eax != 0u || (ecx != edi_2 && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != edi_2 || (edx != edi_2 && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != edi_2 || (esi_2 != edi_2 && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && FLOAT_AT(vcPads(3)) < 0.0f))
+	if (eax != 0u || (ecx != edi_2 && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != edi_2 || (edx != edi_2 && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != edi_2 || (esi_2 != edi_2 && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 		MEM32(g_esp + 0x14u) = ebp_2;
 	else
 		MEM32(g_esp + 0x14u) = edi_2;
-	if (vcPad_pressed_right(vcPads(0)) != edi_2 || (ecx != edi_2 && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi_2 || (edx != edi_2 && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi_2 || (esi_2 != edi_2 && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && FLOAT_AT(vcPads(3)) > 0.0f))
+	if (vcPad_pressed_right(vcPads(0)) != edi_2 || (ecx != edi_2 && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi_2 || (edx != edi_2 && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi_2 || (esi_2 != edi_2 && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 		MEM32(g_esp + 0x18u) = ebp_2;
 	else
 		MEM32(g_esp + 0x18u) = edi_2;
@@ -43496,13 +43496,13 @@ uint32_t MainMenuCodeSequence(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 	esi_2 = vcPad_pressed_left_y(vcPads(2));
 	edx = vcPad_pressed_left_y(vcPads(1));
 	ecx = vcPad_pressed_left_y(vcPads(0));
-	if (vcPad_pressed_up(vcPads(0)) != edi_2 || (ecx != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi_2 || (edx != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi_2 || (esi_2 != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))
+	if (vcPad_pressed_up(vcPads(0)) != edi_2 || (ecx != edi_2 && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi_2 || (edx != edi_2 && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi_2 || (esi_2 != edi_2 && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && (double)vcPad_left_y(vcPads(3)) > 0.0f))
 		ebp_2 = 1u;
 	else
 		ebp_2 = 0u;
 	t1 = vcPad_pressed_down(vcPads(0));
 	MEM32(g_esp + 0x1Cu) = ebp_2;
-	if (t1 != edi_2 || (ecx != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi_2 || (edx != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi_2 || (esi_2 != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+	if (t1 != edi_2 || (ecx != edi_2 && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi_2 || (edx != edi_2 && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi_2 || (esi_2 != edi_2 && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi_2 || (ebx_2 != edi_2 && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 		esi_2 = 1u;
 	else
 		esi_2 = 0u;
@@ -43529,11 +43529,11 @@ uint32_t MainMenuCodeSequence(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 		if (t5 != edi_2)
 			MEM32(g_esp + 0x2Cu) = 1u;
 	}
-	if (FLOAT_AT(vcPad_left_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(2))) != 0.0f)
+	if ((double)vcPad_left_trigger(vcPads(0)) != 0.0f || (double)vcPad_left_trigger(vcPads(1)) != 0.0f || (double)vcPad_left_trigger(vcPads(2)) != 0.0f)
 		MEM32(g_esp + 0x10u) = 1u;
 	else
 	{
-		f0 = FLOAT_AT(vcPad_left_trigger_VA(vcPads(3)));
+		f0 = (double)vcPad_left_trigger(vcPads(3));
 		MEM32(g_esp + 0x10u) = edi_2;
 		if (f0 != 0.0f)
 			MEM32(g_esp + 0x10u) = 1u;
@@ -43549,11 +43549,11 @@ uint32_t MainMenuCodeSequence(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 		g_esp = g_esp + 0x3Cu;
 		return eax;
 	}
-	if (FLOAT_AT(vcPad_right_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(2))) != 0.0f)
+	if ((double)vcPad_right_trigger(vcPads(0)) != 0.0f || (double)vcPad_right_trigger(vcPads(1)) != 0.0f || (double)vcPad_right_trigger(vcPads(2)) != 0.0f)
 		MEM32(g_esp + 0x10u) = 1u;
 	else
 	{
-		f0 = FLOAT_AT(vcPad_right_trigger_VA(vcPads(3)));
+		f0 = (double)vcPad_right_trigger(vcPads(3));
 		MEM32(g_esp + 0x10u) = edi_2;
 		if (f0 != 0.0f)
 			MEM32(g_esp + 0x10u) = 1u;
@@ -54547,9 +54547,9 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			ecx_2 = saved_ecx;
 		}
 	}
-	if (MEM32(0x2AEB20u) == ebp && FLOAT_AT(vcPad_x_VA(vcPads(ecx_2))) > 0.0f)
+	if (MEM32(0x2AEB20u) == ebp && (double)vcPad_x(vcPads(ecx_2)) > 0.0f)
 		MEM32(ebx + 4u) = MEM32(ebx + 4u) | 0x14u;
-	if (MEM32(0x2AEB24u) == ebp && FLOAT_AT(vcPad_b_VA(vcPads(ecx_2))) > 0.0f)
+	if (MEM32(0x2AEB24u) == ebp && (double)vcPad_b(vcPads(ecx_2)) > 0.0f)
 		MEM32(ebx + 4u) = MEM32(ebx + 4u) | 0x18u;
 	if (MEM32(0x2AEB28u) != ebp)
 		stack = ebp;
@@ -55917,7 +55917,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 			sub_00017A50(arg0_2, arg1, arg2, &eax, &esi);
 			return eax;
 		}
-		if (MEM32(0x2AEB44u) == ebp && FLOAT_AT(vcPad_a_VA(vcPads(ebx))) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
+		if (MEM32(0x2AEB44u) == ebp && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
 			MEM32(saved_eax + 0x3DCu) = 1u;
 		edx = saved_eax;
 		if (MEM32(edx + 0x3DCu) != ebp)
@@ -55932,7 +55932,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 				{
 					MEM32(edx + 0x3DCu) = ebp;
 					if (MEM32(0x2AEB44u) == ebp)
-						MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+						MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 					else
 						MEMF(esi + 0x2Cu) = (float)0.0f;
 					arg2 = esi;
@@ -55955,7 +55955,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 		}
 		if (MEM32(0x2AEB44u) == ebp)
 		{
-			MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 			arg2 = esi;
 			arg1 = saved_eax;
 			eax = sub_0003D570(arg1, arg2);
@@ -56081,7 +56081,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 			eax = sub_0003D570(arg1, arg2);
 			return eax;
 		}
-		if (MEM32(0x2AEB44u) == edx && FLOAT_AT(vcPad_a_VA(vcPads(ebx))) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
+		if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
 			MEM32(ebp + 0x3DCu) = 1u;
 		if (MEM32(ebp + 0x3DCu) != edx)
 		{
@@ -56095,7 +56095,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 				{
 					MEM32(ebp + 0x3DCu) = edx;
 					if (MEM32(0x2AEB44u) == edx)
-						MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+						MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 					else
 						MEMF(esi + 0x2Cu) = (float)0.0f;
 					arg2 = ebx;
@@ -56112,7 +56112,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 		}
 		if (MEM32(0x2AEB44u) == edx)
 		{
-			MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 			arg2 = ebx;
 			arg1 = ebp;
 			arg0_2 = edi;
@@ -56363,7 +56363,7 @@ uint32_t sub_00040190(uint32_t arg0)
 		if (!(FLOAT_AT(esi + 0x178u) > 0.0f))
 			MEM32(esi + 0x2Cu) = 0u;
 		else if (MEM32(0x2AEB44u) == 0u)
-			MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebp)));
+			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 		else
 			MEMF(esi + 0x2Cu) = (float)0.0f;
 		if (MEM32(edi + 0x3E4u) == 0u)
@@ -56591,7 +56591,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 		}
 		return eax;
 	}
-	if (MEM32(0x2AEB44u) == edx && FLOAT_AT(vcPad_a_VA(vcPads(ebx))) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
+	if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
 		MEM32(ebp + 0x3DCu) = 1u;
 	if (MEM32(ebp + 0x3DCu) != edx)
 	{
@@ -56606,7 +56606,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 			{
 				MEM32(ebp + 0x3DCu) = edx;
 				if (MEM32(0x2AEB44u) == edx)
-					MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+					MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 				else
 					MEMF(esi + 0x2Cu) = (float)0.0f;
 				arg2 = esi;
@@ -56629,7 +56629,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 	}
 	if (MEM32(0x2AEB44u) == edx)
 	{
-		MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebx)));
+		MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 		arg2 = esi;
 		arg1 = ebp;
 		eax = sub_0003D570(arg1, arg2);
@@ -56765,7 +56765,7 @@ uint32_t sub_00040740(uint32_t arg0)
 		eax = sub_0003D570(arg1, arg2);
 		return eax;
 	}
-	if (MEM32(0x2AEB44u) == edx && FLOAT_AT(vcPad_a_VA(vcPads(ebp))) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
+	if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebp)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
 		MEM32(ebx + 0x3DCu) = 1u;
 	if (MEM32(ebx + 0x3DCu) != edx)
 	{
@@ -56780,7 +56780,7 @@ uint32_t sub_00040740(uint32_t arg0)
 			{
 				MEM32(ebx + 0x3DCu) = edx;
 				if (MEM32(0x2AEB44u) == edx)
-					MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebp)));
+					MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 				else
 					MEMF(esi + 0x2Cu) = (float)0.0f;
 				arg2 = ebp;
@@ -56797,7 +56797,7 @@ uint32_t sub_00040740(uint32_t arg0)
 	}
 	if (MEM32(0x2AEB44u) == edx)
 	{
-		MEMF(esi + 0x2Cu) = (float)FLOAT_AT(vcPad_a_VA(vcPads(ebp)));
+		MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 		arg2 = ebp;
 		arg1 = ebx;
 		arg0_2 = edi;
@@ -66918,7 +66918,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			}
 			MEM32(ebp_2 + 0x188u) = 1u;
 			g_esp = g_esp + 4u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -66946,7 +66946,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			}
 			MEM32(ebp_2 + 0x188u) = 1u;
 			g_esp = g_esp + 4u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -66971,7 +66971,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		}
 		MEM32(ebp_2 + 0x188u) = 1u;
 		g_esp = g_esp + 4u;
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -67006,7 +67006,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (L_04C09A)
 		{
 			esi_2 = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			edi_2 = MEM32(ebp_2 + 0x124u);
 			MEM32(g_esp + 0x20u) = eax;
 			eax = sub_00049AF0(edi_2);
@@ -67074,7 +67074,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (L_04C2D3 || (int32_t)ecx_2 < 0)
 			{
-				if (L_04C2D3 || vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))
+				if (L_04C2D3 || vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (ebx_2 != 0u && (double)vcPad_left_y(vcPads(3)) > 0.0f))
 				{
 					esi_2 = MEM32(g_esp + 0x1Cu);
 					g_esp = g_esp - 4u;
@@ -67101,7 +67101,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					g_esp = g_esp + 0x18u;
 					MEM32(ebp_2 + 0x180u) = 2u;
 					g_esp = g_esp + 4u;
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 					g_esp = g_esp + 4u;
 					g_esp = g_esp + 4u;
 					g_esp = g_esp + 4u;
@@ -67127,7 +67127,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				{
 					if (L_04C39F || L_04C39F || (int32_t)ecx_2 < 0)
 					{
-						if (L_04C39F || L_04C39F || vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+						if (L_04C39F || L_04C39F || vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (ebx_2 != 0u && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 						{
 							esi_2 = MEM32(g_esp + 0x1Cu);
 							g_esp = g_esp - 4u;
@@ -67152,7 +67152,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							arg1_2 = MEM32(g_esp + 4u);
 							sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_3);
 							MEM32(ebp_2 + 0x180u) = 1u;
-							MEM32(0x1EAB20u) = 1u;
+							MenuCursorSoundAsked = 1u;
 							g_esp = g_esp + 0x18u;
 							g_esp = g_esp + 4u;
 							g_esp = g_esp + 4u;
@@ -67239,7 +67239,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
 			sub_0003CCF0(arg0_2, arg1_2);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			g_esp = g_esp + 0x10u;
 		}
 		ecx_2 = MEM32(ebp_2 + 0x18u);
@@ -67253,7 +67253,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (!L_04B883)
 				L_04B7B5 = true;
 		}
-		if (L_04B883 || (!L_04B7B5 && (vcPad_pressed_up(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))))
+		if (L_04B883 || (!L_04B7B5 && (vcPad_pressed_up(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && (double)vcPad_left_y(vcPads(3)) > 0.0f))))
 		{
 			esi_2 = MEM32(g_esp + 0x1Cu);
 			g_esp = g_esp - 4u;
@@ -67279,7 +67279,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_3);
 			MEM32(ebp_2 + 0x180u) = ebx_2;
 			g_esp = g_esp + 0x18u;
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		}
 		else
 		{
@@ -67287,7 +67287,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			{
 				if (L_04B93C || (int32_t)ecx_2 < (int32_t)ebx_2)
 				{
-					if (L_04B93C || vcPad_pressed_down(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+					if (L_04B93C || vcPad_pressed_down(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 					{
 						L_04B93C = false;
 						esi_2 = MEM32(g_esp + 0x1Cu);
@@ -67307,7 +67307,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_3);
 						MEM32(ebp_2 + 0x180u) = 2u;
 						g_esp = g_esp + 0x10u;
-						MEM32(0x1EAB20u) = 1u;
+						MenuCursorSoundAsked = 1u;
 					}
 				}
 				else
@@ -67329,7 +67329,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (!L_04BA93)
 				L_04B9C5 = true;
 		}
-		if (L_04BA93 || (!L_04B9C5 && (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPads(3)) < 0.0f))))
+		if (L_04BA93 || (!L_04B9C5 && (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (ebx_2 != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))))
 		{
 			ebx_2 = 0xEu;
 			edi_2 = 9u;
@@ -67440,7 +67440,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				sub_00034E70(edi_2, arg0_2, arg1_2, &ebx_2, &ebp_2);
 				g_esp = g_esp + 8u;
 			}
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		}
 		else
 		{
@@ -67448,7 +67448,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			{
 				if (L_04BC4A || (int32_t)ecx_2 < 0)
 				{
-					if (L_04BC4A || vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (esi_2 != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (edi_2 != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPads(3)) > 0.0f))
+					if (L_04BC4A || vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (esi_2 != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (edi_2 != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (ebx_2 != 0u && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 					{
 						L_04BC4A = false;
 						edi_2 = 0xFu;
@@ -67557,7 +67557,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							sub_00034E70(edi_2, arg0_2, arg1_2, &ebx_2, &ebp_2);
 							g_esp = g_esp + 8u;
 						}
-						MEM32(0x1EAB20u) = 1u;
+						MenuCursorSoundAsked = 1u;
 					}
 				}
 				else
@@ -67665,7 +67665,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						sub_00034E70(edi_2, arg0_2, arg1_2, &ebx_2, &ebp_2);
 						g_esp = g_esp + 8u;
 					}
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 				}
 			}
 		}
@@ -67674,7 +67674,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (L_04BF47 || (int32_t)eax < 0)
 			{
-				if (!L_04BF47 && (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u))
+				if (!L_04BF47 && (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u))
 				{
 					esi_2 = MEM32(g_esp + 0x1Cu);
 					g_esp = g_esp - 4u;
@@ -67688,7 +67688,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				else
 				{
 					if (!L_04BF47)
-						f0 = FLOAT_AT(vcPads(3));
+						f0 = (double)vcPad_left_x(vcPads(3));
 					L_04BF47 = false;
 					if (!(f0 > 0.0f))
 					{
@@ -67739,9 +67739,9 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		g_esp = g_esp + 8u;
 		if ((int32_t)eax < 0)
 		{
-			if (vcPad_read_before(vcPads(0))[8] == 0u && !(FLOAT_AT(vcPads_VA) < 0.0f) && vcPad_read_before(vcPads(1))[8] == 0u && !(FLOAT_AT(vcPads(1)) < 0.0f) && vcPad_read_before(vcPads(2))[8] == 0u && !(FLOAT_AT(vcPads(2)) < 0.0f) && vcPad_read_before(vcPads(3))[8] == 0u)
+			if (vcPad_read_before(vcPads(0))[8] == 0u && !((double)vcPad_left_x(vcPads(0)) < 0.0f) && vcPad_read_before(vcPads(1))[8] == 0u && !((double)vcPad_left_x(vcPads(1)) < 0.0f) && vcPad_read_before(vcPads(2))[8] == 0u && !((double)vcPad_left_x(vcPads(2)) < 0.0f) && vcPad_read_before(vcPads(3))[8] == 0u)
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (!(f0 < 0.0f))
 				{
 					g_esp = g_esp - 4u;
@@ -67854,7 +67854,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_0003CCF0(arg0_2, arg1_2);
 		MEM32(ebp_2 + 0x180u) = ebx_2;
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 		g_esp = g_esp + 0x10u;
 	}
 	ecx_2 = MEM32(ebp_2 + 0x18u);
@@ -67868,7 +67868,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (!L_04B194)
 			L_04B0C4 = true;
 	}
-	if (L_04B194 || (!L_04B0C4 && (vcPad_pressed_up(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))))
+	if (L_04B194 || (!L_04B0C4 && (vcPad_pressed_up(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && (double)vcPad_left_y(vcPads(3)) > 0.0f))))
 	{
 		esi_2 = MEM32(g_esp + 0x1Cu);
 		g_esp = g_esp - 4u;
@@ -67886,7 +67886,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_3);
 		MEM32(ebp_2 + 0x180u) = 1u;
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 		g_esp = g_esp + 0x10u;
 	}
 	else
@@ -67895,7 +67895,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (L_04B24A || (int32_t)ecx_2 < (int32_t)ebx_2)
 			{
-				if (L_04B24A || vcPad_pressed_down(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+				if (L_04B24A || vcPad_pressed_down(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx_2 || (vcPad_pressed_left_y(vcPads(3)) != ebx_2 && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 				{
 					L_04B24A = false;
 					esi_2 = MEM32(g_esp + 0x1Cu);
@@ -67921,7 +67921,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					arg1_2 = MEM32(g_esp + 4u);
 					sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_3);
 					MEM32(ebp_2 + 0x180u) = ebx_2;
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 					g_esp = g_esp + 0x18u;
 				}
 			}
@@ -67953,7 +67953,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (!L_04B3B1)
 			L_04B2E1 = true;
 	}
-	if (L_04B3B1 || (!L_04B2E1 && (vcPad_pressed_left(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebx_2 || (vcPad_pressed_left_x(vcPads(3)) != ebx_2 && FLOAT_AT(vcPads(3)) < 0.0f))))
+	if (L_04B3B1 || (!L_04B2E1 && (vcPad_pressed_left(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebx_2 || (vcPad_pressed_left_x(vcPads(3)) != ebx_2 && (double)vcPad_left_x(vcPads(3)) < 0.0f))))
 	{
 		edi_2 = 5u;
 		ebx_2 = 0xAu;
@@ -68018,7 +68018,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			sub_00034E70(edi_2, arg0_2, arg1_2, &ebx_2, &ebp_2);
 			g_esp = g_esp + 8u;
 		}
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 	}
 	else
 	{
@@ -68030,7 +68030,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				{
 					do
 					{
-						if (L_04B4D4 || L_04B4D4 || (!L_04B4D2 && (vcPad_pressed_right(vcPads(0)) != ebx_2 || (edx != ebx_2 && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebx_2)))
+						if (L_04B4D4 || L_04B4D4 || (!L_04B4D2 && (vcPad_pressed_right(vcPads(0)) != ebx_2 || (edx != ebx_2 && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebx_2 || (esi_2 != ebx_2 && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebx_2 || (edi_2 != ebx_2 && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebx_2)))
 						{
 							do
 							{
@@ -68056,7 +68056,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							sub_000C7330(arg0_2, arg1_2, arg2_2, &ignored, &ignored_3);
 							g_esp = g_esp + 0xCu;
 							if (MEM32(ebp_2 + 0x124u) == 0xFu)
-								MEM32(0x1EAB20u) = 1u;
+								MenuCursorSoundAsked = 1u;
 							else
 							{
 								g_esp = g_esp - 4u;
@@ -68068,10 +68068,10 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								arg1_2 = MEM32(g_esp + 4u);
 								sub_00034E70(edi_2, arg0_2, arg1_2, &ebx_2, &ebp_2);
 								g_esp = g_esp + 8u;
-								MEM32(0x1EAB20u) = 1u;
+								MenuCursorSoundAsked = 1u;
 							}
 						}
-						else if (L_04B4D2 || (vcPad_pressed_left_x(vcPads(3)) != ebx_2 && FLOAT_AT(vcPads(3)) > 0.0f))
+						else if (L_04B4D2 || (vcPad_pressed_left_x(vcPads(3)) != ebx_2 && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 						{
 							L_04B4D2 = false;
 							ebx_2 = 0u;
@@ -68094,7 +68094,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	{
 		if (L_04B5C8 || (int32_t)eax < 0)
 		{
-			if (!L_04B5C8 && (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u))
+			if (!L_04B5C8 && (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u))
 			{
 				esi_2 = MEM32(g_esp + 0x1Cu);
 				g_esp = g_esp - 4u;
@@ -68108,7 +68108,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			else
 			{
 				if (!L_04B5C8)
-					f0 = FLOAT_AT(vcPads(3));
+					f0 = (double)vcPad_left_x(vcPads(3));
 				L_04B5C8 = false;
 				if (!(f0 > 0.0f))
 				{
@@ -68159,9 +68159,9 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp + 8u;
 	if ((int32_t)eax < 0)
 	{
-		if (vcPad_read_before(vcPads(0))[8] == 0u && !(FLOAT_AT(vcPads_VA) < 0.0f) && vcPad_read_before(vcPads(1))[8] == 0u && !(FLOAT_AT(vcPads(1)) < 0.0f) && vcPad_read_before(vcPads(2))[8] == 0u && !(FLOAT_AT(vcPads(2)) < 0.0f) && vcPad_read_before(vcPads(3))[8] == 0u)
+		if (vcPad_read_before(vcPads(0))[8] == 0u && !((double)vcPad_left_x(vcPads(0)) < 0.0f) && vcPad_read_before(vcPads(1))[8] == 0u && !((double)vcPad_left_x(vcPads(1)) < 0.0f) && vcPad_read_before(vcPads(2))[8] == 0u && !((double)vcPad_left_x(vcPads(2)) < 0.0f) && vcPad_read_before(vcPads(3))[8] == 0u)
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (!(f0 < 0.0f))
 			{
 				g_esp = g_esp - 4u;
@@ -142616,7 +142616,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					if (L_0A2A9D || L_0A2A9D || L_0A2A9D || vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u || vcPad_pressed_start(vcPads(3)) != 0u)
 					{
 						edi_2 = 1u;
-						MEM32(0x1EAB28u) = 1u;
+						MenuConfirmSoundAsked = 1u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = MEM32(MEM32(esi_2 + 0x124u) * 8u + 0x1B1900u) + MEM32(esi_2 + 0x128u);
 						level = MEM32(g_esp);
@@ -142665,7 +142665,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 								{
 									MEM32(esi_2 + 0x224u) = edi_2;
-									MEM32(0x1EAB24u) = edi_2;
+									MenuCancelSoundAsked = edi_2;
 									MEM32(0x1BC6C4u) = 0u;
 									g_esp = g_esp + 4u;
 									g_esp = g_esp + 4u;
@@ -142687,7 +142687,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 									return;
 								}
 								MEM32(esi_2 + 0x224u) = edi_2;
-								MEM32(0x1EAB24u) = edi_2;
+								MenuCancelSoundAsked = edi_2;
 								MEM32(0x1BC6C4u) = 0u;
 								g_esp = g_esp + 4u;
 								g_esp = g_esp + 4u;
@@ -142701,7 +142701,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 							{
 								MEM32(esi_2 + 0x224u) = edi_2;
-								MEM32(0x1EAB24u) = edi_2;
+								MenuCancelSoundAsked = edi_2;
 								MEM32(0x1BC6C4u) = 0u;
 								g_esp = g_esp + 4u;
 								g_esp = g_esp + 4u;
@@ -142715,7 +142715,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							if (zero == 0u)
 							{
 								MEM32(esi_2 + 0x224u) = edi_2;
-								MEM32(0x1EAB24u) = edi_2;
+								MenuCancelSoundAsked = edi_2;
 								MEM32(0x1BC6C4u) = 0u;
 							}
 							g_esp = g_esp + 4u;
@@ -142788,13 +142788,13 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							ecx = vcPad_pressed_left_y(vcPads(0));
 							if ((int32_t)ebp_2 < 0)
 							{
-								if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
+								if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx_2 != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
 									MEM32(g_esp + 0x14u) = 1u;
 								else if (edi_2 == 0u)
 									MEM32(g_esp + 0x14u) = 0u;
 								else
 								{
-									f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+									f0 = (double)vcPad_left_y(vcPads(3));
 									if (f0 > 0.0f)
 										MEM32(g_esp + 0x14u) = 1u;
 									else
@@ -142819,13 +142819,13 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							}
 							if ((int32_t)ebp_2 < 0)
 							{
-								if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
+								if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebx_2 != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
 									MEM32(g_esp + 0x10u) = 1u;
 								else if (edi_2 == 0u)
 									MEM32(g_esp + 0x10u) = 0u;
 								else
 								{
-									f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+									f0 = (double)vcPad_left_y(vcPads(3));
 									if (f0 < 0.0f)
 										MEM32(g_esp + 0x10u) = 1u;
 									else
@@ -142854,13 +142854,13 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							ecx = vcPad_pressed_left_x(vcPads(0));
 							if ((int32_t)ebp_2 < 0)
 							{
-								if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
+								if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebx_2 != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
 									ebp_2 = 1u;
 								else if (edi_2 == 0u)
 									ebp_2 = 0u;
 								else
 								{
-									f0 = FLOAT_AT(vcPads(3));
+									f0 = (double)vcPad_left_x(vcPads(3));
 									if (f0 > 0.0f)
 										ebp_2 = 1u;
 									else
@@ -142886,13 +142886,13 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							eax_2 = MEM32(g_esp + 0x18u);
 							if ((int32_t)eax_2 < 0)
 							{
-								if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx_2 != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+								if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx_2 != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 									ebx_2 = 1u;
 								else if (edi_2 == 0u)
 									ebx_2 = 0u;
 								else
 								{
-									f0 = FLOAT_AT(vcPads(3));
+									f0 = (double)vcPad_left_x(vcPads(3));
 									if (f0 < 0.0f)
 										ebx_2 = 1u;
 									else
@@ -142921,29 +142921,29 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							if (MEM32(g_esp + 0x30u) <= MEM32(esi_2 + 0x218u))
 							{
 								if (eax_2 != 0u || MEM32(g_esp + 0x10u) != 0u)
-									MEM32(0x1EAB20u) = 1u;
+									MenuCursorSoundAsked = 1u;
 								else if (ebx_2 != 0u || ebp_2 != 0u)
-									MEM32(0x1EAB20u) = 1u;
+									MenuCursorSoundAsked = 1u;
 							}
 							else if (eax_2 != 0u || MEM32(g_esp + 0x10u) != 0u)
-								MEM32(0x1EAB20u) = 1u;
+								MenuCursorSoundAsked = 1u;
 							else if (ebp_2 != 0u)
 							{
 								if (ebx_2 != 0u || ebp_2 != 0u)
-									MEM32(0x1EAB20u) = 1u;
+									MenuCursorSoundAsked = 1u;
 							}
 							else if (ebx_2 != 0u)
-								MEM32(0x1EAB20u) = 1u;
+								MenuCursorSoundAsked = 1u;
 							else
 							{
 								eax_2 = MEM32(g_esp + 0x18u);
 								if ((int32_t)eax_2 < 0)
 								{
-									if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u)
+									if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u)
 										MEM32(g_esp + 0x14u) = 1u;
 									else
 									{
-										f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+										f0 = (double)vcPad_left_y(vcPads(3));
 										MEM32(g_esp + 0x14u) = 0u;
 										if (f0 > 0.0f)
 											MEM32(g_esp + 0x14u) = 1u;
@@ -142966,11 +142966,11 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								ebx_2 = 0u;
 								if ((int32_t)ecx < 0)
 								{
-									if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
+									if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
 										MEM32(g_esp + 0x10u) = 1u;
 									else
 									{
-										f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+										f0 = (double)vcPad_left_y(vcPads(3));
 										MEM32(g_esp + 0x10u) = ebx_2;
 										if (f0 < 0.0f)
 											MEM32(g_esp + 0x10u) = 1u;
@@ -142991,11 +142991,11 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								}
 								if ((int32_t)ecx < (int32_t)ebx_2)
 								{
-									if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u)
+									if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u)
 										ebp_2 = 1u;
 									else
 									{
-										f0 = FLOAT_AT(vcPads(3));
+										f0 = (double)vcPad_left_x(vcPads(3));
 										if (f0 > 0.0f)
 											ebp_2 = 1u;
 										else
@@ -143018,11 +143018,11 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								}
 								if ((int32_t)ecx < (int32_t)ebx_2)
 								{
-									if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u)
+									if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u)
 										ebx_2 = 1u;
 									else
 									{
-										f0 = FLOAT_AT(vcPads(3));
+										f0 = (double)vcPad_left_x(vcPads(3));
 										if (f0 < 0.0f)
 											ebx_2 = 1u;
 									}
@@ -143042,9 +143042,9 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								MEM32(esi_2 + 0x218u) = MEM32(g_esp + 0x30u) + 0x1EFu;
 								eax_2 = MEM32(g_esp + 0x14u);
 								if (eax_2 != 0u || MEM32(g_esp + 0x10u) != 0u)
-									MEM32(0x1EAB20u) = 1u;
+									MenuCursorSoundAsked = 1u;
 								else if (ebx_2 != 0u || ebp_2 != 0u)
-									MEM32(0x1EAB20u) = 1u;
+									MenuCursorSoundAsked = 1u;
 							}
 							eax_2 = MEM32(esi_2 + 0x140u);
 							if (eax_2 != 0u)
@@ -143205,7 +143205,7 @@ void sub_000A2A20(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 													g_esp = g_esp + 0x14u;
 													return;
 												}
-												MEM32(0x1EAB20u) = 1u;
+												MenuCursorSoundAsked = 1u;
 												g_esp = g_esp - 4u;
 												MEM32(g_esp) = MEM32(MEM32(esi_2 + 0x124u) * 8u + 0x1B1900u) + MEM32(esi_2 + 0x128u);
 												level = MEM32(g_esp);
@@ -160672,7 +160672,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		ecx = 1u;
 		MEM32(0x1BC6C0u) = eax;
 		MEM32(esi + 0x188u) = 1u;
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 	}
 	eax = MEM32(esi + 0x18u);
 	if ((int32_t)eax < (int32_t)edi)
@@ -160680,7 +160680,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		if (vcPad_pressed_b(vcPads(0)) != edi || vcPad_pressed_back(vcPads(0)) != edi || vcPad_pressed_b(vcPads(1)) != edi || vcPad_pressed_back(vcPads(1)) != edi || vcPad_pressed_b(vcPads(2)) != edi || vcPad_pressed_back(vcPads(2)) != edi || vcPad_pressed_b(vcPads(3)) != edi)
 		{
 			MEM32(esi + 0x184u) = ecx;
-			MEM32(0x1EAB24u) = ecx;
+			MenuCancelSoundAsked = ecx;
 		}
 		else
 		{
@@ -160688,7 +160688,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 			if (zero == 0u)
 			{
 				MEM32(esi + 0x184u) = ecx;
-				MEM32(0x1EAB24u) = ecx;
+				MenuCancelSoundAsked = ecx;
 			}
 		}
 	}
@@ -160698,7 +160698,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		if (MEM32(eax + vcPad_pressed_b_VA(vcPads_VA)) != edi)
 		{
 			MEM32(esi + 0x184u) = ecx;
-			MEM32(0x1EAB24u) = ecx;
+			MenuCancelSoundAsked = ecx;
 		}
 		else
 		{
@@ -160706,7 +160706,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 			if (zero == 0u)
 			{
 				MEM32(esi + 0x184u) = ecx;
-				MEM32(0x1EAB24u) = ecx;
+				MenuCancelSoundAsked = ecx;
 			}
 		}
 	}
@@ -160726,13 +160726,13 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		saved_esi = esi;
 		if ((int32_t)esi < (int32_t)edi)
 		{
-			if (vcPad_pressed_up(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi)
+			if (vcPad_pressed_up(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi)
 				stack = 1u;
 			else if (ebp == edi)
 				stack = edi;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 > 0.0f)
 					stack = 1u;
 				else
@@ -160757,13 +160757,13 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		}
 		if ((int32_t)esi < (int32_t)edi)
 		{
-			if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
+			if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
 				stack_8 = 1u;
 			else if (ebp == edi)
 				stack_8 = edi;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 < 0.0f)
 					stack_8 = 1u;
 				else
@@ -160792,13 +160792,13 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		ecx = vcPad_pressed_left_x(vcPads(0));
 		if ((int32_t)esi < (int32_t)edi)
 		{
-			if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
+			if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
 				edi = 1u;
 			else if (ebp == edi)
 				edi = 0u;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 > 0.0f)
 					edi = 1u;
 				else
@@ -160823,13 +160823,13 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		}
 		if ((int32_t)esi < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 				edx = 1u;
 			else if (ebp == 0u)
 				edx = 0u;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 < 0.0f)
 					edx = 1u;
 				else
@@ -160870,14 +160870,14 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 				eax = saved_esi;
 				if ((int32_t)eax < 0)
 				{
-					if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
+					if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
 						stack = 1u;
 					else if (esi == 0u)
 					{
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+							if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 								stack = 1u;
 							else
 								stack = 0u;
@@ -160893,7 +160893,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+						f0 = (double)vcPad_left_y(vcPads(3));
 						if (f0 > 0.0f)
 							stack = 1u;
 						else
@@ -160901,7 +160901,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+								if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 									stack = 1u;
 								else
 									stack = 0u;
@@ -160927,7 +160927,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+							if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 								stack = 1u;
 							else
 								stack = 0u;
@@ -160951,7 +160951,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+								if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 									stack = 1u;
 								else
 									stack = 0u;
@@ -160975,14 +160975,14 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 				eax = saved_esi;
 				if ((int32_t)eax < 0)
 				{
-					if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
+					if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
 						stack_8 = 1u;
 					else if (esi == 0u)
 					{
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+							if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 								stack_8 = 1u;
 							else
 								stack_8 = 0u;
@@ -160998,7 +160998,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+						f0 = (double)vcPad_left_y(vcPads(3));
 						if (f0 < 0.0f)
 							stack_8 = 1u;
 						else
@@ -161006,7 +161006,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+								if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 									stack_8 = 1u;
 								else
 									stack_8 = 0u;
@@ -161032,7 +161032,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+							if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 								stack_8 = 1u;
 							else
 								stack_8 = 0u;
@@ -161056,7 +161056,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+								if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 									stack_8 = 1u;
 								else
 									stack_8 = 0u;
@@ -161084,14 +161084,14 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 				eax = saved_esi;
 				if ((int32_t)eax < 0)
 				{
-					if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
+					if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
 						edi = 1u;
 					else if (esi == 0u)
 					{
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+							if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 								edi = 1u;
 							else
 								edi = 0u;
@@ -161107,7 +161107,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPads(3));
+						f0 = (double)vcPad_left_x(vcPads(3));
 						if (f0 > 0.0f)
 							edi = 1u;
 						else
@@ -161115,7 +161115,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+								if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 									edi = 1u;
 								else
 									edi = 0u;
@@ -161141,7 +161141,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+							if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 								edi = 1u;
 							else
 								edi = 0u;
@@ -161165,7 +161165,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+								if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 									edi = 1u;
 								else
 									edi = 0u;
@@ -161189,14 +161189,14 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 				eax = saved_esi;
 				if ((int32_t)eax < 0)
 				{
-					if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+					if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 						edx = 1u;
 					else if (esi == 0u)
 					{
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+							if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 								edx = 1u;
 							else
 								edx = 0u;
@@ -161212,7 +161212,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPads(3));
+						f0 = (double)vcPad_left_x(vcPads(3));
 						if (f0 < 0.0f)
 							edx = 1u;
 						else
@@ -161220,7 +161220,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+								if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 									edx = 1u;
 								else
 									edx = 0u;
@@ -161246,7 +161246,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 						eax = saved_esi;
 						if ((int32_t)eax < 0)
 						{
-							if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+							if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 								edx = 1u;
 							else
 								edx = 0u;
@@ -161270,7 +161270,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 							eax = saved_esi;
 							if ((int32_t)eax < 0)
 							{
-								if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+								if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 									edx = 1u;
 								else
 									edx = 0u;
@@ -161292,7 +161292,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 	ebx = stack;
 	esi = stack_8;
 	if (ebx != 0u || esi != 0u || edx != 0u || edi != 0u)
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 	ecx = saved_arg2;
 	eax = MEM32(ecx + 0x180u);
 	if (eax > 5u)
@@ -161863,7 +161863,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 			arg1 = MEM32(0x1AEC80u);
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 			return;
 		}
 		zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -161874,7 +161874,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 			arg1 = MEM32(0x1AEC80u);
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 		}
 		return;
 	}
@@ -161885,7 +161885,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 		arg1 = MEM32(0x1AEC80u);
 		arg0 = eax_2;
 		sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
-		MEM32(0x1EAB24u) = edi;
+		MenuCancelSoundAsked = edi;
 	}
 	else
 	{
@@ -161897,7 +161897,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 			arg1 = MEM32(0x1AEC80u);
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
-			MEM32(0x1EAB24u) = edi;
+			MenuCancelSoundAsked = edi;
 			return;
 		}
 	}
@@ -162619,7 +162619,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	{
 		eax_2 = MEM32(0x20FBE0u);
 		ebx = 1u;
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 		MEM32(0x1B7710u) = eax_2;
 		if (eax_2 != 0u)
 		{
@@ -162666,7 +162666,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	if (L_0B0F59)
 	{
 		eax_2 = MEM32(0x1B7710u);
-		MEM32(0x1EAB24u) = ebx;
+		MenuCancelSoundAsked = ebx;
 		MEM32(0x20FBE0u) = eax_2;
 		if (eax_2 != 0u)
 		{
@@ -162691,7 +162691,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	{
 		edi = saved_arg2;
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		esi = saved_arg2;
 		arg2_2 = stack_10;
 		eax_2 = edi;
@@ -162707,7 +162707,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	ecx = vcPad_pressed_left_y(vcPads(0));
 	if ((int32_t)esi < 0)
 	{
-		if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))
+		if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(3)) > 0.0f))
 		{
 			edi = 0u;
 			stack = 1u;
@@ -162729,13 +162729,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	}
 	if ((int32_t)esi < (int32_t)edi)
 	{
-		if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
+		if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
 			stack_C = 1u;
 		else if (ebp == edi)
 			stack_C = edi;
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (f0 < 0.0f)
 				stack_C = 1u;
 			else
@@ -162764,13 +162764,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	ecx = vcPad_pressed_left_x(vcPads(0));
 	if ((int32_t)esi < (int32_t)edi)
 	{
-		if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
+		if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
 			stack_10 = 1u;
 		else if (ebp == edi)
 			stack_10 = edi;
 		else
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (f0 > 0.0f)
 				stack_10 = 1u;
 			else
@@ -162795,13 +162795,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	}
 	if ((int32_t)esi < (int32_t)edi)
 	{
-		if (vcPad_pressed_left(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != edi)
+		if (vcPad_pressed_left(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != edi)
 			edi = 1u;
 		else if (ebp == edi)
 			edi = 0u;
 		else
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (f0 < 0.0f)
 				edi = 1u;
 			else
@@ -162831,7 +162831,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	if (ecx <= MEM32(edx + 0x14Cu))
 	{
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		esi = saved_arg2;
 		arg2_2 = stack_10;
 		eax_2 = edi;
@@ -162848,13 +162848,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack = 1u;
 	else if ((int32_t)esi < 0)
 	{
-		if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
+		if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
 			stack = 1u;
 		else if (ebp == 0u)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162870,12 +162870,12 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (f0 > 0.0f)
 				stack = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162899,7 +162899,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162920,7 +162920,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 					stack = 1u;
 				else
 					stack = 0u;
@@ -162939,13 +162939,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack_C = 1u;
 	else if ((int32_t)esi < 0)
 	{
-		if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
+		if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
 			stack_C = 1u;
 		else if (ebp == 0u)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+				if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -162961,12 +162961,12 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (f0 < 0.0f)
 				stack_C = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+				if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -162990,7 +162990,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+				if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -163011,7 +163011,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_C = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+				if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 					stack_C = 1u;
 				else
 					stack_C = 0u;
@@ -163034,13 +163034,13 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack_10 = 1u;
 	else if ((int32_t)esi < 0)
 	{
-		if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
+		if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
 			stack_10 = 1u;
 		else if (ebp == 0u)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163056,12 +163056,12 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		else
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (f0 > 0.0f)
 				stack_10 = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163085,7 +163085,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		{
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163106,7 +163106,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_10 = 1u;
 			else if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 					stack_10 = 1u;
 				else
 					stack_10 = 0u;
@@ -163125,7 +163125,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	{
 		edi = 1u;
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		esi = saved_arg2;
 		arg2_2 = stack_10;
 		eax_2 = edi;
@@ -163135,11 +163135,11 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	}
 	if ((int32_t)esi < 0)
 	{
-		if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+		if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 		{
 			edi = 1u;
 			if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			esi = saved_arg2;
 			arg2_2 = stack_10;
 			eax_2 = edi;
@@ -163149,12 +163149,12 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		if (ebp != 0u)
 		{
-			f0 = FLOAT_AT(vcPads(3));
+			f0 = (double)vcPad_left_x(vcPads(3));
 			if (f0 < 0.0f)
 			{
 				edi = 1u;
 				if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 				esi = saved_arg2;
 				arg2_2 = stack_10;
 				eax_2 = edi;
@@ -163171,7 +163171,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		{
 			edi = 1u;
 			if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			esi = saved_arg2;
 			arg2_2 = stack_10;
 			eax_2 = edi;
@@ -163186,7 +163186,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			{
 				edi = 1u;
 				if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 				esi = saved_arg2;
 				arg2_2 = stack_10;
 				eax_2 = edi;
@@ -163196,11 +163196,11 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			}
 			if ((int32_t)esi < 0)
 			{
-				if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+				if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 				{
 					edi = 1u;
 					if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-						MEM32(0x1EAB20u) = 1u;
+						MenuCursorSoundAsked = 1u;
 					esi = saved_arg2;
 					arg2_2 = stack_10;
 					eax_2 = edi;
@@ -163210,7 +163210,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				edi = 0u;
 				if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 				esi = saved_arg2;
 				arg2_2 = stack_10;
 				eax_2 = edi;
@@ -163223,7 +163223,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			{
 				edi = 1u;
 				if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-					MEM32(0x1EAB20u) = 1u;
+					MenuCursorSoundAsked = 1u;
 				esi = saved_arg2;
 				arg2_2 = stack_10;
 				eax_2 = edi;
@@ -163233,7 +163233,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			}
 			edi = 0u;
 			if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			esi = saved_arg2;
 			arg2_2 = stack_10;
 			eax_2 = edi;
@@ -163244,11 +163244,11 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	}
 	if ((int32_t)esi < 0)
 	{
-		if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+		if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 		{
 			edi = 1u;
 			if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			esi = saved_arg2;
 			arg2_2 = stack_10;
 			eax_2 = edi;
@@ -163258,7 +163258,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		edi = 0u;
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		esi = saved_arg2;
 		arg2_2 = stack_10;
 		eax_2 = edi;
@@ -163271,7 +163271,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	{
 		edi = 1u;
 		if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		esi = saved_arg2;
 		arg2_2 = stack_10;
 		eax_2 = edi;
@@ -163281,7 +163281,7 @@ void sub_000B0DE0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	}
 	edi = 0u;
 	if (stack != 0u || stack_C != 0u || edi != 0u || stack_10 != 0u)
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 	esi = saved_arg2;
 	arg2_2 = stack_10;
 	eax_2 = edi;
@@ -164159,7 +164159,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			ecx = MEM32(0x20FD20u);
 			edx = MEM32(0x20FD24u);
 			ebx = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			MEM32(0x1B1D78u) = ecx;
 			MEM32(0x1B1D7Cu) = edx;
 			MEM32(esi + 0x144u) = 1u;
@@ -164177,7 +164177,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				ecx = MEM32(0x20FD20u);
 				edx = MEM32(0x20FD24u);
 				ebx = 1u;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 				MEM32(0x1B1D78u) = ecx;
 				MEM32(0x1B1D7Cu) = edx;
 				MEM32(esi + 0x144u) = 1u;
@@ -164192,7 +164192,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			ecx = MEM32(0x20FD20u);
 			edx = MEM32(0x20FD24u);
 			ebx = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			MEM32(0x1B1D78u) = ecx;
 			MEM32(0x1B1D7Cu) = edx;
 			MEM32(esi + 0x144u) = 1u;
@@ -164210,7 +164210,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				ecx = MEM32(0x20FD20u);
 				edx = MEM32(0x20FD24u);
 				ebx = 1u;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 				MEM32(0x1B1D78u) = ecx;
 				MEM32(0x1B1D7Cu) = edx;
 				MEM32(esi + 0x144u) = 1u;
@@ -164244,7 +164244,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		overflow = x86_overflow_sub32(ecx, edi, 0u);
 		zero = t1 == 0u;
 		negative = t1 >> 31;
-		MEM32(0x1EAB24u) = ebx;
+		MenuCancelSoundAsked = ebx;
 		stack = (((negative ^ overflow) | zero) - 1u) & ecx;
 		arg0 = float_to_bits((float)x87_round((double)(int32_t)stack * 0.071428575f));
 		sub_00026F90(arg0);
@@ -164271,13 +164271,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		ecx = vcPad_pressed_left_y(vcPads(0));
 		if ((int32_t)ebp < (int32_t)edi)
 		{
-			if (vcPad_pressed_up(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi)
+			if (vcPad_pressed_up(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != edi)
 				stack = 1u;
 			else if (esi == edi)
 				stack = edi;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 > 0.0f)
 					stack = 1u;
 				else
@@ -164302,13 +164302,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		if ((int32_t)ebp < (int32_t)edi)
 		{
-			if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
+			if (vcPad_pressed_down(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != edi)
 				stack_C = 1u;
 			else if (esi == edi)
 				stack_C = edi;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 < 0.0f)
 					stack_C = 1u;
 				else
@@ -164337,13 +164337,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		ecx = vcPad_pressed_left_x(vcPads(0));
 		if ((int32_t)ebp < (int32_t)edi)
 		{
-			if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
+			if (vcPad_pressed_right(vcPads(0)) != edi || (ecx != edi && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != edi || (edx != edi && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != edi || (ebx != edi && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != edi)
 				edi = 1u;
 			else if (esi == edi)
 				edi = 0u;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 > 0.0f)
 					edi = 1u;
 				else
@@ -164369,13 +164369,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack_10 = edi;
 		if ((int32_t)ebp < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (ebx != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 				stack_14 = 1u;
 			else if (esi == 0u)
 				stack_14 = 0u;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 < 0.0f)
 					stack_14 = 1u;
 				else
@@ -164418,13 +164418,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack = 1u;
 			else if ((int32_t)ebp < (int32_t)ebx)
 			{
-				if (vcPad_pressed_up(vcPads(0)) != ebx || (ecx != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx || (edx != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx || (esi != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx)
+				if (vcPad_pressed_up(vcPads(0)) != ebx || (ecx != ebx && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebx || (edx != ebx && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebx || (esi != ebx && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebx)
 					stack = 1u;
 				else if (edi == ebx)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164440,12 +164440,12 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+					f0 = (double)vcPad_left_y(vcPads(3));
 					if (f0 > 0.0f)
 						stack = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164469,7 +164469,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164490,7 +164490,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = ebx;
@@ -164509,13 +164509,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_C = 1u;
 			else if ((int32_t)ebp < (int32_t)ebx)
 			{
-				if (vcPad_pressed_down(vcPads(0)) != ebx || (ecx != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx || (edx != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx || (esi != ebx && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx)
+				if (vcPad_pressed_down(vcPads(0)) != ebx || (ecx != ebx && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebx || (edx != ebx && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebx || (esi != ebx && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebx)
 					stack_C = 1u;
 				else if (edi == ebx)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164531,12 +164531,12 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+					f0 = (double)vcPad_left_y(vcPads(3));
 					if (f0 < 0.0f)
 						stack_C = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164560,7 +164560,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164581,7 +164581,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack_C = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = ebx;
@@ -164604,13 +164604,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_10 = 1u;
 			else if ((int32_t)ebp < (int32_t)ebx)
 			{
-				if (vcPad_pressed_right(vcPads(0)) != ebx || (ecx != ebx && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebx || (edx != ebx && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebx || (esi != ebx && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebx)
+				if (vcPad_pressed_right(vcPads(0)) != ebx || (ecx != ebx && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebx || (edx != ebx && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebx || (esi != ebx && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebx)
 					stack_10 = 1u;
 				else if (edi == ebx)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164626,12 +164626,12 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPads(3));
+					f0 = (double)vcPad_left_x(vcPads(3));
 					if (f0 > 0.0f)
 						stack_10 = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164655,7 +164655,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164676,7 +164676,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack_10 = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = ebx;
@@ -164695,13 +164695,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_14 = 1u;
 			else if ((int32_t)ebp < (int32_t)ebx)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != ebx || (ecx != ebx && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebx || (edx != ebx && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebx || (esi != ebx && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebx)
+				if (vcPad_pressed_left(vcPads(0)) != ebx || (ecx != ebx && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebx || (edx != ebx && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebx || (esi != ebx && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebx)
 					stack_14 = 1u;
 				else if (edi == ebx)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164717,12 +164717,12 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPads(3));
+					f0 = (double)vcPad_left_x(vcPads(3));
 					if (f0 < 0.0f)
 						stack_14 = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164746,7 +164746,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164767,7 +164767,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack_14 = 1u;
 					else if ((int32_t)ebp < (int32_t)ebx)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							stack_14 = 1u;
 						else
 							stack_14 = ebx;
@@ -164784,21 +164784,21 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			}
 			if ((int32_t)ebp < (int32_t)ebx)
 			{
-				if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+				if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 				{
 					arg0 = MEM32(0x20FC2Cu);
 					sub_0010E7E0(arg0, &ignored, &ignored_3);
 				}
 				else if ((int32_t)ebp < (int32_t)ebx)
 				{
-					if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
+					if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
 					{
 						arg0 = MEM32(0x20FC2Cu);
 						sub_0010E7E0(arg0, &ignored, &ignored_3);
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+						f0 = (double)vcPad_left_y(vcPads(3));
 						if (f0 < 0.0f)
 						{
 							arg0 = MEM32(0x20FC2Cu);
@@ -164835,14 +164835,14 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else if ((int32_t)ebp < (int32_t)ebx)
 				{
-					if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
+					if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
 					{
 						arg0 = MEM32(0x20FC2Cu);
 						sub_0010E7E0(arg0, &ignored, &ignored_3);
 					}
 					else
 					{
-						f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+						f0 = (double)vcPad_left_y(vcPads(3));
 						if (f0 < 0.0f)
 						{
 							arg0 = MEM32(0x20FC2Cu);
@@ -164885,13 +164885,13 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		arg0 = stack_C;
 		sub_000B1BA0(eax_2, esi, edi, arg0, arg1_2, arg2_2);
 		if (ebp != 0u || ebx != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		return;
 	}
 	if (eax_2 != 1u)
 		return;
 	if (stack_10 != 0u || stack_14 != 0u)
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 	esi = saved_arg2;
 	edi = saved_arg1;
 	arg2_2 = stack_14;
@@ -165318,7 +165318,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 			{
 				if ((int32_t)edi < 0x2BE1A0)
 				{
-					if (vcPad_pressed_right(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) > 0.0f))
+					if (vcPad_pressed_right(vcPads(0)) != 0u || (vcPad_pressed_left_x(vcPads(0)) != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (vcPad_pressed_left_x(vcPads(1)) != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 					{
 						arg2_2 = 0x80u;
 						arg1_2 = 3u;
@@ -166634,7 +166634,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			MEM32(0x1BC4A0u) = eax_2;
 			sub_000B3BA0(esi, edi);
 			MEM32(edi + 0x160u) = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		else
 		{
@@ -166649,7 +166649,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				MEM32(0x1BC4A0u) = eax_2;
 				sub_000B3BA0(esi, edi);
 				MEM32(edi + 0x160u) = 1u;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 			}
 		}
 	}
@@ -166666,7 +166666,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			MEM32(0x1BC4A0u) = eax_2;
 			sub_000B3BA0(esi, edi);
 			MEM32(edi + 0x160u) = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		else
 		{
@@ -166681,7 +166681,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				MEM32(0x1BC4A0u) = eax_2;
 				sub_000B3BA0(esi, edi);
 				MEM32(edi + 0x160u) = 1u;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 			}
 		}
 	}
@@ -166702,7 +166702,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			MEM32(0x20FD78u) = eax_2;
 			sub_000B3BA0(esi, edi);
 			MEM32(edi + 0x15Cu) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 		}
 		else
 		{
@@ -166721,7 +166721,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				MEM32(0x20FD78u) = eax_2;
 				sub_000B3BA0(esi, edi);
 				MEM32(edi + 0x15Cu) = 1u;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 			}
 		}
 	}
@@ -166742,7 +166742,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			MEM32(0x20FD78u) = eax_2;
 			sub_000B3BA0(esi, edi);
 			MEM32(edi + 0x15Cu) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 		}
 		else
 		{
@@ -166761,7 +166761,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				MEM32(0x20FD78u) = eax_2;
 				sub_000B3BA0(esi, edi);
 				MEM32(edi + 0x15Cu) = 1u;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 			}
 		}
 	}
@@ -166777,13 +166777,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		ecx = vcPad_pressed_left_y(vcPads(0));
 		if ((int32_t)edi < (int32_t)ebp)
 		{
-			if (vcPad_pressed_up(vcPads(0)) != ebp || (ecx != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebp || (edx != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebp || (esi != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebp)
+			if (vcPad_pressed_up(vcPads(0)) != ebp || (ecx != ebp && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != ebp || (edx != ebp && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != ebp || (esi != ebp && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != ebp)
 				stack = 1u;
 			else if (ebx == ebp)
 				stack = ebp;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 > 0.0f)
 					stack = 1u;
 				else
@@ -166808,13 +166808,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		if ((int32_t)edi < (int32_t)ebp)
 		{
-			if (vcPad_pressed_down(vcPads(0)) != ebp || (ecx != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebp || (edx != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebp || (esi != ebp && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebp)
+			if (vcPad_pressed_down(vcPads(0)) != ebp || (ecx != ebp && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != ebp || (edx != ebp && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != ebp || (esi != ebp && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != ebp)
 				stack_C = 1u;
 			else if (ebx == ebp)
 				stack_C = ebp;
 			else
 			{
-				f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+				f0 = (double)vcPad_left_y(vcPads(3));
 				if (f0 < 0.0f)
 					stack_C = 1u;
 				else
@@ -166843,13 +166843,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		ecx = vcPad_pressed_left_x(vcPads(0));
 		if ((int32_t)edi < (int32_t)ebp)
 		{
-			if (vcPad_pressed_right(vcPads(0)) != ebp || (ecx != ebp && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebp || (edx != ebp && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebp || (esi != ebp && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebp)
+			if (vcPad_pressed_right(vcPads(0)) != ebp || (ecx != ebp && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != ebp || (edx != ebp && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != ebp || (esi != ebp && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != ebp)
 				stack_10 = 1u;
 			else if (ebx == ebp)
 				stack_10 = ebp;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 > 0.0f)
 					stack_10 = 1u;
 				else
@@ -166874,13 +166874,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		}
 		if ((int32_t)edi < (int32_t)ebp)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != ebp || (ecx != ebp && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebp || (edx != ebp && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebp || (esi != ebp && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebp)
+			if (vcPad_pressed_left(vcPads(0)) != ebp || (ecx != ebp && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != ebp || (edx != ebp && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != ebp || (esi != ebp && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != ebp)
 				ebp = 1u;
 			else if (ebx == ebp)
 				ebp = 0u;
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (f0 < 0.0f)
 					ebp = 1u;
 				else
@@ -166918,13 +166918,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack = 1u;
 			else if ((int32_t)edi < 0)
 			{
-				if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (esi != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
+				if (vcPad_pressed_up(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (esi != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
 					stack = 1u;
 				else if (ebx == 0u)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166940,12 +166940,12 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+					f0 = (double)vcPad_left_y(vcPads(3));
 					if (f0 > 0.0f)
 						stack = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166969,7 +166969,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -166990,7 +166990,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 							stack = 1u;
 						else
 							stack = 0u;
@@ -167009,13 +167009,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_C = 1u;
 			else if ((int32_t)edi < 0)
 			{
-				if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (esi != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
+				if (vcPad_pressed_down(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (esi != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
 					stack_C = 1u;
 				else if (ebx == 0u)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167031,12 +167031,12 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+					f0 = (double)vcPad_left_y(vcPads(3));
 					if (f0 < 0.0f)
 						stack_C = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167060,7 +167060,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167081,7 +167081,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack_C = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 							stack_C = 1u;
 						else
 							stack_C = 0u;
@@ -167104,13 +167104,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				stack_10 = 1u;
 			else if ((int32_t)edi < 0)
 			{
-				if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (esi != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
+				if (vcPad_pressed_right(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (esi != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u)
 					stack_10 = 1u;
 				else if (ebx == 0u)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167126,12 +167126,12 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPads(3));
+					f0 = (double)vcPad_left_x(vcPads(3));
 					if (f0 > 0.0f)
 						stack_10 = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167155,7 +167155,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167176,7 +167176,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						stack_10 = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[9] != 0u || FLOAT_AT(vcPads_VA) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || FLOAT_AT(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || FLOAT_AT(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || FLOAT_AT(vcPads(3)) > 0.0f)
+						if (vcPad_read_before(vcPads(0))[9] != 0u || (double)vcPad_left_x(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[9] != 0u || (double)vcPad_left_x(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[9] != 0u || (double)vcPad_left_x(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[9] != 0u || (double)vcPad_left_x(vcPads(3)) > 0.0f)
 							stack_10 = 1u;
 						else
 							stack_10 = 0u;
@@ -167195,13 +167195,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				ebp = 1u;
 			else if ((int32_t)edi < 0)
 			{
-				if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (esi != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
+				if (vcPad_pressed_left(vcPads(0)) != 0u || (ecx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (esi != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u)
 					ebp = 1u;
 				else if (ebx == 0u)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167217,12 +167217,12 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				}
 				else
 				{
-					f0 = FLOAT_AT(vcPads(3));
+					f0 = (double)vcPad_left_x(vcPads(3));
 					if (f0 < 0.0f)
 						ebp = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167246,7 +167246,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				{
 					if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167267,7 +167267,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 						ebp = 1u;
 					else if ((int32_t)edi < 0)
 					{
-						if (vcPad_read_before(vcPads(0))[8] != 0u || FLOAT_AT(vcPads_VA) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || FLOAT_AT(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || FLOAT_AT(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || FLOAT_AT(vcPads(3)) < 0.0f)
+						if (vcPad_read_before(vcPads(0))[8] != 0u || (double)vcPad_left_x(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[8] != 0u || (double)vcPad_left_x(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[8] != 0u || (double)vcPad_left_x(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[8] != 0u || (double)vcPad_left_x(vcPads(3)) < 0.0f)
 							ebp = 1u;
 						else
 							ebp = 0u;
@@ -167289,13 +167289,13 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	if (edi != 0u || edx != 0u || ebp != 0u)
 	{
 		ecx = stack_10;
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 	}
 	else
 	{
 		ecx = stack_10;
 		if (ecx != 0u)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 	}
 	esi = saved_arg2;
 	t1 = MEM32(esi + 0x150u);
@@ -167612,7 +167612,7 @@ void sub_000B53C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0xDD000000u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_00126D00(arg0, arg1);
@@ -167623,7 +167623,7 @@ void sub_000B53C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
@@ -167635,14 +167635,14 @@ void sub_000B53C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x7F000000u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_00126D00(arg0, arg1);
 			MEMF(g_esp + 4u) = (float)x87_round(FLOAT_AT(g_esp + 0x10u) + 4.0);
 			MEMF(g_esp) = (float)x87_round(FLOAT_AT(g_esp + 0x14u) + 4.0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
@@ -167650,7 +167650,7 @@ void sub_000B53C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0xFFFFFFFFu;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_00126D00(arg0, arg1);
@@ -167661,7 +167661,7 @@ void sub_000B53C0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x20FDCCu;
+			MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
@@ -167823,11 +167823,11 @@ uint32_t MedalsScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	MEM32(0x20FDCCu) = eax;
+	vcSprite_texture(MedalsScreenHudMedalStarSprite_VA) = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	sub_00118140(arg0, arg1);
-	eax = MEM32(0x20FDCCu);
+	eax = vcSprite_texture(MedalsScreenHudMedalStarSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -167838,7 +167838,7 @@ uint32_t MedalsScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x20FDCCu;
+	MEM32(g_esp) = MedalsScreenHudMedalStarSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -167846,8 +167846,8 @@ uint32_t MedalsScreen_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &eax, &ignored, &esi_2, &edi_2);
 	g_esp = g_esp + 0x24u;
-	MEM32(0x20FDD8u) = 0x41D00000u;
-	MEM32(0x20FDD4u) = 0x41D00000u;
+	MEM32(vcSprite_height_VA(MedalsScreenHudMedalStarSprite_VA)) = 0x41D00000u;
+	MEM32(vcSprite_width_VA(MedalsScreenHudMedalStarSprite_VA)) = 0x41D00000u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x10u;
@@ -167874,7 +167874,7 @@ uint32_t MedalsScreen_Shutdown(void)
 		}
 		esi += 4u;
 	} while ((int32_t)esi < 0x20FE50);
-	arg0 = 0x20FDCCu;
+	arg0 = MedalsScreenHudMedalStarSprite_VA;
 	sub_00126C70(arg0, &eax, &ignored_3);
 	return eax;
 }
@@ -168919,9 +168919,9 @@ uint32_t AwardsScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xA7u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
-	MEM32(0x20FE94u) = eax;
+	vcSprite_texture(AwardsScreenGUIMissionMenuSprite_VA) = eax;
 	x86_call(vcRectSet_entry, 0x000B6131u, 0);
-	ecx = MEM32(0x20FE94u);
+	ecx = vcSprite_texture(AwardsScreenGUIMissionMenuSprite_VA);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -168933,7 +168933,7 @@ uint32_t AwardsScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x20FE94u;
+	MEM32(g_esp) = AwardsScreenGUIMissionMenuSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -168942,8 +168942,8 @@ uint32_t AwardsScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &eax, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp + 0x14u;
 	g_esp = g_esp + 4u;
-	MEM32(0x20FE9Cu) = 0x42800000u;
-	MEM32(0x20FEA0u) = 0x42800000u;
+	MEM32(vcSprite_width_VA(AwardsScreenGUIMissionMenuSprite_VA)) = 0x42800000u;
+	MEM32(vcSprite_height_VA(AwardsScreenGUIMissionMenuSprite_VA)) = 0x42800000u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x10u;
@@ -168962,7 +168962,7 @@ uint32_t AwardsScreen_Shutdown(void)
 		sub_00126C70(arg0, &ignored, &ignored_2);
 		esi += 0x3Cu;
 	} while ((int32_t)esi < 0x210348);
-	arg0 = 0x20FE94u;
+	arg0 = AwardsScreenGUIMissionMenuSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = 0x20FED0u;
 	sub_00126C70(arg0, &eax, &ignored_2);
@@ -169222,7 +169222,7 @@ uint32_t sub_000B66E0(uint32_t eax, uint32_t esi)
 			arg0 = MEM32(esi + 0x20u);
 			eax_2 = sub_000208E0(arg0, arg1);
 			MEM32(esi + 0x140u) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return eax_2;
 		}
 	}
@@ -169233,7 +169233,7 @@ uint32_t sub_000B66E0(uint32_t eax, uint32_t esi)
 	arg0 = MEM32(esi + 0x20u);
 	eax_2 = sub_000208E0(arg0, arg1);
 	MEM32(esi + 0x140u) = 1u;
-	MEM32(0x1EAB24u) = 1u;
+	MenuCancelSoundAsked = 1u;
 	return eax_2;
 }
 
@@ -169406,7 +169406,7 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 	arg1_2 = vcScreenRect_VA;
 	arg0_2 = esi + 0x130u;
 	ignored = x86_call(vcRectCopy_entry, 0x000B6A12u, 2, arg0_2, arg1_2);
-	ecx = MEM32(esi + 0x134u) + x87_ftol(FLOAT_AT(0x210398u));
+	ecx = MEM32(esi + 0x134u) + x87_ftol((double)vcSprite_height(CreditsScreenGUIHeadingsCreditsSprite_VA));
 	ebx_2 = MEM32(esi + 0x13Cu) - 3u;
 	MEM32(esi + 0x124u) = 0u - ebx_2;
 	MEM32(esi + 0x134u) = ecx;
@@ -171151,7 +171151,7 @@ void sub_000B7EA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFFC4CAD0u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21038Cu;
+	MEM32(g_esp) = CreditsScreenGUIHeadingsCreditsSprite_VA;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0_2, arg1_2);
@@ -171159,9 +171159,9 @@ void sub_000B7EA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	eax = MEM32(vcScreenRect_VA);
 	MEMF(g_esp + 4u) = (float)(double)(int32_t)MEM32(0x2BF2F4u);
 	MEM32(g_esp + 0x38u) = eax + edx;
-	MEMF(g_esp) = (float)x87_round(x87_round((double)(int32_t)MEM32(g_esp + 0x38u) * 0.5) - x87_round(FLOAT_AT(0x210394u) * 0.5));
+	MEMF(g_esp) = (float)x87_round(x87_round((double)(int32_t)MEM32(g_esp + 0x38u) * 0.5) - x87_round((double)vcSprite_width(CreditsScreenGUIHeadingsCreditsSprite_VA) * 0.5));
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21038Cu;
+	MEM32(g_esp) = CreditsScreenGUIHeadingsCreditsSprite_VA;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2_2 = MEM32(g_esp + 8u);
@@ -171277,14 +171277,14 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	MEM32(g_esp) = 0x100u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
-	MEM32(0x21038Cu) = eax;
+	vcSprite_texture(CreditsScreenGUIHeadingsCreditsSprite_VA) = eax;
 	eax = g_esp + 0x28u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000B8249u, 0);
-	edx = MEM32(0x21038Cu);
+	edx = vcSprite_texture(CreditsScreenGUIHeadingsCreditsSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -171295,7 +171295,7 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21038Cu;
+	MEM32(g_esp) = CreditsScreenGUIHeadingsCreditsSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -171313,14 +171313,14 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	MEM32(g_esp) = 0x20u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x62u;
-	MEM32(0x2199C8u) = eax;
+	vcSprite_texture(CreditsScreenGUIMainMenuSprite_VA) = eax;
 	eax = g_esp + 0x58u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x10u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000B8286u, 0);
-	edx = MEM32(0x2199C8u);
+	edx = vcSprite_texture(CreditsScreenGUIMainMenuSprite_VA);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -171332,7 +171332,7 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2199C8u;
+	MEM32(g_esp) = CreditsScreenGUIMainMenuSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -171342,7 +171342,7 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x32000000u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2199C8u;
+	MEM32(g_esp) = CreditsScreenGUIMainMenuSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
@@ -171357,8 +171357,8 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	MEM32(g_esp + 0x20u) = edx - eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A35ECu;
-	MEMF(0x2199D0u) = (float)f0;
-	MEMF(0x2199D4u) = (float)(double)(int32_t)MEM32(g_esp + 0x24u);
+	vcSprite_width(CreditsScreenGUIMainMenuSprite_VA) = (float)f0;
+	vcSprite_height(CreditsScreenGUIMainMenuSprite_VA) = (float)(double)(int32_t)MEM32(g_esp + 0x24u);
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
@@ -171377,9 +171377,9 @@ uint32_t CreditsScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = 0x21038Cu;
+	arg0 = CreditsScreenGUIHeadingsCreditsSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = 0x2199C8u;
+	arg0 = CreditsScreenGUIMainMenuSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = CreditsScreenModel;
 	x86_call(vcObjectRelease_entry, 0x000B832Fu, 1, arg0);
@@ -171766,7 +171766,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 		{
 			arg1_2 = 0u;
 			arg0 = edi;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			sub_000208E0(arg0, arg1_2);
 			arg1_2 = 1u;
 			arg0 = MEM32(esi + 0x20u);
@@ -171779,7 +171779,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 			{
 				arg1_2 = 0u;
 				arg0 = edi;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				sub_000208E0(arg0, arg1_2);
 				arg1_2 = 1u;
 				arg0 = MEM32(esi + 0x20u);
@@ -171794,7 +171794,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 		{
 			arg1_2 = 0u;
 			arg0 = edi;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			sub_000208E0(arg0, arg1_2);
 			arg1_2 = 1u;
 			arg0 = MEM32(esi + 0x20u);
@@ -171807,7 +171807,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 			{
 				arg1_2 = 0u;
 				arg0 = edi;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				sub_000208E0(arg0, arg1_2);
 				arg1_2 = 1u;
 				arg0 = MEM32(esi + 0x20u);
@@ -171821,9 +171821,9 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	edx = vcPad_pressed_left_y(vcPads(0));
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+		if (vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 		{
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 			arg4 = 0u;
 			arg3 = 0u;
 			arg2 = MEM32(esi + MEM32(esi + 0x134u) * 4u + 0x124u);
@@ -171848,7 +171848,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 		eax = ecx * 0x210u;
 		if (MEM32(eax + vcPad_pressed_down_VA(vcPads_VA)) != 0u || (MEM32(eax + vcPad_pressed_left_y_VA(vcPads_VA)) != 0u && FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) < 0.0f))
 		{
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 			arg4 = 0u;
 			arg3 = 0u;
 			arg2 = MEM32(esi + MEM32(esi + 0x134u) * 4u + 0x124u);
@@ -171870,9 +171870,9 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	}
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f))
+		if (vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebx != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && (double)vcPad_left_y(vcPads(3)) > 0.0f))
 		{
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 			arg4 = 0u;
 			arg3 = 0u;
 			arg2 = MEM32(esi + MEM32(esi + 0x134u) * 4u + 0x124u);
@@ -171897,7 +171897,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 		eax = ecx * 0x210u;
 		if (MEM32(eax + vcPad_pressed_up_VA(vcPads_VA)) != 0u || (MEM32(eax + vcPad_pressed_left_y_VA(vcPads_VA)) != 0u && FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)) > 0.0f))
 		{
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 			arg4 = 0u;
 			arg3 = 0u;
 			arg2 = MEM32(esi + MEM32(esi + 0x134u) * 4u + 0x124u);
@@ -171921,7 +171921,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	{
 		if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 		{
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			MEM32(esi + 0x138u) = 1u;
 			return;
 		}
@@ -171932,7 +171932,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 		eax = ecx * 0x210u;
 		if (MEM32(eax + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 		{
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			MEM32(esi + 0x138u) = 1u;
 			return;
 		}
@@ -171940,7 +171940,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	}
 	if (zero == 0u)
 	{
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		MEM32(esi + 0x138u) = 1u;
 		return;
 	}
@@ -171966,7 +171966,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	eax = sub_000248B0();
 	edi = 1u;
 	ebx = eax;
-	MEM32(0x1EAB28u) = 1u;
+	MenuConfirmSoundAsked = 1u;
 	if (MEM32(esi + 0x134u) == 3u)
 		eax = 0x49Cu;
 	else
@@ -172386,34 +172386,34 @@ void sub_000B8F90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			MEM32(esi + 0x144u) = edi_2 + 0x1EFu;
 			if ((int32_t)ecx_2 < (int32_t)edx)
 			{
-				if (FLOAT_AT(vcPad_left_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(2))) != 0.0f)
+				if ((double)vcPad_left_trigger(vcPads(0)) != 0.0f || (double)vcPad_left_trigger(vcPads(1)) != 0.0f || (double)vcPad_left_trigger(vcPads(2)) != 0.0f)
 					stack = ebx_2;
 				else
 				{
 					stack = edx;
-					if (FLOAT_AT(vcPad_left_trigger_VA(vcPads(3))) != 0.0f)
+					if ((double)vcPad_left_trigger(vcPads(3)) != 0.0f)
 						stack = ebx_2;
 				}
 				f0 = (double)(int32_t)stack;
 			}
 			else
-				f0 = FLOAT_AT(vcPad_left_trigger_VA(vcPads(ecx_2)));
+				f0 = (double)vcPad_left_trigger(vcPads(ecx_2));
 			if (f0 != 0.0f)
 				MEM32(esi + 0x138u) = ebx_2;
 			if ((int32_t)ecx_2 < (int32_t)edx)
 			{
-				if (FLOAT_AT(vcPad_right_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(2))) != 0.0f)
+				if ((double)vcPad_right_trigger(vcPads(0)) != 0.0f || (double)vcPad_right_trigger(vcPads(1)) != 0.0f || (double)vcPad_right_trigger(vcPads(2)) != 0.0f)
 					stack = ebx_2;
 				else
 				{
 					stack = edx;
-					if (FLOAT_AT(vcPad_right_trigger_VA(vcPads(3))) != 0.0f)
+					if ((double)vcPad_right_trigger(vcPads(3)) != 0.0f)
 						stack = ebx_2;
 				}
 				f0 = (double)(int32_t)stack;
 			}
 			else
-				f0 = FLOAT_AT(vcPad_right_trigger_VA(vcPads(ecx_2)));
+				f0 = (double)vcPad_right_trigger(vcPads(ecx_2));
 			if (f0 != 0.0f)
 				MEM32(esi + 0x13Cu) = ebx_2;
 		}
@@ -172421,28 +172421,28 @@ void sub_000B8F90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ecx_2 = MEM32(esi + 0x18u);
 	if ((int32_t)ecx_2 < (int32_t)edx)
 	{
-		if (FLOAT_AT(vcPad_left_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_left_trigger_VA(vcPads(2))) != 0.0f)
+		if ((double)vcPad_left_trigger(vcPads(0)) != 0.0f || (double)vcPad_left_trigger(vcPads(1)) != 0.0f || (double)vcPad_left_trigger(vcPads(2)) != 0.0f)
 			stack = ebx_2;
 		else
 		{
 			stack = edx;
-			if (FLOAT_AT(vcPad_left_trigger_VA(vcPads(3))) != 0.0f)
+			if ((double)vcPad_left_trigger(vcPads(3)) != 0.0f)
 				stack = ebx_2;
 		}
 		f0 = (double)(int32_t)stack;
 	}
 	else
-		f0 = FLOAT_AT(vcPad_left_trigger_VA(vcPads(ecx_2)));
+		f0 = (double)vcPad_left_trigger(vcPads(ecx_2));
 	if (f0 != 0.0f || MEM32(esi + 0x138u) != edx)
 		MEM32(esi + 0x12Cu) = ebx_2;
 	if ((int32_t)ecx_2 < (int32_t)edx)
 	{
-		if (FLOAT_AT(vcPad_right_trigger_VA(vcPads_VA)) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(1))) != 0.0f || FLOAT_AT(vcPad_right_trigger_VA(vcPads(2))) != 0.0f)
+		if ((double)vcPad_right_trigger(vcPads(0)) != 0.0f || (double)vcPad_right_trigger(vcPads(1)) != 0.0f || (double)vcPad_right_trigger(vcPads(2)) != 0.0f)
 			stack = ebx_2;
 		else
 		{
 			stack = edx;
-			if (FLOAT_AT(vcPad_right_trigger_VA(vcPads(3))) != 0.0f)
+			if ((double)vcPad_right_trigger(vcPads(3)) != 0.0f)
 			{
 				stack = ebx_2;
 				f0 = (double)(int32_t)stack;
@@ -172465,7 +172465,7 @@ void sub_000B8F90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		f0 = (double)(int32_t)stack;
 	}
 	else
-		f0 = FLOAT_AT(vcPad_right_trigger_VA(vcPads(ecx_2)));
+		f0 = (double)vcPad_right_trigger(vcPads(ecx_2));
 	if (f0 != 0.0f || MEM32(esi + 0x13Cu) != edx)
 		MEM32(esi + 0x130u) = ebx_2;
 	edi_2 = saved_edi;
@@ -173632,25 +173632,25 @@ void sub_000B9D90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	if (MEM32(esi + 0x164u) != 0u)
 	{
 		sub_0010C9C0(&ignored, &ecx, &ebx, &esi, &edi);
-		if (MEM32(0x1EAB28u) != 0u)
+		if (MenuConfirmSoundAsked != 0u)
 		{
 			arg0 = MEM32(0x219D1Cu);
 			sub_0010E7E0(arg0, &ignored, &ecx);
 		}
-		if (MEM32(0x1EAB24u) != 0u)
+		if (MenuCancelSoundAsked != 0u)
 		{
 			ecx = MEM32(0x219D18u);
 			arg0 = ecx;
 			sub_0010E7E0(arg0, &ignored, &ecx);
 		}
-		if (MEM32(0x1EAB20u) != 0u)
+		if (MenuCursorSoundAsked != 0u)
 		{
 			arg0 = MEM32(0x219D14u);
 			sub_0010E7E0(arg0, &ignored, &ecx);
 		}
-		MEM32(0x1EAB28u) = 0u;
-		MEM32(0x1EAB24u) = 0u;
-		MEM32(0x1EAB20u) = 0u;
+		MenuConfirmSoundAsked = 0u;
+		MenuCancelSoundAsked = 0u;
+		MenuCursorSoundAsked = 0u;
 	}
 	eax = MEM32(esi + 0x154u);
 	saved_ebp = ebp;
@@ -173795,7 +173795,7 @@ void sub_000B9D90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						if (L_0BA073 || L_0BA073 || vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u)
 						{
 							L_0BA073 = false;
-							MEM32(0x1EAB28u) = ebp_2;
+							MenuConfirmSoundAsked = ebp_2;
 							arg0 = MEM32(esi + 0x150u);
 							sub_000BF7D0(arg0, &eax, &ecx);
 							if (eax == 2u)
@@ -173870,21 +173870,21 @@ void sub_000B9D90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				eax = eax * 0x210u;
 				if (MEM32(eax + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 				{
-					MEM32(0x1EAB24u) = ebp_2;
+					MenuCancelSoundAsked = ebp_2;
 					MEM32(esi + 0x158u) = ebp_2;
 					return;
 				}
 				zero = MEM32(eax + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
 				if (zero == 0u)
 				{
-					MEM32(0x1EAB24u) = ebp_2;
+					MenuCancelSoundAsked = ebp_2;
 					MEM32(esi + 0x158u) = ebp_2;
 				}
 				return;
 			}
 			if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 			{
-				MEM32(0x1EAB24u) = ebp_2;
+				MenuCancelSoundAsked = ebp_2;
 				MEM32(esi + 0x158u) = ebp_2;
 			}
 			else
@@ -173892,7 +173892,7 @@ void sub_000B9D90(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				zero = vcPad_pressed_back(vcPads(3)) == 0u;
 				if (zero == 0u)
 				{
-					MEM32(0x1EAB24u) = ebp_2;
+					MenuCancelSoundAsked = ebp_2;
 					MEM32(esi + 0x158u) = ebp_2;
 					return;
 				}
@@ -176163,7 +176163,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 					arg1 = esi;
 					arg0 = ebx;
 					x86_call(sub_000BBBA0, 0x000BC67Cu, 2, arg0, arg1);
-					MEM32(0x1EAB28u) = 1u;
+					MenuConfirmSoundAsked = 1u;
 					return;
 				}
 			}
@@ -176180,7 +176180,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 						arg1 = esi;
 						arg0 = ebx;
 						x86_call(sub_000BBBA0, 0x000BC67Cu, 2, arg0, arg1);
-						MEM32(0x1EAB28u) = 1u;
+						MenuConfirmSoundAsked = 1u;
 						return;
 					}
 				}
@@ -176199,7 +176199,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 					arg1 = esi;
 					arg0 = ebx;
 					x86_call(sub_000BBBA0, 0x000BC67Cu, 2, arg0, arg1);
-					MEM32(0x1EAB28u) = 1u;
+					MenuConfirmSoundAsked = 1u;
 					return;
 				}
 			}
@@ -176225,7 +176225,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 				ecx_2 = 1u;
 				if (eax_2 != 0u)
 					MEM32(esi + 0x170u) = ecx_2;
-				MEM32(0x1EAB28u) = ecx_2;
+				MenuConfirmSoundAsked = ecx_2;
 				return;
 			}
 			zero = vcPad_pressed_start(vcPads(3)) == 0u;
@@ -176251,7 +176251,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 				ecx_2 = 1u;
 				if (eax_2 != 0u)
 					MEM32(esi + 0x170u) = ecx_2;
-				MEM32(0x1EAB28u) = ecx_2;
+				MenuConfirmSoundAsked = ecx_2;
 				return;
 			}
 			zero = MEM32(ecx_2 + vcPad_pressed_start_VA(vcPads_VA)) == 0u;
@@ -176274,7 +176274,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 			ecx_2 = 1u;
 			if (eax_2 != 0u)
 				MEM32(esi + 0x170u) = ecx_2;
-			MEM32(0x1EAB28u) = ecx_2;
+			MenuConfirmSoundAsked = ecx_2;
 			return;
 		}
 	}
@@ -176283,7 +176283,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 		if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 		{
 			MEM32(esi + 0x174u) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return;
 		}
 		zero = vcPad_pressed_back(vcPads(3)) == 0u;
@@ -176294,7 +176294,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 		if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 		{
 			MEM32(esi + 0x174u) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return;
 		}
 		zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -176302,7 +176302,7 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 	if (zero == 0u)
 	{
 		MEM32(esi + 0x174u) = 1u;
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		return;
 	}
 	if (stack != MEM32(esi + 0x124u))
@@ -178465,7 +178465,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = MEM32(edi_2 + 0x178u);
 				MEM32(edi_2 + 0x180u) = 0u;
@@ -178487,7 +178487,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			eax_2 = eax_2 * 0x210u;
 			if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = MEM32(edi_2 + 0x178u);
 				MEM32(edi_2 + 0x180u) = 0u;
@@ -178506,7 +178506,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		}
 		if (zero == 0u)
 		{
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(edi_2 + 0x178u);
 			MEM32(edi_2 + 0x180u) = 0u;
@@ -178627,7 +178627,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	{
 		if ((int32_t)ebx_2 <= 0)
 		{
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(edi_2 + 0x178u);
 			arg0_2 = MEM32(g_esp);
@@ -178768,7 +178768,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 				MEM32(g_esp) = edi_2;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ebp_2;
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 				x86_call(sub_000BE580, 0x000BEAB8u, 0);
 				g_esp = g_esp + 8u;
 				g_esp = g_esp + 4u;
@@ -178789,7 +178789,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					if (L_0BEB32 || L_0BEB32 || vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u)
 					{
 						L_0BEB32 = false;
-						MEM32(0x1EAB28u) = 1u;
+						MenuConfirmSoundAsked = 1u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = MEM32(edi_2 + 0x178u);
 						arg0_2 = MEM32(g_esp);
@@ -178954,7 +178954,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		{
 			if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				MEM32(edi_2 + 0x188u) = 1u;
 				g_esp = g_esp + 4u;
 				g_esp = g_esp + 4u;
@@ -178970,7 +178970,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			eax_2 = eax_2 * 0x210u;
 			if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				MEM32(edi_2 + 0x188u) = 1u;
 				g_esp = g_esp + 4u;
 				g_esp = g_esp + 4u;
@@ -179015,7 +179015,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			g_esp = g_esp + 0xCu;
 			return;
 		}
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		MEM32(edi_2 + 0x188u) = 1u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -180403,13 +180403,13 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	stack = MEM32(esi + 0x340u);
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (edi != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
+		if (vcPad_pressed_up(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) > 0.0f) || vcPad_pressed_up(vcPads(1)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(1)) > 0.0f) || vcPad_pressed_up(vcPads(2)) != 0u || (edi != 0u && (double)vcPad_left_y(vcPads(2)) > 0.0f) || vcPad_pressed_up(vcPads(3)) != 0u)
 			stack_8 = 1u;
 		else if (ebx == 0u)
 			stack_8 = 0u;
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (f0 > 0.0f)
 				stack_8 = 1u;
 			else
@@ -180434,13 +180434,13 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	}
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebp != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (edi != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
+		if (vcPad_pressed_down(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (ebp != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (edi != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u)
 			stack_C = 1u;
 		else if (ebx == 0u)
 			stack_C = 0u;
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (f0 < 0.0f)
 				stack_C = 1u;
 			else
@@ -180486,7 +180486,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 		{
 			if (MEM32(esi + 0x3B0u) == 0xFFFFFFFFu)
 				MEM32(esi + 0x3B0u) = MEM32(esi + 0x340u);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		else
 		{
@@ -180495,7 +180495,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 			{
 				if (MEM32(esi + 0x3B0u) == 0xFFFFFFFFu)
 					MEM32(esi + 0x3B0u) = MEM32(esi + 0x340u);
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 			}
 		}
 	}
@@ -180506,7 +180506,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 		{
 			if (MEM32(esi + 0x3B0u) == 0xFFFFFFFFu)
 				MEM32(esi + 0x3B0u) = MEM32(esi + 0x340u);
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		else
 		{
@@ -180515,7 +180515,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 			{
 				if (MEM32(esi + 0x3B0u) == 0xFFFFFFFFu)
 					MEM32(esi + 0x3B0u) = MEM32(esi + 0x340u);
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 			}
 		}
 	}
@@ -180535,7 +180535,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 				eax = MEM32(esi + 0x18u);
 				if ((int32_t)eax < (int32_t)ebp)
 				{
-					if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) > 0.0f)
+					if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u || (double)vcPad_left_y(vcPads(3)) > 0.0f)
 						ecx = 1u;
 					else
 						ecx = 0u;
@@ -180557,7 +180557,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 				eax = MEM32(esi + 0x18u);
 				if ((int32_t)eax < (int32_t)ebp)
 				{
-					if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f)
+					if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u || (double)vcPad_left_y(vcPads(3)) < 0.0f)
 						edx = 1u;
 					else
 						edx = 0u;
@@ -180678,7 +180678,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	eax = MEM32(esi + 0x18u);
 	if ((int32_t)eax < (int32_t)ebp)
 	{
-		if (vcPad_read_before(vcPads(0))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u)
+		if (vcPad_read_before(vcPads(0))[6] != 0u || (double)vcPad_left_y(vcPads(0)) > 0.0f || vcPad_read_before(vcPads(1))[6] != 0u || (double)vcPad_left_y(vcPads(1)) > 0.0f || vcPad_read_before(vcPads(2))[6] != 0u || (double)vcPad_left_y(vcPads(2)) > 0.0f || vcPad_read_before(vcPads(3))[6] != 0u)
 		{
 			arg1_2 = MEM32(esi + 0x358u);
 			arg0 = ebx;
@@ -180686,7 +180686,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 		}
 		else
 		{
-			f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+			f0 = (double)vcPad_left_y(vcPads(3));
 			if (!(f0 > 0.0f))
 			{
 				arg1_2 = MEM32(esi + 0x358u);
@@ -180730,16 +180730,16 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 	eax = MEM32(esi + 0x18u);
 	if ((int32_t)eax < (int32_t)ebp)
 	{
-		if (vcPad_read_before(vcPads(0))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
+		if (vcPad_read_before(vcPads(0))[7] != 0u || (double)vcPad_left_y(vcPads(0)) < 0.0f || vcPad_read_before(vcPads(1))[7] != 0u || (double)vcPad_left_y(vcPads(1)) < 0.0f || vcPad_read_before(vcPads(2))[7] != 0u || (double)vcPad_left_y(vcPads(2)) < 0.0f || vcPad_read_before(vcPads(3))[7] != 0u)
 		{
 			arg1_2 = MEM32(esi + 0x35Cu);
 			arg0 = ebx;
 			sub_0003CC90(arg0, arg1_2, &ignored, &ignored_2);
 			if (stack_8 != ebp || stack_C != ebp)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			return;
 		}
-		f0 = FLOAT_AT(vcPad_left_y_VA(vcPads(3)));
+		f0 = (double)vcPad_left_y(vcPads(3));
 	}
 	else
 	{
@@ -180750,7 +180750,7 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 			arg0 = ebx;
 			sub_0003CC90(arg0, arg1_2, &ignored, &ignored_2);
 			if (stack_8 != ebp || stack_C != ebp)
-				MEM32(0x1EAB20u) = 1u;
+				MenuCursorSoundAsked = 1u;
 			return;
 		}
 		f0 = FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA));
@@ -180761,14 +180761,14 @@ void sub_000BFDE0(uint32_t esi, uint32_t arg1, uint32_t arg3)
 		arg0 = ebx;
 		sub_0003CCF0(arg0, arg1_2);
 		if (stack_8 != ebp || stack_C != ebp)
-			MEM32(0x1EAB20u) = 1u;
+			MenuCursorSoundAsked = 1u;
 		return;
 	}
 	arg1_2 = MEM32(esi + 0x35Cu);
 	arg0 = ebx;
 	sub_0003CC90(arg0, arg1_2, &ignored, &ignored_2);
 	if (stack_8 != ebp || stack_C != ebp)
-		MEM32(0x1EAB20u) = 1u;
+		MenuCursorSoundAsked = 1u;
 }
 
 uint32_t sub_000C0510(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
@@ -183551,21 +183551,21 @@ void sub_000C2E10(uint32_t esi, uint32_t edi)
 		if (MEM32(eax + vcPad_pressed_a_VA(vcPads_VA)) != 0u)
 		{
 			MEM32(edi + 0x140u) = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			return;
 		}
 		zero = MEM32(eax + vcPad_pressed_start_VA(vcPads_VA)) == 0u;
 		if (zero == 0u)
 		{
 			MEM32(edi + 0x140u) = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 		}
 		return;
 	}
 	if (vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u)
 	{
 		MEM32(edi + 0x140u) = 1u;
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 	}
 	else
 	{
@@ -183573,7 +183573,7 @@ void sub_000C2E10(uint32_t esi, uint32_t edi)
 		if (zero == 0u)
 		{
 			MEM32(edi + 0x140u) = 1u;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			return;
 		}
 	}
@@ -184195,7 +184195,7 @@ void sub_000C34B0(uint32_t esi, uint32_t edi)
 	}
 	if ((int32_t)eax < 0)
 	{
-		if (vcPad_pressed_down(vcPads(0)) != 0u || (vcPad_pressed_left_y(vcPads(0)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads_VA)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (vcPad_pressed_left_y(vcPads(1)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(1))) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (vcPad_pressed_left_y(vcPads(2)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(2))) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && FLOAT_AT(vcPad_left_y_VA(vcPads(3))) < 0.0f))
+		if (vcPad_pressed_down(vcPads(0)) != 0u || (vcPad_pressed_left_y(vcPads(0)) != 0u && (double)vcPad_left_y(vcPads(0)) < 0.0f) || vcPad_pressed_down(vcPads(1)) != 0u || (vcPad_pressed_left_y(vcPads(1)) != 0u && (double)vcPad_left_y(vcPads(1)) < 0.0f) || vcPad_pressed_down(vcPads(2)) != 0u || (vcPad_pressed_left_y(vcPads(2)) != 0u && (double)vcPad_left_y(vcPads(2)) < 0.0f) || vcPad_pressed_down(vcPads(3)) != 0u || (vcPad_pressed_left_y(vcPads(3)) != 0u && (double)vcPad_left_y(vcPads(3)) < 0.0f))
 		{
 			arg1 = 0u;
 			arg0 = edi;
@@ -185299,14 +185299,14 @@ void sub_000C3FD0(uint32_t ebx, uint32_t esi, uint32_t edi)
 		stack = MEM32(esi + 4u) + 0x19u;
 		arg2 = float_to_bits((float)(double)(int32_t)stack);
 		arg1 = float_to_bits((float)(double)(int32_t)stack_8);
-		arg0 = 0x21CB70u;
+		arg0 = PauseScreenGUIPauseHeaderSprite_VA;
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 	}
 	if (MEM32(esi + 0x134u) != 0u)
 	{
 		arg2 = float_to_bits((float)x87_round(x87_round((double)(int32_t)MEM32(esi + 0x144u) - 16.0) + 2.0));
 		arg1 = float_to_bits((float)x87_round(x87_round((double)(int32_t)MEM32(esi + 0x140u) + 16.0) - 2.0));
-		arg0 = 0x21CB34u;
+		arg0 = PauseScreenGUIMainMenuSprite_VA;
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 	}
 }
@@ -185324,7 +185324,7 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 	edi = MEM32(esi + 0x174u);
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (ebp != 0u && FLOAT_AT(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) > 0.0f))
+		if (vcPad_pressed_right(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) > 0.0f) || vcPad_pressed_right(vcPads(1)) != 0u || (ebp != 0u && (double)vcPad_left_x(vcPads(1)) > 0.0f) || vcPad_pressed_right(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) > 0.0f) || vcPad_pressed_right(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) > 0.0f))
 		{
 			eax_2 = edi + 1u;
 			MEM32(esi + 0x174u) = eax_2;
@@ -185333,7 +185333,7 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 		}
 		else if ((int32_t)ecx < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebp != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebp != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 			{
 				eax_2 = edi - 1u;
 				MEM32(esi + 0x174u) = eax_2;
@@ -185365,7 +185365,7 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 		}
 		else if ((int32_t)ecx < 0)
 		{
-			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && FLOAT_AT(vcPads_VA) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebp != 0u && FLOAT_AT(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && FLOAT_AT(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && FLOAT_AT(vcPads(3)) < 0.0f))
+			if (vcPad_pressed_left(vcPads(0)) != 0u || (edx != 0u && (double)vcPad_left_x(vcPads(0)) < 0.0f) || vcPad_pressed_left(vcPads(1)) != 0u || (ebp != 0u && (double)vcPad_left_x(vcPads(1)) < 0.0f) || vcPad_pressed_left(vcPads(2)) != 0u || (vcPad_pressed_left_x(vcPads(2)) != 0u && (double)vcPad_left_x(vcPads(2)) < 0.0f) || vcPad_pressed_left(vcPads(3)) != 0u || (vcPad_pressed_left_x(vcPads(3)) != 0u && (double)vcPad_left_x(vcPads(3)) < 0.0f))
 			{
 				eax_2 = edi - 1u;
 				MEM32(esi + 0x174u) = eax_2;
@@ -185403,13 +185403,13 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 	ecx = MEM32(esi + 0x18u);
 	if ((int32_t)ecx < 0)
 	{
-		if (vcPad_pressed_right(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !(FLOAT_AT(vcPads_VA) > 0.0f)) && vcPad_pressed_right(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !(FLOAT_AT(vcPads(1)) > 0.0f)) && vcPad_pressed_right(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !(FLOAT_AT(vcPads(2)) > 0.0f)) && vcPad_pressed_right(vcPads(3)) == 0u)
+		if (vcPad_pressed_right(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !((double)vcPad_left_x(vcPads(0)) > 0.0f)) && vcPad_pressed_right(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !((double)vcPad_left_x(vcPads(1)) > 0.0f)) && vcPad_pressed_right(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !((double)vcPad_left_x(vcPads(2)) > 0.0f)) && vcPad_pressed_right(vcPads(3)) == 0u)
 		{
 			if (vcPad_pressed_left_x(vcPads(3)) == 0u)
 			{
 				if ((int32_t)ecx < 0)
 				{
-					if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !(FLOAT_AT(vcPads_VA) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !(FLOAT_AT(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !(FLOAT_AT(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !(FLOAT_AT(vcPads(3)) < 0.0f)))
+					if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !((double)vcPad_left_x(vcPads(0)) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !((double)vcPad_left_x(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !((double)vcPad_left_x(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !((double)vcPad_left_x(vcPads(3)) < 0.0f)))
 						return;
 				}
 				else
@@ -185426,12 +185426,12 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 			}
 			else
 			{
-				f0 = FLOAT_AT(vcPads(3));
+				f0 = (double)vcPad_left_x(vcPads(3));
 				if (!(f0 > 0.0f))
 				{
 					if ((int32_t)ecx < 0)
 					{
-						if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !(FLOAT_AT(vcPads_VA) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !(FLOAT_AT(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !(FLOAT_AT(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !(FLOAT_AT(vcPads(3)) < 0.0f)))
+						if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !((double)vcPad_left_x(vcPads(0)) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !((double)vcPad_left_x(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !((double)vcPad_left_x(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !((double)vcPad_left_x(vcPads(3)) < 0.0f)))
 							return;
 					}
 					else
@@ -185458,7 +185458,7 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 			{
 				if ((int32_t)ecx < 0)
 				{
-					if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !(FLOAT_AT(vcPads_VA) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !(FLOAT_AT(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !(FLOAT_AT(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !(FLOAT_AT(vcPads(3)) < 0.0f)))
+					if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !((double)vcPad_left_x(vcPads(0)) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !((double)vcPad_left_x(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !((double)vcPad_left_x(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !((double)vcPad_left_x(vcPads(3)) < 0.0f)))
 						return;
 				}
 				else
@@ -185480,7 +185480,7 @@ void sub_000C40E0(uint32_t eax, uint32_t ebx)
 				{
 					if ((int32_t)ecx < 0)
 					{
-						if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !(FLOAT_AT(vcPads_VA) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !(FLOAT_AT(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !(FLOAT_AT(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !(FLOAT_AT(vcPads(3)) < 0.0f)))
+						if (vcPad_pressed_left(vcPads(0)) == 0u && (vcPad_pressed_left_x(vcPads(0)) == 0u || !((double)vcPad_left_x(vcPads(0)) < 0.0f)) && vcPad_pressed_left(vcPads(1)) == 0u && (vcPad_pressed_left_x(vcPads(1)) == 0u || !((double)vcPad_left_x(vcPads(1)) < 0.0f)) && vcPad_pressed_left(vcPads(2)) == 0u && (vcPad_pressed_left_x(vcPads(2)) == 0u || !((double)vcPad_left_x(vcPads(2)) < 0.0f)) && vcPad_pressed_left(vcPads(3)) == 0u && (vcPad_pressed_left_x(vcPads(3)) == 0u || !((double)vcPad_left_x(vcPads(3)) < 0.0f)))
 							return;
 					}
 					else
@@ -185555,24 +185555,24 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 	}
 	DoNothing();
 	sub_0010C9C0(&ignored, &ecx, &ebx, &esi, &edi);
-	if (MEM32(0x1EAB28u) != 0u)
+	if (MenuConfirmSoundAsked != 0u)
 	{
 		arg0 = PauseScreenConfirmSSound;
 		sub_0010E770(arg0);
 	}
-	if (MEM32(0x1EAB24u) != 0u)
+	if (MenuCancelSoundAsked != 0u)
 	{
 		arg0 = PauseScreenCancelBackSSound;
 		sub_0010E7E0(arg0, &ignored, &ignored_2);
 	}
-	if (MEM32(0x1EAB20u) != 0u)
+	if (MenuCursorSoundAsked != 0u)
 	{
 		arg0 = PauseScreenCursorSound;
 		sub_0010E7E0(arg0, &ignored, &ignored_2);
 	}
-	MEM32(0x1EAB28u) = 0u;
-	MEM32(0x1EAB24u) = 0u;
-	MEM32(0x1EAB20u) = 0u;
+	MenuConfirmSoundAsked = 0u;
+	MenuCancelSoundAsked = 0u;
+	MenuCursorSoundAsked = 0u;
 	eax_2 = MEM32(esi + 0x124u);
 	if (eax_2 != 0u)
 	{
@@ -185596,7 +185596,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			eax_2 = eax_2 * 0x210u;
 			if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				arg0 = MEM32(esi + 0x124u);
 				eax_2 = sub_000BA330(arg0);
 				if (eax_2 == 0u)
@@ -185613,7 +185613,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			}
 			zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
 			if (zero == 0u)
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 			arg0 = MEM32(esi + 0x124u);
 			eax_2 = sub_000BA330(arg0);
 			if (eax_2 == 0u)
@@ -185629,13 +185629,13 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			return;
 		}
 		if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 		else
 		{
 			zero = vcPad_pressed_back(vcPads(3)) == 0u;
 			if (zero == 0u)
 			{
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				arg0 = MEM32(esi + 0x124u);
 				eax_2 = sub_000BA330(arg0);
 				if (eax_2 == 0u)
@@ -185673,7 +185673,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 				arg1 = 5u;
 				arg0 = ebx;
 				sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				return;
 			}
 			zero = vcPad_pressed_back(vcPads(3)) == 0u;
@@ -185682,7 +185682,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			arg1 = 5u;
 			arg0 = ebx;
 			sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return;
 		}
 		eax_2 = eax_2 * 0x210u;
@@ -185691,7 +185691,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			arg1 = 5u;
 			arg0 = ebx;
 			sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return;
 		}
 		zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -185700,7 +185700,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 		arg1 = 5u;
 		arg0 = ebx;
 		sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		return;
 	case 0x0C474Eu:
 		sub_000A57A0();
@@ -185716,7 +185716,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			if (vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u)
 			{
 				arg0 = ebx;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 				sub_000209B0(arg0, &ignored, &ignored_2, &ignored_3);
 				return;
 			}
@@ -185728,7 +185728,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			if (MEM32(eax_2 + vcPad_pressed_a_VA(vcPads_VA)) != 0u)
 			{
 				arg0 = ebx;
-				MEM32(0x1EAB28u) = 1u;
+				MenuConfirmSoundAsked = 1u;
 				sub_000209B0(arg0, &ignored, &ignored_2, &ignored_3);
 				return;
 			}
@@ -185737,7 +185737,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 		if (zero == 0u)
 		{
 			arg0 = ebx;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			sub_000209B0(arg0, &ignored, &ignored_2, &ignored_3);
 			return;
 		}
@@ -185785,13 +185785,13 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 		case 0x0C4876u:
 			arg1 = 1u;
 			arg0 = ebx;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
 			return;
 		case 0x0C488Eu:
 			arg1 = 0u;
 			arg0 = ebx;
-			MEM32(0x1EAB28u) = 1u;
+			MenuConfirmSoundAsked = 1u;
 			sub_000C37D0(arg0, arg1, &ebx, &ebp, &esi, &edi);
 			return;
 		case 0x0C48A6u:
@@ -185983,14 +185983,14 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x100u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x21u;
-	MEM32(0x21CB70u) = eax;
+	vcSprite_texture(PauseScreenGUIPauseHeaderSprite_VA) = eax;
 	eax = g_esp + 0x2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000C4B04u, 0);
-	edx = MEM32(0x21CB70u);
+	edx = vcSprite_texture(PauseScreenGUIPauseHeaderSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186001,7 +186001,7 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CB70u;
+	MEM32(g_esp) = PauseScreenGUIPauseHeaderSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -186010,7 +186010,7 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CB70u;
+	MEM32(g_esp) = PauseScreenGUIPauseHeaderSprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -186024,14 +186024,14 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xE2u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 5u;
-	MEM32(0x21CB34u) = eax;
+	vcSprite_texture(PauseScreenGUIMainMenuSprite_VA) = eax;
 	eax = g_esp + 0x18u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 2u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000C4B51u, 0);
-	edx = MEM32(0x21CB34u);
+	edx = vcSprite_texture(PauseScreenGUIMainMenuSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
@@ -186042,18 +186042,18 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CB34u;
+	MEM32(g_esp) = PauseScreenGUIMainMenuSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
-	f0 = x87_round(FLOAT_AT(0x21CB40u) + 3.0);
+	f0 = x87_round((double)vcSprite_height(PauseScreenGUIMainMenuSprite_VA) + 3.0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A3810u;
-	MEM32(0x21CB3Cu) = 0x43960000u;
-	MEMF(0x21CB40u) = (float)f0;
+	MEM32(vcSprite_width_VA(PauseScreenGUIMainMenuSprite_VA)) = 0x43960000u;
+	vcSprite_height(PauseScreenGUIMainMenuSprite_VA) = (float)f0;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
@@ -186094,9 +186094,9 @@ uint32_t PauseScreen_Shutdown(void)
 	x86_call(GameObjectTypeRelease, 0x000C4BEBu, 2, arg0, arg1);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	arg0 = 0x21CB70u;
+	arg0 = PauseScreenGUIPauseHeaderSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = 0x21CB34u;
+	arg0 = PauseScreenGUIMainMenuSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = PauseScreenConfirmSSound;
 	x86_call(vcObjectRelease_entry, 0x000C4C0Au, 1, arg0);
@@ -186673,12 +186673,12 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		MEM32(g_esp + 0x1Cu) = MEM32(esi_2 + 8u) - MEM32(esi_2);
 		f0 = x87_round((double)(int32_t)MEM32(g_esp + 0x1Cu) * 0.5);
 	}
-	MEMF(0x21CC48u) = (float)f0;
+	vcSprite_width(SniperScreenSniperRotateSprite_VA) = (float)f0;
 	MEM32(g_esp + 0x1Cu) = MEM32(esi_2 + 0xCu) - MEM32(esi_2 + 4u);
 	f0 = (double)(int32_t)MEM32(g_esp + 0x1Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CC40u;
-	MEMF(0x21CC4Cu) = (float)x87_round(f0 * 0.5);
+	MEM32(g_esp) = SniperScreenSniperRotateSprite_VA;
+	vcSprite_height(SniperScreenSniperRotateSprite_VA) = (float)x87_round(f0 * 0.5);
 	arg0_2 = MEM32(g_esp);
 	sub_00126CE0(arg0_2);
 	MEMF(g_esp) = (float)x87_round(FLOAT_AT(MEM32(g_esp + 0x18u) + 0x3BCu) * 1.8e+02);
@@ -186688,7 +186688,7 @@ void sub_000C4CD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CC40u;
+	MEM32(g_esp) = SniperScreenSniperRotateSprite_VA;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -186977,14 +186977,14 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xFFu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
-	MEM32(0x21CC40u) = eax;
+	vcSprite_texture(SniperScreenSniperRotateSprite_VA) = eax;
 	eax = g_esp + 0x28u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000C56B4u, 0);
-	edx = MEM32(0x21CC40u);
+	edx = vcSprite_texture(SniperScreenSniperRotateSprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -186995,7 +186995,7 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CC40u;
+	MEM32(g_esp) = SniperScreenSniperRotateSprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -187004,7 +187004,7 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x21CC40u;
+	MEM32(g_esp) = SniperScreenSniperRotateSprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -187062,7 +187062,7 @@ uint32_t SniperScreen_Shutdown(void)
 	SniperScreenSniperSideMiddleTexture = 0u;
 	SniperScreenSniperCenterTexture = 0u;
 	sub_00126C70(arg0, &ignored, &ignored_3);
-	arg0 = 0x21CC40u;
+	arg0 = SniperScreenSniperRotateSprite_VA;
 	sub_00126C70(arg0, &eax, &ignored_3);
 	return eax;
 }
@@ -187524,7 +187524,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 				arg1 = 5u;
 				arg0 = ebx;
 				sub_000C57C0(ebx, ebp, esi, edi, arg0, arg1);
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				return;
 			}
 			eax_2 = vcPad_pressed_back(vcPads(3));
@@ -187538,7 +187538,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 				arg1 = 5u;
 				arg0 = ebx;
 				sub_000C57C0(ebx, ebp, esi, edi, arg0, arg1);
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				return;
 			}
 			zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -187548,7 +187548,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg1 = 5u;
 		arg0 = ebx;
 		sub_000C57C0(ebx, ebp, esi, edi, arg0, arg1);
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		return;
 	case 0x0C5CA5u:
 		eax_2 = MEM32(esi + 0x18u);
@@ -187576,7 +187576,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 				arg0 = ebx;
 				MEM32(esi + 0x13Cu) = 1u;
 				edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-				MEM32(0x1EAB24u) = edi_2;
+				MenuCancelSoundAsked = edi_2;
 				return;
 			}
 		}
@@ -187585,7 +187585,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg0 = ebx;
 		MEM32(esi + 0x13Cu) = 1u;
 		edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-		MEM32(0x1EAB24u) = edi_2;
+		MenuCancelSoundAsked = edi_2;
 		return;
 	case 0x0C5D3Eu:
 		eax_2 = MEM32(esi + 0x18u);
@@ -187598,7 +187598,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 				arg0 = ebx;
 				MEM32(esi + 0x13Cu) = 1u;
 				edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-				MEM32(0x1EAB24u) = edi_2;
+				MenuCancelSoundAsked = edi_2;
 				return;
 			}
 			eax_2 = vcPad_pressed_back(vcPads(3));
@@ -187610,7 +187610,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 			arg0 = ebx;
 			MEM32(esi + 0x13Cu) = 1u;
 			edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-			MEM32(0x1EAB24u) = edi_2;
+			MenuCancelSoundAsked = edi_2;
 			return;
 		}
 		eax_2 = eax_2 * 0x210u;
@@ -187621,7 +187621,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 			arg0 = ebx;
 			MEM32(esi + 0x13Cu) = 1u;
 			edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-			MEM32(0x1EAB24u) = edi_2;
+			MenuCancelSoundAsked = edi_2;
 			return;
 		}
 		zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -187632,7 +187632,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg0 = ebx;
 		MEM32(esi + 0x13Cu) = 1u;
 		edi_2 = sub_000C57C0(ebx, ebp, esi, edi_2, arg0, arg1);
-		MEM32(0x1EAB24u) = edi_2;
+		MenuCancelSoundAsked = edi_2;
 		return;
 	case 0x0C5DCAu:
 		arg0 = MEM32(esi + 0x124u);
@@ -187643,7 +187643,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 		arg1 = 5u;
 		arg0 = ebx;
 		sub_000C57C0(ebx, ebp, esi, edi, arg0, arg1);
-		MEM32(0x1EAB24u) = 1u;
+		MenuCancelSoundAsked = 1u;
 		return;
 	case 0x0C5DF9u:
 		arg0 = MEM32(esi + 0x124u);
@@ -187654,7 +187654,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 			if (vcPad_pressed_b(vcPads(0)) != 0u || vcPad_pressed_back(vcPads(0)) != 0u || vcPad_pressed_b(vcPads(1)) != 0u || vcPad_pressed_back(vcPads(1)) != 0u || vcPad_pressed_b(vcPads(2)) != 0u || vcPad_pressed_back(vcPads(2)) != 0u || vcPad_pressed_b(vcPads(3)) != 0u)
 			{
 				MEM32(esi + 0x138u) = 1u;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				return;
 			}
 			zero = vcPad_pressed_back(vcPads(3)) == 0u;
@@ -187665,7 +187665,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 			if (MEM32(edx + vcPad_pressed_b_VA(vcPads_VA)) != 0u)
 			{
 				MEM32(esi + 0x138u) = 1u;
-				MEM32(0x1EAB24u) = 1u;
+				MenuCancelSoundAsked = 1u;
 				return;
 			}
 			zero = MEM32(edx + vcPad_pressed_back_VA(vcPads_VA)) == 0u;
@@ -187673,7 +187673,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 		if (zero == 0u)
 		{
 			MEM32(esi + 0x138u) = 1u;
-			MEM32(0x1EAB24u) = 1u;
+			MenuCancelSoundAsked = 1u;
 			return;
 		}
 		if ((int32_t)ecx < 0)
@@ -187696,7 +187696,7 @@ void sub_000C5BA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi)
 			}
 		}
 		edi_2 = 1u;
-		MEM32(0x1EAB28u) = 1u;
+		MenuConfirmSoundAsked = 1u;
 		MEM32(0x21CD88u) = eax_2;
 		if (eax_2 > 4u)
 			return;
@@ -227724,14 +227724,14 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0xDu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x222964u) = eax;
+	vcSprite_texture(FriendlyReticleElementRetFriendly03Sprite_VA) = eax;
 	eax = g_esp + 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E58F6u, 0);
-	edx = MEM32(0x222964u);
+	edx = vcSprite_texture(FriendlyReticleElementRetFriendly03Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -227742,7 +227742,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x222964u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly03Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -227750,13 +227750,13 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x222964u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly03Sprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0xFFFF0000u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x222964u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly03Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
@@ -227772,14 +227772,14 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x80u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x222928u) = eax;
+	vcSprite_texture(FriendlyReticleElementRetFriendly01Sprite_VA) = eax;
 	eax = g_esp + 0xCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E5955u, 0);
-	edx = MEM32(0x222928u);
+	edx = vcSprite_texture(FriendlyReticleElementRetFriendly01Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -227790,7 +227790,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x222928u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly01Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -227808,14 +227808,14 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x3Du;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x2228ECu) = eax;
+	vcSprite_texture(FriendlyReticleElementRetFriendly02Sprite_VA) = eax;
 	eax = g_esp + 0x3Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E5992u, 0);
-	edx = MEM32(0x2228ECu);
+	edx = vcSprite_texture(FriendlyReticleElementRetFriendly02Sprite_VA);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -227827,7 +227827,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2228ECu;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly02Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -227835,7 +227835,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2228ECu;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly02Sprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -227849,7 +227849,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x80u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x2228B0u) = eax;
+	vcSprite_texture(FriendlyReticleElementRetFriendly04Sprite_VA) = eax;
 	eax = g_esp + 0x2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
@@ -227861,13 +227861,13 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	ecx = g_esp + 0x3Cu;
-	edx = MEM32(0x2228B0u);
+	edx = vcSprite_texture(FriendlyReticleElementRetFriendly04Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2228B0u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly04Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -227876,7 +227876,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2228B0u;
+	MEM32(g_esp) = FriendlyReticleElementRetFriendly04Sprite_VA;
 	arg0 = MEM32(g_esp);
 	eax = sub_00126CE0(arg0);
 	g_esp = g_esp + 0x14u;
@@ -227889,22 +227889,22 @@ uint32_t FriendlyReticleElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x222964u);
+	arg0 = vcSprite_texture(FriendlyReticleElementRetFriendly03Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E5A1Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x222928u);
+	arg0 = vcSprite_texture(FriendlyReticleElementRetFriendly01Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E5A27u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2228ECu);
+	arg0 = vcSprite_texture(FriendlyReticleElementRetFriendly02Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E5A33u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	eax = MEM32(0x2228B0u);
+	eax = vcSprite_texture(FriendlyReticleElementRetFriendly04Sprite_VA);
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000E5A3Eu, 1, arg0);
@@ -228032,10 +228032,10 @@ void sub_000E5AF0(uint32_t eax, uint32_t ecx, uint32_t arg0, uint32_t arg1, uint
 				stack_14 = float_to_bits((float)f0);
 		}
 		f0 = x87_round(x87_float(stack_18) * 61.0);
-		arg0_2 = 0x2228ECu;
+		arg0_2 = FriendlyReticleElementRetFriendly02Sprite_VA;
 		MEM32((ebp << 4) + 0x222854u) = stack_14;
-		MEMF(0x2228F8u) = (float)f0;
-		MEMF(0x2228F4u) = (float)f0;
+		vcSprite_height(FriendlyReticleElementRetFriendly02Sprite_VA) = (float)f0;
+		vcSprite_width(FriendlyReticleElementRetFriendly02Sprite_VA) = (float)f0;
 		sub_00126CE0(arg0_2);
 		arg3_2 = 0xC2340000u;
 		stack_10 = float_to_bits((float)(double)(int32_t)stack_10);
@@ -228043,48 +228043,48 @@ void sub_000E5AF0(uint32_t eax, uint32_t ecx, uint32_t arg0, uint32_t arg1, uint
 		esi = stack_C;
 		arg2_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_18) * 41.0) + x87_float(stack_10)));
 		arg1_2 = esi;
-		arg0_2 = 0x2228ECu;
+		arg0_2 = FriendlyReticleElementRetFriendly02Sprite_VA;
 		sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 		if (x87_round(x87_float(saved_arg4) / x87_float(saved_arg5)) <= 0.4f)
 		{
-			arg0_2 = 0x222964u;
+			arg0_2 = FriendlyReticleElementRetFriendly03Sprite_VA;
 			f0 = x87_round(x87_float(stack_18) * 13.0);
-			MEMF(0x222970u) = (float)f0;
-			MEMF(0x22296Cu) = (float)f0;
+			vcSprite_height(FriendlyReticleElementRetFriendly03Sprite_VA) = (float)f0;
+			vcSprite_width(FriendlyReticleElementRetFriendly03Sprite_VA) = (float)f0;
 			sub_00126CE0(arg0_2);
 			arg2_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_18) * 85.0) + (double)(int32_t)stack_8));
 			arg1_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_18) * 26.0) + (double)(int32_t)stack));
-			arg0_2 = 0x222964u;
+			arg0_2 = FriendlyReticleElementRetFriendly03Sprite_VA;
 			sub_00126890(arg0_2, arg1_2, arg2_2, &ignored, &ignored_2, &ignored_3);
 		}
-		arg0_2 = 0x222928u;
+		arg0_2 = FriendlyReticleElementRetFriendly01Sprite_VA;
 		f0 = x87_round(x87_float(stack_18) * 128.0);
-		MEMF(0x222934u) = (float)f0;
+		vcSprite_height(FriendlyReticleElementRetFriendly01Sprite_VA) = (float)f0;
 		stack_18 = float_to_bits((float)f0);
-		MEMF(0x222930u) = (float)f0;
+		vcSprite_width(FriendlyReticleElementRetFriendly01Sprite_VA) = (float)f0;
 		sub_00126CE0(arg0_2);
 		ebx = saved_arg0;
 		arg1_2 = ebx;
-		arg0_2 = 0x222928u;
+		arg0_2 = FriendlyReticleElementRetFriendly01Sprite_VA;
 		sub_00126D00(arg0_2, arg1_2);
 		edi = stack_10;
 		arg3_2 = 0xC2340000u;
 		arg2_2 = edi;
 		arg1_2 = esi;
-		arg0_2 = 0x222928u;
+		arg0_2 = FriendlyReticleElementRetFriendly01Sprite_VA;
 		sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 		eax_2 = stack_18;
-		arg0_2 = 0x2228B0u;
-		MEM32(0x2228BCu) = eax_2;
-		MEM32(0x2228B8u) = eax_2;
+		arg0_2 = FriendlyReticleElementRetFriendly04Sprite_VA;
+		MEM32(vcSprite_height_VA(FriendlyReticleElementRetFriendly04Sprite_VA)) = eax_2;
+		MEM32(vcSprite_width_VA(FriendlyReticleElementRetFriendly04Sprite_VA)) = eax_2;
 		sub_00126CE0(arg0_2);
 		arg1_2 = ebx;
-		arg0_2 = 0x2228B0u;
+		arg0_2 = FriendlyReticleElementRetFriendly04Sprite_VA;
 		sub_00126D00(arg0_2, arg1_2);
 		arg3_2 = stack_14;
 		arg2_2 = edi;
 		arg1_2 = esi;
-		arg0_2 = 0x2228B0u;
+		arg0_2 = FriendlyReticleElementRetFriendly04Sprite_VA;
 		sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 	}
 }
@@ -228867,14 +228867,14 @@ uint32_t MissileLockElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x2229F4u) = eax;
+	vcSprite_texture(MissileLockElementMissLock01Sprite_VA) = eax;
 	eax = g_esp + 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	eax = x86_call(vcRectSet_entry, 0x000E6656u, 0);
-	edx = MEM32(0x2229F4u);
+	edx = vcSprite_texture(MissileLockElementMissLock01Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -228885,7 +228885,7 @@ uint32_t MissileLockElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2229F4u;
+	MEM32(g_esp) = MissileLockElementMissLock01Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -228902,7 +228902,7 @@ uint32_t MissileLockElement_Shutdown(void)
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x2229F4u);
+	eax = vcSprite_texture(MissileLockElementMissLock01Sprite_VA);
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -228952,19 +228952,19 @@ void sub_000E6690(uint32_t eax, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 	if (0.0f < f1)
 		f1 = 0.0f;
 	MEMF(0x2229F0u) = (float)f1;
-	arg0_2 = 0x2229F4u;
+	arg0_2 = MissileLockElementMissLock01Sprite_VA;
 	MEM32(0x2229ECu) = 0u;
 	f0 = x87_round(f0 * 64.0);
-	MEMF(0x222A00u) = (float)f0;
-	MEMF(0x2229FCu) = (float)f0;
+	vcSprite_height(MissileLockElementMissLock01Sprite_VA) = (float)f0;
+	vcSprite_width(MissileLockElementMissLock01Sprite_VA) = (float)f0;
 	sub_00126CE0(arg0_2);
 	arg1_2 = saved_arg0;
-	arg0_2 = 0x2229F4u;
+	arg0_2 = MissileLockElementMissLock01Sprite_VA;
 	sub_00126D00(arg0_2, arg1_2);
 	arg3 = 0u;
 	arg2_2 = float_to_bits((float)(double)(int32_t)stack_C);
 	arg1_2 = float_to_bits((float)(double)(int32_t)saved_esi);
-	arg0_2 = 0x2229F4u;
+	arg0_2 = MissileLockElementMissLock01Sprite_VA;
 	sub_00126A10(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ignored_2);
 }
 
@@ -233119,14 +233119,14 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x10u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x2233C0u) = eax;
+	vcSprite_texture(PickupReticleElementPickUpRet05Sprite_VA) = eax;
 	eax = g_esp + 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E9706u, 0);
-	edx = MEM32(0x2233C0u);
+	edx = vcSprite_texture(PickupReticleElementPickUpRet05Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -233137,7 +233137,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2233C0u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet05Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -233145,7 +233145,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2233C0u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet05Sprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -233159,14 +233159,14 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x20u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x223384u) = eax;
+	vcSprite_texture(PickupReticleElementPickUpRet03Sprite_VA) = eax;
 	eax = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E974Du, 0);
-	edx = MEM32(0x223384u);
+	edx = vcSprite_texture(PickupReticleElementPickUpRet03Sprite_VA);
 	g_esp = g_esp + 0x50u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -233178,7 +233178,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x223384u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet03Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -233186,7 +233186,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x223384u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet03Sprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -233200,14 +233200,14 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x80u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x223348u) = eax;
+	vcSprite_texture(PickupReticleElementPickUpRet01Sprite_VA) = eax;
 	eax = g_esp + 0x2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E979Du, 0);
-	edx = MEM32(0x223348u);
+	edx = vcSprite_texture(PickupReticleElementPickUpRet01Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -233218,7 +233218,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x223348u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet01Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -233237,14 +233237,14 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x80u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x22330Cu) = eax;
+	vcSprite_texture(PickupReticleElementPickUpRet02Sprite_VA) = eax;
 	eax = g_esp + 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E97E3u, 0);
-	edx = MEM32(0x22330Cu);
+	edx = vcSprite_texture(PickupReticleElementPickUpRet02Sprite_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	g_esp = g_esp - 4u;
@@ -233255,7 +233255,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x22330Cu;
+	MEM32(g_esp) = PickupReticleElementPickUpRet02Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -233263,7 +233263,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x22330Cu;
+	MEM32(g_esp) = PickupReticleElementPickUpRet02Sprite_VA;
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
@@ -233277,14 +233277,14 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x20u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
-	MEM32(0x2232D0u) = eax;
+	vcSprite_texture(PickupReticleElementPickUpRet04Sprite_VA) = eax;
 	eax = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000E982Au, 0);
-	edx = MEM32(0x2232D0u);
+	edx = vcSprite_texture(PickupReticleElementPickUpRet04Sprite_VA);
 	g_esp = g_esp + 0x50u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -233296,7 +233296,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2232D0u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet04Sprite_VA;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -233304,7 +233304,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x2232D0u;
+	MEM32(g_esp) = PickupReticleElementPickUpRet04Sprite_VA;
 	arg0 = MEM32(g_esp);
 	eax = sub_00126CE0(arg0);
 	g_esp = g_esp + 0x28u;
@@ -233317,29 +233317,29 @@ uint32_t PickupReticleElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg0 = MEM32(0x2233C0u);
+	arg0 = vcSprite_texture(PickupReticleElementPickUpRet05Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E986Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x223348u);
+	arg0 = vcSprite_texture(PickupReticleElementPickUpRet01Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E9877u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x22330Cu);
+	arg0 = vcSprite_texture(PickupReticleElementPickUpRet02Sprite_VA);
 	x86_call(vcObjectRelease_entry, 0x000E9883u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	eax = MEM32(0x223384u);
+	eax = vcSprite_texture(PickupReticleElementPickUpRet03Sprite_VA);
 	arg0 = eax;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000E988Eu, 1, arg0);
 	eax = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2232D0u);
+	arg0 = vcSprite_texture(PickupReticleElementPickUpRet04Sprite_VA);
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x000E989Au, 1, arg0);
 	eax = g_eax;
@@ -233422,15 +233422,15 @@ void sub_000E98A0(uint32_t eax, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 			if (!(x87_float(stack_1C) > f0))
 				stack_1C = float_to_bits((float)f0);
 		}
-		arg0_2 = 0x223348u;
+		arg0_2 = PickupReticleElementPickUpRet01Sprite_VA;
 		MEMF(esi * 8u + 0x223190u) = (float)x87_float(stack_1C);
 		f0 = x87_round(x87_float(stack_1FFFF8) * 128.0);
-		MEMF(0x223354u) = (float)f0;
+		vcSprite_height(PickupReticleElementPickUpRet01Sprite_VA) = (float)f0;
 		stack_18 = float_to_bits((float)f0);
-		MEMF(0x223350u) = (float)f0;
+		vcSprite_width(PickupReticleElementPickUpRet01Sprite_VA) = (float)f0;
 		sub_00126CE0(arg0_2);
 		arg1_2 = edi;
-		arg0_2 = 0x223348u;
+		arg0_2 = PickupReticleElementPickUpRet01Sprite_VA;
 		sub_00126D00(arg0_2, arg1_2);
 		arg3_2 = 0xC2340000u;
 		stack_14 = float_to_bits((float)(double)(int32_t)stack_14);
@@ -233439,49 +233439,49 @@ void sub_000E98A0(uint32_t eax, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 		stack_10 = float_to_bits((float)(double)(int32_t)stack_10);
 		ebp = stack_10;
 		arg1_2 = ebp;
-		arg0_2 = 0x223348u;
+		arg0_2 = PickupReticleElementPickUpRet01Sprite_VA;
 		sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 		ecx = stack_18;
-		arg0_2 = 0x22330Cu;
-		MEM32(0x223318u) = ecx;
-		MEM32(0x223314u) = ecx;
+		arg0_2 = PickupReticleElementPickUpRet02Sprite_VA;
+		MEM32(vcSprite_height_VA(PickupReticleElementPickUpRet02Sprite_VA)) = ecx;
+		MEM32(vcSprite_width_VA(PickupReticleElementPickUpRet02Sprite_VA)) = ecx;
 		sub_00126CE0(arg0_2);
 		arg1_2 = edi;
-		arg0_2 = 0x22330Cu;
+		arg0_2 = PickupReticleElementPickUpRet02Sprite_VA;
 		sub_00126D00(arg0_2, arg1_2);
 		arg3_2 = stack_1C;
 		arg2_2 = ebx;
 		arg1_2 = ebp;
-		arg0_2 = 0x22330Cu;
+		arg0_2 = PickupReticleElementPickUpRet02Sprite_VA;
 		sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 		if (x87_float(stack_1C) == -45.0)
 		{
-			arg0_2 = 0x2233C0u;
+			arg0_2 = PickupReticleElementPickUpRet05Sprite_VA;
 			f0 = x87_round(x87_float(stack_1FFFF8) * 16.0);
-			MEMF(0x2233CCu) = (float)f0;
-			MEMF(0x2233C8u) = (float)f0;
+			vcSprite_height(PickupReticleElementPickUpRet05Sprite_VA) = (float)f0;
+			vcSprite_width(PickupReticleElementPickUpRet05Sprite_VA) = (float)f0;
 			sub_00126CE0(arg0_2);
 			arg1_2 = edi;
-			arg0_2 = 0x2233C0u;
+			arg0_2 = PickupReticleElementPickUpRet05Sprite_VA;
 			sub_00126D00(arg0_2, arg1_2);
 			stack_1C = float_to_bits((float)(double)(int32_t)stack_C);
 			stack_18 = float_to_bits((float)(double)(int32_t)stack_8);
 			arg2_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_1FFFF8) * 101.0) + x87_float(stack_1C)));
 			arg1_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_1FFFF8) * 63.0) + x87_float(stack_18)));
-			arg0_2 = 0x2233C0u;
+			arg0_2 = PickupReticleElementPickUpRet05Sprite_VA;
 			sub_00126890(arg0_2, arg1_2, arg2_2, &ignored, &ignored_2, &ignored_3);
 			f0 = x87_round(x87_float(stack_1FFFF8) * 32.0);
-			arg0_2 = 0x223384u;
-			MEMF(0x223390u) = (float)f0;
-			MEMF(0x22338Cu) = (float)f0;
+			arg0_2 = PickupReticleElementPickUpRet03Sprite_VA;
+			vcSprite_height(PickupReticleElementPickUpRet03Sprite_VA) = (float)f0;
+			vcSprite_width(PickupReticleElementPickUpRet03Sprite_VA) = (float)f0;
 			sub_00126CE0(arg0_2);
 			arg1_2 = edi;
-			arg0_2 = 0x223384u;
+			arg0_2 = PickupReticleElementPickUpRet03Sprite_VA;
 			sub_00126D00(arg0_2, arg1_2);
 			arg3_2 = 0xC2340000u;
 			arg2_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_1FFFF8) * -18.0) + x87_float(stack_1C)));
 			arg1_2 = float_to_bits((float)x87_round(x87_float(stack_18) + x87_float(stack)));
-			arg0_2 = 0x223384u;
+			arg0_2 = PickupReticleElementPickUpRet03Sprite_VA;
 			sub_00126A10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ignored_2);
 			if (saved_arg6 == 0u)
 				return;
@@ -233494,18 +233494,18 @@ void sub_000E98A0(uint32_t eax, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 				if ((int32_t)ecx >= 3)
 					MEM32(esi * 4u + 0x2230F0u) = 0u;
 			}
-			arg0_2 = 0x2232D0u;
+			arg0_2 = PickupReticleElementPickUpRet04Sprite_VA;
 			f0 = x87_round(x87_round(FLOAT_AT(MEM32(esi * 4u + 0x2230F0u) * 4u + 0x1B7770u) * 32.0) * x87_float(stack_1FFFF8));
-			MEMF(0x2232DCu) = (float)f0;
-			MEMF(0x2232D8u) = (float)f0;
+			vcSprite_height(PickupReticleElementPickUpRet04Sprite_VA) = (float)f0;
+			vcSprite_width(PickupReticleElementPickUpRet04Sprite_VA) = (float)f0;
 			sub_00126CE0(arg0_2);
 			arg1_2 = edi;
-			arg0_2 = 0x2232D0u;
+			arg0_2 = PickupReticleElementPickUpRet04Sprite_VA;
 			sub_00126D00(arg0_2, arg1_2);
 			eax_2 = (MEM32(esi * 4u + 0x2230F0u) * 3u) << 2;
 			arg2_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_1FFFF8) * FLOAT_AT(eax_2 + 0x1B7754u)) + x87_float(stack_1C)));
 			arg1_2 = float_to_bits((float)x87_round(x87_round(x87_float(stack_1FFFF8) * FLOAT_AT(eax_2 + 0x1B774Cu)) + x87_float(stack_18)));
-			arg0_2 = 0x2232D0u;
+			arg0_2 = PickupReticleElementPickUpRet04Sprite_VA;
 			sub_00126890(arg0_2, arg1_2, arg2_2, &ignored, &ignored_2, &ignored_3);
 		}
 	}
