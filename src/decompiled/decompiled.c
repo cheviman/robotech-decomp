@@ -1360,13 +1360,15 @@ uint32_t sub_00012440(uint32_t edx, uint32_t esi)
 	return eax;
 }
 
-uint32_t sub_00016700(uint32_t arg0)
+/* Whether a pad has just pressed A or START, or any of its buttons where any_button is set; takes that
+   pad's presses away. */
+uint32_t MovieSkipPressed(uint32_t any_button)
 {
 	uint32_t zero = 0;
 	uint32_t eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, port = 0;
 	uint32_t stack = 0;
 
-	stack = arg0;
+	stack = any_button;
 	edx = vcPad_pressed_start(vcPads(3));
 	if (stack == 0u)
 	{
@@ -4030,19 +4032,19 @@ void sub_00018530(void)
 	arg0 = EntityFamily_VA;
 	VF1DX_Register(arg0);
 	arg0 = EntityFamily_VA;
-	sub_00063DB0(arg0);
+	VF1AX_Register(arg0);
 	arg0 = EntityFamily_VA;
 	VF1BX_Register(arg0);
 	arg0 = EntityFamily_VA;
 	VF1JX_Register(arg0);
 	arg0 = EntityFamily_VA;
-	sub_0005E110(arg0);
+	VF1SX_Register(arg0);
 	arg0 = EntityFamily_VA;
 	sub_0005C230(arg0);
 	arg0 = EntityFamily_VA;
 	sub_0005C160(arg0);
 	arg0 = EntityFamily_VA;
-	sub_0005C090(arg0);
+	VF1AXIzzy_Register(arg0);
 	arg0 = EntityFamily_VA;
 	VF1DM_Register(arg0);
 	arg0 = EntityFamily_VA;
@@ -4055,17 +4057,17 @@ void sub_00018530(void)
 	VF1SM_Register(arg0);
 	sub_0005BA90();
 	arg0 = EntityFamily_VA;
-	sub_00059400(arg0);
+	RDFLightMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
-	sub_00059120(arg0);
+	RDFHeavyMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
 	ZenLightMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
 	ZenHeavyMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
-	sub_00058870(arg0);
+	PlayerRDFLightMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
-	sub_00058590(arg0);
+	PlayerRDFHeavyMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
 	FPAMissile_Register(arg0);
 	arg0 = EntityFamily_VA;
@@ -21588,11 +21590,12 @@ void sub_00025320(void)
 	LevelCurrent = 0u;
 }
 
-uint32_t sub_00025360(uint32_t arg0)
+/* Whether no level of a chapter is finished yet. */
+uint32_t LevelChapterNotStarted(uint32_t chapter)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
-	edx = arg0;
+	edx = chapter;
 	eax = 1u;
 	ecx = Levels_VA;
 	while (MEM32(ecx + 0x50u) != edx || (MEM8(ecx) & 1u) == 0u)
@@ -22979,7 +22982,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (vcPad_pressed_a(vcPads(0)) != 0u || vcPad_pressed_start(vcPads(0)) != 0u || vcPad_pressed_a(vcPads(1)) != 0u || vcPad_pressed_start(vcPads(1)) != 0u || vcPad_pressed_a(vcPads(2)) != 0u || vcPad_pressed_start(vcPads(2)) != 0u || vcPad_pressed_a(vcPads(3)) != 0u)
 		{
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1E64A8u);
+			MEM32(g_esp) = MissionFailedScreenConfirmSSound;
 			arg0_2 = MEM32(g_esp);
 			sub_0010E770(arg0_2);
 			g_esp = g_esp + 4u;
@@ -22990,7 +22993,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (zero == 0u)
 			{
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(0x1E64A8u);
+				MEM32(g_esp) = MissionFailedScreenConfirmSSound;
 				arg0_2 = MEM32(g_esp);
 				sub_0010E770(arg0_2);
 				g_esp = g_esp + 4u;
@@ -23003,7 +23006,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (MEM32(eax_2 + vcPad_pressed_a_VA(vcPads_VA)) != 0u)
 		{
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(0x1E64A8u);
+			MEM32(g_esp) = MissionFailedScreenConfirmSSound;
 			arg0_2 = MEM32(g_esp);
 			sub_0010E770(arg0_2);
 			g_esp = g_esp + 4u;
@@ -23014,7 +23017,7 @@ void sub_000263F0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (zero == 0u)
 			{
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(0x1E64A8u);
+				MEM32(g_esp) = MissionFailedScreenConfirmSSound;
 				arg0_2 = MEM32(g_esp);
 				sub_0010E770(arg0_2);
 				g_esp = g_esp + 4u;
@@ -23398,7 +23401,7 @@ uint32_t MissionFailedScreen_Startup(uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 2u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1E6460u;
-	MEM32(0x1E64A8u) = eax;
+	MissionFailedScreenConfirmSSound = eax;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
@@ -23435,7 +23438,7 @@ uint32_t MissionFailedScreen_Shutdown(void)
 	sub_00126C70(arg0, &ignored, &ignored_2);
 	arg0 = MissionFailedScreenGUIMainMenuSprite_VA;
 	sub_00126C70(arg0, &ignored, &ignored_2);
-	arg0 = MEM32(0x1E64A8u);
+	arg0 = MissionFailedScreenConfirmSSound;
 	x86_call(vcObjectRelease_entry, 0x0002695Au, 1, arg0);
 	ignored = g_eax;
 	ignored_3 = g_ecx;
@@ -23858,7 +23861,7 @@ uint32_t gcLevel_Create(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, 
 	eax = MEM32(g_esp + 0x2Cu);
 	MEM32(esi_2 + 0x114u) = 0u;
 	MEM32(esi_2 + 0x110u) = 0u;
-	MEM32(0x1E64F8u) = eax;
+	gcLevelObject = eax;
 	MEM32(esi_2 + 0x118u) = 0x43FA0000u;
 	MEM32(esi_2 + 0x11Cu) = 0x447A0000u;
 	MEM32(esi_2 + 0x120u) = 0xFFFFFFFFu;
@@ -23893,7 +23896,7 @@ uint32_t gcLevel_Destroy(uint32_t edx, uint32_t arg1)
 	ignored_2 = g_ecx;
 	edx = g_edx;
 	arg0 = esi;
-	MEM32(0x1E64F8u) = 0u;
+	gcLevelObject = 0u;
 	g_edx = edx;
 	x86_call(crt_free, 0x00026EB4u, 1, arg0);
 	eax = g_eax;
@@ -23933,17 +23936,17 @@ void sub_00026F00(uint32_t edx, uint32_t edi)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	eax = MEM32(0x1E64E8u);
+	eax = LevelMusic;
 	if (eax != 0u)
 	{
 		arg0 = eax;
 		sub_00129AB0(arg0, &ignored, &edx, &edi);
-		arg0 = MEM32(0x1E64E8u);
+		arg0 = LevelMusic;
 		x86_call(vcObjectRelease_entry, 0x00026F1Au, 1, arg0);
 		ignored = g_eax;
 		ignored_2 = g_ecx;
 		ignored_3 = g_edx;
-		MEM32(0x1E64E8u) = 0u;
+		LevelMusic = 0u;
 	}
 	esi = 0x1E64D0u;
 	do
@@ -23963,7 +23966,7 @@ uint32_t sub_00026F50(uint32_t edx)
 	uint32_t arg0 = 0, eax = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x1E64E8u);
+	eax = LevelMusic;
 	if (eax != 0u)
 	{
 		saved_eax = eax;
@@ -23978,7 +23981,7 @@ uint32_t sub_00026F70(void)
 	uint32_t arg0 = 0, eax = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x1E64E8u);
+	eax = LevelMusic;
 	if (eax != 0u)
 	{
 		saved_eax = eax;
@@ -24006,7 +24009,7 @@ uint32_t sub_00026F90(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0;
 
-	eax = MEM32(0x1E64E8u);
+	eax = LevelMusic;
 	if (eax != 0u)
 	{
 		arg1 = arg0;
@@ -24057,12 +24060,12 @@ uint32_t sub_00027030(uint32_t arg0, uint32_t arg1)
 		if (eax == 0u)
 		{
 			eax = arg1;
-			MEMF(eax) = (float)FLOAT_AT(0x1E64B8u);
-			MEM32(eax + 4u) = MEM32(0x1E64BCu);
-			MEM32(eax + 8u) = MEM32(0x1E64C0u);
-			MEM32(eax + 0xCu) = MEM32(0x1E64C4u);
-			MEM32(eax + 0x10u) = MEM32(0x1E64C8u);
-			MEM32(eax + 0x14u) = MEM32(0x1E64CCu);
+			MEMF(eax) = (float)(double)LevelFileBoundsMin(0);
+			MEM32(eax + 4u) = MEM32(LevelFileBoundsMin_VA + 0x4u);
+			MEM32(eax + 8u) = MEM32(LevelFileBoundsMin_VA + 0x8u);
+			MEM32(eax + 0xCu) = MEM32(LevelFileBoundsMax_VA);
+			MEM32(eax + 0x10u) = MEM32(LevelFileBoundsMax_VA + 0x4u);
+			MEM32(eax + 0x14u) = MEM32(LevelFileBoundsMax_VA + 0x8u);
 			return eax;
 		}
 		ecx = arg1;
@@ -24078,12 +24081,12 @@ uint32_t sub_00027030(uint32_t arg0, uint32_t arg1)
 	if (eax == 0u || (eax & ~0xFFFFFFu) != 0u)
 	{
 		eax = arg1;
-		MEMF(eax) = (float)FLOAT_AT(0x1E64B8u);
-		MEM32(eax + 4u) = MEM32(0x1E64BCu);
-		MEM32(eax + 8u) = MEM32(0x1E64C0u);
-		MEM32(eax + 0xCu) = MEM32(0x1E64C4u);
-		MEM32(eax + 0x10u) = MEM32(0x1E64C8u);
-		MEM32(eax + 0x14u) = MEM32(0x1E64CCu);
+		MEMF(eax) = (float)(double)LevelFileBoundsMin(0);
+		MEM32(eax + 4u) = MEM32(LevelFileBoundsMin_VA + 0x4u);
+		MEM32(eax + 8u) = MEM32(LevelFileBoundsMin_VA + 0x8u);
+		MEM32(eax + 0xCu) = MEM32(LevelFileBoundsMax_VA);
+		MEM32(eax + 0x10u) = MEM32(LevelFileBoundsMax_VA + 0x4u);
+		MEM32(eax + 0x14u) = MEM32(LevelFileBoundsMax_VA + 0x8u);
 		return eax;
 	}
 	vcObjectCacheHandle = eax;
@@ -24092,12 +24095,12 @@ uint32_t sub_00027030(uint32_t arg0, uint32_t arg1)
 	if (eax == 0u)
 	{
 		eax = arg1;
-		MEMF(eax) = (float)FLOAT_AT(0x1E64B8u);
-		MEM32(eax + 4u) = MEM32(0x1E64BCu);
-		MEM32(eax + 8u) = MEM32(0x1E64C0u);
-		MEM32(eax + 0xCu) = MEM32(0x1E64C4u);
-		MEM32(eax + 0x10u) = MEM32(0x1E64C8u);
-		MEM32(eax + 0x14u) = MEM32(0x1E64CCu);
+		MEMF(eax) = (float)(double)LevelFileBoundsMin(0);
+		MEM32(eax + 4u) = MEM32(LevelFileBoundsMin_VA + 0x4u);
+		MEM32(eax + 8u) = MEM32(LevelFileBoundsMin_VA + 0x8u);
+		MEM32(eax + 0xCu) = MEM32(LevelFileBoundsMax_VA);
+		MEM32(eax + 0x10u) = MEM32(LevelFileBoundsMax_VA + 0x4u);
+		MEM32(eax + 0x14u) = MEM32(LevelFileBoundsMax_VA + 0x8u);
 		return eax;
 	}
 	ecx = arg1;
@@ -24114,10 +24117,10 @@ uint32_t sub_00027030(uint32_t arg0, uint32_t arg1)
 void sub_000270B0(uint32_t eax, uint32_t ecx)
 {
 	MEM32(eax + 4u) = ecx;
-	MEM32(eax + 8u) = MEM32(0x1E64C0u);
-	MEM32(eax + 0xCu) = MEM32(0x1E64C4u);
-	MEM32(eax + 0x10u) = MEM32(0x1E64C8u);
-	MEM32(eax + 0x14u) = MEM32(0x1E64CCu);
+	MEM32(eax + 8u) = MEM32(LevelFileBoundsMin_VA + 0x8u);
+	MEM32(eax + 0xCu) = MEM32(LevelFileBoundsMax_VA);
+	MEM32(eax + 0x10u) = MEM32(LevelFileBoundsMax_VA + 0x4u);
+	MEM32(eax + 0x14u) = MEM32(LevelFileBoundsMax_VA + 0x8u);
 }
 
 uint32_t sub_000270E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
@@ -24186,7 +24189,7 @@ void sub_00027170(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_edx
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, esi = 0;
 
-	esi = MEM32(0x1E64E8u);
+	esi = LevelMusic;
 	if (esi == 0u)
 	{
 		return;
@@ -24221,7 +24224,7 @@ uint32_t sub_000271D0(uint32_t esi, uint32_t edi)
 	uint32_t eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0;
 	uint32_t t1 = 0;
 
-	eax = MEM32(0x1E64F8u);
+	eax = gcLevelObject;
 	g_esp = g_esp - 0x18u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
@@ -24242,7 +24245,7 @@ uint32_t sub_000271D0(uint32_t esi, uint32_t edi)
 			esi_2 = 0u;
 		else
 		{
-			edx = vcClassByType(MEM16(0x1E64FAu));
+			edx = vcClassByType(((uint16_t)(gcLevelObject >> 16)));
 			vcObjectCacheHandle = eax;
 			esi_2 = MEM32((eax & 0xFFFFu) * 0x4Cu + MEM32(edx + 0x6Cu));
 			vcObjectCacheData = esi_2;
@@ -24350,7 +24353,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp + 8u) = arg1;
 	MEM32(g_esp + 0xCu) = arg2;
 	MEM32(g_esp + 0x10u) = arg3;
-	eax = MEM32(0x1E64E8u);
+	eax = LevelMusic;
 	g_esp = g_esp - 0xB4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
@@ -24362,9 +24365,9 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		arg0_2 = MEM32(g_esp);
 		sub_00129AB0(arg0_2, &ignored, &edx, &edi);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(0x1E64E8u);
+		MEM32(g_esp) = LevelMusic;
 		x86_call(vcObjectRelease_entry, 0x000273D3u, 0);
-		MEM32(0x1E64E8u) = esi_2;
+		LevelMusic = esi_2;
 		g_esp = g_esp + 8u;
 		x86_call(vcObjectReleaseQueued_entry, 0x000273E1u, 0);
 	}
@@ -24526,16 +24529,16 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		esi_2 = sub_00026FB0(esi_2, arg0_2, arg1_2, arg2_2);
 		edx_2 = MEM32(g_esp + 0x5Cu);
 		eax = MEM32(g_esp + 0x60u);
-		MEM32(0x1E64B8u) = MEM32(g_esp + 0x58u);
+		MEM32(LevelFileBoundsMin_VA) = MEM32(g_esp + 0x58u);
 		ecx = MEM32(g_esp + 0x4Cu);
-		MEM32(0x1E64BCu) = edx_2;
+		MEM32(LevelFileBoundsMin_VA + 0x4u) = edx_2;
 		edx_2 = MEM32(g_esp + 0x50u);
-		MEM32(0x1E64C0u) = eax;
+		MEM32(LevelFileBoundsMin_VA + 0x8u) = eax;
 		eax = MEM32(g_esp + 0x54u);
-		MEM32(0x1E64C4u) = ecx;
+		MEM32(LevelFileBoundsMax_VA) = ecx;
 		ecx = g_esp + 0x58u;
-		MEM32(0x1E64C8u) = edx_2;
-		MEM32(0x1E64CCu) = eax;
+		MEM32(LevelFileBoundsMax_VA + 0x4u) = edx_2;
+		MEM32(LevelFileBoundsMax_VA + 0x8u) = eax;
 		g_esp = g_esp + 0x24u;
 		MEM32(g_esp + 0x14u) = ecx;
 		ebx_2 = MEM32(g_esp + 0x14u);
@@ -24695,7 +24698,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	eax = ebp_2 + 0x124u;
 	MEM32(0x1B0800u) = MEM32(ebx_2);
 	MEM8(eax) = 0u;
-	MEM32(0x1E64E8u) = 0u;
+	LevelMusic = 0u;
 	if (edi_2 >= 0xBu)
 	{
 		g_esp = g_esp - 4u;
@@ -24753,7 +24756,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1Bu;
 	eax = x86_call(vcObjectGet_entry, 0x000277F2u, 0);
-	MEM32(0x1E64E8u) = eax;
+	LevelMusic = eax;
 	g_esp = g_esp + 8u;
 	if (eax == 0u)
 	{
@@ -24786,7 +24789,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x1Bu;
 		eax = x86_call(vcObjectGet_entry, 0x00027848u, 0);
-		MEM32(0x1E64E8u) = eax;
+		LevelMusic = eax;
 		g_esp = g_esp + 8u;
 	}
 	g_esp = g_esp - 4u;
@@ -25489,17 +25492,17 @@ void sub_00027E30(void)
 	arg0 = WeaponFamily_VA;
 	FlareWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000CF5F0(arg0);
+	RDFLightMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000CF520(arg0);
+	RDFHeavyMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	ZenLightMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	ZenHeavyMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000CF2B0(arg0);
+	PlayerRDFLightMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000CF1E0(arg0);
+	PlayerRDFHeavyMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	FPAMissileLauncherWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
@@ -37276,51 +37279,51 @@ uint32_t sub_00030690(void)
 	uint32_t eax = 0, ecx = 0;
 	uint32_t t1 = 0, t2 = 0;
 
-	eax = MEM32(0x1B0A60u) + MEM32(0x1B0A68u);
+	eax = (uint32_t)MissionCompleteScreenPulseAlpha + MissionCompleteScreenPulseStep;
 	ecx = 0xFFu;
-	MEM32(0x1B0A60u) = eax;
+	MissionCompleteScreenPulseAlpha = eax;
 	if ((int32_t)eax < 0xFF)
 	{
 		if ((int32_t)eax <= 0x37)
 		{
-			MEM32(0x1B0A60u) = 0x37u;
-			MEM32(0x1B0A68u) = 1u;
+			MissionCompleteScreenPulseAlpha = 0x37u;
+			MissionCompleteScreenPulseStep = 1u;
 		}
 	}
 	else
 	{
-		MEM32(0x1B0A60u) = ecx;
-		MEM32(0x1B0A68u) = 0xFFFFFFFFu;
+		MissionCompleteScreenPulseAlpha = ecx;
+		MissionCompleteScreenPulseStep = 0xFFFFFFFFu;
 	}
-	eax = MEM32(0x1B0A64u) + MEM32(0x1B0A6Cu);
-	MEM32(0x1B0A64u) = eax;
+	eax = (uint32_t)MissionCompleteScreenFadeAlpha + MissionCompleteScreenFadeStep;
+	MissionCompleteScreenFadeAlpha = eax;
 	if ((int32_t)eax < (int32_t)ecx)
 	{
 		ecx = 0u;
 		if ((int32_t)eax <= 0)
 		{
-			t1 = MEM32(0x1B0A70u) - 1u;
+			t1 = MissionCompleteScreenFadeHold - 1u;
 			eax = t1;
-			MEM32(0x1B0A64u) = ecx;
-			MEM32(0x1B0A6Cu) = ecx;
-			MEM32(0x1B0A70u) = eax;
+			MissionCompleteScreenFadeAlpha = ecx;
+			MissionCompleteScreenFadeStep = ecx;
+			MissionCompleteScreenFadeHold = eax;
 			if ((int32_t)t1 < 0)
 			{
-				MEM32(0x1B0A6Cu) = 5u;
-				MEM32(0x1B0A70u) = 0x1Eu;
+				MissionCompleteScreenFadeStep = 5u;
+				MissionCompleteScreenFadeHold = 0x1Eu;
 			}
 		}
 		return eax;
 	}
-	t2 = MEM32(0x1B0A70u) - 1u;
+	t2 = MissionCompleteScreenFadeHold - 1u;
 	eax = t2;
-	MEM32(0x1B0A64u) = ecx;
-	MEM32(0x1B0A6Cu) = 0u;
-	MEM32(0x1B0A70u) = eax;
+	MissionCompleteScreenFadeAlpha = ecx;
+	MissionCompleteScreenFadeStep = 0u;
+	MissionCompleteScreenFadeHold = eax;
 	if ((int32_t)t2 >= 0)
 		return eax;
-	MEM32(0x1B0A6Cu) = 0xFFFFFFFBu;
-	MEM32(0x1B0A70u) = 5u;
+	MissionCompleteScreenFadeStep = 0xFFFFFFFBu;
+	MissionCompleteScreenFadeHold = 5u;
 	return eax;
 }
 
@@ -37407,31 +37410,31 @@ void sub_00030750(uint32_t arg0)
 	{
 		ecx = ecx * 0x7530u;
 		carry = MEM32(0x1BC494u) < ecx;
-		MEM32(0x1B0A74u) = 0u - (ecx - ecx - carry) + 0x73Cu;
+		MissionCompleteScreenVersusResultText = 0u - (ecx - ecx - carry) + 0x73Cu;
 		return;
 	}
 	if (FLOAT_AT(0x1EA7FCu) > 0.25 && FLOAT_AT(0x1EA804u) > 0.25 && fabs(x87_round(FLOAT_AT(0x1EA7FCu) - FLOAT_AT(0x1EA800u))) < 0.05000000074505806 && fabs(x87_round(FLOAT_AT(0x1EA804u) - FLOAT_AT(0x1EA808u))) < 0.05000000074505806)
 	{
 		edx = MEM32(0x1BC494u);
 		carry = ecx * 0xEA60u < edx;
-		MEM32(0x1B0A74u) = 0u - (edx - edx - carry) + 0x73Eu;
+		MissionCompleteScreenVersusResultText = 0u - (edx - edx - carry) + 0x73Eu;
 		return;
 	}
 	if (ebx != 0u)
 	{
-		MEM32(0x1B0A74u) = 0x740u;
+		MissionCompleteScreenVersusResultText = 0x740u;
 		return;
 	}
 	edx = MEM32(0x1EA6D8u);
 	if ((int32_t)edx >= 0 && ecx * 0xEA60u < MEM32(0x1BC494u) && FLOAT_AT(edx * 4u + 0x1EA7FCu) < 0.2f)
 	{
 		f0 = FLOAT_AT(edx * 4u + 0x1EA804u);
-		MEM32(0x1B0A74u) = 0x741u;
+		MissionCompleteScreenVersusResultText = 0x741u;
 		if (!(f0 < 0.2f))
-			MEM32(0x1B0A74u) = 0x74Bu;
+			MissionCompleteScreenVersusResultText = 0x74Bu;
 		return;
 	}
-	MEM32(0x1B0A74u) = 0x74Bu;
+	MissionCompleteScreenVersusResultText = 0x74Bu;
 }
 
 uint32_t sub_00030A40(uint32_t ebx, uint32_t ebp, uint32_t arg0)
@@ -37859,7 +37862,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 3u;
 		eax = x86_call(vcFormatLast_entry, 0x00030EDCu, 0);
-		ecx = MEM32(0x1B0A64u) << 24;
+		ecx = (uint32_t)MissionCompleteScreenFadeAlpha << 24;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
@@ -37869,7 +37872,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		MEM32(g_esp) = edx;
 		x86_call(vcTextDrawInRect_entry, 0x00030EF7u, 0);
 		g_esp = g_esp + 0x14u;
-		if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u)
+		if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u)
 			MissionCompleteScreenSectionCursors(5) = 1u;
 	}
 	else
@@ -37897,7 +37900,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 3u;
 		eax = x86_call(vcFormatLast_entry, 0x00030E5Bu, 0);
-		ecx = MEM32(0x1B0A64u) << 24;
+		ecx = (uint32_t)MissionCompleteScreenFadeAlpha << 24;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
@@ -37907,7 +37910,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		MEM32(g_esp) = edx;
 		x86_call(vcTextDrawInRect_entry, 0x00030E76u, 0);
 		g_esp = g_esp + 0x14u;
-		if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u)
+		if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u)
 			MissionCompleteScreenSectionCursors(5) = 0u;
 	}
 	eax = MEM32(g_esp);
@@ -37985,7 +37988,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 3u;
 		eax = x86_call(vcFormatLast_entry, 0x00030FD8u, 0);
-		ecx = MEM32(0x1B0A60u) << 24;
+		ecx = (uint32_t)MissionCompleteScreenPulseAlpha << 24;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
@@ -38003,7 +38006,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		MEM32(g_esp) = eax;
 		x86_call(vcRectOffset_entry, 0x00031001u, 0);
 		f0_2 = x87_round((double)MissionCompleteScreenLineY + 18.0);
-		ecx = MEM32(0x1B0A74u);
+		ecx = MissionCompleteScreenVersusResultText;
 		g_esp = g_esp + 0x20u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
@@ -38292,7 +38295,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		}
 		else
 		{
-			esi_2 = MEM32(0x1B0A60u) + 0x80u;
+			esi_2 = MissionCompleteScreenPulseAlpha + 0x80u;
 			edi_2 = 0xFF92BAE2u;
 			if ((int32_t)esi_2 >= 0xFF)
 				esi_2 = 0xFFu;
@@ -38301,7 +38304,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	}
 	else
 	{
-		eax = MEM32(0x1B0A60u) + 0x80u;
+		eax = MissionCompleteScreenPulseAlpha + 0x80u;
 		if ((int32_t)eax >= 0xFF)
 			eax = 0xFFu;
 		edi_2 = (eax << 24) | 0x92BAE2u;
@@ -38390,7 +38393,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		}
 		else
 		{
-			esi_2 = MEM32(0x1B0A60u) + 0x80u;
+			esi_2 = MissionCompleteScreenPulseAlpha + 0x80u;
 			edi_2 = 0xFF92BAE2u;
 			if ((int32_t)esi_2 >= 0xFF)
 				esi_2 = 0xFFu;
@@ -38399,7 +38402,7 @@ uint32_t sub_00030F40(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	}
 	else
 	{
-		eax = MEM32(0x1B0A60u) + 0x80u;
+		eax = MissionCompleteScreenPulseAlpha + 0x80u;
 		if ((int32_t)eax >= 0xFF)
 			eax = 0xFFu;
 		edi_2 = (eax << 24) | 0x92BAE2u;
@@ -38700,7 +38703,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 					if ((uint32_t)MissionCompleteScreenSectionCursors(0) == 0xFFFFFF9Cu)
 						esi = 0xFF92BAE2u;
 					else
-						esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+						esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
@@ -38715,7 +38718,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 					MEM32(g_esp) = eax;
 					x86_call(vcTextDrawInRect_entry, 0x0003188Fu, 0);
 					g_esp = g_esp + 0x14u;
-					if (MEM32(0x1B0A64u) != 0u || MEM32(0x1B0A70u) != 0u)
+					if ((uint32_t)MissionCompleteScreenFadeAlpha != 0u || (uint32_t)MissionCompleteScreenFadeHold != 0u)
 						eax = MissionCompleteScreenSectionCursors(0);
 					else
 					{
@@ -38771,7 +38774,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				if ((uint32_t)MissionCompleteScreenSectionCursors(0) == 0xFFFFFF9Cu)
 					esi = 0xFF92BAE2u;
 				else
-					esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+					esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 				eax = MEM32(edi + 0x28u);
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0u;
@@ -38792,7 +38795,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				x86_call(vcTextDrawInRect_entry, 0x00031955u, 0);
 				g_esp = g_esp + 0x14u;
 			}
-			eax = MEM32(0x1B0A64u);
+			eax = MissionCompleteScreenFadeAlpha;
 			*p_edi = MEM32(g_esp);
 			g_esp = g_esp + 4u;
 			if (eax != 0u)
@@ -38806,7 +38809,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				*p_eax = eax;
 				return;
 			}
-			eax = MEM32(0x1B0A70u);
+			eax = MissionCompleteScreenFadeHold;
 			if (eax != 0u)
 			{
 				*p_esi = MEM32(g_esp);
@@ -39028,7 +39031,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 					continue;
 				}
 			}
-			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && ecx != 0xFFFFFF9Cu)
+			else if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && ecx != 0xFFFFFF9Cu)
 				MissionCompleteScreenSectionCursors(1) = 0xFFFFFFFFu;
 		}
 		else
@@ -39049,7 +39052,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			if ((uint32_t)MissionCompleteScreenSectionCursors(1) == 0xFFFFFF9Cu)
 				esi = 0xFF92BAE2u;
 			else
-				esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+				esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 			eax = MEM32(edi + 0x28u);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
@@ -39254,7 +39257,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 					continue;
 				}
 			}
-			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && ecx != 0xFFFFFF9Cu)
+			else if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && ecx != 0xFFFFFF9Cu)
 				MissionCompleteScreenSectionCursors(2) = 0xFFFFFFFFu;
 		}
 		else
@@ -39268,7 +39271,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 		if ((uint32_t)MissionCompleteScreenSectionCursors(2) == 0xFFFFFF9Cu)
 			esi = 0xFF92BAE2u;
 		else
-			esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+			esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
@@ -39424,7 +39427,7 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 					if ((uint32_t)MissionCompleteScreenSectionCursors(6) == 0xFFFFFF9Cu)
 						esi_2 = 0xFF92BAE2u;
 					else
-						esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+						esi_2 = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
@@ -39646,7 +39649,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
-				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+				esi_2 = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
 			g_esp = g_esp - 4u;
@@ -39665,7 +39668,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = ecx;
 			x86_call(vcTextDrawInRect_entry, 0x000321DAu, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+			if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
 				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFFu;
 		}
 		edi = 0xFFFFFFFDu;
@@ -39681,7 +39684,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
-				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+				esi_2 = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
 			g_esp = g_esp - 4u;
@@ -39700,7 +39703,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = edx;
 			x86_call(vcTextDrawInRect_entry, 0x00032267u, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+			if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
 			{
 				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFCu;
 				MEM32(g_esp + 0x10u) = 1u;
@@ -39718,7 +39721,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
-				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+				esi_2 = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
 			g_esp = g_esp - 4u;
@@ -39737,7 +39740,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = eax;
 			x86_call(vcTextDrawInRect_entry, 0x000322FBu, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+			if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
 			{
 				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFCu;
 				MEM32(g_esp + 0x10u) = 1u;
@@ -39763,7 +39766,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
-				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
+				esi_2 = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0x92BAE2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
 			g_esp = g_esp - 4u;
@@ -39781,11 +39784,11 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			x86_call(vcTextDrawInRect_entry, 0x00032390u, 0);
-			eax = MEM32(0x1B0A64u);
+			eax = MissionCompleteScreenFadeAlpha;
 			g_esp = g_esp + 0x14u;
 			if (eax == 0u)
 			{
-				eax = MEM32(0x1B0A70u);
+				eax = MissionCompleteScreenFadeHold;
 				if (eax != 0u || (uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				{
 					*p_edi = MEM32(g_esp);
@@ -40027,7 +40030,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 					esi = 0xFFFFE600u;
 				else
-					esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
+					esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0xFFE600u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0u;
 				g_esp = g_esp - 4u;
@@ -40069,7 +40072,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 				esi = 0xFFFFE600u;
 			else
-				esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
+				esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0xFFE600u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0u;
 			g_esp = g_esp - 4u;
@@ -40084,12 +40087,12 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			MEM32(g_esp) = eax_2;
 			x86_call(vcTextDrawInRect_entry, 0x000325BAu, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) != 0u)
+			if ((uint32_t)MissionCompleteScreenFadeAlpha != 0u)
 			{
 				eax = MissionCompleteScreenSectionCursors(4);
 				break;
 			}
-			t2 = MEM32(0x1B0A70u);
+			t2 = MissionCompleteScreenFadeHold;
 			eax = MissionCompleteScreenSectionCursors(4);
 			if (t2 != 0u || eax == 0xFFFFFF9Cu)
 				break;
@@ -40209,7 +40212,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 					continue;
 				}
 			}
-			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && eax != 0xFFFFFF9Cu)
+			else if ((uint32_t)MissionCompleteScreenFadeAlpha == 0u && (uint32_t)MissionCompleteScreenFadeHold == 0u && eax != 0xFFFFFF9Cu)
 				MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFFu;
 		}
 		else
@@ -40227,7 +40230,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 			esi = 0xFFFFE600u;
 		else
-			esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
+			esi = ((uint32_t)MissionCompleteScreenFadeAlpha << 24) | 0xFFE600u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u;
 		g_esp = g_esp - 4u;
@@ -46087,10 +46090,10 @@ uint32_t sub_00038410(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 			eax = GameObjectLastObject;
 		if (eax == 0u)
 		{
-			eax = MEM32(0x24EBECu);
+			eax = MEM32(LevelBoundsMax_VA);
 			MEM32(esi_2) = eax;
-			MEM32(esi_2 + 4u) = MEM32(0x24EBF0u);
-			MEM32(esi_2 + 8u) = MEM32(0x24EBF4u);
+			MEM32(esi_2 + 4u) = MEM32(LevelBoundsMax_VA + 0x4u);
+			MEM32(esi_2 + 8u) = MEM32(LevelBoundsMax_VA + 0x8u);
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -46113,10 +46116,10 @@ uint32_t sub_00038410(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		g_esp = g_esp + 0x14u;
 		if (eax == 0u)
 		{
-			eax = MEM32(0x24EBECu);
+			eax = MEM32(LevelBoundsMax_VA);
 			MEM32(esi_2) = eax;
-			MEM32(esi_2 + 4u) = MEM32(0x24EBF0u);
-			MEM32(esi_2 + 8u) = MEM32(0x24EBF4u);
+			MEM32(esi_2 + 4u) = MEM32(LevelBoundsMax_VA + 0x4u);
+			MEM32(esi_2 + 8u) = MEM32(LevelBoundsMax_VA + 0x8u);
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -46168,10 +46171,10 @@ uint32_t sub_00038410(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		g_esp = g_esp + 0x14u;
 		if (eax == 0u)
 		{
-			MEM32(esi_2) = MEM32(0x24EBECu);
-			eax = MEM32(0x24EBF0u);
+			MEM32(esi_2) = MEM32(LevelBoundsMax_VA);
+			eax = MEM32(LevelBoundsMax_VA + 0x4u);
 			MEM32(esi_2 + 4u) = eax;
-			MEM32(esi_2 + 8u) = MEM32(0x24EBF4u);
+			MEM32(esi_2 + 8u) = MEM32(LevelBoundsMax_VA + 0x8u);
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -46206,10 +46209,10 @@ uint32_t sub_00038410(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 		g_esp = g_esp + 0x14u;
 		if (eax == 0u)
 		{
-			eax = MEM32(0x24EBECu);
+			eax = MEM32(LevelBoundsMax_VA);
 			MEM32(esi_2) = eax;
-			MEM32(esi_2 + 4u) = MEM32(0x24EBF0u);
-			MEM32(esi_2 + 8u) = MEM32(0x24EBF4u);
+			MEM32(esi_2 + 4u) = MEM32(LevelBoundsMax_VA + 0x4u);
+			MEM32(esi_2 + 8u) = MEM32(LevelBoundsMax_VA + 0x8u);
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -78702,11 +78705,13 @@ uint32_t sub_00058410(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EE0D8u;
+	eax = PlayerRDFHeavyMissileMissileSpec_VA;
 	return eax;
 }
 
-uint32_t sub_00058420(void)
+/* The PlayerRDFHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t PlayerRDFHeavyMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -78749,7 +78754,8 @@ uint32_t sub_00058420(void)
 	return eax;
 }
 
-uint32_t sub_00058490(void)
+/* The PlayerRDFHeavyMissile type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t PlayerRDFHeavyMissile_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -78792,7 +78798,7 @@ uint32_t sub_00058490(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x193370u;
+	arg2 = PlayerRDFHeavyMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EE278u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -78811,53 +78817,57 @@ uint32_t sub_00058490(void)
 	return eax;
 }
 
-void sub_00058590(uint32_t arg0)
+/* Registers the PlayerRDFHeavyMissile type (Entity 73), its asset rdf_heavy_missile: what
+   PlayerRDFHeavyMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family. */
+void PlayerRDFHeavyMissile_Register(uint32_t arg0)
 {
-	MEM32(0x1EE0ACu) = 0u;
-	MEM32(0x1EE0B0u) = 0u;
-	MEM32(0x1EE090u) = 0x3CCu;
-	MEM32(0x1EE094u) = 0x58490u;
-	MEM32(0x1EE098u) = 0x58420u;
-	MEM32(0x1EE09Cu) = 0x5B850u;
-	MEM32(0x1EE0A0u) = 0x19500u;
-	MEM32(0x1EE0A8u) = 0x196A0u;
-	MEM32(arg0 + 0x134u) = 0x1EE090u;
-	x86_rep_stos32(0x1EE0D8u, 0u, 0x13u);
-	MEM32(0x1EE0D8u) = 0x19331Cu;
-	MEM32(0x1EE0E0u) = 0x193310u;
-	MEM32(0x1EE0E4u) = 0x193314u;
-	MEM32(0x1EE0DCu) = 0x193318u;
-	MEM32(0x1EE0E8u) = 0x193320u;
-	MEM32(0x1EE0ECu) = 0x193324u;
-	MEM32(0x1EE0F0u) = 0x193328u;
-	MEM32(0x1EE0F4u) = 0x19332Cu;
-	MEM32(0x1EE0F8u) = 0x193330u;
-	MEM32(0x1EE0FCu) = 0x193334u;
-	MEM32(0x1EE100u) = 0x193338u;
-	MEM32(0x1EE104u) = 0x19333Cu;
-	MEM32(0x1EE108u) = 0x193340u;
-	MEM32(0x1EE10Cu) = 0x193344u;
-	MEM32(0x1EE110u) = 0x193348u;
-	MEM32(0x1EE114u) = 0x19334Cu;
-	MEM32(0x1EE118u) = 0x193350u;
-	MEM32(0x1EE11Cu) = 0x193354u;
-	MEM32(0x1EE120u) = 0x193358u;
-	x86_rep_stos32(0x1EE124u, 0u, 0x41u);
-	MEM32(0x1EE154u) = 0x19338Cu;
-	MEM32(0x1EE124u) = 0x1932ECu;
-	MEM32(0x1EE128u) = 0x1932F0u;
-	MEM32(0x1EE20Cu) = 0x1932F4u;
+	GameObjectType_version(PlayerRDFHeavyMissileType_VA) = 0u;
+	GameObjectType_flags(PlayerRDFHeavyMissileType_VA) = 0u;
+	GameObjectType_size(PlayerRDFHeavyMissileType_VA) = 0x3CCu;
+	GameObjectType_startup(PlayerRDFHeavyMissileType_VA) = 0x58490u;
+	GameObjectType_shutdown(PlayerRDFHeavyMissileType_VA) = 0x58420u;
+	GameObjectType_state_machine(PlayerRDFHeavyMissileType_VA) = 0x5B850u;
+	GameObjectType_load(PlayerRDFHeavyMissileType_VA) = 0x19500u;
+	GameObjectType_collect(PlayerRDFHeavyMissileType_VA) = 0x196A0u;
+	MEM32(arg0 + 0x134u) = PlayerRDFHeavyMissileType_VA;
+	x86_rep_stos32(PlayerRDFHeavyMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_speed_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_thrust(PlayerRDFHeavyMissileMissileSpec_VA) = PlayerRDFHeavyMissileMissileConstants_VA;
+	MEM32(PlayerRDFHeavyMissileMissileSpec_VA + 0xCu) = PlayerRDFHeavyMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_mass_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_damage(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_damage_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_life(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_life_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_steer_interval(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MEM32(PlayerRDFHeavyMissileMissileSpec_VA + 0x24u) = PlayerRDFHeavyMissileMissileConstants_VA + 0x24u;
+	MEM32(PlayerRDFHeavyMissileMissileSpec_VA + 0x28u) = PlayerRDFHeavyMissileMissileConstants_VA + 0x28u;
+	MEM32(PlayerRDFHeavyMissileMissileSpec_VA + 0x2Cu) = PlayerRDFHeavyMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_swing_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_swing_time(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_swing_time_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_turn_time(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_turn_time_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_inner(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_outer(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	MEM32(PlayerRDFHeavyMissileMissileSpec_VA + 0x44u) = PlayerRDFHeavyMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(PlayerRDFHeavyMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(PlayerRDFHeavyMissileMissileConstants_VA);
+	x86_rep_stos32(PlayerRDFHeavyMissileSpec_VA, 0u, 0x41u);
+	EntitySpec_radius(PlayerRDFHeavyMissileSpec_VA) = 0x19338Cu;
+	EntitySpec_hit_points(PlayerRDFHeavyMissileSpec_VA) = 0x1932ECu;
+	MEM32(PlayerRDFHeavyMissileSpec_VA + 0x4u) = 0x1932F0u;
+	MEM32(PlayerRDFHeavyMissileSpec_VA + 0xE8u) = 0x1932F4u;
 }
 
 uint32_t sub_000586F0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EE308u;
+	eax = PlayerRDFLightMissileMissileSpec_VA;
 	return eax;
 }
 
-uint32_t sub_00058700(void)
+/* The PlayerRDFLightMissile type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t PlayerRDFLightMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -78900,7 +78910,8 @@ uint32_t sub_00058700(void)
 	return eax;
 }
 
-uint32_t sub_00058770(void)
+/* The PlayerRDFLightMissile type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t PlayerRDFLightMissile_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -78943,7 +78954,7 @@ uint32_t sub_00058770(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x193474u;
+	arg2 = PlayerRDFLightMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EE4A8u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -78962,42 +78973,44 @@ uint32_t sub_00058770(void)
 	return eax;
 }
 
-void sub_00058870(uint32_t arg0)
+/* Registers the PlayerRDFLightMissile type (Entity 72), its asset rdf_light_missile: what
+   PlayerRDFLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family. */
+void PlayerRDFLightMissile_Register(uint32_t arg0)
 {
-	MEM32(0x1EE2DCu) = 0u;
-	MEM32(0x1EE2E0u) = 0u;
-	MEM32(0x1EE2C0u) = 0x3CCu;
-	MEM32(0x1EE2C4u) = 0x58770u;
-	MEM32(0x1EE2C8u) = 0x58700u;
-	MEM32(0x1EE2CCu) = 0x5B850u;
-	MEM32(0x1EE2D0u) = 0x19500u;
-	MEM32(0x1EE2D8u) = 0x196A0u;
-	MEM32(arg0 + 0x130u) = 0x1EE2C0u;
-	x86_rep_stos32(0x1EE308u, 0u, 0x13u);
-	MEM32(0x1EE308u) = 0x193420u;
-	MEM32(0x1EE310u) = 0x193414u;
-	MEM32(0x1EE314u) = 0x193418u;
-	MEM32(0x1EE30Cu) = 0x19341Cu;
-	MEM32(0x1EE318u) = 0x193424u;
-	MEM32(0x1EE31Cu) = 0x193428u;
-	MEM32(0x1EE320u) = 0x19342Cu;
-	MEM32(0x1EE324u) = 0x193430u;
-	MEM32(0x1EE328u) = 0x193434u;
-	MEM32(0x1EE32Cu) = 0x193438u;
-	MEM32(0x1EE330u) = 0x19343Cu;
-	MEM32(0x1EE334u) = 0x193440u;
-	MEM32(0x1EE338u) = 0x193444u;
-	MEM32(0x1EE33Cu) = 0x193448u;
-	MEM32(0x1EE340u) = 0x19344Cu;
-	MEM32(0x1EE344u) = 0x193450u;
-	MEM32(0x1EE348u) = 0x193454u;
-	MEM32(0x1EE34Cu) = 0x193458u;
-	MEM32(0x1EE350u) = 0x19345Cu;
-	x86_rep_stos32(0x1EE354u, 0u, 0x41u);
-	MEM32(0x1EE384u) = 0x193490u;
-	MEM32(0x1EE354u) = 0x1933F0u;
-	MEM32(0x1EE358u) = 0x1933F4u;
-	MEM32(0x1EE43Cu) = 0x1933F8u;
+	GameObjectType_version(PlayerRDFLightMissileType_VA) = 0u;
+	GameObjectType_flags(PlayerRDFLightMissileType_VA) = 0u;
+	GameObjectType_size(PlayerRDFLightMissileType_VA) = 0x3CCu;
+	GameObjectType_startup(PlayerRDFLightMissileType_VA) = 0x58770u;
+	GameObjectType_shutdown(PlayerRDFLightMissileType_VA) = 0x58700u;
+	GameObjectType_state_machine(PlayerRDFLightMissileType_VA) = 0x5B850u;
+	GameObjectType_load(PlayerRDFLightMissileType_VA) = 0x19500u;
+	GameObjectType_collect(PlayerRDFLightMissileType_VA) = 0x196A0u;
+	MEM32(arg0 + 0x130u) = PlayerRDFLightMissileType_VA;
+	x86_rep_stos32(PlayerRDFLightMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_speed_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_thrust(PlayerRDFLightMissileMissileSpec_VA) = PlayerRDFLightMissileMissileConstants_VA;
+	MEM32(PlayerRDFLightMissileMissileSpec_VA + 0xCu) = PlayerRDFLightMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_mass_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_damage(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_damage_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_life(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_life_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_steer_interval(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MEM32(PlayerRDFLightMissileMissileSpec_VA + 0x24u) = PlayerRDFLightMissileMissileConstants_VA + 0x24u;
+	MEM32(PlayerRDFLightMissileMissileSpec_VA + 0x28u) = PlayerRDFLightMissileMissileConstants_VA + 0x28u;
+	MEM32(PlayerRDFLightMissileMissileSpec_VA + 0x2Cu) = PlayerRDFLightMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_swing_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_swing_time(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_swing_time_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_turn_time(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_turn_time_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_blast_inner(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MissileSpec_blast_outer(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(PlayerRDFLightMissileMissileConstants_VA);
+	MEM32(PlayerRDFLightMissileMissileSpec_VA + 0x44u) = PlayerRDFLightMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(PlayerRDFLightMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(PlayerRDFLightMissileMissileConstants_VA);
+	x86_rep_stos32(PlayerRDFLightMissileSpec_VA, 0u, 0x41u);
+	EntitySpec_radius(PlayerRDFLightMissileSpec_VA) = 0x193490u;
+	EntitySpec_hit_points(PlayerRDFLightMissileSpec_VA) = 0x1933F0u;
+	MEM32(PlayerRDFLightMissileSpec_VA + 0x4u) = 0x1933F4u;
+	MEM32(PlayerRDFLightMissileSpec_VA + 0xE8u) = 0x1933F8u;
 }
 
 uint32_t sub_000589D0(void)
@@ -79314,11 +79327,12 @@ uint32_t sub_00058F90(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EE998u;
+	eax = RDFHeavyMissileMissileSpec_VA;
 	return eax;
 }
 
-uint32_t sub_00058FA0(void)
+/* The RDFHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t RDFHeavyMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -79367,7 +79381,8 @@ void DoNothing(void)
 {
 }
 
-uint32_t sub_00059020(void)
+/* The RDFHeavyMissile type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t RDFHeavyMissile_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -79410,7 +79425,7 @@ uint32_t sub_00059020(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x193780u;
+	arg2 = RDFHeavyMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EEB38u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -79429,53 +79444,56 @@ uint32_t sub_00059020(void)
 	return eax;
 }
 
-void sub_00059120(uint32_t arg0)
+/* Registers the RDFHeavyMissile type (Entity 71), its asset rdf_heavy_missile: what
+   RDFHeavyMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family. */
+void RDFHeavyMissile_Register(uint32_t arg0)
 {
-	MEM32(0x1EE96Cu) = 0u;
-	MEM32(0x1EE970u) = 0u;
-	MEM32(0x1EE950u) = 0x3CCu;
-	MEM32(0x1EE954u) = 0x59020u;
-	MEM32(0x1EE958u) = 0x58FA0u;
-	MEM32(0x1EE95Cu) = 0x5B850u;
-	MEM32(0x1EE960u) = 0x19500u;
-	MEM32(0x1EE968u) = 0x196A0u;
-	MEM32(arg0 + 0x12Cu) = 0x1EE950u;
-	x86_rep_stos32(0x1EE998u, 0u, 0x13u);
-	MEM32(0x1EE998u) = 0x19372Cu;
-	MEM32(0x1EE9A0u) = 0x193720u;
-	MEM32(0x1EE9A4u) = 0x193724u;
-	MEM32(0x1EE99Cu) = 0x193728u;
-	MEM32(0x1EE9A8u) = 0x193730u;
-	MEM32(0x1EE9ACu) = 0x193734u;
-	MEM32(0x1EE9B0u) = 0x193738u;
-	MEM32(0x1EE9B4u) = 0x19373Cu;
-	MEM32(0x1EE9B8u) = 0x193740u;
-	MEM32(0x1EE9BCu) = 0x193744u;
-	MEM32(0x1EE9C0u) = 0x193748u;
-	MEM32(0x1EE9C4u) = 0x19374Cu;
-	MEM32(0x1EE9C8u) = 0x193750u;
-	MEM32(0x1EE9CCu) = 0x193754u;
-	MEM32(0x1EE9D0u) = 0x193758u;
-	MEM32(0x1EE9D4u) = 0x19375Cu;
-	MEM32(0x1EE9D8u) = 0x193760u;
-	MEM32(0x1EE9DCu) = 0x193764u;
-	MEM32(0x1EE9E0u) = 0x193768u;
-	x86_rep_stos32(0x1EE9E4u, 0u, 0x41u);
-	MEM32(0x1EEA14u) = 0x19379Cu;
-	MEM32(0x1EE9E4u) = 0x1936FCu;
-	MEM32(0x1EE9E8u) = 0x193700u;
-	MEM32(0x1EEACCu) = 0x193704u;
+	GameObjectType_version(RDFHeavyMissileType_VA) = 0u;
+	GameObjectType_flags(RDFHeavyMissileType_VA) = 0u;
+	GameObjectType_size(RDFHeavyMissileType_VA) = 0x3CCu;
+	GameObjectType_startup(RDFHeavyMissileType_VA) = 0x59020u;
+	GameObjectType_shutdown(RDFHeavyMissileType_VA) = 0x58FA0u;
+	GameObjectType_state_machine(RDFHeavyMissileType_VA) = 0x5B850u;
+	GameObjectType_load(RDFHeavyMissileType_VA) = 0x19500u;
+	GameObjectType_collect(RDFHeavyMissileType_VA) = 0x196A0u;
+	MEM32(arg0 + 0x12Cu) = RDFHeavyMissileType_VA;
+	x86_rep_stos32(RDFHeavyMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(RDFHeavyMissileMissileSpec_VA) = MissileConstants_speed_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_thrust(RDFHeavyMissileMissileSpec_VA) = RDFHeavyMissileMissileConstants_VA;
+	MEM32(RDFHeavyMissileMissileSpec_VA + 0xCu) = RDFHeavyMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(RDFHeavyMissileMissileSpec_VA) = MissileConstants_mass_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_damage(RDFHeavyMissileMissileSpec_VA) = MissileConstants_damage_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_life(RDFHeavyMissileMissileSpec_VA) = MissileConstants_life_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_steer_interval(RDFHeavyMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed(RDFHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(RDFHeavyMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(RDFHeavyMissileMissileConstants_VA);
+	MEM32(RDFHeavyMissileMissileSpec_VA + 0x24u) = RDFHeavyMissileMissileConstants_VA + 0x24u;
+	MEM32(RDFHeavyMissileMissileSpec_VA + 0x28u) = RDFHeavyMissileMissileConstants_VA + 0x28u;
+	MEM32(RDFHeavyMissileMissileSpec_VA + 0x2Cu) = RDFHeavyMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(RDFHeavyMissileMissileSpec_VA) = MissileConstants_swing_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_swing_time(RDFHeavyMissileMissileSpec_VA) = MissileConstants_swing_time_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_turn_time(RDFHeavyMissileMissileSpec_VA) = MissileConstants_turn_time_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_inner(RDFHeavyMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(RDFHeavyMissileMissileConstants_VA);
+	MissileSpec_blast_outer(RDFHeavyMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(RDFHeavyMissileMissileConstants_VA);
+	MEM32(RDFHeavyMissileMissileSpec_VA + 0x44u) = RDFHeavyMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(RDFHeavyMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(RDFHeavyMissileMissileConstants_VA);
+	x86_rep_stos32(RDFHeavyMissileSpec_VA, 0u, 0x41u);
+	EntitySpec_radius(RDFHeavyMissileSpec_VA) = 0x19379Cu;
+	EntitySpec_hit_points(RDFHeavyMissileSpec_VA) = 0x1936FCu;
+	MEM32(RDFHeavyMissileSpec_VA + 0x4u) = 0x193700u;
+	MEM32(RDFHeavyMissileSpec_VA + 0xE8u) = 0x193704u;
 }
 
 uint32_t sub_00059280(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x1EEBC8u;
+	eax = RDFLightMissileMissileSpec_VA;
 	return eax;
 }
 
-uint32_t sub_00059290(void)
+/* The RDFLightMissile type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t RDFLightMissile_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -79518,7 +79536,8 @@ uint32_t sub_00059290(void)
 	return eax;
 }
 
-uint32_t sub_00059300(void)
+/* The RDFLightMissile type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t RDFLightMissile_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -79561,7 +79580,7 @@ uint32_t sub_00059300(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x193884u;
+	arg2 = RDFLightMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EED68u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -79580,42 +79599,44 @@ uint32_t sub_00059300(void)
 	return eax;
 }
 
-void sub_00059400(uint32_t arg0)
+/* Registers the RDFLightMissile type (Entity 70), its asset rdf_light_missile: what
+   RDFLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family. */
+void RDFLightMissile_Register(uint32_t arg0)
 {
-	MEM32(0x1EEB9Cu) = 0u;
-	MEM32(0x1EEBA0u) = 0u;
-	MEM32(0x1EEB80u) = 0x3CCu;
-	MEM32(0x1EEB84u) = 0x59300u;
-	MEM32(0x1EEB88u) = 0x59290u;
-	MEM32(0x1EEB8Cu) = 0x5B850u;
-	MEM32(0x1EEB90u) = 0x19500u;
-	MEM32(0x1EEB98u) = 0x196A0u;
-	MEM32(arg0 + 0x128u) = 0x1EEB80u;
-	x86_rep_stos32(0x1EEBC8u, 0u, 0x13u);
-	MEM32(0x1EEBC8u) = 0x193830u;
-	MEM32(0x1EEBD0u) = 0x193824u;
-	MEM32(0x1EEBD4u) = 0x193828u;
-	MEM32(0x1EEBCCu) = 0x19382Cu;
-	MEM32(0x1EEBD8u) = 0x193834u;
-	MEM32(0x1EEBDCu) = 0x193838u;
-	MEM32(0x1EEBE0u) = 0x19383Cu;
-	MEM32(0x1EEBE4u) = 0x193840u;
-	MEM32(0x1EEBE8u) = 0x193844u;
-	MEM32(0x1EEBECu) = 0x193848u;
-	MEM32(0x1EEBF0u) = 0x19384Cu;
-	MEM32(0x1EEBF4u) = 0x193850u;
-	MEM32(0x1EEBF8u) = 0x193854u;
-	MEM32(0x1EEBFCu) = 0x193858u;
-	MEM32(0x1EEC00u) = 0x19385Cu;
-	MEM32(0x1EEC04u) = 0x193860u;
-	MEM32(0x1EEC08u) = 0x193864u;
-	MEM32(0x1EEC0Cu) = 0x193868u;
-	MEM32(0x1EEC10u) = 0x19386Cu;
-	x86_rep_stos32(0x1EEC14u, 0u, 0x41u);
-	MEM32(0x1EEC44u) = 0x1938A0u;
-	MEM32(0x1EEC14u) = 0x193800u;
-	MEM32(0x1EEC18u) = 0x193804u;
-	MEM32(0x1EECFCu) = 0x193808u;
+	GameObjectType_version(RDFLightMissileType_VA) = 0u;
+	GameObjectType_flags(RDFLightMissileType_VA) = 0u;
+	GameObjectType_size(RDFLightMissileType_VA) = 0x3CCu;
+	GameObjectType_startup(RDFLightMissileType_VA) = 0x59300u;
+	GameObjectType_shutdown(RDFLightMissileType_VA) = 0x59290u;
+	GameObjectType_state_machine(RDFLightMissileType_VA) = 0x5B850u;
+	GameObjectType_load(RDFLightMissileType_VA) = 0x19500u;
+	GameObjectType_collect(RDFLightMissileType_VA) = 0x196A0u;
+	MEM32(arg0 + 0x128u) = RDFLightMissileType_VA;
+	x86_rep_stos32(RDFLightMissileMissileSpec_VA, 0u, 0x13u);
+	MissileSpec_speed(RDFLightMissileMissileSpec_VA) = MissileConstants_speed_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_thrust(RDFLightMissileMissileSpec_VA) = RDFLightMissileMissileConstants_VA;
+	MEM32(RDFLightMissileMissileSpec_VA + 0xCu) = RDFLightMissileMissileConstants_VA + 0x4u;
+	MissileSpec_mass(RDFLightMissileMissileSpec_VA) = MissileConstants_mass_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_damage(RDFLightMissileMissileSpec_VA) = MissileConstants_damage_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_life(RDFLightMissileMissileSpec_VA) = MissileConstants_life_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_steer_interval(RDFLightMissileMissileSpec_VA) = MissileConstants_steer_interval_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed(RDFLightMissileMissileSpec_VA) = MissileConstants_launch_speed_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_launch_speed_random(RDFLightMissileMissileSpec_VA) = MissileConstants_launch_speed_random_VA(RDFLightMissileMissileConstants_VA);
+	MEM32(RDFLightMissileMissileSpec_VA + 0x24u) = RDFLightMissileMissileConstants_VA + 0x24u;
+	MEM32(RDFLightMissileMissileSpec_VA + 0x28u) = RDFLightMissileMissileConstants_VA + 0x28u;
+	MEM32(RDFLightMissileMissileSpec_VA + 0x2Cu) = RDFLightMissileMissileConstants_VA + 0x2Cu;
+	MissileSpec_swing(RDFLightMissileMissileSpec_VA) = MissileConstants_swing_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_swing_time(RDFLightMissileMissileSpec_VA) = MissileConstants_swing_time_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_turn_time(RDFLightMissileMissileSpec_VA) = MissileConstants_turn_time_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_blast_inner(RDFLightMissileMissileSpec_VA) = MissileConstants_blast_inner_VA(RDFLightMissileMissileConstants_VA);
+	MissileSpec_blast_outer(RDFLightMissileMissileSpec_VA) = MissileConstants_blast_outer_VA(RDFLightMissileMissileConstants_VA);
+	MEM32(RDFLightMissileMissileSpec_VA + 0x44u) = RDFLightMissileMissileConstants_VA + 0x44u;
+	MissileSpec_alert_radius(RDFLightMissileMissileSpec_VA) = MissileConstants_alert_radius_VA(RDFLightMissileMissileConstants_VA);
+	x86_rep_stos32(RDFLightMissileSpec_VA, 0u, 0x41u);
+	EntitySpec_radius(RDFLightMissileSpec_VA) = 0x1938A0u;
+	EntitySpec_hit_points(RDFLightMissileSpec_VA) = 0x193800u;
+	MEM32(RDFLightMissileSpec_VA + 0x4u) = 0x193804u;
+	MEM32(RDFLightMissileSpec_VA + 0xE8u) = 0x193808u;
 }
 
 uint32_t sub_00059560(uint32_t eax, uint32_t ebx)
@@ -82892,7 +82913,8 @@ uint32_t sub_0005C020(void)
 	return eax;
 }
 
-uint32_t sub_0005C030(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The VF1AXIzzy type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VF1AXIzzy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -82912,7 +82934,8 @@ uint32_t sub_0005C030(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-uint32_t sub_0005C070(void)
+/* The VF1AXIzzy type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t VF1AXIzzy_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -82926,19 +82949,21 @@ uint32_t sub_0005C070(void)
 	return eax;
 }
 
-void sub_0005C090(uint32_t arg0)
+/* Registers the VF1AXIzzy type (Entity 58), its asset VF-1AX, with Izzy's skin and a voice bank of its
+   own (491.wav): fills its GameObjectType and stores it in its family. */
+void VF1AXIzzy_Register(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0;
 
-	MEM32(0x1F6430u) = 0x308u;
-	MEM32(0x1F6434u) = 0x5C030u;
-	MEM32(0x1F6438u) = 0x5C070u;
-	MEM32(0x1F643Cu) = 0x484B0u;
-	MEM32(0x1F6440u) = 0x19500u;
-	MEM32(0x1F6448u) = 0x196A0u;
-	MEM32(0x1F644Cu) = 0u;
-	MEM32(0x1F6450u) = 1u;
-	MEM32(arg0 + 0xF8u) = 0x1F6430u;
+	GameObjectType_size(VF1AXIzzyType_VA) = 0x308u;
+	GameObjectType_startup(VF1AXIzzyType_VA) = 0x5C030u;
+	GameObjectType_shutdown(VF1AXIzzyType_VA) = 0x5C070u;
+	GameObjectType_state_machine(VF1AXIzzyType_VA) = 0x484B0u;
+	GameObjectType_load(VF1AXIzzyType_VA) = 0x19500u;
+	GameObjectType_collect(VF1AXIzzyType_VA) = 0x196A0u;
+	GameObjectType_version(VF1AXIzzyType_VA) = 0u;
+	GameObjectType_flags(VF1AXIzzyType_VA) = 1u;
+	MEM32(arg0 + 0xF8u) = VF1AXIzzyType_VA;
 	arg0_2 = 0x1F6478u;
 	sub_00061FA0(arg0_2);
 }
@@ -83065,11 +83090,12 @@ uint32_t sub_0005C2A0(void)
 	return eax;
 }
 
-uint32_t sub_0005C2B0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The VF1SX type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VF1SX_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x193E20u;
+	arg0 = VF1SXVF1SXText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -83083,7 +83109,8 @@ uint32_t sub_0005C2B0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-uint32_t sub_0005C2E0(void)
+/* The VF1SX type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t VF1SX_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -84316,19 +84343,22 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 	}
 }
 
-void sub_0005E110(uint32_t arg0)
+/* Registers the VF1SX type (Entity 29), its asset VF-1SX: a player's; with two players VF1SM in its
+   place (Entity 56 and 57, with Roy's skin, have the asset too): fills its GameObjectType and stores it
+   in its family. */
+void VF1SX_Register(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0;
 
-	MEM32(0x1FAB40u) = 0x308u;
-	MEM32(0x1FAB44u) = 0x5C2B0u;
-	MEM32(0x1FAB48u) = 0x5C2E0u;
-	MEM32(0x1FAB4Cu) = 0x484B0u;
-	MEM32(0x1FAB50u) = 0x19500u;
-	MEM32(0x1FAB58u) = 0x196A0u;
-	MEM32(0x1FAB5Cu) = 0u;
-	MEM32(0x1FAB60u) = 1u;
-	MEM32(arg0 + 0x84u) = 0x1FAB40u;
+	GameObjectType_size(VF1SXType_VA) = 0x308u;
+	GameObjectType_startup(VF1SXType_VA) = 0x5C2B0u;
+	GameObjectType_shutdown(VF1SXType_VA) = 0x5C2E0u;
+	GameObjectType_state_machine(VF1SXType_VA) = 0x484B0u;
+	GameObjectType_load(VF1SXType_VA) = 0x19500u;
+	GameObjectType_collect(VF1SXType_VA) = 0x196A0u;
+	GameObjectType_version(VF1SXType_VA) = 0u;
+	GameObjectType_flags(VF1SXType_VA) = 1u;
+	MEM32(arg0 + 0x84u) = VF1SXType_VA;
 	arg0_2 = 0x1FAB88u;
 	sub_0005C300(arg0_2);
 }
@@ -86901,7 +86931,8 @@ uint32_t sub_00061F40(void)
 	return eax;
 }
 
-uint32_t sub_00061F50(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The VF1AX type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VF1AX_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -86919,7 +86950,8 @@ uint32_t sub_00061F50(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-uint32_t sub_00061F80(void)
+/* The VF1AX type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t VF1AX_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -88152,19 +88184,22 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 	}
 }
 
-void sub_00063DB0(uint32_t arg0)
+/* Registers the VF1AX type (Entity 26), its asset VF-1AX: a player's, as VF1BX and VF1JX; with two
+   players VF1AM in its place (VF1AXIzzy has the asset too): fills its GameObjectType and stores it in
+   its family. */
+void VF1AX_Register(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0;
 
-	MEM32(0x1FF250u) = 0x308u;
-	MEM32(0x1FF254u) = 0x61F50u;
-	MEM32(0x1FF258u) = 0x61F80u;
-	MEM32(0x1FF25Cu) = 0x484B0u;
-	MEM32(0x1FF260u) = 0x19500u;
-	MEM32(0x1FF268u) = 0x196A0u;
-	MEM32(0x1FF26Cu) = 0u;
-	MEM32(0x1FF270u) = 1u;
-	MEM32(arg0 + 0x78u) = 0x1FF250u;
+	GameObjectType_size(VF1AXType_VA) = 0x308u;
+	GameObjectType_startup(VF1AXType_VA) = 0x61F50u;
+	GameObjectType_shutdown(VF1AXType_VA) = 0x61F80u;
+	GameObjectType_state_machine(VF1AXType_VA) = 0x484B0u;
+	GameObjectType_load(VF1AXType_VA) = 0x19500u;
+	GameObjectType_collect(VF1AXType_VA) = 0x196A0u;
+	GameObjectType_version(VF1AXType_VA) = 0u;
+	GameObjectType_flags(VF1AXType_VA) = 1u;
+	MEM32(arg0 + 0x78u) = VF1AXType_VA;
 	arg0_2 = 0x1FF298u;
 	sub_00061FA0(arg0_2);
 }
@@ -90577,191 +90612,191 @@ uint32_t Excalibur_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C60u);
+	arg0 = MechMotions_slide_back(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006948Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C64u);
+	arg0 = MechMotions_run_back(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006949Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C68u);
+	arg0 = MechMotions_idle(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694A5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C6Cu);
+	arg0 = MEM32(ExcaliburMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x000694B1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C70u);
+	arg0 = MechMotions_walk(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694BDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C74u);
+	arg0 = MechMotions_run(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694C8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C78u);
+	arg0 = MechMotions_slide_forward(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694D4u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C7Cu);
+	arg0 = MechMotions_slide_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694E0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C80u);
+	arg0 = MechMotions_strafe_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694EBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C84u);
+	arg0 = MechMotions_strafe_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000694F7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C88u);
+	arg0 = MechMotions_slide_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069503u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C8Cu);
+	arg0 = MechMotions_turn_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006950Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C90u);
+	arg0 = MechMotions_turn_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006951Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C94u);
+	arg0 = MechMotions_rise(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069526u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C98u);
+	arg0 = MechMotions_land_soft(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069531u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203C9Cu);
+	arg0 = MechMotions_land(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069540u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CA0u);
+	arg0 = MechMotions_thrust(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006954Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CA4u);
+	arg0 = MechMotions_thrust_forward(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069557u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CA8u);
+	arg0 = MechMotions_thrust_back(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069563u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CB0u);
+	arg0 = MechMotions_thrust_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006956Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CACu);
+	arg0 = MechMotions_thrust_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006957Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CB4u);
+	arg0 = MechMotions_fall(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069586u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CB8u);
+	arg0 = MechMotions_fall_forward(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069592u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CBCu);
+	arg0 = MechMotions_fall_back(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0006959Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CC4u);
+	arg0 = MechMotions_fall_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695A9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CC0u);
+	arg0 = MechMotions_fall_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695B5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CC8u);
+	arg0 = MechMotions_boost_back(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695C0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CCCu);
+	arg0 = MechMotions_boost_forward(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695CCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CD0u);
+	arg0 = MechMotions_boost_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695D8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CD4u);
+	arg0 = MechMotions_boost_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695E3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CD8u);
+	arg0 = MechMotions_alert(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695EFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CDCu);
+	arg0 = MechMotions_alarm(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000695FEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CE0u);
+	arg0 = MechMotions_alarm_turn_left(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069609u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CE4u);
+	arg0 = MechMotions_alarm_turn_right(ExcaliburMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00069615u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CE8u);
+	arg0 = MEM32(ExcaliburMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00069621u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x203CECu);
+	arg0 = MEM32(ExcaliburMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0006962Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x203C18u;
+	arg0 = MechMotions_landing_sounds_VA(ExcaliburMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x203CF0u;
+	arg0 = MechMotions_footstep_sounds_VA(ExcaliburMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x203C08u, 0u, 0x55u);
+	x86_rep_stos32(ExcaliburMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x2042F0u);
 	x86_call(vcObjectRelease_entry, 0x0006965Au, 1, arg0);
 	ignored = g_eax;
@@ -90923,7 +90958,7 @@ void Excalibur_Register(uint32_t arg0)
 	EntitySpec_explode_chance(ExcaliburSpec_VA) = EntityConstants_explode_chance_VA(ExcaliburConstants_VA);
 	EntitySpec_death_wait(ExcaliburSpec_VA) = EntityConstants_death_wait_VA(ExcaliburConstants_VA);
 	EntitySpec_fade_time(ExcaliburSpec_VA) = EntityConstants_fade_time_VA(ExcaliburConstants_VA);
-	EntitySpec_motions(ExcaliburSpec_VA) = 0x203C08u;
+	EntitySpec_motions(ExcaliburSpec_VA) = ExcaliburMotions_VA;
 	MEM32(ExcaliburSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(ExcaliburSpec_VA) = 0x203D5Cu;
 }
@@ -97656,191 +97691,191 @@ uint32_t MalePowerArmor_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063A0u);
+	arg0 = MechMotions_slide_back(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A0Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063A4u);
+	arg0 = MechMotions_run_back(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A1Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063A8u);
+	arg0 = MechMotions_idle(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A25u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063ACu);
+	arg0 = MEM32(MalePowerArmorMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x00073A31u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063B0u);
+	arg0 = MechMotions_walk(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A3Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063B4u);
+	arg0 = MechMotions_run(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A48u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063B8u);
+	arg0 = MechMotions_slide_forward(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A54u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063BCu);
+	arg0 = MechMotions_slide_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A60u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063C0u);
+	arg0 = MechMotions_strafe_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A6Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063C4u);
+	arg0 = MechMotions_strafe_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A77u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063C8u);
+	arg0 = MechMotions_slide_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A83u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063CCu);
+	arg0 = MechMotions_turn_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A8Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063D0u);
+	arg0 = MechMotions_turn_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073A9Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063D4u);
+	arg0 = MechMotions_rise(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AA6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063D8u);
+	arg0 = MechMotions_land_soft(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AB1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063DCu);
+	arg0 = MechMotions_land(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AC0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063E0u);
+	arg0 = MechMotions_thrust(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073ACCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063E4u);
+	arg0 = MechMotions_thrust_forward(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AD7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063E8u);
+	arg0 = MechMotions_thrust_back(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AE3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063F0u);
+	arg0 = MechMotions_thrust_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AEFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063ECu);
+	arg0 = MechMotions_thrust_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073AFAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063F4u);
+	arg0 = MechMotions_fall(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B06u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063F8u);
+	arg0 = MechMotions_fall_forward(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B12u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2063FCu);
+	arg0 = MechMotions_fall_back(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B1Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206404u);
+	arg0 = MechMotions_fall_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B29u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206400u);
+	arg0 = MechMotions_fall_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B35u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206408u);
+	arg0 = MechMotions_boost_back(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B40u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20640Cu);
+	arg0 = MechMotions_boost_forward(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B4Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206410u);
+	arg0 = MechMotions_boost_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B58u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206414u);
+	arg0 = MechMotions_boost_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B63u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206418u);
+	arg0 = MechMotions_alert(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B6Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20641Cu);
+	arg0 = MechMotions_alarm(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B7Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206420u);
+	arg0 = MechMotions_alarm_turn_left(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B89u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206424u);
+	arg0 = MechMotions_alarm_turn_right(MalePowerArmorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00073B95u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206428u);
+	arg0 = MEM32(MalePowerArmorMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00073BA1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20642Cu);
+	arg0 = MEM32(MalePowerArmorMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x00073BACu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x206358u;
+	arg0 = MechMotions_landing_sounds_VA(MalePowerArmorMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x206430u;
+	arg0 = MechMotions_footstep_sounds_VA(MalePowerArmorMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x206348u, 0u, 0x55u);
+	x86_rep_stos32(MalePowerArmorMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x206894u);
 	x86_call(vcObjectRelease_entry, 0x00073BDAu, 1, arg0);
 	ignored = g_eax;
@@ -98081,7 +98116,7 @@ void MalePowerArmor_Register(uint32_t arg0)
 	EntitySpec_explode_chance(MalePowerArmorSpec_VA) = EntityConstants_explode_chance_VA(MalePowerArmorConstants_VA);
 	EntitySpec_death_wait(MalePowerArmorSpec_VA) = EntityConstants_death_wait_VA(MalePowerArmorConstants_VA);
 	EntitySpec_fade_time(MalePowerArmorSpec_VA) = EntityConstants_fade_time_VA(MalePowerArmorConstants_VA);
-	EntitySpec_motions(MalePowerArmorSpec_VA) = 0x206348u;
+	EntitySpec_motions(MalePowerArmorSpec_VA) = MalePowerArmorMotions_VA;
 	MEM32(MalePowerArmorSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(MalePowerArmorSpec_VA) = 0x20649Cu;
 	x86_rep_stos32(0x206540u, 0u, 0x41u);
@@ -98147,7 +98182,7 @@ void MalePowerArmor_Register(uint32_t arg0)
 	MEM32(0x206630u) = 0x19BB88u;
 	MEM32(0x206634u) = 0x19BB8Cu;
 	MEM32(0x206638u) = 0x19BB90u;
-	MEM32(0x206600u) = 0x206348u;
+	MEM32(0x206600u) = MalePowerArmorMotions_VA;
 	MEM32(0x20663Cu) = 1u;
 	MEM32(0x206640u) = 0x206644u;
 	x86_rep_stos32(0x2066E8u, 0u, 0x41u);
@@ -98213,7 +98248,7 @@ void MalePowerArmor_Register(uint32_t arg0)
 	MEM32(0x2067D8u) = 0x19BD38u;
 	MEM32(0x2067DCu) = 0x19BD3Cu;
 	MEM32(0x2067E0u) = 0x19BD40u;
-	MEM32(0x2067A8u) = 0x206348u;
+	MEM32(0x2067A8u) = MalePowerArmorMotions_VA;
 	MEM32(0x2067E4u) = 1u;
 	MEM32(0x2067E8u) = 0x2067ECu;
 }
@@ -101128,7 +101163,7 @@ uint32_t PodOfficerSkarredDisabled_StateMachine(uint32_t esi, uint32_t arg0, uin
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x206F48u);
+					arg1_2 = MechMotions_alert(PodOfficerSkarredDisabledMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -101232,191 +101267,191 @@ uint32_t PodOfficerSkarredDisabled_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206ED0u);
+	arg0 = MechMotions_slide_back(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000787FEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206ED4u);
+	arg0 = MechMotions_run_back(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007880Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206ED8u);
+	arg0 = MechMotions_idle(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078815u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EDCu);
+	arg0 = MEM32(PodOfficerSkarredDisabledMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x00078821u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EE0u);
+	arg0 = MechMotions_walk(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007882Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EE4u);
+	arg0 = MechMotions_run(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078838u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EE8u);
+	arg0 = MechMotions_slide_forward(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078844u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EECu);
+	arg0 = MechMotions_slide_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078850u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EF0u);
+	arg0 = MechMotions_strafe_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007885Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EF4u);
+	arg0 = MechMotions_strafe_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078867u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EF8u);
+	arg0 = MechMotions_slide_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078873u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206EFCu);
+	arg0 = MechMotions_turn_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007887Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F00u);
+	arg0 = MechMotions_turn_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007888Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F04u);
+	arg0 = MechMotions_rise(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078896u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F08u);
+	arg0 = MechMotions_land_soft(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788A1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F0Cu);
+	arg0 = MechMotions_land(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788B0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F10u);
+	arg0 = MechMotions_thrust(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788BCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F14u);
+	arg0 = MechMotions_thrust_forward(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788C7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F18u);
+	arg0 = MechMotions_thrust_back(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788D3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F20u);
+	arg0 = MechMotions_thrust_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788DFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F1Cu);
+	arg0 = MechMotions_thrust_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788EAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F24u);
+	arg0 = MechMotions_fall(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000788F6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F28u);
+	arg0 = MechMotions_fall_forward(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078902u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F2Cu);
+	arg0 = MechMotions_fall_back(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007890Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F34u);
+	arg0 = MechMotions_fall_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078919u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F30u);
+	arg0 = MechMotions_fall_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078925u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F38u);
+	arg0 = MechMotions_boost_back(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078930u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F3Cu);
+	arg0 = MechMotions_boost_forward(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007893Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F40u);
+	arg0 = MechMotions_boost_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078948u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F44u);
+	arg0 = MechMotions_boost_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078953u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F48u);
+	arg0 = MechMotions_alert(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007895Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F4Cu);
+	arg0 = MechMotions_alarm(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007896Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F50u);
+	arg0 = MechMotions_alarm_turn_left(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078979u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F54u);
+	arg0 = MechMotions_alarm_turn_right(PodOfficerSkarredDisabledMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00078985u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F58u);
+	arg0 = MEM32(PodOfficerSkarredDisabledMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00078991u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x206F5Cu);
+	arg0 = MEM32(PodOfficerSkarredDisabledMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0007899Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x206E88u;
+	arg0 = MechMotions_landing_sounds_VA(PodOfficerSkarredDisabledMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x206F60u;
+	arg0 = MechMotions_footstep_sounds_VA(PodOfficerSkarredDisabledMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x206E78u, 0u, 0x55u);
+	x86_rep_stos32(PodOfficerSkarredDisabledMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x206DD4u) > 0)
 	{
@@ -101568,7 +101603,7 @@ void PodOfficerSkarredDisabled_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodOfficerSkarredDisabledSpec_VA) = EntityConstants_explode_chance_VA(PodOfficerSkarredDisabledConstants_VA);
 	EntitySpec_death_wait(PodOfficerSkarredDisabledSpec_VA) = EntityConstants_death_wait_VA(PodOfficerSkarredDisabledConstants_VA);
 	EntitySpec_fade_time(PodOfficerSkarredDisabledSpec_VA) = EntityConstants_fade_time_VA(PodOfficerSkarredDisabledConstants_VA);
-	EntitySpec_motions(PodOfficerSkarredDisabledSpec_VA) = 0x206E78u;
+	EntitySpec_motions(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledMotions_VA;
 	MEM32(PodOfficerSkarredDisabledSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodOfficerSkarredDisabledSpec_VA) = 0x206DD0u;
 }
@@ -101911,7 +101946,7 @@ uint32_t PodOfficerSkarred_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x2072A0u);
+					arg1_2 = MechMotions_alert(PodOfficerSkarredMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -102014,191 +102049,191 @@ uint32_t PodOfficerSkarred_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207228u);
+	arg0 = MechMotions_slide_back(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079ACEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20722Cu);
+	arg0 = MechMotions_run_back(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079ADAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207230u);
+	arg0 = MechMotions_idle(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079AE5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207234u);
+	arg0 = MEM32(PodOfficerSkarredMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x00079AF1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207238u);
+	arg0 = MechMotions_walk(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079AFDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20723Cu);
+	arg0 = MechMotions_run(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B08u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207240u);
+	arg0 = MechMotions_slide_forward(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B14u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207244u);
+	arg0 = MechMotions_slide_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B20u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207248u);
+	arg0 = MechMotions_strafe_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B2Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20724Cu);
+	arg0 = MechMotions_strafe_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B37u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207250u);
+	arg0 = MechMotions_slide_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B43u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207254u);
+	arg0 = MechMotions_turn_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B4Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207258u);
+	arg0 = MechMotions_turn_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B5Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20725Cu);
+	arg0 = MechMotions_rise(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B66u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207260u);
+	arg0 = MechMotions_land_soft(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B71u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207264u);
+	arg0 = MechMotions_land(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B80u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207268u);
+	arg0 = MechMotions_thrust(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B8Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20726Cu);
+	arg0 = MechMotions_thrust_forward(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079B97u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207270u);
+	arg0 = MechMotions_thrust_back(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BA3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207278u);
+	arg0 = MechMotions_thrust_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BAFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207274u);
+	arg0 = MechMotions_thrust_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BBAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20727Cu);
+	arg0 = MechMotions_fall(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BC6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207280u);
+	arg0 = MechMotions_fall_forward(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BD2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207284u);
+	arg0 = MechMotions_fall_back(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BDDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20728Cu);
+	arg0 = MechMotions_fall_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BE9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207288u);
+	arg0 = MechMotions_fall_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079BF5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207290u);
+	arg0 = MechMotions_boost_back(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C00u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207294u);
+	arg0 = MechMotions_boost_forward(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C0Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207298u);
+	arg0 = MechMotions_boost_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C18u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20729Cu);
+	arg0 = MechMotions_boost_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C23u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072A0u);
+	arg0 = MechMotions_alert(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C2Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072A4u);
+	arg0 = MechMotions_alarm(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C3Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072A8u);
+	arg0 = MechMotions_alarm_turn_left(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C49u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072ACu);
+	arg0 = MechMotions_alarm_turn_right(PodOfficerSkarredMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00079C55u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072B0u);
+	arg0 = MEM32(PodOfficerSkarredMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00079C61u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2072B4u);
+	arg0 = MEM32(PodOfficerSkarredMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x00079C6Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x2071E0u;
+	arg0 = MechMotions_landing_sounds_VA(PodOfficerSkarredMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x2072B8u;
+	arg0 = MechMotions_footstep_sounds_VA(PodOfficerSkarredMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x2071D0u, 0u, 0x55u);
+	x86_rep_stos32(PodOfficerSkarredMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20712Cu) > 0)
 	{
@@ -102350,7 +102385,7 @@ void PodOfficerSkarred_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodOfficerSkarredSpec_VA) = EntityConstants_explode_chance_VA(PodOfficerSkarredConstants_VA);
 	EntitySpec_death_wait(PodOfficerSkarredSpec_VA) = EntityConstants_death_wait_VA(PodOfficerSkarredConstants_VA);
 	EntitySpec_fade_time(PodOfficerSkarredSpec_VA) = EntityConstants_fade_time_VA(PodOfficerSkarredConstants_VA);
-	EntitySpec_motions(PodOfficerSkarredSpec_VA) = 0x2071D0u;
+	EntitySpec_motions(PodOfficerSkarredSpec_VA) = PodOfficerSkarredMotions_VA;
 	MEM32(PodOfficerSkarredSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodOfficerSkarredSpec_VA) = 0x207128u;
 }
@@ -102652,191 +102687,191 @@ uint32_t PodOfficer_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207610u);
+	arg0 = MechMotions_slide_back(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEAEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207614u);
+	arg0 = MechMotions_run_back(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEBAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207618u);
+	arg0 = MechMotions_idle(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEC5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20761Cu);
+	arg0 = MEM32(PodOfficerMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0007AED1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207620u);
+	arg0 = MechMotions_walk(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEDDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207624u);
+	arg0 = MechMotions_run(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEE8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207628u);
+	arg0 = MechMotions_slide_forward(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AEF4u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20762Cu);
+	arg0 = MechMotions_slide_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF00u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207630u);
+	arg0 = MechMotions_strafe_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF0Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207634u);
+	arg0 = MechMotions_strafe_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF17u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207638u);
+	arg0 = MechMotions_slide_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF23u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20763Cu);
+	arg0 = MechMotions_turn_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF2Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207640u);
+	arg0 = MechMotions_turn_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF3Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207644u);
+	arg0 = MechMotions_rise(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF46u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207648u);
+	arg0 = MechMotions_land_soft(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF51u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20764Cu);
+	arg0 = MechMotions_land(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF60u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207650u);
+	arg0 = MechMotions_thrust(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF6Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207654u);
+	arg0 = MechMotions_thrust_forward(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF77u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207658u);
+	arg0 = MechMotions_thrust_back(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF83u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207660u);
+	arg0 = MechMotions_thrust_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF8Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20765Cu);
+	arg0 = MechMotions_thrust_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AF9Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207664u);
+	arg0 = MechMotions_fall(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFA6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207668u);
+	arg0 = MechMotions_fall_forward(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFB2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20766Cu);
+	arg0 = MechMotions_fall_back(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFBDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207674u);
+	arg0 = MechMotions_fall_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFC9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207670u);
+	arg0 = MechMotions_fall_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFD5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207678u);
+	arg0 = MechMotions_boost_back(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFE0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20767Cu);
+	arg0 = MechMotions_boost_forward(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFECu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207680u);
+	arg0 = MechMotions_boost_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007AFF8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207684u);
+	arg0 = MechMotions_boost_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007B003u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207688u);
+	arg0 = MechMotions_alert(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007B00Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20768Cu);
+	arg0 = MechMotions_alarm(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007B01Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207690u);
+	arg0 = MechMotions_alarm_turn_left(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007B029u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207694u);
+	arg0 = MechMotions_alarm_turn_right(PodOfficerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007B035u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207698u);
+	arg0 = MEM32(PodOfficerMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0007B041u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20769Cu);
+	arg0 = MEM32(PodOfficerMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0007B04Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x2075C8u;
+	arg0 = MechMotions_landing_sounds_VA(PodOfficerMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x2076A0u;
+	arg0 = MechMotions_footstep_sounds_VA(PodOfficerMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x2075B8u, 0u, 0x55u);
+	x86_rep_stos32(PodOfficerMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x207514u) > 0)
 	{
@@ -102992,7 +103027,7 @@ void PodOfficer_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodOfficerSpec_VA) = EntityConstants_explode_chance_VA(PodOfficerConstants_VA);
 	EntitySpec_death_wait(PodOfficerSpec_VA) = EntityConstants_death_wait_VA(PodOfficerConstants_VA);
 	EntitySpec_fade_time(PodOfficerSpec_VA) = EntityConstants_fade_time_VA(PodOfficerConstants_VA);
-	EntitySpec_motions(PodOfficerSpec_VA) = 0x2075B8u;
+	EntitySpec_motions(PodOfficerSpec_VA) = PodOfficerMotions_VA;
 	MEM32(PodOfficerSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodOfficerSpec_VA) = 0x207510u;
 }
@@ -104878,191 +104913,191 @@ uint32_t Spartan_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E30u);
+	arg0 = MechMotions_slide_back(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DA5Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E34u);
+	arg0 = MechMotions_run_back(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DA6Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E38u);
+	arg0 = MechMotions_idle(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DA75u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E3Cu);
+	arg0 = MEM32(SpartanMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0007DA81u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E40u);
+	arg0 = MechMotions_walk(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DA8Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E44u);
+	arg0 = MechMotions_run(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DA98u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E48u);
+	arg0 = MechMotions_slide_forward(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAA4u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E4Cu);
+	arg0 = MechMotions_slide_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAB0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E50u);
+	arg0 = MechMotions_strafe_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DABBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E54u);
+	arg0 = MechMotions_strafe_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAC7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E58u);
+	arg0 = MechMotions_slide_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAD3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E5Cu);
+	arg0 = MechMotions_turn_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DADEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E60u);
+	arg0 = MechMotions_turn_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAEAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E64u);
+	arg0 = MechMotions_rise(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DAF6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E68u);
+	arg0 = MechMotions_land_soft(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB01u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E6Cu);
+	arg0 = MechMotions_land(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB10u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E70u);
+	arg0 = MechMotions_thrust(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB1Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E74u);
+	arg0 = MechMotions_thrust_forward(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB27u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E78u);
+	arg0 = MechMotions_thrust_back(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB33u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E80u);
+	arg0 = MechMotions_thrust_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB3Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E7Cu);
+	arg0 = MechMotions_thrust_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB4Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E84u);
+	arg0 = MechMotions_fall(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB56u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E88u);
+	arg0 = MechMotions_fall_forward(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB62u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E8Cu);
+	arg0 = MechMotions_fall_back(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB6Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E94u);
+	arg0 = MechMotions_fall_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB79u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E90u);
+	arg0 = MechMotions_fall_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB85u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E98u);
+	arg0 = MechMotions_boost_back(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB90u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207E9Cu);
+	arg0 = MechMotions_boost_forward(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DB9Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EA0u);
+	arg0 = MechMotions_boost_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBA8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EA4u);
+	arg0 = MechMotions_boost_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBB3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EA8u);
+	arg0 = MechMotions_alert(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBBFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EACu);
+	arg0 = MechMotions_alarm(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBCEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EB0u);
+	arg0 = MechMotions_alarm_turn_left(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBD9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EB4u);
+	arg0 = MechMotions_alarm_turn_right(SpartanMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007DBE5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EB8u);
+	arg0 = MEM32(SpartanMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0007DBF1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x207EBCu);
+	arg0 = MEM32(SpartanMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0007DBFCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x207DE8u;
+	arg0 = MechMotions_landing_sounds_VA(SpartanMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x207EC0u;
+	arg0 = MechMotions_footstep_sounds_VA(SpartanMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x207DD8u, 0u, 0x55u);
+	x86_rep_stos32(SpartanMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x207D34u) > 0)
 	{
@@ -105214,7 +105249,7 @@ void Spartan_Register(uint32_t arg0)
 	EntitySpec_explode_chance(SpartanSpec_VA) = EntityConstants_explode_chance_VA(SpartanConstants_VA);
 	EntitySpec_death_wait(SpartanSpec_VA) = EntityConstants_death_wait_VA(SpartanConstants_VA);
 	EntitySpec_fade_time(SpartanSpec_VA) = EntityConstants_fade_time_VA(SpartanConstants_VA);
-	EntitySpec_motions(SpartanSpec_VA) = 0x207DD8u;
+	EntitySpec_motions(SpartanSpec_VA) = SpartanMotions_VA;
 	MEM32(SpartanSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(SpartanSpec_VA) = 0x207D30u;
 }
@@ -105406,191 +105441,191 @@ uint32_t RaiderX_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208188u);
+	arg0 = MechMotions_slide_back(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED2Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20818Cu);
+	arg0 = MechMotions_run_back(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED3Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208190u);
+	arg0 = MechMotions_idle(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED45u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208194u);
+	arg0 = MEM32(RaiderXMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0007ED51u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208198u);
+	arg0 = MechMotions_walk(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED5Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20819Cu);
+	arg0 = MechMotions_run(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED68u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081A0u);
+	arg0 = MechMotions_slide_forward(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED74u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081A4u);
+	arg0 = MechMotions_slide_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED80u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081A8u);
+	arg0 = MechMotions_strafe_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED8Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081ACu);
+	arg0 = MechMotions_strafe_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007ED97u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081B0u);
+	arg0 = MechMotions_slide_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDA3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081B4u);
+	arg0 = MechMotions_turn_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDAEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081B8u);
+	arg0 = MechMotions_turn_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDBAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081BCu);
+	arg0 = MechMotions_rise(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDC6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081C0u);
+	arg0 = MechMotions_land_soft(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDD1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081C4u);
+	arg0 = MechMotions_land(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDE0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081C8u);
+	arg0 = MechMotions_thrust(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDECu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081CCu);
+	arg0 = MechMotions_thrust_forward(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EDF7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081D0u);
+	arg0 = MechMotions_thrust_back(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE03u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081D8u);
+	arg0 = MechMotions_thrust_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE0Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081D4u);
+	arg0 = MechMotions_thrust_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE1Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081DCu);
+	arg0 = MechMotions_fall(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE26u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081E0u);
+	arg0 = MechMotions_fall_forward(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE32u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081E4u);
+	arg0 = MechMotions_fall_back(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE3Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081ECu);
+	arg0 = MechMotions_fall_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE49u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081E8u);
+	arg0 = MechMotions_fall_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE55u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081F0u);
+	arg0 = MechMotions_boost_back(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE60u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081F4u);
+	arg0 = MechMotions_boost_forward(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE6Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081F8u);
+	arg0 = MechMotions_boost_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE78u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2081FCu);
+	arg0 = MechMotions_boost_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE83u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208200u);
+	arg0 = MechMotions_alert(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE8Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208204u);
+	arg0 = MechMotions_alarm(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EE9Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208208u);
+	arg0 = MechMotions_alarm_turn_left(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EEA9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20820Cu);
+	arg0 = MechMotions_alarm_turn_right(RaiderXMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007EEB5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208210u);
+	arg0 = MEM32(RaiderXMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0007EEC1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208214u);
+	arg0 = MEM32(RaiderXMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0007EECCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x208140u;
+	arg0 = MechMotions_landing_sounds_VA(RaiderXMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x208218u;
+	arg0 = MechMotions_footstep_sounds_VA(RaiderXMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x208130u, 0u, 0x55u);
+	x86_rep_stos32(RaiderXMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20808Cu) > 0)
 	{
@@ -105737,7 +105772,7 @@ void RaiderX_Register(uint32_t arg0)
 	EntitySpec_explode_chance(RaiderXSpec_VA) = EntityConstants_explode_chance_VA(RaiderXConstants_VA);
 	EntitySpec_death_wait(RaiderXSpec_VA) = EntityConstants_death_wait_VA(RaiderXConstants_VA);
 	EntitySpec_fade_time(RaiderXSpec_VA) = EntityConstants_fade_time_VA(RaiderXConstants_VA);
-	EntitySpec_motions(RaiderXSpec_VA) = 0x208130u;
+	EntitySpec_motions(RaiderXSpec_VA) = RaiderXMotions_VA;
 	MEM32(RaiderXSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(RaiderXSpec_VA) = 0x208088u;
 }
@@ -106181,22 +106216,22 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	MacIITargetNode = eax;
-	x86_rep_stos32(0x2084C0u, 0u, 0x55u);
+	x86_rep_stos32(MacIIMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DC6Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x2084C0u) = 0x19DC5Cu;
-	MEM32(0x2084C4u) = 0x19DC60u;
-	MEM32(0x2084C8u) = 0x19DC64u;
-	MEM32(0x2084CCu) = 0x19DC68u;
-	MEM32(0x2085F0u) = 0u;
-	MEM32(0x2085E8u) = 0u;
-	MEM32(0x208510u) = 0u;
+	MechMotions_walk_speed(MacIIMotions_VA) = 0x19DC5Cu;
+	MechMotions_run_speed(MacIIMotions_VA) = 0x19DC60u;
+	MEM32(MacIIMotions_VA + 0x8u) = 0x19DC64u;
+	MechMotions_run_back_speed(MacIIMotions_VA) = 0x19DC68u;
+	MechMotions_footsteps(MacIIMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(MacIIMotions_VA) = 0u;
+	MechMotions_landing_sound_count(MacIIMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0007F71Eu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DC78u;
-	MEM32(0x208518u) = eax;
+	MechMotions_slide_back(MacIIMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0007F72Fu, 0);
@@ -106205,119 +106240,119 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = Mak2IdleText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20851Cu) = eax;
+	MechMotions_run_back(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F743u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DC90u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208520u) = eax;
+	MechMotions_idle(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F754u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DC9Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208524u) = eax;
+	MEM32(MacIIMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F765u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = Mak2RunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208528u) = eax;
+	MechMotions_walk(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F776u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCB4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20852Cu) = eax;
+	MechMotions_run(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F787u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCC0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208530u) = eax;
+	MechMotions_slide_forward(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F798u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCCCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208534u) = eax;
+	MechMotions_slide_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F7A9u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCD8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208538u) = eax;
+	MechMotions_strafe_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F7BAu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCE4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20853Cu) = eax;
+	MechMotions_strafe_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F7CEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DCF0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208540u) = eax;
+	MechMotions_slide_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F7DFu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD08u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208544u) = eax;
+	MechMotions_turn_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F7F0u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD1Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208548u) = eax;
+	MechMotions_turn_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F801u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD28u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20854Cu) = eax;
+	MechMotions_rise(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F812u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD34u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208550u) = eax;
+	MechMotions_land_soft(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F823u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208554u) = eax;
+	MechMotions_land(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F834u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD4Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208558u) = eax;
+	MechMotions_thrust(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F845u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD58u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20855Cu) = eax;
+	MechMotions_thrust_forward(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F859u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD64u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208560u) = eax;
+	MechMotions_thrust_back(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F86Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD70u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208568u) = eax;
+	MechMotions_thrust_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F87Bu, 0);
-	MEM32(0x208564u) = eax;
+	MechMotions_thrust_left(MacIIMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD7Cu;
 	g_esp = g_esp - 4u;
@@ -106327,93 +106362,93 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = 0x19DD88u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20856Cu) = eax;
+	MechMotions_fall(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F89Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DD94u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208570u) = eax;
+	MechMotions_fall_forward(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F8AEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDA0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208574u) = eax;
+	MechMotions_fall_back(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F8BFu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDACu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20857Cu) = eax;
+	MechMotions_fall_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F8D0u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDC4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208578u) = eax;
+	MechMotions_fall_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F8E4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDD0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208580u) = eax;
+	MechMotions_boost_back(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F8F5u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDDCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208584u) = eax;
+	MechMotions_boost_forward(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F906u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DDE8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208588u) = eax;
+	MechMotions_boost_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F917u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = Mak2AlertPoseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20858Cu) = eax;
+	MechMotions_boost_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F928u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE20u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208590u) = eax;
+	MechMotions_alert(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F939u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208594u) = eax;
+	MechMotions_alarm(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F94Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE44u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x208598u) = eax;
+	MechMotions_alarm_turn_left(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F95Bu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE55u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20859Cu) = eax;
+	MechMotions_alarm_turn_right(MacIIMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F96Fu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19DE56u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x2085A0u) = eax;
+	MEM32(MacIIMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F980u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = Mak2AimArmsText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x2085A4u) = eax;
+	MEM32(MacIIMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F991u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = Mak2FireText_VA;
@@ -106766,191 +106801,191 @@ uint32_t MacII_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208518u);
+	arg0 = MechMotions_slide_back(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD4Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20851Cu);
+	arg0 = MechMotions_run_back(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD5Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208520u);
+	arg0 = MechMotions_idle(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD65u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208524u);
+	arg0 = MEM32(MacIIMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0007FD71u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208528u);
+	arg0 = MechMotions_walk(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD7Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20852Cu);
+	arg0 = MechMotions_run(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD88u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208530u);
+	arg0 = MechMotions_slide_forward(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FD94u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208534u);
+	arg0 = MechMotions_slide_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDA0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208538u);
+	arg0 = MechMotions_strafe_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDABu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20853Cu);
+	arg0 = MechMotions_strafe_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDB7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208540u);
+	arg0 = MechMotions_slide_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDC3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208544u);
+	arg0 = MechMotions_turn_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDCEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208548u);
+	arg0 = MechMotions_turn_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDDAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20854Cu);
+	arg0 = MechMotions_rise(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDE6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208550u);
+	arg0 = MechMotions_land_soft(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FDF1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208554u);
+	arg0 = MechMotions_land(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE00u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208558u);
+	arg0 = MechMotions_thrust(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE0Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20855Cu);
+	arg0 = MechMotions_thrust_forward(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE17u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208560u);
+	arg0 = MechMotions_thrust_back(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE23u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208568u);
+	arg0 = MechMotions_thrust_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE2Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208564u);
+	arg0 = MechMotions_thrust_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE3Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20856Cu);
+	arg0 = MechMotions_fall(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE46u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208570u);
+	arg0 = MechMotions_fall_forward(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE52u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208574u);
+	arg0 = MechMotions_fall_back(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE5Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20857Cu);
+	arg0 = MechMotions_fall_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE69u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208578u);
+	arg0 = MechMotions_fall_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE75u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208580u);
+	arg0 = MechMotions_boost_back(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE80u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208584u);
+	arg0 = MechMotions_boost_forward(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE8Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208588u);
+	arg0 = MechMotions_boost_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FE98u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20858Cu);
+	arg0 = MechMotions_boost_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FEA3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208590u);
+	arg0 = MechMotions_alert(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FEAFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208594u);
+	arg0 = MechMotions_alarm(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FEBEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x208598u);
+	arg0 = MechMotions_alarm_turn_left(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FEC9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20859Cu);
+	arg0 = MechMotions_alarm_turn_right(MacIIMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0007FED5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2085A0u);
+	arg0 = MEM32(MacIIMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0007FEE1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x2085A4u);
+	arg0 = MEM32(MacIIMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0007FEECu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x2084D0u;
+	arg0 = MechMotions_landing_sounds_VA(MacIIMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x2085A8u;
+	arg0 = MechMotions_footstep_sounds_VA(MacIIMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x2084C0u, 0u, 0x55u);
+	x86_rep_stos32(MacIIMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x208720u);
 	x86_call(vcObjectRelease_entry, 0x0007FF1Au, 1, arg0);
 	ignored = g_eax;
@@ -107277,7 +107312,7 @@ void MacII_Register(uint32_t arg0)
 	EntitySpec_explode_chance(MacIISpec_VA) = EntityConstants_explode_chance_VA(MacIIConstants_VA);
 	EntitySpec_death_wait(MacIISpec_VA) = EntityConstants_death_wait_VA(MacIIConstants_VA);
 	EntitySpec_fade_time(MacIISpec_VA) = EntityConstants_fade_time_VA(MacIIConstants_VA);
-	EntitySpec_motions(MacIISpec_VA) = 0x2084C0u;
+	EntitySpec_motions(MacIISpec_VA) = MacIIMotions_VA;
 	MEM32(MacIISpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(MacIISpec_VA) = 0x208418u;
 }
@@ -111640,45 +111675,45 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	GladiatorTargetNode = eax;
-	x86_rep_stos32(0x2092B8u, 0u, 0x55u);
+	x86_rep_stos32(GladiatorMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E6A0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x2092B8u) = 0x19E690u;
-	MEM32(0x2092BCu) = 0x19E694u;
-	MEM32(0x2092C0u) = 0x19E698u;
-	MEM32(0x2092C4u) = 0x19E69Cu;
-	MEM32(0x2093E8u) = 0u;
-	MEM32(0x2093E0u) = 0u;
-	MEM32(0x209308u) = 0u;
+	MechMotions_walk_speed(GladiatorMotions_VA) = 0x19E690u;
+	MechMotions_run_speed(GladiatorMotions_VA) = 0x19E694u;
+	MEM32(GladiatorMotions_VA + 0x8u) = 0x19E698u;
+	MechMotions_run_back_speed(GladiatorMotions_VA) = 0x19E69Cu;
+	MechMotions_footsteps(GladiatorMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(GladiatorMotions_VA) = 0u;
+	MechMotions_landing_sound_count(GladiatorMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000850EDu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorGladiatorRunBackText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209310u) = eax;
+	MechMotions_slide_back(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000850FEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E6CCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209314u) = eax;
+	MechMotions_run_back(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008510Fu, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E6DCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209318u) = eax;
+	MechMotions_idle(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085123u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20931Cu) = eax;
+	MEM32(GladiatorMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085134u, 0);
-	MEM32(0x209320u) = eax;
+	MechMotions_walk(GladiatorMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorGladiatorRunText_VA;
 	g_esp = g_esp - 4u;
@@ -111688,119 +111723,119 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp) = GladiatorSlideForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209324u) = eax;
+	MechMotions_run(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085156u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorSlideLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209328u) = eax;
+	MechMotions_slide_forward(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085167u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E73Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20932Cu) = eax;
+	MechMotions_slide_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085178u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E754u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209330u) = eax;
+	MechMotions_strafe_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085189u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorSlideRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209334u) = eax;
+	MechMotions_strafe_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008519Au, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E784u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209338u) = eax;
+	MechMotions_slide_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000851AEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7A0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20933Cu) = eax;
+	MechMotions_turn_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000851BFu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7B8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209340u) = eax;
+	MechMotions_turn_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000851D0u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7C8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209344u) = eax;
+	MechMotions_rise(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000851E1u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7D8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209348u) = eax;
+	MechMotions_land_soft(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000851F2u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7E8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20934Cu) = eax;
+	MechMotions_land(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085203u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E7F8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209350u) = eax;
+	MechMotions_thrust(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085214u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E808u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209354u) = eax;
+	MechMotions_thrust_forward(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085225u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E818u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209358u) = eax;
+	MechMotions_thrust_back(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085239u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E828u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209360u) = eax;
+	MechMotions_thrust_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008524Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E838u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20935Cu) = eax;
+	MechMotions_thrust_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008525Bu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E848u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209364u) = eax;
+	MechMotions_fall(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008526Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E858u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209368u) = eax;
+	MechMotions_fall_forward(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008527Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E868u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20936Cu) = eax;
+	MechMotions_fall_back(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008528Eu, 0);
-	MEM32(0x209374u) = eax;
+	MechMotions_fall_right(GladiatorMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E878u;
 	g_esp = g_esp - 4u;
@@ -111810,69 +111845,69 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp) = 0x19E8B0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209370u) = eax;
+	MechMotions_fall_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852B0u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E8C4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209378u) = eax;
+	MechMotions_boost_back(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852C4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E8D4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20937Cu) = eax;
+	MechMotions_boost_forward(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852D5u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E8ECu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209380u) = eax;
+	MechMotions_boost_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852E6u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorAlertPoseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209384u) = eax;
+	MechMotions_boost_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852F7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209388u) = eax;
+	MechMotions_alert(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085308u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E944u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20938Cu) = eax;
+	MechMotions_alarm(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085319u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E960u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209390u) = eax;
+	MechMotions_alarm_turn_left(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008532Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E976u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209394u) = eax;
+	MechMotions_alarm_turn_right(GladiatorMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008533Bu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19E977u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x209398u) = eax;
+	MEM32(GladiatorMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008534Fu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = GladiatorHatchesOpenText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20939Cu) = eax;
+	MEM32(GladiatorMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085360u, 0);
 	esi_2 = GladiatorModel;
 	MEM32(0x209518u) = eax;
@@ -112175,191 +112210,191 @@ uint32_t Gladiator_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209310u);
+	arg0 = MechMotions_slide_back(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008579Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209314u);
+	arg0 = MechMotions_run_back(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857AAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209318u);
+	arg0 = MechMotions_idle(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857B5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20931Cu);
+	arg0 = MEM32(GladiatorMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x000857C1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209320u);
+	arg0 = MechMotions_walk(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857CDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209324u);
+	arg0 = MechMotions_run(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857D8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209328u);
+	arg0 = MechMotions_slide_forward(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857E4u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20932Cu);
+	arg0 = MechMotions_slide_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857F0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209330u);
+	arg0 = MechMotions_strafe_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000857FBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209334u);
+	arg0 = MechMotions_strafe_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085807u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209338u);
+	arg0 = MechMotions_slide_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085813u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20933Cu);
+	arg0 = MechMotions_turn_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008581Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209340u);
+	arg0 = MechMotions_turn_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008582Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209344u);
+	arg0 = MechMotions_rise(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085836u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209348u);
+	arg0 = MechMotions_land_soft(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085841u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20934Cu);
+	arg0 = MechMotions_land(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085850u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209350u);
+	arg0 = MechMotions_thrust(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008585Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209354u);
+	arg0 = MechMotions_thrust_forward(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085867u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209358u);
+	arg0 = MechMotions_thrust_back(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085873u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209360u);
+	arg0 = MechMotions_thrust_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008587Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20935Cu);
+	arg0 = MechMotions_thrust_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008588Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209364u);
+	arg0 = MechMotions_fall(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085896u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209368u);
+	arg0 = MechMotions_fall_forward(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858A2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20936Cu);
+	arg0 = MechMotions_fall_back(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858ADu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209374u);
+	arg0 = MechMotions_fall_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858B9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209370u);
+	arg0 = MechMotions_fall_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858C5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209378u);
+	arg0 = MechMotions_boost_back(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858D0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20937Cu);
+	arg0 = MechMotions_boost_forward(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858DCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209380u);
+	arg0 = MechMotions_boost_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858E8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209384u);
+	arg0 = MechMotions_boost_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858F3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209388u);
+	arg0 = MechMotions_alert(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000858FFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20938Cu);
+	arg0 = MechMotions_alarm(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008590Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209390u);
+	arg0 = MechMotions_alarm_turn_left(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085919u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209394u);
+	arg0 = MechMotions_alarm_turn_right(GladiatorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00085925u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x209398u);
+	arg0 = MEM32(GladiatorMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00085931u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20939Cu);
+	arg0 = MEM32(GladiatorMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0008593Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x2092C8u;
+	arg0 = MechMotions_landing_sounds_VA(GladiatorMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x2093A0u;
+	arg0 = MechMotions_footstep_sounds_VA(GladiatorMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x2092B8u, 0u, 0x55u);
+	x86_rep_stos32(GladiatorMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x209518u);
 	x86_call(vcObjectRelease_entry, 0x0008596Au, 1, arg0);
 	ignored = g_eax;
@@ -112516,7 +112551,7 @@ void Gladiator_Register(uint32_t arg0)
 	EntitySpec_explode_chance(GladiatorSpec_VA) = EntityConstants_explode_chance_VA(GladiatorConstants_VA);
 	EntitySpec_death_wait(GladiatorSpec_VA) = EntityConstants_death_wait_VA(GladiatorConstants_VA);
 	EntitySpec_fade_time(GladiatorSpec_VA) = EntityConstants_fade_time_VA(GladiatorConstants_VA);
-	EntitySpec_motions(GladiatorSpec_VA) = 0x2092B8u;
+	EntitySpec_motions(GladiatorSpec_VA) = GladiatorMotions_VA;
 	MEM32(GladiatorSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(GladiatorSpec_VA) = 0x209210u;
 }
@@ -115257,191 +115292,191 @@ uint32_t PodHeavyArtillery_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A728u);
+	arg0 = MechMotions_slide_back(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A22Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A72Cu);
+	arg0 = MechMotions_run_back(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A23Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A730u);
+	arg0 = MechMotions_idle(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A245u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A734u);
+	arg0 = MEM32(PodHeavyArtilleryMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0008A251u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A738u);
+	arg0 = MechMotions_walk(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A25Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A73Cu);
+	arg0 = MechMotions_run(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A268u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A740u);
+	arg0 = MechMotions_slide_forward(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A274u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A744u);
+	arg0 = MechMotions_slide_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A280u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A748u);
+	arg0 = MechMotions_strafe_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A28Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A74Cu);
+	arg0 = MechMotions_strafe_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A297u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A750u);
+	arg0 = MechMotions_slide_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2A3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A754u);
+	arg0 = MechMotions_turn_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2AEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A758u);
+	arg0 = MechMotions_turn_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2BAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A75Cu);
+	arg0 = MechMotions_rise(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2C6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A760u);
+	arg0 = MechMotions_land_soft(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2D1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A764u);
+	arg0 = MechMotions_land(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2E0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A768u);
+	arg0 = MechMotions_thrust(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2ECu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A76Cu);
+	arg0 = MechMotions_thrust_forward(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A2F7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A770u);
+	arg0 = MechMotions_thrust_back(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A303u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A778u);
+	arg0 = MechMotions_thrust_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A30Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A774u);
+	arg0 = MechMotions_thrust_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A31Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A77Cu);
+	arg0 = MechMotions_fall(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A326u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A780u);
+	arg0 = MechMotions_fall_forward(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A332u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A784u);
+	arg0 = MechMotions_fall_back(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A33Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A78Cu);
+	arg0 = MechMotions_fall_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A349u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A788u);
+	arg0 = MechMotions_fall_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A355u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A790u);
+	arg0 = MechMotions_boost_back(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A360u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A794u);
+	arg0 = MechMotions_boost_forward(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A36Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A798u);
+	arg0 = MechMotions_boost_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A378u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A79Cu);
+	arg0 = MechMotions_boost_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A383u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7A0u);
+	arg0 = MechMotions_alert(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A38Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7A4u);
+	arg0 = MechMotions_alarm(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A39Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7A8u);
+	arg0 = MechMotions_alarm_turn_left(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A3A9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7ACu);
+	arg0 = MechMotions_alarm_turn_right(PodHeavyArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008A3B5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7B0u);
+	arg0 = MEM32(PodHeavyArtilleryMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0008A3C1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20A7B4u);
+	arg0 = MEM32(PodHeavyArtilleryMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0008A3CCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20A6E0u;
+	arg0 = MechMotions_landing_sounds_VA(PodHeavyArtilleryMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20A7B8u;
+	arg0 = MechMotions_footstep_sounds_VA(PodHeavyArtilleryMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20A6D0u, 0u, 0x55u);
+	x86_rep_stos32(PodHeavyArtilleryMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x20A930u);
 	x86_call(vcObjectRelease_entry, 0x0008A3FAu, 1, arg0);
 	ignored = g_eax;
@@ -115600,7 +115635,7 @@ void PodHeavyArtillery_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodHeavyArtillerySpec_VA) = EntityConstants_explode_chance_VA(PodHeavyArtilleryConstants_VA);
 	EntitySpec_death_wait(PodHeavyArtillerySpec_VA) = EntityConstants_death_wait_VA(PodHeavyArtilleryConstants_VA);
 	EntitySpec_fade_time(PodHeavyArtillerySpec_VA) = EntityConstants_fade_time_VA(PodHeavyArtilleryConstants_VA);
-	EntitySpec_motions(PodHeavyArtillerySpec_VA) = 0x20A6D0u;
+	EntitySpec_motions(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryMotions_VA;
 	MEM32(PodHeavyArtillerySpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodHeavyArtillerySpec_VA) = 0x20A628u;
 }
@@ -115796,22 +115831,22 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	ZenWarriorNoArmourTargetNode = eax;
-	x86_rep_stos32(0x20AA28u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorNoArmourMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F54Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA28u) = 0x19F53Cu;
-	MEM32(0x20AA2Cu) = 0x19F540u;
-	MEM32(0x20AA30u) = 0x19F544u;
-	MEM32(0x20AA34u) = 0x19F548u;
-	MEM32(0x20AB58u) = 0u;
-	MEM32(0x20AB50u) = 0u;
-	MEM32(0x20AA78u) = 0u;
+	MechMotions_walk_speed(ZenWarriorNoArmourMotions_VA) = 0x19F53Cu;
+	MechMotions_run_speed(ZenWarriorNoArmourMotions_VA) = 0x19F540u;
+	MEM32(ZenWarriorNoArmourMotions_VA + 0x8u) = 0x19F544u;
+	MechMotions_run_back_speed(ZenWarriorNoArmourMotions_VA) = 0x19F548u;
+	MechMotions_footsteps(ZenWarriorNoArmourMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(ZenWarriorNoArmourMotions_VA) = 0u;
+	MechMotions_landing_sound_count(ZenWarriorNoArmourMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008AA82u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRunBackwardsText_VA;
-	MEM32(0x20AA80u) = eax;
+	MechMotions_slide_back(ZenWarriorNoArmourMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008AA93u, 0);
@@ -115820,119 +115855,119 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA84u) = eax;
+	MechMotions_run_back(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAA7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F59Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA88u) = eax;
+	MechMotions_idle(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAB8u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA8Cu) = eax;
+	MEM32(ZenWarriorNoArmourMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAC9u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA90u) = eax;
+	MechMotions_walk(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AADAu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA94u) = eax;
+	MechMotions_run(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAEBu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA98u) = eax;
+	MechMotions_slide_forward(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAFCu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AA9Cu) = eax;
+	MechMotions_slide_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB0Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAA0u) = eax;
+	MechMotions_strafe_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAA4u) = eax;
+	MechMotions_strafe_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB32u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAA8u) = eax;
+	MechMotions_slide_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB43u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAACu) = eax;
+	MechMotions_turn_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB54u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F6B4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAB0u) = eax;
+	MechMotions_turn_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB65u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAB4u) = eax;
+	MechMotions_rise(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB76u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAB8u) = eax;
+	MechMotions_land_soft(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB87u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F6FCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AABCu) = eax;
+	MechMotions_land(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB98u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F710u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAC0u) = eax;
+	MechMotions_thrust(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ABA9u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F724u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAC4u) = eax;
+	MechMotions_thrust_forward(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ABBDu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F738u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAC8u) = eax;
+	MechMotions_thrust_back(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ABCEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F74Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAD0u) = eax;
+	MechMotions_thrust_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ABDFu, 0);
-	MEM32(0x20AACCu) = eax;
+	MechMotions_thrust_left(ZenWarriorNoArmourMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F760u;
 	g_esp = g_esp - 4u;
@@ -115942,93 +115977,93 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = 0x19F780u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAD4u) = eax;
+	MechMotions_fall(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC01u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F7A0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAD8u) = eax;
+	MechMotions_fall_forward(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC12u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F7C0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AADCu) = eax;
+	MechMotions_fall_back(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC23u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F7E0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAE4u) = eax;
+	MechMotions_fall_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC34u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F830u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAE0u) = eax;
+	MechMotions_fall_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC48u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F848u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAE8u) = eax;
+	MechMotions_boost_back(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC59u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F860u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAECu) = eax;
+	MechMotions_boost_forward(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC6Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F878u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAF0u) = eax;
+	MechMotions_boost_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC7Bu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAF4u) = eax;
+	MechMotions_boost_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC8Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAF8u) = eax;
+	MechMotions_alert(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC9Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AAFCu) = eax;
+	MechMotions_alarm(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACAEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AB00u) = eax;
+	MechMotions_alarm_turn_left(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACBFu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F91Fu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AB04u) = eax;
+	MechMotions_alarm_turn_right(ZenWarriorNoArmourMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACD3u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19F920u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AB08u) = eax;
+	MEM32(ZenWarriorNoArmourMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACE4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AB0Cu) = eax;
+	MEM32(ZenWarriorNoArmourMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACF5u, 0);
 	edx = ZenWarriorNoArmourModel;
 	MEM32(0x20AC88u) = eax;
@@ -116105,191 +116140,191 @@ uint32_t ZenWarriorNoArmour_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA80u);
+	arg0 = MechMotions_slide_back(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008ADEAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA84u);
+	arg0 = MechMotions_run_back(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008ADF5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA88u);
+	arg0 = MechMotions_idle(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE01u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA8Cu);
+	arg0 = MEM32(ZenWarriorNoArmourMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0008AE0Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA90u);
+	arg0 = MechMotions_walk(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE18u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA94u);
+	arg0 = MechMotions_run(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE24u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA98u);
+	arg0 = MechMotions_slide_forward(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE30u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AA9Cu);
+	arg0 = MechMotions_slide_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE3Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAA0u);
+	arg0 = MechMotions_strafe_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE47u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAA4u);
+	arg0 = MechMotions_strafe_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE53u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAA8u);
+	arg0 = MechMotions_slide_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE5Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAACu);
+	arg0 = MechMotions_turn_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE6Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAB0u);
+	arg0 = MechMotions_turn_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE76u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAB4u);
+	arg0 = MechMotions_rise(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE81u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAB8u);
+	arg0 = MechMotions_land_soft(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE90u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AABCu);
+	arg0 = MechMotions_land(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AE9Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAC0u);
+	arg0 = MechMotions_thrust(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEA7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAC4u);
+	arg0 = MechMotions_thrust_forward(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEB3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAC8u);
+	arg0 = MechMotions_thrust_back(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEBFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAD0u);
+	arg0 = MechMotions_thrust_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AECAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AACCu);
+	arg0 = MechMotions_thrust_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AED6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAD4u);
+	arg0 = MechMotions_fall(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEE2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAD8u);
+	arg0 = MechMotions_fall_forward(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEEDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AADCu);
+	arg0 = MechMotions_fall_back(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AEF9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAE4u);
+	arg0 = MechMotions_fall_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF05u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAE0u);
+	arg0 = MechMotions_fall_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF10u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAE8u);
+	arg0 = MechMotions_boost_back(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF1Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAECu);
+	arg0 = MechMotions_boost_forward(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF28u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAF0u);
+	arg0 = MechMotions_boost_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF33u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAF4u);
+	arg0 = MechMotions_boost_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF3Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAF8u);
+	arg0 = MechMotions_alert(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF4Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AAFCu);
+	arg0 = MechMotions_alarm(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF59u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AB00u);
+	arg0 = MechMotions_alarm_turn_left(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF65u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AB04u);
+	arg0 = MechMotions_alarm_turn_right(ZenWarriorNoArmourMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008AF71u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AB08u);
+	arg0 = MEM32(ZenWarriorNoArmourMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0008AF7Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AB0Cu);
+	arg0 = MEM32(ZenWarriorNoArmourMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0008AF88u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20AA38u;
+	arg0 = MechMotions_landing_sounds_VA(ZenWarriorNoArmourMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20AB10u;
+	arg0 = MechMotions_footstep_sounds_VA(ZenWarriorNoArmourMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20AA28u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorNoArmourMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20A984u) <= 0)
 	{
@@ -116832,7 +116867,7 @@ uint32_t ZenWarriorNoArmour_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t a
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x20AAF8u);
+					arg1_2 = MechMotions_alert(ZenWarriorNoArmourMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -117002,7 +117037,7 @@ void ZenWarriorNoArmour_Register(uint32_t arg0)
 	EntitySpec_explode_chance(ZenWarriorNoArmourSpec_VA) = EntityConstants_explode_chance_VA(ZenWarriorNoArmourConstants_VA);
 	EntitySpec_death_wait(ZenWarriorNoArmourSpec_VA) = EntityConstants_death_wait_VA(ZenWarriorNoArmourConstants_VA);
 	EntitySpec_fade_time(ZenWarriorNoArmourSpec_VA) = EntityConstants_fade_time_VA(ZenWarriorNoArmourConstants_VA);
-	EntitySpec_motions(ZenWarriorNoArmourSpec_VA) = 0x20AA28u;
+	EntitySpec_motions(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourMotions_VA;
 	MEM32(ZenWarriorNoArmourSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(ZenWarriorNoArmourSpec_VA) = 0x20A980u;
 }
@@ -117195,22 +117230,22 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	ZenWarriorHeavyTargetNode = eax;
-	x86_rep_stos32(0x20AD80u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorHeavyMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FAA0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AD80u) = 0x19FA90u;
-	MEM32(0x20AD84u) = 0x19FA94u;
-	MEM32(0x20AD88u) = 0x19FA98u;
-	MEM32(0x20AD8Cu) = 0x19FA9Cu;
-	MEM32(0x20AEB0u) = 0u;
-	MEM32(0x20AEA8u) = 0u;
-	MEM32(0x20ADD0u) = 0u;
+	MechMotions_walk_speed(ZenWarriorHeavyMotions_VA) = 0x19FA90u;
+	MechMotions_run_speed(ZenWarriorHeavyMotions_VA) = 0x19FA94u;
+	MEM32(ZenWarriorHeavyMotions_VA + 0x8u) = 0x19FA98u;
+	MechMotions_run_back_speed(ZenWarriorHeavyMotions_VA) = 0x19FA9Cu;
+	MechMotions_footsteps(ZenWarriorHeavyMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(ZenWarriorHeavyMotions_VA) = 0u;
+	MechMotions_landing_sound_count(ZenWarriorHeavyMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008BC82u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRunBackwardsText_VA;
-	MEM32(0x20ADD8u) = eax;
+	MechMotions_slide_back(ZenWarriorHeavyMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008BC93u, 0);
@@ -117219,119 +117254,119 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADDCu) = eax;
+	MechMotions_run_back(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCA7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FAF0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADE0u) = eax;
+	MechMotions_idle(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCB8u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADE4u) = eax;
+	MEM32(ZenWarriorHeavyMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCC9u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADE8u) = eax;
+	MechMotions_walk(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCDAu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADECu) = eax;
+	MechMotions_run(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCEBu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADF0u) = eax;
+	MechMotions_slide_forward(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCFCu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADF4u) = eax;
+	MechMotions_slide_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD0Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADF8u) = eax;
+	MechMotions_strafe_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20ADFCu) = eax;
+	MechMotions_strafe_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD32u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE00u) = eax;
+	MechMotions_slide_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD43u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE04u) = eax;
+	MechMotions_turn_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD54u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FC08u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE08u) = eax;
+	MechMotions_turn_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD65u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE0Cu) = eax;
+	MechMotions_rise(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD76u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE10u) = eax;
+	MechMotions_land_soft(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD87u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FC50u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE14u) = eax;
+	MechMotions_land(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD98u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FC64u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE18u) = eax;
+	MechMotions_thrust(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BDA9u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FC78u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE1Cu) = eax;
+	MechMotions_thrust_forward(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BDBDu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FC8Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE20u) = eax;
+	MechMotions_thrust_back(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BDCEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FCA0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE28u) = eax;
+	MechMotions_thrust_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BDDFu, 0);
-	MEM32(0x20AE24u) = eax;
+	MechMotions_thrust_left(ZenWarriorHeavyMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FCB4u;
 	g_esp = g_esp - 4u;
@@ -117341,93 +117376,93 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = 0x19FCD4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE2Cu) = eax;
+	MechMotions_fall(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE01u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FCF4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE30u) = eax;
+	MechMotions_fall_forward(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE12u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FD14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE34u) = eax;
+	MechMotions_fall_back(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE23u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FD34u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE3Cu) = eax;
+	MechMotions_fall_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE34u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FD84u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE38u) = eax;
+	MechMotions_fall_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE48u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FD9Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE40u) = eax;
+	MechMotions_boost_back(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE59u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FDB4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE44u) = eax;
+	MechMotions_boost_forward(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE6Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FDCCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE48u) = eax;
+	MechMotions_boost_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE7Bu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE4Cu) = eax;
+	MechMotions_boost_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE8Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE50u) = eax;
+	MechMotions_alert(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE9Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE54u) = eax;
+	MechMotions_alarm(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEAEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE58u) = eax;
+	MechMotions_alarm_turn_left(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEBFu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FE73u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE5Cu) = eax;
+	MechMotions_alarm_turn_right(ZenWarriorHeavyMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BED3u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FE74u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE60u) = eax;
+	MEM32(ZenWarriorHeavyMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEE4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20AE64u) = eax;
+	MEM32(ZenWarriorHeavyMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEF5u, 0);
 	edx = ZenWarriorHeavyModel;
 	MEM32(0x20AFE0u) = eax;
@@ -117504,191 +117539,191 @@ uint32_t ZenWarriorHeavy_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADD8u);
+	arg0 = MechMotions_slide_back(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008BFEAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADDCu);
+	arg0 = MechMotions_run_back(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008BFF5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADE0u);
+	arg0 = MechMotions_idle(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C001u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADE4u);
+	arg0 = MEM32(ZenWarriorHeavyMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0008C00Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADE8u);
+	arg0 = MechMotions_walk(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C018u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADECu);
+	arg0 = MechMotions_run(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C024u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADF0u);
+	arg0 = MechMotions_slide_forward(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C030u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADF4u);
+	arg0 = MechMotions_slide_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C03Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADF8u);
+	arg0 = MechMotions_strafe_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C047u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20ADFCu);
+	arg0 = MechMotions_strafe_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C053u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE00u);
+	arg0 = MechMotions_slide_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C05Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE04u);
+	arg0 = MechMotions_turn_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C06Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE08u);
+	arg0 = MechMotions_turn_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C076u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE0Cu);
+	arg0 = MechMotions_rise(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C081u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE10u);
+	arg0 = MechMotions_land_soft(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C090u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE14u);
+	arg0 = MechMotions_land(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C09Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE18u);
+	arg0 = MechMotions_thrust(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0A7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE1Cu);
+	arg0 = MechMotions_thrust_forward(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0B3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE20u);
+	arg0 = MechMotions_thrust_back(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0BFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE28u);
+	arg0 = MechMotions_thrust_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0CAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE24u);
+	arg0 = MechMotions_thrust_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0D6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE2Cu);
+	arg0 = MechMotions_fall(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0E2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE30u);
+	arg0 = MechMotions_fall_forward(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0EDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE34u);
+	arg0 = MechMotions_fall_back(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C0F9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE3Cu);
+	arg0 = MechMotions_fall_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C105u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE38u);
+	arg0 = MechMotions_fall_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C110u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE40u);
+	arg0 = MechMotions_boost_back(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C11Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE44u);
+	arg0 = MechMotions_boost_forward(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C128u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE48u);
+	arg0 = MechMotions_boost_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C133u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE4Cu);
+	arg0 = MechMotions_boost_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C13Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE50u);
+	arg0 = MechMotions_alert(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C14Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE54u);
+	arg0 = MechMotions_alarm(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C159u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE58u);
+	arg0 = MechMotions_alarm_turn_left(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C165u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE5Cu);
+	arg0 = MechMotions_alarm_turn_right(ZenWarriorHeavyMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008C171u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE60u);
+	arg0 = MEM32(ZenWarriorHeavyMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0008C17Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20AE64u);
+	arg0 = MEM32(ZenWarriorHeavyMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0008C188u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20AD90u;
+	arg0 = MechMotions_landing_sounds_VA(ZenWarriorHeavyMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20AE68u;
+	arg0 = MechMotions_footstep_sounds_VA(ZenWarriorHeavyMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20AD80u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorHeavyMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20ACDCu) <= 0)
 	{
@@ -118230,7 +118265,7 @@ uint32_t ZenWarriorHeavy_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x20AE50u);
+					arg1_2 = MechMotions_alert(ZenWarriorHeavyMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -118400,7 +118435,7 @@ void ZenWarriorHeavy_Register(uint32_t arg0)
 	EntitySpec_explode_chance(ZenWarriorHeavySpec_VA) = EntityConstants_explode_chance_VA(ZenWarriorHeavyConstants_VA);
 	EntitySpec_death_wait(ZenWarriorHeavySpec_VA) = EntityConstants_death_wait_VA(ZenWarriorHeavyConstants_VA);
 	EntitySpec_fade_time(ZenWarriorHeavySpec_VA) = EntityConstants_fade_time_VA(ZenWarriorHeavyConstants_VA);
-	EntitySpec_motions(ZenWarriorHeavySpec_VA) = 0x20AD80u;
+	EntitySpec_motions(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyMotions_VA;
 	MEM32(ZenWarriorHeavySpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(ZenWarriorHeavySpec_VA) = 0x20ACD8u;
 }
@@ -118596,22 +118631,22 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	ZenWarriorLiteTargetNode = eax;
-	x86_rep_stos32(0x20B0D8u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorLiteMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x19FFF8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B0D8u) = 0x19FFE8u;
-	MEM32(0x20B0DCu) = 0x19FFECu;
-	MEM32(0x20B0E0u) = 0x19FFF0u;
-	MEM32(0x20B0E4u) = 0x19FFF4u;
-	MEM32(0x20B208u) = 0u;
-	MEM32(0x20B200u) = 0u;
-	MEM32(0x20B128u) = 0u;
+	MechMotions_walk_speed(ZenWarriorLiteMotions_VA) = 0x19FFE8u;
+	MechMotions_run_speed(ZenWarriorLiteMotions_VA) = 0x19FFECu;
+	MEM32(ZenWarriorLiteMotions_VA + 0x8u) = 0x19FFF0u;
+	MechMotions_run_back_speed(ZenWarriorLiteMotions_VA) = 0x19FFF4u;
+	MechMotions_footsteps(ZenWarriorLiteMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(ZenWarriorLiteMotions_VA) = 0u;
+	MechMotions_landing_sound_count(ZenWarriorLiteMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008CE82u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRunBackwardsText_VA;
-	MEM32(0x20B130u) = eax;
+	MechMotions_slide_back(ZenWarriorLiteMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008CE93u, 0);
@@ -118620,119 +118655,119 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B134u) = eax;
+	MechMotions_run_back(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEA7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0048u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B138u) = eax;
+	MechMotions_idle(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEB8u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B13Cu) = eax;
+	MEM32(ZenWarriorLiteMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEC9u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B140u) = eax;
+	MechMotions_walk(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEDAu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B144u) = eax;
+	MechMotions_run(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEEBu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B148u) = eax;
+	MechMotions_slide_forward(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEFCu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B14Cu) = eax;
+	MechMotions_slide_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF0Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B150u) = eax;
+	MechMotions_strafe_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B154u) = eax;
+	MechMotions_strafe_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF32u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B158u) = eax;
+	MechMotions_slide_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF43u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B15Cu) = eax;
+	MechMotions_turn_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF54u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0160u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B160u) = eax;
+	MechMotions_turn_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF65u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B164u) = eax;
+	MechMotions_rise(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF76u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B168u) = eax;
+	MechMotions_land_soft(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF87u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A01A8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B16Cu) = eax;
+	MechMotions_land(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF98u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A01BCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B170u) = eax;
+	MechMotions_thrust(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CFA9u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A01D0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B174u) = eax;
+	MechMotions_thrust_forward(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CFBDu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A01E4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B178u) = eax;
+	MechMotions_thrust_back(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CFCEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A01F8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B180u) = eax;
+	MechMotions_thrust_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CFDFu, 0);
-	MEM32(0x20B17Cu) = eax;
+	MechMotions_thrust_left(ZenWarriorLiteMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A020Cu;
 	g_esp = g_esp - 4u;
@@ -118742,93 +118777,93 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = 0x1A022Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B184u) = eax;
+	MechMotions_fall(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D001u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A024Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B188u) = eax;
+	MechMotions_fall_forward(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D012u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A026Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B18Cu) = eax;
+	MechMotions_fall_back(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D023u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A028Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B194u) = eax;
+	MechMotions_fall_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D034u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A02DCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B190u) = eax;
+	MechMotions_fall_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D048u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A02F4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B198u) = eax;
+	MechMotions_boost_back(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D059u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A030Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B19Cu) = eax;
+	MechMotions_boost_forward(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D06Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A0324u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1A0u) = eax;
+	MechMotions_boost_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D07Bu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1A4u) = eax;
+	MechMotions_boost_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D08Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1A8u) = eax;
+	MechMotions_alert(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D09Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1ACu) = eax;
+	MechMotions_alarm(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0AEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1B0u) = eax;
+	MechMotions_alarm_turn_left(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0BFu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A03CBu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1B4u) = eax;
+	MechMotions_alarm_turn_right(ZenWarriorLiteMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0D3u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A03CCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1B8u) = eax;
+	MEM32(ZenWarriorLiteMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0E4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20B1BCu) = eax;
+	MEM32(ZenWarriorLiteMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0F5u, 0);
 	edx = ZenWarriorLiteModel;
 	MEM32(0x20B338u) = eax;
@@ -118905,191 +118940,191 @@ uint32_t ZenWarriorLite_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B130u);
+	arg0 = MechMotions_slide_back(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D1EAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B134u);
+	arg0 = MechMotions_run_back(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D1F5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B138u);
+	arg0 = MechMotions_idle(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D201u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B13Cu);
+	arg0 = MEM32(ZenWarriorLiteMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0008D20Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B140u);
+	arg0 = MechMotions_walk(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D218u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B144u);
+	arg0 = MechMotions_run(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D224u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B148u);
+	arg0 = MechMotions_slide_forward(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D230u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B14Cu);
+	arg0 = MechMotions_slide_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D23Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B150u);
+	arg0 = MechMotions_strafe_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D247u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B154u);
+	arg0 = MechMotions_strafe_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D253u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B158u);
+	arg0 = MechMotions_slide_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D25Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B15Cu);
+	arg0 = MechMotions_turn_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D26Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B160u);
+	arg0 = MechMotions_turn_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D276u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B164u);
+	arg0 = MechMotions_rise(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D281u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B168u);
+	arg0 = MechMotions_land_soft(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D290u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B16Cu);
+	arg0 = MechMotions_land(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D29Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B170u);
+	arg0 = MechMotions_thrust(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2A7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B174u);
+	arg0 = MechMotions_thrust_forward(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2B3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B178u);
+	arg0 = MechMotions_thrust_back(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2BFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B180u);
+	arg0 = MechMotions_thrust_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2CAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B17Cu);
+	arg0 = MechMotions_thrust_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2D6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B184u);
+	arg0 = MechMotions_fall(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2E2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B188u);
+	arg0 = MechMotions_fall_forward(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2EDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B18Cu);
+	arg0 = MechMotions_fall_back(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D2F9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B194u);
+	arg0 = MechMotions_fall_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D305u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B190u);
+	arg0 = MechMotions_fall_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D310u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B198u);
+	arg0 = MechMotions_boost_back(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D31Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B19Cu);
+	arg0 = MechMotions_boost_forward(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D328u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1A0u);
+	arg0 = MechMotions_boost_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D333u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1A4u);
+	arg0 = MechMotions_boost_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D33Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1A8u);
+	arg0 = MechMotions_alert(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D34Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1ACu);
+	arg0 = MechMotions_alarm(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D359u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1B0u);
+	arg0 = MechMotions_alarm_turn_left(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D365u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1B4u);
+	arg0 = MechMotions_alarm_turn_right(ZenWarriorLiteMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0008D371u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1B8u);
+	arg0 = MEM32(ZenWarriorLiteMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x0008D37Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20B1BCu);
+	arg0 = MEM32(ZenWarriorLiteMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0008D388u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20B0E8u;
+	arg0 = MechMotions_landing_sounds_VA(ZenWarriorLiteMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20B1C0u;
+	arg0 = MechMotions_footstep_sounds_VA(ZenWarriorLiteMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20B0D8u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorLiteMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20B034u) <= 0)
 	{
@@ -119631,7 +119666,7 @@ uint32_t ZenWarriorLite_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1,
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x20B1A8u);
+					arg1_2 = MechMotions_alert(ZenWarriorLiteMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -119801,7 +119836,7 @@ void ZenWarriorLite_Register(uint32_t arg0)
 	EntitySpec_explode_chance(ZenWarriorLiteSpec_VA) = EntityConstants_explode_chance_VA(ZenWarriorLiteConstants_VA);
 	EntitySpec_death_wait(ZenWarriorLiteSpec_VA) = EntityConstants_death_wait_VA(ZenWarriorLiteConstants_VA);
 	EntitySpec_fade_time(ZenWarriorLiteSpec_VA) = EntityConstants_fade_time_VA(ZenWarriorLiteConstants_VA);
-	EntitySpec_motions(ZenWarriorLiteSpec_VA) = 0x20B0D8u;
+	EntitySpec_motions(ZenWarriorLiteSpec_VA) = ZenWarriorLiteMotions_VA;
 	MEM32(ZenWarriorLiteSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(ZenWarriorLiteSpec_VA) = 0x20B030u;
 }
@@ -126473,22 +126508,22 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	ZenWarriorScavengerTargetNode = eax;
-	x86_rep_stos32(0x20C3E0u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorScavengerMotions_VA, 0u, 0x55u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A13ACu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C3E0u) = 0x1A139Cu;
-	MEM32(0x20C3E4u) = 0x1A13A0u;
-	MEM32(0x20C3E8u) = 0x1A13A4u;
-	MEM32(0x20C3ECu) = 0x1A13A8u;
-	MEM32(0x20C510u) = 0u;
-	MEM32(0x20C508u) = 0u;
-	MEM32(0x20C430u) = 0u;
+	MechMotions_walk_speed(ZenWarriorScavengerMotions_VA) = 0x1A139Cu;
+	MechMotions_run_speed(ZenWarriorScavengerMotions_VA) = 0x1A13A0u;
+	MEM32(ZenWarriorScavengerMotions_VA + 0x8u) = 0x1A13A4u;
+	MechMotions_run_back_speed(ZenWarriorScavengerMotions_VA) = 0x1A13A8u;
+	MechMotions_footsteps(ZenWarriorScavengerMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(ZenWarriorScavengerMotions_VA) = 0u;
+	MechMotions_landing_sound_count(ZenWarriorScavengerMotions_VA) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000945D2u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRunBackwardsText_VA;
-	MEM32(0x20C438u) = eax;
+	MechMotions_slide_back(ZenWarriorScavengerMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x000945E3u, 0);
@@ -126497,119 +126532,119 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C43Cu) = eax;
+	MechMotions_run_back(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000945F7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A13FCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C440u) = eax;
+	MechMotions_idle(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094608u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C444u) = eax;
+	MEM32(ZenWarriorScavengerMotions_VA + 0x64u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094619u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C448u) = eax;
+	MechMotions_walk(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009462Au, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C44Cu) = eax;
+	MechMotions_run(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009463Bu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C450u) = eax;
+	MechMotions_slide_forward(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009464Cu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C454u) = eax;
+	MechMotions_slide_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009465Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C458u) = eax;
+	MechMotions_strafe_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009466Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C45Cu) = eax;
+	MechMotions_strafe_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094682u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C460u) = eax;
+	MechMotions_slide_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094693u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C464u) = eax;
+	MechMotions_turn_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946A4u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1514u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C468u) = eax;
+	MechMotions_turn_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946B5u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C46Cu) = eax;
+	MechMotions_rise(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946C6u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C470u) = eax;
+	MechMotions_land_soft(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946D7u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A155Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C474u) = eax;
+	MechMotions_land(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946E8u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1570u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C478u) = eax;
+	MechMotions_thrust(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946F9u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1584u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C47Cu) = eax;
+	MechMotions_thrust_forward(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009470Du, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1598u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C480u) = eax;
+	MechMotions_thrust_back(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009471Eu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A15ACu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C488u) = eax;
+	MechMotions_thrust_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009472Fu, 0);
-	MEM32(0x20C484u) = eax;
+	MechMotions_thrust_left(ZenWarriorScavengerMotions_VA) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A15C0u;
 	g_esp = g_esp - 4u;
@@ -126619,93 +126654,93 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = 0x1A15E0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C48Cu) = eax;
+	MechMotions_fall(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094751u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1600u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C490u) = eax;
+	MechMotions_fall_forward(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094762u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1620u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C494u) = eax;
+	MechMotions_fall_back(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094773u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1640u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C49Cu) = eax;
+	MechMotions_fall_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094784u, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1690u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C498u) = eax;
+	MechMotions_fall_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094798u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A16A8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4A0u) = eax;
+	MechMotions_boost_back(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947A9u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A16C0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4A4u) = eax;
+	MechMotions_boost_forward(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947BAu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A16D8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4A8u) = eax;
+	MechMotions_boost_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947CBu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4ACu) = eax;
+	MechMotions_boost_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947DCu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4B0u) = eax;
+	MechMotions_alert(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947EDu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4B4u) = eax;
+	MechMotions_alarm(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947FEu, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4B8u) = eax;
+	MechMotions_alarm_turn_left(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009480Fu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A177Fu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4BCu) = eax;
+	MechMotions_alarm_turn_right(ZenWarriorScavengerMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094823u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1A1780u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4C0u) = eax;
+	MEM32(ZenWarriorScavengerMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094834u, 0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
-	MEM32(0x20C4C4u) = eax;
+	MEM32(ZenWarriorScavengerMotions_VA + 0xE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094845u, 0);
 	edx = ZenWarriorScavengerModel;
 	MEM32(0x20C640u) = eax;
@@ -126783,191 +126818,191 @@ uint32_t ZenWarriorScavenger_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C438u);
+	arg0 = MechMotions_slide_back(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009493Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C43Cu);
+	arg0 = MechMotions_run_back(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094945u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C440u);
+	arg0 = MechMotions_idle(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094951u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C444u);
+	arg0 = MEM32(ZenWarriorScavengerMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x0009495Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C448u);
+	arg0 = MechMotions_walk(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094968u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C44Cu);
+	arg0 = MechMotions_run(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094974u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C450u);
+	arg0 = MechMotions_slide_forward(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094980u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C454u);
+	arg0 = MechMotions_slide_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009498Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C458u);
+	arg0 = MechMotions_strafe_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094997u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C45Cu);
+	arg0 = MechMotions_strafe_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949A3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C460u);
+	arg0 = MechMotions_slide_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949AEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C464u);
+	arg0 = MechMotions_turn_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949BAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C468u);
+	arg0 = MechMotions_turn_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949C6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C46Cu);
+	arg0 = MechMotions_rise(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949D1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C470u);
+	arg0 = MechMotions_land_soft(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949E0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C474u);
+	arg0 = MechMotions_land(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949ECu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C478u);
+	arg0 = MechMotions_thrust(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000949F7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C47Cu);
+	arg0 = MechMotions_thrust_forward(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A03u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C480u);
+	arg0 = MechMotions_thrust_back(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A0Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C488u);
+	arg0 = MechMotions_thrust_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A1Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C484u);
+	arg0 = MechMotions_thrust_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A26u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C48Cu);
+	arg0 = MechMotions_fall(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A32u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C490u);
+	arg0 = MechMotions_fall_forward(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A3Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C494u);
+	arg0 = MechMotions_fall_back(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A49u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C49Cu);
+	arg0 = MechMotions_fall_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A55u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C498u);
+	arg0 = MechMotions_fall_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A60u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4A0u);
+	arg0 = MechMotions_boost_back(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A6Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4A4u);
+	arg0 = MechMotions_boost_forward(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A78u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4A8u);
+	arg0 = MechMotions_boost_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A83u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4ACu);
+	arg0 = MechMotions_boost_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A8Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4B0u);
+	arg0 = MechMotions_alert(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094A9Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4B4u);
+	arg0 = MechMotions_alarm(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094AA9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4B8u);
+	arg0 = MechMotions_alarm_turn_left(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094AB5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4BCu);
+	arg0 = MechMotions_alarm_turn_right(ZenWarriorScavengerMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00094AC1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4C0u);
+	arg0 = MEM32(ZenWarriorScavengerMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00094ACCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20C4C4u);
+	arg0 = MEM32(ZenWarriorScavengerMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x00094AD8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20C3F0u;
+	arg0 = MechMotions_landing_sounds_VA(ZenWarriorScavengerMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20C4C8u;
+	arg0 = MechMotions_footstep_sounds_VA(ZenWarriorScavengerMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20C3E0u, 0u, 0x55u);
+	x86_rep_stos32(ZenWarriorScavengerMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20C33Cu) <= 0)
 	{
@@ -127509,7 +127544,7 @@ uint32_t ZenWarriorScavenger_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t 
 					edx = MEM32(arg1 + 0x194u);
 					arg3_2 = 5u;
 					arg2_2 = 0xC8u;
-					arg1_2 = MEM32(0x20C4B0u);
+					arg1_2 = MechMotions_alert(ZenWarriorScavengerMotions_VA);
 					arg0_2 = edx;
 					sub_00120890(arg0_2, arg1_2, arg2_2, arg3_2);
 					eax = 1u;
@@ -127679,7 +127714,7 @@ void ZenWarriorScavenger_Register(uint32_t arg0)
 	EntitySpec_explode_chance(ZenWarriorScavengerSpec_VA) = EntityConstants_explode_chance_VA(ZenWarriorScavengerConstants_VA);
 	EntitySpec_death_wait(ZenWarriorScavengerSpec_VA) = EntityConstants_death_wait_VA(ZenWarriorScavengerConstants_VA);
 	EntitySpec_fade_time(ZenWarriorScavengerSpec_VA) = EntityConstants_fade_time_VA(ZenWarriorScavengerConstants_VA);
-	EntitySpec_motions(ZenWarriorScavengerSpec_VA) = 0x20C3E0u;
+	EntitySpec_motions(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerMotions_VA;
 	MEM32(ZenWarriorScavengerSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(ZenWarriorScavengerSpec_VA) = 0x20C338u;
 }
@@ -127909,191 +127944,191 @@ uint32_t PodLightArtillery_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA60u);
+	arg0 = MechMotions_slide_back(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000964BEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA64u);
+	arg0 = MechMotions_run_back(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000964CAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA68u);
+	arg0 = MechMotions_idle(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000964D5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA6Cu);
+	arg0 = MEM32(PodLightArtilleryMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x000964E1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA70u);
+	arg0 = MechMotions_walk(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000964EDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA74u);
+	arg0 = MechMotions_run(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000964F8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA78u);
+	arg0 = MechMotions_slide_forward(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096504u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA7Cu);
+	arg0 = MechMotions_slide_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096510u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA80u);
+	arg0 = MechMotions_strafe_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009651Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA84u);
+	arg0 = MechMotions_strafe_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096527u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA88u);
+	arg0 = MechMotions_slide_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096533u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA8Cu);
+	arg0 = MechMotions_turn_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009653Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA90u);
+	arg0 = MechMotions_turn_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009654Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA94u);
+	arg0 = MechMotions_rise(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096556u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA98u);
+	arg0 = MechMotions_land_soft(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096561u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CA9Cu);
+	arg0 = MechMotions_land(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096570u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAA0u);
+	arg0 = MechMotions_thrust(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009657Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAA4u);
+	arg0 = MechMotions_thrust_forward(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096587u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAA8u);
+	arg0 = MechMotions_thrust_back(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096593u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAB0u);
+	arg0 = MechMotions_thrust_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009659Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAACu);
+	arg0 = MechMotions_thrust_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965AAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAB4u);
+	arg0 = MechMotions_fall(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965B6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAB8u);
+	arg0 = MechMotions_fall_forward(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965C2u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CABCu);
+	arg0 = MechMotions_fall_back(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965CDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAC4u);
+	arg0 = MechMotions_fall_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965D9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAC0u);
+	arg0 = MechMotions_fall_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965E5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAC8u);
+	arg0 = MechMotions_boost_back(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965F0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CACCu);
+	arg0 = MechMotions_boost_forward(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000965FCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAD0u);
+	arg0 = MechMotions_boost_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096608u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAD4u);
+	arg0 = MechMotions_boost_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096613u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAD8u);
+	arg0 = MechMotions_alert(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009661Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CADCu);
+	arg0 = MechMotions_alarm(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009662Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAE0u);
+	arg0 = MechMotions_alarm_turn_left(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096639u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAE4u);
+	arg0 = MechMotions_alarm_turn_right(PodLightArtilleryMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00096645u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAE8u);
+	arg0 = MEM32(PodLightArtilleryMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00096651u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20CAECu);
+	arg0 = MEM32(PodLightArtilleryMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0009665Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20CA18u;
+	arg0 = MechMotions_landing_sounds_VA(PodLightArtilleryMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20CAF0u;
+	arg0 = MechMotions_footstep_sounds_VA(PodLightArtilleryMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20CA08u, 0u, 0x55u);
+	x86_rep_stos32(PodLightArtilleryMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x20CC68u);
 	x86_call(vcObjectRelease_entry, 0x0009668Au, 1, arg0);
 	ignored = g_eax;
@@ -128252,7 +128287,7 @@ void PodLightArtillery_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodLightArtillerySpec_VA) = EntityConstants_explode_chance_VA(PodLightArtilleryConstants_VA);
 	EntitySpec_death_wait(PodLightArtillerySpec_VA) = EntityConstants_death_wait_VA(PodLightArtilleryConstants_VA);
 	EntitySpec_fade_time(PodLightArtillerySpec_VA) = EntityConstants_fade_time_VA(PodLightArtilleryConstants_VA);
-	EntitySpec_motions(PodLightArtillerySpec_VA) = 0x20CA08u;
+	EntitySpec_motions(PodLightArtillerySpec_VA) = PodLightArtilleryMotions_VA;
 	MEM32(PodLightArtillerySpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodLightArtillerySpec_VA) = 0x20C960u;
 }
@@ -129126,40 +129161,40 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	arg1 = stack_24;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x1B189Cu) = eax;
-	x86_rep_stos32(0x20D018u, 0u, 0x55u);
+	x86_rep_stos32(PodScoutMotions_VA, 0u, 0x55u);
 	stack_2C = 0x1A1E40u;
 	stack_30 = 9u;
-	MEM32(0x20D018u) = 0x1A1E30u;
-	MEM32(0x20D01Cu) = 0x1A1E34u;
-	MEM32(0x20D020u) = 0x1A1E38u;
-	MEM32(0x20D024u) = 0x1A1E3Cu;
-	MEM32(0x20D148u) = 0u;
-	MEM32(0x20D140u) = 0u;
-	MEM32(0x20D068u) = 0u;
+	MechMotions_walk_speed(PodScoutMotions_VA) = 0x1A1E30u;
+	MechMotions_run_speed(PodScoutMotions_VA) = 0x1A1E34u;
+	MEM32(PodScoutMotions_VA + 0x8u) = 0x1A1E38u;
+	MechMotions_run_back_speed(PodScoutMotions_VA) = 0x1A1E3Cu;
+	MechMotions_footsteps(PodScoutMotions_VA) = 0u;
+	MechMotions_footstep_sound_count(PodScoutMotions_VA) = 0u;
+	MechMotions_landing_sound_count(PodScoutMotions_VA) = 0u;
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00097C5Cu, 2, arg0, arg1);
 	stack_34 = 0x1A1E50u;
 	stack_38 = 9u;
-	MEM32(0x20D070u) = eax;
+	MechMotions_slide_back(PodScoutMotions_VA) = eax;
 	arg0 = stack_38;
 	arg1 = stack_34;
 	eax = x86_call(vcObjectGet_entry, 0x00097C6Du, 2, arg0, arg1);
 	stack_3C = 0x1A1E60u;
 	stack_40 = 9u;
-	MEM32(0x20D074u) = eax;
+	MechMotions_run_back(PodScoutMotions_VA) = eax;
 	arg0 = stack_40;
 	arg1 = stack_3C;
 	eax = x86_call(vcObjectGet_entry, 0x00097C7Eu, 2, arg0, arg1);
 	stack_44 = 0x1A1E6Cu;
 	stack_48 = 9u;
-	MEM32(0x20D078u) = eax;
+	MechMotions_idle(PodScoutMotions_VA) = eax;
 	arg0 = stack_48;
 	arg1 = stack_44;
 	eax = x86_call(vcObjectGet_entry, 0x00097C8Fu, 2, arg0, arg1);
 	arg1 = 0x1A1E78u;
 	arg0 = 9u;
-	MEM32(0x20D07Cu) = eax;
+	MEM32(PodScoutMotions_VA + 0x64u) = eax;
 	arg2 = stack_48;
 	arg3 = stack_44;
 	arg4 = stack_40;
@@ -129177,49 +129212,49 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = x86_call(vcObjectGet_entry, 0x00097CA0u, 16, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
 	stack = 0x1A1E84u;
 	stack_18 = 9u;
-	MEM32(0x20D080u) = eax;
+	MechMotions_walk(PodScoutMotions_VA) = eax;
 	arg0 = stack_18;
 	arg1 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x00097CB4u, 2, arg0, arg1);
 	stack_1C = 0x1A1E8Cu;
 	stack_20 = 9u;
-	MEM32(0x20D084u) = eax;
+	MechMotions_run(PodScoutMotions_VA) = eax;
 	arg0 = stack_20;
 	arg1 = stack_1C;
 	eax = x86_call(vcObjectGet_entry, 0x00097CC5u, 2, arg0, arg1);
 	stack_24 = 0x1A1EA0u;
 	stack_28 = 9u;
-	MEM32(0x20D088u) = eax;
+	MechMotions_slide_forward(PodScoutMotions_VA) = eax;
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = x86_call(vcObjectGet_entry, 0x00097CD6u, 2, arg0, arg1);
 	stack_2C = 0x1A1EB0u;
 	stack_30 = 9u;
-	MEM32(0x20D08Cu) = eax;
+	MechMotions_slide_left(PodScoutMotions_VA) = eax;
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00097CE7u, 2, arg0, arg1);
 	stack_34 = 0x1A1EC0u;
 	stack_38 = 9u;
-	MEM32(0x20D090u) = eax;
+	MechMotions_strafe_left(PodScoutMotions_VA) = eax;
 	arg0 = stack_38;
 	arg1 = stack_34;
 	eax = x86_call(vcObjectGet_entry, 0x00097CF8u, 2, arg0, arg1);
 	stack_3C = 0x1A1ED4u;
 	stack_40 = 9u;
-	MEM32(0x20D094u) = eax;
+	MechMotions_strafe_right(PodScoutMotions_VA) = eax;
 	arg0 = stack_40;
 	arg1 = stack_3C;
 	eax = x86_call(vcObjectGet_entry, 0x00097D09u, 2, arg0, arg1);
 	stack_44 = 0x1A1EE4u;
 	stack_48 = 9u;
-	MEM32(0x20D098u) = eax;
+	MechMotions_slide_right(PodScoutMotions_VA) = eax;
 	arg0 = stack_48;
 	arg1 = stack_44;
 	eax = x86_call(vcObjectGet_entry, 0x00097D1Au, 2, arg0, arg1);
 	arg1 = 0x1A1EFCu;
 	arg0 = 9u;
-	MEM32(0x20D09Cu) = eax;
+	MechMotions_turn_left(PodScoutMotions_VA) = eax;
 	arg2 = stack_48;
 	arg3 = stack_44;
 	arg4 = stack_40;
@@ -129237,49 +129272,49 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = x86_call(vcObjectGet_entry, 0x00097D2Bu, 16, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
 	stack = 0x1A1F0Cu;
 	stack_18 = 9u;
-	MEM32(0x20D0A0u) = eax;
+	MechMotions_turn_right(PodScoutMotions_VA) = eax;
 	arg0 = stack_18;
 	arg1 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x00097D3Fu, 2, arg0, arg1);
 	stack_1C = 0x1A1F14u;
 	stack_20 = 9u;
-	MEM32(0x20D0A4u) = eax;
+	MechMotions_rise(PodScoutMotions_VA) = eax;
 	arg0 = stack_20;
 	arg1 = stack_1C;
 	eax = x86_call(vcObjectGet_entry, 0x00097D50u, 2, arg0, arg1);
 	stack_24 = 0x1A1F24u;
 	stack_28 = 9u;
-	MEM32(0x20D0A8u) = eax;
+	MechMotions_land_soft(PodScoutMotions_VA) = eax;
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = x86_call(vcObjectGet_entry, 0x00097D61u, 2, arg0, arg1);
 	stack_2C = 0x1A1F30u;
 	stack_30 = 9u;
-	MEM32(0x20D0ACu) = eax;
+	MechMotions_land(PodScoutMotions_VA) = eax;
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00097D72u, 2, arg0, arg1);
 	stack_34 = 0x1A1F38u;
 	stack_38 = 9u;
-	MEM32(0x20D0B0u) = eax;
+	MechMotions_thrust(PodScoutMotions_VA) = eax;
 	arg0 = stack_38;
 	arg1 = stack_34;
 	eax = x86_call(vcObjectGet_entry, 0x00097D83u, 2, arg0, arg1);
 	stack_3C = 0x1A1F40u;
 	stack_40 = 9u;
-	MEM32(0x20D0B4u) = eax;
+	MechMotions_thrust_forward(PodScoutMotions_VA) = eax;
 	arg0 = stack_40;
 	arg1 = stack_3C;
 	eax = x86_call(vcObjectGet_entry, 0x00097D94u, 2, arg0, arg1);
 	stack_44 = 0x1A1F48u;
 	stack_48 = 9u;
-	MEM32(0x20D0B8u) = eax;
+	MechMotions_thrust_back(PodScoutMotions_VA) = eax;
 	arg0 = stack_48;
 	arg1 = stack_44;
 	eax = x86_call(vcObjectGet_entry, 0x00097DA5u, 2, arg0, arg1);
 	arg1 = 0x1A1F50u;
 	arg0 = 9u;
-	MEM32(0x20D0C0u) = eax;
+	MechMotions_thrust_right(PodScoutMotions_VA) = eax;
 	arg2 = stack_48;
 	arg3 = stack_44;
 	arg4 = stack_40;
@@ -129297,49 +129332,49 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = x86_call(vcObjectGet_entry, 0x00097DB6u, 16, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
 	stack = 0x1A1F58u;
 	stack_18 = 9u;
-	MEM32(0x20D0BCu) = eax;
+	MechMotions_thrust_left(PodScoutMotions_VA) = eax;
 	arg0 = stack_18;
 	arg1 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x00097DCAu, 2, arg0, arg1);
 	stack_1C = 0x1A1F64u;
 	stack_20 = 9u;
-	MEM32(0x20D0C4u) = eax;
+	MechMotions_fall(PodScoutMotions_VA) = eax;
 	arg0 = stack_20;
 	arg1 = stack_1C;
 	eax = x86_call(vcObjectGet_entry, 0x00097DDBu, 2, arg0, arg1);
 	stack_24 = 0x1A1F70u;
 	stack_28 = 9u;
-	MEM32(0x20D0C8u) = eax;
+	MechMotions_fall_forward(PodScoutMotions_VA) = eax;
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = x86_call(vcObjectGet_entry, 0x00097DECu, 2, arg0, arg1);
 	stack_2C = 0x1A1F7Cu;
 	stack_30 = 9u;
-	MEM32(0x20D0CCu) = eax;
+	MechMotions_fall_back(PodScoutMotions_VA) = eax;
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00097DFDu, 2, arg0, arg1);
 	stack_34 = 0x1A1F88u;
 	stack_38 = 9u;
-	MEM32(0x20D0D4u) = eax;
+	MechMotions_fall_right(PodScoutMotions_VA) = eax;
 	arg0 = stack_38;
 	arg1 = stack_34;
 	eax = x86_call(vcObjectGet_entry, 0x00097E0Eu, 2, arg0, arg1);
 	stack_3C = 0x1A1FACu;
 	stack_40 = 9u;
-	MEM32(0x20D0D0u) = eax;
+	MechMotions_fall_left(PodScoutMotions_VA) = eax;
 	arg0 = stack_40;
 	arg1 = stack_3C;
 	eax = x86_call(vcObjectGet_entry, 0x00097E1Fu, 2, arg0, arg1);
 	stack_44 = 0x1A1FB8u;
 	stack_48 = 9u;
-	MEM32(0x20D0D8u) = eax;
+	MechMotions_boost_back(PodScoutMotions_VA) = eax;
 	arg0 = stack_48;
 	arg1 = stack_44;
 	eax = x86_call(vcObjectGet_entry, 0x00097E30u, 2, arg0, arg1);
 	arg1 = 0x1A1FC4u;
 	arg0 = 9u;
-	MEM32(0x20D0DCu) = eax;
+	MechMotions_boost_forward(PodScoutMotions_VA) = eax;
 	arg2 = stack_48;
 	arg3 = stack_44;
 	arg4 = stack_40;
@@ -129357,34 +129392,34 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = x86_call(vcObjectGet_entry, 0x00097E41u, 16, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
 	arg1 = 0x1A1FD4u;
 	arg0 = 9u;
-	MEM32(0x20D0E0u) = eax;
+	MechMotions_boost_left(PodScoutMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097E55u, 2, arg0, arg1);
 	arg1 = 0x1A1FE8u;
 	arg0 = 9u;
-	MEM32(0x20D0E4u) = eax;
+	MechMotions_boost_right(PodScoutMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097E66u, 2, arg0, arg1);
 	arg1 = 0x1A1FF4u;
 	arg0 = 9u;
-	MEM32(0x20D0E8u) = eax;
+	MechMotions_alert(PodScoutMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097E77u, 2, arg0, arg1);
-	MEM32(0x20D0ECu) = eax;
+	MechMotions_alarm(PodScoutMotions_VA) = eax;
 	arg1 = 0x1A2000u;
 	arg0 = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x00097E88u, 2, arg0, arg1);
 	arg1 = 0x1A201Cu;
 	arg0 = 9u;
-	MEM32(0x20D0F0u) = eax;
+	MechMotions_alarm_turn_left(PodScoutMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097E99u, 2, arg0, arg1);
 	arg1 = 0x1A2032u;
 	arg0 = 9u;
-	MEM32(0x20D0F4u) = eax;
+	MechMotions_alarm_turn_right(PodScoutMotions_VA) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097EAAu, 2, arg0, arg1);
 	arg1 = 0x1A2033u;
 	arg0 = 9u;
-	MEM32(0x20D0F8u) = eax;
+	MEM32(PodScoutMotions_VA + 0xE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00097EBBu, 2, arg0, arg1);
 	esi = MEM32(0x20D274u);
-	MEM32(0x20D0FCu) = eax;
+	MEM32(PodScoutMotions_VA + 0xE4u) = eax;
 	x86_rep_stos32(0x20CF70u, 0u, 0x29u);
 	edi = MEM32(0x20CF70u) * 3u * 4u + 0x20CF7Cu;
 	arg1 = DamageNodeText_VA;
@@ -129561,191 +129596,191 @@ uint32_t PodScout_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D070u);
+	arg0 = MechMotions_slide_back(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009818Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D074u);
+	arg0 = MechMotions_run_back(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009819Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D078u);
+	arg0 = MechMotions_idle(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981A5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D07Cu);
+	arg0 = MEM32(PodScoutMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x000981B1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D080u);
+	arg0 = MechMotions_walk(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981BDu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D084u);
+	arg0 = MechMotions_run(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981C8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D088u);
+	arg0 = MechMotions_slide_forward(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981D4u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D08Cu);
+	arg0 = MechMotions_slide_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981E0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D090u);
+	arg0 = MechMotions_strafe_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981EBu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D094u);
+	arg0 = MechMotions_strafe_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000981F7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D098u);
+	arg0 = MechMotions_slide_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098203u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D09Cu);
+	arg0 = MechMotions_turn_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009820Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0A0u);
+	arg0 = MechMotions_turn_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009821Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0A4u);
+	arg0 = MechMotions_rise(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098226u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0A8u);
+	arg0 = MechMotions_land_soft(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098231u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0ACu);
+	arg0 = MechMotions_land(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098240u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0B0u);
+	arg0 = MechMotions_thrust(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009824Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0B4u);
+	arg0 = MechMotions_thrust_forward(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098257u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0B8u);
+	arg0 = MechMotions_thrust_back(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098263u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0C0u);
+	arg0 = MechMotions_thrust_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009826Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0BCu);
+	arg0 = MechMotions_thrust_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009827Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0C4u);
+	arg0 = MechMotions_fall(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098286u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0C8u);
+	arg0 = MechMotions_fall_forward(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098292u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0CCu);
+	arg0 = MechMotions_fall_back(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009829Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0D4u);
+	arg0 = MechMotions_fall_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982A9u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0D0u);
+	arg0 = MechMotions_fall_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982B5u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0D8u);
+	arg0 = MechMotions_boost_back(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982C0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0DCu);
+	arg0 = MechMotions_boost_forward(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982CCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0E0u);
+	arg0 = MechMotions_boost_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982D8u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0E4u);
+	arg0 = MechMotions_boost_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982E3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0E8u);
+	arg0 = MechMotions_alert(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982EFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0ECu);
+	arg0 = MechMotions_alarm(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000982FEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0F0u);
+	arg0 = MechMotions_alarm_turn_left(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098309u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0F4u);
+	arg0 = MechMotions_alarm_turn_right(PodScoutMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00098315u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0F8u);
+	arg0 = MEM32(PodScoutMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00098321u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D0FCu);
+	arg0 = MEM32(PodScoutMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x0009832Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20D028u;
+	arg0 = MechMotions_landing_sounds_VA(PodScoutMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20D100u;
+	arg0 = MechMotions_footstep_sounds_VA(PodScoutMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20D018u, 0u, 0x55u);
+	x86_rep_stos32(PodScoutMotions_VA, 0u, 0x55u);
 	edi = 0u;
 	if ((int32_t)MEM32(0x20CF74u) > 0)
 	{
@@ -129896,7 +129931,7 @@ void PodScout_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodScoutSpec_VA) = EntityConstants_explode_chance_VA(PodScoutConstants_VA);
 	EntitySpec_death_wait(PodScoutSpec_VA) = EntityConstants_death_wait_VA(PodScoutConstants_VA);
 	EntitySpec_fade_time(PodScoutSpec_VA) = EntityConstants_fade_time_VA(PodScoutConstants_VA);
-	EntitySpec_motions(PodScoutSpec_VA) = 0x20D018u;
+	EntitySpec_motions(PodScoutSpec_VA) = PodScoutMotions_VA;
 	MEM32(PodScoutSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodScoutSpec_VA) = 0x20CF70u;
 }
@@ -130369,191 +130404,191 @@ uint32_t PodStandardWarrior_Shutdown(void)
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D420u);
+	arg0 = MechMotions_slide_back(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000998FEu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D424u);
+	arg0 = MechMotions_run_back(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009990Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D428u);
+	arg0 = MechMotions_idle(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099915u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D42Cu);
+	arg0 = MEM32(PodStandardWarriorMotions_VA + 0x64u);
 	x86_call(vcObjectRelease_entry, 0x00099921u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D430u);
+	arg0 = MechMotions_walk(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009992Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D434u);
+	arg0 = MechMotions_run(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099938u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D438u);
+	arg0 = MechMotions_slide_forward(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099944u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D43Cu);
+	arg0 = MechMotions_slide_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099950u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D440u);
+	arg0 = MechMotions_strafe_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009995Bu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D444u);
+	arg0 = MechMotions_strafe_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099967u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D448u);
+	arg0 = MechMotions_slide_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099973u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D44Cu);
+	arg0 = MechMotions_turn_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009997Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D450u);
+	arg0 = MechMotions_turn_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x0009998Au, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D454u);
+	arg0 = MechMotions_rise(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099996u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D458u);
+	arg0 = MechMotions_land_soft(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999A1u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D45Cu);
+	arg0 = MechMotions_land(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999B0u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D460u);
+	arg0 = MechMotions_thrust(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999BCu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D464u);
+	arg0 = MechMotions_thrust_forward(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999C7u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D468u);
+	arg0 = MechMotions_thrust_back(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999D3u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D470u);
+	arg0 = MechMotions_thrust_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999DFu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D46Cu);
+	arg0 = MechMotions_thrust_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999EAu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D474u);
+	arg0 = MechMotions_fall(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x000999F6u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D478u);
+	arg0 = MechMotions_fall_forward(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A02u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D47Cu);
+	arg0 = MechMotions_fall_back(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A0Du, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D484u);
+	arg0 = MechMotions_fall_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A19u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D480u);
+	arg0 = MechMotions_fall_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A25u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D488u);
+	arg0 = MechMotions_boost_back(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A30u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D48Cu);
+	arg0 = MechMotions_boost_forward(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A3Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D490u);
+	arg0 = MechMotions_boost_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A48u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D494u);
+	arg0 = MechMotions_boost_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A53u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D498u);
+	arg0 = MechMotions_alert(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A5Fu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D49Cu);
+	arg0 = MechMotions_alarm(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A6Eu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D4A0u);
+	arg0 = MechMotions_alarm_turn_left(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A79u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D4A4u);
+	arg0 = MechMotions_alarm_turn_right(PodStandardWarriorMotions_VA);
 	x86_call(vcObjectRelease_entry, 0x00099A85u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D4A8u);
+	arg0 = MEM32(PodStandardWarriorMotions_VA + 0xE0u);
 	x86_call(vcObjectRelease_entry, 0x00099A91u, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = MEM32(0x20D4ACu);
+	arg0 = MEM32(PodStandardWarriorMotions_VA + 0xE4u);
 	x86_call(vcObjectRelease_entry, 0x00099A9Cu, 1, arg0);
 	ignored = g_eax;
 	ignored_2 = g_ecx;
 	ignored_3 = g_edx;
-	arg0 = 0x20D3D8u;
+	arg0 = MechMotions_landing_sounds_VA(PodStandardWarriorMotions_VA);
 	sub_0010E340(arg0);
-	arg0 = 0x20D4B0u;
+	arg0 = MechMotions_footstep_sounds_VA(PodStandardWarriorMotions_VA);
 	sub_0010E340(arg0);
-	x86_rep_stos32(0x20D3C8u, 0u, 0x55u);
+	x86_rep_stos32(PodStandardWarriorMotions_VA, 0u, 0x55u);
 	arg0 = MEM32(0x20D628u);
 	x86_call(vcObjectRelease_entry, 0x00099ACAu, 1, arg0);
 	ignored = g_eax;
@@ -130712,7 +130747,7 @@ void PodStandardWarrior_Register(uint32_t arg0)
 	EntitySpec_explode_chance(PodStandardWarriorSpec_VA) = EntityConstants_explode_chance_VA(PodStandardWarriorConstants_VA);
 	EntitySpec_death_wait(PodStandardWarriorSpec_VA) = EntityConstants_death_wait_VA(PodStandardWarriorConstants_VA);
 	EntitySpec_fade_time(PodStandardWarriorSpec_VA) = EntityConstants_fade_time_VA(PodStandardWarriorConstants_VA);
-	EntitySpec_motions(PodStandardWarriorSpec_VA) = 0x20D3C8u;
+	EntitySpec_motions(PodStandardWarriorSpec_VA) = PodStandardWarriorMotions_VA;
 	MEM32(PodStandardWarriorSpec_VA + 0xFCu) = 1u;
 	EntitySpec_death_motions(PodStandardWarriorSpec_VA) = 0x20D320u;
 }
@@ -138761,18 +138796,18 @@ void sub_0009F990(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 				MEMF(g_esp + 0x44u) = (float)x87_round(f0_2 + FLOAT_AT(g_esp + 0x18u));
 				MEMF(g_esp + 0x4Cu) = (float)x87_round((double)(int32_t)MEM32(g_esp + 0x10u) + FLOAT_AT(g_esp + 0x20u));
 			}
-			if (FLOAT_AT(0x24EBECu) < FLOAT_AT(g_esp + 0x44u))
-				MEM32(g_esp + 0x44u) = MEM32(0x24EBECu);
-			if (FLOAT_AT(0x24EBE0u) > FLOAT_AT(g_esp + 0x44u))
-				MEM32(g_esp + 0x44u) = MEM32(0x24EBE0u);
-			if (FLOAT_AT(0x24EBF0u) < FLOAT_AT(g_esp + 0x1Cu))
-				MEM32(g_esp + 0x48u) = MEM32(0x24EBF0u);
-			if (FLOAT_AT(0x24EBE4u) > FLOAT_AT(g_esp + 0x48u))
-				MEM32(g_esp + 0x48u) = MEM32(0x24EBE4u);
-			if (FLOAT_AT(0x24EBF4u) < FLOAT_AT(g_esp + 0x4Cu))
-				MEM32(g_esp + 0x4Cu) = MEM32(0x24EBF4u);
-			if (FLOAT_AT(0x24EBE8u) > FLOAT_AT(g_esp + 0x4Cu))
-				MEM32(g_esp + 0x4Cu) = MEM32(0x24EBE8u);
+			if ((double)LevelBoundsMax(0) < FLOAT_AT(g_esp + 0x44u))
+				MEM32(g_esp + 0x44u) = MEM32(LevelBoundsMax_VA);
+			if ((double)LevelBoundsMin(0) > FLOAT_AT(g_esp + 0x44u))
+				MEM32(g_esp + 0x44u) = MEM32(LevelBoundsMin_VA);
+			if ((double)LevelBoundsMax(1) < FLOAT_AT(g_esp + 0x1Cu))
+				MEM32(g_esp + 0x48u) = MEM32(LevelBoundsMax_VA + 0x4u);
+			if ((double)LevelBoundsMin(1) > FLOAT_AT(g_esp + 0x48u))
+				MEM32(g_esp + 0x48u) = MEM32(LevelBoundsMin_VA + 0x4u);
+			if ((double)LevelBoundsMax(2) < FLOAT_AT(g_esp + 0x4Cu))
+				MEM32(g_esp + 0x4Cu) = MEM32(LevelBoundsMax_VA + 0x8u);
+			if ((double)LevelBoundsMin(2) > FLOAT_AT(g_esp + 0x4Cu))
+				MEM32(g_esp + 0x4Cu) = MEM32(LevelBoundsMin_VA + 0x8u);
 			ecx = g_esp + 0x3Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150143,7 +150178,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 	MEM32(g_esp) = *p_edi;
 	x86_rep_stos32(g_esp + 0x18u, 0u, 0x20u);
 	esi_2 = 0u;
-	if (MEM32(0x20F7F0u) == 0u)
+	if (MovementPatternFigure1NodeMade == 0u)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x40u;
@@ -150175,7 +150210,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 		MEM32(g_esp + 0xA8u) = esi_2;
 		MEM32(g_esp + 0xACu) = esi_2;
 		eax = x86_call(GameObjectCreate, 0x000A7EC2u, 0);
-		MEM32(0x20F7ECu) = eax;
+		MovementPatternFigure1Node = eax;
 		g_esp = g_esp + 0x1Cu;
 		if (eax != esi_2)
 		{
@@ -150190,7 +150225,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7ECu);
+			ecx = MovementPatternFigure1Node;
 			eax = g_esp + 0x14u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150202,7 +150237,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7ECu);
+			eax = MovementPatternFigure1Node;
 			edx = g_esp + 0x1Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150214,7 +150249,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7ECu);
+			edx = MovementPatternFigure1Node;
 			ecx = g_esp + 0x24u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150226,7 +150261,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7ECu);
+			ecx = MovementPatternFigure1Node;
 			eax = g_esp + 0x2Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150238,7 +150273,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7ECu);
+			eax = MovementPatternFigure1Node;
 			edx = g_esp + 0x34u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150250,7 +150285,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7ECu);
+			edx = MovementPatternFigure1Node;
 			ecx = g_esp + 0x3Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150262,7 +150297,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7ECu);
+			ecx = MovementPatternFigure1Node;
 			eax = g_esp + 0x44u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150277,12 +150312,12 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			MEM32(0x26E2E0u) = esi_2;
 			MEM32(0x26E2E4u) = esi_2;
 			MEM32(0x26E2E8u) = esi_2;
-			MEM32(0x20F7F0u) = 1u;
+			MovementPatternFigure1NodeMade = 1u;
 			g_esp = g_esp + 0x40u;
 			x86_rep_stos32(0x26E300u, 0u, 6u);
 		}
 	}
-	if (MEM32(0x20F7F8u) == esi_2)
+	if (MovementPatternFigure3NodeMade == esi_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x40u;
@@ -150316,7 +150351,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 		x86_call(GameObjectCreate, 0x000A80D3u, 0);
 		eax = g_eax;
 		edx = g_edx;
-		MEM32(0x20F7F4u) = eax;
+		MovementPatternFigure3Node = eax;
 		g_esp = g_esp + 0x1Cu;
 		if (eax != esi_2)
 		{
@@ -150331,7 +150366,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7F4u);
+			eax = MovementPatternFigure3Node;
 			edx = g_esp + 0x14u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150343,7 +150378,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7F4u);
+			edx = MovementPatternFigure3Node;
 			ecx = g_esp + 0x1Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150355,7 +150390,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7F4u);
+			ecx = MovementPatternFigure3Node;
 			eax = g_esp + 0x24u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150367,7 +150402,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7F4u);
+			eax = MovementPatternFigure3Node;
 			edx = g_esp + 0x2Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150379,7 +150414,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7F4u);
+			edx = MovementPatternFigure3Node;
 			ecx = g_esp + 0x34u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150391,7 +150426,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7F4u);
+			ecx = MovementPatternFigure3Node;
 			eax = g_esp + 0x3Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150403,7 +150438,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7F4u);
+			eax = MovementPatternFigure3Node;
 			edx = g_esp + 0x44u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150418,12 +150453,12 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			MEM32(0x26E2A0u) = 0u;
 			MEM32(0x26E2A4u) = 0u;
 			MEM32(0x26E2A8u) = 0u;
-			MEM32(0x20F7F8u) = 1u;
+			MovementPatternFigure3NodeMade = 1u;
 			g_esp = g_esp + 0x40u;
 			x86_rep_stos32(0x26E2C0u, 0u, 6u);
 		}
 	}
-	if (MEM32(0x20F800u) == esi_2)
+	if (MovementPatternFigure4NodeMade == esi_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x40u;
@@ -150457,7 +150492,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 		x86_call(GameObjectCreate, 0x000A82F7u, 0);
 		eax = g_eax;
 		edx = g_edx;
-		MEM32(0x20F7FCu) = eax;
+		MovementPatternFigure4Node = eax;
 		g_esp = g_esp + 0x1Cu;
 		if (eax != esi_2)
 		{
@@ -150472,7 +150507,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7FCu);
+			eax = MovementPatternFigure4Node;
 			edx = g_esp + 0x14u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150484,7 +150519,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7FCu);
+			edx = MovementPatternFigure4Node;
 			ecx = g_esp + 0x1Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150496,7 +150531,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7FCu);
+			ecx = MovementPatternFigure4Node;
 			eax = g_esp + 0x24u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150508,7 +150543,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7FCu);
+			eax = MovementPatternFigure4Node;
 			edx = g_esp + 0x2Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150520,7 +150555,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			edx = MEM32(0x20F7FCu);
+			edx = MovementPatternFigure4Node;
 			ecx = g_esp + 0x34u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
@@ -150532,7 +150567,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			ecx = MEM32(0x20F7FCu);
+			ecx = MovementPatternFigure4Node;
 			eax = g_esp + 0x3Cu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
@@ -150544,7 +150579,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			sub_0003C4F0(arg0, arg1, &edx, &ebp_2);
-			eax = MEM32(0x20F7FCu);
+			eax = MovementPatternFigure4Node;
 			edx = g_esp + 0x44u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -150559,7 +150594,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 			MEM32(0x26E270u) = 0u;
 			MEM32(0x26E274u) = 0u;
 			MEM32(0x26E278u) = 0u;
-			MEM32(0x20F800u) = 1u;
+			MovementPatternFigure4NodeMade = 1u;
 			g_esp = g_esp + 0x40u;
 			x86_rep_stos32(0x26E280u, 0u, 6u);
 		}
@@ -150628,29 +150663,29 @@ uint32_t sub_000A8500(void)
 {
 	uint32_t eax = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x20F7F0u);
+	eax = MovementPatternFigure1NodeMade;
 	esi = 0u;
 	if (eax != 0u)
 	{
-		eax = MEM32(0x20F7ECu);
+		eax = MovementPatternFigure1Node;
 		handle = eax;
 		GameObjectDestroy(handle, &eax, &ignored, &ignored_2);
-		MEM32(0x20F7ECu) = esi;
-		MEM32(0x20F7F0u) = esi;
+		MovementPatternFigure1Node = esi;
+		MovementPatternFigure1NodeMade = esi;
 	}
-	if (MEM32(0x20F7F8u) != esi)
+	if (MovementPatternFigure3NodeMade != esi)
 	{
-		handle = MEM32(0x20F7F4u);
+		handle = MovementPatternFigure3Node;
 		GameObjectDestroy(handle, &eax, &ignored, &ignored_2);
-		MEM32(0x20F7F4u) = esi;
-		MEM32(0x20F7F8u) = esi;
+		MovementPatternFigure3Node = esi;
+		MovementPatternFigure3NodeMade = esi;
 	}
-	if (MEM32(0x20F800u) != esi)
+	if (MovementPatternFigure4NodeMade != esi)
 	{
-		handle = MEM32(0x20F7FCu);
+		handle = MovementPatternFigure4Node;
 		GameObjectDestroy(handle, &eax, &ignored, &ignored_2);
-		MEM32(0x20F7FCu) = esi;
-		MEM32(0x20F800u) = esi;
+		MovementPatternFigure4Node = esi;
+		MovementPatternFigure4NodeMade = esi;
 	}
 	return eax;
 }
@@ -151991,7 +152026,7 @@ void sub_000A92C0(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 			*p_esi = esi_2;
 			return;
 		}
-		esi_2 = MEM32(0x20F7ECu);
+		esi_2 = MovementPatternFigure1Node;
 		ecx = eax * 3u;
 		MEMF(g_esp + 8u) = (float)FLOAT_AT(ecx * 4u + 0x1B1AE0u);
 		g_ecx = ecx;
@@ -152022,7 +152057,7 @@ void sub_000A92C0(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 				*p_esi = esi_2;
 				return;
 			}
-			esi_2 = MEM32(0x20F7F4u);
+			esi_2 = MovementPatternFigure3Node;
 			eax = (eax * 3u) << 2;
 			ecx = MEM32(eax + 0x1B1B28u);
 			edx = MEM32(eax + 0x1B1B2Cu);
@@ -152047,7 +152082,7 @@ void sub_000A92C0(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 				*p_esi = esi_2;
 				return;
 			}
-			esi_2 = MEM32(0x20F7FCu);
+			esi_2 = MovementPatternFigure4Node;
 			eax = (eax * 3u) << 2;
 			ecx = MEM32(eax + 0x1B1B70u);
 			edx = MEM32(eax + 0x1B1B74u);
@@ -189960,14 +189995,14 @@ uint32_t sub_000C7630(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	MEM32(0x24EBE0u) = MEM32(eax);
-	MEM32(0x24EBE4u) = MEM32(eax + 4u);
-	MEM32(0x24EBE8u) = MEM32(eax + 8u);
+	MEM32(LevelBoundsMin_VA) = MEM32(eax);
+	MEM32(LevelBoundsMin_VA + 0x4u) = MEM32(eax + 4u);
+	MEM32(LevelBoundsMin_VA + 0x8u) = MEM32(eax + 8u);
 	eax = arg1;
-	MEM32(0x24EBECu) = MEM32(eax);
-	MEM32(0x24EBF0u) = MEM32(eax + 4u);
+	MEM32(LevelBoundsMax_VA) = MEM32(eax);
+	MEM32(LevelBoundsMax_VA + 0x4u) = MEM32(eax + 4u);
 	eax = MEM32(eax + 8u);
-	MEM32(0x24EBF4u) = eax;
+	MEM32(LevelBoundsMax_VA + 0x8u) = eax;
 	return eax;
 }
 
@@ -197941,11 +197976,13 @@ uint32_t sub_000CF1B0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FEF4u;
+	eax = PlayerRDFHeavyMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
-uint32_t sub_000CF1C0(void)
+/* The PlayerRDFHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects
+   share. */
+uint32_t PlayerRDFHeavyMissileLauncherWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -197955,7 +197992,9 @@ uint32_t sub_000CF1C0(void)
 	return eax;
 }
 
-uint32_t sub_000CF1D0(void)
+/* The PlayerRDFHeavyMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what
+   its objects share. */
+uint32_t PlayerRDFHeavyMissileLauncherWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 
@@ -197967,35 +198006,40 @@ uint32_t sub_000CF1D0(void)
 	return eax;
 }
 
-void sub_000CF1E0(uint32_t arg0)
+/* Registers the PlayerRDFHeavyMissileLauncherWeapon type (Weapon 10), it fires PlayerRDFHeavyMissile: a
+   player's veritech's, and its super veritech pack's: fills its GameObjectType and stores it in its
+   family. */
+void PlayerRDFHeavyMissileLauncherWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x21FEC0u) = 0u;
-	MEM32(0x21FEC8u) = 0u;
-	MEM32(0x21FECCu) = 0u;
-	MEM32(0x21FED0u) = 0u;
-	MEM32(0x21FEB0u) = 0x2DCu;
-	MEM32(0x21FEB4u) = 0xCF1C0u;
-	MEM32(0x21FEB8u) = 0xCF1D0u;
-	MEM32(0x21FEBCu) = 0xEF760u;
-	MEM32(arg0 + 0x38u) = 0x21FEB0u;
-	x86_rep_stos32(0x21FEF4u, 0u, 7u);
-	MEM32(0x21FEF4u) = 0x1A53D4u;
-	MEM32(0x21FF00u) = 0x1A53E0u;
-	MEM32(0x21FEF8u) = 0x1A53D8u;
-	MEM32(0x21FEFCu) = 0x1A53DCu;
-	MEM32(0x21FF04u) = 0x1A53D0u;
-	MEM32(0x21FF0Cu) = 0x1A53E4u;
+	GameObjectType_load(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_collect(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_version(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_flags(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_size(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0x2DCu;
+	GameObjectType_startup(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0xCF1C0u;
+	GameObjectType_shutdown(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0xCF1D0u;
+	GameObjectType_state_machine(PlayerRDFHeavyMissileLauncherWeaponType_VA) = 0xEF760u;
+	MEM32(arg0 + 0x38u) = PlayerRDFHeavyMissileLauncherWeaponType_VA;
+	x86_rep_stos32(PlayerRDFHeavyMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(PlayerRDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(PlayerRDFHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(PlayerRDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(PlayerRDFHeavyMissileLauncherWeaponConstants_VA);
+	MEM32(PlayerRDFHeavyMissileLauncherWeaponSpec_VA + 0x4u) = PlayerRDFHeavyMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(PlayerRDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(PlayerRDFHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(PlayerRDFHeavyMissileLauncherWeaponSpec_VA) = PlayerRDFHeavyMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(PlayerRDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(PlayerRDFHeavyMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF280(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x21FF54u;
+	eax = PlayerRDFLightMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
-uint32_t sub_000CF290(void)
+/* The PlayerRDFLightMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects
+   share. */
+uint32_t PlayerRDFLightMissileLauncherWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -198005,7 +198049,9 @@ uint32_t sub_000CF290(void)
 	return eax;
 }
 
-uint32_t sub_000CF2A0(void)
+/* The PlayerRDFLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what
+   its objects share. */
+uint32_t PlayerRDFLightMissileLauncherWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 
@@ -198017,24 +198063,26 @@ uint32_t sub_000CF2A0(void)
 	return eax;
 }
 
-void sub_000CF2B0(uint32_t arg0)
+/* Registers the PlayerRDFLightMissileLauncherWeapon type (Weapon 9), it fires PlayerRDFLightMissile: a
+   player's veritech's, and its packs': fills its GameObjectType and stores it in its family. */
+void PlayerRDFLightMissileLauncherWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x21FF20u) = 0u;
-	MEM32(0x21FF28u) = 0u;
-	MEM32(0x21FF2Cu) = 0u;
-	MEM32(0x21FF30u) = 0u;
-	MEM32(0x21FF10u) = 0x2DCu;
-	MEM32(0x21FF14u) = 0xCF290u;
-	MEM32(0x21FF18u) = 0xCF2A0u;
-	MEM32(0x21FF1Cu) = 0xEF760u;
-	MEM32(arg0 + 0x34u) = 0x21FF10u;
-	x86_rep_stos32(0x21FF54u, 0u, 7u);
-	MEM32(0x21FF54u) = 0x1A53ECu;
-	MEM32(0x21FF60u) = 0x1A53F8u;
-	MEM32(0x21FF58u) = 0x1A53F0u;
-	MEM32(0x21FF5Cu) = 0x1A53F4u;
-	MEM32(0x21FF64u) = 0x1A53E8u;
-	MEM32(0x21FF6Cu) = 0x1A53FCu;
+	GameObjectType_load(PlayerRDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_collect(PlayerRDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_version(PlayerRDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_flags(PlayerRDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_size(PlayerRDFLightMissileLauncherWeaponType_VA) = 0x2DCu;
+	GameObjectType_startup(PlayerRDFLightMissileLauncherWeaponType_VA) = 0xCF290u;
+	GameObjectType_shutdown(PlayerRDFLightMissileLauncherWeaponType_VA) = 0xCF2A0u;
+	GameObjectType_state_machine(PlayerRDFLightMissileLauncherWeaponType_VA) = 0xEF760u;
+	MEM32(arg0 + 0x34u) = PlayerRDFLightMissileLauncherWeaponType_VA;
+	x86_rep_stos32(PlayerRDFLightMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(PlayerRDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(PlayerRDFLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(PlayerRDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(PlayerRDFLightMissileLauncherWeaponConstants_VA);
+	MEM32(PlayerRDFLightMissileLauncherWeaponSpec_VA + 0x4u) = PlayerRDFLightMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(PlayerRDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(PlayerRDFLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(PlayerRDFLightMissileLauncherWeaponSpec_VA) = PlayerRDFLightMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(PlayerRDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(PlayerRDFLightMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF350(void)
@@ -198152,11 +198200,12 @@ uint32_t sub_000CF4F0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x220074u;
+	eax = RDFHeavyMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
-uint32_t sub_000CF500(void)
+/* The RDFHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t RDFHeavyMissileLauncherWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -198166,7 +198215,9 @@ uint32_t sub_000CF500(void)
 	return eax;
 }
 
-uint32_t sub_000CF510(void)
+/* The RDFHeavyMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t RDFHeavyMissileLauncherWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 
@@ -198178,35 +198229,38 @@ uint32_t sub_000CF510(void)
 	return eax;
 }
 
-void sub_000CF520(uint32_t arg0)
+/* Registers the RDFHeavyMissileLauncherWeapon type (Weapon 6), it fires RDFHeavyMissile: a veritech's no
+   player controls, and its super veritech pack's: fills its GameObjectType and stores it in its family. */
+void RDFHeavyMissileLauncherWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x220040u) = 0u;
-	MEM32(0x220048u) = 0u;
-	MEM32(0x22004Cu) = 0u;
-	MEM32(0x220050u) = 0u;
-	MEM32(0x220030u) = 0x2DCu;
-	MEM32(0x220034u) = 0xCF500u;
-	MEM32(0x220038u) = 0xCF510u;
-	MEM32(0x22003Cu) = 0xEF760u;
-	MEM32(arg0 + 0x28u) = 0x220030u;
-	x86_rep_stos32(0x220074u, 0u, 7u);
-	MEM32(0x220074u) = 0x1A5434u;
-	MEM32(0x220080u) = 0x1A5440u;
-	MEM32(0x220078u) = 0x1A5438u;
-	MEM32(0x22007Cu) = 0x1A543Cu;
-	MEM32(0x220084u) = 0x1A5430u;
-	MEM32(0x22008Cu) = 0x1A5444u;
+	GameObjectType_load(RDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_collect(RDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_version(RDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_flags(RDFHeavyMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_size(RDFHeavyMissileLauncherWeaponType_VA) = 0x2DCu;
+	GameObjectType_startup(RDFHeavyMissileLauncherWeaponType_VA) = 0xCF500u;
+	GameObjectType_shutdown(RDFHeavyMissileLauncherWeaponType_VA) = 0xCF510u;
+	GameObjectType_state_machine(RDFHeavyMissileLauncherWeaponType_VA) = 0xEF760u;
+	MEM32(arg0 + 0x28u) = RDFHeavyMissileLauncherWeaponType_VA;
+	x86_rep_stos32(RDFHeavyMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(RDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(RDFHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(RDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(RDFHeavyMissileLauncherWeaponConstants_VA);
+	MEM32(RDFHeavyMissileLauncherWeaponSpec_VA + 0x4u) = RDFHeavyMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(RDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(RDFHeavyMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(RDFHeavyMissileLauncherWeaponSpec_VA) = RDFHeavyMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(RDFHeavyMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(RDFHeavyMissileLauncherWeaponConstants_VA);
 }
 
 uint32_t sub_000CF5C0(void)
 {
 	uint32_t eax = 0;
 
-	eax = 0x2200D4u;
+	eax = RDFLightMissileLauncherWeaponSpec_VA;
 	return eax;
 }
 
-uint32_t sub_000CF5D0(void)
+/* The RDFLightMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t RDFLightMissileLauncherWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -198216,7 +198270,9 @@ uint32_t sub_000CF5D0(void)
 	return eax;
 }
 
-uint32_t sub_000CF5E0(void)
+/* The RDFLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t RDFLightMissileLauncherWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 
@@ -198228,24 +198284,26 @@ uint32_t sub_000CF5E0(void)
 	return eax;
 }
 
-void sub_000CF5F0(uint32_t arg0)
+/* Registers the RDFLightMissileLauncherWeapon type (Weapon 5), it fires RDFLightMissile: a veritech's no
+   player controls, and its packs': fills its GameObjectType and stores it in its family. */
+void RDFLightMissileLauncherWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x2200A0u) = 0u;
-	MEM32(0x2200A8u) = 0u;
-	MEM32(0x2200ACu) = 0u;
-	MEM32(0x2200B0u) = 0u;
-	MEM32(0x220090u) = 0x2DCu;
-	MEM32(0x220094u) = 0xCF5D0u;
-	MEM32(0x220098u) = 0xCF5E0u;
-	MEM32(0x22009Cu) = 0xEF760u;
-	MEM32(arg0 + 0x24u) = 0x220090u;
-	x86_rep_stos32(0x2200D4u, 0u, 7u);
-	MEM32(0x2200D4u) = 0x1A544Cu;
-	MEM32(0x2200E0u) = 0x1A5458u;
-	MEM32(0x2200D8u) = 0x1A5450u;
-	MEM32(0x2200DCu) = 0x1A5454u;
-	MEM32(0x2200E4u) = 0x1A5448u;
-	MEM32(0x2200ECu) = 0x1A545Cu;
+	GameObjectType_load(RDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_collect(RDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_version(RDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_flags(RDFLightMissileLauncherWeaponType_VA) = 0u;
+	GameObjectType_size(RDFLightMissileLauncherWeaponType_VA) = 0x2DCu;
+	GameObjectType_startup(RDFLightMissileLauncherWeaponType_VA) = 0xCF5D0u;
+	GameObjectType_shutdown(RDFLightMissileLauncherWeaponType_VA) = 0xCF5E0u;
+	GameObjectType_state_machine(RDFLightMissileLauncherWeaponType_VA) = 0xEF760u;
+	MEM32(arg0 + 0x24u) = RDFLightMissileLauncherWeaponType_VA;
+	x86_rep_stos32(RDFLightMissileLauncherWeaponSpec_VA, 0u, 7u);
+	WeaponSpec_cost(RDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_cost_VA(RDFLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_reload(RDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_reload_VA(RDFLightMissileLauncherWeaponConstants_VA);
+	MEM32(RDFLightMissileLauncherWeaponSpec_VA + 0x4u) = RDFLightMissileLauncherWeaponConstants_VA + 0x8u;
+	WeaponSpec_range(RDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_range_VA(RDFLightMissileLauncherWeaponConstants_VA);
+	WeaponSpec_damage(RDFLightMissileLauncherWeaponSpec_VA) = RDFLightMissileLauncherWeaponConstants_VA;
+	WeaponSpec_alert_radius(RDFLightMissileLauncherWeaponSpec_VA) = LauncherConstants_alert_radius_VA(RDFLightMissileLauncherWeaponConstants_VA);
 }
 
 void sub_000CF690(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
@@ -203461,7 +203519,7 @@ uint32_t sub_000D34F0(uint32_t ecx, uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	if (x87_round(FLOAT_AT(0x24EBE0u) + x87_float(arg0)) > FLOAT_AT(ecx) || x87_round(FLOAT_AT(0x24EBECu) - x87_float(arg0)) < FLOAT_AT(ecx) || x87_round(FLOAT_AT(0x24EBE4u) + x87_float(arg0)) > FLOAT_AT(ecx + 4u) || x87_round(FLOAT_AT(0x24EBF0u) - x87_float(arg0)) < FLOAT_AT(ecx + 4u) || x87_round(FLOAT_AT(0x24EBE8u) + x87_float(arg0)) > FLOAT_AT(ecx + 8u) || x87_round(FLOAT_AT(0x24EBF4u) - x87_float(arg0)) < FLOAT_AT(ecx + 8u))
+	if (x87_round((double)LevelBoundsMin(0) + x87_float(arg0)) > FLOAT_AT(ecx) || x87_round((double)LevelBoundsMax(0) - x87_float(arg0)) < FLOAT_AT(ecx) || x87_round((double)LevelBoundsMin(1) + x87_float(arg0)) > FLOAT_AT(ecx + 4u) || x87_round((double)LevelBoundsMax(1) - x87_float(arg0)) < FLOAT_AT(ecx + 4u) || x87_round((double)LevelBoundsMin(2) + x87_float(arg0)) > FLOAT_AT(ecx + 8u) || x87_round((double)LevelBoundsMax(2) - x87_float(arg0)) < FLOAT_AT(ecx + 8u))
 	{
 		eax = 1u;
 		return eax;
@@ -225144,22 +225202,22 @@ void sub_000E3570(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEMF(eax) = (float)x87_round(FLOAT_AT(ebx_2) + FLOAT_AT(ecx));
 	MEMF(eax + 4u) = (float)f1;
 	MEMF(eax + 8u) = (float)t3;
-	f0 = x87_round(FLOAT_AT(0x24EBECu) - 1e+02);
+	f0 = x87_round((double)LevelBoundsMax(0) - 1e+02);
 	if (f0 < FLOAT_AT(g_esp + 0x18u))
 		MEMF(g_esp + 0x18u) = (float)f0;
-	f0 = x87_round(FLOAT_AT(0x24EBE0u) + 1e+02);
+	f0 = x87_round((double)LevelBoundsMin(0) + 1e+02);
 	if (f0 > FLOAT_AT(g_esp + 0x18u))
 		MEMF(g_esp + 0x18u) = (float)f0;
-	f0 = x87_round(FLOAT_AT(0x24EBF0u) - 1e+02);
+	f0 = x87_round((double)LevelBoundsMax(1) - 1e+02);
 	if (f0 < FLOAT_AT(g_esp + 0x1Cu))
 		MEMF(g_esp + 0x1Cu) = (float)f0;
-	f0 = x87_round(FLOAT_AT(0x24EBE4u) + 1e+02);
+	f0 = x87_round((double)LevelBoundsMin(1) + 1e+02);
 	if (f0 > FLOAT_AT(g_esp + 0x1Cu))
 		MEMF(g_esp + 0x1Cu) = (float)f0;
-	f0 = x87_round(FLOAT_AT(0x24EBF4u) - 1e+02);
+	f0 = x87_round((double)LevelBoundsMax(2) - 1e+02);
 	if (f0 < FLOAT_AT(g_esp + 0x20u))
 		MEMF(g_esp + 0x20u) = (float)f0;
-	f0 = x87_round(FLOAT_AT(0x24EBE8u) + 1e+02);
+	f0 = x87_round((double)LevelBoundsMin(2) + 1e+02);
 	if (f0 > FLOAT_AT(g_esp + 0x20u))
 		MEMF(g_esp + 0x20u) = (float)f0;
 	eax = MEM32(edi + 0x48u);
@@ -260029,7 +260087,7 @@ void sub_001001A0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x24EBE0u;
+	MEM32(g_esp) = LevelBoundsMin_VA;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2_2 = MEM32(g_esp + 8u);
@@ -289007,7 +289065,9 @@ uint32_t sub_00118630(uint32_t edx)
 	return eax;
 }
 
-uint32_t sub_00118700(uint32_t edx)
+/* Gives Bink the engine's DirectSound to play the movies' sound with (BinkSetSoundSystem,
+   BinkOpenDirectSound). */
+uint32_t vcMovieSetSoundSystem(uint32_t edx)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -289017,12 +289077,13 @@ uint32_t sub_00118700(uint32_t edx)
 		arg1 = eax;
 		arg0 = 0x175370u;
 		g_edx = edx;
-		eax = x86_call(sub_00171C80, 0x00118714u, 2, arg0, arg1);
+		eax = x86_call(BinkSetSoundSystem, 0x00118714u, 2, arg0, arg1);
 	}
 	return eax;
 }
 
-uint32_t sub_00118720(uint32_t arg0)
+/* Whether a movie has frames left to show. */
+uint32_t vcMovieIsPlaying(uint32_t arg0)
 {
 	uint32_t carry = 0;
 	uint32_t eax = 0;
@@ -332659,7 +332720,8 @@ uint32_t sub_001406D0(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_00140730(uint32_t edx, uint32_t arg0, uint32_t arg1)
+/* Writes where a movie is: the data's folder, the platform's, vcMovie and the name. */
+uint32_t vcMoviePath(uint32_t edx, uint32_t arg0, uint32_t arg1)
 {
 	uint8_t ecx = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, edx_2 = 0;
@@ -338500,9 +338562,9 @@ void sub_00012440_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00016700_entry(void)
+void MovieSkipPressed_entry(void)
 {
-	g_eax = sub_00016700(ARG32(0));
+	g_eax = MovieSkipPressed(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -341110,9 +341172,9 @@ void sub_00025320_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00025360_entry(void)
+void LevelChapterNotStarted_entry(void)
 {
-	g_eax = sub_00025360(ARG32(0));
+	g_eax = LevelChapterNotStarted(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347198,10 +347260,10 @@ void sub_00058410_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058420_entry(void)
+void PlayerRDFHeavyMissile_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00058420();
+	g_eax = PlayerRDFHeavyMissile_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347209,10 +347271,10 @@ void sub_00058420_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058490_entry(void)
+void PlayerRDFHeavyMissile_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00058490();
+	g_eax = PlayerRDFHeavyMissile_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347220,9 +347282,9 @@ void sub_00058490_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058590_entry(void)
+void PlayerRDFHeavyMissile_Register_entry(void)
 {
-	sub_00058590(ARG32(0));
+	PlayerRDFHeavyMissile_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347232,10 +347294,10 @@ void sub_000586F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058700_entry(void)
+void PlayerRDFLightMissile_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00058700();
+	g_eax = PlayerRDFLightMissile_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347243,10 +347305,10 @@ void sub_00058700_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058770_entry(void)
+void PlayerRDFLightMissile_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00058770();
+	g_eax = PlayerRDFLightMissile_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347254,9 +347316,9 @@ void sub_00058770_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058870_entry(void)
+void PlayerRDFLightMissile_Register_entry(void)
 {
-	sub_00058870(ARG32(0));
+	PlayerRDFLightMissile_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347334,10 +347396,10 @@ void sub_00058F90_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00058FA0_entry(void)
+void RDFHeavyMissile_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00058FA0();
+	g_eax = RDFHeavyMissile_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347351,10 +347413,10 @@ void DoNothing_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00059020_entry(void)
+void RDFHeavyMissile_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00059020();
+	g_eax = RDFHeavyMissile_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347362,9 +347424,9 @@ void sub_00059020_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00059120_entry(void)
+void RDFHeavyMissile_Register_entry(void)
 {
-	sub_00059120(ARG32(0));
+	RDFHeavyMissile_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347374,10 +347436,10 @@ void sub_00059280_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00059290_entry(void)
+void RDFLightMissile_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00059290();
+	g_eax = RDFLightMissile_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347385,10 +347447,10 @@ void sub_00059290_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00059300_entry(void)
+void RDFLightMissile_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00059300();
+	g_eax = RDFLightMissile_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347396,9 +347458,9 @@ void sub_00059300_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00059400_entry(void)
+void RDFLightMissile_Register_entry(void)
 {
-	sub_00059400(ARG32(0));
+	RDFLightMissile_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347824,10 +347886,10 @@ void sub_0005C020_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005C030_entry(void)
+void VF1AXIzzy_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0005C030(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = VF1AXIzzy_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347835,10 +347897,10 @@ void sub_0005C030_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005C070_entry(void)
+void VF1AXIzzy_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0005C070();
+	g_eax = VF1AXIzzy_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347846,9 +347908,9 @@ void sub_0005C070_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005C090_entry(void)
+void VF1AXIzzy_Register_entry(void)
 {
-	sub_0005C090(ARG32(0));
+	VF1AXIzzy_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -347926,10 +347988,10 @@ void sub_0005C2A0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005C2B0_entry(void)
+void VF1SX_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0005C2B0(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = VF1SX_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347937,10 +347999,10 @@ void sub_0005C2B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005C2E0_entry(void)
+void VF1SX_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0005C2E0();
+	g_eax = VF1SX_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347965,9 +348027,9 @@ void sub_0005DC90_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005E110_entry(void)
+void VF1SX_Register_entry(void)
 {
-	sub_0005E110(ARG32(0));
+	VF1SX_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -348079,10 +348141,10 @@ void sub_00061F40_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00061F50_entry(void)
+void VF1AX_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00061F50(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = VF1AX_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348090,10 +348152,10 @@ void sub_00061F50_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00061F80_entry(void)
+void VF1AX_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00061F80();
+	g_eax = VF1AX_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348118,9 +348180,9 @@ void sub_00063930_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00063DB0_entry(void)
+void VF1AX_Register_entry(void)
 {
-	sub_00063DB0(ARG32(0));
+	VF1AX_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359683,10 +359745,10 @@ void sub_000CF1B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF1C0_entry(void)
+void PlayerRDFHeavyMissileLauncherWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF1C0();
+	g_eax = PlayerRDFHeavyMissileLauncherWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359694,10 +359756,10 @@ void sub_000CF1C0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF1D0_entry(void)
+void PlayerRDFHeavyMissileLauncherWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF1D0();
+	g_eax = PlayerRDFHeavyMissileLauncherWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359705,9 +359767,9 @@ void sub_000CF1D0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF1E0_entry(void)
+void PlayerRDFHeavyMissileLauncherWeapon_Register_entry(void)
 {
-	sub_000CF1E0(ARG32(0));
+	PlayerRDFHeavyMissileLauncherWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359717,10 +359779,10 @@ void sub_000CF280_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF290_entry(void)
+void PlayerRDFLightMissileLauncherWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF290();
+	g_eax = PlayerRDFLightMissileLauncherWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359728,10 +359790,10 @@ void sub_000CF290_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF2A0_entry(void)
+void PlayerRDFLightMissileLauncherWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF2A0();
+	g_eax = PlayerRDFLightMissileLauncherWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359739,9 +359801,9 @@ void sub_000CF2A0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF2B0_entry(void)
+void PlayerRDFLightMissileLauncherWeapon_Register_entry(void)
 {
-	sub_000CF2B0(ARG32(0));
+	PlayerRDFLightMissileLauncherWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359819,10 +359881,10 @@ void sub_000CF4F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF500_entry(void)
+void RDFHeavyMissileLauncherWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF500();
+	g_eax = RDFHeavyMissileLauncherWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359830,10 +359892,10 @@ void sub_000CF500_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF510_entry(void)
+void RDFHeavyMissileLauncherWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF510();
+	g_eax = RDFHeavyMissileLauncherWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359841,9 +359903,9 @@ void sub_000CF510_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF520_entry(void)
+void RDFHeavyMissileLauncherWeapon_Register_entry(void)
 {
-	sub_000CF520(ARG32(0));
+	RDFHeavyMissileLauncherWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359853,10 +359915,10 @@ void sub_000CF5C0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF5D0_entry(void)
+void RDFLightMissileLauncherWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF5D0();
+	g_eax = RDFLightMissileLauncherWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359864,10 +359926,10 @@ void sub_000CF5D0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF5E0_entry(void)
+void RDFLightMissileLauncherWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CF5E0();
+	g_eax = RDFLightMissileLauncherWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359875,9 +359937,9 @@ void sub_000CF5E0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CF5F0_entry(void)
+void RDFLightMissileLauncherWeapon_Register_entry(void)
 {
-	sub_000CF5F0(ARG32(0));
+	RDFLightMissileLauncherWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -373832,10 +373894,10 @@ void sub_00118630_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00118700_entry(void)
+void vcMovieSetSoundSystem_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00118700(g_edx);
+	g_eax = vcMovieSetSoundSystem(g_edx);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -373843,9 +373905,9 @@ void sub_00118700_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00118720_entry(void)
+void vcMovieIsPlaying_entry(void)
 {
-	g_eax = sub_00118720(ARG32(0));
+	g_eax = vcMovieIsPlaying(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -379664,10 +379726,10 @@ void sub_001406D0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00140730_entry(void)
+void vcMoviePath_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00140730(g_edx, ARG32(0), ARG32(1));
+	g_eax = vcMoviePath(g_edx, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;

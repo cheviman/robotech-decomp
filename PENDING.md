@@ -1188,6 +1188,110 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   opacities and colour no code reaches) and 8 after `LevelFarPlane` (2000.0 and 1, the same), which counted
   before with the word they follow. `tools/verify_c.py` 209 vectors, 0 different, twice. The nine
   scenarios frame for frame as their references, at the first run.
+- **The mechs' motions typed: `MechMotions`** (11-11-2026). What "The mechs' records of motions, looked at
+  with Ghidra and not typed" above was left waiting for, found by an Opus agent asked the one question
+  (how does a motion of the record reach the screen) and checked here. The search before missed the reader
+  because Ghidra writes it as a table of words (`puVar6[0x1a]`), not as an offset: sub_00050EF0, the
+  update of the entities that walk, ends in sub_0004FB50(the entity, its `EntitySpec`, its rotation),
+  which takes `motions` and, from the entity's speed along its three axes, its turning, what it asks for
+  (its +0x28 up, its +0x2C the boost) and its flags, picks one or two of the record's motions and sets
+  them in the model's first layer with how much of each (sub_001205C0: the layer's two motions and the
+  milliseconds of the change; the weight is its sixth word, the rate its seventh). So a mech's walk is a
+  blend by speed: idle and walk below `walk_speed` (+0x00), walk and run up to `run_speed` (+0x04), and
+  past it the run with `slide_forward`; `run_back` by `run_back_speed` (+0x0C); the strafes and slides
+  sideways the same way; `turn_left` and `turn_right` in place; in the air `rise`, the five of `thrust`
+  while it asks to go up and the five of `fall` (the middle one blended with the one of where it moves),
+  `land_soft` and `land` blended by how hard it comes down (sub_00120790); the four of `boost` alone
+  while it boosts; `alarm` and its two turns while the entity's flag 0x200 is on. The slots' names are
+  what that function plays each for and agree with what the types load into each (the VF-1SX's "battloid
+  bj fall back" at +0xB4, "battloid boost forward" at +0xC4). The record also holds two sets of sounds of
+  the shape the weapons' is (16 handles, how many, which next; sub_0010E370 takes the next): the hard
+  landing's at +0x10 and the steps' at +0xE8, with whether the steps sound (+0x130) and where in each of
+  five motions a step sounds (+0x134; sub_0004FA20, sub_0004EC50). `alert` (+0xD0) each type plays itself.
+  `MechMotions`, 46 fields, and the records of the 17 types with a name whose Startup or Shutdown clears
+  one in place (`GladiatorMotions`): 874 places of the C. Not named: +0x08 (a rate of the walk-to-run
+  blend), +0x64 (the idle while flag 0x100 is on: the Gladiator's with its hatches open), +0xE0 (the walk
+  of an entity whose +0x180 is 2) and +0xE4, which nothing reads. Six more records are of types without a
+  name. With it, from a second agent's zones, checked here (19 lines): the level's box as its file gives
+  it and as places are tested against it (`LevelFileBoundsMin`/`Max`, `LevelBoundsMin`/`Max`),
+  `LevelMusic`, `gcLevelObject`, the mission complete screen's blinking (`...PulseAlpha`, `...FadeAlpha`,
+  their steps, `...FadeHold`, `...VersusResultText`), the mission failed screen's confirm sound and the
+  three figures' nodes (`MovementPatternFigure1Node`...). And a third agent's answer to what the four
+  `EntitySpec` at 0x1EB428 on are for: not settled, and the code says why: no code that Ghidra decompiled
+  sets the word of the start data (+0x54) that sub_00046280 fills them on, so that branch does not run in
+  the game as it is. The start data's 0x5C bytes as that agent read them (sub_00019A30): the position at
+  +0x00, the orientation from +0x0C, a hit points' count that replaces the type's when above 0 at +0x34,
+  the player at +0x3C, the opening state at +0x40, the side at +0x44 (the first player's veritech 1, the
+  second's -1), the pack at +0x48, whether a player controls it at +0x4C (the entity's flag 0x8000).
+  Measured: reads at a raw address 10,025 to 8,896; data addresses written as numbers 6,457 to 6,379;
+  memory at a named place no field names 2,158 to 2,286: 79 the four words of `MechMotions` not named,
+  49 where the code copies the level's box a word at a time (`MEM32(LevelBoundsMax_VA + 0x4u)`: floats
+  moved by their bits, as the 19 before); the XBE's untyped bytes 835,151 to 829,663, its unknown bytes
+  3,763 to 3,839: 4 bytes after each of 15 records of motions (the record is 0x154 bytes and the next
+  thing starts 8 on), 4 after the mission failed screen's sound, 4 after `gcLevelObject` and 8 between the
+  level's box and the camera's place that follows it, words no code reaches. `tools/verify_c.py` 209
+  vectors, 0 different, twice. The nine scenarios frame for frame as their references, at the first run.
+  Left as leads, not checked: the camera node's place and rotation at 0x24EC00 and 0x24EC0C (Node 12 has
+  no name), six objects that wall the level's box at 0x1E64D0, the AI's tables' counts at 0x20F7E0 on.
+- **Fishing by a thing, the cinematics first** (11-11-2026, Sebas: find a ship, its weapons and things, and
+  stay there; or the cinematics, the menus, the levels, the codes). A thing whole, followed through its
+  links in the code, each link holding the next: here from the three strings that speak of movies (".bik",
+  the path's format with vcMovie, "Not a Bink file.") to who uses them and who calls those. A movie is a
+  Bink file played by its name: `MoviePlay` (the name, whether it can be skipped, with any button or only
+  A and START: `MovieSkipPressed`) opens it and loops a frame a turn until it ends or a pad skips it. The
+  engine's part, between its textures' code and its scene's: `vcMovieOpen` (the path, `vcMoviePath`, ".bik"
+  added, `BinkOpen`, a texture), `vcMovieDrawFrame` (the canonical loop of Bink's: `BinkWait`,
+  `BinkDoFrame`, `BinkCopyToBuffer` into the texture locked, that drawn on the whole screen and shown,
+  `BinkNextFrame`), `vcMovieIsPlaying` (its frame against how many it has), `vcMovieClose`
+  (`BinkClose`), and `vcMovieSetSoundSystem` (`BinkSetSoundSystem` with `BinkOpenDirectSound` and the
+  engine's DirectSound). Thirteen movies: TDKLogo, HarmonyLogo, VCLogo, Intro and RoboLegal where the
+  game starts (sub_000124D0, not named: it does more than that), Intro again from three places of the main
+  menu, and the story's by level: `LevelPlayMovie` (a chapter's, M100 to M500, before its first levels
+  while `LevelChapterNotStarted`, no level of it finished; M103 and M104 before levels 2 and 4) and
+  `LevelPlayEndMovie` (M500Post once level 49 is finished). 19 functions named, 11 of them described,
+  with their arguments. Not named: sub_000B0160, which plays a movie whose name it is handed (a menu of
+  movies, by its looks). Measured: functions without a name 962 to 948 in the recompiled C and 3,362 to
+  3,357 in the decompiled, without a description 2,027 to 2,021 and 3,565 to 3,560; parameters named by
+  their place 88,507 to 88,503; nothing went up. `tools/verify_c.py` 209 vectors, 0 different (one run in
+  between said "0 function vectors", the known fluke of a run right after another). The nine scenarios
+  frame for frame as their references, at the first run. With functions named the analysis was worked
+  out again. The menus as they stand: 13 of the 36 screen types have a name (MainMenu, Sniper, Pause,
+  Loading, HUD, Splash, Controller, MissionComplete, MissionFailed, Credits, Awards, Medals, Interviews)
+  and 6 of the 27 screen elements; the texts they show are numbers handed to the string table, not read.
+  Next things to fish: the veritech (13 types without a name, their missiles and launchers, two guns), a
+  screen with its textures, a level with what it loads, the codes by what each bit of `Cheats` gates.
+- **The veritech, fished** (11-11-2026). An Opus agent followed its chain whole and what it brought was
+  checked here. It set an old note right first: of the 13 types of Veritech_StateMachine eight had their
+  names (VF1DX, VF1BX, VF1JX and the five of two players, VF1DM to VF1SM); the five without were the ones
+  whose asset another type has too. What tells them apart, from the code: sub_00017AE0 makes a player's
+  veritech of type 0, 26, 27, 28 or 29, and of 59 to 63 in their place when both players are there (and
+  the respawn after three seconds always); the types' set-up functions pair them by model, so 26 is
+  `VF1AX` and 29 `VF1SX`, a player's as VF1BX and VF1JX are. Entity 58 loads the VF-1AX with a skin of its
+  own it does not let the player choose, Izzy's (`SkinIzzyText`, the fourth of sub_00044530's table), and
+  a voice bank of its own (491.wav): `VF1AXIzzy`. Entity 56 and 57 are the VF-1SX with Roy's skin, the
+  same in everything the code shows but their number and their block: not named, the levels' files would
+  tell which is which. The missiles: `MissileLauncherCreateMissile` makes the missile of the launcher's
+  type (Weapon 5 Entity 70, 6 71, 9 72, 10 73), and a veritech makes itself launchers 9 and 10 where a
+  player controls it (its flag 0x8000, from its start data) and 5 and 6 where none does (sub_00046280);
+  the damage in each launcher's constants is its missile's (60, 150, 100, 175), which pairs them a second
+  way. So `RDFLightMissile` and `RDFHeavyMissile` (their assets rdf_light_missile and rdf_heavy_missile)
+  with `RDFLightMissileLauncherWeapon` and `RDFHeavyMissileLauncherWeapon`, and the player's four with
+  `Player` before: 11 types named, their functions with them (33), and their records in place (the four
+  missiles' `MissileSpec`, `EntitySpec` and `MissileConstants`, the four launchers' `WeaponSpec` and
+  `LauncherConstants`: 20 lines); `tools/symbols.py texts` names five more texts with them. Not named,
+  from the same report and not checked: the veritech's four gun pods are Weapon 0, 1, 2 and 34 (one a
+  mode, by which function fires each: 2 the battloid's, 0 the guardian's, 34 the fighter's; what 1 is for
+  is not settled); Weapon 25 and 26 are the female power armour's and 42 a male power armour's, not the
+  veritech's; Entity 1 is a thing that does not move, of the asset rdf_heavy_missile, that no code makes by
+  its number; and most of the tests for "type 1" in the code are of Node 1, `PlayerStandInEntityNode`,
+  not of it. Measured: functions without a name in the decompiled C 3,357 to 3,324, without a description
+  3,560 to 3,527; reads at a raw address 8,896 to 8,692; data addresses written as numbers 6,379 to 6,243;
+  memory at a named place no field names 2,286 to 2,318 (the 32 words not read of the twelve new records:
+  five of each `MissileSpec`, two of each missile's `EntitySpec`, one of each `WeaponSpec`); the XBE's
+  untyped bytes 829,663 to 827,995, its unknown bytes 3,839 to 3,855 (the word between a newly named
+  type's record and what follows it, which nothing reaches, less three bytes of each missile's constants
+  now inside a record). `tools/verify_c.py` 209 vectors, 0 different, twice. The nine scenarios frame for
+  frame as their references, at the first run.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

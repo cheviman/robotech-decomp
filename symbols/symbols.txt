@@ -746,8 +746,10 @@ type  Entity         21  PodHeavyArtillerySpace            # its asset Pod Heavy
 type  Entity         22  Gladiator                         # its asset gladiator
 type  Entity         23  PodScoutSpace                     # its asset Pod Scout, in space
 type  Entity         25  ZenReconShip                      # its asset zen_recon_ship
+type  Entity     26  VF1AX                             # its asset VF-1AX: a player's, as VF1BX and VF1JX; with two players VF1AM in its place (VF1AXIzzy has the asset too)
 type  Entity         27  VF1BX                             # its asset VF-1BX
 type  Entity         28  VF1JX                             # its asset VF-1JX
+type  Entity     29  VF1SX                             # its asset VF-1SX: a player's; with two players VF1SM in its place (Entity 56 and 57, with Roy's skin, have the asset too)
 type  Entity         30  ARMDTurret                        # its asset ARMD_turret
 type  Entity         32  ZenReEntryPod                     # its asset Zen_re-entry pod
 type  Entity         33  MechHauler                        # its asset vehicle_mil_mechhauler
@@ -770,20 +772,29 @@ type  Entity         50  ZenShuttleCollision               # its asset zen_shutt
 type  Entity         51  ZenReconCollision                 # its asset zen_recon_collision
 type  Entity         52  PodOfficerSkarred                 # its asset skarred
 type  Entity         53  PodOfficerSkarredDisabled         # its asset skarred_disabled
+type  Entity     58  VF1AXIzzy                         # its asset VF-1AX, with Izzy's skin and a voice bank of its own (491.wav)
 type  Entity         59  VF1DM                             # its asset VF-1DM
 type  Entity         60  VF1AM                             # its asset VF-1AM
 type  Entity         61  VF1BM                             # its asset VF-1BM
 type  Entity         62  VF1JM                             # its asset VF-1JM
 type  Entity         63  VF1SM                             # its asset VF-1SM
 type  Entity         69  Flare                             # its asset fx_flare
+type  Entity     70  RDFLightMissile                   # its asset rdf_light_missile: what RDFLightMissileLauncherWeapon fires
+type  Entity     71  RDFHeavyMissile                   # its asset rdf_heavy_missile: what RDFHeavyMissileLauncherWeapon fires
+type  Entity     72  PlayerRDFLightMissile             # its asset rdf_light_missile: what PlayerRDFLightMissileLauncherWeapon fires
+type  Entity     73  PlayerRDFHeavyMissile             # its asset rdf_heavy_missile: what PlayerRDFHeavyMissileLauncherWeapon fires
 type  Entity         74  ZenLightMissile                   # its asset zen_light_missile: what ZenLightMissileLauncherWeapon fires
 type  Entity         75  ZenHeavyMissile                   # its asset zen_heavy_missile: what ZenHeavyMissileLauncherWeapon fires
 type  Entity         76  FPAMissile                        # its asset zen_light_missile: what FPAMissileLauncherWeapon fires
 type  Entity         77  PodOfficerSledMissile             # its asset zen_heavy_missile: what PodOfficerSledMissileLauncherWeapon fires
 type  Structure       0  Building                          # its asset building_explosion.wav
 type  Weapon          4  FlareWeapon                       # it creates the Flare entities; the VF-1s'
+type  Weapon      5  RDFLightMissileLauncherWeapon     # it fires RDFLightMissile: a veritech's no player controls, and its packs'
+type  Weapon      6  RDFHeavyMissileLauncherWeapon     # it fires RDFHeavyMissile: a veritech's no player controls, and its super veritech pack's
 type  Weapon          7  ZenLightMissileLauncherWeapon     # it fires ZenLightMissile: the light artillery pods' and the light missile turrets'
 type  Weapon          8  ZenHeavyMissileLauncherWeapon     # it fires ZenHeavyMissile: the heavy artillery pods', the heavy missile turret's, the recon ship's, the fighter pod's
+type  Weapon      9  PlayerRDFLightMissileLauncherWeapon # it fires PlayerRDFLightMissile: a player's veritech's, and its packs'
+type  Weapon     10  PlayerRDFHeavyMissileLauncherWeapon # it fires PlayerRDFHeavyMissile: a player's veritech's, and its super veritech pack's
 type  Weapon         11  FPAMissileLauncherWeapon          # it fires FPAMissile: the female power armours'
 type  Weapon         12  SuperVeritechPackWeapon           # its assets SV_back_missile, sv_backboosters, sv_armbooster: a VF-1's, with missile launchers of its own
 type  Weapon         13  SumoPackWeapon                    # its assets sumo_chest, sumo_backpack, sumo shoulder: armour pieces of a VF-1, with missile launchers of their own
@@ -2252,6 +2263,171 @@ field   ControllerItems  2C  left_y                   u32   # the left stick, up
 001EB418  var   MenuVeritechFighterMotion  u32           # the motion "VF-1SX fighter"
 001EB41C  var   MenuVeritechSumoWalkMotion  u32          # the motion "sumo walk"
 001EB420  var   MenuVeritechSuperFighterMotion  u32      # the motion "super fighter"
+
+# A mech's motions: the record of 0x55 words an EntitySpec's motions points at for a type that walks. Its
+# type's X_Startup clears it and fills it one motion at a time (vcObjectGet, class 9) and its X_Shutdown
+# lets go of each. The shared code that moves an entity (sub_00050EF0, each frame) hands the record to
+# sub_0004FB50, which picks one or two of its motions from the entity's speed along its three axes, its
+# turning and its state, and blends them in the model's first layer (sub_001205C0); the names here are
+# what that function plays each for, which is what the types load into each (the VF-1SX's "battloid bj
+# fall back" at +0xB4). Read by an agent from Ghidra's C and checked here. Not named: +0x08 (a rate the
+# walk-to-run blend plays at), +0x64 (the idle while the entity's flag 0x100 is on), +0xE0 (the walk of an
+# entity whose +0x180 is 2: the veritech with the sumo pack) and +0xE4, which nothing reads.
+struct  MechMotions  154                            # a walking type's motions and the sounds of its steps
+field   MechMotions  000  walk_speed            u32   # points at the speed forward at which the walk plays whole: below it, idle and walk are blended
+field   MechMotions  004  run_speed             u32   # points at the speed forward at which the run plays whole: between the two, walk and run are blended
+field   MechMotions  00C  run_back_speed        u32   # points at the speed backward at which the run back plays whole
+field   MechMotions  010  landing_sounds        u32[16]   # the sounds of a hard landing, played in turn
+field   MechMotions  050  landing_sound_count   u32   # how many of them there are
+field   MechMotions  054  landing_sound_next    u32   # which one plays next
+field   MechMotions  058  slide_back            u32   # going backward faster than its top speed backward
+field   MechMotions  05C  run_back              u32
+field   MechMotions  060  idle                  u32
+field   MechMotions  068  walk                  u32
+field   MechMotions  06C  run                   u32
+field   MechMotions  070  slide_forward         u32   # going forward faster than run_speed
+field   MechMotions  074  slide_left            u32   # going left faster than its top speed sideways
+field   MechMotions  078  strafe_left           u32
+field   MechMotions  07C  strafe_right          u32
+field   MechMotions  080  slide_right           u32
+field   MechMotions  084  turn_left             u32   # turning in place
+field   MechMotions  088  turn_right            u32
+field   MechMotions  08C  rise                  u32   # going up in the air
+field   MechMotions  090  land_soft             u32   # blended with land by how hard it comes down
+field   MechMotions  094  land                  u32
+field   MechMotions  098  thrust                u32   # in the air while it asks to go up: this, blended with the one of where it moves
+field   MechMotions  09C  thrust_forward        u32
+field   MechMotions  0A0  thrust_back           u32
+field   MechMotions  0A4  thrust_left           u32
+field   MechMotions  0A8  thrust_right          u32
+field   MechMotions  0AC  fall                  u32   # falling: this, blended with the one of where it moves
+field   MechMotions  0B0  fall_forward          u32
+field   MechMotions  0B4  fall_back             u32
+field   MechMotions  0B8  fall_left             u32
+field   MechMotions  0BC  fall_right            u32
+field   MechMotions  0C0  boost_back            u32   # while it boosts on the ground: the one of where it moves, alone
+field   MechMotions  0C4  boost_forward         u32
+field   MechMotions  0C8  boost_left            u32
+field   MechMotions  0CC  boost_right           u32
+field   MechMotions  0D0  alert                 u32   # the type's own code plays it, not the shared one
+field   MechMotions  0D4  alarm                 u32   # the idle while the entity's flag 0x200 is on
+field   MechMotions  0D8  alarm_turn_left       u32   # turning in place then
+field   MechMotions  0DC  alarm_turn_right      u32
+field   MechMotions  0E8  footstep_sounds       u32[16]   # the sounds of its steps, played in turn
+field   MechMotions  128  footstep_sound_count  u32   # how many of them there are
+field   MechMotions  12C  footstep_sound_next   u32   # which one plays next
+field   MechMotions  130  footsteps             u32   # whether its steps sound
+field   MechMotions  134  footstep_phases       f32[5]   # where in the motion a step sounds, for the walk, the run back, the run, the strafe left and the strafe right
+00203C08  var   ExcaliburMotions                         MechMotions
+00206348  var   MalePowerArmorMotions                    MechMotions
+00206E78  var   PodOfficerSkarredDisabledMotions         MechMotions
+002071D0  var   PodOfficerSkarredMotions                 MechMotions
+002075B8  var   PodOfficerMotions                        MechMotions
+00207DD8  var   SpartanMotions                           MechMotions
+00208130  var   RaiderXMotions                           MechMotions
+002084C0  var   MacIIMotions                             MechMotions
+002092B8  var   GladiatorMotions                         MechMotions
+0020A6D0  var   PodHeavyArtilleryMotions                 MechMotions
+0020AA28  var   ZenWarriorNoArmourMotions                MechMotions
+0020AD80  var   ZenWarriorHeavyMotions                   MechMotions
+0020B0D8  var   ZenWarriorLiteMotions                    MechMotions
+0020C3E0  var   ZenWarriorScavengerMotions               MechMotions
+0020CA08  var   PodLightArtilleryMotions                 MechMotions
+0020D018  var   PodScoutMotions                          MechMotions
+0020D3C8  var   PodStandardWarriorMotions                MechMotions
+# More of the game's variables read by an agent from Ghidra's C and checked here: the level's box as its
+# file gives it and as the game tests places against it (sub_000C7630 sets the second from the first), its
+# music and its object; the mission complete screen's blinking; the three figures an entity can be told to
+# move along, each a node of eight points (sub_000A7E20 makes them).
+001E64B8  var   LevelFileBoundsMin  f32[3]              # the least corner of the level's box as gcLevel_Load read it
+001E64C4  var   LevelFileBoundsMax  f32[3]              # its greatest corner
+0024EBE0  var   LevelBoundsMin  f32[3]                  # the least corner of the box places are kept within and tested against
+0024EBEC  var   LevelBoundsMax  f32[3]                  # its greatest corner
+001E64E8  var   LevelMusic  u32                         # the level's vcMusic object, by the name the level's file gives
+001E64F8  var   gcLevelObject  u32                      # the gcLevel object there is: gcLevel_Create keeps its handle and gcLevel_Destroy clears it
+001E64A8  var   MissionFailedScreenConfirmSSound  u32   # a sound made of the vcSnd "Confirm_S.wav" MissionFailedScreen_Startup makes and its Shutdown lets go of
+001B0A60  var   MissionCompleteScreenPulseAlpha  s32    # the opacity of what the screen makes pulse, 55 to 255
+001B0A64  var   MissionCompleteScreenFadeAlpha  s32     # the opacity of the line a section shows in turn, 0 to 255
+001B0A68  var   MissionCompleteScreenPulseStep  s32     # what the first changes by a frame: 1 or -1
+001B0A6C  var   MissionCompleteScreenFadeStep  s32      # what the second changes by a frame: 5, -5 or 0
+001B0A70  var   MissionCompleteScreenFadeHold  s32      # the frames the second still stays at its end before it turns back
+001B0A74  var   MissionCompleteScreenVersusResultText  s32   # the number of the text under the winner's line of a match of two
+0020F7EC  var   MovementPatternFigure1Node  u32         # the node "MovementPattern Figure1"
+0020F7F0  var   MovementPatternFigure1NodeMade  u32     # whether it is made
+0020F7F4  var   MovementPatternFigure3Node  u32         # the node "MovementPattern Figure3"
+0020F7F8  var   MovementPatternFigure3NodeMade  u32     # whether it is made
+0020F7FC  var   MovementPatternFigure4Node  u32         # the node "MovementPattern Figure4"
+0020F800  var   MovementPatternFigure4NodeMade  u32     # whether it is made
+
+# The cinematics: a movie is a Bink file the game plays by its name, to its end or until a button. The
+# engine opens it from the folder vcMovie of the data, draws each frame into a texture and that on the whole
+# screen (vcMovieOpen, vcMovieDrawFrame, vcMovieIsPlaying, vcMovieClose), and MoviePlay loops over them.
+# Thirteen are played: TDKLogo, HarmonyLogo, VCLogo, Intro and RoboLegal when the game starts (sub_000124D0),
+# Intro again from the main menu, and the story's, before a level or after the last (LevelPlayMovie,
+# LevelPlayEndMovie): M100, M103, M104, M200, M300, M400, M500, M500Post. Bink's functions are named as its
+# library calls them, told by what the engine's four do with each (BinkOpen is the one that answers "Not a
+# Bink file.").
+00016700  func  MovieSkipPressed
+00016AF0  func  MoviePlay
+00025360  func  LevelChapterNotStarted
+000253C0  func  LevelPlayMovie
+00025510  func  LevelPlayEndMovie
+00118700  func  vcMovieSetSoundSystem
+00118720  func  vcMovieIsPlaying
+00118740  func  vcMovieOpen
+00118940  func  vcMovieClose
+00118980  func  vcMovieDrawFrame
+00140730  func  vcMoviePath
+00171C80  func  BinkSetSoundSystem
+00172AA0  func  BinkDoFrame
+00173100  func  BinkWait
+00173660  func  BinkOpen
+001745A0  func  BinkCopyToBuffer
+001745E0  func  BinkNextFrame
+00174780  func  BinkClose
+00175370  func  BinkOpenDirectSound
+param   MovieSkipPressed        arg0  any_button
+param   MoviePlay               arg0  name
+param   MoviePlay               arg1  can_skip
+param   MoviePlay               arg2  any_button
+param   LevelChapterNotStarted  arg0  chapter
+param   LevelPlayMovie          arg0  level
+param   LevelPlayEndMovie       arg0  level
+comment MovieSkipPressed Whether a pad has just pressed A or START, or any of its buttons where any_button is set; takes that pad's presses away.
+comment MoviePlay Plays the movie of a name on the whole screen, to its end, or until MovieSkipPressed where can_skip is set. Hands back 0 if there is no such movie.
+comment LevelChapterNotStarted Whether no level of a chapter is finished yet.
+comment LevelPlayMovie Plays the story's movie that goes before a level: a chapter's (M100, M200, M300, M400, M500) before its first levels while LevelChapterNotStarted, and M103 and M104 before levels 2 and 4.
+comment LevelPlayEndMovie Plays the story's last movie (M500Post) once the last level is finished.
+comment vcMovieSetSoundSystem Gives Bink the engine's DirectSound to play the movies' sound with (BinkSetSoundSystem, BinkOpenDirectSound).
+comment vcMovieIsPlaying Whether a movie has frames left to show.
+comment vcMovieOpen Opens the movie of a name (vcMoviePath and ".bik", BinkOpen) and makes the texture its frames are drawn into. Hands back 0 if Bink does not open it.
+comment vcMovieClose Closes a movie (BinkClose) and lets go of its texture.
+comment vcMovieDrawFrame Where it is time for it (BinkWait), has Bink work out the movie's next frame (BinkDoFrame), copies it into the texture (BinkCopyToBuffer), draws that on the whole screen, shows it and goes on to the frame after (BinkNextFrame). Hands back the number of the frame it is at then, -1 past the last; where it is not time yet, only that number.
+comment vcMoviePath Writes where a movie is: the data's folder, the platform's, vcMovie and the name.
+
+# The veritech's missiles and launchers, named with their types (PENDING.md, "The veritech, fished"): a
+# launcher's type picks its missile's (MissileLauncherCreateMissile), and a veritech gets the player's two
+# launchers where a player controls it and the other two where none does (sub_00046280).
+001EEBC8  var   RDFLightMissileMissileSpec                       MissileSpec
+001EE998  var   RDFHeavyMissileMissileSpec                       MissileSpec
+001EE308  var   PlayerRDFLightMissileMissileSpec                 MissileSpec
+001EE0D8  var   PlayerRDFHeavyMissileMissileSpec                 MissileSpec
+001EEC14  var   RDFLightMissileSpec                              EntitySpec
+001EE9E4  var   RDFHeavyMissileSpec                              EntitySpec
+001EE354  var   PlayerRDFLightMissileSpec                        EntitySpec
+001EE124  var   PlayerRDFHeavyMissileSpec                        EntitySpec
+00193824  var   RDFLightMissileMissileConstants                  MissileConstants
+00193720  var   RDFHeavyMissileMissileConstants                  MissileConstants
+00193414  var   PlayerRDFLightMissileMissileConstants            MissileConstants
+00193310  var   PlayerRDFHeavyMissileMissileConstants            MissileConstants
+002200D4  var   RDFLightMissileLauncherWeaponSpec                WeaponSpec
+00220074  var   RDFHeavyMissileLauncherWeaponSpec                WeaponSpec
+0021FF54  var   PlayerRDFLightMissileLauncherWeaponSpec          WeaponSpec
+0021FEF4  var   PlayerRDFHeavyMissileLauncherWeaponSpec          WeaponSpec
+001A5448  var   RDFLightMissileLauncherWeaponConstants           LauncherConstants
+001A5430  var   RDFHeavyMissileLauncherWeaponConstants           LauncherConstants
+001A53E8  var   PlayerRDFLightMissileLauncherWeaponConstants     LauncherConstants
+001A53D0  var   PlayerRDFHeavyMissileLauncherWeaponConstants     LauncherConstants
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
@@ -3844,6 +4020,18 @@ comment FPAMissile_Shutdown The FPAMissile type's last release (GameObjectTypeRe
 comment FPAMissile_Startup The FPAMissile type's first use (GameObjectTypeUse): gets what its objects share.
 000582B0  func  FPAMissile_Register
 comment FPAMissile_Register Registers the FPAMissile type (Entity 76), its asset zen_light_missile: what FPAMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00058420  func  PlayerRDFHeavyMissile_Shutdown
+comment PlayerRDFHeavyMissile_Shutdown The PlayerRDFHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00058490  func  PlayerRDFHeavyMissile_Startup
+comment PlayerRDFHeavyMissile_Startup The PlayerRDFHeavyMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00058590  func  PlayerRDFHeavyMissile_Register
+comment PlayerRDFHeavyMissile_Register Registers the PlayerRDFHeavyMissile type (Entity 73), its asset rdf_heavy_missile: what PlayerRDFHeavyMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00058700  func  PlayerRDFLightMissile_Shutdown
+comment PlayerRDFLightMissile_Shutdown The PlayerRDFLightMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00058770  func  PlayerRDFLightMissile_Startup
+comment PlayerRDFLightMissile_Startup The PlayerRDFLightMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00058870  func  PlayerRDFLightMissile_Register
+comment PlayerRDFLightMissile_Register Registers the PlayerRDFLightMissile type (Entity 72), its asset rdf_light_missile: what PlayerRDFLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
 000589E0  func  ZenHeavyMissile_Shutdown
 comment ZenHeavyMissile_Shutdown The ZenHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
 00058A50  func  ZenHeavyMissile_Startup
@@ -3856,6 +4044,18 @@ comment ZenLightMissile_Shutdown The ZenLightMissile type's last release (GameOb
 comment ZenLightMissile_Startup The ZenLightMissile type's first use (GameObjectTypeUse): gets what its objects share.
 00058E30  func  ZenLightMissile_Register
 comment ZenLightMissile_Register Registers the ZenLightMissile type (Entity 74), its asset zen_light_missile: what ZenLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00058FA0  func  RDFHeavyMissile_Shutdown
+comment RDFHeavyMissile_Shutdown The RDFHeavyMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00059020  func  RDFHeavyMissile_Startup
+comment RDFHeavyMissile_Startup The RDFHeavyMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00059120  func  RDFHeavyMissile_Register
+comment RDFHeavyMissile_Register Registers the RDFHeavyMissile type (Entity 71), its asset rdf_heavy_missile: what RDFHeavyMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
+00059290  func  RDFLightMissile_Shutdown
+comment RDFLightMissile_Shutdown The RDFLightMissile type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00059300  func  RDFLightMissile_Startup
+comment RDFLightMissile_Startup The RDFLightMissile type's first use (GameObjectTypeUse): gets what its objects share.
+00059400  func  RDFLightMissile_Register
+comment RDFLightMissile_Register Registers the RDFLightMissile type (Entity 70), its asset rdf_light_missile: what RDFLightMissileLauncherWeapon fires: fills its GameObjectType and stores it in its family.
 0005BAD0  func  VF1SM_Startup
 comment VF1SM_Startup The VF1SM type's first use (GameObjectTypeUse): gets what its objects share.
 0005BB00  func  VF1SM_Shutdown
@@ -3886,6 +4086,18 @@ comment VF1DM_Startup The VF1DM type's first use (GameObjectTypeUse): gets what 
 comment VF1DM_Shutdown The VF1DM type's last release (GameObjectTypeRelease): lets go of what its objects share.
 0005BF60  func  VF1DM_Register
 comment VF1DM_Register Registers the VF1DM type (Entity 59), its asset VF-1DM: fills its GameObjectType and stores it in its family.
+0005C030  func  VF1AXIzzy_Startup
+comment VF1AXIzzy_Startup The VF1AXIzzy type's first use (GameObjectTypeUse): gets what its objects share.
+0005C070  func  VF1AXIzzy_Shutdown
+comment VF1AXIzzy_Shutdown The VF1AXIzzy type's last release (GameObjectTypeRelease): lets go of what its objects share.
+0005C090  func  VF1AXIzzy_Register
+comment VF1AXIzzy_Register Registers the VF1AXIzzy type (Entity 58), its asset VF-1AX, with Izzy's skin and a voice bank of its own (491.wav): fills its GameObjectType and stores it in its family.
+0005C2B0  func  VF1SX_Startup
+comment VF1SX_Startup The VF1SX type's first use (GameObjectTypeUse): gets what its objects share.
+0005C2E0  func  VF1SX_Shutdown
+comment VF1SX_Shutdown The VF1SX type's last release (GameObjectTypeRelease): lets go of what its objects share.
+0005E110  func  VF1SX_Register
+comment VF1SX_Register Registers the VF1SX type (Entity 29), its asset VF-1SX: a player's; with two players VF1SM in its place (Entity 56 and 57, with Roy's skin, have the asset too): fills its GameObjectType and stores it in its family.
 0005E190  func  VF1JX_Startup
 comment VF1JX_Startup The VF1JX type's first use (GameObjectTypeUse): gets what its objects share.
 0005E1C0  func  VF1JX_Shutdown
@@ -3898,6 +4110,12 @@ comment VF1BX_Startup The VF1BX type's first use (GameObjectTypeUse): gets what 
 comment VF1BX_Shutdown The VF1BX type's last release (GameObjectTypeRelease): lets go of what its objects share.
 00061ED0  func  VF1BX_Register
 comment VF1BX_Register Registers the VF1BX type (Entity 27), its asset VF-1BX: fills its GameObjectType and stores it in its family.
+00061F50  func  VF1AX_Startup
+comment VF1AX_Startup The VF1AX type's first use (GameObjectTypeUse): gets what its objects share.
+00061F80  func  VF1AX_Shutdown
+comment VF1AX_Shutdown The VF1AX type's last release (GameObjectTypeRelease): lets go of what its objects share.
+00063DB0  func  VF1AX_Register
+comment VF1AX_Register Registers the VF1AX type (Entity 26), its asset VF-1AX: a player's, as VF1BX and VF1JX; with two players VF1AM in its place (VF1AXIzzy has the asset too): fills its GameObjectType and stores it in its family.
 00063E30  func  VF1DX_Startup
 comment VF1DX_Startup The VF1DX type's first use (GameObjectTypeUse): gets what its objects share.
 00063E60  func  VF1DX_Shutdown
@@ -4406,6 +4624,18 @@ comment FPAMissileLauncherWeapon_Startup The FPAMissileLauncherWeapon type's fir
 comment FPAMissileLauncherWeapon_Shutdown The FPAMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
 000CF110  func  FPAMissileLauncherWeapon_Register
 comment FPAMissileLauncherWeapon_Register Registers the FPAMissileLauncherWeapon type (Weapon 11), it fires FPAMissile: the female power armours': fills its GameObjectType and stores it in its family.
+000CF1C0  func  PlayerRDFHeavyMissileLauncherWeapon_Startup
+comment PlayerRDFHeavyMissileLauncherWeapon_Startup The PlayerRDFHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF1D0  func  PlayerRDFHeavyMissileLauncherWeapon_Shutdown
+comment PlayerRDFHeavyMissileLauncherWeapon_Shutdown The PlayerRDFHeavyMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF1E0  func  PlayerRDFHeavyMissileLauncherWeapon_Register
+comment PlayerRDFHeavyMissileLauncherWeapon_Register Registers the PlayerRDFHeavyMissileLauncherWeapon type (Weapon 10), it fires PlayerRDFHeavyMissile: a player's veritech's, and its super veritech pack's: fills its GameObjectType and stores it in its family.
+000CF290  func  PlayerRDFLightMissileLauncherWeapon_Startup
+comment PlayerRDFLightMissileLauncherWeapon_Startup The PlayerRDFLightMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF2A0  func  PlayerRDFLightMissileLauncherWeapon_Shutdown
+comment PlayerRDFLightMissileLauncherWeapon_Shutdown The PlayerRDFLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF2B0  func  PlayerRDFLightMissileLauncherWeapon_Register
+comment PlayerRDFLightMissileLauncherWeapon_Register Registers the PlayerRDFLightMissileLauncherWeapon type (Weapon 9), it fires PlayerRDFLightMissile: a player's veritech's, and its packs': fills its GameObjectType and stores it in its family.
 000CF360  func  ZenHeavyMissileLauncherWeapon_Startup
 comment ZenHeavyMissileLauncherWeapon_Startup The ZenHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
 000CF370  func  ZenHeavyMissileLauncherWeapon_Shutdown
@@ -4418,6 +4648,18 @@ comment ZenLightMissileLauncherWeapon_Startup The ZenLightMissileLauncherWeapon 
 comment ZenLightMissileLauncherWeapon_Shutdown The ZenLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
 000CF450  func  ZenLightMissileLauncherWeapon_Register
 comment ZenLightMissileLauncherWeapon_Register Registers the ZenLightMissileLauncherWeapon type (Weapon 7), it fires ZenLightMissile: the light artillery pods' and the light missile turrets': fills its GameObjectType and stores it in its family.
+000CF500  func  RDFHeavyMissileLauncherWeapon_Startup
+comment RDFHeavyMissileLauncherWeapon_Startup The RDFHeavyMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF510  func  RDFHeavyMissileLauncherWeapon_Shutdown
+comment RDFHeavyMissileLauncherWeapon_Shutdown The RDFHeavyMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF520  func  RDFHeavyMissileLauncherWeapon_Register
+comment RDFHeavyMissileLauncherWeapon_Register Registers the RDFHeavyMissileLauncherWeapon type (Weapon 6), it fires RDFHeavyMissile: a veritech's no player controls, and its super veritech pack's: fills its GameObjectType and stores it in its family.
+000CF5D0  func  RDFLightMissileLauncherWeapon_Startup
+comment RDFLightMissileLauncherWeapon_Startup The RDFLightMissileLauncherWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CF5E0  func  RDFLightMissileLauncherWeapon_Shutdown
+comment RDFLightMissileLauncherWeapon_Shutdown The RDFLightMissileLauncherWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CF5F0  func  RDFLightMissileLauncherWeapon_Register
+comment RDFLightMissileLauncherWeapon_Register Registers the RDFLightMissileLauncherWeapon type (Weapon 5), it fires RDFLightMissile: a veritech's no player controls, and its packs': fills its GameObjectType and stores it in its family.
 000CF790  func  FlareWeapon_StateMachine
 comment FlareWeapon_StateMachine The FlareWeapon type's state machine: how its objects answer each message in each state (GameObjectDeliver). Hands back whether one was answered.
 000CF830  func  FlareWeapon_Startup
@@ -5263,15 +5505,22 @@ comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine:
 001ED790  var   VF1AXFighterType                     GameObjectType   # the VF1AXFighter type (Entity 42): what its registering function fills in, and its pool
 001EDC30  var   PodOfficerSledMissileType            GameObjectType   # the PodOfficerSledMissile type (Entity 77): what its registering function fills in, and its pool
 001EDE60  var   FPAMissileType                       GameObjectType   # the FPAMissile type (Entity 76): what its registering function fills in, and its pool
+001EE090  var   PlayerRDFHeavyMissileType            GameObjectType   # the PlayerRDFHeavyMissile type (Entity 73): what its registering function fills in, and its pool
+001EE2C0  var   PlayerRDFLightMissileType            GameObjectType   # the PlayerRDFLightMissile type (Entity 72): what its registering function fills in, and its pool
 001EE4F0  var   ZenHeavyMissileType                  GameObjectType   # the ZenHeavyMissile type (Entity 75): what its registering function fills in, and its pool
 001EE720  var   ZenLightMissileType                  GameObjectType   # the ZenLightMissile type (Entity 74): what its registering function fills in, and its pool
+001EE950  var   RDFHeavyMissileType                  GameObjectType   # the RDFHeavyMissile type (Entity 71): what its registering function fills in, and its pool
+001EEB80  var   RDFLightMissileType                  GameObjectType   # the RDFLightMissile type (Entity 70): what its registering function fills in, and its pool
 001EEDC0  var   VF1SMType                            GameObjectType   # the VF1SM type (Entity 63): what its registering function fills in, and its pool
 001F0570  var   VF1JMType                            GameObjectType   # the VF1JM type (Entity 62): what its registering function fills in, and its pool
 001F1D20  var   VF1BMType                            GameObjectType   # the VF1BM type (Entity 61): what its registering function fills in, and its pool
 001F34D0  var   VF1AMType                            GameObjectType   # the VF1AM type (Entity 60): what its registering function fills in, and its pool
 001F4C80  var   VF1DMType                            GameObjectType   # the VF1DM type (Entity 59): what its registering function fills in, and its pool
+001F6430  var   VF1AXIzzyType                        GameObjectType   # the VF1AXIzzy type (Entity 58): what its registering function fills in, and its pool
+001FAB40  var   VF1SXType                            GameObjectType   # the VF1SX type (Entity 29): what its registering function fills in, and its pool
 001FC2F0  var   VF1JXType                            GameObjectType   # the VF1JX type (Entity 28): what its registering function fills in, and its pool
 001FDAA0  var   VF1BXType                            GameObjectType   # the VF1BX type (Entity 27): what its registering function fills in, and its pool
+001FF250  var   VF1AXType                            GameObjectType   # the VF1AX type (Entity 26): what its registering function fills in, and its pool
 00200A00  var   VF1DXType                            GameObjectType   # the VF1DX type (Entity 0): what its registering function fills in, and its pool
 00203AB8  var   ExcaliburType                        GameObjectType   # the Excalibur type (Entity 12): what its registering function fills in, and its pool
 00204310  var   ZenReconCollisionType                GameObjectType   # the ZenReconCollision type (Entity 51): what its registering function fills in, and its pool
@@ -5346,8 +5595,12 @@ comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine:
 0021FCE8  var   PodParticleCannonWeaponType          GameObjectType   # the PodParticleCannonWeapon type (Weapon 15): what its registering function fills in, and its pool
 0021FDF0  var   PodOfficerSledMissileLauncherWeaponType GameObjectType   # the PodOfficerSledMissileLauncherWeapon type (Weapon 14): what its registering function fills in, and its pool
 0021FE50  var   FPAMissileLauncherWeaponType         GameObjectType   # the FPAMissileLauncherWeapon type (Weapon 11): what its registering function fills in, and its pool
+0021FEB0  var   PlayerRDFHeavyMissileLauncherWeaponType GameObjectType   # the PlayerRDFHeavyMissileLauncherWeapon type (Weapon 10): what its registering function fills in, and its pool
+0021FF10  var   PlayerRDFLightMissileLauncherWeaponType GameObjectType   # the PlayerRDFLightMissileLauncherWeapon type (Weapon 9): what its registering function fills in, and its pool
 0021FF70  var   ZenHeavyMissileLauncherWeaponType    GameObjectType   # the ZenHeavyMissileLauncherWeapon type (Weapon 8): what its registering function fills in, and its pool
 0021FFD0  var   ZenLightMissileLauncherWeaponType    GameObjectType   # the ZenLightMissileLauncherWeapon type (Weapon 7): what its registering function fills in, and its pool
+00220030  var   RDFHeavyMissileLauncherWeaponType    GameObjectType   # the RDFHeavyMissileLauncherWeapon type (Weapon 6): what its registering function fills in, and its pool
+00220090  var   RDFLightMissileLauncherWeaponType    GameObjectType   # the RDFLightMissileLauncherWeapon type (Weapon 5): what its registering function fills in, and its pool
 002200F0  var   FlareWeaponType                      GameObjectType   # the FlareWeapon type (Weapon 4): what its registering function fills in, and its pool
 00220150  var   ARMDTurretCannonWeaponType           GameObjectType   # the ARMDTurretCannonWeapon type (Weapon 45): what its registering function fills in, and its pool
 00220240  var   ZenReconShipCannonWeaponType         GameObjectType   # the ZenReconShipCannonWeapon type (Weapon 38): what its registering function fills in, and its pool
@@ -5674,7 +5927,12 @@ comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine:
 00193070  var   VF1AXFighterFighterOnlyDeathText             char[19]
 00193168  var   PodOfficerSledMissileHeavyMissileLaunchMWavText char[27]
 0019326C  var   FPAMissileHeavyMissileLaunchMWavText         char[27]
+00193370  var   PlayerRDFHeavyMissileHeavyMissileLaunchMWavText char[27]
+00193474  var   PlayerRDFLightMissileHeavyMissileLaunchMWavText char[27]
 0019367C  var   ZenLightMissileHeavyMissileLaunchMWavText    char[27]
+00193780  var   RDFHeavyMissileHeavyMissileLaunchMWavText    char[27]
+00193884  var   RDFLightMissileHeavyMissileLaunchMWavText    char[27]
+00193E20  var   VF1SXVF1SXText                               char[7]
 00194240  var   Vf1sTrainerHeadText                          char[19]
 001942AC  var   Vf1sGenericHeadText                          char[19]
 00194318  var   Vf1sJack01HeadText                           char[18]
