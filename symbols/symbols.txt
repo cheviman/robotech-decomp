@@ -125,9 +125,11 @@
 0010F670  file  game/unsorted
 00110230  file  engine/screen                       # the engine's screen: the Direct3D device, its title-safe part, clearing and showing it
 00110260  file  engine/objects                      # the engine's object system: classes, handles, and creating, releasing, cloning and loading objects through their classes' callbacks
-00111300  file  game/unsorted
+00111300  file  engine/pad                          # the engine's pads: each port's pad read once a frame, and what was pressed and released in it
+00111720  file  game/unsorted
 00111930  file  engine/vcStringManager              # the engine's vcStringManager class: its registration and callbacks
-001123E0  file  game/unsorted
+001123E0  file  engine/pad
+001127F0  file  game/unsorted
 00112B30  file  engine/vcPak                        # the engine's vcPak class: its registration and callbacks
 00112D60  file  game/unsorted
 00115CA0  file  engine/screen
@@ -1090,15 +1092,181 @@ comment vcRenderSetState Sets a render state, unless it is already so in vcRende
 comment vcRenderSetTextureStageState Sets a texture stage's state, unless it is already so in vcRenderTextureStageStates: the deferred ones recorded in Direct3D's own record for the next draw, the others set by their own functions, as the XDK's D3DDevice_SetTextureStageState does.
 comment vcRenderBuffersInit Makes the renderer's vertex buffers: four of 512 KB, four of 384 KB, one of 768 KB, one of 4 MB, and one more.
 
-# The pads: each port's state read with XInputGetState, the sticks as bytes.
+# The pads: each port's pad read once a frame with XInputGetState (vcPadUpdate, vcPadRead), the sticks and
+# buttons as a byte each, 24 of them in the engine's own order (0 to 3 the sticks' axes, 4 and 5 the sticks
+# pressed in, 6 to 9 the d-pad, 10 and 12 the triggers, 14 to 17 X A Y B, 18 white, 19 black, 20 START, 21
+# BACK; 11, 13, 22 and 23 none of the Xbox's). From the last two reads each control gets a value, and
+# whether it was pressed, released or pressed twice in this frame, which is what the game asks.
+00111300  func  vcPadInit
+00111330  func  vcPadShutdown
+00111340  func  vcPadReset
+001113A0  func  vcPadClearPresses
+00111410  func  vcPadUpdate
+00111700  func  vcPadSetDeadZones
+001123E0  func  vcPadCloseAll
+00112400  func  vcPadIsOpen
+00112420  func  vcPadGetHandle
+00112430  func  vcPadUpdateDevices
 00112530  func  vcPadCalibrate                        # the port in eax, the state in ecx
 00112690  func  vcPadRead
-comment vcPadCalibrate Widens a port's stick ranges to the furthest each stick has been seen to go, and zeroes a stick's axis within its dead zone.
-comment vcPadRead Reads a port's pad with XInputGetState into the engine's state of it: the sticks as bytes, the digital buttons as 0 or 255, an analog button under 30 as 0. Nothing for a port with no pad open.
-002BE140  var   vcPads  vcPad[4]                      # each port's pad as the game reads it
-struct  vcPad  210                                    # a port's pad as the game reads it: what it makes of the reads, and the last two reads
-field   vcPad  1E0  read_before  u8[24]               # the read before the last, which the next read moves here
-field   vcPad  1F8  read         u8[24]               # the pad as vcPadRead last read it: the sticks as bytes, the buttons 0 to 255
+param   vcPadReset  arg0  port
+param   vcPadClearPresses  arg0  port
+param   vcPadSetDeadZones  arg0  stick
+param   vcPadSetDeadZones  arg1  button
+param   vcPadIsOpen  arg0  port
+param   vcPadGetHandle  arg0  port
+param   vcPadCalibrate  eax  port
+param   vcPadCalibrate  ecx  state
+param   vcPadRead  arg0  port
+param   vcPadRead  arg1  read
+comment vcPadInit Starts the pads: their platform's part, then the eight pads' records and vcPadSeen cleared.
+comment vcPadShutdown Closes every port's pad (vcPadCloseAll).
+comment vcPadReset Clears a pad's record, and centres the sticks in its last two reads.
+comment vcPadClearPresses Clears a port's pad's pressed and pressed-twice flags, so that nothing after it in the frame takes this frame's presses again; the four ports' with a port under 0.
+comment vcPadUpdate Once a frame, after vcPadUpdateDevices, for each of the eight pads: the last read becomes the read before, a port's pad is read (vcPadRead), and each control gets from the two reads its value, whether it was pressed or released in this frame, and whether it was pressed twice within vcPadDoublePressTime. A pad's first read is copied to the read before too (vcPadSeen), so what is held then is no press. What fills the four pads after the ports' is not read yet.
+comment vcPadSetDeadZones Sets vcPadStickDeadZone and vcPadButtonDeadZone.
+comment vcPadCloseAll Closes each port's open pad (XInputClose).
+comment vcPadIsOpen Whether a port has a pad open.
+comment vcPadGetHandle A port's pad's handle, 0 with none open.
+comment vcPadUpdateDevices Asks which pads were taken out and put in since the last time (XGetDeviceChanges): closes the ones taken out and opens the ones put in (XInputOpen), their sticks' calibration started again.
+comment vcPadCalibrate Widens a port's stick ranges to the furthest each stick has been seen to go, and zeroes a stick's axis within its dead zone: 10000 of 32767 until the stick has reached both ends of both axes, 4096 after.
+comment vcPadRead Reads a port's pad with XInputGetState into the engine's read of it: the sticks as bytes, the digital buttons as 0 or 255, an analog button under 30 as 0. Nothing for a port with no pad open.
+001B9A54  var    vcPadStickDeadZone  s32              # how far from its centre, 128, a stick's byte has to be for vcPadUpdate not to take it as centred
+001B9A58  var    vcPadButtonDeadZone  s32             # a button's byte under this is 0 for vcPadUpdate
+001B9A5C  var    vcPadDoublePressTime  u32            # two presses of a control less than this apart, in vcGameTime's units, are a press twice
+0023D224  var    vcPadSeen  u32[8]                    # 1 once a pad's first read was copied to its read before
+0023D2AC  var    vcPadHandles  u32[4]                 # each port's pad's handle, from XInputOpen; 0 with none open
+0023D2BC  var    vcPadOpened  u32                     # 1 when vcPadUpdateDevices opened a pad the last time it ran
+002BE0C0  var    vcPadCalibrations  vcPadCalibration[4]# each port's sticks' ranges
+struct   vcPadCalibration  1C                         # how far a port's sticks have been seen to go (vcPadCalibrate)
+field    vcPadCalibration  04  left_full    u32       # 1 once the left stick has reached both ends of both axes
+field    vcPadCalibration  08  left_x_min   s16       # the lowest x the left stick has been read at; 32767 when the pad is opened
+field    vcPadCalibration  0A  left_x_max   s16       # the highest; -32768 when the pad is opened
+field    vcPadCalibration  0C  left_y_min   s16
+field    vcPadCalibration  0E  left_y_max   s16
+field    vcPadCalibration  10  right_full   u32       # the same for the right stick
+field    vcPadCalibration  14  right_x_min  s16
+field    vcPadCalibration  16  right_x_max  s16
+field    vcPadCalibration  18  right_y_min  s16
+field    vcPadCalibration  1A  right_y_max  s16
+002BE140  var    vcPads  vcPad[8]                     # each port's pad as the game reads it, and four more vcPadUpdate goes through without a port
+struct   vcPad  210                                   # a pad as the game reads it: what vcPadUpdate makes of each control, and the last two reads
+field    vcPad  000  left_x                     f32   # the left stick's x: its value: a stick's axis from -1 to 1 (0 within vcPadStickDeadZone of its centre), a button from 0 to 1 (0 under vcPadButtonDeadZone)
+field    vcPad  004  right_x                    f32   # the right stick's x
+field    vcPad  008  left_y                     f32   # the left stick's y, up positive
+field    vcPad  00C  right_y                    f32   # the right stick's y, up positive
+field    vcPad  010  left_thumb                 f32   # the left stick pressed in
+field    vcPad  014  right_thumb                f32   # the right stick pressed in
+field    vcPad  018  up                         f32   # the d-pad's up
+field    vcPad  01C  down                       f32   # the d-pad's down
+field    vcPad  020  left                       f32   # the d-pad's left
+field    vcPad  024  right                      f32   # the d-pad's right
+field    vcPad  028  left_trigger               f32   # the left trigger
+field    vcPad  030  right_trigger              f32   # the right trigger
+field    vcPad  038  x                          f32   # X
+field    vcPad  03C  a                          f32   # A
+field    vcPad  040  y                          f32   # Y
+field    vcPad  044  b                          f32   # B
+field    vcPad  048  white                      f32   # the white button
+field    vcPad  04C  black                      f32   # the black button
+field    vcPad  050  start                      f32   # START
+field    vcPad  054  back                       f32   # BACK
+field    vcPad  060  pressed_left_x             u32   # the left stick's x: 1 in the update it left its rest in (a button pressed, a stick moved off its centre)
+field    vcPad  064  pressed_right_x            u32   # the right stick's x
+field    vcPad  068  pressed_left_y             u32   # the left stick's y, up positive
+field    vcPad  06C  pressed_right_y            u32   # the right stick's y, up positive
+field    vcPad  070  pressed_left_thumb         u32   # the left stick pressed in
+field    vcPad  074  pressed_right_thumb        u32   # the right stick pressed in
+field    vcPad  078  pressed_up                 u32   # the d-pad's up
+field    vcPad  07C  pressed_down               u32   # the d-pad's down
+field    vcPad  080  pressed_left               u32   # the d-pad's left
+field    vcPad  084  pressed_right              u32   # the d-pad's right
+field    vcPad  088  pressed_left_trigger       u32   # the left trigger
+field    vcPad  090  pressed_right_trigger      u32   # the right trigger
+field    vcPad  098  pressed_x                  u32   # X
+field    vcPad  09C  pressed_a                  u32   # A
+field    vcPad  0A0  pressed_y                  u32   # Y
+field    vcPad  0A4  pressed_b                  u32   # B
+field    vcPad  0A8  pressed_white              u32   # the white button
+field    vcPad  0AC  pressed_black              u32   # the black button
+field    vcPad  0B0  pressed_start              u32   # START
+field    vcPad  0B4  pressed_back               u32   # BACK
+field    vcPad  0C0  released_left_x            u32   # the left stick's x: 1 in the update it came back to its rest in
+field    vcPad  0C4  released_right_x           u32   # the right stick's x
+field    vcPad  0C8  released_left_y            u32   # the left stick's y, up positive
+field    vcPad  0CC  released_right_y           u32   # the right stick's y, up positive
+field    vcPad  0D0  released_left_thumb        u32   # the left stick pressed in
+field    vcPad  0D4  released_right_thumb       u32   # the right stick pressed in
+field    vcPad  0D8  released_up                u32   # the d-pad's up
+field    vcPad  0DC  released_down              u32   # the d-pad's down
+field    vcPad  0E0  released_left              u32   # the d-pad's left
+field    vcPad  0E4  released_right             u32   # the d-pad's right
+field    vcPad  0E8  released_left_trigger      u32   # the left trigger
+field    vcPad  0F0  released_right_trigger     u32   # the right trigger
+field    vcPad  0F8  released_x                 u32   # X
+field    vcPad  0FC  released_a                 u32   # A
+field    vcPad  100  released_y                 u32   # Y
+field    vcPad  104  released_b                 u32   # B
+field    vcPad  108  released_white             u32   # the white button
+field    vcPad  10C  released_black             u32   # the black button
+field    vcPad  110  released_start             u32   # START
+field    vcPad  114  released_back              u32   # BACK
+field    vcPad  120  twice_left_x               u32   # the left stick's x: 1 in the update it was pressed in again less than vcPadDoublePressTime after the press before
+field    vcPad  124  twice_right_x              u32   # the right stick's x
+field    vcPad  128  twice_left_y               u32   # the left stick's y, up positive
+field    vcPad  12C  twice_right_y              u32   # the right stick's y, up positive
+field    vcPad  130  twice_left_thumb           u32   # the left stick pressed in
+field    vcPad  134  twice_right_thumb          u32   # the right stick pressed in
+field    vcPad  138  twice_up                   u32   # the d-pad's up
+field    vcPad  13C  twice_down                 u32   # the d-pad's down
+field    vcPad  140  twice_left                 u32   # the d-pad's left
+field    vcPad  144  twice_right                u32   # the d-pad's right
+field    vcPad  148  twice_left_trigger         u32   # the left trigger
+field    vcPad  150  twice_right_trigger        u32   # the right trigger
+field    vcPad  158  twice_x                    u32   # X
+field    vcPad  15C  twice_a                    u32   # A
+field    vcPad  160  twice_y                    u32   # Y
+field    vcPad  164  twice_b                    u32   # B
+field    vcPad  168  twice_white                u32   # the white button
+field    vcPad  16C  twice_black                u32   # the black button
+field    vcPad  170  twice_start                u32   # START
+field    vcPad  174  twice_back                 u32   # BACK
+field    vcPad  180  pressed_at_left_x          u32   # the left stick's x: vcGameTime at the press the next one is timed from
+field    vcPad  184  pressed_at_right_x         u32   # the right stick's x
+field    vcPad  188  pressed_at_left_y          u32   # the left stick's y, up positive
+field    vcPad  18C  pressed_at_right_y         u32   # the right stick's y, up positive
+field    vcPad  190  pressed_at_left_thumb      u32   # the left stick pressed in
+field    vcPad  194  pressed_at_right_thumb     u32   # the right stick pressed in
+field    vcPad  198  pressed_at_up              u32   # the d-pad's up
+field    vcPad  19C  pressed_at_down            u32   # the d-pad's down
+field    vcPad  1A0  pressed_at_left            u32   # the d-pad's left
+field    vcPad  1A4  pressed_at_right           u32   # the d-pad's right
+field    vcPad  1A8  pressed_at_left_trigger    u32   # the left trigger
+field    vcPad  1B0  pressed_at_right_trigger   u32   # the right trigger
+field    vcPad  1B8  pressed_at_x               u32   # X
+field    vcPad  1BC  pressed_at_a               u32   # A
+field    vcPad  1C0  pressed_at_y               u32   # Y
+field    vcPad  1C4  pressed_at_b               u32   # B
+field    vcPad  1C8  pressed_at_white           u32   # the white button
+field    vcPad  1CC  pressed_at_black           u32   # the black button
+field    vcPad  1D0  pressed_at_start           u32   # START
+field    vcPad  1D4  pressed_at_back            u32   # BACK
+field    vcPad  1E0  read_before                u8[24]# the read before the last, which the next read moves here
+field    vcPad  1F8  read                       u8[24]# the pad as vcPadRead last read it: the sticks as bytes, the buttons 0 to 255
+
+# The vehicles' parameters: each vehicle type's file keeps 62 constants (floats and counts) in .rdata after its
+# model's and its shadow's names, and its registering function stores the address of each in the type's record.
+# After the four vehicles' own lie the same four again, byte for byte, which no code and no word of the image
+# points at (the vehicles' shared file's own copies).
+struct  VehicleParameters  F8                         # a vehicle type's 62 constants, floats and counts; none named yet
+00191E04  var   ZenRetrievalParameters           VehicleParameters
+00191F3C  var   CentipedeParameters              VehicleParameters
+00192074  var   MilitaryTransportParameters      VehicleParameters
+001921AC  var   MechHaulerParameters             VehicleParameters
+001922D8  var   MechHaulerParametersCopy         VehicleParameters   # nothing reads it
+00192404  var   MilitaryTransportParametersCopy  VehicleParameters   # nothing reads it
+00192530  var   CentipedeParametersCopy          VehicleParameters   # nothing reads it
+00192654  var   ZenRetrievalParametersCopy       VehicleParameters   # nothing reads it
 
 # The cheats: a word of bits the game menu's codes set. With L and R held, left, up, down, A, right, B,
 # START open the code keyboard; its text is set against twelve codes (WEWILLWIN, WHERESMAX, SUPERMECH,

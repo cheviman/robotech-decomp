@@ -644,12 +644,45 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   a raw address and is now `MEM32(vcPads(1) + 0x78u)`) 30 to 1,720; the XBE's unknown bytes of the game
   15,284 to 14,448 (the levels' records went; the bytes after a typed record that only an earlier
   reference had reached became unknown), untyped 898,918 to 856,201. The nine scenarios frame for frame as
-  their references. Left: the pads' other fields (the code sequence reads the words at 0x78 to 0xB4, a
-  button each, and the floats at 0x00 to 0x44, the sticks and the triggers), and the tables the unknown
-  bytes still are: the vehicles' parameters in `.rdata` (records of 0x12C bytes from 0x1922A4: a death
-  effect, a model, a shadow, dozens of floats), the effects' and sounds' references (a name in 64 bytes,
-  then -1) and the halfword pairs at 0x1BA518; and the 131 types without a name, whose records keep their
-  addresses.
+  their references. Left: the 131 types without a name, whose records keep their addresses.
+- **The pads by their controls, the vehicles' constants and the names' buffers** (10-11-2026). The pad's
+  record is typed whole. `vcPadUpdate` goes through eight pads once a frame, not four (`vcPadInit` clears
+  eight, and the table ends where `vcObjectCacheData` starts): the four ports', read with `vcPadRead`, and
+  four more that code not read yet fills (0x23D258 to 0x23D270, sub_00111720, sub_001128B0; a recording
+  played back, by its looks). Of a pad's last two reads, a byte a control in the engine's own order of 24
+  (0 to 3 the sticks' axes, 4 and 5 the sticks pressed in, 6 to 9 the d-pad, 10 and 12 the triggers, 14 to
+  17 X A Y B, 18 white, 19 black, 20 START, 21 BACK; 11, 13, 22 and 23 none of the Xbox's), it makes five
+  arrays: each control's value as a float (a stick's axis -1 to 1, a button 0 to 1), whether it was
+  pressed or released in this frame, whether it was pressed twice within `vcPadDoublePressTime`, and when
+  it was pressed. A field for each control in each array, 100 of them, since the game asks for a control
+  at a fixed address (3,482 instructions reach the pads' records): `vcPad_pressed_up(vcPads(1))`,
+  `FLOAT_AT(vcPad_left_y_VA(vcPads(1)))`. With them the pad's functions by name, in a file of their own
+  (engine/pad: `vcPadInit`, `vcPadShutdown`, `vcPadReset`, `vcPadClearPresses`, `vcPadUpdate`,
+  `vcPadSetDeadZones`, `vcPadCloseAll`, `vcPadIsOpen`, `vcPadGetHandle`, `vcPadUpdateDevices`), the dead
+  zones, the ports' handles and the sticks' calibration (`vcPadCalibrations`). The vehicles: each of the
+  four vehicle types keeps 62 constants in `.rdata` after its model's and its shadow's names
+  (`VehicleParameters`, no field named yet; its registering function stores each one's address in the
+  type's record), and after the four lie the same four again, byte for byte, which no code and no word of
+  the image points at: what this file had as records of 0x12C bytes from 0x1922A4 were those copies with
+  their strings between them. `tools/coverage.py` counts the rest of a name's buffer as described: the
+  zeros after a string the code reaches, up to 16, 32, 64, 128 or 256 bytes from where the code takes it,
+  when the next known thing or a -1 comes there (the types' files keep each name in a char[64]; 8,522 of
+  the unknown bytes were those zeros). Measured: memory at a named place no field names 1,720 to 684;
+  data addresses written as numbers 14,047 to 13,773; reads and writes at a raw address 15,663 to 15,654;
+  functions without a name in the decompiled C 3,376 to 3,366; the XBE's unknown bytes of the game 14,448
+  to 3,841, untyped 856,201 to 853,701. The nine scenarios frame for frame as their references;
+  `tools/verify_c.py` 209 vectors, 0 different. `tools/decompile.py build` took 28 minutes with another
+  project's decompilation running beside it. Left: a pad's control reached by a pad's offset worked out
+  before (`MEM32(eax_2 + vcPad_pressed_start_VA(vcPads_VA))`, `MEM8(eax_2 + (vcPads_VA + 0x1E6u))` for
+  `read_before[6]`: the emitter names a field's start, not a place inside an array field, and takes an
+  index for a record's only where it sees the multiplication); the floats through `FLOAT_AT` of a
+  field's address, not the field; `VehicleParameters`' fields, from the vehicles' state machine; the
+  pads' recording; and the unknown bytes that are left: the -1 and the word after each name's buffer
+  (172 runs of 4 bytes: the effects' and sounds' references, a name and the handle found for it), the
+  tables in `.data` that sub_0012C5C0 walks up to 0x1BA66C (pairs of halfwords, by their looks the edges
+  between the points of rings of 5 and of 9; the function is not read yet), the tables of words at
+  0x1B9974 and 0x1B99D8, and constants nothing reaches by an address after a name (0x18FF60, the runs of
+  33 to 37 bytes from 0x1930C1 and 0x19394D).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

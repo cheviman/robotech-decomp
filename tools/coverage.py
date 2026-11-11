@@ -3,7 +3,7 @@ Name:        coverage.py
 Description: byte map of the XBE: the functions' code, the data they point at, fill, and what is still unknown
 Version:     0.1.0
 Created:     05-11-2026
-Modified:    05-11-2026
+Modified:    10-11-2026
 Author:      Sebastian Toyos
 
     py -3 tools/coverage.py           # writes analysis/coverage.txt and prints the bytes of each class
@@ -15,6 +15,9 @@ gets one class:
   described data   data whose layout is known: symbols.txt's var lines (a type and a count; of records
                    of a structure in place, their named fields), the jump
                    tables and the byte tables of sparse switches, the strings (analysis/disasm/strings.json),
+                   the rest of a string's buffer (the zeros after a string the code reaches, up to 16, 32,
+                   64, 128 or 256 bytes from its start, when the next known thing or a -1 comes there: a
+                   name kept in a char[64]),
                    the constants the code loads from .rdata by their address with a width the instruction
                    gives (the x87's floats, which the decompiled C writes as their values), the words that
                    hold a function's entry or a string's start, the kernel's import table, and the sections
@@ -67,6 +70,8 @@ GAME_DATA = (".rdata", ".data")
 WHOLE = {"$$XTIMAGE": "the title's image", "$$XSIMAGE": "the saves' image",
          "DOLBY": "the Dolby Digital encoder's DSP program, which DirectSound loads"}
 CODE_FILL = (0xCC, 0x90, 0x00)
+# the sizes of the buffers the game keeps a name in: a string and zeros up to one of these from its start
+BUFFER_SIZES = (16, 32, 64, 128, 256)
 # the instructions MSVC fills with up to an aligned place in code (a jump table, a loop): nothing done
 NOPS = (bytes.fromhex("8da42400000000"), bytes.fromhex("8d9b00000000"), bytes.fromhex("8d642400"),
         bytes.fromhex("8d4900"), bytes.fromhex("8bff"), bytes.fromhex("8bc0"), b"\x90", b"\xcc", b"\x00")
@@ -207,9 +212,11 @@ def classify(image):
                 references[place].append(int(x["from"], 16))
 
     strings = {}
+    string_ends = {}        # where a string's terminator ends -> its start
     for s in json.load(open(STRINGS)):
         address = int(s["address"], 16)
         strings[address] = s["length"] + 1
+        string_ends[address + s["length"] + 1] = address
         describe(address, s["length"] + 1)
 
     variables, fields, records, data = symbols_places()
@@ -291,9 +298,25 @@ def classify(image):
             after = row[stop] if stop < len(row) else None
             if holds_code and after in known and only_nops(image.program.read(start + offset, stop - offset)):
                 row[offset:stop] = bytes([CLASSES.index(FILL)]) * (stop - offset)
-            elif values == {0}:
-                aligned = min(stop, offset + (-(start + offset)) % 4)
-                row[offset:aligned] = bytes([CLASSES.index(FILL)]) * (aligned - offset)
+            else:
+                # a string the code reaches, in a buffer of a round size the zeros fill (a name's char[64]):
+                # the zeros up to that size from where the code takes the string (the scanner may have started
+                # it a byte or two early, on the bytes of the number before), when the run ends there or a -1
+                # follows (a name and the handle found for it, -1 until then)
+                first, taken = start + offset, offset
+                text = string_ends.get(first)
+                for begin in ([a for a in range(text, first) if a in references] if text is not None else ()):
+                    for size in BUFFER_SIZES:
+                        end_of_buffer = begin + size
+                        if first < end_of_buffer <= start + stop \
+                                and (end_of_buffer == start + stop or program.word(end_of_buffer) == 0xFFFFFFFF) \
+                                and not any(image.byte(k) for k in range(first, end_of_buffer)):
+                            taken = max(taken, end_of_buffer - start)
+                if taken > offset:
+                    row[offset:taken] = bytes([CLASSES.index(DESCRIBED)]) * (taken - offset)
+                elif values == {0}:
+                    aligned = min(stop, offset + (-(start + offset)) % 4)
+                    row[offset:aligned] = bytes([CLASSES.index(FILL)]) * (aligned - offset)
             offset = stop
         classes[(name, start)] = row
     return classes, references, described

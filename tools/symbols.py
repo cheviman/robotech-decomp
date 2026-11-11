@@ -86,7 +86,7 @@ NAME_SUBJECTS = [("vcRegisterClass", "engine/objects"), ("vcObject", "engine/obj
                  ("vcSceneObject", "engine/scene"), ("vcSceneInit", "engine/scene"),
                  ("vcSceneShutdown", "engine/scene"), ("vcQuadtree", "engine/quadtree"),
                  ("vcBoxCenter", "engine/scene"), ("vcTransformPoint", "engine/vector"),
-                 ("GameObject", "game/objects")]
+                 ("vcPad", "engine/pad"), ("GameObject", "game/objects")]
 FAMILY_FOLDER = {"Player": "players", "Entity": "entities", "Structure": "structures", "Effect": "effects",
                  "Weapon": "weapons", "Screen": "screens", "Action": "actions", "Component": "components",
                  "ScreenElement": "screen_elements", "Node": "nodes", "Steering": "steering",
@@ -559,6 +559,7 @@ def layout():
         "engine/scene": "the engine's scene objects: where each object is, its bounds and flags, its parent and children",
         "engine/quadtree": "the engine's quadtrees: objects kept by the square their sphere falls in",
         "engine/vector": "the engine's vector maths: points turned and moved",
+        "engine/pad": "the engine's pads: each port's pad read once a frame, and what was pressed and released in it",
     }
     lines = []
     seen = set()
