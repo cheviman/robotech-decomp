@@ -1043,6 +1043,151 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   2640) only run again alone, twice: another project's decompilation was running beside. Left of the effects: MotionTrailEffect's record of 9 words; the eleven muzzle flashes, each
   with five words its Register clears one by one; what the Startups get (219 reads) and the Shutdowns let
   go of (86).
+- **The texts by name, from a rule and not one by one** (11-11-2026, Sebas: something that covers more
+  than a record a round). Measured first what is left by what it is, not by where: the 10,579 reads at a
+  raw address go to 6,449 places, 5,025 of them read once (the 100 most read are 13 % of the reads): 8,141
+  are words of `.data` the code also writes, the game's variables, which only reading names. The 10,370
+  data addresses written as numbers are another matter: 2,109 are strings (1,808 uses of where one starts,
+  301 of a place inside one) and 5,050 are constants of `.rdata`, 3,050 of them in five functions
+  (sub_0005C300, sub_0005E1E0, sub_000600C0, sub_00061FA0, sub_00063E80) that store 610 addresses each:
+  the veritechs' set-up, the next block to read. The strings need no reading: `tools/symbols.py texts`
+  writes a generated section of symbols.txt with a `var NAME char[N]` for each string of
+  `analysis/disasm/strings.json` that an instruction has as an immediate, that none reads as data or
+  points into (`xrefs.json`), and that no other line names or holds. The name is the text's own words and
+  `Text` (`gunvent02` is `Gunvent02Text`, `TargetSwitch.wav` `TargetSwitchWavText`); a text several places
+  hold, as each type's file has its own copy of a motion's name, takes the name of the one type whose
+  functions use that place before it (`Pod Officer alert` in PodOfficer's file is
+  `PodOfficerPodOfficerAlertText`) and has no line where that does not tell the places apart. 947 named. Left out, counted by the tool: 1,118 places of a text several hold that one type
+  does not tell apart (most used by functions without a name: they get theirs when the types do), 95 that
+  only the credits' function uses (sub_000B69E0: lines the game shows, people's names, not the names of
+  things), 56 that are not the words of a name (formats, sentences, a digit first), 35 inside a place
+  another line names (the guns' materials and sounds). In the decompiled C `arg0 = 0x1A3E50u;` is `arg0 =
+  SumoPackWeaponSumoChestText_VA;`. Measured: data addresses written as numbers 10,370 to 9,514; reads at
+  a raw address 10,579 to 10,572 and memory at a named place no field names 2,132 to 2,139, the same seven
+  reads: where the compiler copied a text in line, its last two or three bytes are read at the text's end
+  (`MEM16(PlayerStandInEntityText_VA + 0x14u)`), which was a raw address before; the XBE's unknown bytes
+  3,831, as before. `tools/verify_c.py` 209 vectors, 0 different, twice. The nine scenarios frame for frame as their references, at the first run. A change of
+  `tools/symbols.py` is a change of the analysis's code to `decompile.py build`, which worked the analysis
+  out again (552 s). Left of the strings: 952 uses of 761 places, and the 301 uses inside one (what
+  strings.json takes for a string and the code uses in parts: to look at).
+- **The veritechs' block: ten `EntitySpec` a model, and their constants typed** (11-11-2026). The five functions that store 610
+  addresses each do not fill a record of 610 words of its own: they fill ten `EntitySpec` a model. One
+  function a model, whose name is the text 8 bytes before its constants: VF-1SX (sub_0005C300, constants
+  from 0x193E28), VF-1JX (sub_0005E1E0, 0x194C48), VF-1BX (sub_000600C0, 0x195A68), VF-1AX (sub_00061FA0,
+  0x196888), VF-1DX (sub_00063E80, 0x1976A8); the five lay everything out the same but for one number
+  (+0xF90 of the block: 5, 4, 5, 4, 3). The block is what a veritech type's objects share (0x17B0 bytes,
+  five at 0x1EEE08, 0x1F05B8, 0x1F1D68, 0x1F3518 and 0x1F4CC8; three more registers call two of the
+  functions, not read); a veritech keeps its address at +0x2C4 and its first word points at one of the
+  ten records, by its mode and its pack (its +0x180: 0 none, 1 the super veritech pack, 2 the sumo pack;
+  sub_00044880 sets it where it makes the pack's weapon, Weapon 12 or 13, and picks the record from a
+  table of mode and pack). The records: with no pack +0x004, +0x300, +0x558 and +0x730; with the super
+  veritech pack +0xB80, +0xC84, +0xD88 and +0xE8C; with the sumo pack +0x978 and +0xA7C, the first two
+  modes only. The modes by the motions each record's `motions` points at (sub_000424C0 loads them by
+  name): the first two both have the battloid's (the sets at +0x108 and +0x404 of the block, the same
+  names), the third the guardian's (+0x65C: "guardian hover"), the fourth the fighter's (+0x834). Which
+  of the first two a battloid gets is bit 0 of the level's kind (0x1EB888, from sub_000271D0: 8 the menu,
+  1 where sub_0002E140 says so, 2 where the level's +0x88 is set, 4 otherwise; sub_00047160 tests
+  it), and that bit is whether the level has a terrain: sub_0002E140 hands back +0xD0 of the object at
+  0x1EA274, which sub_0002DDD0 and sub_0002DF50 fill with the level's vcTerrain (the object sub_00123F10,
+  among vcTerrain's functions, takes). So the first record is the battloid's on a level with a terrain and
+  the second its on one without. The constants: each record's are 0xF4 bytes from its mass laid out as
+  `EntityConstants` for the 18 other fields with a name, one record after another (from +0x20 of the
+  model's constants the four with no pack, from +0x860 the six with one), and the ten `hit_points` point
+  at the model's first constant (20000). Typed: `VeritechConstants`, `EntityConstants` without
+  `hit_points` (0xF4 bytes, 18 fields), a model's ten in place by mode and pack
+  (`VF1SXVeritechBattloidConstants`, `VF1SXVeritechBattloidNoTerrainConstants`,
+  `VF1SXVeritechGuardianSuperVeritechPackConstants`...) and its hit points (`VF1SXVeritechHitPoints`): 55
+  lines, and 3,050 places of the decompiled C by them. Not typed: the ten records themselves in what the
+  types share, which the code fills and reads through a pointer, not at an address.
+  Also seen: the block's +0xF90 (5, 4 or 3) and +0xF94 (4) are numbers a veritech keeps at its +0x264,
+  the second with the sumo pack, and +0xF98 a flag tested with the level's kind (8, the menu).
+- **Reading with an agent, tried blind** (11-11-2026, Sebas: could cheaper agents take sections?). One
+  Haiku agent was given Ghidra's C of the missiles' code from before any of today's names (2,020 lines,
+  26 functions), the constants' values and how a missile reaches its record, and asked for each of the 19
+  words a verdict (certain, unclear, not read), a name only where certain, and the line that shows it. Its
+  11 certain ones mean what `MissileSpec`'s fields say; it invented nothing for the words nobody reads and
+  found the two that are kept in the missile and not used; the seven lines of its that were looked up are
+  in the file as quoted. It left unclear three that are named here: the mass (it saw the arithmetic and
+  would not call it), and two that needed what the brief did not give (a constant's value, a function
+  outside the extract). Two slips: the swing's size "from 0" (from half), and the steering's cap called
+  an acceleration (a force: it is divided by the mass after). 169,000 tokens and four and a half minutes.
+  So the reading can be handed out, an extract an agent, with every function it will need in the extract
+  and the names and the quoted lines checked here before anything is written; the build and the checks
+  stay in one place. Its doubt on `swing_time` had this file's comment corrected (a whole swing takes
+  three quarters to one and a half of it).
+- **Zones of variables read by agents, Haiku and then Opus** (11-11-2026, Sebas: give two agents work; then:
+  Haiku reasons too simply, take them up to Opus). An extract a zone (`zone.py` of the session's scratchpad:
+  Ghidra's C of every function that touches an address of the zone, with each place's first value and how
+  the C uses it), an agent an extract, each with leave to print other functions with
+  `tools/ghidra/show.py`. Haiku, two agents (137,000 and 201,000 tokens, under five minutes): of the
+  engine's zone at 0x248D28 it told nine variables that held when read here (the storage devices and the
+  vertex shaders, below); of the game's two zones it told the shape of everything and the meaning of
+  little: 15 of its 17 "certain" names were a shape's (`RecordArray`, `SlotPool`, `Row1PercentLeft`), not
+  what the thing is, and two were taken. Opus, two agents on the same kind of brief with the rule spelt
+  out (a shape's description is not a name) and leave to follow callers and callees (117,000 and 197,000
+  tokens, two and five minutes): it followed the chain to where the meaning is fixed, the action that
+  sets the twelve words, the XDK calls behind the saved games, the death of an entity behind a tally,
+  and said what it could not settle and what would. Every line of the four reports that was looked up is
+  in Ghidra's C as quoted. What it shows: Haiku is enough for a record whose readers are in one extract;
+  telling what a loose variable is takes following the program, and that is Opus's. Named from them,
+  each checked here in the code (33 lines): the pad's items a mission has off, a record of twelve words
+  at 0x2AEB20 (`ControllerItems`, `ControllerItemsDisabled`: DisableControllerItemsAction sets a word a
+  bit of its mask in sub_000DEA10, and the players' control code tests each where it reads that control
+  of vcPads: 106 places of the C); the saved games the game finds on each storage device and the job on
+  them going on (`StorageDeviceSavedGames`, its count, `SavedGamesTask`, the three of the listing,
+  `SavedGameDevice`); the game's tallies (`Stats`, `StatsCount`); the engine's storage devices
+  (`vcStorageDevices`, `vcStorageDeviceCount`, `vcMemoryUnitCount`, `vcStorageEvent`, the memory units put
+  in and taken out) and its vertex shaders on the device (`vcVertexShaderCurrent`, where the next goes,
+  how many are loaded); the mission complete screen's cursor sound and the game's AI data (`AIData`).
+  Left from the agents' reports, each a lead and not checked: the game in play is a record of 0x370 bytes
+  at 0x1EA288, the saved game's image (its name, a random id, the player's name, the version, a word a
+  level, 29 tallies, the medals' stars, and at +0x350 on the options: `Cheats` is its +0x364), which typing
+  whole means taking the lines that name places inside it into a structure; a storage device's record of
+  saved games holds 16 of those, then how many, its state and its free room; the mission complete
+  screen's seven counts and seven cursors of its sections (0x1EA7B4 and 0x1EA7D0 on: the missions opened,
+  the medals won) and its four percentages, which wait for the game's texts 0x6D2 to 0x6D5 and 0x79D; the
+  record at 0x1EA810 is Screen 13's GameObjectType, a screen that shows a level's loading and has no name
+  yet; 0x248D28 on is four numbers a drawing function sorts its four children by.
+  Measured for the three together (the veritechs, the agents' variables): reads at a raw address 10,572 to
+  10,306; data addresses written as numbers 9,514 to 6,460; memory at a named place no field names 2,139,
+  as before; the XBE's untyped bytes 838,919 to 835,327, its unknown bytes 3,831 to 3,727 (120 fewer in
+  the veritechs' constants, 16 more after the twelve words of `ControllerItemsDisabled`, which nothing
+  reaches and counted before with the word they follow). `tools/verify_c.py` 209 vectors, 0 different,
+  twice. The nine scenarios frame for frame as their references; force_of_arms (6 of its 30 frames, from
+  frame 2880) and mission1 (2 of 20, from 2160) only run again alone, twice each: the full run went
+  beside the agents and another project's decompilation.
+- **Two more zones by Opus agents, and the mission complete screen's sections** (11-11-2026). The densest
+  zones left, an agent each. The options and their neighbours (0x1AEC70, 0x1B1D78, 0x1B777C on): named and
+  checked here, the level's view (`LevelNearPlane`, `LevelFarPlane`: gcLevel_Load takes them from the
+  level and sub_00113310 builds the projection with them, far over far less near), `Difficulty` (0 to 2:
+  sub_000A57C0 moves an enemy's chance to hit by -10, 0 or 10), `VibrationOn` and `VibrationKept`,
+  `VersusKillLimit` and `VersusWinner` (sub_00024BB0 ends a match of two when a player's tally reaches
+  the limit), `MusicVolume` and `SoundVolume` (0 to 14; sub_000B36C0 and sub_000B36F0 set them and the
+  level's music's and the engine's sounds' with them), the sound options' bars (`VolumeBarAlphas`,
+  `VolumeBarColor`) and `RadarRange`. The player's zone (0x1EB3E4 to 0x1EB840, 320 reads): the five
+  motions the menu's veritech plays by mode (`MenuVeritechBattloidWalkMotion`...), named; and four more
+  `EntitySpec` at 0x1EB428 (fighter), 0x1EB530 (guardian), 0x1EB638 (battloid, no terrain) and 0x1EB740
+  (battloid), which sub_00046280 fills where a veritech's start data has its +0x54 set, pointing the
+  veritech at them in the model's ten's place (its +0x2FC is 1 then and its +0x184 1), with constants of
+  their own laid out as `VeritechConstants` (hit points 100000 at 0x1917D8, the four sets from 0x1917F4)
+  whatever the model: not named, what that word of the start data says of a veritech is not read (Entity_Load
+  and the levels' files would tell; they are 260 of the zone's reads). The mission complete screen's
+  seven counts and seven cursors, cleared together by loops of seven in sub_00032FF0, are two tables
+  (`MissionCompleteScreenSectionCounts`, `MissionCompleteScreenSectionCursors`: each of five counts is
+  handed to the text function with its section's heading, texts 0x7AD and 0x6D2 to 0x6D5): 107 places.
+  25 lines. Left as leads from the two reports, not checked: the two health gauges' and two green
+  gauges' colour words at 0x1B777C on (a word a channel; which gauge each is waits for the entity's
+  fields they show); a gravity of (0, -50, 0) at 0x1B77E4 that sub_000F2AA0 adds to an entity's speed
+  (whose entities': not settled); 0x1AEC90, which turns the menus' highlight off; the d-pad's waiting
+  command and its repeat at 0x1EB3EC to 0x1EB40C. Measured: reads at a raw address 10,306 to 10,025;
+  data addresses written as numbers 6,460 to 6,457; memory at a named place no field names 2,139 to 2,158:
+  19 places where the code moves the four bytes of `LevelNearPlane`, `LevelFarPlane` or `RadarRange` as a
+  word (hands the float on as an argument), which the C writes `MEM32(LevelFarPlane_VA)`: the place has
+  its name, the emitter does not write a float's bits by its name yet; the XBE's unknown bytes 3,727 to
+  3,763: 28 bytes after `VibrationKept` (seven words, 255, 150, 75 and four more, a second set of bar
+  opacities and colour no code reaches) and 8 after `LevelFarPlane` (2000.0 and 1, the same), which counted
+  before with the word they follow. `tools/verify_c.py` 209 vectors, 0 different, twice. The nine
+  scenarios frame for frame as their references, at the first run.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

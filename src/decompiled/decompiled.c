@@ -23,7 +23,7 @@ uint32_t sub_00011000(uint32_t arg0)
 		sub_0010E310(arg0_2, &ignored, &edx, &ignored64);
 		arg0_2 = 0u;
 		sub_0010E2E0(arg0_2, &ignored, &edx);
-		arg0_2 = MEM32(0x1AEC84u);
+		arg0_2 = VibrationOn;
 		sub_0010F9F0(arg0_2, &eax, &ignored_2, &ignored_3);
 		return eax;
 	}
@@ -146,7 +146,7 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			sub_0010E310(arg0, &ignored, &edx, &ignored64);
 			arg0 = 0u;
 			sub_0010E2E0(arg0, &ignored, &edx);
-			arg0 = MEM32(0x1AEC84u);
+			arg0 = VibrationOn;
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			if (MEM32(0x1BC760u) == 0u)
 			{
@@ -419,7 +419,7 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			sub_0010E310(arg0, &ignored, &edx, &ignored64);
 			arg0 = 0u;
 			sub_0010E2E0(arg0, &ignored, &edx);
-			arg0 = MEM32(0x1AEC84u);
+			arg0 = VibrationOn;
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			if (MEM32(0x1BC760u) == 0u)
 			{
@@ -613,7 +613,7 @@ uint32_t sub_00011300(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		sub_0010E310(arg0, &ignored, &edx, &ignored64);
 		arg0 = 0u;
 		sub_0010E2E0(arg0, &ignored, &edx);
-		ecx = MEM32(0x1AEC84u);
+		ecx = VibrationOn;
 		arg0 = ecx;
 		sub_0010F9F0(arg0, &ignored, &ecx, &ignored_2);
 	}
@@ -656,7 +656,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	{
 		saved_edi = edi;
 		saved_esi = esi;
-		x86_rep_stos32(0x2AEB20u, 1u, 0xCu);
+		x86_rep_stos32(ControllerItemsDisabled_VA, 1u, 0xCu);
 		arg0 = saved_esi;
 		sub_00019A20(arg0);
 		edi = saved_edi;
@@ -667,7 +667,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	MEM32(0x1BC470u) = esi;
 	MEM32(0x1E6308u) = esi;
 	MEM32(0x1B09B0u) = 1u;
-	MEM32(0x1AEC8Cu) = 0xFFFFFFFFu;
+	VersusWinner = 0xFFFFFFFFu;
 	if (eax != 2u || Players(1) == esi)
 	{
 		arg0 = 1u;
@@ -731,7 +731,7 @@ uint32_t sub_00011690(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	arg1 = 0xFFFFFFFFu;
 	arg0 = edx;
 	sub_00027170(arg0, arg1, &ignored, &edx, &edi);
-	arg0 = MEM32(0x1AEC84u);
+	arg0 = VibrationOn;
 	sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 	x86_call(vcRandomReset_entry, 0x0001182Cu, 0);
 	arg0 = 1u;
@@ -1938,7 +1938,7 @@ uint32_t sub_00017000(uint32_t arg0)
 	edi = eax;
 	if (edi == ebp)
 	{
-		ecx = MEM32(0x1AEC84u);
+		ecx = VibrationOn;
 		MEM32(0x1BC760u) = ebp;
 		arg0_2 = ecx;
 		sub_0010F9F0(arg0_2, &eax, &ignored, &ignored_2);
@@ -2006,7 +2006,7 @@ uint32_t sub_00017000(uint32_t arg0)
 		sub_00118CE0(arg0_2, &eax, &ignored);
 		edi = eax;
 	} while (edi != ebp);
-	ecx = MEM32(0x1AEC84u);
+	ecx = VibrationOn;
 	MEM32(0x1BC760u) = ebp;
 	arg0_2 = ecx;
 	sub_0010F9F0(arg0_2, &eax, &ignored, &ignored_2);
@@ -2605,7 +2605,7 @@ void sub_00017700(void)
 
 	x86_rep_stos32(PlayerFamily_VA, 0u, 0x86u);
 	arg0 = PlayerFamily_VA;
-	GameObjectFamily_name(PlayerFamily_VA) = 0x18F354u;
+	GameObjectFamily_name(PlayerFamily_VA) = PlayerText_VA;
 	GameObjectFamily_startup(PlayerFamily_VA) = 0u;
 	GameObjectFamily_shutdown(PlayerFamily_VA) = 0u;
 	GameObjectFamily_version(PlayerFamily_VA) = 0u;
@@ -3168,7 +3168,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 				{
 				case 0x017C82u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F3ACu;
+					MEM32(g_esp) = Vt1dText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3177,7 +3177,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017C89u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F3A4u;
+					MEM32(g_esp) = Vf1aText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3186,7 +3186,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017C90u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F39Cu;
+					MEM32(g_esp) = Vf1bText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3195,7 +3195,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017C97u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F394u;
+					MEM32(g_esp) = Vf1jText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3204,7 +3204,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017C9Eu:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F38Cu;
+					MEM32(g_esp) = Vf1sText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3213,7 +3213,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CA5u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F384u;
+					MEM32(g_esp) = Mp1dText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3222,7 +3222,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CACu:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F37Cu;
+					MEM32(g_esp) = Mp1aText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3231,7 +3231,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CB3u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F374u;
+					MEM32(g_esp) = Mp1bText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3240,7 +3240,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CBAu:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F36Cu;
+					MEM32(g_esp) = Mp1jText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3249,7 +3249,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CC1u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F364u;
+					MEM32(g_esp) = Mp1sText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -3258,7 +3258,7 @@ void sub_00017AE0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 					break;
 				case 0x017CC8u:
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x18F35Cu;
+					MEM32(g_esp) = PfpaText_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x1Cu;
 					eax = x86_call(vcObjectGet_entry, 0x00017CD4u, 0);
@@ -6434,7 +6434,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 			eax = sub_000A1710();
 			if (eax == 2u)
 			{
-				t1 = MEM32(0x1AEC80u);
+				t1 = Difficulty;
 				eax = t1 - ebp_2;
 				if (t1 == ebp_2)
 				{
@@ -6833,7 +6833,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					arg0_2 = MEM32(g_esp);
 					eax = sub_000304F0(arg0_2);
 					g_esp = g_esp + 4u;
-					if (eax == MEM32(0x1AEC88u) - 1u)
+					if (eax == VersusKillLimit - 1u)
 					{
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = 0x42u;
@@ -6871,7 +6871,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				arg0_2 = MEM32(g_esp);
 				eax = sub_000304F0(arg0_2);
 				g_esp = g_esp + 4u;
-				if (eax == MEM32(0x1AEC88u) - 1u)
+				if (eax == VersusKillLimit - 1u)
 				{
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x41u;
@@ -8223,7 +8223,7 @@ void sub_0001B820(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 			}
 		}
 	}
-	if ((MEM32(esi_2 + 4u) & ebx_2) != 0u && MEM32(0x2AEB34u) == 0u && edi_2 == 0u)
+	if ((MEM32(esi_2 + 4u) & ebx_2) != 0u && ControllerItems_dpad_left(ControllerItemsDisabled_VA) == 0u && edi_2 == 0u)
 	{
 		eax = Players(0);
 		if (eax == 0u)
@@ -12823,13 +12823,13 @@ void sub_0001F4C0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
 	if ((int32_t)eax <= 0)
 	{
 		f0 = 4e+03;
-		t1 = FLOAT_AT(0x1AEC74u);
+		t1 = (double)LevelFarPlane;
 		MEM32(0x20DCE8u) = 0x9DCB0u;
 		MEM32(0x1E5FC0u) = 1u;
 		eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t1, 0u);
 		if (!(f0 < t1))
 		{
-			MEM32(0x1E5FC4u) = MEM32(0x1AEC74u);
+			MEM32(0x1E5FC4u) = MEM32(LevelFarPlane_VA);
 			*p_eax = eax;
 			return;
 		}
@@ -12862,13 +12862,13 @@ void sub_0001F4C0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
 		edi++;
 	} while ((int32_t)edi < (int32_t)eax);
 	f0 = 4e+03;
-	t1 = FLOAT_AT(0x1AEC74u);
+	t1 = (double)LevelFarPlane;
 	MEM32(0x20DCE8u) = 0x9DCB0u;
 	MEM32(0x1E5FC0u) = 1u;
 	eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t1, 0u);
 	if (!(f0 < t1))
 	{
-		MEM32(0x1E5FC4u) = MEM32(0x1AEC74u);
+		MEM32(0x1E5FC4u) = MEM32(LevelFarPlane_VA);
 		*p_eax = eax;
 		return;
 	}
@@ -13684,7 +13684,7 @@ uint32_t sub_0001FEF0(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	if (MEM32(0x1AEC84u) != 0u)
+	if ((uint32_t)VibrationOn != 0u)
 	{
 		arg0 = 1u;
 		sub_0010F9F0(arg0, &ignored, &ignored_2, &edx);
@@ -14021,7 +14021,7 @@ uint32_t sub_00020320(void)
 
 	x86_rep_stos32(ScreenFamily_VA, 0u, 0x86u);
 	arg0 = ScreenFamily_VA;
-	GameObjectFamily_name(ScreenFamily_VA) = 0x18F4B0u;
+	GameObjectFamily_name(ScreenFamily_VA) = ScreenText_VA;
 	GameObjectFamily_startup(ScreenFamily_VA) = 0u;
 	GameObjectFamily_shutdown(ScreenFamily_VA) = 0u;
 	GameObjectFamily_version(ScreenFamily_VA) = 0u;
@@ -15677,8 +15677,8 @@ uint32_t sub_00021360(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0;
 
 	arg3 = arg1;
-	arg2 = MEM32(0x1AEC74u);
-	arg1_2 = MEM32(0x1AEC70u);
+	arg2 = MEM32(LevelFarPlane_VA);
+	arg1_2 = MEM32(LevelNearPlane_VA);
 	arg0_2 = MEM32(arg0);
 	eax = x86_call(sub_00113310, 0x0002137Fu, 4, arg0_2, arg1_2, arg2, arg3);
 	return eax;
@@ -17482,8 +17482,8 @@ void sub_00022910(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 			MEM32(esi_2 + 0x10u) = ebx_2;
 			MEM32(esi_2 + 0x14u) = ebx_2;
 			MEM32(esi_2 + 0x2F8u) = ebx_2;
-			edx = MEM32(0x1AEC74u);
-			eax = MEM32(0x1AEC70u);
+			edx = MEM32(LevelFarPlane_VA);
+			eax = MEM32(LevelNearPlane_VA);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x42820000u;
 			g_esp = g_esp - 4u;
@@ -17560,14 +17560,14 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
 	esi_2 = MEM32(g_esp + 0x90u);
-	if ((int32_t)eax > 1 && MEM32(0x1E62F0u) != 0u && MEM32(0x1AEC8Cu) != 0xFFFFFFFFu)
+	if ((int32_t)eax > 1 && MEM32(0x1E62F0u) != 0u && (uint32_t)VersusWinner != 0xFFFFFFFFu)
 	{
 		eax = g_esp + 0x58u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		x86_call(vcScreenGetRect_entry, 0x00022AE0u, 0);
 		g_esp = g_esp + 4u;
-		t1 = Players(MEM32(0x1AEC8Cu));
+		t1 = Players((uint32_t)VersusWinner);
 		eax = MEM32(esi_2);
 		if (MEM32(esi_2 + 8u) != t1)
 		{
@@ -17641,8 +17641,8 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			eax = MEM32(esi_2);
 			MEM32(0x1E6218u) = MEM32(eax + 0x2CCu);
 		}
-		ecx = MEM32(0x1AEC74u);
-		edx = MEM32(0x1AEC70u);
+		ecx = MEM32(LevelFarPlane_VA);
+		edx = MEM32(LevelNearPlane_VA);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x42820000u;
 		g_esp = g_esp - 4u;
@@ -17860,8 +17860,8 @@ void sub_00022AA0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 	}
 	ecx = MEM32(esi_2);
 	MEM32(esi_2 + 0x18u) = 0u;
-	edx = MEM32(0x1AEC74u);
-	eax = MEM32(0x1AEC70u);
+	edx = MEM32(LevelFarPlane_VA);
+	eax = MEM32(LevelNearPlane_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x42820000u;
 	g_esp = g_esp - 4u;
@@ -18021,8 +18021,8 @@ void sub_00022E00(uint32_t edx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint
 				}
 			}
 		}
-		eax = MEM32(0x1AEC74u);
-		ecx = MEM32(0x1AEC70u);
+		eax = MEM32(LevelFarPlane_VA);
+		ecx = MEM32(LevelNearPlane_VA);
 		edx_2 = g_esp + 0x10u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx_2;
@@ -20437,7 +20437,7 @@ uint32_t sub_000248C0(void)
 	uint32_t eax = 0;
 
 	eax = 0u;
-	x86_rep_stos32(0x2AEB20u, 0u, 0xCu);
+	x86_rep_stos32(ControllerItemsDisabled_VA, 0u, 0xCu);
 	return eax;
 }
 
@@ -20604,7 +20604,7 @@ uint32_t sub_00024A60(void)
 		esi++;
 	} while ((int32_t)esi < 4);
 	eax = 0u;
-	x86_rep_stos32(0x2AEB20u, 0u, 0xCu);
+	x86_rep_stos32(ControllerItemsDisabled_VA, 0u, 0xCu);
 	return eax;
 }
 
@@ -20686,8 +20686,8 @@ void sub_00024B00(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 	MEM32(esi + 0x10u) = edi;
 	MEM32(esi + 0x14u) = edi;
 	MEM32(esi + 0x2F8u) = edi;
-	eax = MEM32(0x1AEC74u);
-	ecx = MEM32(0x1AEC70u);
+	eax = MEM32(LevelFarPlane_VA);
+	ecx = MEM32(LevelNearPlane_VA);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x42820000u;
 	g_esp = g_esp - 4u;
@@ -20754,11 +20754,11 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 	{
 		arg0 = 0x41u;
 		eax = sub_000304F0(arg0);
-		if ((int32_t)eax < (int32_t)MEM32(0x1AEC88u))
+		if ((int32_t)eax < VersusKillLimit)
 		{
 			arg0 = 0x42u;
 			eax = sub_000304F0(arg0);
-			ecx = MEM32(0x1AEC88u);
+			ecx = VersusKillLimit;
 			if ((int32_t)eax < (int32_t)ecx)
 			{
 				eax = 0u;
@@ -20767,7 +20767,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 				return;
 			}
 			eax = Players(1);
-			MEM32(0x1AEC8Cu) = 1u;
+			VersusWinner = 1u;
 			if (eax == 0u)
 				eax = 0u;
 			else if (eax != GameObjectLastHandle)
@@ -20793,7 +20793,7 @@ void sub_00024BB0(uint32_t *p_eax, uint32_t *p_ecx)
 		else
 		{
 			eax = Players(0);
-			MEM32(0x1AEC8Cu) = 0u;
+			VersusWinner = 0u;
 			if (eax == 0u)
 				eax = 0u;
 			else if (eax != GameObjectLastHandle)
@@ -21971,7 +21971,7 @@ void sub_00025880(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 	MEM32(esi + 0x124u) = ebx_2;
 	MEM32(esi + 0x12Cu) = 0xFFFFFFFFu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1AEC84u);
+	MEM32(g_esp) = VibrationOn;
 	arg0_2 = MEM32(g_esp);
 	sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 	edx = MEM32(esi + 0x18u);
@@ -23305,7 +23305,7 @@ uint32_t MissionFailedScreen_Startup(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F800u;
+	MEM32(g_esp) = GUIHeadingsMissionfailedTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x0002684Au, 0);
@@ -24268,7 +24268,7 @@ uint32_t sub_000271D0(uint32_t esi, uint32_t edi)
 	x86_call(crt_strlwr, 0x0002724Fu, 0);
 	edx = g_esp + 0x18u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18EF4Cu;
+	MEM32(g_esp) = MenuText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	eax = x86_call(crt_strstr, 0x0002725Eu, 0);
@@ -24277,7 +24277,7 @@ uint32_t sub_000271D0(uint32_t esi, uint32_t edi)
 		edi_2 = 8u;
 	eax = g_esp + 8u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F828u;
+	MEM32(g_esp) = M2402Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	eax = x86_call(crt_strstr, 0x00027279u, 0);
@@ -24294,7 +24294,7 @@ uint32_t sub_000271D0(uint32_t esi, uint32_t edi)
 	}
 	ecx = g_esp + 8u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F820u;
+	MEM32(g_esp) = V2402Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	eax = x86_call(crt_strstr, 0x0002728Fu, 0);
@@ -24805,11 +24805,11 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x23D364u) = MEM32(ebp_2 + 0x28u);
 	MEM32(0x1B9CA8u) = MEM32(ebp_2 + 0x2Cu);
 	MEM32(0x23D360u) = MEM32(ebp_2 + 0x30u);
-	MEM32(0x1AEC70u) = MEM32(ebp_2 + 0x34u);
+	MEM32(LevelNearPlane_VA) = MEM32(ebp_2 + 0x34u);
 	eax = MEM32(ebp_2 + 0x38u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
-	MEM32(0x1AEC74u) = eax;
+	MEM32(LevelFarPlane_VA) = eax;
 	arg0_2 = MEM32(g_esp);
 	GameObjectLoad(arg0_2, &eax, &ignored_2, &ebx_2, &esi_2, &edi_2);
 	MEM32(ebp_2) = eax;
@@ -25460,7 +25460,7 @@ void sub_00027E30(void)
 	uint32_t arg0 = 0, arg1 = 0, ignored = 0, ignored_2 = 0;
 
 	x86_rep_stos32(WeaponFamily_VA, 0u, 0x86u);
-	GameObjectFamily_name(WeaponFamily_VA) = 0x18F89Cu;
+	GameObjectFamily_name(WeaponFamily_VA) = WeaponText_VA;
 	GameObjectFamily_startup(WeaponFamily_VA) = 0x27E10u;
 	GameObjectFamily_shutdown(WeaponFamily_VA) = 0x27E20u;
 	GameObjectFamily_version(WeaponFamily_VA) = 0u;
@@ -27573,7 +27573,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x00029760u, 0);
@@ -27609,7 +27609,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000297A3u, 0);
@@ -27646,7 +27646,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000297E3u, 0);
@@ -27683,7 +27683,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x00029829u, 0);
@@ -27719,7 +27719,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x0002986Cu, 0);
@@ -27772,7 +27772,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = 0x1Du;
 		eax = x86_call(vcObjectCreate_entry, 0x000298E2u, 0);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x18F8B8u;
+		MEM32(g_esp) = TargetAcquiredMWavText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0xFu;
 		MEM32(0x1E6BC8u) = eax;
@@ -27798,7 +27798,7 @@ uint32_t HUDScreen_Startup(uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = 0x1Du;
 		eax = x86_call(vcObjectCreate_entry, 0x0002991Au, 0);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x18F8A4u;
+		MEM32(g_esp) = TargetSwitchWavText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0xFu;
 		MEM32(0x1E6BCCu) = eax;
@@ -30527,7 +30527,7 @@ void sub_0002B240(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 		MEM32(g_esp + 0x4Cu) = MEM32(g_esp + 0x54u) - MEM32(g_esp + 0x50u);
 		f0 = (double)(int32_t)MEM32(g_esp + 0x4Cu);
 		MEM32(g_esp + 0x2Cu) = eax - ecx;
-		eax = MEM32(0x2AEB2Cu);
+		eax = ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA);
 		MEMF(g_esp + 0x4Cu) = (float)f0;
 		MEMF(g_esp + 0x10u) = (float)(double)(int32_t)MEM32(g_esp + 0x2Cu);
 		if (eax != ebp_2)
@@ -31145,7 +31145,7 @@ void sub_0002B900(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 	MEM32(g_esp) = edi;
 	edi_2 = 0u;
 	MEM32(g_esp + 8u) = eax;
-	t1 = MEM32(0x2AEB2Cu);
+	t1 = ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA);
 	MEM32(g_esp + 0x28u) = 0x4CBEBC20u;
 	MEM32(g_esp + 0x14u) = 0u;
 	MEM32(g_esp + 0xCu) = 0xFFFFFFFFu;
@@ -34446,10 +34446,10 @@ uint32_t sub_0002E170(uint32_t eax)
 	uint32_t edx = 0, esi = 0;
 	uint32_t t1 = 0;
 
-	esi = MEM32(0x1EA60Cu);
+	esi = StorageDeviceSavedGamesCount;
 	if ((int32_t)esi <= 0)
 		return eax;
-	edx = MEM32(0x1EA5F8u) + 0x3708u;
+	edx = StorageDeviceSavedGames + 0x3708u;
 	do
 	{
 		eax = 0u;
@@ -34472,7 +34472,7 @@ uint32_t sub_0002E1C0(uint32_t ecx, uint32_t arg0)
 	uint8_t t1 = 0, t3 = 0;
 	uint32_t t2 = 0;
 
-	edx = MEM32(0x1EA5F8u);
+	edx = StorageDeviceSavedGames;
 	ecx = ecx * 0x370Cu;
 	ebp = MEM32(ecx + edx + 0x3700u);
 	ecx += edx;
@@ -34538,7 +34538,7 @@ uint32_t sub_0002E240(uint32_t edx)
 	uint32_t arg0 = 0, eax = 0, ignored = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x1EA5F8u);
+	eax = StorageDeviceSavedGames;
 	if (eax != 0u)
 	{
 		saved_eax = eax;
@@ -34577,7 +34577,7 @@ uint32_t sub_0002E260(uint32_t esi, uint32_t edi)
 
 	edi = sub_0012DCF0(edi);
 	sub_0002E170(0u);
-	MEM32(0x1EA608u) = 2u;
+	SavedGamesTask = 2u;
 	sub_0012E0B0(esi, edi);
 	MEM32(0x1EA284u) = 0u;
 	sub_00112B00(&eax, &ignored, &f0);
@@ -34602,7 +34602,7 @@ uint32_t sub_0002E2C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp + 4u) = arg0;
 	MEM32(g_esp + 8u) = arg1;
 	eax = MEM32(g_esp + 4u);
-	ecx = MEM32(0x1EA5F8u);
+	ecx = StorageDeviceSavedGames;
 	g_esp = g_esp - 0x104u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp;
@@ -34614,7 +34614,7 @@ uint32_t sub_0002E2C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = edi;
 	edi_2 = MEM32(g_esp + 0x118u);
 	ebp_2 = 0u;
-	MEM32(0x1EA608u) = 4u;
+	SavedGamesTask = 4u;
 	if ((int32_t)edx <= (int32_t)edi_2 || (int32_t)edi_2 < 0)
 	{
 		for (;;)
@@ -34721,7 +34721,7 @@ uint32_t sub_0002E2C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(0x1EA33Cu) = 7u;
 		g_ebx = ebx;
 		eax = x86_call(sub_0012E610, 0x0002E448u, 0);
-		MEM32(0x1EA610u) = edi_2;
+		SavedGameDevice = edi_2;
 		g_esp = g_esp + 0x18u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -34739,7 +34739,7 @@ uint32_t sub_0002E2C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	sub_0012E8E0(arg0_2, arg1_2);
 	eax = 0u;
 	g_esp = g_esp + 8u;
-	x86_rep_stos32(edi_2 * 0x370u + esi_2 + MEM32(0x1EA5F8u), 0u, 0xDCu);
+	x86_rep_stos32(edi_2 * 0x370u + esi_2 + StorageDeviceSavedGames, 0u, 0xDCu);
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -34752,17 +34752,17 @@ uint32_t sub_0002E4B0(uint32_t edi)
 {
 	uint32_t arg0 = 0, eax = 0, ebp = 0, ecx = 0, edx = 0, esi = 0;
 
-	ecx = MEM32(0x1EA60Cu);
+	ecx = StorageDeviceSavedGamesCount;
 	eax = 0u;
 	ebp = 0u;
-	MEM32(0x1EA604u) = ecx;
-	MEM32(0x1EA5FCu) = 0u;
+	SavedGamesScanDevicesLeft = ecx;
+	SavedGamesScanDevice = 0u;
 	if ((int32_t)ecx <= 0)
 	{
 		eax = ebp;
 		return eax;
 	}
-	edx = MEM32(0x1EA5F8u);
+	edx = StorageDeviceSavedGames;
 	esi = 0xFFFFFFFFu;
 	for (;;)
 	{
@@ -34771,40 +34771,40 @@ uint32_t sub_0002E4B0(uint32_t edi)
 		eax = sub_0012DEB0(arg0);
 		if (eax == 0u)
 		{
-			eax = MEM32(0x1EA5FCu);
-			edx = MEM32(0x1EA5F8u);
+			eax = SavedGamesScanDevice;
+			edx = StorageDeviceSavedGames;
 			ecx = eax * 0x370Cu + edx;
 			MEM32(ecx + 0x3700u) = esi;
 			MEM32(ecx + 0x3704u) = 1u;
 		}
 		else
 		{
-			arg0 = MEM32(0x1EA5FCu);
+			arg0 = SavedGamesScanDevice;
 			eax = sub_0012DED0(arg0);
 			if (eax != 0u)
 				break;
-			eax = MEM32(0x1EA5FCu);
-			edx = MEM32(0x1EA5F8u);
+			eax = SavedGamesScanDevice;
+			edx = StorageDeviceSavedGames;
 			ecx = eax * 0x370Cu + edx;
 			MEM32(ecx + 0x3700u) = esi;
 			MEM32(ecx + 0x3704u) = 2u;
 		}
-		MEM32(0x1EA604u) = MEM32(0x1EA604u) - 1u;
-		ecx = MEM32(0x1EA60Cu);
+		SavedGamesScanDevicesLeft = SavedGamesScanDevicesLeft - 1u;
+		ecx = StorageDeviceSavedGamesCount;
 		eax++;
-		MEM32(0x1EA5FCu) = eax;
+		SavedGamesScanDevice = eax;
 		if ((int32_t)ecx <= (int32_t)eax)
 		{
 			eax = ebp;
 			return eax;
 		}
 	}
-	arg0 = MEM32(0x1EA5FCu);
+	arg0 = SavedGamesScanDevice;
 	sub_0012E390(edi, arg0);
-	arg0 = MEM32(0x1EA5FCu);
+	arg0 = SavedGamesScanDevice;
 	eax = sub_0012DF00(arg0);
-	ecx = MEM32(0x1EA5FCu);
-	edx = MEM32(0x1EA5F8u);
+	ecx = SavedGamesScanDevice;
+	edx = StorageDeviceSavedGames;
 	MEM32(ecx * 0x370Cu + edx + 0x3708u) = eax;
 	arg0 = ecx;
 	esi = ecx * 0x370Cu + edx;
@@ -34819,14 +34819,14 @@ uint32_t sub_0002E5F0(uint32_t edi)
 {
 	uint32_t arg0 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
 
-	eax = MEM32(0x1EA5FCu);
+	eax = SavedGamesScanDevice;
 	ecx = 0u;
-	if ((int32_t)MEM32(0x1EA60Cu) <= (int32_t)eax)
+	if (StorageDeviceSavedGamesCount <= (int32_t)eax)
 	{
 		eax = ecx;
 		return eax;
 	}
-	edx = MEM32(0x1EA5F8u);
+	edx = StorageDeviceSavedGames;
 	esi = 0xFFFFFFFFu;
 	for (;;)
 	{
@@ -34835,50 +34835,50 @@ uint32_t sub_0002E5F0(uint32_t edi)
 		eax = sub_0012DEB0(arg0);
 		if (eax == 0u)
 		{
-			eax = MEM32(0x1EA5FCu);
-			edx = MEM32(0x1EA5F8u);
+			eax = SavedGamesScanDevice;
+			edx = StorageDeviceSavedGames;
 			ecx = eax * 0x370Cu + edx;
 			MEM32(ecx + 0x3700u) = esi;
 			MEM32(ecx + 0x3704u) = 1u;
 		}
 		else
 		{
-			arg0 = MEM32(0x1EA5FCu);
+			arg0 = SavedGamesScanDevice;
 			eax = sub_0012DED0(arg0);
 			if (eax != 0u)
 				break;
-			eax = MEM32(0x1EA5FCu);
-			edx = MEM32(0x1EA5F8u);
+			eax = SavedGamesScanDevice;
+			edx = StorageDeviceSavedGames;
 			ecx = eax * 0x370Cu + edx;
 			MEM32(ecx + 0x3700u) = esi;
 			MEM32(ecx + 0x3704u) = 2u;
 		}
-		MEM32(0x1EA604u) = MEM32(0x1EA604u) - 1u;
-		ecx = MEM32(0x1EA60Cu);
+		SavedGamesScanDevicesLeft = SavedGamesScanDevicesLeft - 1u;
+		ecx = StorageDeviceSavedGamesCount;
 		eax++;
-		MEM32(0x1EA5FCu) = eax;
+		SavedGamesScanDevice = eax;
 		if ((int32_t)ecx <= (int32_t)eax)
 		{
 			eax = 0u;
 			return eax;
 		}
 	}
-	arg0 = MEM32(0x1EA5FCu);
+	arg0 = SavedGamesScanDevice;
 	sub_0012E390(edi, arg0);
-	arg0 = MEM32(0x1EA5FCu);
+	arg0 = SavedGamesScanDevice;
 	eax = sub_0012DF00(arg0);
-	ecx = MEM32(0x1EA5FCu);
-	edx = MEM32(0x1EA5F8u);
+	ecx = SavedGamesScanDevice;
+	edx = StorageDeviceSavedGames;
 	MEM32(ecx * 0x370Cu + edx + 0x3708u) = eax;
 	arg0 = ecx;
 	esi = ecx * 0x370Cu + edx;
 	eax = sub_0012DFA0(arg0);
 	if (MEM32(esi + 0x3708u) < eax + 0x2E4u)
 		MEM32(esi + 0x3704u) = 3u;
-	ecx = MEM32(0x1EA5FCu) + 1u;
+	ecx = SavedGamesScanDevice + 1u;
 	eax = 1u;
-	MEM32(0x1EA604u) = MEM32(0x1EA604u) - 1u;
-	MEM32(0x1EA5FCu) = ecx;
+	SavedGamesScanDevicesLeft = SavedGamesScanDevicesLeft - 1u;
+	SavedGamesScanDevice = ecx;
 	return eax;
 }
 
@@ -34888,33 +34888,33 @@ uint32_t sub_0002E740(uint32_t eax)
 
 	esi = eax;
 	arg0 = esi;
-	MEM32(0x1EA608u) = 3u;
+	SavedGamesTask = 3u;
 	eax_2 = sub_0012DEB0(arg0);
 	if (eax_2 == 0u)
 	{
-		eax_2 = esi * 0x370Cu + MEM32(0x1EA5F8u);
+		eax_2 = esi * 0x370Cu + StorageDeviceSavedGames;
 		MEM32(eax_2 + 0x3700u) = 0xFFFFFFFFu;
 		MEM32(eax_2 + 0x3704u) = 1u;
-		MEM32(0x1EA608u) = 0u;
+		SavedGamesTask = 0u;
 		return eax_2;
 	}
 	edi = esi * 0x370Cu;
 	arg0 = esi;
-	MEM32(edi + MEM32(0x1EA5F8u) + 0x3704u) = 0u;
+	MEM32(edi + StorageDeviceSavedGames + 0x3704u) = 0u;
 	eax_2 = sub_0012DED0(arg0);
 	if (eax_2 == 0u)
 	{
-		eax_2 = MEM32(0x1EA5F8u);
+		eax_2 = StorageDeviceSavedGames;
 		MEM32(edi + eax_2 + 0x3700u) = 0xFFFFFFFFu;
 		MEM32(edi + eax_2 + 0x3704u) = 2u;
-		MEM32(0x1EA608u) = 0u;
+		SavedGamesTask = 0u;
 		return eax_2;
 	}
 	arg0 = esi;
 	sub_0012E390(edi, arg0);
 	arg0 = esi;
 	eax_2 = sub_0012DF00(arg0);
-	ecx = MEM32(0x1EA5F8u);
+	ecx = StorageDeviceSavedGames;
 	MEM32(edi + ecx + 0x3708u) = eax_2;
 	arg0 = esi;
 	edi += ecx;
@@ -34930,7 +34930,7 @@ uint32_t sub_0002E820(uint32_t eax)
 {
 	uint32_t eax_2 = 0, edx = 0;
 
-	edx = eax * 0x370Cu + MEM32(0x1EA5F8u);
+	edx = eax * 0x370Cu + StorageDeviceSavedGames;
 	eax_2 = 0u;
 	x86_rep_stos32(edx, 0u, 0xDC0u);
 	MEM32(edx + 0x3700u) = 0xFFFFFFFFu;
@@ -34948,13 +34948,13 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	MEM32(0x1EA600u) = 0u;
+	SavedGamesScanLeft = 0u;
 	arg0 = MEM32(g_esp);
 	eax = sub_0012DEB0(arg0);
 	g_esp = g_esp + 4u;
 	if (eax == 0u)
 	{
-		eax = MEM32(0x1EA5F8u);
+		eax = StorageDeviceSavedGames;
 		esi_2 = edi * 0x370Cu;
 		MEM32(esi_2 + eax + 0x3700u) = 0xFFFFFFFFu;
 		MEM32(esi_2 + eax + 0x3704u) = 1u;
@@ -34968,7 +34968,7 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 4u;
 		esi_2 = edi * 0x370Cu;
 		t1 = eax;
-		eax = MEM32(0x1EA5F8u);
+		eax = StorageDeviceSavedGames;
 		if (t1 == 0u)
 		{
 			MEM32(esi_2 + eax + 0x3700u) = 0xFFFFFFFFu;
@@ -34976,7 +34976,7 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 		}
 		else
 		{
-			t2 = MEM32(0x1EA600u);
+			t2 = SavedGamesScanLeft;
 			MEM32(esi_2 + eax + 0x3704u) = 0u;
 			if (t2 == 0x10u)
 				MEM32(esi_2 + eax + 0x3704u) = 3u;
@@ -34994,13 +34994,13 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 			MEM32(g_esp) = edi;
 			arg0 = MEM32(g_esp);
 			eax = sub_0012DF30(arg0);
-			MEM32(0x1EA600u) = eax;
+			SavedGamesScanLeft = eax;
 			g_esp = g_esp + 4u;
-			MEM32(esi_2 + MEM32(0x1EA5F8u) + 0x3700u) = 0u;
+			MEM32(esi_2 + StorageDeviceSavedGames + 0x3700u) = 0u;
 			g_esp = g_esp + 4u;
 		}
 	}
-	if ((int32_t)MEM32(0x1EA600u) <= 0)
+	if (SavedGamesScanLeft <= 0)
 	{
 		eax = 0u;
 		g_esp = g_esp + 4u;
@@ -35018,7 +35018,7 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0012DF50(arg0, arg1, arg2);
-	eax = MEM32(0x1EA5F8u);
+	eax = StorageDeviceSavedGames;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x80u;
 	edx = g_esp + 0x14u;
@@ -35027,7 +35027,7 @@ uint32_t sub_0002E860(uint32_t ebp, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + eax;
 	x86_call(crt_strncpy, 0x0002E975u, 0);
-	eax = MEM32(0x1EA5F8u);
+	eax = StorageDeviceSavedGames;
 	MEM8(esi_2 + eax + 0x80u) = 0u;
 	MEM32(esi_2 + eax + 0x82u) = MEM32(g_esp + 0xA8u);
 	MEM32(esi_2 + eax + 0x86u) = MEM32(g_esp + 0xACu);
@@ -35052,7 +35052,7 @@ uint32_t sub_0002E9D0(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ecx = 0, edi_2 = 0, esi_2 = 0;
 
-	eax = MEM32(0x1EA5F8u);
+	eax = StorageDeviceSavedGames;
 	g_esp = g_esp - 0x98u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
@@ -35060,7 +35060,7 @@ uint32_t sub_0002E9D0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	edi_2 = MEM32(esi_2 + eax + 0x3700u);
-	if ((int32_t)MEM32(0x1EA600u) <= 0)
+	if (SavedGamesScanLeft <= 0)
 	{
 		eax = 0u;
 		g_esp = g_esp + 4u;
@@ -35079,7 +35079,7 @@ uint32_t sub_0002E9D0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	sub_0012DF50(arg0, arg1, arg2);
-	ecx = MEM32(0x1EA5F8u);
+	ecx = StorageDeviceSavedGames;
 	esi_2 += edi_2 * 0x370u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x80u;
@@ -35089,7 +35089,7 @@ uint32_t sub_0002E9D0(uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + ecx;
 	x86_call(crt_strncpy, 0x0002EA2Fu, 0);
-	eax = MEM32(0x1EA5F8u);
+	eax = StorageDeviceSavedGames;
 	MEM8(esi_2 + eax + 0x80u) = 0u;
 	MEM32(esi_2 + eax + 0x82u) = MEM32(g_esp + 0xACu);
 	MEM32(esi_2 + eax + 0x86u) = MEM32(g_esp + 0xB0u);
@@ -35115,7 +35115,7 @@ uint32_t sub_0002EE80(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(arg0 * 0x370Cu + MEM32(0x1EA5F8u) + 0x3704u);
+	eax = MEM32(arg0 * 0x370Cu + StorageDeviceSavedGames + 0x3704u);
 	return eax;
 }
 
@@ -35123,7 +35123,7 @@ uint32_t sub_0002EEA0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(arg0 * 0x370Cu + MEM32(0x1EA5F8u) + 0x3700u);
+	eax = MEM32(arg0 * 0x370Cu + StorageDeviceSavedGames + 0x3700u);
 	return eax;
 }
 
@@ -35131,7 +35131,7 @@ uint32_t sub_0002EEC0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(arg0 * 0x370Cu + MEM32(0x1EA5F8u) + 0x3708u);
+	eax = MEM32(arg0 * 0x370Cu + StorageDeviceSavedGames + 0x3708u);
 	return eax;
 }
 
@@ -35140,15 +35140,15 @@ void sub_0002EEE0(uint32_t arg0, uint32_t arg1)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	x86_rep_movs32(0x1EA288u, arg1 * 0x370u + (MEM32(0x1EA5F8u) + eax * 0x370Cu), 0xDCu);
-	MEM32(0x1EA610u) = eax;
+	x86_rep_movs32(0x1EA288u, arg1 * 0x370u + (StorageDeviceSavedGames + eax * 0x370Cu), 0xDCu);
+	SavedGameDevice = eax;
 }
 
 uint32_t sub_0002EF20(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0;
 
-	eax = arg1 * 0x370u + (MEM32(0x1EA5F8u) + arg0 * 0x370Cu);
+	eax = arg1 * 0x370u + (StorageDeviceSavedGames + arg0 * 0x370Cu);
 	return eax;
 }
 
@@ -35244,7 +35244,7 @@ void sub_0002EFF0(void)
 	esi = 1u;
 	if ((int32_t)eax < 1)
 		return;
-	MEM32(0x1AEC84u) = MEM32(0x1EA570u);
+	VibrationOn = MEM32(0x1EA570u);
 	MEM32(0x1EA5A0u) = esi;
 	MEM32(0x1EA5A4u) = esi;
 	MEM32(0x1EA59Cu) = esi;
@@ -35254,10 +35254,10 @@ void sub_0002EFF0(void)
 	sub_000BA3B0(arg0);
 	arg0 = MEM32(0x1EA5E0u);
 	sub_000BA3C0(arg0);
-	arg0 = MEM32(0x1AEC84u);
+	arg0 = VibrationOn;
 	sub_000BA3D0(arg0);
 	edx = MEM32(0x1EA5E4u);
-	MEM32(0x1AEC80u) = MEM32(0x1EA5E8u);
+	Difficulty = MEM32(0x1EA5E8u);
 	eax = MEM32(0x1EA33Cu);
 	MEM32(0x1B7710u) = edx;
 	if ((int32_t)eax < 5)
@@ -35281,12 +35281,12 @@ uint32_t sub_0002F120(void)
 
 	arg0 = 1u;
 	sub_0002EFA0(arg0, &ignored, &ignored_2);
-	MEM32(0x1EA570u) = MEM32(0x1AEC84u);
+	MEM32(0x1EA570u) = VibrationOn;
 	eax = sub_000BA390();
 	MEM32(0x1EA5DCu) = eax;
 	eax = sub_000BA3A0();
 	ecx = MEM32(0x1B7710u);
-	edx = MEM32(0x1AEC80u);
+	edx = Difficulty;
 	MEM32(0x1EA5E0u) = eax;
 	eax = MEM32(0x1BC49Cu);
 	MEM32(0x1EA5E4u) = ecx;
@@ -35554,13 +35554,13 @@ uint32_t sub_0002F4A0(uint32_t edx)
 	eax = sub_0012DE70();
 	arg1 = 0x370Cu;
 	arg0 = eax;
-	MEM32(0x1EA60Cu) = eax;
+	StorageDeviceSavedGamesCount = eax;
 	g_edx = edx;
 	x86_call(crt_calloc, 0x0002F4B5u, 2, arg0, arg1);
 	eax = g_eax;
 	ignored = g_ecx;
 	edx = g_edx;
-	MEM32(0x1EA5F8u) = eax;
+	StorageDeviceSavedGames = eax;
 	if (eax == 0u)
 		return eax;
 	sub_0002E170(eax);
@@ -35568,7 +35568,7 @@ uint32_t sub_0002F4A0(uint32_t edx)
 	eax = 0u;
 	do
 	{
-		ecx = MEM8(eax + 0x18F960u);
+		ecx = MEM8(eax + JACKText_VA);
 		MEM8(eax + 0x1EA31Cu) = ecx;
 		eax++;
 	} while (ecx != 0u);
@@ -35724,7 +35724,7 @@ uint32_t sub_0002F690(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	eax = MEM32(0x1EA618u);
+	eax = AIData;
 	if (eax != 0u)
 	{
 		arg0 = eax;
@@ -35733,7 +35733,7 @@ uint32_t sub_0002F690(void)
 		eax = g_eax;
 		ignored = g_ecx;
 		ignored_2 = g_edx;
-		MEM32(0x1EA618u) = 0u;
+		AIData = 0u;
 	}
 	return eax;
 }
@@ -35753,14 +35753,14 @@ uint32_t sub_0002F6B0(void)
 	arg0 = stack_10;
 	arg1 = stack_C;
 	sub_0002F510(arg0, arg1);
-	arg1 = 0x18F968u;
+	arg1 = AIDataText_VA;
 	arg0 = 0x22u;
 	arg2 = stack_10;
 	arg3 = stack_C;
 	arg4 = stack_8;
 	arg5 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x0002F6D4u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
-	MEM32(0x1EA618u) = eax;
+	AIData = eax;
 	return eax;
 }
 
@@ -37040,7 +37040,7 @@ uint32_t sub_000303C0(uint32_t arg0, uint32_t arg1)
 
 	eax = arg0;
 	MEM32(0x1EA644u) = 0xFFFFFFFFu;
-	MEM32(0x1EA638u) = 0u;
+	Stats = 0u;
 	MEM32(0x1EA634u) = 0u;
 	if ((int32_t)eax <= 0)
 		eax = 0x80u;
@@ -37049,7 +37049,7 @@ uint32_t sub_000303C0(uint32_t arg0, uint32_t arg1)
 	negative = ecx >> 31;
 	esi = (eax * 3u) << 2;
 	arg0_2 = esi;
-	MEM32(0x1EA640u) = eax;
+	StatsCount = eax;
 	edx = ((negative ^ overflow) - 1u) & ecx;
 	MEM32(0x1EA63Cu) = edx;
 	g_edx = edx;
@@ -37058,7 +37058,7 @@ uint32_t sub_000303C0(uint32_t arg0, uint32_t arg1)
 	edx = g_edx;
 	edx = eax;
 	eax = 0u;
-	MEM32(0x1EA638u) = edx;
+	Stats = edx;
 	if (edx == 0u)
 		return eax;
 	ecx = esi >> 2;
@@ -37066,7 +37066,7 @@ uint32_t sub_000303C0(uint32_t arg0, uint32_t arg1)
 	MEM32(0x1EA644u) = eax;
 	x86_rep_stos32(edi, eax, ecx);
 	x86_rep_stos8(edi + ecx * 4u, eax, 0u);
-	ecx = MEM32(0x1EA640u);
+	ecx = StatsCount;
 	if ((int32_t)ecx > 0)
 	{
 		eax = edx;
@@ -37086,7 +37086,7 @@ uint32_t sub_00030460(uint32_t edx)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0;
 
-	eax = MEM32(0x1EA638u);
+	eax = Stats;
 	MEM32(0x1EA634u) = 0u;
 	if (eax != 0u)
 	{
@@ -37096,7 +37096,7 @@ uint32_t sub_00030460(uint32_t edx)
 		eax = g_eax;
 		ignored = g_ecx;
 		edx = g_edx;
-		MEM32(0x1EA638u) = 0u;
+		Stats = 0u;
 	}
 	return eax;
 }
@@ -37106,12 +37106,12 @@ uint32_t sub_00030490(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if ((int32_t)eax < 0 || (int32_t)MEM32(0x1EA640u) <= (int32_t)eax)
+	if ((int32_t)eax < 0 || StatsCount <= (int32_t)eax)
 	{
 		eax = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1EA638u) + eax * 3u * 4u;
+	eax = Stats + eax * 3u * 4u;
 	if (MEM32(eax) != 0xFFFFFFFFu)
 		return eax;
 	MEM32(eax) = 0xFFFFFFFEu;
@@ -37123,12 +37123,12 @@ uint32_t sub_000304C0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0 + 0x60u;
-	if ((int32_t)eax < 0 || (int32_t)MEM32(0x1EA640u) <= (int32_t)eax)
+	if ((int32_t)eax < 0 || StatsCount <= (int32_t)eax)
 	{
 		eax = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1EA638u) + eax * 3u * 4u;
+	eax = Stats + eax * 3u * 4u;
 	if (MEM32(eax) != 0xFFFFFFFFu)
 		return eax;
 	MEM32(eax) = 0xFFFFFFFEu;
@@ -37137,12 +37137,12 @@ uint32_t sub_000304C0(uint32_t arg0)
 
 uint32_t sub_000304C7(uint32_t eax)
 {
-	if ((int32_t)eax < 0 || (int32_t)MEM32(0x1EA640u) <= (int32_t)eax)
+	if ((int32_t)eax < 0 || StatsCount <= (int32_t)eax)
 	{
 		eax = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1EA638u) + eax * 3u * 4u;
+	eax = Stats + eax * 3u * 4u;
 	if (MEM32(eax) != 0xFFFFFFFFu)
 		return eax;
 	MEM32(eax) = 0xFFFFFFFEu;
@@ -37154,12 +37154,12 @@ uint32_t sub_000304F0(uint32_t arg0)
 	uint32_t eax = 0;
 
 	eax = arg0;
-	if ((int32_t)eax < 0 || (int32_t)MEM32(0x1EA640u) <= (int32_t)eax)
+	if ((int32_t)eax < 0 || StatsCount <= (int32_t)eax)
 	{
 		eax = 0u;
 		return eax;
 	}
-	eax = MEM32(0x1EA638u) + eax * 3u * 4u;
+	eax = Stats + eax * 3u * 4u;
 	if (MEM32(eax) == 0xFFFFFFFFu)
 		MEM32(eax) = 0xFFFFFFFEu;
 	if (eax == 0u)
@@ -37175,7 +37175,7 @@ uint32_t sub_00030530(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1EA638u) + arg0 * 3u * 4u;
+	eax = Stats + arg0 * 3u * 4u;
 	return eax;
 }
 
@@ -37183,14 +37183,14 @@ void sub_00030550(void)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
-	edx = MEM32(0x1EA640u);
+	edx = StatsCount;
 	ecx = 0x60u;
 	if ((int32_t)edx <= 0x60)
 	{
 		MEM32(0x1EA644u) = 0x60u;
 		return;
 	}
-	eax = MEM32(0x1EA638u) + 0x488u;
+	eax = Stats + 0x488u;
 	do
 	{
 		if ((int32_t)ecx >= 0 && (int32_t)ecx < (int32_t)edx)
@@ -37209,7 +37209,7 @@ void sub_000305A0(void)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0, esi = 0;
 
-	edx = MEM32(0x1EA640u);
+	edx = StatsCount;
 	esi = 0u;
 	ecx = 0u;
 	if ((int32_t)edx <= 0)
@@ -37217,7 +37217,7 @@ void sub_000305A0(void)
 		MEM32(0x1EA644u) = esi;
 		return;
 	}
-	eax = MEM32(0x1EA638u) + 8u;
+	eax = Stats + 8u;
 	do
 	{
 		if ((int32_t)esi <= (int32_t)ecx && (int32_t)ecx < (int32_t)edx)
@@ -37237,9 +37237,9 @@ void sub_000305E0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if ((int32_t)eax >= 0 && (int32_t)eax < (int32_t)MEM32(0x1EA640u))
+	if ((int32_t)eax >= 0 && (int32_t)eax < StatsCount)
 	{
-		ecx = MEM32(0x1EA638u) + eax * 3u * 4u;
+		ecx = Stats + eax * 3u * 4u;
 		MEM32(ecx) = 0xFFFFFFFEu;
 		MEMF(ecx + 4u) = (float)x87_round(x87_float(arg1) + FLOAT_AT(ecx + 4u));
 		MEM32(ecx + 8u) = MEM32(ecx + 8u) + arg2;
@@ -37256,12 +37256,12 @@ uint32_t sub_00030640(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0;
 
 	eax = arg0;
-	if ((int32_t)eax < 0 || (int32_t)MEM32(0x1EA640u) <= (int32_t)eax)
+	if ((int32_t)eax < 0 || StatsCount <= (int32_t)eax)
 	{
 		eax = 0xFFFFFFFFu;
 		return eax;
 	}
-	ecx = MEM32(0x1EA638u) + eax * 3u * 4u;
+	ecx = Stats + eax * 3u * 4u;
 	MEM32(ecx) = 0xFFFFFFFEu;
 	MEM32(ecx + 4u) = arg1;
 	MEM32(ecx + 8u) = arg2;
@@ -37345,7 +37345,7 @@ void sub_00030750(uint32_t arg0)
 		edi = eax;
 		eax = sub_000304F0(arg0_2);
 		esi = eax;
-		eax = MEM32(0x1AEC88u);
+		eax = VersusKillLimit;
 		if ((int32_t)eax <= (int32_t)edi || (int32_t)eax <= (int32_t)esi)
 		{
 			overflow = x86_overflow_sub32(edi, esi, 0u);
@@ -37400,7 +37400,7 @@ void sub_00030750(uint32_t arg0)
 	}
 	if (ebp == 0u)
 		return;
-	ecx = MEM32(0x1AEC88u);
+	ecx = VersusKillLimit;
 	eax = edi - esi;
 	edx = (int32_t)eax >> 31;
 	if ((eax ^ edx) - edx == ecx)
@@ -37832,7 +37832,7 @@ uint32_t sub_00030D50(uint32_t eax)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	x86_call(vcRectSet_entry, 0x00030E05u, 0);
-	eax = MEM32(0x1EA7E4u);
+	eax = MissionCompleteScreenSectionCursors(5);
 	g_esp = g_esp + 0x28u;
 	if (eax == 0xFFFFFFFFu || eax == 0u)
 	{
@@ -37870,7 +37870,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		x86_call(vcTextDrawInRect_entry, 0x00030EF7u, 0);
 		g_esp = g_esp + 0x14u;
 		if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u)
-			MEM32(0x1EA7E4u) = 1u;
+			MissionCompleteScreenSectionCursors(5) = 1u;
 	}
 	else
 	{
@@ -37908,7 +37908,7 @@ uint32_t sub_00030D50(uint32_t eax)
 		x86_call(vcTextDrawInRect_entry, 0x00030E76u, 0);
 		g_esp = g_esp + 0x14u;
 		if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u)
-			MEM32(0x1EA7E4u) = 0u;
+			MissionCompleteScreenSectionCursors(5) = 0u;
 	}
 	eax = MEM32(g_esp);
 	f0_2 = x87_round((double)MissionCompleteScreenLineY + 2e+01);
@@ -38467,7 +38467,7 @@ void sub_000315C0(uint32_t arg0)
 
 	eax = MEM32(0x1BC498u);
 	ebp = 0u;
-	MEM32(0x1EA7B4u) = 0u;
+	MissionCompleteScreenSectionCounts(0) = 0u;
 	MEM32(0x1EA690u) = 0u;
 	MEM32(0x1EA68Cu) = 0u;
 	if (eax != 0u)
@@ -38481,7 +38481,7 @@ void sub_000315C0(uint32_t arg0)
 		if (eax == 4u || eax == 0xFu || eax == 0x1Au || eax == 0x1Du || eax == 0x29u || eax == 0x2Bu)
 		{
 			MEM32(0x1EA68Cu) = MEM32(ebx + 0x140u) + 1u;
-			MEM32(0x1EA7D0u) = 0xFFFFFFFEu;
+			MissionCompleteScreenSectionCursors(0) = 0xFFFFFFFEu;
 		}
 	}
 	edi = 0u;
@@ -38512,7 +38512,7 @@ void sub_000315C0(uint32_t arg0)
 								eax = MEM32(0x1EA690u);
 								MEM32(eax * 4u + 0x1EA698u) = edi;
 								MEM32(0x1EA690u) = eax + 1u;
-								MEM32(0x1EA7D0u) = ebp;
+								MissionCompleteScreenSectionCursors(0) = ebp;
 							}
 							else if ((MEM8(esi) & 8u) != 0u)
 							{
@@ -38523,7 +38523,7 @@ void sub_000315C0(uint32_t arg0)
 									eax = MEM32(0x1EA690u);
 									MEM32(eax * 4u + 0x1EA698u) = edi;
 									MEM32(0x1EA690u) = eax + 1u;
-									MEM32(0x1EA7D0u) = ebp;
+									MissionCompleteScreenSectionCursors(0) = ebp;
 								}
 							}
 						}
@@ -38536,7 +38536,7 @@ void sub_000315C0(uint32_t arg0)
 								eax = MEM32(0x1EA690u);
 								MEM32(eax * 4u + 0x1EA698u) = edi;
 								MEM32(0x1EA690u) = eax + 1u;
-								MEM32(0x1EA7D0u) = ebp;
+								MissionCompleteScreenSectionCursors(0) = ebp;
 							}
 						}
 						eax = MEM32(0x1EA690u);
@@ -38554,21 +38554,21 @@ void sub_000315C0(uint32_t arg0)
 		}
 	}
 	t1 = MEM32(0x1EA68Cu);
-	MEM32(0x1EA7B4u) = eax;
+	MissionCompleteScreenSectionCounts(0) = eax;
 	if (t1 != ebp)
 	{
 		eax++;
-		MEM32(0x1EA7B4u) = eax;
+		MissionCompleteScreenSectionCounts(0) = eax;
 	}
 	if ((int32_t)eax > 1)
 	{
-		MEM32(0x1EA7D0u) = 0xFFFFFFFFu;
+		MissionCompleteScreenSectionCursors(0) = 0xFFFFFFFFu;
 		return;
 	}
 	eax--;
 	carry = eax != 0u;
 	eax = 0u - eax;
-	MEM32(0x1EA7D0u) = eax - eax - carry - 0x64u;
+	MissionCompleteScreenSectionCursors(0) = eax - eax - carry - 0x64u;
 }
 
 void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
@@ -38587,7 +38587,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 		eax = MEM32(0x1E6308u);
 		if (eax != 0u)
 		{
-			eax = MEM32(0x1EA7B4u);
+			eax = MissionCompleteScreenSectionCounts(0);
 			if (eax == 0u)
 			{
 				*p_ebp = MEM32(g_esp);
@@ -38615,7 +38615,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			MEM32(g_esp) = 0x41800000u;
 			x86_call(vcTextSetSize_entry, 0x00031787u, 0);
 			x87_pop();
-			eax = MEM32(0x1EA7B4u);
+			eax = MissionCompleteScreenSectionCounts(0);
 			g_esp = g_esp + 0x18u;
 			if ((int32_t)eax <= 1)
 			{
@@ -38667,7 +38667,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			MEM32(g_esp) = edx;
 			x86_call(vcRectOffset_entry, 0x000317EAu, 0);
 			ecx = MEM32(0x1EA68Cu);
-			eax = MEM32(0x1EA7D0u);
+			eax = MissionCompleteScreenSectionCursors(0);
 			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 18.0);
 			g_esp = g_esp + 0x20u;
 			if ((int32_t)ecx > 0)
@@ -38675,7 +38675,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				if (eax == 0xFFFFFFFEu || eax == 0xFFFFFFFFu)
 				{
 					if (eax != 0xFFFFFF9Cu)
-						MEM32(0x1EA7D0u) = 0xFFFFFFFEu;
+						MissionCompleteScreenSectionCursors(0) = 0xFFFFFFFEu;
 					L_031836 = true;
 				}
 				else
@@ -38697,7 +38697,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 					x86_call(vcTextSetSize_entry, 0x00031855u, 0);
 					x87_pop();
 					g_esp = g_esp + 0xCu;
-					if (MEM32(0x1EA7D0u) == 0xFFFFFF9Cu)
+					if ((uint32_t)MissionCompleteScreenSectionCursors(0) == 0xFFFFFF9Cu)
 						esi = 0xFF92BAE2u;
 					else
 						esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -38716,14 +38716,14 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 					x86_call(vcTextDrawInRect_entry, 0x0003188Fu, 0);
 					g_esp = g_esp + 0x14u;
 					if (MEM32(0x1B0A64u) != 0u || MEM32(0x1B0A70u) != 0u)
-						eax = MEM32(0x1EA7D0u);
+						eax = MissionCompleteScreenSectionCursors(0);
 					else
 					{
-						eax = MEM32(0x1EA7D0u);
+						eax = MissionCompleteScreenSectionCursors(0);
 						if (eax != 0xFFFFFF9Cu)
 						{
 							eax = 0xFFFFFFFFu;
-							MEM32(0x1EA7D0u) = 0xFFFFFFFFu;
+							MissionCompleteScreenSectionCursors(0) = 0xFFFFFFFFu;
 							*p_ebp = 1u;
 						}
 					}
@@ -38752,7 +38752,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				if (eax == 0xFFFFFFFFu)
 				{
 					eax = 0u;
-					MEM32(0x1EA7D0u) = 0u;
+					MissionCompleteScreenSectionCursors(0) = 0u;
 				}
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = MEM32(eax * 4u + 0x1EA698u);
@@ -38768,7 +38768,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				x86_call(vcTextSetSize_entry, 0x0003190Bu, 0);
 				x87_pop();
 				g_esp = g_esp + 4u;
-				if (MEM32(0x1EA7D0u) == 0xFFFFFF9Cu)
+				if ((uint32_t)MissionCompleteScreenSectionCursors(0) == 0xFFFFFF9Cu)
 					esi = 0xFF92BAE2u;
 				else
 					esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -38818,7 +38818,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				*p_eax = eax;
 				return;
 			}
-			eax = MEM32(0x1EA7D0u);
+			eax = MissionCompleteScreenSectionCursors(0);
 			if (eax == 0xFFFFFF9Cu || *p_ebp != 0u)
 			{
 				*p_esi = MEM32(g_esp);
@@ -38832,7 +38832,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 			}
 			ecx = MEM32(0x1EA690u);
 			eax++;
-			MEM32(0x1EA7D0u) = eax;
+			MissionCompleteScreenSectionCursors(0) = eax;
 			if ((int32_t)eax < (int32_t)ecx)
 			{
 				*p_esi = MEM32(g_esp);
@@ -38844,7 +38844,7 @@ void sub_00031720(uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p
 				*p_eax = eax;
 				return;
 			}
-			MEM32(0x1EA7D0u) = 0xFFFFFFFFu;
+			MissionCompleteScreenSectionCursors(0) = 0xFFFFFFFFu;
 			*p_esi = MEM32(g_esp);
 			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 			g_esp = g_esp + 4u;
@@ -38869,10 +38869,10 @@ void sub_000319B0(void)
 
 	eax = MEM32(0x2B5E60u);
 	edx = 0u;
-	MEM32(0x1EA7B8u) = 0u;
+	MissionCompleteScreenSectionCounts(1) = 0u;
 	if ((int32_t)eax <= 0)
 	{
-		MEM32(0x1EA7D4u) = 0xFFFFFF9Bu;
+		MissionCompleteScreenSectionCursors(1) = 0xFFFFFF9Bu;
 		return;
 	}
 	ecx = 0x2B5E08u;
@@ -38886,16 +38886,16 @@ void sub_000319B0(void)
 		esi = t1 - 1u;
 		ecx += 0xCu;
 	} while (t1 != 1u);
-	MEM32(0x1EA7B8u) = edx;
+	MissionCompleteScreenSectionCounts(1) = edx;
 	if (edx != 0u)
 	{
 		edx--;
 		carry = edx != 0u;
 		edx = 0u - edx;
-		MEM32(0x1EA7D4u) = ((edx - edx - carry) & 0x63u) - 0x64u;
+		MissionCompleteScreenSectionCursors(1) = ((edx - edx - carry) & 0x63u) - 0x64u;
 		return;
 	}
-	MEM32(0x1EA7D4u) = 0xFFFFFF9Bu;
+	MissionCompleteScreenSectionCursors(1) = 0xFFFFFF9Bu;
 }
 
 void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
@@ -38905,7 +38905,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 
 	eax = MEM32(0x1E6308u);
 	g_esp = g_esp - 0x10u;
-	if (eax == 0u || MEM32(0x1EA7D4u) == 0xFFFFFF9Bu)
+	if (eax == 0u || (uint32_t)MissionCompleteScreenSectionCursors(1) == 0xFFFFFF9Bu)
 	{
 		g_esp = g_esp + 0x10u;
 		*p_eax = eax;
@@ -38930,7 +38930,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	MEM32(g_esp) = 0x41800000u;
 	x86_call(vcTextSetSize_entry, 0x00031A67u, 0);
 	x87_pop();
-	eax = MEM32(0x1EA7B8u);
+	eax = MissionCompleteScreenSectionCounts(1);
 	g_esp = g_esp + 0x18u;
 	if ((int32_t)eax <= 1)
 	{
@@ -38994,7 +38994,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_eax = eax;
 		return;
 	}
-	ecx = MEM32(0x1EA7D4u);
+	ecx = MissionCompleteScreenSectionCursors(1);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = *p_ebp;
 	g_esp = g_esp - 4u;
@@ -39029,10 +39029,10 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				}
 			}
 			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && ecx != 0xFFFFFF9Cu)
-				MEM32(0x1EA7D4u) = 0xFFFFFFFFu;
+				MissionCompleteScreenSectionCursors(1) = 0xFFFFFFFFu;
 		}
 		else
-			MEM32(0x1EA7D4u) = ebx;
+			MissionCompleteScreenSectionCursors(1) = ebx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		level = MEM32(g_esp);
@@ -39046,7 +39046,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			x86_call(vcTextSetSize_entry, 0x00031B69u, 0);
 			x87_pop();
 			g_esp = g_esp + 4u;
-			if (MEM32(0x1EA7D4u) == 0xFFFFFF9Cu)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(1) == 0xFFFFFF9Cu)
 				esi = 0xFF92BAE2u;
 			else
 				esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39070,7 +39070,7 @@ void sub_00031A10(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			x86_call(vcTextDrawInRect_entry, 0x00031BAAu, 0);
 			g_esp = g_esp + 0x14u;
 		}
-		ecx = MEM32(0x1EA7D4u);
+		ecx = MissionCompleteScreenSectionCursors(1);
 		eax = MEM32(0x2B5E60u);
 		ebx++;
 		ebp += 0xCu;
@@ -39098,10 +39098,10 @@ void sub_00031BE0(void)
 
 	edx = MEM32(0x2B5E60u);
 	ecx = 0u;
-	MEM32(0x1EA7BCu) = 0u;
+	MissionCompleteScreenSectionCounts(2) = 0u;
 	if ((int32_t)edx <= 0)
 	{
-		MEM32(0x1EA7D8u) = 0xFFFFFF9Bu;
+		MissionCompleteScreenSectionCursors(2) = 0xFFFFFF9Bu;
 		return;
 	}
 	eax = 0x2B5E04u;
@@ -39113,16 +39113,16 @@ void sub_00031BE0(void)
 		edx = t1 - 1u;
 		eax += 0xCu;
 	} while (t1 != 1u);
-	MEM32(0x1EA7BCu) = ecx;
+	MissionCompleteScreenSectionCounts(2) = ecx;
 	if (ecx != 0u)
 	{
 		ecx--;
 		carry = ecx != 0u;
 		ecx = 0u - ecx;
-		MEM32(0x1EA7D8u) = ((ecx - ecx - carry) & 0x63u) - 0x64u;
+		MissionCompleteScreenSectionCursors(2) = ((ecx - ecx - carry) & 0x63u) - 0x64u;
 		return;
 	}
-	MEM32(0x1EA7D8u) = 0xFFFFFF9Bu;
+	MissionCompleteScreenSectionCursors(2) = 0xFFFFFF9Bu;
 }
 
 void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, uint32_t *p_edi)
@@ -39130,7 +39130,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 	uint32_t arg0 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
 
-	eax = MEM32(0x1EA7D8u);
+	eax = MissionCompleteScreenSectionCursors(2);
 	g_esp = g_esp - 0x10u;
 	if (eax == 0xFFFFFF9Bu)
 	{
@@ -39157,7 +39157,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 	MEM32(g_esp) = 0x41800000u;
 	x86_call(vcTextSetSize_entry, 0x00031C7Bu, 0);
 	x87_pop();
-	eax = MEM32(0x1EA7BCu);
+	eax = MissionCompleteScreenSectionCounts(2);
 	g_esp = g_esp + 0x18u;
 	if ((int32_t)eax <= 1)
 	{
@@ -39220,7 +39220,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 		*p_eax = eax;
 		return;
 	}
-	ecx = MEM32(0x1EA7D8u);
+	ecx = MissionCompleteScreenSectionCursors(2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp;
 	g_esp = g_esp - 4u;
@@ -39255,17 +39255,17 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 				}
 			}
 			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && ecx != 0xFFFFFF9Cu)
-				MEM32(0x1EA7D8u) = 0xFFFFFFFFu;
+				MissionCompleteScreenSectionCursors(2) = 0xFFFFFFFFu;
 		}
 		else
-			MEM32(0x1EA7D8u) = ebx_2;
+			MissionCompleteScreenSectionCursors(2) = ebx_2;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x41600000u;
 		edi = eax + 0x4F7u;
 		x86_call(vcTextSetSize_entry, 0x00031D67u, 0);
 		x87_pop();
 		g_esp = g_esp + 4u;
-		if (MEM32(0x1EA7D8u) == 0xFFFFFF9Cu)
+		if ((uint32_t)MissionCompleteScreenSectionCursors(2) == 0xFFFFFF9Cu)
 			esi = 0xFF92BAE2u;
 		else
 			esi = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39286,7 +39286,7 @@ void sub_00031C30(uint32_t ebx, uint32_t ebp, uint32_t *p_eax, uint32_t *p_esi, 
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		x86_call(vcTextDrawInRect_entry, 0x00031DA5u, 0);
-		ecx = MEM32(0x1EA7D8u);
+		ecx = MissionCompleteScreenSectionCursors(2);
 		g_esp = g_esp + 0x14u;
 		eax = MEM32(0x2B5E60u);
 		ebx_2++;
@@ -39312,7 +39312,7 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 	double f0 = 0;
 
 	g_esp = g_esp - 0x28u;
-	t1 = MEM32(0x1EA7E8u);
+	t1 = MissionCompleteScreenSectionCursors(6);
 	MEM32(g_esp + 0x10u) = 4u;
 	MEM32(g_esp + 0x14u) = 0xFu;
 	MEM32(g_esp + 0x18u) = 0x1Bu;
@@ -39415,13 +39415,13 @@ uint32_t sub_00031DE0(uint32_t eax, uint32_t esi, uint32_t edi)
 					f0 = x87_round((double)MissionCompleteScreenLineY + 16.0);
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x41600000u;
-					MEM32(0x1EA7E8u) = 0xFFFFFF9Cu;
+					MissionCompleteScreenSectionCursors(6) = 0xFFFFFF9Cu;
 					edi_2 = esi_2 + 0x754u;
 					MissionCompleteScreenLineY = (float)f0;
 					x86_call(vcTextSetSize_entry, 0x00031F19u, 0);
 					x87_pop();
 					g_esp = g_esp + 0x24u;
-					if (MEM32(0x1EA7E8u) == 0xFFFFFF9Cu)
+					if ((uint32_t)MissionCompleteScreenSectionCursors(6) == 0xFFFFFF9Cu)
 						esi_2 = 0xFF92BAE2u;
 					else
 						esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39467,7 +39467,7 @@ void sub_00031F80(uint32_t arg0)
 
 	eax = MEM32(0x2B5E60u);
 	ecx = 0u;
-	MEM32(0x1EA7C0u) = 0u;
+	MissionCompleteScreenSectionCounts(3) = 0u;
 	if ((int32_t)eax > 0)
 	{
 		edx = 0x2B5E00u;
@@ -39480,36 +39480,36 @@ void sub_00031F80(uint32_t arg0)
 			{
 				if (eax == 9u || eax == 0xFu)
 				{
-					MEM32(0x1EA7DCu) = edi;
+					MissionCompleteScreenSectionCursors(3) = edi;
 					ecx++;
 				}
 			}
 			else
 			{
-				MEM32(0x1EA7DCu) = 0xFFFFFFFDu;
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFDu;
 				ecx++;
 			}
 			t1 = esi;
 			esi = t1 - 1u;
 			edx += 0xCu;
 		} while (t1 != 1u);
-		MEM32(0x1EA7C0u) = ecx;
+		MissionCompleteScreenSectionCounts(3) = ecx;
 	}
 	eax = MEM32(arg0 + 0x13Cu);
 	if (eax == 0xFFFFFFFDu || eax == 0x1Du || eax == 0x23u)
 	{
 		ecx++;
-		MEM32(0x1EA7C0u) = ecx;
+		MissionCompleteScreenSectionCounts(3) = ecx;
 	}
 	if (ecx != 0u)
 	{
 		ecx--;
 		carry = ecx != 0u;
 		ecx = 0u - ecx;
-		MEM32(0x1EA7DCu) = ((ecx - ecx - carry) & 0x63u) - 0x64u;
+		MissionCompleteScreenSectionCursors(3) = ((ecx - ecx - carry) & 0x63u) - 0x64u;
 		return;
 	}
-	MEM32(0x1EA7DCu) = 0xFFFFFF9Bu;
+	MissionCompleteScreenSectionCursors(3) = 0xFFFFFF9Bu;
 }
 
 void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
@@ -39522,7 +39522,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
-	eax = MEM32(0x1EA7DCu);
+	eax = MissionCompleteScreenSectionCursors(3);
 	g_esp = g_esp - 0x1Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = *p_ebp;
@@ -39574,7 +39574,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		MEM32(g_esp) = 0x41800000u;
 		x86_call(vcTextSetSize_entry, 0x000320D6u, 0);
 		x87_pop();
-		eax = MEM32(0x1EA7C0u);
+		eax = MissionCompleteScreenSectionCounts(3);
 		g_esp = g_esp + 4u;
 		if ((int32_t)eax <= 1)
 		{
@@ -39634,8 +39634,8 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 		g_esp = g_esp + 0x20u;
 		if (eax == 0x1Du || eax == 0x23u)
 		{
-			if (MEM32(0x1EA7DCu) != ebx)
-				MEM32(0x1EA7DCu) = 0xFFFFFFFEu;
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFEu;
 			zero = MEM32(ecx + 0x13Cu) - 0x1Du == 0u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x41600000u;
@@ -39643,7 +39643,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			x86_call(vcTextSetSize_entry, 0x0003219Du, 0);
 			x87_pop();
 			g_esp = g_esp + 4u;
-			if (MEM32(0x1EA7DCu) == ebx)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
 				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39665,20 +39665,20 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = ecx;
 			x86_call(vcTextDrawInRect_entry, 0x000321DAu, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && MEM32(0x1EA7DCu) != ebx)
-				MEM32(0x1EA7DCu) = 0xFFFFFFFFu;
+			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFFu;
 		}
 		edi = 0xFFFFFFFDu;
 		if (*p_ebp != 0u)
 		{
-			if (MEM32(0x1EA7DCu) != ebx)
-				MEM32(0x1EA7DCu) = edi;
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+				MissionCompleteScreenSectionCursors(3) = edi;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x41600000u;
 			x86_call(vcTextSetSize_entry, 0x00032226u, 0);
 			x87_pop();
 			g_esp = g_esp + 4u;
-			if (MEM32(0x1EA7DCu) == ebx)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
 				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39700,22 +39700,22 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = edx;
 			x86_call(vcTextDrawInRect_entry, 0x00032267u, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && MEM32(0x1EA7DCu) != ebx)
+			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
 			{
-				MEM32(0x1EA7DCu) = 0xFFFFFFFCu;
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFCu;
 				MEM32(g_esp + 0x10u) = 1u;
 			}
 		}
 		if (MEM32(g_esp + 0x14u) != 0u)
 		{
-			if (MEM32(0x1EA7DCu) != ebx)
-				MEM32(0x1EA7DCu) = edi;
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
+				MissionCompleteScreenSectionCursors(3) = edi;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x41600000u;
 			x86_call(vcTextSetSize_entry, 0x000322BAu, 0);
 			x87_pop();
 			g_esp = g_esp + 4u;
-			if (MEM32(0x1EA7DCu) == ebx)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
 				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39737,30 +39737,30 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			MEM32(g_esp) = eax;
 			x86_call(vcTextDrawInRect_entry, 0x000322FBu, 0);
 			g_esp = g_esp + 0x14u;
-			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && MEM32(0x1EA7DCu) != ebx)
+			if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && (uint32_t)MissionCompleteScreenSectionCursors(3) != ebx)
 			{
-				MEM32(0x1EA7DCu) = 0xFFFFFFFCu;
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFCu;
 				MEM32(g_esp + 0x10u) = 1u;
 			}
 		}
 		t2 = MEM32(g_esp + 0x18u);
-		eax = MEM32(0x1EA7DCu);
+		eax = MissionCompleteScreenSectionCursors(3);
 		if (t2 == 0u)
 		{
 			zero = eax + 4u == 0u;
 			if (zero)
-				MEM32(0x1EA7DCu) = 0xFFFFFFFFu;
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFFu;
 		}
 		else
 		{
 			if (eax != ebx)
-				MEM32(0x1EA7DCu) = 0xFFFFFFFCu;
+				MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFCu;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x41600000u;
 			x86_call(vcTextSetSize_entry, 0x0003234Fu, 0);
 			x87_pop();
 			g_esp = g_esp + 4u;
-			if (MEM32(0x1EA7DCu) == ebx)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				esi_2 = 0xFF92BAE2u;
 			else
 				esi_2 = (MEM32(0x1B0A64u) << 24) | 0x92BAE2u;
@@ -39786,7 +39786,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			if (eax == 0u)
 			{
 				eax = MEM32(0x1B0A70u);
-				if (eax != 0u || MEM32(0x1EA7DCu) == ebx)
+				if (eax != 0u || (uint32_t)MissionCompleteScreenSectionCursors(3) == ebx)
 				{
 					*p_edi = MEM32(g_esp);
 					g_esp = g_esp + 4u;
@@ -39806,7 +39806,7 @@ void sub_00032020(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 				eax = MEM32(g_esp + 0x10u);
 				zero = eax == 0u;
 				if (zero)
-					MEM32(0x1EA7DCu) = 0xFFFFFFFFu;
+					MissionCompleteScreenSectionCursors(3) = 0xFFFFFFFFu;
 				*p_edi = MEM32(g_esp);
 				g_esp = g_esp + 4u;
 				*p_ebx = MEM32(g_esp);
@@ -39856,10 +39856,10 @@ void sub_000323E0(void)
 
 	eax = MEM32(0x2B5E60u);
 	edx = 0u;
-	MEM32(0x1EA7C4u) = 0u;
+	MissionCompleteScreenSectionCounts(4) = 0u;
 	if ((int32_t)eax <= 0)
 	{
-		MEM32(0x1EA7E0u) = 0xFFFFFF9Bu;
+		MissionCompleteScreenSectionCursors(4) = 0xFFFFFF9Bu;
 		return;
 	}
 	ecx = 0x2B5E00u;
@@ -39873,16 +39873,16 @@ void sub_000323E0(void)
 		esi = t1 - 1u;
 		ecx += 0xCu;
 	} while (t1 != 1u);
-	MEM32(0x1EA7C4u) = edx;
+	MissionCompleteScreenSectionCounts(4) = edx;
 	if (edx != 0u)
 	{
 		edx--;
 		carry = edx != 0u;
 		edx = 0u - edx;
-		MEM32(0x1EA7E0u) = ((edx - edx - carry) & 0x63u) - 0x64u;
+		MissionCompleteScreenSectionCursors(4) = ((edx - edx - carry) & 0x63u) - 0x64u;
 		return;
 	}
-	MEM32(0x1EA7E0u) = 0xFFFFFF9Bu;
+	MissionCompleteScreenSectionCursors(4) = 0xFFFFFF9Bu;
 }
 
 void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
@@ -39892,7 +39892,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
 	double f0 = 0;
 
-	t1 = MEM32(0x1EA7E0u);
+	t1 = MissionCompleteScreenSectionCursors(4);
 	g_esp = g_esp - 0x14u;
 	MEM32(g_esp) = 0u;
 	if (t1 == 0xFFFFFF9Bu)
@@ -39927,7 +39927,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	edi = 0u;
 	g_esp = g_esp + 0x14u;
 	if ((int32_t)ecx <= 0)
-		eax = MEM32(0x1EA7E0u);
+		eax = MissionCompleteScreenSectionCursors(4);
 	else
 	{
 		eax_2 = 0x2B5E00u;
@@ -39939,7 +39939,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				edi++;
 				if ((int32_t)edi < (int32_t)ecx)
 					continue;
-				eax = MEM32(0x1EA7E0u);
+				eax = MissionCompleteScreenSectionCursors(4);
 				break;
 			}
 			g_esp = g_esp - 4u;
@@ -39947,7 +39947,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			MEM32(g_esp + 0x10u) = 1u;
 			x86_call(vcTextSetSize_entry, 0x000324C7u, 0);
 			x87_pop();
-			eax_2 = MEM32(0x1EA7C4u);
+			eax_2 = MissionCompleteScreenSectionCounts(4);
 			g_esp = g_esp + 4u;
 			if ((int32_t)eax_2 <= 1)
 			{
@@ -39996,7 +39996,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			x86_call(vcRectOffset_entry, 0x00032529u, 0);
-			eax = MEM32(0x1EA7E0u);
+			eax = MissionCompleteScreenSectionCursors(4);
 			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 			g_esp = g_esp + 0x20u;
 			if (eax != 0xFFFFFFFEu)
@@ -40024,7 +40024,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				x86_call(vcTextSetSize_entry, 0x0003262Bu, 0);
 				x87_pop();
 				g_esp = g_esp + 0xCu;
-				if (MEM32(0x1EA7E0u) == 0xFFFFFF9Cu)
+				if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 					esi = 0xFFFFE600u;
 				else
 					esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
@@ -40042,7 +40042,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				MEM32(g_esp) = ecx;
 				x86_call(vcTextDrawInRect_entry, 0x00032665u, 0);
 				g_esp = g_esp + 0x14u;
-				eax = MEM32(0x1EA7E0u);
+				eax = MissionCompleteScreenSectionCursors(4);
 				break;
 			}
 			eax = sub_0002F340(eax);
@@ -40066,7 +40066,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			x86_call(vcTextSetSize_entry, 0x00032580u, 0);
 			x87_pop();
 			g_esp = g_esp + 0xCu;
-			if (MEM32(0x1EA7E0u) == 0xFFFFFF9Cu)
+			if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 				esi = 0xFFFFE600u;
 			else
 				esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
@@ -40086,15 +40086,15 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			g_esp = g_esp + 0x14u;
 			if (MEM32(0x1B0A64u) != 0u)
 			{
-				eax = MEM32(0x1EA7E0u);
+				eax = MissionCompleteScreenSectionCursors(4);
 				break;
 			}
 			t2 = MEM32(0x1B0A70u);
-			eax = MEM32(0x1EA7E0u);
+			eax = MissionCompleteScreenSectionCursors(4);
 			if (t2 != 0u || eax == 0xFFFFFF9Cu)
 				break;
 			eax = 0xFFFFFFFFu;
-			MEM32(0x1EA7E0u) = 0xFFFFFFFFu;
+			MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFFu;
 			break;
 		}
 	}
@@ -40102,7 +40102,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	if (edi == ecx && eax == 0xFFFFFFFEu)
 	{
 		eax = 0xFFFFFFFFu;
-		MEM32(0x1EA7E0u) = 0xFFFFFFFFu;
+		MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFFu;
 	}
 	ebx = 0u;
 	if ((int32_t)ecx <= 0)
@@ -40115,7 +40115,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_ebx = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 		if (t3 == ecx && eax == 0xFFFFFFFFu)
-			MEM32(0x1EA7E0u) = 0xFFFFFFFEu;
+			MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFEu;
 		MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 		g_esp = g_esp + 0x14u;
 		*p_eax = eax;
@@ -40142,7 +40142,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			MEM32(g_esp + 0x14u) = 1u;
 			x86_call(vcTextSetSize_entry, 0x000326BCu, 0);
 			x87_pop();
-			eax_2 = MEM32(0x1EA7C4u);
+			eax_2 = MissionCompleteScreenSectionCounts(4);
 			g_esp = g_esp + 4u;
 			if ((int32_t)eax_2 <= 1)
 			{
@@ -40191,7 +40191,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
 			x86_call(vcRectOffset_entry, 0x0003271Eu, 0);
-			eax = MEM32(0x1EA7E0u);
+			eax = MissionCompleteScreenSectionCursors(4);
 			MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 16.0);
 			g_esp = g_esp + 0x20u;
 		}
@@ -40210,10 +40210,10 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 				}
 			}
 			else if (MEM32(0x1B0A64u) == 0u && MEM32(0x1B0A70u) == 0u && eax != 0xFFFFFF9Cu)
-				MEM32(0x1EA7E0u) = 0xFFFFFFFFu;
+				MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFFu;
 		}
 		else
-			MEM32(0x1EA7E0u) = ebx;
+			MissionCompleteScreenSectionCursors(4) = ebx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(ebp);
 		arg0 = MEM32(g_esp);
@@ -40224,7 +40224,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		x86_call(vcTextSetSize_entry, 0x00032788u, 0);
 		x87_pop();
 		g_esp = g_esp + 8u;
-		if (MEM32(0x1EA7E0u) == 0xFFFFFF9Cu)
+		if ((uint32_t)MissionCompleteScreenSectionCursors(4) == 0xFFFFFF9Cu)
 			esi = 0xFFFFE600u;
 		else
 			esi = (MEM32(0x1B0A64u) << 24) | 0xFFE600u;
@@ -40245,7 +40245,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		x86_call(vcTextDrawInRect_entry, 0x000327C6u, 0);
-		eax = MEM32(0x1EA7E0u);
+		eax = MissionCompleteScreenSectionCursors(4);
 		g_esp = g_esp + 0x14u;
 		ecx = MEM32(0x2B5E60u);
 		ebp += 0xCu;
@@ -40263,7 +40263,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 	*p_ebx = MEM32(g_esp);
 	g_esp = g_esp + 4u;
 	if (t3 == ecx && eax == 0xFFFFFFFFu)
-		MEM32(0x1EA7E0u) = 0xFFFFFFFEu;
+		MissionCompleteScreenSectionCursors(4) = 0xFFFFFFFEu;
 	MissionCompleteScreenLineY = (float)x87_round((double)MissionCompleteScreenLineY + 22.0);
 	g_esp = g_esp + 0x14u;
 	*p_eax = eax;
@@ -40677,7 +40677,7 @@ uint32_t sub_00032B50(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, u
 	if (MenuCursorSoundAsked != ebp_2)
 	{
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(0x1EA7ECu);
+		MEM32(g_esp) = MissionCompleteScreenCursorSound;
 		arg0_2 = MEM32(g_esp);
 		sub_0010E7E0(arg0_2, &ignored, &ignored_2);
 		g_esp = g_esp + 4u;
@@ -41045,7 +41045,7 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	GameObjectTypeUse(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F9ECu;
+	MEM32(g_esp) = GUIHeadingsMissioncompleteTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x00032EEAu, 0);
@@ -41094,7 +41094,7 @@ uint32_t MissionCompleteScreen_Startup(uint32_t esi, uint32_t edi)
 	MissionCompleteScreenCancelBackSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
-	MEM32(0x1EA7ECu) = eax;
+	MissionCompleteScreenCursorSound = eax;
 	g_esp = g_esp + 0x1Cu;
 	return eax;
 }
@@ -41129,7 +41129,7 @@ uint32_t MissionCompleteScreen_Shutdown(void)
 	eax = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg0 = MEM32(0x1EA7ECu);
+	arg0 = MissionCompleteScreenCursorSound;
 	g_eax = eax;
 	x86_call(vcObjectRelease_entry, 0x00032F8Cu, 1, arg0);
 	eax = g_eax;
@@ -41208,9 +41208,9 @@ void sub_00032FF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	arg1 = MEM32(g_esp + 4u);
 	sub_00020CD0(edx, arg0_2, arg1, &ignored, &ebx, &esi, &edi);
 	MEM32(MEM32(g_esp + 0x74u) + 8u) = 0x30AF0u;
-	x86_rep_stos32(0x1EA7B4u, 0u, 7u);
-	x86_rep_stos32(0x1EA7D0u, 0xFFFFFFFFu, 7u);
-	edi_2 = 0x1EA7ECu;
+	x86_rep_stos32(MissionCompleteScreenSectionCounts_VA, 0u, 7u);
+	x86_rep_stos32(MissionCompleteScreenSectionCursors_VA, 0xFFFFFFFFu, 7u);
+	edi_2 = MissionCompleteScreenCursorSound_VA;
 	eax_2 = LevelGetCurrent();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
@@ -42885,7 +42885,7 @@ uint32_t sub_00034040(uint32_t arg0)
 	eax = arg0 - 1u;
 	if (eax > 6u)
 	{
-		arg1 = 0x18FA4Cu;
+		arg1 = GUILoadingBkgrdTgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x000340BDu, 2, arg0_2, arg1);
 		return eax;
@@ -42894,37 +42894,37 @@ uint32_t sub_00034040(uint32_t arg0)
 	switch (jump_target)
 	{
 	case 0x034051u:
-		arg1 = 0x18FAF0u;
+		arg1 = GUILoadingBkgrdCh2TgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x0003405Du, 2, arg0_2, arg1);
 		return eax;
 	case 0x034061u:
-		arg1 = 0x18FAD4u;
+		arg1 = GUILoadingBkgrdCh3TgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x0003406Du, 2, arg0_2, arg1);
 		return eax;
 	case 0x034071u:
-		arg1 = 0x18FAB8u;
+		arg1 = GUILoadingBkgrdCh4TgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x0003407Du, 2, arg0_2, arg1);
 		return eax;
 	case 0x034081u:
-		arg1 = 0x18FA9Cu;
+		arg1 = GUILoadingBkgrdCh5TgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x0003408Du, 2, arg0_2, arg1);
 		return eax;
 	case 0x034091u:
-		arg1 = 0x18FA80u;
+		arg1 = GUILoadingBkgrdTrTgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x0003409Du, 2, arg0_2, arg1);
 		return eax;
 	case 0x0340A1u:
-		arg1 = 0x18FA64u;
+		arg1 = GUILoadingBkgrdVsTgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x000340ADu, 2, arg0_2, arg1);
 		return eax;
 	case 0x0340B1u:
-		arg1 = 0x18FA4Cu;
+		arg1 = GUILoadingBkgrdTgaText_VA;
 		arg0_2 = 1u;
 		eax = x86_call(vcObjectGet_entry, 0x000340BDu, 2, arg0_2, arg1);
 		return eax;
@@ -42953,27 +42953,27 @@ uint32_t sub_000340F0(uint32_t arg0)
 		switch (jump_target)
 		{
 		case 0x03410Cu:
-			arg1 = 0x18FB98u;
+			arg1 = GUILoadingTitles01TgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034118u, 2, arg0_2, arg1);
 			return eax;
 		case 0x03411Cu:
-			arg1 = 0x18FB7Cu;
+			arg1 = GUILoadingTitles02TgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034128u, 2, arg0_2, arg1);
 			return eax;
 		case 0x03412Cu:
-			arg1 = 0x18FB60u;
+			arg1 = GUILoadingTitles03TgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034138u, 2, arg0_2, arg1);
 			return eax;
 		case 0x03413Cu:
-			arg1 = 0x18FB44u;
+			arg1 = GUILoadingTitles04TgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034148u, 2, arg0_2, arg1);
 			return eax;
 		case 0x03414Cu:
-			arg1 = 0x18FB28u;
+			arg1 = GUILoadingTitles05TgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034158u, 2, arg0_2, arg1);
 			return eax;
@@ -42983,7 +42983,7 @@ uint32_t sub_000340F0(uint32_t arg0)
 			eax = x86_call(vcObjectGet_entry, 0x00034168u, 2, arg0_2, arg1);
 			return eax;
 		case 0x03416Cu:
-			arg1 = 0x18FB0Cu;
+			arg1 = GUILoadingTitlesVsTgaText_VA;
 			arg0_2 = 1u;
 			eax = x86_call(vcObjectGet_entry, 0x00034178u, 2, arg0_2, arg1);
 			break;
@@ -42998,7 +42998,7 @@ uint32_t sub_0003416C(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
-	arg1 = 0x18FB0Cu;
+	arg1 = GUILoadingTitlesVsTgaText_VA;
 	arg0 = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x00034178u, 2, arg0, arg1);
 	return eax;
@@ -43648,63 +43648,63 @@ uint32_t MainMenuEnterCode(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t ar
 	uint32_t stack = 0, stack_C = 0, stack_10 = 0, stack_14 = 0, stack_18 = 0;
 
 	esi = arg2;
-	arg1 = 0x18FDF0u;
+	arg1 = WEWILLWINText_VA;
 	arg0 = esi;
 	MainMenuCodeAnswer = 0u;
 	eax = x86_call(crt_stricmp, 0x00034B2Au, 2, arg0, arg1);
 	if (eax != 0u)
 	{
-		arg1 = 0x18FDE4u;
+		arg1 = WHERESMAXText_VA;
 		arg0 = esi;
 		eax = x86_call(crt_stricmp, 0x00034B55u, 2, arg0, arg1);
 		if (eax != 0u)
 		{
-			arg1 = 0x18FDD8u;
+			arg1 = SUPERMECHText_VA;
 			arg0 = esi;
 			eax = x86_call(crt_stricmp, 0x00034B8Au, 2, arg0, arg1);
 			if (eax != 0u)
 			{
-				arg1 = 0x18FDCCu;
+				arg1 = SPACEFOLDText_VA;
 				arg0 = esi;
 				eax = x86_call(crt_stricmp, 0x00034BB5u, 2, arg0, arg1);
 				if (eax != 0u)
 				{
-					arg1 = 0x18FDC0u;
+					arg1 = MARSBASEText_VA;
 					arg0 = esi;
 					eax = x86_call(crt_stricmp, 0x00034BE0u, 2, arg0, arg1);
 					if (eax != 0u)
 					{
-						arg1 = 0x18FDB8u;
+						arg1 = MIRIYAText_VA;
 						arg0 = esi;
 						eax = x86_call(crt_stricmp, 0x00034C0Bu, 2, arg0, arg1);
 						if (eax != 0u)
 						{
-							arg1 = 0x18FDACu;
+							arg1 = MISSMACROSSText_VA;
 							arg0 = esi;
 							eax = x86_call(crt_stricmp, 0x00034C3Du, 2, arg0, arg1);
 							if (eax != 0u)
 							{
-								arg1 = 0x18FDA0u;
+								arg1 = BACKSTABBERText_VA;
 								arg0 = esi;
 								eax = x86_call(crt_stricmp, 0x00034C6Bu, 2, arg0, arg1);
 								if (eax != 0u)
 								{
-									arg1 = 0x18FD98u;
+									arg1 = SNIPERText_VA;
 									arg0 = esi;
 									eax = x86_call(crt_stricmp, 0x00034C99u, 2, arg0, arg1);
 									if (eax != 0u)
 									{
-										arg1 = 0x18FD8Cu;
+										arg1 = MULTIMAYHEMText_VA;
 										arg0 = esi;
 										eax = x86_call(crt_stricmp, 0x00034CC7u, 2, arg0, arg1);
 										if (eax != 0u)
 										{
-											arg1 = 0x18FD80u;
+											arg1 = DEATHGRIPText_VA;
 											arg0 = esi;
 											eax = x86_call(crt_stricmp, 0x00034CF2u, 2, arg0, arg1);
 											if (eax != 0u)
 											{
-												arg1 = 0x18FD78u;
+												arg1 = CLEARText_VA;
 												arg0 = esi;
 												eax = x86_call(crt_stricmp, 0x00034D1Du, 2, arg0, arg1);
 												if (eax != 0u)
@@ -43810,21 +43810,21 @@ uint32_t MainMenuEnterCode(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t ar
 		{
 			if (edx == 2u)
 			{
-				stack = 0x18FD38u;
+				stack = C3MONOWavText_VA;
 				arg0 = stack;
 				sub_0010E630(edx, arg0, &ignored, &ecx);
 			}
 		}
 		else
 		{
-			stack = 0x18FCF8u;
+			stack = C2MONOWavText_VA;
 			arg0 = stack;
 			sub_0010E630(edx, arg0, &ignored, &ecx);
 		}
 	}
 	else
 	{
-		stack = 0x18FCB8u;
+		stack = C1MONOWavText_VA;
 		arg0 = stack;
 		sub_0010E630(edx, arg0, &ignored, &ecx);
 	}
@@ -43856,7 +43856,7 @@ uint32_t sub_00034DB0(uint32_t esi)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
-	arg0 = 0x18FE0Cu;
+	arg0 = GuiBkgdRdfText_VA;
 	eax = sub_00038860(arg0);
 	if (eax != 0u)
 	{
@@ -43864,7 +43864,7 @@ uint32_t sub_00034DB0(uint32_t esi)
 		arg0 = eax;
 		sub_000D8240(arg0, arg1);
 	}
-	arg0 = 0x18FDFCu;
+	arg0 = GuiBkgdTitleText_VA;
 	eax = sub_00038860(arg0);
 	if (eax != 0u)
 	{
@@ -44089,7 +44089,7 @@ void sub_00035020(uint32_t esi, uint32_t *p_eax, uint32_t *p_ebp)
 	edi = MEM32(0x1EAB2Cu);
 	ebx = 0u;
 	sub_00034F90(ebx, edi, &ignored, p_ebp);
-	arg0 = 0x18FE0Cu;
+	arg0 = GuiBkgdRdfText_VA;
 	eax = sub_00038860(arg0);
 	if (eax != 0u)
 	{
@@ -44097,7 +44097,7 @@ void sub_00035020(uint32_t esi, uint32_t *p_eax, uint32_t *p_ebp)
 		arg0 = eax;
 		sub_000D8240(arg0, arg1);
 	}
-	arg0 = 0x18FDFCu;
+	arg0 = GuiBkgdTitleText_VA;
 	eax = sub_00038860(arg0);
 	if (eax != 0u)
 	{
@@ -44701,12 +44701,12 @@ uint32_t MainMenuScreen_Startup(uint32_t esi)
 	arg1 = 3u;
 	arg0 = 0xCu;
 	GameObjectTypeUse(arg0, arg1);
-	arg0 = 0x18FC38u;
+	arg0 = MainMenuScreenConfirmSWavText_VA;
 	eax = sub_0010E920(arg0);
-	arg0 = 0x18FBF8u;
+	arg0 = MainMenuScreenCancelBackSWavText_VA;
 	MainMenuScreenConfirmSSound = eax;
 	eax = sub_0010E920(arg0);
-	arg0 = 0x18FC78u;
+	arg0 = MainMenuScreenCursorWavText_VA;
 	MainMenuScreenCancelBackSSound = eax;
 	eax = sub_0010E920(arg0);
 	arg0 = 0xFFFFFFFFu;
@@ -44898,7 +44898,7 @@ uint32_t sub_00035870(uint32_t ebx, uint32_t ebp)
 	sub_0002EFA0(arg0, &ignored, &ebx);
 	level = 0u;
 	LevelSetCurrent(level);
-	arg0 = 0x18F960u;
+	arg0 = JACKText_VA;
 	sub_0002EF60(arg0);
 	return sub_0004AE00(ebx, ebp);
 }
@@ -45125,7 +45125,7 @@ uint32_t sub_00035950(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, ui
 		g_esp = g_esp + 0x1Cu;
 	}
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18FE1Cu;
+	MEM32(g_esp) = DefaultCameraText_VA;
 	arg0_2 = MEM32(g_esp);
 	eax_2 = sub_00038860(arg0_2);
 	g_esp = g_esp + 4u;
@@ -45321,7 +45321,7 @@ void sub_00037CD0(void)
 
 	x86_rep_stos32(NodeFamily_VA, 0u, 0x86u);
 	arg0 = NodeFamily_VA;
-	GameObjectFamily_name(NodeFamily_VA) = 0x18FE2Cu;
+	GameObjectFamily_name(NodeFamily_VA) = NodeText_VA;
 	GameObjectFamily_startup(NodeFamily_VA) = 0u;
 	GameObjectFamily_shutdown(NodeFamily_VA) = 0u;
 	GameObjectFamily_version(NodeFamily_VA) = 0u;
@@ -48037,7 +48037,7 @@ void sub_000398B0(void)
 
 	x86_rep_stos32(ActionFamily_VA, 0u, 0x86u);
 	arg0 = ActionFamily_VA;
-	GameObjectFamily_name(ActionFamily_VA) = 0x18FE44u;
+	GameObjectFamily_name(ActionFamily_VA) = ActionText_VA;
 	GameObjectFamily_startup(ActionFamily_VA) = 0u;
 	GameObjectFamily_shutdown(ActionFamily_VA) = 0u;
 	GameObjectFamily_version(ActionFamily_VA) = 0u;
@@ -49134,7 +49134,7 @@ void sub_0003A4A0(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t arg0, uint3
 							MEM32(g_esp) = 0x40u;
 							ecx = g_esp + 0x4Cu;
 							g_esp = g_esp - 4u;
-							MEM32(g_esp) = 0x18FE6Cu;
+							MEM32(g_esp) = SplineHandleInText_VA;
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = ecx;
 							MEM32(g_esp + 0x94u) = esi_2;
@@ -51911,7 +51911,7 @@ void sub_0003C8D0(void)
 
 	x86_rep_stos32(ScreenElementFamily_VA, 0u, 0x86u);
 	arg0 = ScreenElementFamily_VA;
-	GameObjectFamily_name(ScreenElementFamily_VA) = 0x18FEC4u;
+	GameObjectFamily_name(ScreenElementFamily_VA) = ScreenElementText_VA;
 	GameObjectFamily_startup(ScreenElementFamily_VA) = 0u;
 	GameObjectFamily_shutdown(ScreenElementFamily_VA) = 0u;
 	GameObjectFamily_version(ScreenElementFamily_VA) = 0u;
@@ -52619,7 +52619,7 @@ uint32_t sub_0003D1D0(uint32_t esi, uint32_t edi)
 	{
 		eax = MEM32(edi_2 + 0x194u);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x19005Cu;
+		MEM32(g_esp) = GunEffectsText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0 = MEM32(g_esp);
@@ -52715,7 +52715,7 @@ void sub_0003D2F0(uint32_t esi)
 		MEM32(esi + 0x390u) = 0x1F4u;
 		return;
 	}
-	arg1 = 0x19005Cu;
+	arg1 = GunEffectsText_VA;
 	arg0 = MEM32(eax + 0x194u);
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(esi + 0x34Cu) = eax;
@@ -53275,7 +53275,7 @@ void sub_0003DC00(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	else
 		eax &= ~8u;
 	MEM32(esi + 4u) = eax;
-	ecx = MEM32(0x2AEB24u);
+	ecx = ControllerItems_b(ControllerItemsDisabled_VA);
 	if (ecx == 0u)
 	{
 		ebx = saved_arg2 * 0x210u;
@@ -53301,7 +53301,7 @@ void sub_0003DC00(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				arg1_2 = esi;
 				arg0_2 = stack_200000;
 				sub_0002AE30(arg0_2, arg1_2, &eax, &ebx, &ebp, &esi, &edi);
-				ecx = MEM32(0x2AEB24u);
+				ecx = ControllerItems_b(ControllerItemsDisabled_VA);
 				if (ecx == 0u)
 				{
 					eax = MEM32(ebx + vcPad_released_b_VA(vcPads_VA));
@@ -53322,7 +53322,7 @@ void sub_0003DC00(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 			eax = sub_0002A450(arg1_2);
 			edx = saved_arg1;
 			MEM32(edx + 0x3E8u) = edi + 0xC8u;
-			ecx = MEM32(0x2AEB24u);
+			ecx = ControllerItems_b(ControllerItemsDisabled_VA);
 			if (ecx == 0u)
 			{
 				if (FLOAT_AT(ebx + vcPad_b_VA(vcPads_VA)) == 0.0f || edi < MEM32(edx + 0x3E8u))
@@ -53344,7 +53344,7 @@ void sub_0003DC00(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					arg1_2 = esi;
 					arg0_2 = stack_200000;
 					sub_0002AE30(arg0_2, arg1_2, &eax, &ebx, &ebp, &esi, &edi);
-					ecx = MEM32(0x2AEB24u);
+					ecx = ControllerItems_b(ControllerItemsDisabled_VA);
 					if (ecx == 0u)
 					{
 						eax = MEM32(ebx + vcPad_released_b_VA(vcPads_VA));
@@ -53602,7 +53602,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 		MEMF(edi + 0x60u) = (float)f0;
 		if (fabs(f0) < 0.0001f)
 			MEM32(edi + 0x60u) = ebx_2;
-		if ((MEM32(0x2AEB20u) != ebx_2 || !(FLOAT_AT(ebp + vcPad_x_VA(vcPads_VA)) > 0.0f)) && (MEM32(0x2AEB24u) != ebx_2 || !(FLOAT_AT(ebp + vcPad_b_VA(vcPads_VA)) > 0.0f)))
+		if ((ControllerItems_x(ControllerItemsDisabled_VA) != ebx_2 || !(FLOAT_AT(ebp + vcPad_x_VA(vcPads_VA)) > 0.0f)) && (ControllerItems_b(ControllerItemsDisabled_VA) != ebx_2 || !(FLOAT_AT(ebp + vcPad_b_VA(vcPads_VA)) > 0.0f)))
 		{
 			if (FLOAT_AT(edi + 0x188u) > 0.0f)
 			{
@@ -53644,7 +53644,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 			arg0_2 = MEM32(esi + 0x4Cu);
 			sub_0010FBE0(arg0_2, arg1, arg2, &ignored_3, &ignored);
 		}
-		if (MEM32(0x2AEB2Cu) == ebx_2)
+		if (ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) == ebx_2)
 		{
 			if (FLOAT_AT(ebp + vcPad_white_VA(vcPads_VA)) > 0.0f || FLOAT_AT(ebp + vcPad_black_VA(vcPads_VA)) > 0.0f)
 				stack = 1u;
@@ -53679,7 +53679,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 			if (L_03E40F || !L_03E415)
 				MEM32(0x1EB3FCu) = ebx_2;
 		}
-		if (L_03E4B6 || MEM32(0x2AEB2Cu) == ebx_2)
+		if (L_03E4B6 || ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) == ebx_2)
 		{
 			if (fabs(FLOAT_AT(ebp + vcPad_right_x_VA(vcPads_VA))) > 0.5 || fabs(FLOAT_AT(ebp + vcPad_right_y_VA(vcPads_VA))) > 0.5)
 			{
@@ -53690,7 +53690,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 					eax = sub_0002A480(arg1);
 					if (eax != 0u)
 					{
-						ebx_2 = MEM32(0x2AEB30u);
+						ebx_2 = ControllerItems_right_stick(ControllerItemsDisabled_VA);
 						edx = 0u;
 						if (ebx_2 != 0u || !(FLOAT_AT(ebp + vcPad_right_y_VA(vcPads_VA)) < 0.0f))
 						{
@@ -53836,7 +53836,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 				{
 					if (MEM32(esi + 0x3ACu) < saved_eax - MEM32(esi + 0x3A8u))
 					{
-						ebx_2 = MEM32(0x2AEB30u);
+						ebx_2 = ControllerItems_right_stick(ControllerItemsDisabled_VA);
 						if (ebx_2 != 0u || !(FLOAT_AT(stack_200000 + vcPad_right_y_VA(vcPads_VA)) < 0.0f))
 						{
 							ebp = 0u;
@@ -54020,7 +54020,7 @@ uint32_t sub_0003DDE0(uint32_t ebx, uint32_t arg0)
 				}
 			}
 		}
-		eax = MEM32(0x2AEB28u);
+		eax = ControllerItems_y(ControllerItemsDisabled_VA);
 		if (eax != 0u)
 			stack_200000 = 0u;
 		else
@@ -54115,7 +54115,7 @@ uint32_t Player_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
-	arg0 = 0x18FEE0u;
+	arg0 = PlayerCameraWavText_VA;
 	eax = sub_0010E920(arg0);
 	arg0 = 0x18FFB8u;
 	PlayerCameraSound = eax;
@@ -54422,7 +54422,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		{
 			if (edx < MEM32(0x1EB3F0u))
 			{
-				if (MEM32(0x2AEB28u) != ebp)
+				if (ControllerItems_y(ControllerItemsDisabled_VA) != ebp)
 					stack = ebp;
 				else
 				{
@@ -54441,11 +54441,11 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			else
 				MEM32(0x1EB3ECu) = ebp;
 		}
-		else if (MEM32(0x2AEB34u) != ebp || vcPad_pressed_left(vcPads(ecx_2)) == ebp)
+		else if (ControllerItems_dpad_left(ControllerItemsDisabled_VA) != ebp || vcPad_pressed_left(vcPads(ecx_2)) == ebp)
 		{
-			if (MEM32(0x2AEB38u) != ebp)
+			if (ControllerItems_dpad_up_down(ControllerItemsDisabled_VA) != ebp)
 			{
-				if (MEM32(0x2AEB3Cu) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
+				if (ControllerItems_dpad_right(ControllerItemsDisabled_VA) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
 				{
 					MEM32(0x1EB3ECu) = 1u;
 					MEM32(0x1EB3F0u) = edx + 0x1F4u;
@@ -54459,7 +54459,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 				{
 					if (MEM32(eax_2 + vcPad_pressed_down_VA(vcPads_VA)) == ebp)
 					{
-						if (MEM32(0x2AEB3Cu) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
+						if (ControllerItems_dpad_right(ControllerItemsDisabled_VA) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
 						{
 							MEM32(0x1EB3ECu) = 1u;
 							MEM32(0x1EB3F0u) = edx + 0x1F4u;
@@ -54493,11 +54493,11 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 	else
 	{
 		ebp = 0u;
-		if (MEM32(0x2AEB34u) != 0u || vcPad_pressed_left(vcPads(ecx_2)) == ebp)
+		if (ControllerItems_dpad_left(ControllerItemsDisabled_VA) != 0u || vcPad_pressed_left(vcPads(ecx_2)) == ebp)
 		{
-			if (MEM32(0x2AEB38u) != ebp)
+			if (ControllerItems_dpad_up_down(ControllerItemsDisabled_VA) != ebp)
 			{
-				if (MEM32(0x2AEB3Cu) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
+				if (ControllerItems_dpad_right(ControllerItemsDisabled_VA) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
 				{
 					stack_20 = 2u;
 					arg0_2 = stack_20;
@@ -54512,7 +54512,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 				{
 					if (MEM32(eax_2 + vcPad_pressed_down_VA(vcPads_VA)) == ebp)
 					{
-						if (MEM32(0x2AEB3Cu) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
+						if (ControllerItems_dpad_right(ControllerItemsDisabled_VA) == ebp && vcPad_pressed_right(vcPads(ecx_2)) != ebp)
 						{
 							stack_20 = 2u;
 							arg0_2 = stack_20;
@@ -54547,11 +54547,11 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			ecx_2 = saved_ecx;
 		}
 	}
-	if (MEM32(0x2AEB20u) == ebp && (double)vcPad_x(vcPads(ecx_2)) > 0.0f)
+	if (ControllerItems_x(ControllerItemsDisabled_VA) == ebp && (double)vcPad_x(vcPads(ecx_2)) > 0.0f)
 		MEM32(ebx + 4u) = MEM32(ebx + 4u) | 0x14u;
-	if (MEM32(0x2AEB24u) == ebp && (double)vcPad_b(vcPads(ecx_2)) > 0.0f)
+	if (ControllerItems_b(ControllerItemsDisabled_VA) == ebp && (double)vcPad_b(vcPads(ecx_2)) > 0.0f)
 		MEM32(ebx + 4u) = MEM32(ebx + 4u) | 0x18u;
-	if (MEM32(0x2AEB28u) != ebp)
+	if (ControllerItems_y(ControllerItemsDisabled_VA) != ebp)
 		stack = ebp;
 	else
 	{
@@ -54593,7 +54593,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			}
 		}
 	}
-	if (MEM32(0x2AEB2Cu) == ebp)
+	if (ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) == ebp)
 	{
 		ecx_2 = ecx_2 * 0x210u;
 		if (FLOAT_AT(ecx_2 + vcPad_white_VA(vcPads_VA)) > 0.0f || FLOAT_AT(ecx_2 + vcPad_black_VA(vcPads_VA)) > 0.0f)
@@ -54623,7 +54623,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		if (L_03EEA4 || !L_03EEAA)
 			MEM32(0x1EB3F8u) = ebp;
 	}
-	if (!L_03EEB6 && MEM32(0x2AEB2Cu) != ebp)
+	if (!L_03EEB6 && ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) != ebp)
 		MEM32(edi + 0x3A4u) = 0u;
 	else
 	{
@@ -54637,7 +54637,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 				eax_2 = sub_0002A480(arg1);
 				if (eax_2 != 0u)
 				{
-					esi = MEM32(0x2AEB30u);
+					esi = ControllerItems_right_stick(ControllerItemsDisabled_VA);
 					if (esi != 0u || !(FLOAT_AT(ebp + vcPad_right_y_VA(vcPads_VA)) < 0.0f))
 					{
 						ebx = 0u;
@@ -54805,7 +54805,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			{
 				if (MEM32(edi + 0x3ACu) < saved_edx - MEM32(edi + 0x3A8u))
 				{
-					esi = MEM32(0x2AEB30u);
+					esi = ControllerItems_right_stick(ControllerItemsDisabled_VA);
 					if (esi != 0u || !(FLOAT_AT(ebp + vcPad_right_y_VA(vcPads_VA)) < 0.0f))
 					{
 						ebx = 0u;
@@ -54997,7 +54997,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			}
 		}
 	}
-	if ((MEM32(0x2AEB34u) != ebp && MEM32(esi + vcPad_pressed_left_VA(vcPads_VA)) != ebp) || (MEM32(0x2AEB38u) != ebp && MEM32(esi + vcPad_pressed_up_VA(vcPads_VA)) != ebp) || (MEM32(0x2AEB3Cu) != ebp && MEM32(esi + vcPad_pressed_right_VA(vcPads_VA)) != ebp))
+	if ((ControllerItems_dpad_left(ControllerItemsDisabled_VA) != ebp && MEM32(esi + vcPad_pressed_left_VA(vcPads_VA)) != ebp) || (ControllerItems_dpad_up_down(ControllerItemsDisabled_VA) != ebp && MEM32(esi + vcPad_pressed_up_VA(vcPads_VA)) != ebp) || (ControllerItems_dpad_right(ControllerItemsDisabled_VA) != ebp && MEM32(esi + vcPad_pressed_right_VA(vcPads_VA)) != ebp))
 	{
 		stack_20 = ebx + 8u;
 		arg0_2 = 0x1EB350u;
@@ -55011,7 +55011,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		MEM32(ebx + 0x2Cu) = ebp;
 		return eax;
 	}
-	if (MEM32(0x2AEB20u) != ebp)
+	if (ControllerItems_x(ControllerItemsDisabled_VA) != ebp)
 	{
 		f0 = FLOAT_AT(esi + vcPad_x_VA(vcPads_VA));
 		t2 = 0.0f;
@@ -55031,7 +55031,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			return eax;
 		}
 	}
-	if (MEM32(0x2AEB24u) != ebp)
+	if (ControllerItems_b(ControllerItemsDisabled_VA) != ebp)
 	{
 		f0 = FLOAT_AT(esi + vcPad_b_VA(vcPads_VA));
 		t3 = 0.0f;
@@ -55051,7 +55051,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			return eax;
 		}
 	}
-	if (MEM32(0x2AEB28u) != ebp && MEM32(esi + vcPad_pressed_y_VA(vcPads_VA)) != ebp)
+	if (ControllerItems_y(ControllerItemsDisabled_VA) != ebp && MEM32(esi + vcPad_pressed_y_VA(vcPads_VA)) != ebp)
 	{
 		stack_20 = ebx + 8u;
 		arg0_2 = 0x1EB350u;
@@ -55065,7 +55065,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		MEM32(ebx + 0x2Cu) = ebp;
 		return eax;
 	}
-	if (MEM32(0x2AEB44u) != ebp)
+	if (ControllerItems_a(ControllerItemsDisabled_VA) != ebp)
 	{
 		f0 = FLOAT_AT(esi + vcPad_a_VA(vcPads_VA));
 		t4 = 0.0f;
@@ -55085,9 +55085,9 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 			return eax;
 		}
 	}
-	if (MEM32(0x2AEB2Cu) == ebp)
+	if (ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) == ebp)
 	{
-		if (MEM32(0x2AEB30u) == ebp)
+		if (ControllerItems_right_stick(ControllerItemsDisabled_VA) == ebp)
 		{
 			MEM32(ebx + 0x20u) = ebp;
 			MEM32(ebx + 0x24u) = ebp;
@@ -55163,7 +55163,7 @@ uint32_t sub_0003EB30(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		MEM32(ebx + 0x2Cu) = ebp;
 		return eax;
 	}
-	if (MEM32(0x2AEB30u) == ebp)
+	if (ControllerItems_right_stick(ControllerItemsDisabled_VA) == ebp)
 	{
 		MEM32(ebx + 0x20u) = ebp;
 		MEM32(ebx + 0x24u) = ebp;
@@ -55868,7 +55868,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 		arg0_2 = esi;
 		ecx = edi;
 		sub_0003EB30(eax, ecx, arg0_2);
-		if (MEM32(0x2AEB4Cu) == ebp)
+		if (ControllerItems_left_y(ControllerItemsDisabled_VA) == ebp)
 		{
 			ecx = ebx * 0x210u;
 			f0 = x87_round(fabs(FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA)));
@@ -55876,7 +55876,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 		else
 			f0 = 0.0f;
 		MEMF(esi + 0x20u) = (float)f0;
-		if (MEM32(0x2AEB40u) == ebp)
+		if (ControllerItems_triggers(ControllerItemsDisabled_VA) == ebp)
 		{
 			eax = ebx * 0x210u;
 			f1 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -55890,7 +55890,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 		t2 = f2;
 		stack = float_to_bits((float)x87_round(f1 - t2));
 		MEM32(esi + 0x24u) = stack;
-		if (MEM32(0x2AEB48u) == ebp)
+		if (ControllerItems_left_x(ControllerItemsDisabled_VA) == ebp)
 		{
 			eax = ebx * 0x210u;
 			f1 = x87_round(fabs(FLOAT_AT(eax + vcPads_VA)) * FLOAT_AT(eax + vcPads_VA));
@@ -55917,12 +55917,12 @@ uint32_t sub_0003FA30(uint32_t arg0)
 			sub_00017A50(arg0_2, arg1, arg2, &eax, &esi);
 			return eax;
 		}
-		if (MEM32(0x2AEB44u) == ebp && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) == ebp && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
 			MEM32(saved_eax + 0x3DCu) = 1u;
 		edx = saved_eax;
 		if (MEM32(edx + 0x3DCu) != ebp)
 		{
-			if (MEM32(0x2AEB44u) != ebp)
+			if (ControllerItems_a(ControllerItemsDisabled_VA) != ebp)
 				MEM32(edx + 0x3DCu) = ebp;
 			else
 			{
@@ -55931,7 +55931,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 				if (FLOAT_AT(eax + vcPad_a_VA(vcPads_VA)) == 0.0f)
 				{
 					MEM32(edx + 0x3DCu) = ebp;
-					if (MEM32(0x2AEB44u) == ebp)
+					if (ControllerItems_a(ControllerItemsDisabled_VA) == ebp)
 						MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 					else
 						MEMF(esi + 0x2Cu) = (float)0.0f;
@@ -55953,7 +55953,7 @@ uint32_t sub_0003FA30(uint32_t arg0)
 				MEM32(esi + 0x28u) = MEM32(ecx);
 			}
 		}
-		if (MEM32(0x2AEB44u) == ebp)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) == ebp)
 		{
 			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 			arg2 = esi;
@@ -56037,7 +56037,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 		ecx = edi;
 		sub_0003EB30(eax, ecx, arg0_2);
 		edx = 0u;
-		if (MEM32(0x2AEB4Cu) == 0u)
+		if (ControllerItems_left_y(ControllerItemsDisabled_VA) == 0u)
 		{
 			eax = ebx * 0x210u;
 			f0 = x87_round(fabs(FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)));
@@ -56045,7 +56045,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 		else
 			f0 = 0.0f;
 		MEMF(esi + 0x20u) = (float)f0;
-		if (MEM32(0x2AEB40u) == edx)
+		if (ControllerItems_triggers(ControllerItemsDisabled_VA) == edx)
 		{
 			eax = ebx * 0x210u;
 			f1 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56059,7 +56059,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 		t2 = f2;
 		stack = float_to_bits((float)x87_round(f1 - t2));
 		MEM32(esi + 0x24u) = stack;
-		if (MEM32(0x2AEB48u) == edx)
+		if (ControllerItems_left_x(ControllerItemsDisabled_VA) == edx)
 		{
 			eax = ebx * 0x210u;
 			f1 = x87_round(fabs(FLOAT_AT(eax + vcPads_VA)) * FLOAT_AT(eax + vcPads_VA));
@@ -56081,11 +56081,11 @@ uint32_t sub_0003FC80(uint32_t arg0)
 			eax = sub_0003D570(arg1, arg2);
 			return eax;
 		}
-		if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && f0 == 0.0f && x87_float(stack) == 0.0f)
 			MEM32(ebp + 0x3DCu) = 1u;
 		if (MEM32(ebp + 0x3DCu) != edx)
 		{
-			if (MEM32(0x2AEB44u) != edx)
+			if (ControllerItems_a(ControllerItemsDisabled_VA) != edx)
 				MEM32(ebp + 0x3DCu) = edx;
 			else
 			{
@@ -56094,7 +56094,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 				if (FLOAT_AT(eax + vcPad_a_VA(vcPads_VA)) == 0.0f)
 				{
 					MEM32(ebp + 0x3DCu) = edx;
-					if (MEM32(0x2AEB44u) == edx)
+					if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 						MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 					else
 						MEMF(esi + 0x2Cu) = (float)0.0f;
@@ -56110,7 +56110,7 @@ uint32_t sub_0003FC80(uint32_t arg0)
 				MEM32(esi + 0x28u) = MEM32(ecx);
 			}
 		}
-		if (MEM32(0x2AEB44u) == edx)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 		{
 			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 			arg2 = ebx;
@@ -56180,7 +56180,7 @@ uint32_t sub_0003FEA0(uint32_t arg0)
 	f0 = x87_float(saved_eax);
 	MEMF(esi + 0x20u) = (float)f0;
 	ecx = 0u;
-	if (MEM32(0x2AEB48u) == 0u)
+	if (ControllerItems_left_x(ControllerItemsDisabled_VA) == 0u)
 	{
 		edx = ebp * 0x210u;
 		f1 = x87_round(fabs(FLOAT_AT(edx + vcPads_VA)) * FLOAT_AT(edx + vcPads_VA));
@@ -56188,7 +56188,7 @@ uint32_t sub_0003FEA0(uint32_t arg0)
 	else
 		f1 = 0.0f;
 	MEMF(esi + 0x60u) = (float)f1;
-	if (MEM32(0x2AEB4Cu) == ecx)
+	if (ControllerItems_left_y(ControllerItemsDisabled_VA) == ecx)
 	{
 		eax = ebp * 0x210u;
 		f1 = -x87_round(fabs(FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(eax + vcPad_left_y_VA(vcPads_VA)));
@@ -56196,7 +56196,7 @@ uint32_t sub_0003FEA0(uint32_t arg0)
 	else
 		f1 = 0.0f;
 	MEMF(esi + 0x28u) = (float)f1;
-	if (MEM32(0x2AEB40u) == ecx)
+	if (ControllerItems_triggers(ControllerItemsDisabled_VA) == ecx)
 	{
 		eax = ebp * 0x210u;
 		f2 = x87_round(FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA)) - FLOAT_AT(eax + vcPad_left_trigger_VA(vcPads_VA)));
@@ -56258,7 +56258,7 @@ uint32_t sub_0003FEA0(uint32_t arg0)
 	}
 	else
 	{
-		if (MEM32(0x2AEB44u) == 0u)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) == 0u)
 			f0 = FLOAT_AT(ebx + vcPad_a_VA(vcPads_VA));
 		else
 			f0 = 0.0f;
@@ -56324,7 +56324,7 @@ uint32_t sub_00040190(uint32_t arg0)
 		eax = edi;
 		ecx = ebx;
 		sub_0003EB30(eax, ecx, arg0_2);
-		if (MEM32(0x2AEB40u) == 0u)
+		if (ControllerItems_triggers(ControllerItemsDisabled_VA) == 0u)
 		{
 			eax = ebp * 0x210u;
 			f0 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56337,7 +56337,7 @@ uint32_t sub_00040190(uint32_t arg0)
 		}
 		t2 = f1;
 		MEMF(esi + 0x24u) = (float)x87_round(f0 - t2);
-		if (MEM32(0x2AEB48u) == 0u)
+		if (ControllerItems_left_x(ControllerItemsDisabled_VA) == 0u)
 		{
 			eax = ebp * 0x210u;
 			f0 = x87_round(fabs(FLOAT_AT(eax + vcPads_VA)) * FLOAT_AT(eax + vcPads_VA));
@@ -56345,7 +56345,7 @@ uint32_t sub_00040190(uint32_t arg0)
 		else
 			f0 = 0.0f;
 		MEMF(esi + 0x60u) = (float)f0;
-		if (MEM32(0x2AEB4Cu) == 0u)
+		if (ControllerItems_left_y(ControllerItemsDisabled_VA) == 0u)
 		{
 			ecx = ebp * 0x210u;
 			f0 = -x87_round(fabs(-FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA)));
@@ -56362,7 +56362,7 @@ uint32_t sub_00040190(uint32_t arg0)
 		sub_0003DC00(arg0_2, arg1, arg2, &ignored_3, &esi);
 		if (!(FLOAT_AT(esi + 0x178u) > 0.0f))
 			MEM32(esi + 0x2Cu) = 0u;
-		else if (MEM32(0x2AEB44u) == 0u)
+		else if (ControllerItems_a(ControllerItemsDisabled_VA) == 0u)
 			MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 		else
 			MEMF(esi + 0x2Cu) = (float)0.0f;
@@ -56374,9 +56374,9 @@ uint32_t sub_00040190(uint32_t arg0)
 			arg1 = edi;
 			sub_0003D570(arg1, arg2);
 		}
-		if (MEM32(0x2AEB44u) != 0u)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) != 0u)
 		{
-			if (MEM32(0x2AEB40u) == 0u)
+			if (ControllerItems_triggers(ControllerItemsDisabled_VA) == 0u)
 			{
 				eax = ebp * 0x210u;
 				f0 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56393,7 +56393,7 @@ uint32_t sub_00040190(uint32_t arg0)
 			ecx = ebp * 0x210u;
 			if (!(FLOAT_AT(ecx + vcPad_a_VA(vcPads_VA)) > 0.0001f))
 			{
-				if (MEM32(0x2AEB40u) == 0u)
+				if (ControllerItems_triggers(ControllerItemsDisabled_VA) == 0u)
 				{
 					eax = ebp * 0x210u;
 					f0 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56407,7 +56407,7 @@ uint32_t sub_00040190(uint32_t arg0)
 			}
 			else
 			{
-				edx = MEM32(0x2AEB40u);
+				edx = ControllerItems_triggers(ControllerItemsDisabled_VA);
 				if (edx != 0u || !(FLOAT_AT(ecx + vcPad_right_trigger_VA(vcPads_VA)) > 0.0001f))
 				{
 					f0 = 0.0f;
@@ -56432,10 +56432,10 @@ uint32_t sub_00040190(uint32_t arg0)
 		MEMF(esi + 0x68u) = (float)x87_round(f0 - t3);
 		if (MEM32(edi + 0x3E4u) == 0u)
 		{
-			if (MEM32(0x2AEB4Cu) == 0u)
+			if (ControllerItems_left_y(ControllerItemsDisabled_VA) == 0u)
 			{
 				ecx = ebp * 0x210u;
-				if (-x87_round(fabs(-FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) > 0.5 && MEM32(0x2AEB40u) == 0u && FLOAT_AT(ecx + vcPad_left_trigger_VA(vcPads_VA)) > 0.5 && FLOAT_AT(ecx + vcPad_right_trigger_VA(vcPads_VA)) > 0.5)
+				if (-x87_round(fabs(-FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) * FLOAT_AT(ecx + vcPad_left_y_VA(vcPads_VA))) > 0.5 && ControllerItems_triggers(ControllerItemsDisabled_VA) == 0u && FLOAT_AT(ecx + vcPad_left_trigger_VA(vcPads_VA)) > 0.5 && FLOAT_AT(ecx + vcPad_right_trigger_VA(vcPads_VA)) > 0.5)
 				{
 					eax = 0x800u;
 					if ((0x800u & MEM32(esi + 4u)) == 0u)
@@ -56451,7 +56451,7 @@ uint32_t sub_00040190(uint32_t arg0)
 			if (eax == 0u)
 				return eax;
 		}
-		eax = MEM32(0x2AEB4Cu);
+		eax = ControllerItems_left_y(ControllerItemsDisabled_VA);
 		if (eax == 0u)
 		{
 			ecx = ebp * 0x210u;
@@ -56460,7 +56460,7 @@ uint32_t sub_00040190(uint32_t arg0)
 			eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t4, 0u);
 			if (f0 > t4)
 			{
-				eax = MEM32(0x2AEB40u);
+				eax = ControllerItems_triggers(ControllerItemsDisabled_VA);
 				if (eax == 0u)
 				{
 					f0 = FLOAT_AT(ecx + vcPad_left_trigger_VA(vcPads_VA));
@@ -56526,7 +56526,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 	sub_0003EB30(eax, ecx, arg0_2);
 	edx = 0u;
 	t1 = MEM32(ebp + 0x3DCu);
-	eax = MEM32(0x2AEB4Cu);
+	eax = ControllerItems_left_y(ControllerItemsDisabled_VA);
 	if (t1 == 0u)
 	{
 		if (eax == edx)
@@ -56549,7 +56549,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 	}
 	else
 		MEMF(esi + 0x20u) = (float)0.0f;
-	if (MEM32(0x2AEB40u) == edx)
+	if (ControllerItems_triggers(ControllerItemsDisabled_VA) == edx)
 	{
 		eax = ebx * 0x210u;
 		f0 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56563,7 +56563,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 	t2 = f1;
 	stack = float_to_bits((float)x87_round(f0 - t2));
 	MEM32(esi + 0x24u) = stack;
-	if (MEM32(0x2AEB48u) == edx)
+	if (ControllerItems_left_x(ControllerItemsDisabled_VA) == edx)
 	{
 		ecx = ebx * 0x210u;
 		f0 = x87_round(fabs(FLOAT_AT(ecx + vcPads_VA)) * FLOAT_AT(ecx + vcPads_VA));
@@ -56591,11 +56591,11 @@ uint32_t sub_000404D0(uint32_t arg0)
 		}
 		return eax;
 	}
-	if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
+	if (ControllerItems_a(ControllerItemsDisabled_VA) == edx && (double)vcPad_a(vcPads(ebx)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
 		MEM32(ebp + 0x3DCu) = 1u;
 	if (MEM32(ebp + 0x3DCu) != edx)
 	{
-		if (MEM32(0x2AEB44u) != edx)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) != edx)
 			MEM32(ebp + 0x3DCu) = edx;
 		else
 		{
@@ -56605,7 +56605,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 			if (f0 == 0.0f)
 			{
 				MEM32(ebp + 0x3DCu) = edx;
-				if (MEM32(0x2AEB44u) == edx)
+				if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 					MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 				else
 					MEMF(esi + 0x2Cu) = (float)0.0f;
@@ -56627,7 +56627,7 @@ uint32_t sub_000404D0(uint32_t arg0)
 			MEM32(esi + 0x28u) = MEM32(ecx);
 		}
 	}
-	if (MEM32(0x2AEB44u) == edx)
+	if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 	{
 		MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebx));
 		arg2 = esi;
@@ -56706,7 +56706,7 @@ uint32_t sub_00040740(uint32_t arg0)
 	sub_0003EB30(eax, ecx, arg0_2);
 	edx = 0u;
 	t1 = MEM32(ebx + 0x3DCu);
-	eax = MEM32(0x2AEB4Cu);
+	eax = ControllerItems_left_y(ControllerItemsDisabled_VA);
 	if (t1 == 0u)
 	{
 		if (eax == edx)
@@ -56729,7 +56729,7 @@ uint32_t sub_00040740(uint32_t arg0)
 	}
 	else
 		MEMF(esi + 0x20u) = (float)0.0f;
-	if (MEM32(0x2AEB40u) == edx)
+	if (ControllerItems_triggers(ControllerItemsDisabled_VA) == edx)
 	{
 		eax = ebp * 0x210u;
 		f0 = FLOAT_AT(eax + vcPad_right_trigger_VA(vcPads_VA));
@@ -56743,7 +56743,7 @@ uint32_t sub_00040740(uint32_t arg0)
 	t2 = f1;
 	stack = float_to_bits((float)x87_round(f0 - t2));
 	MEM32(esi + 0x24u) = stack;
-	if (MEM32(0x2AEB48u) == edx)
+	if (ControllerItems_left_x(ControllerItemsDisabled_VA) == edx)
 	{
 		ecx = ebp * 0x210u;
 		f0 = x87_round(fabs(FLOAT_AT(ecx + vcPads_VA)) * FLOAT_AT(ecx + vcPads_VA));
@@ -56765,11 +56765,11 @@ uint32_t sub_00040740(uint32_t arg0)
 		eax = sub_0003D570(arg1, arg2);
 		return eax;
 	}
-	if (MEM32(0x2AEB44u) == edx && (double)vcPad_a(vcPads(ebp)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
+	if (ControllerItems_a(ControllerItemsDisabled_VA) == edx && (double)vcPad_a(vcPads(ebp)) != 0.0f && FLOAT_AT(esi + 0x20u) == 0.0f && x87_float(stack) == 0.0f)
 		MEM32(ebx + 0x3DCu) = 1u;
 	if (MEM32(ebx + 0x3DCu) != edx)
 	{
-		if (MEM32(0x2AEB44u) != edx)
+		if (ControllerItems_a(ControllerItemsDisabled_VA) != edx)
 			MEM32(ebx + 0x3DCu) = edx;
 		else
 		{
@@ -56779,7 +56779,7 @@ uint32_t sub_00040740(uint32_t arg0)
 			if (f0 == 0.0f)
 			{
 				MEM32(ebx + 0x3DCu) = edx;
-				if (MEM32(0x2AEB44u) == edx)
+				if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 					MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 				else
 					MEMF(esi + 0x2Cu) = (float)0.0f;
@@ -56795,7 +56795,7 @@ uint32_t sub_00040740(uint32_t arg0)
 			MEM32(esi + 0x28u) = MEM32(ecx);
 		}
 	}
-	if (MEM32(0x2AEB44u) == edx)
+	if (ControllerItems_a(ControllerItemsDisabled_VA) == edx)
 	{
 		MEMF(esi + 0x2Cu) = (float)(double)vcPad_a(vcPads(ebp));
 		arg2 = ebp;
@@ -56966,7 +56966,7 @@ uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		g_esp = g_esp + 0x10u;
 		return eax;
 	}
-	eax = MEM32(0x2AEB20u);
+	eax = ControllerItems_x(ControllerItemsDisabled_VA);
 	if (eax != 0u)
 	{
 		g_esp = g_esp + 4u;
@@ -58518,11 +58518,11 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	g_esp = g_esp + 4u;
 	if ((MEM8(0x1EB888u) & 8u) == 0u || MEM32(esi_2 + 0xF98u) != ebp_2)
 	{
-		MEM32(0x1EB410u) = 0u;
-		MEM32(0x1EB414u) = 0u;
-		MEM32(0x1EB418u) = 0u;
-		MEM32(0x1EB41Cu) = 0u;
-		MEM32(0x1EB420u) = 0u;
+		MenuVeritechBattloidWalkMotion = 0u;
+		MenuVeritechGuardianHoverMotion = 0u;
+		MenuVeritechFighterMotion = 0u;
+		MenuVeritechSumoWalkMotion = 0u;
+		MenuVeritechSuperFighterMotion = 0u;
 		sub_00018A20();
 		edx = esi_2 + 0x108u;
 		ecx = 0x55u;
@@ -58622,13 +58622,13 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x190u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043283u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190478u;
+			MEM32(g_esp) = VF1SXBattloidBjLandSoftText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x194u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043295u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190498u;
+			MEM32(g_esp) = VF1SXBattloidBjLandText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x198u) = eax;
@@ -58757,7 +58757,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x1E8u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043418u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x19069Cu;
+			MEM32(g_esp) = VF1SXAimPartialOverrideText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x1ECu) = eax;
@@ -58769,7 +58769,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(g_esp) = 9u;
 			eax = x86_call(vcObjectGet_entry, 0x0004343Cu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1906B8u;
+			MEM32(g_esp) = VF1SXAimSniperOverrideText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0xFA4u) = eax;
@@ -58999,7 +58999,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0xCu);
 			eax = x86_call(vcObjectGet_entry, 0x0004371Fu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190BB4u;
+			MEM32(g_esp) = VF1SXGuardianBoostText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = eax;
@@ -59011,62 +59011,62 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x660u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x0004373Fu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190BE4u;
+			MEM32(g_esp) = VF1SXGuardianBrakeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x664u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043751u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190BFCu;
+			MEM32(g_esp) = VF1SXGuardianDownText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x668u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043763u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C14u;
+			MEM32(g_esp) = VF1SXGuardianUpText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x66Cu) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043775u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C64u;
+			MEM32(g_esp) = VF1SXGuardianLeftTurnText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x670u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00043787u, 0);
 			g_esp = g_esp + 0x40u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C80u;
+			MEM32(g_esp) = VF1SXGuardianRightTurnText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x67Cu) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x0004379Cu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C28u;
+			MEM32(g_esp) = VF1SXGuardianLeftStrafeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x680u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x000437AEu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C44u;
+			MEM32(g_esp) = VF1SXGuardianRightStrafeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x674u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x000437C0u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190C9Cu;
+			MEM32(g_esp) = VF1SXGuardianGrabText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x678u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x000437D2u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190CB4u;
+			MEM32(g_esp) = VF1SXGuardianDropText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x684u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x000437E4u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190CCCu;
+			MEM32(g_esp) = VF1SXAimGuardianText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x688u) = eax;
@@ -59080,7 +59080,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 7u);
 			eax = x86_call(vcObjectGet_entry, 0x00043819u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190D08u;
+			MEM32(g_esp) = VF1SXFighterBoostText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = eax;
@@ -59122,7 +59122,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0x29u);
 			edi_2 = ebx_2 + (MEM32(ebx_2) + 1u) * 3u * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(g_esp + 0x40u) = edx;
@@ -59139,7 +59139,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x40u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -59154,7 +59154,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (edx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = edx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -59168,7 +59168,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2) + 1u;
 			g_esp = g_esp + 0x40u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1905F0u;
+			MEM32(g_esp) = VF1SXBattloidDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx;
@@ -59178,7 +59178,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(edi_2 + 4u) = 1u;
 			edx = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190608u;
+			MEM32(g_esp) = VF1SXBattloidDeath2Text_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			edx++;
@@ -59190,7 +59190,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2 + 4u);
 			eax = MEM32(ebx_2 + 8u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190620u;
+			MEM32(g_esp) = VF1SXBattloidDeathZeroGText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2 + 4u) = ecx + 1u;
@@ -59204,7 +59204,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0x29u);
 			edi_2 = ebx_2 + (MEM32(ebx_2) + 1u) * 3u * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(g_esp + 0x30u) = edx;
@@ -59220,7 +59220,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (ecx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = ecx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -59236,7 +59236,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x38u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -59249,7 +59249,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2);
 			eax = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190CE0u;
+			MEM32(g_esp) = VF1SXGuardianDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx + 1u;
@@ -59263,7 +59263,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0x29u);
 			edi_2 = ebx_2 + (MEM32(ebx_2) + 1u) * 3u * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(g_esp + 0x50u) = edx;
@@ -59280,7 +59280,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (ecx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = ecx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -59296,7 +59296,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x18u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -59309,7 +59309,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2);
 			eax = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190D24u;
+			MEM32(g_esp) = VF1SXFighterDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx + 1u;
@@ -59419,13 +59419,13 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x190u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042876u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190EFCu;
+			MEM32(g_esp) = VF1SMBattloidBjLandSoftText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x194u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042888u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x190F1Cu;
+			MEM32(g_esp) = VF1SMBattloidBjLandText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x198u) = eax;
@@ -59554,7 +59554,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x1E8u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042A0Bu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191120u;
+			MEM32(g_esp) = VF1SMAimPartialOverrideText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x1ECu) = eax;
@@ -59566,13 +59566,13 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(g_esp) = 9u;
 			eax = x86_call(vcObjectGet_entry, 0x00042A2Fu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x19113Cu;
+			MEM32(g_esp) = VF1SMAimSniperOverrideText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0xFA4u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042A41u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C78u;
+			MEM32(g_esp) = Vf1smBattloidVicotryDanceText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0xFA8u) = eax;
@@ -59801,7 +59801,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0xCu);
 			eax = x86_call(vcObjectGet_entry, 0x00042D1Eu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191638u;
+			MEM32(g_esp) = VF1SMGuardianBoostText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = eax;
@@ -59813,62 +59813,62 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x660u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D3Eu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191668u;
+			MEM32(g_esp) = VF1SMGuardianBrakeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x664u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D50u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191680u;
+			MEM32(g_esp) = VF1SMGuardianDownText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x668u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D62u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191698u;
+			MEM32(g_esp) = VF1SMGuardianUpText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x66Cu) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D74u, 0);
 			g_esp = g_esp + 0x40u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1916E8u;
+			MEM32(g_esp) = VF1SMGuardianLeftTurnText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x670u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D89u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191704u;
+			MEM32(g_esp) = VF1SMGuardianRightTurnText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x67Cu) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042D9Bu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1916ACu;
+			MEM32(g_esp) = VF1SMGuardianLeftStrafeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x680u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042DADu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1916C8u;
+			MEM32(g_esp) = VF1SMGuardianRightStrafeText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x674u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042DBFu, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191720u;
+			MEM32(g_esp) = VF1SMGuardianGrabText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x678u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042DD1u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191738u;
+			MEM32(g_esp) = VF1SMGuardianDropText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x684u) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042DE3u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191750u;
+			MEM32(g_esp) = VF1SMAimGuardianText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x688u) = eax;
@@ -59876,14 +59876,14 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0xFA0u) = eax;
 			ebx_2 = esi_2 + 0x834u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x19177Cu;
+			MEM32(g_esp) = VF1SMFighterText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			x86_rep_stos32(ebx_2, 0u, 7u);
 			eax = x86_call(vcObjectGet_entry, 0x00042E18u, 0);
 			g_esp = g_esp + 0x40u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x19178Cu;
+			MEM32(g_esp) = VF1SMFighterBoostText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = eax;
@@ -59913,7 +59913,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(esi_2 + 0x83Cu) = eax;
 			eax = x86_call(vcObjectGet_entry, 0x00042E71u, 0);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1917C0u;
+			MEM32(g_esp) = SuperMFighterText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(esi_2 + 0x840u) = eax;
@@ -59924,7 +59924,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0x29u);
 			edi_2 = ebx_2 + (MEM32(ebx_2) + 1u) * 3u * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(g_esp + 0x48u) = edx;
@@ -59940,7 +59940,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (ecx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = ecx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -59957,7 +59957,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x10u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -59970,7 +59970,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2);
 			eax = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191074u;
+			MEM32(g_esp) = VF1SMBattloidDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx + 1u;
@@ -59980,7 +59980,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(edi_2 + 4u) = 1u;
 			edx = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x19108Cu;
+			MEM32(g_esp) = VF1SMBattloidDeath2Text_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			edx++;
@@ -59992,7 +59992,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(ebx_2 + 4u) = MEM32(ebx_2 + 4u) + 1u;
 			edi_2 = ebx_2 + MEM32(ebx_2 + 8u) * 8u + 0x94u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1910A4u;
+			MEM32(g_esp) = VF1SMBattloidDeathZeroGText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			eax = x86_call(vcObjectGet_entry, 0x00042F8Fu, 0);
@@ -60004,7 +60004,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			x86_rep_stos32(ebx_2, 0u, 0x29u);
 			edi_2 = ebx_2 + (MEM32(ebx_2) + 1u) * 3u * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(g_esp + 0x38u) = edx;
@@ -60021,7 +60021,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x38u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -60036,7 +60036,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (edx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = edx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -60049,7 +60049,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2);
 			edx = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191764u;
+			MEM32(g_esp) = VF1SMGuardianDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx + 1u;
@@ -60067,7 +60067,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM16(edi_2 + 4u) = ebp_2;
 			MEM16(edi_2 + 6u) = 2u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM32(edi_2) = ebp_2;
@@ -60081,7 +60081,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edx = MEM32(g_esp + 0x18u);
 			edi_2 = ebx_2 + (eax * 3u + 3u) * 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			MEM16(edi_2 + 4u) = ebp_2;
@@ -60096,7 +60096,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			edi_2 = ebx_2 + (edx * 3u + 3u) * 4u;
 			MEM32(ebx_2) = edx;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x191C70u;
+			MEM32(g_esp) = TargetText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx;
 			MEM16(edi_2 + 4u) = 0xAu;
@@ -60109,7 +60109,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			ecx = MEM32(ebx_2);
 			edx = MEM32(ebx_2 + 4u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1917A8u;
+			MEM32(g_esp) = VF1SMFighterDeathText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 9u;
 			MEM32(ebx_2) = ecx + 1u;
@@ -60203,7 +60203,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		sub_0011E770(arg0_2, arg1, arg2);
 		ecx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C70u;
+		MEM32(g_esp) = TargetText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -60212,7 +60212,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFE8u) = eax;
 		edx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x19005Cu;
+		MEM32(g_esp) = GunEffectsText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		arg0_2 = MEM32(g_esp);
@@ -60221,7 +60221,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFB0u) = eax;
 		eax = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C58u;
+		MEM32(g_esp) = GuardianMisslesLeftText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
@@ -60230,7 +60230,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFB4u) = eax;
 		ecx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C40u;
+		MEM32(g_esp) = GuardianMisslesRightText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -60240,7 +60240,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		edx = MEM32(esi_2);
 		g_esp = g_esp + 0x44u;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C30u;
+		MEM32(g_esp) = MisslesLeftText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		arg0_2 = MEM32(g_esp);
@@ -60249,7 +60249,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFBCu) = eax;
 		eax = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C20u;
+		MEM32(g_esp) = MisslesRightText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
@@ -60258,7 +60258,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFC0u) = eax;
 		ecx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C70u;
+		MEM32(g_esp) = TargetText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -60267,7 +60267,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFC4u) = eax;
 		edx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C10u;
+		MEM32(g_esp) = JetpackEffectText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		arg0_2 = MEM32(g_esp);
@@ -60276,7 +60276,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFC8u) = eax;
 		eax = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191CB0u;
+		MEM32(g_esp) = ExhaustEffectLeftText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
@@ -60284,7 +60284,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		eax = sub_0011EA70(arg0_2, arg1);
 		ecx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191C98u;
+		MEM32(g_esp) = ExhaustEffectRightText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		MEM32(esi_2 + 0xFCCu) = eax;
@@ -60293,7 +60293,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		eax = sub_0011EA70(arg0_2, arg1);
 		edx = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191BFCu;
+		MEM32(g_esp) = WingtipEffectLeftText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		MEM32(esi_2 + 0xFD0u) = eax;
@@ -60303,7 +60303,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFD4u) = eax;
 		eax = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191BE4u;
+		MEM32(g_esp) = WingtipEffectRightText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
@@ -60313,7 +60313,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		ecx = MEM32(esi_2);
 		g_esp = g_esp + 0x40u;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191BD4u;
+		MEM32(g_esp) = GunShells01Text_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -60331,7 +60331,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(esi_2 + 0xFE0u) = eax;
 		eax = MEM32(esi_2);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x191BC4u;
+		MEM32(g_esp) = ItemPickupArmText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		arg0_2 = MEM32(g_esp);
@@ -60849,7 +60849,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		g_esp = g_esp + 8u;
 		return eax;
 	}
-	if (MEM32(0x1EB410u) == ebp_2)
+	if (MenuVeritechBattloidWalkMotion == ebp_2)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x19026Cu;
@@ -60860,27 +60860,27 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(g_esp) = 0x190284u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 9u;
-		MEM32(0x1EB410u) = eax;
+		MenuVeritechBattloidWalkMotion = eax;
 		eax = x86_call(vcObjectGet_entry, 0x00042528u, 0);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x19029Cu;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 9u;
-		MEM32(0x1EB414u) = eax;
+		MenuVeritechGuardianHoverMotion = eax;
 		eax = x86_call(vcObjectGet_entry, 0x00042539u, 0);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x1902ACu;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 9u;
-		MEM32(0x1EB418u) = eax;
+		MenuVeritechFighterMotion = eax;
 		eax = x86_call(vcObjectGet_entry, 0x0004254Au, 0);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x1902B8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 9u;
-		MEM32(0x1EB41Cu) = eax;
+		MenuVeritechSumoWalkMotion = eax;
 		eax = x86_call(vcObjectGet_entry, 0x0004255Bu, 0);
-		MEM32(0x1EB420u) = eax;
+		MenuVeritechSuperFighterMotion = eax;
 		g_esp = g_esp + 0x28u;
 	}
 	edx = MEM32(0x190114u);
@@ -60961,7 +60961,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	sub_0011E770(arg0_2, arg1, arg2);
 	ecx = MEM32(esi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191CB0u;
+	MEM32(g_esp) = ExhaustEffectLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0_2 = MEM32(g_esp);
@@ -60969,7 +60969,7 @@ uint32_t sub_000424C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	eax = sub_0011EA70(arg0_2, arg1);
 	edx = MEM32(esi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C98u;
+	MEM32(g_esp) = ExhaustEffectRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(esi_2 + 0xFCCu) = eax;
@@ -61093,17 +61093,17 @@ uint32_t sub_00044530(uint32_t esi, uint32_t arg0)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
 	esi_2 = MEM32(g_esp + 0x34u);
-	MEM32(g_esp + 4u) = 0x191D48u;
-	MEM32(g_esp + 8u) = 0x191D38u;
-	MEM32(g_esp + 0xCu) = 0x191D2Cu;
-	MEM32(g_esp + 0x10u) = 0x191D20u;
-	MEM32(g_esp + 0x14u) = 0x191D14u;
-	MEM32(g_esp + 0x18u) = 0x191D08u;
-	MEM32(g_esp + 0x1Cu) = 0x191CFCu;
-	MEM32(g_esp + 0x20u) = 0x191CECu;
-	MEM32(g_esp + 0x24u) = 0x191CDCu;
-	MEM32(g_esp + 0x28u) = 0x191CD0u;
-	MEM32(g_esp + 0x2Cu) = 0x191CC4u;
+	MEM32(g_esp + 4u) = SkinTrainerText_VA;
+	MEM32(g_esp + 8u) = SkinGenericText_VA;
+	MEM32(g_esp + 0xCu) = SkinJackText_VA;
+	MEM32(g_esp + 0x10u) = SkinIzzyText_VA;
+	MEM32(g_esp + 0x14u) = SkinRickText_VA;
+	MEM32(g_esp + 0x18u) = SkinMaxText_VA;
+	MEM32(g_esp + 0x1Cu) = SkinMiriyaText_VA;
+	MEM32(g_esp + 0x20u) = SkinPatriotText_VA;
+	MEM32(g_esp + 0x24u) = SkinStealthText_VA;
+	MEM32(g_esp + 0x28u) = SkinWolfText_VA;
+	MEM32(g_esp + 0x2Cu) = SkinRoyText_VA;
 	if (esi_2 != 0xFFFFFFFFu)
 	{
 		if (MEM32(esi_2 * 4u + 0x1EB85Cu) == 0u)
@@ -61660,16 +61660,16 @@ void sub_00044AE0(uint32_t arg0, uint32_t arg1)
 	}
 	else
 		eax = GameObjectLastObject;
-	edx = MEM32(0x1EB41Cu);
+	edx = MenuVeritechSumoWalkMotion;
 	ecx = ((int32_t)MEM32(eax + 0x2A4u) >> 11) & 0x7Fu;
 	if (ecx != 0xDu)
-		edx = MEM32(0x1EB410u);
+		edx = MenuVeritechBattloidWalkMotion;
 	MEM32(g_esp) = edx;
-	MEM32(g_esp + 4u) = MEM32(0x1EB414u);
+	MEM32(g_esp + 4u) = MenuVeritechGuardianHoverMotion;
 	if (ecx != 0xCu)
-		MEM32(g_esp + 8u) = MEM32(0x1EB418u);
+		MEM32(g_esp + 8u) = MenuVeritechFighterMotion;
 	else
-		MEM32(g_esp + 8u) = MEM32(0x1EB420u);
+		MEM32(g_esp + 8u) = MenuVeritechSuperFighterMotion;
 	edx = MEM32(g_esp + MEM32(g_esp + 0x14u) * 4u);
 	eax = MEM32(eax + 0x194u);
 	g_esp = g_esp - 4u;
@@ -64941,7 +64941,7 @@ uint32_t sub_000492C0(uint32_t arg0)
 		ignored_3 = g_edx;
 		return eax;
 	}
-	esi = 0x1EB410u;
+	esi = MenuVeritechBattloidWalkMotion_VA;
 	do
 	{
 		eax = MEM32(esi);
@@ -69362,10 +69362,10 @@ void sub_0004D0A0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t arg0)
 	if ((int32_t)eax_2 <= 0)
 	{
 		edi = ebx;
-		x86_rep_movs32(edi, 0x191D94u, 5u);
+		x86_rep_movs32(edi, PlayerStandInEntityText_VA, 5u);
 		edi += 0x14u;
-		MEM16(edi) = MEM16(0x191DA8u);
-		MEM8(edi + 2u) = MEM8(0x191DAAu);
+		MEM16(edi) = MEM16(PlayerStandInEntityText_VA + 0x14u);
+		MEM8(edi + 2u) = MEM8(PlayerStandInEntityText_VA + 0x16u);
 		MEM32(ebx + 0xD0u) = ebp;
 	}
 	else
@@ -72011,7 +72011,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, saved_eax = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, saved_esi = 0, stack_30 = 0, saved_esi_2 = 0, stack_38 = 0, saved_esi_3 = 0, stack_40 = 0, saved_esi_4 = 0;
 
 	sub_00018A20();
-	stack = 0x191DE4u;
+	stack = ZenRetrievalText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_14 = 0u;
@@ -72024,7 +72024,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000513E1u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x1EBCF8u);
 	arg0 = stack_24;
 	arg1 = stack_20;
@@ -72033,7 +72033,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1EBCF4u) = eax;
 	x86_rep_stos32(0x1EBAFCu, 0u, 0x29u);
 	edi = MEM32(0x1EBAFCu) * 3u * 4u + 0x1EBB08u;
-	stack_28 = 0x191C70u;
+	stack_28 = TargetText_VA;
 	saved_esi = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -72045,7 +72045,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBAFCu) + 1u;
 	MEM32(0x1EBAFCu) = eax;
 	edi = eax * 3u * 4u + 0x1EBB08u;
-	stack_30 = 0x191C70u;
+	stack_30 = TargetText_VA;
 	saved_esi_2 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -72057,7 +72057,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBAFCu) + 1u;
 	MEM32(0x1EBAFCu) = eax;
 	edi = eax * 3u * 4u + 0x1EBB08u;
-	stack_38 = 0x191C70u;
+	stack_38 = TargetText_VA;
 	saved_esi_3 = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -72069,7 +72069,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBAFCu) + 1u;
 	MEM32(0x1EBAFCu) = eax;
 	edi = eax * 3u * 4u + 0x1EBB08u;
-	stack_40 = 0x191C70u;
+	stack_40 = TargetText_VA;
 	saved_esi_4 = esi;
 	MEM16(edi + 4u) = 0x57u;
 	MEM16(edi + 6u) = 1u;
@@ -72079,7 +72079,7 @@ uint32_t ZenRetrieval_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(edi + 8u) = eax;
 	esi = MEM32(0x1EBB00u);
-	arg1 = 0x191EFCu;
+	arg1 = ZenRetrievalPodDeath2Text_VA;
 	arg0 = 9u;
 	MEM32(0x1EBAFCu) = MEM32(0x1EBAFCu) + 1u;
 	esi = esi * 8u + 0x1EBB80u;
@@ -72292,7 +72292,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, saved_eax = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, saved_esi = 0, stack_30 = 0, saved_esi_2 = 0, stack_38 = 0, saved_esi_3 = 0, stack_40 = 0, saved_esi_4 = 0;
 
 	sub_00018A20();
-	stack = 0x191F14u;
+	stack = VehicleMilCentipedeText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_14 = 0u;
@@ -72305,7 +72305,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00051961u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x1EC050u);
 	arg0 = stack_24;
 	arg1 = stack_20;
@@ -72314,7 +72314,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1EC04Cu) = eax;
 	x86_rep_stos32(0x1EBE54u, 0u, 0x29u);
 	edi = MEM32(0x1EBE54u) * 3u * 4u + 0x1EBE60u;
-	stack_28 = 0x191C70u;
+	stack_28 = TargetText_VA;
 	saved_esi = esi;
 	MEM16(edi + 4u) = 0x44u;
 	MEM16(edi + 6u) = 1u;
@@ -72326,7 +72326,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBE54u) + 1u;
 	MEM32(0x1EBE54u) = eax;
 	edi = eax * 3u * 4u + 0x1EBE60u;
-	stack_30 = 0x191C70u;
+	stack_30 = TargetText_VA;
 	saved_esi_2 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -72338,7 +72338,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBE54u) + 1u;
 	MEM32(0x1EBE54u) = eax;
 	edi = eax * 3u * 4u + 0x1EBE60u;
-	stack_38 = 0x191C70u;
+	stack_38 = TargetText_VA;
 	saved_esi_3 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 1u;
@@ -72350,7 +72350,7 @@ uint32_t Centipede_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EBE54u) + 1u;
 	MEM32(0x1EBE54u) = eax;
 	edi = eax * 3u * 4u + 0x1EBE60u;
-	stack_40 = 0x191C70u;
+	stack_40 = TargetText_VA;
 	saved_esi_4 = esi;
 	MEM16(edi + 4u) = 0x57u;
 	MEM16(edi + 6u) = 1u;
@@ -72565,7 +72565,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, saved_eax = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, saved_esi = 0, stack_30 = 0, saved_esi_2 = 0, stack_38 = 0, saved_esi_3 = 0, stack_40 = 0, saved_esi_4 = 0;
 
 	sub_00018A20();
-	stack = 0x19204Cu;
+	stack = VehicleMilTransportText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_14 = 0u;
@@ -72578,7 +72578,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00051EC1u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x1EC3A8u);
 	arg0 = stack_24;
 	arg1 = stack_20;
@@ -72587,7 +72587,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1EC3A4u) = eax;
 	x86_rep_stos32(0x1EC1ACu, 0u, 0x29u);
 	edi = MEM32(0x1EC1ACu) * 3u * 4u + 0x1EC1B8u;
-	stack_28 = 0x191C70u;
+	stack_28 = TargetText_VA;
 	saved_esi = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -72599,7 +72599,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC1ACu) + 1u;
 	MEM32(0x1EC1ACu) = eax;
 	edi = eax * 3u * 4u + 0x1EC1B8u;
-	stack_30 = 0x191C70u;
+	stack_30 = TargetText_VA;
 	saved_esi_2 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -72611,7 +72611,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC1ACu) + 1u;
 	MEM32(0x1EC1ACu) = eax;
 	edi = eax * 3u * 4u + 0x1EC1B8u;
-	stack_38 = 0x191C70u;
+	stack_38 = TargetText_VA;
 	saved_esi_3 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 1u;
@@ -72623,7 +72623,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC1ACu) + 1u;
 	MEM32(0x1EC1ACu) = eax;
 	edi = eax * 3u * 4u + 0x1EC1B8u;
-	stack_40 = 0x191C70u;
+	stack_40 = TargetText_VA;
 	saved_esi_4 = esi;
 	MEM16(edi + 4u) = 0x57u;
 	MEM16(edi + 6u) = 1u;
@@ -72633,7 +72633,7 @@ uint32_t MilitaryTransport_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(edi + 8u) = eax;
 	esi = MEM32(0x1EC1B0u);
-	arg1 = 0x19216Cu;
+	arg1 = MilitaryTransportPodDeath2Text_VA;
 	arg0 = 9u;
 	MEM32(0x1EC1ACu) = MEM32(0x1EC1ACu) + 1u;
 	esi = esi * 8u + 0x1EC230u;
@@ -72850,7 +72850,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, saved_eax = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, saved_esi = 0, stack_30 = 0, saved_esi_2 = 0, stack_38 = 0, saved_esi_3 = 0, stack_40 = 0, saved_esi_4 = 0;
 
 	sub_00018A20();
-	stack = 0x192184u;
+	stack = VehicleMilMechhaulerText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_14 = 0u;
@@ -72863,7 +72863,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00052441u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x1EC700u);
 	arg0 = stack_24;
 	arg1 = stack_20;
@@ -72872,7 +72872,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1EC6FCu) = eax;
 	x86_rep_stos32(0x1EC504u, 0u, 0x29u);
 	edi = MEM32(0x1EC504u) * 3u * 4u + 0x1EC510u;
-	stack_28 = 0x191C70u;
+	stack_28 = TargetText_VA;
 	saved_esi = esi;
 	MEM16(edi + 4u) = 0x44u;
 	MEM16(edi + 6u) = 1u;
@@ -72884,7 +72884,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC504u) + 1u;
 	MEM32(0x1EC504u) = eax;
 	edi = eax * 3u * 4u + 0x1EC510u;
-	stack_30 = 0x191C70u;
+	stack_30 = TargetText_VA;
 	saved_esi_2 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -72896,7 +72896,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC504u) + 1u;
 	MEM32(0x1EC504u) = eax;
 	edi = eax * 3u * 4u + 0x1EC510u;
-	stack_38 = 0x191C70u;
+	stack_38 = TargetText_VA;
 	saved_esi_3 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 1u;
@@ -72908,7 +72908,7 @@ uint32_t MechHauler_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EC504u) + 1u;
 	MEM32(0x1EC504u) = eax;
 	edi = eax * 3u * 4u + 0x1EC510u;
-	stack_40 = 0x191C70u;
+	stack_40 = TargetText_VA;
 	saved_esi_4 = esi;
 	MEM16(edi + 4u) = 0x57u;
 	MEM16(edi + 6u) = 1u;
@@ -73722,7 +73722,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000531E1u, 0);
 	eax = ZenHeavyMissileTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192924u;
+	MEM32(g_esp) = HeavyMissleLauncherTargetnodText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -73730,7 +73730,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = ZenHeavyMissileTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19290Cu;
+	MEM32(g_esp) = HeavyMissleLauncherText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MEM32(0x1B16BCu) = eax;
@@ -73742,7 +73742,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	x86_rep_stos32(0x1ECA40u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ECA40u) * 3u * 4u + 0x1ECA4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192924u;
+	MEM32(g_esp) = HeavyMissleLauncherTargetnodText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0u;
@@ -73756,7 +73756,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(0x1ECA40u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ECA4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192924u;
+	MEM32(g_esp) = HeavyMissleLauncherTargetnodText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0xDu;
@@ -73770,7 +73770,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(0x1ECA40u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ECA4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192924u;
+	MEM32(g_esp) = HeavyMissleLauncherTargetnodText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0x57u;
@@ -73794,7 +73794,7 @@ uint32_t ZenHeavyMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	eax = ZenHeavyMissileTurretModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1928ECu;
+	MEM32(g_esp) = HeavyMissleLauncherRightnodeText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -74830,7 +74830,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00054121u, 0);
 	eax = ZenLightMissileTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -74850,7 +74850,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	x86_rep_stos32(0x1ECF30u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ECF30u) * 3u * 4u + 0x1ECF3Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0u;
@@ -74864,7 +74864,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(0x1ECF30u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ECF3Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0xDu;
@@ -74878,7 +74878,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(0x1ECF30u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ECF3Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0x57u;
@@ -74891,7 +74891,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM16(esi_2 + 8u) = eax;
 	ecx = MEM32(0x1ECF30u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192AF8u;
+	MEM32(g_esp) = LightMissleLauncherLeftnodeText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x1ECF30u) = ecx + 1u;
@@ -74902,7 +74902,7 @@ uint32_t ZenLightMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	eax = ZenLightMissileTurretModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192AD8u;
+	MEM32(g_esp) = LightMissleLauncherRightnodeText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -76376,7 +76376,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192B18u;
+	MEM32(g_esp) = ZenCruiserTurret1Text_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -76398,7 +76398,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x192C5Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192C34u;
+	MEM32(g_esp) = ZenTurretMid1Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 0u;
@@ -76472,7 +76472,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	eax = x86_call(vcObjectGet_entry, 0x0005578Bu, 0);
 	MEM32(0x1ED1E0u) = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ZenCruiserTurret1Model;
 	arg0 = MEM32(g_esp);
@@ -76483,7 +76483,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	x86_rep_stos32(0x1ED130u, 0u, 0x29u);
 	esi_2 = MEM32(0x1ED130u) * 3u * 4u + 0x1ED13Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM16(esi_2 + 4u) = 0u;
@@ -76497,7 +76497,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	MEM32(0x1ED130u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ED13Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM16(esi_2 + 4u) = 0x10u;
@@ -76511,7 +76511,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	MEM32(0x1ED130u) = eax;
 	esi_2 = eax * 3u * 4u + 0x1ED13Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM16(esi_2 + 4u) = 0x57u;
@@ -76524,7 +76524,7 @@ uint32_t ZenCruiserTurret1_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	edi_2 = MEM32(0x1ED130u);
 	eax = ZenCruiserTurret1Model;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192D18u;
+	MEM32(g_esp) = ZenTurretLazerNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	MEM32(0x1ED130u) = edi_2 + 1u;
@@ -76873,7 +76873,7 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t t1 = 0;
 
 	sub_00018A20();
-	stack = 0x192D30u;
+	stack = VF1SXFighterVF1SXFighterText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -76887,19 +76887,19 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00055F83u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_24 = 0x192F1Cu;
+	stack_24 = Target01Text_VA;
 	stack_28 = MEM32(0x1ED78Cu);
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x1B16CCu) = eax;
-	stack_2C = 0x192E4Cu;
+	stack_2C = VF1SXFighterFighterOnlyIdleText_VA;
 	stack_30 = 9u;
 	x86_rep_stos32(0x1ED66Cu, 0u, 7u);
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00055FB2u, 2, arg0, arg1);
-	stack_34 = 0x192E60u;
+	stack_34 = VF1SXFighterFighterOnlyBoostText_VA;
 	stack_38 = 9u;
 	MEM32(0x1ED66Cu) = eax;
 	arg0 = stack_38;
@@ -76947,7 +76947,7 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1ED684u) = eax;
 	x86_rep_stos32(0x1ED5C8u, 0u, 0x29u);
 	esi = MEM32(0x1ED5C8u) * 3u * 4u + 0x1ED5D4u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0u;
 	MEM16(esi + 6u) = 2u;
@@ -76957,7 +76957,7 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1ED5C8u) + 1u;
 	MEM32(0x1ED5C8u) = eax;
 	esi = eax * 3u * 4u + 0x1ED5D4u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0u;
 	MEM16(esi + 6u) = 4u;
@@ -76967,7 +76967,7 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1ED5C8u) + 1u;
 	MEM32(0x1ED5C8u) = eax;
 	esi = eax * 3u * 4u + 0x1ED5D4u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0x13u;
 	MEM16(esi + 6u) = 1u;
@@ -76975,7 +76975,7 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(esi + 8u) = eax;
 	esi = MEM32(0x1ED5CCu);
-	arg1 = 0x192E78u;
+	arg1 = VF1SXFighterFighterOnlyDeathText_VA;
 	arg0 = 9u;
 	MEM32(0x1ED5C8u) = MEM32(0x1ED5C8u) + 1u;
 	esi = esi * 8u + 0x1ED64Cu;
@@ -76983,31 +76983,31 @@ uint32_t VF1SXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	ecx = MEM32(0x1ED78Cu);
 	MEM32(esi) = eax;
 	MEM32(esi + 4u) = 1u;
-	arg1 = 0x192F0Cu;
+	arg1 = GunEffects01Text_VA;
 	arg0 = ecx;
 	MEM32(0x1ED5CCu) = MEM32(0x1ED5CCu) + 1u;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192EFCu;
+	arg1 = MisslesLeft01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	VF1SXFighterGunEffects01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	VF1SXFighterMisslesLeft01Node = eax;
-	arg1 = 0x192EECu;
+	arg1 = MisslesRight01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192ED4u;
+	arg1 = ExhaustEffectLeft01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	VF1SXFighterMisslesRight01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192EBCu;
+	arg1 = ExhaustEffectRight01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	VF1SXFighterExhaustEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	VF1SXFighterExhaustEffectRight01Node = eax;
-	arg1 = 0x192EA4u;
+	arg1 = WingtipEffectLeft01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192E8Cu;
+	arg1 = WingtipEffectRight01Text_VA;
 	arg0 = MEM32(0x1ED78Cu);
 	VF1SXFighterWingtipEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
@@ -77681,7 +77681,7 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t t1 = 0;
 
 	sub_00018A20();
-	stack = 0x192F28u;
+	stack = VF1AXFighterText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -77695,19 +77695,19 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00056FF3u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_24 = 0x192F1Cu;
+	stack_24 = Target01Text_VA;
 	stack_28 = MEM32(0x1EDC2Cu);
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x1B16D0u) = eax;
-	stack_2C = 0x193044u;
+	stack_2C = VF1AXFighterFighterOnlyIdleText_VA;
 	stack_30 = 9u;
 	x86_rep_stos32(0x1EDB0Cu, 0u, 7u);
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x00057022u, 2, arg0, arg1);
-	stack_34 = 0x193058u;
+	stack_34 = VF1AXFighterFighterOnlyBoostText_VA;
 	stack_38 = 9u;
 	MEM32(0x1EDB0Cu) = eax;
 	arg0 = stack_38;
@@ -77755,7 +77755,7 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x1EDB24u) = eax;
 	x86_rep_stos32(0x1EDA68u, 0u, 0x29u);
 	esi = MEM32(0x1EDA68u) * 3u * 4u + 0x1EDA74u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0u;
 	MEM16(esi + 6u) = 2u;
@@ -77765,7 +77765,7 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EDA68u) + 1u;
 	MEM32(0x1EDA68u) = eax;
 	esi = eax * 3u * 4u + 0x1EDA74u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0u;
 	MEM16(esi + 6u) = 4u;
@@ -77775,7 +77775,7 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x1EDA68u) + 1u;
 	MEM32(0x1EDA68u) = eax;
 	esi = eax * 3u * 4u + 0x1EDA74u;
-	arg1 = 0x192F1Cu;
+	arg1 = Target01Text_VA;
 	arg0 = ebp_2;
 	MEM16(esi + 4u) = 0x13u;
 	MEM16(esi + 6u) = 1u;
@@ -77783,7 +77783,7 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(esi + 8u) = eax;
 	esi = MEM32(0x1EDA6Cu);
-	arg1 = 0x193070u;
+	arg1 = VF1AXFighterFighterOnlyDeathText_VA;
 	arg0 = 9u;
 	MEM32(0x1EDA68u) = MEM32(0x1EDA68u) + 1u;
 	esi = esi * 8u + 0x1EDAECu;
@@ -77791,31 +77791,31 @@ uint32_t VF1AXFighter_Startup(uint32_t ebx, uint32_t ebp)
 	ecx = MEM32(0x1EDC2Cu);
 	MEM32(esi) = eax;
 	MEM32(esi + 4u) = 1u;
-	arg1 = 0x192F0Cu;
+	arg1 = GunEffects01Text_VA;
 	arg0 = ecx;
 	MEM32(0x1EDA6Cu) = MEM32(0x1EDA6Cu) + 1u;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192EFCu;
+	arg1 = MisslesLeft01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	VF1AXFighterGunEffects01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	VF1AXFighterMisslesLeft01Node = eax;
-	arg1 = 0x192EECu;
+	arg1 = MisslesRight01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192ED4u;
+	arg1 = ExhaustEffectLeft01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	VF1AXFighterMisslesRight01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192EBCu;
+	arg1 = ExhaustEffectRight01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	VF1AXFighterExhaustEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	VF1AXFighterExhaustEffectRight01Node = eax;
-	arg1 = 0x192EA4u;
+	arg1 = WingtipEffectLeft01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x192E8Cu;
+	arg1 = WingtipEffectRight01Text_VA;
 	arg0 = MEM32(0x1EDC2Cu);
 	VF1AXFighterWingtipEffectLeft01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
@@ -78484,7 +78484,7 @@ uint32_t PodOfficerSledMissile_Startup(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x193168u;
+	arg2 = PodOfficerSledMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EDE18u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -78639,7 +78639,7 @@ uint32_t FPAMissile_Startup(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x19326Cu;
+	arg2 = FPAMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EE048u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -79251,7 +79251,7 @@ uint32_t ZenLightMissile_Startup(void)
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 	arg4 = 0x44BB8000u;
 	arg3 = 0x43960000u;
-	arg2 = 0x19367Cu;
+	arg2 = ZenLightMissileHeavyMissileLaunchMWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x1EE908u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -83106,666 +83106,666 @@ void sub_0005C300(uint32_t arg0)
 	esi = edx + 0xFE8u;
 	ebx = edx + 0x25Cu;
 	MEM32(edx + 0xC4u) = edx + 0x108u;
-	MEM32(edx + 0x34u) = 0x193E4Cu;
+	MEM32(edx + 0x34u) = VeritechConstants_radius_VA(VF1SXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x38u) = esi;
-	MEM32(edx + 8u) = 0x193E54u;
-	MEM32(edx + 0xCu) = 0x193E58u;
-	MEM32(edx + 0x10u) = 0x193E5Cu;
-	MEM32(edx + 0x14u) = 0x193E60u;
-	MEM32(edx + 0x18u) = 0x193E64u;
-	MEM32(edx + 0x1Cu) = 0x193E68u;
-	MEM32(edx + 0x20u) = 0x193E6Cu;
-	MEM32(edx + 0x24u) = 0x193E70u;
-	MEM32(edx + 0x28u) = 0x193E74u;
-	MEM32(edx + 0x2Cu) = 0x193E78u;
-	MEM32(edx + 0x30u) = 0x193E48u;
-	MEM32(edx + 0x3Cu) = 0x193E7Cu;
-	MEM32(edx + 0x40u) = 0x193E80u;
-	MEM32(edx + 0x4Cu) = 0x193E84u;
-	MEM32(edx + 0x50u) = 0x193E88u;
-	MEM32(edx + 0x44u) = 0x193E8Cu;
-	MEM32(edx + 0x48u) = 0x193E90u;
-	MEM32(edx + 0x54u) = 0x193EC4u;
-	MEM32(edx + 0x58u) = 0x193EC8u;
-	MEM32(edx + 0x5Cu) = 0x193E94u;
-	MEM32(edx + 0x60u) = 0x193E98u;
-	MEM32(edx + 0x64u) = 0x193E9Cu;
-	MEM32(edx + 0x68u) = 0x193EA0u;
-	MEM32(edx + 0x6Cu) = 0x193EA4u;
-	MEM32(edx + 0x70u) = 0x193EA8u;
-	MEM32(edx + 0x78u) = 0x193EACu;
-	MEM32(edx + 0x74u) = 0x193EB0u;
-	MEM32(edx + 0x7Cu) = 0x193EB4u;
-	MEM32(edx + 0x80u) = 0x193EB8u;
-	MEM32(edx + 0x84u) = 0x193EBCu;
-	MEM32(edx + 0x88u) = 0x193EC0u;
-	MEM32(edx + 0xB4u) = 0x193ECCu;
-	MEM32(edx + 0x8Cu) = 0x193ED0u;
-	MEM32(edx + 0x94u) = 0x193ED4u;
-	MEM32(edx + 0xB8u) = 0x193ED8u;
-	MEM32(edx + 0x90u) = 0x193EDCu;
-	MEM32(edx + 0x98u) = 0x193EE0u;
-	MEM32(edx + 0xBCu) = 0x193EE4u;
-	MEM32(edx + 0x9Cu) = 0x193EE8u;
-	MEM32(edx + 0xA0u) = 0x193EECu;
-	MEM32(edx + 0xC0u) = 0x193EF0u;
-	MEM32(edx + 0xA4u) = 0x193EF4u;
-	MEM32(edx + 0xA8u) = 0x193EF8u;
-	MEM32(edx + 0xACu) = 0x193EFCu;
-	MEM32(edx + 0xB0u) = 0x193F00u;
-	MEM32(edx + 0xECu) = 0x193F2Cu;
-	MEM32(edx + 0xC8u) = 0x193F04u;
-	MEM32(edx + 0xCCu) = 0x193F08u;
-	MEM32(edx + 0xD0u) = 0x193F0Cu;
-	MEM32(edx + 0xD4u) = 0x193F10u;
-	MEM32(edx + 0xD8u) = 0x193F14u;
-	MEM32(edx + 0xDCu) = 0x193F18u;
-	MEM32(edx + 0xE0u) = 0x193F1Cu;
-	MEM32(edx + 0xE4u) = 0x193F20u;
-	MEM32(edx + 0xE8u) = 0x193F24u;
-	MEM32(edx + 0xF0u) = 0x193F28u;
-	MEM32(edx + 0xF4u) = 0x193F30u;
-	MEM32(edx + 0xF8u) = 0x193F34u;
-	MEM32(edx + 0xFCu) = 0x193F38u;
+	MEM32(edx + 8u) = VF1SXVeritechBattloidConstants_VA + 0xCu;
+	MEM32(edx + 0xCu) = VF1SXVeritechBattloidConstants_VA + 0x10u;
+	MEM32(edx + 0x10u) = VF1SXVeritechBattloidConstants_VA + 0x14u;
+	MEM32(edx + 0x14u) = VF1SXVeritechBattloidConstants_VA + 0x18u;
+	MEM32(edx + 0x18u) = VF1SXVeritechBattloidConstants_VA + 0x1Cu;
+	MEM32(edx + 0x1Cu) = VF1SXVeritechBattloidConstants_VA + 0x20u;
+	MEM32(edx + 0x20u) = VF1SXVeritechBattloidConstants_VA + 0x24u;
+	MEM32(edx + 0x24u) = VF1SXVeritechBattloidConstants_VA + 0x28u;
+	MEM32(edx + 0x28u) = VF1SXVeritechBattloidConstants_VA + 0x2Cu;
+	MEM32(edx + 0x2Cu) = VF1SXVeritechBattloidConstants_VA + 0x30u;
+	MEM32(edx + 0x30u) = VF1SXVeritechBattloidConstants_VA;
+	MEM32(edx + 0x3Cu) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x40u) = VeritechConstants_brake_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x4Cu) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x50u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x44u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x48u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x54u) = VeritechConstants_boost_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x58u) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x5Cu) = VF1SXVeritechBattloidConstants_VA + 0x4Cu;
+	MEM32(edx + 0x60u) = VF1SXVeritechBattloidConstants_VA + 0x50u;
+	MEM32(edx + 0x64u) = VF1SXVeritechBattloidConstants_VA + 0x54u;
+	MEM32(edx + 0x68u) = VF1SXVeritechBattloidConstants_VA + 0x58u;
+	MEM32(edx + 0x6Cu) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x70u) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x78u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x74u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x7Cu) = VF1SXVeritechBattloidConstants_VA + 0x6Cu;
+	MEM32(edx + 0x80u) = VF1SXVeritechBattloidConstants_VA + 0x70u;
+	MEM32(edx + 0x84u) = VF1SXVeritechBattloidConstants_VA + 0x74u;
+	MEM32(edx + 0x88u) = VF1SXVeritechBattloidConstants_VA + 0x78u;
+	MEM32(edx + 0xB4u) = VF1SXVeritechBattloidConstants_VA + 0x84u;
+	MEM32(edx + 0x8Cu) = VF1SXVeritechBattloidConstants_VA + 0x88u;
+	MEM32(edx + 0x94u) = VF1SXVeritechBattloidConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB8u) = VF1SXVeritechBattloidConstants_VA + 0x90u;
+	MEM32(edx + 0x90u) = VF1SXVeritechBattloidConstants_VA + 0x94u;
+	MEM32(edx + 0x98u) = VF1SXVeritechBattloidConstants_VA + 0x98u;
+	MEM32(edx + 0xBCu) = VF1SXVeritechBattloidConstants_VA + 0x9Cu;
+	MEM32(edx + 0x9Cu) = VF1SXVeritechBattloidConstants_VA + 0xA0u;
+	MEM32(edx + 0xA0u) = VF1SXVeritechBattloidConstants_VA + 0xA4u;
+	MEM32(edx + 0xC0u) = VF1SXVeritechBattloidConstants_VA + 0xA8u;
+	MEM32(edx + 0xA4u) = VF1SXVeritechBattloidConstants_VA + 0xACu;
+	MEM32(edx + 0xA8u) = VF1SXVeritechBattloidConstants_VA + 0xB0u;
+	MEM32(edx + 0xACu) = VF1SXVeritechBattloidConstants_VA + 0xB4u;
+	MEM32(edx + 0xB0u) = VF1SXVeritechBattloidConstants_VA + 0xB8u;
+	MEM32(edx + 0xECu) = VF1SXVeritechBattloidConstants_VA + 0xE4u;
+	MEM32(edx + 0xC8u) = VF1SXVeritechBattloidConstants_VA + 0xBCu;
+	MEM32(edx + 0xCCu) = VF1SXVeritechBattloidConstants_VA + 0xC0u;
+	MEM32(edx + 0xD0u) = VF1SXVeritechBattloidConstants_VA + 0xC4u;
+	MEM32(edx + 0xD4u) = VF1SXVeritechBattloidConstants_VA + 0xC8u;
+	MEM32(edx + 0xD8u) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xDCu) = VF1SXVeritechBattloidConstants_VA + 0xD0u;
+	MEM32(edx + 0xE0u) = VF1SXVeritechBattloidConstants_VA + 0xD4u;
+	MEM32(edx + 0xE4u) = VF1SXVeritechBattloidConstants_VA + 0xD8u;
+	MEM32(edx + 0xE8u) = VF1SXVeritechBattloidConstants_VA + 0xDCu;
+	MEM32(edx + 0xF0u) = VF1SXVeritechBattloidConstants_VA + 0xE0u;
+	MEM32(edx + 0xF4u) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xF8u) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xFCu) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x100u) = 1u;
 	MEM32(edx + 0x104u) = ebx;
-	MEM32(edx + 4u) = 0x193E28u;
+	MEM32(edx + 4u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x300u, 0u, 0x41u);
-	MEM32(edx + 0x330u) = 0x193F40u;
+	MEM32(edx + 0x330u) = VeritechConstants_radius_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x334u) = esi;
-	MEM32(edx + 0x304u) = 0x193F48u;
-	MEM32(edx + 0x308u) = 0x193F4Cu;
-	MEM32(edx + 0x30Cu) = 0x193F50u;
-	MEM32(edx + 0x310u) = 0x193F54u;
-	MEM32(edx + 0x314u) = 0x193F58u;
-	MEM32(edx + 0x318u) = 0x193F5Cu;
-	MEM32(edx + 0x31Cu) = 0x193F60u;
-	MEM32(edx + 0x320u) = 0x193F64u;
-	MEM32(edx + 0x324u) = 0x193F68u;
-	MEM32(edx + 0x328u) = 0x193F6Cu;
-	MEM32(edx + 0x32Cu) = 0x193F3Cu;
-	MEM32(edx + 0x338u) = 0x193F70u;
-	MEM32(edx + 0x33Cu) = 0x193F74u;
-	MEM32(edx + 0x348u) = 0x193F78u;
-	MEM32(edx + 0x34Cu) = 0x193F7Cu;
-	MEM32(edx + 0x340u) = 0x193F80u;
-	MEM32(edx + 0x344u) = 0x193F84u;
-	MEM32(edx + 0x350u) = 0x193FB8u;
-	MEM32(edx + 0x354u) = 0x193FBCu;
-	MEM32(edx + 0x358u) = 0x193F88u;
-	MEM32(edx + 0x35Cu) = 0x193F8Cu;
-	MEM32(edx + 0x360u) = 0x193F90u;
-	MEM32(edx + 0x364u) = 0x193F94u;
-	MEM32(edx + 0x368u) = 0x193F98u;
-	MEM32(edx + 0x36Cu) = 0x193F9Cu;
-	MEM32(edx + 0x374u) = 0x193FA0u;
-	MEM32(edx + 0x370u) = 0x193FA4u;
-	MEM32(edx + 0x378u) = 0x193FA8u;
-	MEM32(edx + 0x37Cu) = 0x193FACu;
-	MEM32(edx + 0x380u) = 0x193FB0u;
-	MEM32(edx + 0x384u) = 0x193FB4u;
-	MEM32(edx + 0x3B0u) = 0x193FC0u;
-	MEM32(edx + 0x388u) = 0x193FC4u;
-	MEM32(edx + 0x390u) = 0x193FC8u;
-	MEM32(edx + 0x3B4u) = 0x193FCCu;
-	MEM32(edx + 0x38Cu) = 0x193FD0u;
-	MEM32(edx + 0x394u) = 0x193FD4u;
-	MEM32(edx + 0x3B8u) = 0x193FD8u;
-	MEM32(edx + 0x398u) = 0x193FDCu;
-	MEM32(edx + 0x39Cu) = 0x193FE0u;
-	MEM32(edx + 0x3BCu) = 0x193FE4u;
-	MEM32(edx + 0x3A0u) = 0x193FE8u;
-	MEM32(edx + 0x3A4u) = 0x193FECu;
-	MEM32(edx + 0x3A8u) = 0x193FF0u;
-	MEM32(edx + 0x3ACu) = 0x193FF4u;
-	MEM32(edx + 0x3E8u) = 0x194020u;
-	MEM32(edx + 0x3C4u) = 0x193FF8u;
-	MEM32(edx + 0x3C8u) = 0x193FFCu;
-	MEM32(edx + 0x3CCu) = 0x194000u;
-	MEM32(edx + 0x3D0u) = 0x194004u;
-	MEM32(edx + 0x3D4u) = 0x194008u;
-	MEM32(edx + 0x3D8u) = 0x19400Cu;
-	MEM32(edx + 0x3DCu) = 0x194010u;
-	MEM32(edx + 0x3E0u) = 0x194014u;
-	MEM32(edx + 0x3E4u) = 0x194018u;
-	MEM32(edx + 0x3ECu) = 0x19401Cu;
-	MEM32(edx + 0x3F0u) = 0x194024u;
-	MEM32(edx + 0x3F4u) = 0x194028u;
-	MEM32(edx + 0x3F8u) = 0x19402Cu;
+	MEM32(edx + 0x304u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xCu;
+	MEM32(edx + 0x308u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x10u;
+	MEM32(edx + 0x30Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x14u;
+	MEM32(edx + 0x310u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x18u;
+	MEM32(edx + 0x314u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x1Cu;
+	MEM32(edx + 0x318u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x20u;
+	MEM32(edx + 0x31Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x24u;
+	MEM32(edx + 0x320u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x28u;
+	MEM32(edx + 0x324u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x2Cu;
+	MEM32(edx + 0x328u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x30u;
+	MEM32(edx + 0x32Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA;
+	MEM32(edx + 0x338u) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x33Cu) = VeritechConstants_brake_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x348u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x34Cu) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x340u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x344u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x350u) = VeritechConstants_boost_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x354u) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x358u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x4Cu;
+	MEM32(edx + 0x35Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x50u;
+	MEM32(edx + 0x360u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x54u;
+	MEM32(edx + 0x364u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x58u;
+	MEM32(edx + 0x368u) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x36Cu) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x374u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x370u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x378u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x6Cu;
+	MEM32(edx + 0x37Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x70u;
+	MEM32(edx + 0x380u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x74u;
+	MEM32(edx + 0x384u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x78u;
+	MEM32(edx + 0x3B0u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x84u;
+	MEM32(edx + 0x388u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x88u;
+	MEM32(edx + 0x390u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x8Cu;
+	MEM32(edx + 0x3B4u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x90u;
+	MEM32(edx + 0x38Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x94u;
+	MEM32(edx + 0x394u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x98u;
+	MEM32(edx + 0x3B8u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0x9Cu;
+	MEM32(edx + 0x398u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xA0u;
+	MEM32(edx + 0x39Cu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xA4u;
+	MEM32(edx + 0x3BCu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xA8u;
+	MEM32(edx + 0x3A0u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xACu;
+	MEM32(edx + 0x3A4u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xB0u;
+	MEM32(edx + 0x3A8u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xB4u;
+	MEM32(edx + 0x3ACu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xB8u;
+	MEM32(edx + 0x3E8u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xE4u;
+	MEM32(edx + 0x3C4u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xBCu;
+	MEM32(edx + 0x3C8u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xC0u;
+	MEM32(edx + 0x3CCu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xC4u;
+	MEM32(edx + 0x3D0u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xC8u;
+	MEM32(edx + 0x3D4u) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3D8u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xD0u;
+	MEM32(edx + 0x3DCu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xD4u;
+	MEM32(edx + 0x3E0u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xD8u;
+	MEM32(edx + 0x3E4u) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xDCu;
+	MEM32(edx + 0x3ECu) = VF1SXVeritechBattloidNoTerrainConstants_VA + 0xE0u;
+	MEM32(edx + 0x3F0u) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F4u) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F8u) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x3C0u) = edx + 0x404u;
 	MEM32(edx + 0x3FCu) = 1u;
 	MEM32(edx + 0x400u) = ebx;
-	MEM32(edx + 0x300u) = 0x193E28u;
+	MEM32(edx + 0x300u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x558u, 0u, 0x41u);
-	MEM32(edx + 0x588u) = 0x194034u;
+	MEM32(edx + 0x588u) = VeritechConstants_radius_VA(VF1SXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x58Cu) = esi;
-	MEM32(edx + 0x55Cu) = 0x19403Cu;
-	MEM32(edx + 0x560u) = 0x194040u;
-	MEM32(edx + 0x564u) = 0x194044u;
-	MEM32(edx + 0x568u) = 0x194048u;
-	MEM32(edx + 0x56Cu) = 0x19404Cu;
-	MEM32(edx + 0x570u) = 0x194050u;
-	MEM32(edx + 0x574u) = 0x194054u;
-	MEM32(edx + 0x578u) = 0x194058u;
-	MEM32(edx + 0x57Cu) = 0x19405Cu;
-	MEM32(edx + 0x580u) = 0x194060u;
-	MEM32(edx + 0x584u) = 0x194030u;
-	MEM32(edx + 0x590u) = 0x194064u;
-	MEM32(edx + 0x594u) = 0x194068u;
-	MEM32(edx + 0x5A0u) = 0x19406Cu;
-	MEM32(edx + 0x5A4u) = 0x194070u;
-	MEM32(edx + 0x598u) = 0x194074u;
-	MEM32(edx + 0x59Cu) = 0x194078u;
-	MEM32(edx + 0x5A8u) = 0x1940ACu;
-	MEM32(edx + 0x5ACu) = 0x1940B0u;
-	MEM32(edx + 0x5B0u) = 0x19407Cu;
-	MEM32(edx + 0x5B4u) = 0x194080u;
-	MEM32(edx + 0x5B8u) = 0x194084u;
-	MEM32(edx + 0x5BCu) = 0x194088u;
-	MEM32(edx + 0x5C0u) = 0x19408Cu;
-	MEM32(edx + 0x5C4u) = 0x194090u;
-	MEM32(edx + 0x5CCu) = 0x194094u;
-	MEM32(edx + 0x5C8u) = 0x194098u;
-	MEM32(edx + 0x5D0u) = 0x19409Cu;
-	MEM32(edx + 0x5D4u) = 0x1940A0u;
-	MEM32(edx + 0x5D8u) = 0x1940A4u;
-	MEM32(edx + 0x5DCu) = 0x1940A8u;
-	MEM32(edx + 0x608u) = 0x1940B4u;
-	MEM32(edx + 0x5E0u) = 0x1940B8u;
-	MEM32(edx + 0x5E8u) = 0x1940BCu;
-	MEM32(edx + 0x60Cu) = 0x1940C0u;
-	MEM32(edx + 0x5E4u) = 0x1940C4u;
-	MEM32(edx + 0x5ECu) = 0x1940C8u;
-	MEM32(edx + 0x610u) = 0x1940CCu;
-	MEM32(edx + 0x5F0u) = 0x1940D0u;
-	MEM32(edx + 0x5F4u) = 0x1940D4u;
-	MEM32(edx + 0x614u) = 0x1940D8u;
-	MEM32(edx + 0x5F8u) = 0x1940DCu;
-	MEM32(edx + 0x5FCu) = 0x1940E0u;
-	MEM32(edx + 0x600u) = 0x1940E4u;
-	MEM32(edx + 0x604u) = 0x1940E8u;
-	MEM32(edx + 0x640u) = 0x194114u;
-	MEM32(edx + 0x61Cu) = 0x1940ECu;
-	MEM32(edx + 0x620u) = 0x1940F0u;
-	MEM32(edx + 0x624u) = 0x1940F4u;
-	MEM32(edx + 0x628u) = 0x1940F8u;
-	MEM32(edx + 0x62Cu) = 0x1940FCu;
-	MEM32(edx + 0x630u) = 0x194100u;
-	MEM32(edx + 0x634u) = 0x194104u;
-	MEM32(edx + 0x638u) = 0x194108u;
-	MEM32(edx + 0x63Cu) = 0x19410Cu;
-	MEM32(edx + 0x644u) = 0x194110u;
-	MEM32(edx + 0x648u) = 0x194118u;
-	MEM32(edx + 0x64Cu) = 0x19411Cu;
-	MEM32(edx + 0x650u) = 0x194120u;
+	MEM32(edx + 0x55Cu) = VF1SXVeritechGuardianConstants_VA + 0xCu;
+	MEM32(edx + 0x560u) = VF1SXVeritechGuardianConstants_VA + 0x10u;
+	MEM32(edx + 0x564u) = VF1SXVeritechGuardianConstants_VA + 0x14u;
+	MEM32(edx + 0x568u) = VF1SXVeritechGuardianConstants_VA + 0x18u;
+	MEM32(edx + 0x56Cu) = VF1SXVeritechGuardianConstants_VA + 0x1Cu;
+	MEM32(edx + 0x570u) = VF1SXVeritechGuardianConstants_VA + 0x20u;
+	MEM32(edx + 0x574u) = VF1SXVeritechGuardianConstants_VA + 0x24u;
+	MEM32(edx + 0x578u) = VF1SXVeritechGuardianConstants_VA + 0x28u;
+	MEM32(edx + 0x57Cu) = VF1SXVeritechGuardianConstants_VA + 0x2Cu;
+	MEM32(edx + 0x580u) = VF1SXVeritechGuardianConstants_VA + 0x30u;
+	MEM32(edx + 0x584u) = VF1SXVeritechGuardianConstants_VA;
+	MEM32(edx + 0x590u) = VeritechConstants_thrust_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x594u) = VeritechConstants_brake_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A0u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A4u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x598u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x59Cu) = VeritechConstants_brake_vertical_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A8u) = VeritechConstants_boost_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5ACu) = VeritechConstants_boost_force_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5B0u) = VF1SXVeritechGuardianConstants_VA + 0x4Cu;
+	MEM32(edx + 0x5B4u) = VF1SXVeritechGuardianConstants_VA + 0x50u;
+	MEM32(edx + 0x5B8u) = VF1SXVeritechGuardianConstants_VA + 0x54u;
+	MEM32(edx + 0x5BCu) = VF1SXVeritechGuardianConstants_VA + 0x58u;
+	MEM32(edx + 0x5C0u) = VeritechConstants_speed_forward_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C4u) = VeritechConstants_speed_backward_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5CCu) = VeritechConstants_speed_sideways_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C8u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5D0u) = VF1SXVeritechGuardianConstants_VA + 0x6Cu;
+	MEM32(edx + 0x5D4u) = VF1SXVeritechGuardianConstants_VA + 0x70u;
+	MEM32(edx + 0x5D8u) = VF1SXVeritechGuardianConstants_VA + 0x74u;
+	MEM32(edx + 0x5DCu) = VF1SXVeritechGuardianConstants_VA + 0x78u;
+	MEM32(edx + 0x608u) = VF1SXVeritechGuardianConstants_VA + 0x84u;
+	MEM32(edx + 0x5E0u) = VF1SXVeritechGuardianConstants_VA + 0x88u;
+	MEM32(edx + 0x5E8u) = VF1SXVeritechGuardianConstants_VA + 0x8Cu;
+	MEM32(edx + 0x60Cu) = VF1SXVeritechGuardianConstants_VA + 0x90u;
+	MEM32(edx + 0x5E4u) = VF1SXVeritechGuardianConstants_VA + 0x94u;
+	MEM32(edx + 0x5ECu) = VF1SXVeritechGuardianConstants_VA + 0x98u;
+	MEM32(edx + 0x610u) = VF1SXVeritechGuardianConstants_VA + 0x9Cu;
+	MEM32(edx + 0x5F0u) = VF1SXVeritechGuardianConstants_VA + 0xA0u;
+	MEM32(edx + 0x5F4u) = VF1SXVeritechGuardianConstants_VA + 0xA4u;
+	MEM32(edx + 0x614u) = VF1SXVeritechGuardianConstants_VA + 0xA8u;
+	MEM32(edx + 0x5F8u) = VF1SXVeritechGuardianConstants_VA + 0xACu;
+	MEM32(edx + 0x5FCu) = VF1SXVeritechGuardianConstants_VA + 0xB0u;
+	MEM32(edx + 0x600u) = VF1SXVeritechGuardianConstants_VA + 0xB4u;
+	MEM32(edx + 0x604u) = VF1SXVeritechGuardianConstants_VA + 0xB8u;
+	MEM32(edx + 0x640u) = VF1SXVeritechGuardianConstants_VA + 0xE4u;
+	MEM32(edx + 0x61Cu) = VF1SXVeritechGuardianConstants_VA + 0xBCu;
+	MEM32(edx + 0x620u) = VF1SXVeritechGuardianConstants_VA + 0xC0u;
+	MEM32(edx + 0x624u) = VF1SXVeritechGuardianConstants_VA + 0xC4u;
+	MEM32(edx + 0x628u) = VF1SXVeritechGuardianConstants_VA + 0xC8u;
+	MEM32(edx + 0x62Cu) = VeritechConstants_camera_lag_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x630u) = VF1SXVeritechGuardianConstants_VA + 0xD0u;
+	MEM32(edx + 0x634u) = VF1SXVeritechGuardianConstants_VA + 0xD4u;
+	MEM32(edx + 0x638u) = VF1SXVeritechGuardianConstants_VA + 0xD8u;
+	MEM32(edx + 0x63Cu) = VF1SXVeritechGuardianConstants_VA + 0xDCu;
+	MEM32(edx + 0x644u) = VF1SXVeritechGuardianConstants_VA + 0xE0u;
+	MEM32(edx + 0x648u) = VeritechConstants_explode_chance_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x64Cu) = VeritechConstants_death_wait_VA(VF1SXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x650u) = VeritechConstants_fade_time_VA(VF1SXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x618u) = edx + 0x65Cu;
 	MEM32(edx + 0x654u) = 1u;
 	MEM32(edx + 0x658u) = edx + 0x68Cu;
-	MEM32(edx + 0x558u) = 0x193E28u;
+	MEM32(edx + 0x558u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x730u, 0u, 0x41u);
-	MEM32(edx + 0x760u) = 0x194128u;
+	MEM32(edx + 0x760u) = VeritechConstants_radius_VA(VF1SXVeritechFighterConstants_VA);
 	MEM32(edx + 0x764u) = esi;
-	MEM32(edx + 0x734u) = 0x194130u;
-	MEM32(edx + 0x738u) = 0x194134u;
-	MEM32(edx + 0x73Cu) = 0x194138u;
-	MEM32(edx + 0x740u) = 0x19413Cu;
-	MEM32(edx + 0x744u) = 0x194140u;
-	MEM32(edx + 0x748u) = 0x194144u;
-	MEM32(edx + 0x74Cu) = 0x194148u;
-	MEM32(edx + 0x750u) = 0x19414Cu;
-	MEM32(edx + 0x754u) = 0x194150u;
-	MEM32(edx + 0x758u) = 0x194154u;
-	MEM32(edx + 0x75Cu) = 0x194124u;
-	MEM32(edx + 0x768u) = 0x194158u;
-	MEM32(edx + 0x76Cu) = 0x19415Cu;
-	MEM32(edx + 0x778u) = 0x194160u;
-	MEM32(edx + 0x77Cu) = 0x194164u;
-	MEM32(edx + 0x770u) = 0x194168u;
-	MEM32(edx + 0x774u) = 0x19416Cu;
-	MEM32(edx + 0x780u) = 0x1941A0u;
-	MEM32(edx + 0x784u) = 0x1941A4u;
-	MEM32(edx + 0x788u) = 0x194170u;
-	MEM32(edx + 0x78Cu) = 0x194174u;
-	MEM32(edx + 0x790u) = 0x194178u;
-	MEM32(edx + 0x794u) = 0x19417Cu;
-	MEM32(edx + 0x798u) = 0x194180u;
-	MEM32(edx + 0x79Cu) = 0x194184u;
-	MEM32(edx + 0x7A4u) = 0x194188u;
-	MEM32(edx + 0x7A0u) = 0x19418Cu;
-	MEM32(edx + 0x7A8u) = 0x194190u;
-	MEM32(edx + 0x7ACu) = 0x194194u;
-	MEM32(edx + 0x7B0u) = 0x19419Cu;
-	MEM32(edx + 0x7B4u) = 0x194198u;
-	MEM32(edx + 0x7E0u) = 0x1941A8u;
-	MEM32(edx + 0x7B8u) = 0x1941ACu;
-	MEM32(edx + 0x7C0u) = 0x1941B0u;
-	MEM32(edx + 0x7E4u) = 0x1941B4u;
-	MEM32(edx + 0x7BCu) = 0x1941B8u;
-	MEM32(edx + 0x7C4u) = 0x1941BCu;
-	MEM32(edx + 0x7E8u) = 0x1941C0u;
-	MEM32(edx + 0x7C8u) = 0x1941C4u;
-	MEM32(edx + 0x7CCu) = 0x1941C8u;
-	MEM32(edx + 0x7ECu) = 0x1941CCu;
-	MEM32(edx + 0x7D0u) = 0x1941D0u;
-	MEM32(edx + 0x7D4u) = 0x1941D4u;
-	MEM32(edx + 0x7D8u) = 0x1941D8u;
-	MEM32(edx + 0x7DCu) = 0x1941DCu;
-	MEM32(edx + 0x818u) = 0x194208u;
-	MEM32(edx + 0x7F4u) = 0x1941E0u;
-	MEM32(edx + 0x7F8u) = 0x1941E4u;
-	MEM32(edx + 0x7FCu) = 0x1941E8u;
-	MEM32(edx + 0x800u) = 0x1941ECu;
-	MEM32(edx + 0x804u) = 0x1941F0u;
-	MEM32(edx + 0x808u) = 0x1941F4u;
-	MEM32(edx + 0x80Cu) = 0x1941F8u;
-	MEM32(edx + 0x810u) = 0x1941FCu;
-	MEM32(edx + 0x814u) = 0x194200u;
-	MEM32(edx + 0x81Cu) = 0x194204u;
-	MEM32(edx + 0x820u) = 0x19420Cu;
-	MEM32(edx + 0x824u) = 0x194210u;
-	MEM32(edx + 0x828u) = 0x194214u;
+	MEM32(edx + 0x734u) = VF1SXVeritechFighterConstants_VA + 0xCu;
+	MEM32(edx + 0x738u) = VF1SXVeritechFighterConstants_VA + 0x10u;
+	MEM32(edx + 0x73Cu) = VF1SXVeritechFighterConstants_VA + 0x14u;
+	MEM32(edx + 0x740u) = VF1SXVeritechFighterConstants_VA + 0x18u;
+	MEM32(edx + 0x744u) = VF1SXVeritechFighterConstants_VA + 0x1Cu;
+	MEM32(edx + 0x748u) = VF1SXVeritechFighterConstants_VA + 0x20u;
+	MEM32(edx + 0x74Cu) = VF1SXVeritechFighterConstants_VA + 0x24u;
+	MEM32(edx + 0x750u) = VF1SXVeritechFighterConstants_VA + 0x28u;
+	MEM32(edx + 0x754u) = VF1SXVeritechFighterConstants_VA + 0x2Cu;
+	MEM32(edx + 0x758u) = VF1SXVeritechFighterConstants_VA + 0x30u;
+	MEM32(edx + 0x75Cu) = VF1SXVeritechFighterConstants_VA;
+	MEM32(edx + 0x768u) = VeritechConstants_thrust_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x76Cu) = VeritechConstants_brake_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x778u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x77Cu) = VeritechConstants_brake_sideways_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x770u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x774u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x780u) = VeritechConstants_boost_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x784u) = VeritechConstants_boost_force_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x788u) = VF1SXVeritechFighterConstants_VA + 0x4Cu;
+	MEM32(edx + 0x78Cu) = VF1SXVeritechFighterConstants_VA + 0x50u;
+	MEM32(edx + 0x790u) = VF1SXVeritechFighterConstants_VA + 0x54u;
+	MEM32(edx + 0x794u) = VF1SXVeritechFighterConstants_VA + 0x58u;
+	MEM32(edx + 0x798u) = VeritechConstants_speed_forward_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x79Cu) = VeritechConstants_speed_backward_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A4u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A0u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A8u) = VF1SXVeritechFighterConstants_VA + 0x6Cu;
+	MEM32(edx + 0x7ACu) = VF1SXVeritechFighterConstants_VA + 0x70u;
+	MEM32(edx + 0x7B0u) = VF1SXVeritechFighterConstants_VA + 0x78u;
+	MEM32(edx + 0x7B4u) = VF1SXVeritechFighterConstants_VA + 0x74u;
+	MEM32(edx + 0x7E0u) = VF1SXVeritechFighterConstants_VA + 0x84u;
+	MEM32(edx + 0x7B8u) = VF1SXVeritechFighterConstants_VA + 0x88u;
+	MEM32(edx + 0x7C0u) = VF1SXVeritechFighterConstants_VA + 0x8Cu;
+	MEM32(edx + 0x7E4u) = VF1SXVeritechFighterConstants_VA + 0x90u;
+	MEM32(edx + 0x7BCu) = VF1SXVeritechFighterConstants_VA + 0x94u;
+	MEM32(edx + 0x7C4u) = VF1SXVeritechFighterConstants_VA + 0x98u;
+	MEM32(edx + 0x7E8u) = VF1SXVeritechFighterConstants_VA + 0x9Cu;
+	MEM32(edx + 0x7C8u) = VF1SXVeritechFighterConstants_VA + 0xA0u;
+	MEM32(edx + 0x7CCu) = VF1SXVeritechFighterConstants_VA + 0xA4u;
+	MEM32(edx + 0x7ECu) = VF1SXVeritechFighterConstants_VA + 0xA8u;
+	MEM32(edx + 0x7D0u) = VF1SXVeritechFighterConstants_VA + 0xACu;
+	MEM32(edx + 0x7D4u) = VF1SXVeritechFighterConstants_VA + 0xB0u;
+	MEM32(edx + 0x7D8u) = VF1SXVeritechFighterConstants_VA + 0xB4u;
+	MEM32(edx + 0x7DCu) = VF1SXVeritechFighterConstants_VA + 0xB8u;
+	MEM32(edx + 0x818u) = VF1SXVeritechFighterConstants_VA + 0xE4u;
+	MEM32(edx + 0x7F4u) = VF1SXVeritechFighterConstants_VA + 0xBCu;
+	MEM32(edx + 0x7F8u) = VF1SXVeritechFighterConstants_VA + 0xC0u;
+	MEM32(edx + 0x7FCu) = VF1SXVeritechFighterConstants_VA + 0xC4u;
+	MEM32(edx + 0x800u) = VF1SXVeritechFighterConstants_VA + 0xC8u;
+	MEM32(edx + 0x804u) = VeritechConstants_camera_lag_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x808u) = VF1SXVeritechFighterConstants_VA + 0xD0u;
+	MEM32(edx + 0x80Cu) = VF1SXVeritechFighterConstants_VA + 0xD4u;
+	MEM32(edx + 0x810u) = VF1SXVeritechFighterConstants_VA + 0xD8u;
+	MEM32(edx + 0x814u) = VF1SXVeritechFighterConstants_VA + 0xDCu;
+	MEM32(edx + 0x81Cu) = VF1SXVeritechFighterConstants_VA + 0xE0u;
+	MEM32(edx + 0x820u) = VeritechConstants_explode_chance_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x824u) = VeritechConstants_death_wait_VA(VF1SXVeritechFighterConstants_VA);
+	MEM32(edx + 0x828u) = VeritechConstants_fade_time_VA(VF1SXVeritechFighterConstants_VA);
 	MEM32(edx + 0x7F0u) = edx + 0x834u;
 	MEM32(edx + 0x82Cu) = 1u;
 	MEM32(edx + 0x830u) = edx + 0x850u;
-	MEM32(edx + 0x730u) = 0x193E28u;
+	MEM32(edx + 0x730u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x978u, 0u, 0x41u);
-	MEM32(edx + 0x9A8u) = 0x19468Cu;
+	MEM32(edx + 0x9A8u) = VeritechConstants_radius_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0x9ACu) = esi;
-	MEM32(edx + 0x97Cu) = 0x194694u;
-	MEM32(edx + 0x980u) = 0x194698u;
-	MEM32(edx + 0x984u) = 0x19469Cu;
-	MEM32(edx + 0x988u) = 0x1946A0u;
-	MEM32(edx + 0x98Cu) = 0x1946A4u;
-	MEM32(edx + 0x990u) = 0x1946A8u;
-	MEM32(edx + 0x994u) = 0x1946ACu;
-	MEM32(edx + 0x998u) = 0x1946B0u;
-	MEM32(edx + 0x99Cu) = 0x1946B4u;
-	MEM32(edx + 0x9A0u) = 0x1946B8u;
-	MEM32(edx + 0x9A4u) = 0x194688u;
-	MEM32(edx + 0x9B0u) = 0x1946BCu;
-	MEM32(edx + 0x9B4u) = 0x1946C0u;
-	MEM32(edx + 0x9C0u) = 0x1946C4u;
-	MEM32(edx + 0x9C4u) = 0x1946C8u;
-	MEM32(edx + 0x9B8u) = 0x1946CCu;
-	MEM32(edx + 0x9BCu) = 0x1946D0u;
-	MEM32(edx + 0x9C8u) = 0x194704u;
-	MEM32(edx + 0x9CCu) = 0x194708u;
-	MEM32(edx + 0x9D0u) = 0x1946D4u;
-	MEM32(edx + 0x9D4u) = 0x1946D8u;
-	MEM32(edx + 0x9D8u) = 0x1946DCu;
-	MEM32(edx + 0x9DCu) = 0x1946E0u;
-	MEM32(edx + 0x9E0u) = 0x1946E4u;
-	MEM32(edx + 0x9E4u) = 0x1946E8u;
-	MEM32(edx + 0x9ECu) = 0x1946ECu;
-	MEM32(edx + 0x9E8u) = 0x1946F0u;
-	MEM32(edx + 0x9F0u) = 0x1946F4u;
-	MEM32(edx + 0x9F4u) = 0x1946F8u;
-	MEM32(edx + 0x9F8u) = 0x1946FCu;
-	MEM32(edx + 0x9FCu) = 0x194700u;
-	MEM32(edx + 0xA28u) = 0x19470Cu;
-	MEM32(edx + 0xA00u) = 0x194710u;
-	MEM32(edx + 0xA08u) = 0x194714u;
-	MEM32(edx + 0xA2Cu) = 0x194718u;
-	MEM32(edx + 0xA04u) = 0x19471Cu;
-	MEM32(edx + 0xA0Cu) = 0x194720u;
-	MEM32(edx + 0xA30u) = 0x194724u;
-	MEM32(edx + 0xA10u) = 0x194728u;
-	MEM32(edx + 0xA14u) = 0x19472Cu;
-	MEM32(edx + 0xA34u) = 0x194730u;
-	MEM32(edx + 0xA18u) = 0x194734u;
-	MEM32(edx + 0xA1Cu) = 0x194738u;
-	MEM32(edx + 0xA20u) = 0x19473Cu;
-	MEM32(edx + 0xA24u) = 0x194740u;
-	MEM32(edx + 0xA60u) = 0x19476Cu;
-	MEM32(edx + 0xA3Cu) = 0x194744u;
-	MEM32(edx + 0xA40u) = 0x194748u;
-	MEM32(edx + 0xA44u) = 0x19474Cu;
-	MEM32(edx + 0xA48u) = 0x194750u;
-	MEM32(edx + 0xA4Cu) = 0x194754u;
-	MEM32(edx + 0xA50u) = 0x194758u;
-	MEM32(edx + 0xA54u) = 0x19475Cu;
-	MEM32(edx + 0xA58u) = 0x194760u;
-	MEM32(edx + 0xA5Cu) = 0x194764u;
-	MEM32(edx + 0xA64u) = 0x194768u;
-	MEM32(edx + 0xA68u) = 0x194770u;
-	MEM32(edx + 0xA6Cu) = 0x194774u;
-	MEM32(edx + 0xA70u) = 0x194778u;
+	MEM32(edx + 0x97Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0x980u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0x984u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0x988u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0x98Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0x990u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0x994u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0x998u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0x99Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0x9A0u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0x9A4u) = VF1SXVeritechBattloidSumoPackConstants_VA;
+	MEM32(edx + 0x9B0u) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B4u) = VeritechConstants_brake_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C0u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C4u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B8u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9BCu) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C8u) = VeritechConstants_boost_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9CCu) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9D0u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0x9D4u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0x9D8u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0x9DCu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0x9E0u) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E4u) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9ECu) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E8u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9F0u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0x9F4u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0x9F8u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0x9FCu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xA28u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xA00u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xA08u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xA2Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xA04u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xA0Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xA30u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xA10u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xA14u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xA34u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xA18u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xA1Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xA20u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xA24u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xA60u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xA3Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xA40u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xA44u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xA48u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xA4Cu) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA50u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xA54u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xA58u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xA5Cu) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xA64u) = VF1SXVeritechBattloidSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xA68u) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA6Cu) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA70u) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0xA38u) = edx + 0x108u;
 	MEM32(edx + 0xA74u) = 1u;
 	MEM32(edx + 0xA78u) = ebx;
-	MEM32(edx + 0x978u) = 0x193E28u;
+	MEM32(edx + 0x978u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xA7Cu, 0u, 0x41u);
-	MEM32(edx + 0xAACu) = 0x194780u;
+	MEM32(edx + 0xAACu) = VeritechConstants_radius_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xAB0u) = esi;
-	MEM32(edx + 0xA80u) = 0x194788u;
-	MEM32(edx + 0xA84u) = 0x19478Cu;
-	MEM32(edx + 0xA88u) = 0x194790u;
-	MEM32(edx + 0xA8Cu) = 0x194794u;
-	MEM32(edx + 0xA90u) = 0x194798u;
-	MEM32(edx + 0xA94u) = 0x19479Cu;
-	MEM32(edx + 0xA98u) = 0x1947A0u;
-	MEM32(edx + 0xA9Cu) = 0x1947A4u;
-	MEM32(edx + 0xAA0u) = 0x1947A8u;
-	MEM32(edx + 0xAA4u) = 0x1947ACu;
-	MEM32(edx + 0xAA8u) = 0x19477Cu;
-	MEM32(edx + 0xAB4u) = 0x1947B0u;
-	MEM32(edx + 0xAB8u) = 0x1947B4u;
-	MEM32(edx + 0xAC4u) = 0x1947B8u;
-	MEM32(edx + 0xAC8u) = 0x1947BCu;
-	MEM32(edx + 0xABCu) = 0x1947C0u;
-	MEM32(edx + 0xAC0u) = 0x1947C4u;
-	MEM32(edx + 0xACCu) = 0x1947F8u;
-	MEM32(edx + 0xAD0u) = 0x1947FCu;
-	MEM32(edx + 0xAD4u) = 0x1947C8u;
-	MEM32(edx + 0xAD8u) = 0x1947CCu;
-	MEM32(edx + 0xADCu) = 0x1947D0u;
-	MEM32(edx + 0xAE0u) = 0x1947D4u;
-	MEM32(edx + 0xAE4u) = 0x1947D8u;
-	MEM32(edx + 0xAE8u) = 0x1947DCu;
-	MEM32(edx + 0xAF0u) = 0x1947E0u;
-	MEM32(edx + 0xAECu) = 0x1947E4u;
-	MEM32(edx + 0xAF4u) = 0x1947E8u;
-	MEM32(edx + 0xAF8u) = 0x1947ECu;
-	MEM32(edx + 0xAFCu) = 0x1947F0u;
-	MEM32(edx + 0xB00u) = 0x1947F4u;
-	MEM32(edx + 0xB2Cu) = 0x194800u;
-	MEM32(edx + 0xB04u) = 0x194804u;
-	MEM32(edx + 0xB0Cu) = 0x194808u;
-	MEM32(edx + 0xB30u) = 0x19480Cu;
-	MEM32(edx + 0xB08u) = 0x194810u;
-	MEM32(edx + 0xB10u) = 0x194814u;
-	MEM32(edx + 0xB34u) = 0x194818u;
-	MEM32(edx + 0xB14u) = 0x19481Cu;
-	MEM32(edx + 0xB18u) = 0x194820u;
-	MEM32(edx + 0xB38u) = 0x194824u;
-	MEM32(edx + 0xB1Cu) = 0x194828u;
-	MEM32(edx + 0xB20u) = 0x19482Cu;
-	MEM32(edx + 0xB24u) = 0x194830u;
-	MEM32(edx + 0xB28u) = 0x194834u;
-	MEM32(edx + 0xB64u) = 0x194860u;
-	MEM32(edx + 0xB40u) = 0x194838u;
-	MEM32(edx + 0xB44u) = 0x19483Cu;
-	MEM32(edx + 0xB48u) = 0x194840u;
-	MEM32(edx + 0xB4Cu) = 0x194844u;
-	MEM32(edx + 0xB50u) = 0x194848u;
-	MEM32(edx + 0xB54u) = 0x19484Cu;
-	MEM32(edx + 0xB58u) = 0x194850u;
-	MEM32(edx + 0xB5Cu) = 0x194854u;
-	MEM32(edx + 0xB60u) = 0x194858u;
-	MEM32(edx + 0xB68u) = 0x19485Cu;
-	MEM32(edx + 0xB6Cu) = 0x194864u;
-	MEM32(edx + 0xB70u) = 0x194868u;
-	MEM32(edx + 0xB74u) = 0x19486Cu;
+	MEM32(edx + 0xA80u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0xA84u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0xA88u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0xA8Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0xA90u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xA94u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0xA98u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0xA9Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0xAA0u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xAA4u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0xAA8u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA;
+	MEM32(edx + 0xAB4u) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAB8u) = VeritechConstants_brake_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC4u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC8u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xABCu) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC0u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xACCu) = VeritechConstants_boost_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD0u) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD4u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xAD8u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0xADCu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0xAE0u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0xAE4u) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAE8u) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF0u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAECu) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF4u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xAF8u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0xAFCu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0xB00u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xB2Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xB04u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xB0Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB30u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xB08u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xB10u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xB34u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xB14u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xB18u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xB38u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xB1Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xB20u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xB24u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xB28u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xB64u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xB40u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xB44u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xB48u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xB4Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xB50u) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB54u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xB58u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xB5Cu) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xB60u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xB68u) = VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xB6Cu) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB70u) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB74u) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xB3Cu) = edx + 0x404u;
 	MEM32(edx + 0xB78u) = 1u;
 	MEM32(edx + 0xB7Cu) = ebx;
-	MEM32(edx + 0xA7Cu) = 0x193E28u;
+	MEM32(edx + 0xA7Cu) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xB80u, 0u, 0x41u);
-	MEM32(edx + 0xBB0u) = 0x194874u;
+	MEM32(edx + 0xBB0u) = VeritechConstants_radius_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xBB4u) = esi;
-	MEM32(edx + 0xB84u) = 0x19487Cu;
-	MEM32(edx + 0xB88u) = 0x194880u;
-	MEM32(edx + 0xB8Cu) = 0x194884u;
-	MEM32(edx + 0xB90u) = 0x194888u;
-	MEM32(edx + 0xB94u) = 0x19488Cu;
-	MEM32(edx + 0xB98u) = 0x194890u;
-	MEM32(edx + 0xB9Cu) = 0x194894u;
-	MEM32(edx + 0xBA0u) = 0x194898u;
-	MEM32(edx + 0xBA4u) = 0x19489Cu;
-	MEM32(edx + 0xBA8u) = 0x1948A0u;
-	MEM32(edx + 0xBACu) = 0x194870u;
-	MEM32(edx + 0xBB8u) = 0x1948A4u;
-	MEM32(edx + 0xBBCu) = 0x1948A8u;
-	MEM32(edx + 0xBC8u) = 0x1948ACu;
-	MEM32(edx + 0xBCCu) = 0x1948B0u;
-	MEM32(edx + 0xBC0u) = 0x1948B4u;
-	MEM32(edx + 0xBC4u) = 0x1948B8u;
-	MEM32(edx + 0xBD0u) = 0x1948ECu;
-	MEM32(edx + 0xBD4u) = 0x1948F0u;
-	MEM32(edx + 0xBD8u) = 0x1948BCu;
-	MEM32(edx + 0xBDCu) = 0x1948C0u;
-	MEM32(edx + 0xBE0u) = 0x1948C4u;
-	MEM32(edx + 0xBE4u) = 0x1948C8u;
-	MEM32(edx + 0xBE8u) = 0x1948CCu;
-	MEM32(edx + 0xBECu) = 0x1948D0u;
-	MEM32(edx + 0xBF4u) = 0x1948D4u;
-	MEM32(edx + 0xBF0u) = 0x1948D8u;
-	MEM32(edx + 0xBF8u) = 0x1948DCu;
-	MEM32(edx + 0xBFCu) = 0x1948E0u;
-	MEM32(edx + 0xC00u) = 0x1948E4u;
-	MEM32(edx + 0xC04u) = 0x1948E8u;
-	MEM32(edx + 0xC30u) = 0x1948F4u;
-	MEM32(edx + 0xC08u) = 0x1948F8u;
-	MEM32(edx + 0xC10u) = 0x1948FCu;
-	MEM32(edx + 0xC34u) = 0x194900u;
-	MEM32(edx + 0xC0Cu) = 0x194904u;
-	MEM32(edx + 0xC14u) = 0x194908u;
-	MEM32(edx + 0xC38u) = 0x19490Cu;
-	MEM32(edx + 0xC18u) = 0x194910u;
-	MEM32(edx + 0xC1Cu) = 0x194914u;
-	MEM32(edx + 0xC3Cu) = 0x194918u;
-	MEM32(edx + 0xC20u) = 0x19491Cu;
-	MEM32(edx + 0xC24u) = 0x194920u;
-	MEM32(edx + 0xC28u) = 0x194924u;
-	MEM32(edx + 0xC2Cu) = 0x194928u;
-	MEM32(edx + 0xC68u) = 0x194954u;
-	MEM32(edx + 0xC44u) = 0x19492Cu;
-	MEM32(edx + 0xC48u) = 0x194930u;
-	MEM32(edx + 0xC4Cu) = 0x194934u;
-	MEM32(edx + 0xC50u) = 0x194938u;
-	MEM32(edx + 0xC54u) = 0x19493Cu;
-	MEM32(edx + 0xC58u) = 0x194940u;
-	MEM32(edx + 0xC5Cu) = 0x194944u;
-	MEM32(edx + 0xC60u) = 0x194948u;
-	MEM32(edx + 0xC64u) = 0x19494Cu;
-	MEM32(edx + 0xC6Cu) = 0x194950u;
-	MEM32(edx + 0xC70u) = 0x194958u;
-	MEM32(edx + 0xC74u) = 0x19495Cu;
-	MEM32(edx + 0xC78u) = 0x194960u;
+	MEM32(edx + 0xB84u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xB88u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xB8Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xB90u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xB94u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xB98u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xB9Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xBA0u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xBA4u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xBA8u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xBACu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xBB8u) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBBCu) = VeritechConstants_brake_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC8u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBCCu) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC0u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC4u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD0u) = VeritechConstants_boost_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD4u) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD8u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xBDCu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xBE0u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xBE4u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xBE8u) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBECu) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF4u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF0u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF8u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xBFCu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xC00u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xC04u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xC30u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xC08u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xC10u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xC34u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xC0Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xC14u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xC38u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xC18u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xC1Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xC3Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xC20u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xC24u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xC28u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xC2Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xC68u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xC44u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xC48u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xC4Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xC50u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xC54u) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC58u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xC5Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xC60u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xC64u) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xC6Cu) = VF1SXVeritechBattloidSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xC70u) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC74u) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC78u) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xC40u) = edx + 0x108u;
 	MEM32(edx + 0xC7Cu) = 1u;
 	MEM32(edx + 0xC80u) = ebx;
-	MEM32(edx + 0xB80u) = 0x193E28u;
+	MEM32(edx + 0xB80u) = VF1SXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xC84u, 0u, 0x41u);
-	MEM32(edx + 0xCB4u) = 0x194968u;
+	MEM32(edx + 0xCB4u) = VeritechConstants_radius_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xCB8u) = esi;
-	MEM32(edx + 0xC88u) = 0x194970u;
-	MEM32(edx + 0xC8Cu) = 0x194974u;
-	MEM32(edx + 0xC90u) = 0x194978u;
-	MEM32(edx + 0xC94u) = 0x19497Cu;
-	MEM32(edx + 0xC98u) = 0x194980u;
-	MEM32(edx + 0xC9Cu) = 0x194984u;
-	MEM32(edx + 0xCA0u) = 0x194988u;
-	MEM32(edx + 0xCA4u) = 0x19498Cu;
-	MEM32(edx + 0xCA8u) = 0x194990u;
-	MEM32(edx + 0xCACu) = 0x194994u;
-	MEM32(edx + 0xCB0u) = 0x194964u;
-	MEM32(edx + 0xCBCu) = 0x194998u;
-	MEM32(edx + 0xCC0u) = 0x19499Cu;
-	MEM32(edx + 0xCCCu) = 0x1949A0u;
-	MEM32(edx + 0xCD0u) = 0x1949A4u;
-	MEM32(edx + 0xCC4u) = 0x1949A8u;
-	MEM32(edx + 0xCC8u) = 0x1949ACu;
-	MEM32(edx + 0xCD4u) = 0x1949E0u;
-	MEM32(edx + 0xCD8u) = 0x1949E4u;
-	MEM32(edx + 0xCDCu) = 0x1949B0u;
-	MEM32(edx + 0xCE0u) = 0x1949B4u;
-	MEM32(edx + 0xCE4u) = 0x1949B8u;
-	MEM32(edx + 0xCE8u) = 0x1949BCu;
-	MEM32(edx + 0xCECu) = 0x1949C0u;
-	MEM32(edx + 0xCF0u) = 0x1949C4u;
-	MEM32(edx + 0xCF8u) = 0x1949C8u;
-	MEM32(edx + 0xCF4u) = 0x1949CCu;
-	MEM32(edx + 0xCFCu) = 0x1949D0u;
-	MEM32(edx + 0xD00u) = 0x1949D4u;
-	MEM32(edx + 0xD04u) = 0x1949D8u;
-	MEM32(edx + 0xD08u) = 0x1949DCu;
-	MEM32(edx + 0xD34u) = 0x1949E8u;
-	MEM32(edx + 0xD0Cu) = 0x1949ECu;
-	MEM32(edx + 0xD14u) = 0x1949F0u;
-	MEM32(edx + 0xD38u) = 0x1949F4u;
-	MEM32(edx + 0xD10u) = 0x1949F8u;
-	MEM32(edx + 0xD18u) = 0x1949FCu;
-	MEM32(edx + 0xD3Cu) = 0x194A00u;
-	MEM32(edx + 0xD1Cu) = 0x194A04u;
-	MEM32(edx + 0xD20u) = 0x194A08u;
-	MEM32(edx + 0xD40u) = 0x194A0Cu;
-	MEM32(edx + 0xD24u) = 0x194A10u;
-	MEM32(edx + 0xD28u) = 0x194A14u;
-	MEM32(edx + 0xD2Cu) = 0x194A18u;
-	MEM32(edx + 0xD30u) = 0x194A1Cu;
-	MEM32(edx + 0xD6Cu) = 0x194A48u;
-	MEM32(edx + 0xD48u) = 0x194A20u;
-	MEM32(edx + 0xD4Cu) = 0x194A24u;
-	MEM32(edx + 0xD50u) = 0x194A28u;
-	MEM32(edx + 0xD54u) = 0x194A2Cu;
-	MEM32(edx + 0xD58u) = 0x194A30u;
-	MEM32(edx + 0xD5Cu) = 0x194A34u;
-	MEM32(edx + 0xD60u) = 0x194A38u;
-	MEM32(edx + 0xD64u) = 0x194A3Cu;
-	MEM32(edx + 0xD68u) = 0x194A40u;
-	MEM32(edx + 0xD70u) = 0x194A44u;
-	MEM32(edx + 0xD74u) = 0x194A4Cu;
-	MEM32(edx + 0xD78u) = 0x194A50u;
-	MEM32(edx + 0xD7Cu) = 0x194A54u;
+	MEM32(edx + 0xC88u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xC8Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xC90u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xC94u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xC98u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xC9Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xCA0u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xCA4u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xCA8u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xCACu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xCB0u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xCBCu) = VeritechConstants_thrust_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC0u) = VeritechConstants_brake_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCCCu) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD0u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC4u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC8u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD4u) = VeritechConstants_boost_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD8u) = VeritechConstants_boost_force_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCDCu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xCE0u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xCE4u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xCE8u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xCECu) = VeritechConstants_speed_forward_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF0u) = VeritechConstants_speed_backward_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF8u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF4u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCFCu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xD00u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xD04u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xD08u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xD34u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xD0Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xD14u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xD38u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xD10u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xD18u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xD3Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xD1Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xD20u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xD40u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xD24u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xD28u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xD2Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xD30u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xD6Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xD48u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xD4Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xD50u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xD54u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xD58u) = VeritechConstants_camera_lag_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD5Cu) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xD60u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xD64u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xD68u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xD70u) = VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xD74u) = VeritechConstants_explode_chance_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD78u) = VeritechConstants_death_wait_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD7Cu) = VeritechConstants_fade_time_VA(VF1SXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xD44u) = edx + 0x404u;
 	MEM32(edx + 0xD80u) = 1u;
 	MEM32(edx + 0xD84u) = ebx;
-	MEM32(edx + 0xC84u) = 0x193E28u;
+	MEM32(edx + 0xC84u) = VF1SXVeritechHitPoints_VA;
 	ebx = edx + 0xD88u;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xDB8u) = 0x194A5Cu;
+	MEM32(edx + 0xDB8u) = VeritechConstants_radius_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xDBCu) = esi;
-	MEM32(edx + 0xD8Cu) = 0x194A64u;
-	MEM32(edx + 0xD90u) = 0x194A68u;
-	MEM32(edx + 0xD94u) = 0x194A6Cu;
-	MEM32(edx + 0xD98u) = 0x194A70u;
-	MEM32(edx + 0xD9Cu) = 0x194A74u;
-	MEM32(edx + 0xDA0u) = 0x194A78u;
-	MEM32(edx + 0xDA4u) = 0x194A7Cu;
-	MEM32(edx + 0xDA8u) = 0x194A80u;
-	MEM32(edx + 0xDACu) = 0x194A84u;
-	MEM32(edx + 0xDB0u) = 0x194A88u;
-	MEM32(edx + 0xDB4u) = 0x194A58u;
-	MEM32(edx + 0xDC0u) = 0x194A8Cu;
-	MEM32(edx + 0xDC4u) = 0x194A90u;
-	MEM32(edx + 0xDD0u) = 0x194A94u;
-	MEM32(edx + 0xDD4u) = 0x194A98u;
-	MEM32(edx + 0xDC8u) = 0x194A9Cu;
-	MEM32(edx + 0xDCCu) = 0x194AA0u;
-	MEM32(edx + 0xDD8u) = 0x194AD4u;
-	MEM32(edx + 0xDDCu) = 0x194AD8u;
-	MEM32(edx + 0xDE0u) = 0x194AA4u;
-	MEM32(edx + 0xDE4u) = 0x194AA8u;
-	MEM32(edx + 0xDE8u) = 0x194AACu;
-	MEM32(edx + 0xDECu) = 0x194AB0u;
-	MEM32(edx + 0xDF0u) = 0x194AB4u;
-	MEM32(edx + 0xDF4u) = 0x194AB8u;
-	MEM32(edx + 0xDFCu) = 0x194ABCu;
-	MEM32(edx + 0xDF8u) = 0x194AC0u;
-	MEM32(edx + 0xE00u) = 0x194AC4u;
-	MEM32(edx + 0xE04u) = 0x194AC8u;
-	MEM32(edx + 0xE08u) = 0x194ACCu;
-	MEM32(edx + 0xE0Cu) = 0x194AD0u;
-	MEM32(edx + 0xE38u) = 0x194ADCu;
-	MEM32(edx + 0xE10u) = 0x194AE0u;
-	MEM32(edx + 0xE18u) = 0x194AE4u;
-	MEM32(edx + 0xE3Cu) = 0x194AE8u;
-	MEM32(edx + 0xE14u) = 0x194AECu;
-	MEM32(edx + 0xE1Cu) = 0x194AF0u;
-	MEM32(edx + 0xE40u) = 0x194AF4u;
-	MEM32(edx + 0xE20u) = 0x194AF8u;
-	MEM32(edx + 0xE24u) = 0x194AFCu;
-	MEM32(edx + 0xE44u) = 0x194B00u;
-	MEM32(edx + 0xE28u) = 0x194B04u;
-	MEM32(edx + 0xE2Cu) = 0x194B08u;
-	MEM32(edx + 0xE30u) = 0x194B0Cu;
-	MEM32(edx + 0xE34u) = 0x194B10u;
-	MEM32(edx + 0xE70u) = 0x194B3Cu;
-	MEM32(edx + 0xE4Cu) = 0x194B14u;
-	MEM32(edx + 0xE50u) = 0x194B18u;
-	MEM32(edx + 0xE54u) = 0x194B1Cu;
-	MEM32(edx + 0xE58u) = 0x194B20u;
-	MEM32(edx + 0xE5Cu) = 0x194B24u;
-	MEM32(edx + 0xE60u) = 0x194B28u;
-	MEM32(edx + 0xE64u) = 0x194B2Cu;
-	MEM32(edx + 0xE68u) = 0x194B30u;
-	MEM32(edx + 0xE6Cu) = 0x194B34u;
-	MEM32(edx + 0xE74u) = 0x194B38u;
-	MEM32(edx + 0xE78u) = 0x194B40u;
-	MEM32(edx + 0xE7Cu) = 0x194B44u;
-	MEM32(edx + 0xE80u) = 0x194B48u;
+	MEM32(edx + 0xD8Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xD90u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xD94u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xD98u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xD9Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xDA0u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xDA4u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xDA8u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xDACu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xDB0u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xDB4u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xDC0u) = VeritechConstants_thrust_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC4u) = VeritechConstants_brake_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD0u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD4u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC8u) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDCCu) = VeritechConstants_brake_vertical_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD8u) = VeritechConstants_boost_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDDCu) = VeritechConstants_boost_force_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDE0u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xDE4u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xDE8u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xDECu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xDF0u) = VeritechConstants_speed_forward_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF4u) = VeritechConstants_speed_backward_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDFCu) = VeritechConstants_speed_sideways_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF8u) = VeritechConstants_speed_vertical_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE00u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xE04u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xE08u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xE0Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xE38u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xE10u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xE18u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xE3Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xE14u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xE1Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xE40u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xE20u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xE24u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xE44u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xE28u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xE2Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xE30u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xE34u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xE70u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xE4Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xE50u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xE54u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xE58u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xE5Cu) = VeritechConstants_camera_lag_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE60u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xE64u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xE68u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xE6Cu) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xE74u) = VF1SXVeritechGuardianSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xE78u) = VeritechConstants_explode_chance_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE7Cu) = VeritechConstants_death_wait_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE80u) = VeritechConstants_fade_time_VA(VF1SXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xE48u) = edx + 0x65Cu;
 	MEM32(edx + 0xE84u) = 1u;
 	MEM32(edx + 0xE88u) = edx + 0x68Cu;
-	MEM32(ebx) = 0x193E28u;
+	MEM32(ebx) = VF1SXVeritechHitPoints_VA;
 	ebx = edx + 0xE8Cu;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xEBCu) = 0x194B50u;
+	MEM32(edx + 0xEBCu) = VeritechConstants_radius_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xEC0u) = esi;
-	MEM32(edx + 0xE90u) = 0x194B58u;
-	MEM32(edx + 0xE94u) = 0x194B5Cu;
-	MEM32(edx + 0xE98u) = 0x194B60u;
-	MEM32(edx + 0xE9Cu) = 0x194B64u;
-	MEM32(edx + 0xEA0u) = 0x194B68u;
-	MEM32(edx + 0xEA4u) = 0x194B6Cu;
-	MEM32(edx + 0xEA8u) = 0x194B70u;
-	MEM32(edx + 0xEACu) = 0x194B74u;
-	MEM32(edx + 0xEB0u) = 0x194B78u;
-	MEM32(edx + 0xEB4u) = 0x194B7Cu;
-	MEM32(edx + 0xEB8u) = 0x194B4Cu;
-	MEM32(edx + 0xEC4u) = 0x194B80u;
-	MEM32(edx + 0xEC8u) = 0x194B84u;
-	MEM32(edx + 0xED4u) = 0x194B88u;
-	MEM32(edx + 0xED8u) = 0x194B8Cu;
-	MEM32(edx + 0xECCu) = 0x194B90u;
-	MEM32(edx + 0xED0u) = 0x194B94u;
-	MEM32(edx + 0xEDCu) = 0x194BC8u;
-	MEM32(edx + 0xEE0u) = 0x194BCCu;
-	MEM32(edx + 0xEE4u) = 0x194B98u;
-	MEM32(edx + 0xEE8u) = 0x194B9Cu;
-	MEM32(edx + 0xEECu) = 0x194BA0u;
-	MEM32(edx + 0xEF0u) = 0x194BA4u;
-	MEM32(edx + 0xEF4u) = 0x194BA8u;
-	MEM32(edx + 0xEF8u) = 0x194BACu;
-	MEM32(edx + 0xF00u) = 0x194BB0u;
-	MEM32(edx + 0xEFCu) = 0x194BB4u;
-	MEM32(edx + 0xF04u) = 0x194BB8u;
-	MEM32(edx + 0xF08u) = 0x194BBCu;
-	MEM32(edx + 0xF0Cu) = 0x194BC4u;
-	MEM32(edx + 0xF10u) = 0x194BC0u;
-	MEM32(edx + 0xF3Cu) = 0x194BD0u;
-	MEM32(edx + 0xF14u) = 0x194BD4u;
-	MEM32(edx + 0xF1Cu) = 0x194BD8u;
-	MEM32(edx + 0xF40u) = 0x194BDCu;
-	MEM32(edx + 0xF18u) = 0x194BE0u;
-	MEM32(edx + 0xF20u) = 0x194BE4u;
-	MEM32(edx + 0xF44u) = 0x194BE8u;
-	MEM32(edx + 0xF24u) = 0x194BECu;
-	MEM32(edx + 0xF28u) = 0x194BF0u;
-	MEM32(edx + 0xF48u) = 0x194BF4u;
-	MEM32(edx + 0xF2Cu) = 0x194BF8u;
-	MEM32(edx + 0xF30u) = 0x194BFCu;
-	MEM32(edx + 0xF34u) = 0x194C00u;
-	MEM32(edx + 0xF38u) = 0x194C04u;
-	MEM32(edx + 0xF74u) = 0x194C30u;
-	MEM32(edx + 0xF50u) = 0x194C08u;
-	MEM32(edx + 0xF54u) = 0x194C0Cu;
-	MEM32(edx + 0xF58u) = 0x194C10u;
-	MEM32(edx + 0xF5Cu) = 0x194C14u;
-	MEM32(edx + 0xF60u) = 0x194C18u;
-	MEM32(edx + 0xF64u) = 0x194C1Cu;
-	MEM32(edx + 0xF68u) = 0x194C20u;
-	MEM32(edx + 0xF6Cu) = 0x194C24u;
-	MEM32(edx + 0xF70u) = 0x194C28u;
-	MEM32(edx + 0xF78u) = 0x194C2Cu;
-	MEM32(edx + 0xF7Cu) = 0x194C34u;
-	MEM32(edx + 0xF80u) = 0x194C38u;
-	MEM32(edx + 0xF84u) = 0x194C3Cu;
+	MEM32(edx + 0xE90u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xE94u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xE98u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xE9Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xEA0u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xEA4u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xEA8u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xEACu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xEB0u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xEB4u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xEB8u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xEC4u) = VeritechConstants_thrust_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEC8u) = VeritechConstants_brake_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED4u) = VeritechConstants_thrust_sideways_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED8u) = VeritechConstants_brake_sideways_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xECCu) = VeritechConstants_thrust_vertical_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED0u) = VeritechConstants_brake_vertical_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEDCu) = VeritechConstants_boost_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE0u) = VeritechConstants_boost_force_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE4u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xEE8u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xEECu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xEF0u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xEF4u) = VeritechConstants_speed_forward_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEF8u) = VeritechConstants_speed_backward_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF00u) = VeritechConstants_speed_sideways_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEFCu) = VeritechConstants_speed_vertical_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF04u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xF08u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xF0Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xF10u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xF3Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xF14u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xF1Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xF40u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xF18u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xF20u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xF44u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xF24u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xF28u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xF48u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xF2Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xF30u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xF34u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xF38u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xF74u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xF50u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xF54u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xF58u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xF5Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xF60u) = VeritechConstants_camera_lag_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF64u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xF68u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xF6Cu) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xF70u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xF78u) = VF1SXVeritechFighterSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xF7Cu) = VeritechConstants_explode_chance_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF80u) = VeritechConstants_death_wait_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF84u) = VeritechConstants_fade_time_VA(VF1SXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xF4Cu) = edx + 0x834u;
 	MEM32(edx + 0xF88u) = 1u;
 	MEM32(edx + 0xF8Cu) = edx + 0x850u;
-	MEM32(ebx) = 0x193E28u;
+	MEM32(ebx) = VF1SXVeritechHitPoints_VA;
 	MEM32(edx + 0xF90u) = 5u;
 	MEM32(edx + 0xF94u) = 4u;
 	MEM32(edx + 0xF98u) = 0u;
@@ -83799,7 +83799,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DCC3u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1942ACu;
+		stack_18 = Vf1sGenericHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -83847,7 +83847,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DD25u, 2, arg0_2, arg1_2);
-		stack_18 = 0x194318u;
+		stack_18 = Vf1sJack01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -83895,7 +83895,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DD87u, 2, arg0_2, arg1_2);
-		stack_18 = 0x194574u;
+		stack_18 = Vf1sJack02HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -83943,7 +83943,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DDE9u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1945E4u;
+		stack_18 = Vf1sWolf01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -83991,7 +83991,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DE4Bu, 2, arg0_2, arg1_2);
-		stack_18 = 0x1943DCu;
+		stack_18 = Vf1sRickHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84039,7 +84039,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DEADu, 2, arg0_2, arg1_2);
-		stack_18 = 0x194648u;
+		stack_18 = Vf1sRoyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84087,7 +84087,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DF0Fu, 2, arg0_2, arg1_2);
-		stack_18 = 0x19437Cu;
+		stack_18 = Vf1sIzzyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84135,7 +84135,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DF71u, 2, arg0_2, arg1_2);
-		stack_18 = 0x19449Cu;
+		stack_18 = Vf1sMiryaHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84183,7 +84183,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005DFD3u, 2, arg0_2, arg1_2);
-		stack_18 = 0x19443Cu;
+		stack_18 = Vf1sMaxHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84231,7 +84231,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005E035u, 2, arg0_2, arg1_2);
-		stack_18 = 0x194508u;
+		stack_18 = Vf1sPatriotHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84279,7 +84279,7 @@ void sub_0005DC90(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005E097u, 2, arg0_2, arg1_2);
-		stack_18 = 0x194240u;
+		stack_18 = Vf1sTrainerHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -84346,7 +84346,7 @@ uint32_t VF1JX_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x194C40u;
+	arg0 = VF1JXText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -84384,666 +84384,666 @@ void sub_0005E1E0(uint32_t arg0)
 	esi = edx + 0xFE8u;
 	ebx = edx + 0x25Cu;
 	MEM32(edx + 0xC4u) = edx + 0x108u;
-	MEM32(edx + 0x34u) = 0x194C6Cu;
+	MEM32(edx + 0x34u) = VeritechConstants_radius_VA(VF1JXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x38u) = esi;
-	MEM32(edx + 8u) = 0x194C74u;
-	MEM32(edx + 0xCu) = 0x194C78u;
-	MEM32(edx + 0x10u) = 0x194C7Cu;
-	MEM32(edx + 0x14u) = 0x194C80u;
-	MEM32(edx + 0x18u) = 0x194C84u;
-	MEM32(edx + 0x1Cu) = 0x194C88u;
-	MEM32(edx + 0x20u) = 0x194C8Cu;
-	MEM32(edx + 0x24u) = 0x194C90u;
-	MEM32(edx + 0x28u) = 0x194C94u;
-	MEM32(edx + 0x2Cu) = 0x194C98u;
-	MEM32(edx + 0x30u) = 0x194C68u;
-	MEM32(edx + 0x3Cu) = 0x194C9Cu;
-	MEM32(edx + 0x40u) = 0x194CA0u;
-	MEM32(edx + 0x4Cu) = 0x194CA4u;
-	MEM32(edx + 0x50u) = 0x194CA8u;
-	MEM32(edx + 0x44u) = 0x194CACu;
-	MEM32(edx + 0x48u) = 0x194CB0u;
-	MEM32(edx + 0x54u) = 0x194CE4u;
-	MEM32(edx + 0x58u) = 0x194CE8u;
-	MEM32(edx + 0x5Cu) = 0x194CB4u;
-	MEM32(edx + 0x60u) = 0x194CB8u;
-	MEM32(edx + 0x64u) = 0x194CBCu;
-	MEM32(edx + 0x68u) = 0x194CC0u;
-	MEM32(edx + 0x6Cu) = 0x194CC4u;
-	MEM32(edx + 0x70u) = 0x194CC8u;
-	MEM32(edx + 0x78u) = 0x194CCCu;
-	MEM32(edx + 0x74u) = 0x194CD0u;
-	MEM32(edx + 0x7Cu) = 0x194CD4u;
-	MEM32(edx + 0x80u) = 0x194CD8u;
-	MEM32(edx + 0x84u) = 0x194CDCu;
-	MEM32(edx + 0x88u) = 0x194CE0u;
-	MEM32(edx + 0xB4u) = 0x194CECu;
-	MEM32(edx + 0x8Cu) = 0x194CF0u;
-	MEM32(edx + 0x94u) = 0x194CF4u;
-	MEM32(edx + 0xB8u) = 0x194CF8u;
-	MEM32(edx + 0x90u) = 0x194CFCu;
-	MEM32(edx + 0x98u) = 0x194D00u;
-	MEM32(edx + 0xBCu) = 0x194D04u;
-	MEM32(edx + 0x9Cu) = 0x194D08u;
-	MEM32(edx + 0xA0u) = 0x194D0Cu;
-	MEM32(edx + 0xC0u) = 0x194D10u;
-	MEM32(edx + 0xA4u) = 0x194D14u;
-	MEM32(edx + 0xA8u) = 0x194D18u;
-	MEM32(edx + 0xACu) = 0x194D1Cu;
-	MEM32(edx + 0xB0u) = 0x194D20u;
-	MEM32(edx + 0xECu) = 0x194D4Cu;
-	MEM32(edx + 0xC8u) = 0x194D24u;
-	MEM32(edx + 0xCCu) = 0x194D28u;
-	MEM32(edx + 0xD0u) = 0x194D2Cu;
-	MEM32(edx + 0xD4u) = 0x194D30u;
-	MEM32(edx + 0xD8u) = 0x194D34u;
-	MEM32(edx + 0xDCu) = 0x194D38u;
-	MEM32(edx + 0xE0u) = 0x194D3Cu;
-	MEM32(edx + 0xE4u) = 0x194D40u;
-	MEM32(edx + 0xE8u) = 0x194D44u;
-	MEM32(edx + 0xF0u) = 0x194D48u;
-	MEM32(edx + 0xF4u) = 0x194D50u;
-	MEM32(edx + 0xF8u) = 0x194D54u;
-	MEM32(edx + 0xFCu) = 0x194D58u;
+	MEM32(edx + 8u) = VF1JXVeritechBattloidConstants_VA + 0xCu;
+	MEM32(edx + 0xCu) = VF1JXVeritechBattloidConstants_VA + 0x10u;
+	MEM32(edx + 0x10u) = VF1JXVeritechBattloidConstants_VA + 0x14u;
+	MEM32(edx + 0x14u) = VF1JXVeritechBattloidConstants_VA + 0x18u;
+	MEM32(edx + 0x18u) = VF1JXVeritechBattloidConstants_VA + 0x1Cu;
+	MEM32(edx + 0x1Cu) = VF1JXVeritechBattloidConstants_VA + 0x20u;
+	MEM32(edx + 0x20u) = VF1JXVeritechBattloidConstants_VA + 0x24u;
+	MEM32(edx + 0x24u) = VF1JXVeritechBattloidConstants_VA + 0x28u;
+	MEM32(edx + 0x28u) = VF1JXVeritechBattloidConstants_VA + 0x2Cu;
+	MEM32(edx + 0x2Cu) = VF1JXVeritechBattloidConstants_VA + 0x30u;
+	MEM32(edx + 0x30u) = VF1JXVeritechBattloidConstants_VA;
+	MEM32(edx + 0x3Cu) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x40u) = VeritechConstants_brake_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x4Cu) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x50u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x44u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x48u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x54u) = VeritechConstants_boost_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x58u) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x5Cu) = VF1JXVeritechBattloidConstants_VA + 0x4Cu;
+	MEM32(edx + 0x60u) = VF1JXVeritechBattloidConstants_VA + 0x50u;
+	MEM32(edx + 0x64u) = VF1JXVeritechBattloidConstants_VA + 0x54u;
+	MEM32(edx + 0x68u) = VF1JXVeritechBattloidConstants_VA + 0x58u;
+	MEM32(edx + 0x6Cu) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x70u) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x78u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x74u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x7Cu) = VF1JXVeritechBattloidConstants_VA + 0x6Cu;
+	MEM32(edx + 0x80u) = VF1JXVeritechBattloidConstants_VA + 0x70u;
+	MEM32(edx + 0x84u) = VF1JXVeritechBattloidConstants_VA + 0x74u;
+	MEM32(edx + 0x88u) = VF1JXVeritechBattloidConstants_VA + 0x78u;
+	MEM32(edx + 0xB4u) = VF1JXVeritechBattloidConstants_VA + 0x84u;
+	MEM32(edx + 0x8Cu) = VF1JXVeritechBattloidConstants_VA + 0x88u;
+	MEM32(edx + 0x94u) = VF1JXVeritechBattloidConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB8u) = VF1JXVeritechBattloidConstants_VA + 0x90u;
+	MEM32(edx + 0x90u) = VF1JXVeritechBattloidConstants_VA + 0x94u;
+	MEM32(edx + 0x98u) = VF1JXVeritechBattloidConstants_VA + 0x98u;
+	MEM32(edx + 0xBCu) = VF1JXVeritechBattloidConstants_VA + 0x9Cu;
+	MEM32(edx + 0x9Cu) = VF1JXVeritechBattloidConstants_VA + 0xA0u;
+	MEM32(edx + 0xA0u) = VF1JXVeritechBattloidConstants_VA + 0xA4u;
+	MEM32(edx + 0xC0u) = VF1JXVeritechBattloidConstants_VA + 0xA8u;
+	MEM32(edx + 0xA4u) = VF1JXVeritechBattloidConstants_VA + 0xACu;
+	MEM32(edx + 0xA8u) = VF1JXVeritechBattloidConstants_VA + 0xB0u;
+	MEM32(edx + 0xACu) = VF1JXVeritechBattloidConstants_VA + 0xB4u;
+	MEM32(edx + 0xB0u) = VF1JXVeritechBattloidConstants_VA + 0xB8u;
+	MEM32(edx + 0xECu) = VF1JXVeritechBattloidConstants_VA + 0xE4u;
+	MEM32(edx + 0xC8u) = VF1JXVeritechBattloidConstants_VA + 0xBCu;
+	MEM32(edx + 0xCCu) = VF1JXVeritechBattloidConstants_VA + 0xC0u;
+	MEM32(edx + 0xD0u) = VF1JXVeritechBattloidConstants_VA + 0xC4u;
+	MEM32(edx + 0xD4u) = VF1JXVeritechBattloidConstants_VA + 0xC8u;
+	MEM32(edx + 0xD8u) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xDCu) = VF1JXVeritechBattloidConstants_VA + 0xD0u;
+	MEM32(edx + 0xE0u) = VF1JXVeritechBattloidConstants_VA + 0xD4u;
+	MEM32(edx + 0xE4u) = VF1JXVeritechBattloidConstants_VA + 0xD8u;
+	MEM32(edx + 0xE8u) = VF1JXVeritechBattloidConstants_VA + 0xDCu;
+	MEM32(edx + 0xF0u) = VF1JXVeritechBattloidConstants_VA + 0xE0u;
+	MEM32(edx + 0xF4u) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xF8u) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xFCu) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x100u) = 1u;
 	MEM32(edx + 0x104u) = ebx;
-	MEM32(edx + 4u) = 0x194C48u;
+	MEM32(edx + 4u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x300u, 0u, 0x41u);
-	MEM32(edx + 0x330u) = 0x194D60u;
+	MEM32(edx + 0x330u) = VeritechConstants_radius_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x334u) = esi;
-	MEM32(edx + 0x304u) = 0x194D68u;
-	MEM32(edx + 0x308u) = 0x194D6Cu;
-	MEM32(edx + 0x30Cu) = 0x194D70u;
-	MEM32(edx + 0x310u) = 0x194D74u;
-	MEM32(edx + 0x314u) = 0x194D78u;
-	MEM32(edx + 0x318u) = 0x194D7Cu;
-	MEM32(edx + 0x31Cu) = 0x194D80u;
-	MEM32(edx + 0x320u) = 0x194D84u;
-	MEM32(edx + 0x324u) = 0x194D88u;
-	MEM32(edx + 0x328u) = 0x194D8Cu;
-	MEM32(edx + 0x32Cu) = 0x194D5Cu;
-	MEM32(edx + 0x338u) = 0x194D90u;
-	MEM32(edx + 0x33Cu) = 0x194D94u;
-	MEM32(edx + 0x348u) = 0x194D98u;
-	MEM32(edx + 0x34Cu) = 0x194D9Cu;
-	MEM32(edx + 0x340u) = 0x194DA0u;
-	MEM32(edx + 0x344u) = 0x194DA4u;
-	MEM32(edx + 0x350u) = 0x194DD8u;
-	MEM32(edx + 0x354u) = 0x194DDCu;
-	MEM32(edx + 0x358u) = 0x194DA8u;
-	MEM32(edx + 0x35Cu) = 0x194DACu;
-	MEM32(edx + 0x360u) = 0x194DB0u;
-	MEM32(edx + 0x364u) = 0x194DB4u;
-	MEM32(edx + 0x368u) = 0x194DB8u;
-	MEM32(edx + 0x36Cu) = 0x194DBCu;
-	MEM32(edx + 0x374u) = 0x194DC0u;
-	MEM32(edx + 0x370u) = 0x194DC4u;
-	MEM32(edx + 0x378u) = 0x194DC8u;
-	MEM32(edx + 0x37Cu) = 0x194DCCu;
-	MEM32(edx + 0x380u) = 0x194DD0u;
-	MEM32(edx + 0x384u) = 0x194DD4u;
-	MEM32(edx + 0x3B0u) = 0x194DE0u;
-	MEM32(edx + 0x388u) = 0x194DE4u;
-	MEM32(edx + 0x390u) = 0x194DE8u;
-	MEM32(edx + 0x3B4u) = 0x194DECu;
-	MEM32(edx + 0x38Cu) = 0x194DF0u;
-	MEM32(edx + 0x394u) = 0x194DF4u;
-	MEM32(edx + 0x3B8u) = 0x194DF8u;
-	MEM32(edx + 0x398u) = 0x194DFCu;
-	MEM32(edx + 0x39Cu) = 0x194E00u;
-	MEM32(edx + 0x3BCu) = 0x194E04u;
-	MEM32(edx + 0x3A0u) = 0x194E08u;
-	MEM32(edx + 0x3A4u) = 0x194E0Cu;
-	MEM32(edx + 0x3A8u) = 0x194E10u;
-	MEM32(edx + 0x3ACu) = 0x194E14u;
-	MEM32(edx + 0x3E8u) = 0x194E40u;
-	MEM32(edx + 0x3C4u) = 0x194E18u;
-	MEM32(edx + 0x3C8u) = 0x194E1Cu;
-	MEM32(edx + 0x3CCu) = 0x194E20u;
-	MEM32(edx + 0x3D0u) = 0x194E24u;
-	MEM32(edx + 0x3D4u) = 0x194E28u;
-	MEM32(edx + 0x3D8u) = 0x194E2Cu;
-	MEM32(edx + 0x3DCu) = 0x194E30u;
-	MEM32(edx + 0x3E0u) = 0x194E34u;
-	MEM32(edx + 0x3E4u) = 0x194E38u;
-	MEM32(edx + 0x3ECu) = 0x194E3Cu;
-	MEM32(edx + 0x3F0u) = 0x194E44u;
-	MEM32(edx + 0x3F4u) = 0x194E48u;
-	MEM32(edx + 0x3F8u) = 0x194E4Cu;
+	MEM32(edx + 0x304u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xCu;
+	MEM32(edx + 0x308u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x10u;
+	MEM32(edx + 0x30Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x14u;
+	MEM32(edx + 0x310u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x18u;
+	MEM32(edx + 0x314u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x1Cu;
+	MEM32(edx + 0x318u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x20u;
+	MEM32(edx + 0x31Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x24u;
+	MEM32(edx + 0x320u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x28u;
+	MEM32(edx + 0x324u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x2Cu;
+	MEM32(edx + 0x328u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x30u;
+	MEM32(edx + 0x32Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA;
+	MEM32(edx + 0x338u) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x33Cu) = VeritechConstants_brake_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x348u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x34Cu) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x340u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x344u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x350u) = VeritechConstants_boost_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x354u) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x358u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x4Cu;
+	MEM32(edx + 0x35Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x50u;
+	MEM32(edx + 0x360u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x54u;
+	MEM32(edx + 0x364u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x58u;
+	MEM32(edx + 0x368u) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x36Cu) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x374u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x370u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x378u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x6Cu;
+	MEM32(edx + 0x37Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x70u;
+	MEM32(edx + 0x380u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x74u;
+	MEM32(edx + 0x384u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x78u;
+	MEM32(edx + 0x3B0u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x84u;
+	MEM32(edx + 0x388u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x88u;
+	MEM32(edx + 0x390u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x8Cu;
+	MEM32(edx + 0x3B4u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x90u;
+	MEM32(edx + 0x38Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x94u;
+	MEM32(edx + 0x394u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x98u;
+	MEM32(edx + 0x3B8u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0x9Cu;
+	MEM32(edx + 0x398u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xA0u;
+	MEM32(edx + 0x39Cu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xA4u;
+	MEM32(edx + 0x3BCu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xA8u;
+	MEM32(edx + 0x3A0u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xACu;
+	MEM32(edx + 0x3A4u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xB0u;
+	MEM32(edx + 0x3A8u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xB4u;
+	MEM32(edx + 0x3ACu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xB8u;
+	MEM32(edx + 0x3E8u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xE4u;
+	MEM32(edx + 0x3C4u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xBCu;
+	MEM32(edx + 0x3C8u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xC0u;
+	MEM32(edx + 0x3CCu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xC4u;
+	MEM32(edx + 0x3D0u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xC8u;
+	MEM32(edx + 0x3D4u) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3D8u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xD0u;
+	MEM32(edx + 0x3DCu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xD4u;
+	MEM32(edx + 0x3E0u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xD8u;
+	MEM32(edx + 0x3E4u) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xDCu;
+	MEM32(edx + 0x3ECu) = VF1JXVeritechBattloidNoTerrainConstants_VA + 0xE0u;
+	MEM32(edx + 0x3F0u) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F4u) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F8u) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x3C0u) = edx + 0x404u;
 	MEM32(edx + 0x3FCu) = 1u;
 	MEM32(edx + 0x400u) = ebx;
-	MEM32(edx + 0x300u) = 0x194C48u;
+	MEM32(edx + 0x300u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x558u, 0u, 0x41u);
-	MEM32(edx + 0x588u) = 0x194E54u;
+	MEM32(edx + 0x588u) = VeritechConstants_radius_VA(VF1JXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x58Cu) = esi;
-	MEM32(edx + 0x55Cu) = 0x194E5Cu;
-	MEM32(edx + 0x560u) = 0x194E60u;
-	MEM32(edx + 0x564u) = 0x194E64u;
-	MEM32(edx + 0x568u) = 0x194E68u;
-	MEM32(edx + 0x56Cu) = 0x194E6Cu;
-	MEM32(edx + 0x570u) = 0x194E70u;
-	MEM32(edx + 0x574u) = 0x194E74u;
-	MEM32(edx + 0x578u) = 0x194E78u;
-	MEM32(edx + 0x57Cu) = 0x194E7Cu;
-	MEM32(edx + 0x580u) = 0x194E80u;
-	MEM32(edx + 0x584u) = 0x194E50u;
-	MEM32(edx + 0x590u) = 0x194E84u;
-	MEM32(edx + 0x594u) = 0x194E88u;
-	MEM32(edx + 0x5A0u) = 0x194E8Cu;
-	MEM32(edx + 0x5A4u) = 0x194E90u;
-	MEM32(edx + 0x598u) = 0x194E94u;
-	MEM32(edx + 0x59Cu) = 0x194E98u;
-	MEM32(edx + 0x5A8u) = 0x194ECCu;
-	MEM32(edx + 0x5ACu) = 0x194ED0u;
-	MEM32(edx + 0x5B0u) = 0x194E9Cu;
-	MEM32(edx + 0x5B4u) = 0x194EA0u;
-	MEM32(edx + 0x5B8u) = 0x194EA4u;
-	MEM32(edx + 0x5BCu) = 0x194EA8u;
-	MEM32(edx + 0x5C0u) = 0x194EACu;
-	MEM32(edx + 0x5C4u) = 0x194EB0u;
-	MEM32(edx + 0x5CCu) = 0x194EB4u;
-	MEM32(edx + 0x5C8u) = 0x194EB8u;
-	MEM32(edx + 0x5D0u) = 0x194EBCu;
-	MEM32(edx + 0x5D4u) = 0x194EC0u;
-	MEM32(edx + 0x5D8u) = 0x194EC4u;
-	MEM32(edx + 0x5DCu) = 0x194EC8u;
-	MEM32(edx + 0x608u) = 0x194ED4u;
-	MEM32(edx + 0x5E0u) = 0x194ED8u;
-	MEM32(edx + 0x5E8u) = 0x194EDCu;
-	MEM32(edx + 0x60Cu) = 0x194EE0u;
-	MEM32(edx + 0x5E4u) = 0x194EE4u;
-	MEM32(edx + 0x5ECu) = 0x194EE8u;
-	MEM32(edx + 0x610u) = 0x194EECu;
-	MEM32(edx + 0x5F0u) = 0x194EF0u;
-	MEM32(edx + 0x5F4u) = 0x194EF4u;
-	MEM32(edx + 0x614u) = 0x194EF8u;
-	MEM32(edx + 0x5F8u) = 0x194EFCu;
-	MEM32(edx + 0x5FCu) = 0x194F00u;
-	MEM32(edx + 0x600u) = 0x194F04u;
-	MEM32(edx + 0x604u) = 0x194F08u;
-	MEM32(edx + 0x640u) = 0x194F34u;
-	MEM32(edx + 0x61Cu) = 0x194F0Cu;
-	MEM32(edx + 0x620u) = 0x194F10u;
-	MEM32(edx + 0x624u) = 0x194F14u;
-	MEM32(edx + 0x628u) = 0x194F18u;
-	MEM32(edx + 0x62Cu) = 0x194F1Cu;
-	MEM32(edx + 0x630u) = 0x194F20u;
-	MEM32(edx + 0x634u) = 0x194F24u;
-	MEM32(edx + 0x638u) = 0x194F28u;
-	MEM32(edx + 0x63Cu) = 0x194F2Cu;
-	MEM32(edx + 0x644u) = 0x194F30u;
-	MEM32(edx + 0x648u) = 0x194F38u;
-	MEM32(edx + 0x64Cu) = 0x194F3Cu;
-	MEM32(edx + 0x650u) = 0x194F40u;
+	MEM32(edx + 0x55Cu) = VF1JXVeritechGuardianConstants_VA + 0xCu;
+	MEM32(edx + 0x560u) = VF1JXVeritechGuardianConstants_VA + 0x10u;
+	MEM32(edx + 0x564u) = VF1JXVeritechGuardianConstants_VA + 0x14u;
+	MEM32(edx + 0x568u) = VF1JXVeritechGuardianConstants_VA + 0x18u;
+	MEM32(edx + 0x56Cu) = VF1JXVeritechGuardianConstants_VA + 0x1Cu;
+	MEM32(edx + 0x570u) = VF1JXVeritechGuardianConstants_VA + 0x20u;
+	MEM32(edx + 0x574u) = VF1JXVeritechGuardianConstants_VA + 0x24u;
+	MEM32(edx + 0x578u) = VF1JXVeritechGuardianConstants_VA + 0x28u;
+	MEM32(edx + 0x57Cu) = VF1JXVeritechGuardianConstants_VA + 0x2Cu;
+	MEM32(edx + 0x580u) = VF1JXVeritechGuardianConstants_VA + 0x30u;
+	MEM32(edx + 0x584u) = VF1JXVeritechGuardianConstants_VA;
+	MEM32(edx + 0x590u) = VeritechConstants_thrust_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x594u) = VeritechConstants_brake_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A0u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A4u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x598u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x59Cu) = VeritechConstants_brake_vertical_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A8u) = VeritechConstants_boost_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5ACu) = VeritechConstants_boost_force_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5B0u) = VF1JXVeritechGuardianConstants_VA + 0x4Cu;
+	MEM32(edx + 0x5B4u) = VF1JXVeritechGuardianConstants_VA + 0x50u;
+	MEM32(edx + 0x5B8u) = VF1JXVeritechGuardianConstants_VA + 0x54u;
+	MEM32(edx + 0x5BCu) = VF1JXVeritechGuardianConstants_VA + 0x58u;
+	MEM32(edx + 0x5C0u) = VeritechConstants_speed_forward_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C4u) = VeritechConstants_speed_backward_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5CCu) = VeritechConstants_speed_sideways_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C8u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5D0u) = VF1JXVeritechGuardianConstants_VA + 0x6Cu;
+	MEM32(edx + 0x5D4u) = VF1JXVeritechGuardianConstants_VA + 0x70u;
+	MEM32(edx + 0x5D8u) = VF1JXVeritechGuardianConstants_VA + 0x74u;
+	MEM32(edx + 0x5DCu) = VF1JXVeritechGuardianConstants_VA + 0x78u;
+	MEM32(edx + 0x608u) = VF1JXVeritechGuardianConstants_VA + 0x84u;
+	MEM32(edx + 0x5E0u) = VF1JXVeritechGuardianConstants_VA + 0x88u;
+	MEM32(edx + 0x5E8u) = VF1JXVeritechGuardianConstants_VA + 0x8Cu;
+	MEM32(edx + 0x60Cu) = VF1JXVeritechGuardianConstants_VA + 0x90u;
+	MEM32(edx + 0x5E4u) = VF1JXVeritechGuardianConstants_VA + 0x94u;
+	MEM32(edx + 0x5ECu) = VF1JXVeritechGuardianConstants_VA + 0x98u;
+	MEM32(edx + 0x610u) = VF1JXVeritechGuardianConstants_VA + 0x9Cu;
+	MEM32(edx + 0x5F0u) = VF1JXVeritechGuardianConstants_VA + 0xA0u;
+	MEM32(edx + 0x5F4u) = VF1JXVeritechGuardianConstants_VA + 0xA4u;
+	MEM32(edx + 0x614u) = VF1JXVeritechGuardianConstants_VA + 0xA8u;
+	MEM32(edx + 0x5F8u) = VF1JXVeritechGuardianConstants_VA + 0xACu;
+	MEM32(edx + 0x5FCu) = VF1JXVeritechGuardianConstants_VA + 0xB0u;
+	MEM32(edx + 0x600u) = VF1JXVeritechGuardianConstants_VA + 0xB4u;
+	MEM32(edx + 0x604u) = VF1JXVeritechGuardianConstants_VA + 0xB8u;
+	MEM32(edx + 0x640u) = VF1JXVeritechGuardianConstants_VA + 0xE4u;
+	MEM32(edx + 0x61Cu) = VF1JXVeritechGuardianConstants_VA + 0xBCu;
+	MEM32(edx + 0x620u) = VF1JXVeritechGuardianConstants_VA + 0xC0u;
+	MEM32(edx + 0x624u) = VF1JXVeritechGuardianConstants_VA + 0xC4u;
+	MEM32(edx + 0x628u) = VF1JXVeritechGuardianConstants_VA + 0xC8u;
+	MEM32(edx + 0x62Cu) = VeritechConstants_camera_lag_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x630u) = VF1JXVeritechGuardianConstants_VA + 0xD0u;
+	MEM32(edx + 0x634u) = VF1JXVeritechGuardianConstants_VA + 0xD4u;
+	MEM32(edx + 0x638u) = VF1JXVeritechGuardianConstants_VA + 0xD8u;
+	MEM32(edx + 0x63Cu) = VF1JXVeritechGuardianConstants_VA + 0xDCu;
+	MEM32(edx + 0x644u) = VF1JXVeritechGuardianConstants_VA + 0xE0u;
+	MEM32(edx + 0x648u) = VeritechConstants_explode_chance_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x64Cu) = VeritechConstants_death_wait_VA(VF1JXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x650u) = VeritechConstants_fade_time_VA(VF1JXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x618u) = edx + 0x65Cu;
 	MEM32(edx + 0x654u) = 1u;
 	MEM32(edx + 0x658u) = edx + 0x68Cu;
-	MEM32(edx + 0x558u) = 0x194C48u;
+	MEM32(edx + 0x558u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x730u, 0u, 0x41u);
-	MEM32(edx + 0x760u) = 0x194F48u;
+	MEM32(edx + 0x760u) = VeritechConstants_radius_VA(VF1JXVeritechFighterConstants_VA);
 	MEM32(edx + 0x764u) = esi;
-	MEM32(edx + 0x734u) = 0x194F50u;
-	MEM32(edx + 0x738u) = 0x194F54u;
-	MEM32(edx + 0x73Cu) = 0x194F58u;
-	MEM32(edx + 0x740u) = 0x194F5Cu;
-	MEM32(edx + 0x744u) = 0x194F60u;
-	MEM32(edx + 0x748u) = 0x194F64u;
-	MEM32(edx + 0x74Cu) = 0x194F68u;
-	MEM32(edx + 0x750u) = 0x194F6Cu;
-	MEM32(edx + 0x754u) = 0x194F70u;
-	MEM32(edx + 0x758u) = 0x194F74u;
-	MEM32(edx + 0x75Cu) = 0x194F44u;
-	MEM32(edx + 0x768u) = 0x194F78u;
-	MEM32(edx + 0x76Cu) = 0x194F7Cu;
-	MEM32(edx + 0x778u) = 0x194F80u;
-	MEM32(edx + 0x77Cu) = 0x194F84u;
-	MEM32(edx + 0x770u) = 0x194F88u;
-	MEM32(edx + 0x774u) = 0x194F8Cu;
-	MEM32(edx + 0x780u) = 0x194FC0u;
-	MEM32(edx + 0x784u) = 0x194FC4u;
-	MEM32(edx + 0x788u) = 0x194F90u;
-	MEM32(edx + 0x78Cu) = 0x194F94u;
-	MEM32(edx + 0x790u) = 0x194F98u;
-	MEM32(edx + 0x794u) = 0x194F9Cu;
-	MEM32(edx + 0x798u) = 0x194FA0u;
-	MEM32(edx + 0x79Cu) = 0x194FA4u;
-	MEM32(edx + 0x7A4u) = 0x194FA8u;
-	MEM32(edx + 0x7A0u) = 0x194FACu;
-	MEM32(edx + 0x7A8u) = 0x194FB0u;
-	MEM32(edx + 0x7ACu) = 0x194FB4u;
-	MEM32(edx + 0x7B0u) = 0x194FBCu;
-	MEM32(edx + 0x7B4u) = 0x194FB8u;
-	MEM32(edx + 0x7E0u) = 0x194FC8u;
-	MEM32(edx + 0x7B8u) = 0x194FCCu;
-	MEM32(edx + 0x7C0u) = 0x194FD0u;
-	MEM32(edx + 0x7E4u) = 0x194FD4u;
-	MEM32(edx + 0x7BCu) = 0x194FD8u;
-	MEM32(edx + 0x7C4u) = 0x194FDCu;
-	MEM32(edx + 0x7E8u) = 0x194FE0u;
-	MEM32(edx + 0x7C8u) = 0x194FE4u;
-	MEM32(edx + 0x7CCu) = 0x194FE8u;
-	MEM32(edx + 0x7ECu) = 0x194FECu;
-	MEM32(edx + 0x7D0u) = 0x194FF0u;
-	MEM32(edx + 0x7D4u) = 0x194FF4u;
-	MEM32(edx + 0x7D8u) = 0x194FF8u;
-	MEM32(edx + 0x7DCu) = 0x194FFCu;
-	MEM32(edx + 0x818u) = 0x195028u;
-	MEM32(edx + 0x7F4u) = 0x195000u;
-	MEM32(edx + 0x7F8u) = 0x195004u;
-	MEM32(edx + 0x7FCu) = 0x195008u;
-	MEM32(edx + 0x800u) = 0x19500Cu;
-	MEM32(edx + 0x804u) = 0x195010u;
-	MEM32(edx + 0x808u) = 0x195014u;
-	MEM32(edx + 0x80Cu) = 0x195018u;
-	MEM32(edx + 0x810u) = 0x19501Cu;
-	MEM32(edx + 0x814u) = 0x195020u;
-	MEM32(edx + 0x81Cu) = 0x195024u;
-	MEM32(edx + 0x820u) = 0x19502Cu;
-	MEM32(edx + 0x824u) = 0x195030u;
-	MEM32(edx + 0x828u) = 0x195034u;
+	MEM32(edx + 0x734u) = VF1JXVeritechFighterConstants_VA + 0xCu;
+	MEM32(edx + 0x738u) = VF1JXVeritechFighterConstants_VA + 0x10u;
+	MEM32(edx + 0x73Cu) = VF1JXVeritechFighterConstants_VA + 0x14u;
+	MEM32(edx + 0x740u) = VF1JXVeritechFighterConstants_VA + 0x18u;
+	MEM32(edx + 0x744u) = VF1JXVeritechFighterConstants_VA + 0x1Cu;
+	MEM32(edx + 0x748u) = VF1JXVeritechFighterConstants_VA + 0x20u;
+	MEM32(edx + 0x74Cu) = VF1JXVeritechFighterConstants_VA + 0x24u;
+	MEM32(edx + 0x750u) = VF1JXVeritechFighterConstants_VA + 0x28u;
+	MEM32(edx + 0x754u) = VF1JXVeritechFighterConstants_VA + 0x2Cu;
+	MEM32(edx + 0x758u) = VF1JXVeritechFighterConstants_VA + 0x30u;
+	MEM32(edx + 0x75Cu) = VF1JXVeritechFighterConstants_VA;
+	MEM32(edx + 0x768u) = VeritechConstants_thrust_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x76Cu) = VeritechConstants_brake_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x778u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x77Cu) = VeritechConstants_brake_sideways_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x770u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x774u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x780u) = VeritechConstants_boost_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x784u) = VeritechConstants_boost_force_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x788u) = VF1JXVeritechFighterConstants_VA + 0x4Cu;
+	MEM32(edx + 0x78Cu) = VF1JXVeritechFighterConstants_VA + 0x50u;
+	MEM32(edx + 0x790u) = VF1JXVeritechFighterConstants_VA + 0x54u;
+	MEM32(edx + 0x794u) = VF1JXVeritechFighterConstants_VA + 0x58u;
+	MEM32(edx + 0x798u) = VeritechConstants_speed_forward_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x79Cu) = VeritechConstants_speed_backward_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A4u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A0u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A8u) = VF1JXVeritechFighterConstants_VA + 0x6Cu;
+	MEM32(edx + 0x7ACu) = VF1JXVeritechFighterConstants_VA + 0x70u;
+	MEM32(edx + 0x7B0u) = VF1JXVeritechFighterConstants_VA + 0x78u;
+	MEM32(edx + 0x7B4u) = VF1JXVeritechFighterConstants_VA + 0x74u;
+	MEM32(edx + 0x7E0u) = VF1JXVeritechFighterConstants_VA + 0x84u;
+	MEM32(edx + 0x7B8u) = VF1JXVeritechFighterConstants_VA + 0x88u;
+	MEM32(edx + 0x7C0u) = VF1JXVeritechFighterConstants_VA + 0x8Cu;
+	MEM32(edx + 0x7E4u) = VF1JXVeritechFighterConstants_VA + 0x90u;
+	MEM32(edx + 0x7BCu) = VF1JXVeritechFighterConstants_VA + 0x94u;
+	MEM32(edx + 0x7C4u) = VF1JXVeritechFighterConstants_VA + 0x98u;
+	MEM32(edx + 0x7E8u) = VF1JXVeritechFighterConstants_VA + 0x9Cu;
+	MEM32(edx + 0x7C8u) = VF1JXVeritechFighterConstants_VA + 0xA0u;
+	MEM32(edx + 0x7CCu) = VF1JXVeritechFighterConstants_VA + 0xA4u;
+	MEM32(edx + 0x7ECu) = VF1JXVeritechFighterConstants_VA + 0xA8u;
+	MEM32(edx + 0x7D0u) = VF1JXVeritechFighterConstants_VA + 0xACu;
+	MEM32(edx + 0x7D4u) = VF1JXVeritechFighterConstants_VA + 0xB0u;
+	MEM32(edx + 0x7D8u) = VF1JXVeritechFighterConstants_VA + 0xB4u;
+	MEM32(edx + 0x7DCu) = VF1JXVeritechFighterConstants_VA + 0xB8u;
+	MEM32(edx + 0x818u) = VF1JXVeritechFighterConstants_VA + 0xE4u;
+	MEM32(edx + 0x7F4u) = VF1JXVeritechFighterConstants_VA + 0xBCu;
+	MEM32(edx + 0x7F8u) = VF1JXVeritechFighterConstants_VA + 0xC0u;
+	MEM32(edx + 0x7FCu) = VF1JXVeritechFighterConstants_VA + 0xC4u;
+	MEM32(edx + 0x800u) = VF1JXVeritechFighterConstants_VA + 0xC8u;
+	MEM32(edx + 0x804u) = VeritechConstants_camera_lag_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x808u) = VF1JXVeritechFighterConstants_VA + 0xD0u;
+	MEM32(edx + 0x80Cu) = VF1JXVeritechFighterConstants_VA + 0xD4u;
+	MEM32(edx + 0x810u) = VF1JXVeritechFighterConstants_VA + 0xD8u;
+	MEM32(edx + 0x814u) = VF1JXVeritechFighterConstants_VA + 0xDCu;
+	MEM32(edx + 0x81Cu) = VF1JXVeritechFighterConstants_VA + 0xE0u;
+	MEM32(edx + 0x820u) = VeritechConstants_explode_chance_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x824u) = VeritechConstants_death_wait_VA(VF1JXVeritechFighterConstants_VA);
+	MEM32(edx + 0x828u) = VeritechConstants_fade_time_VA(VF1JXVeritechFighterConstants_VA);
 	MEM32(edx + 0x7F0u) = edx + 0x834u;
 	MEM32(edx + 0x82Cu) = 1u;
 	MEM32(edx + 0x830u) = edx + 0x850u;
-	MEM32(edx + 0x730u) = 0x194C48u;
+	MEM32(edx + 0x730u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x978u, 0u, 0x41u);
-	MEM32(edx + 0x9A8u) = 0x1954ACu;
+	MEM32(edx + 0x9A8u) = VeritechConstants_radius_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0x9ACu) = esi;
-	MEM32(edx + 0x97Cu) = 0x1954B4u;
-	MEM32(edx + 0x980u) = 0x1954B8u;
-	MEM32(edx + 0x984u) = 0x1954BCu;
-	MEM32(edx + 0x988u) = 0x1954C0u;
-	MEM32(edx + 0x98Cu) = 0x1954C4u;
-	MEM32(edx + 0x990u) = 0x1954C8u;
-	MEM32(edx + 0x994u) = 0x1954CCu;
-	MEM32(edx + 0x998u) = 0x1954D0u;
-	MEM32(edx + 0x99Cu) = 0x1954D4u;
-	MEM32(edx + 0x9A0u) = 0x1954D8u;
-	MEM32(edx + 0x9A4u) = 0x1954A8u;
-	MEM32(edx + 0x9B0u) = 0x1954DCu;
-	MEM32(edx + 0x9B4u) = 0x1954E0u;
-	MEM32(edx + 0x9C0u) = 0x1954E4u;
-	MEM32(edx + 0x9C4u) = 0x1954E8u;
-	MEM32(edx + 0x9B8u) = 0x1954ECu;
-	MEM32(edx + 0x9BCu) = 0x1954F0u;
-	MEM32(edx + 0x9C8u) = 0x195524u;
-	MEM32(edx + 0x9CCu) = 0x195528u;
-	MEM32(edx + 0x9D0u) = 0x1954F4u;
-	MEM32(edx + 0x9D4u) = 0x1954F8u;
-	MEM32(edx + 0x9D8u) = 0x1954FCu;
-	MEM32(edx + 0x9DCu) = 0x195500u;
-	MEM32(edx + 0x9E0u) = 0x195504u;
-	MEM32(edx + 0x9E4u) = 0x195508u;
-	MEM32(edx + 0x9ECu) = 0x19550Cu;
-	MEM32(edx + 0x9E8u) = 0x195510u;
-	MEM32(edx + 0x9F0u) = 0x195514u;
-	MEM32(edx + 0x9F4u) = 0x195518u;
-	MEM32(edx + 0x9F8u) = 0x19551Cu;
-	MEM32(edx + 0x9FCu) = 0x195520u;
-	MEM32(edx + 0xA28u) = 0x19552Cu;
-	MEM32(edx + 0xA00u) = 0x195530u;
-	MEM32(edx + 0xA08u) = 0x195534u;
-	MEM32(edx + 0xA2Cu) = 0x195538u;
-	MEM32(edx + 0xA04u) = 0x19553Cu;
-	MEM32(edx + 0xA0Cu) = 0x195540u;
-	MEM32(edx + 0xA30u) = 0x195544u;
-	MEM32(edx + 0xA10u) = 0x195548u;
-	MEM32(edx + 0xA14u) = 0x19554Cu;
-	MEM32(edx + 0xA34u) = 0x195550u;
-	MEM32(edx + 0xA18u) = 0x195554u;
-	MEM32(edx + 0xA1Cu) = 0x195558u;
-	MEM32(edx + 0xA20u) = 0x19555Cu;
-	MEM32(edx + 0xA24u) = 0x195560u;
-	MEM32(edx + 0xA60u) = 0x19558Cu;
-	MEM32(edx + 0xA3Cu) = 0x195564u;
-	MEM32(edx + 0xA40u) = 0x195568u;
-	MEM32(edx + 0xA44u) = 0x19556Cu;
-	MEM32(edx + 0xA48u) = 0x195570u;
-	MEM32(edx + 0xA4Cu) = 0x195574u;
-	MEM32(edx + 0xA50u) = 0x195578u;
-	MEM32(edx + 0xA54u) = 0x19557Cu;
-	MEM32(edx + 0xA58u) = 0x195580u;
-	MEM32(edx + 0xA5Cu) = 0x195584u;
-	MEM32(edx + 0xA64u) = 0x195588u;
-	MEM32(edx + 0xA68u) = 0x195590u;
-	MEM32(edx + 0xA6Cu) = 0x195594u;
-	MEM32(edx + 0xA70u) = 0x195598u;
+	MEM32(edx + 0x97Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0x980u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0x984u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0x988u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0x98Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0x990u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0x994u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0x998u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0x99Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0x9A0u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0x9A4u) = VF1JXVeritechBattloidSumoPackConstants_VA;
+	MEM32(edx + 0x9B0u) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B4u) = VeritechConstants_brake_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C0u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C4u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B8u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9BCu) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C8u) = VeritechConstants_boost_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9CCu) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9D0u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0x9D4u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0x9D8u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0x9DCu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0x9E0u) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E4u) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9ECu) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E8u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9F0u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0x9F4u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0x9F8u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0x9FCu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xA28u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xA00u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xA08u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xA2Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xA04u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xA0Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xA30u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xA10u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xA14u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xA34u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xA18u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xA1Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xA20u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xA24u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xA60u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xA3Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xA40u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xA44u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xA48u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xA4Cu) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA50u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xA54u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xA58u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xA5Cu) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xA64u) = VF1JXVeritechBattloidSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xA68u) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA6Cu) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA70u) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0xA38u) = edx + 0x108u;
 	MEM32(edx + 0xA74u) = 1u;
 	MEM32(edx + 0xA78u) = ebx;
-	MEM32(edx + 0x978u) = 0x194C48u;
+	MEM32(edx + 0x978u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xA7Cu, 0u, 0x41u);
-	MEM32(edx + 0xAACu) = 0x1955A0u;
+	MEM32(edx + 0xAACu) = VeritechConstants_radius_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xAB0u) = esi;
-	MEM32(edx + 0xA80u) = 0x1955A8u;
-	MEM32(edx + 0xA84u) = 0x1955ACu;
-	MEM32(edx + 0xA88u) = 0x1955B0u;
-	MEM32(edx + 0xA8Cu) = 0x1955B4u;
-	MEM32(edx + 0xA90u) = 0x1955B8u;
-	MEM32(edx + 0xA94u) = 0x1955BCu;
-	MEM32(edx + 0xA98u) = 0x1955C0u;
-	MEM32(edx + 0xA9Cu) = 0x1955C4u;
-	MEM32(edx + 0xAA0u) = 0x1955C8u;
-	MEM32(edx + 0xAA4u) = 0x1955CCu;
-	MEM32(edx + 0xAA8u) = 0x19559Cu;
-	MEM32(edx + 0xAB4u) = 0x1955D0u;
-	MEM32(edx + 0xAB8u) = 0x1955D4u;
-	MEM32(edx + 0xAC4u) = 0x1955D8u;
-	MEM32(edx + 0xAC8u) = 0x1955DCu;
-	MEM32(edx + 0xABCu) = 0x1955E0u;
-	MEM32(edx + 0xAC0u) = 0x1955E4u;
-	MEM32(edx + 0xACCu) = 0x195618u;
-	MEM32(edx + 0xAD0u) = 0x19561Cu;
-	MEM32(edx + 0xAD4u) = 0x1955E8u;
-	MEM32(edx + 0xAD8u) = 0x1955ECu;
-	MEM32(edx + 0xADCu) = 0x1955F0u;
-	MEM32(edx + 0xAE0u) = 0x1955F4u;
-	MEM32(edx + 0xAE4u) = 0x1955F8u;
-	MEM32(edx + 0xAE8u) = 0x1955FCu;
-	MEM32(edx + 0xAF0u) = 0x195600u;
-	MEM32(edx + 0xAECu) = 0x195604u;
-	MEM32(edx + 0xAF4u) = 0x195608u;
-	MEM32(edx + 0xAF8u) = 0x19560Cu;
-	MEM32(edx + 0xAFCu) = 0x195610u;
-	MEM32(edx + 0xB00u) = 0x195614u;
-	MEM32(edx + 0xB2Cu) = 0x195620u;
-	MEM32(edx + 0xB04u) = 0x195624u;
-	MEM32(edx + 0xB0Cu) = 0x195628u;
-	MEM32(edx + 0xB30u) = 0x19562Cu;
-	MEM32(edx + 0xB08u) = 0x195630u;
-	MEM32(edx + 0xB10u) = 0x195634u;
-	MEM32(edx + 0xB34u) = 0x195638u;
-	MEM32(edx + 0xB14u) = 0x19563Cu;
-	MEM32(edx + 0xB18u) = 0x195640u;
-	MEM32(edx + 0xB38u) = 0x195644u;
-	MEM32(edx + 0xB1Cu) = 0x195648u;
-	MEM32(edx + 0xB20u) = 0x19564Cu;
-	MEM32(edx + 0xB24u) = 0x195650u;
-	MEM32(edx + 0xB28u) = 0x195654u;
-	MEM32(edx + 0xB64u) = 0x195680u;
-	MEM32(edx + 0xB40u) = 0x195658u;
-	MEM32(edx + 0xB44u) = 0x19565Cu;
-	MEM32(edx + 0xB48u) = 0x195660u;
-	MEM32(edx + 0xB4Cu) = 0x195664u;
-	MEM32(edx + 0xB50u) = 0x195668u;
-	MEM32(edx + 0xB54u) = 0x19566Cu;
-	MEM32(edx + 0xB58u) = 0x195670u;
-	MEM32(edx + 0xB5Cu) = 0x195674u;
-	MEM32(edx + 0xB60u) = 0x195678u;
-	MEM32(edx + 0xB68u) = 0x19567Cu;
-	MEM32(edx + 0xB6Cu) = 0x195684u;
-	MEM32(edx + 0xB70u) = 0x195688u;
-	MEM32(edx + 0xB74u) = 0x19568Cu;
+	MEM32(edx + 0xA80u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0xA84u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0xA88u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0xA8Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0xA90u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xA94u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0xA98u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0xA9Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0xAA0u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xAA4u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0xAA8u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA;
+	MEM32(edx + 0xAB4u) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAB8u) = VeritechConstants_brake_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC4u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC8u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xABCu) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC0u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xACCu) = VeritechConstants_boost_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD0u) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD4u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xAD8u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0xADCu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0xAE0u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0xAE4u) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAE8u) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF0u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAECu) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF4u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xAF8u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0xAFCu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0xB00u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xB2Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xB04u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xB0Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB30u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xB08u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xB10u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xB34u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xB14u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xB18u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xB38u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xB1Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xB20u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xB24u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xB28u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xB64u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xB40u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xB44u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xB48u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xB4Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xB50u) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB54u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xB58u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xB5Cu) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xB60u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xB68u) = VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xB6Cu) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB70u) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB74u) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xB3Cu) = edx + 0x404u;
 	MEM32(edx + 0xB78u) = 1u;
 	MEM32(edx + 0xB7Cu) = ebx;
-	MEM32(edx + 0xA7Cu) = 0x194C48u;
+	MEM32(edx + 0xA7Cu) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xB80u, 0u, 0x41u);
-	MEM32(edx + 0xBB0u) = 0x195694u;
+	MEM32(edx + 0xBB0u) = VeritechConstants_radius_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xBB4u) = esi;
-	MEM32(edx + 0xB84u) = 0x19569Cu;
-	MEM32(edx + 0xB88u) = 0x1956A0u;
-	MEM32(edx + 0xB8Cu) = 0x1956A4u;
-	MEM32(edx + 0xB90u) = 0x1956A8u;
-	MEM32(edx + 0xB94u) = 0x1956ACu;
-	MEM32(edx + 0xB98u) = 0x1956B0u;
-	MEM32(edx + 0xB9Cu) = 0x1956B4u;
-	MEM32(edx + 0xBA0u) = 0x1956B8u;
-	MEM32(edx + 0xBA4u) = 0x1956BCu;
-	MEM32(edx + 0xBA8u) = 0x1956C0u;
-	MEM32(edx + 0xBACu) = 0x195690u;
-	MEM32(edx + 0xBB8u) = 0x1956C4u;
-	MEM32(edx + 0xBBCu) = 0x1956C8u;
-	MEM32(edx + 0xBC8u) = 0x1956CCu;
-	MEM32(edx + 0xBCCu) = 0x1956D0u;
-	MEM32(edx + 0xBC0u) = 0x1956D4u;
-	MEM32(edx + 0xBC4u) = 0x1956D8u;
-	MEM32(edx + 0xBD0u) = 0x19570Cu;
-	MEM32(edx + 0xBD4u) = 0x195710u;
-	MEM32(edx + 0xBD8u) = 0x1956DCu;
-	MEM32(edx + 0xBDCu) = 0x1956E0u;
-	MEM32(edx + 0xBE0u) = 0x1956E4u;
-	MEM32(edx + 0xBE4u) = 0x1956E8u;
-	MEM32(edx + 0xBE8u) = 0x1956ECu;
-	MEM32(edx + 0xBECu) = 0x1956F0u;
-	MEM32(edx + 0xBF4u) = 0x1956F4u;
-	MEM32(edx + 0xBF0u) = 0x1956F8u;
-	MEM32(edx + 0xBF8u) = 0x1956FCu;
-	MEM32(edx + 0xBFCu) = 0x195700u;
-	MEM32(edx + 0xC00u) = 0x195704u;
-	MEM32(edx + 0xC04u) = 0x195708u;
-	MEM32(edx + 0xC30u) = 0x195714u;
-	MEM32(edx + 0xC08u) = 0x195718u;
-	MEM32(edx + 0xC10u) = 0x19571Cu;
-	MEM32(edx + 0xC34u) = 0x195720u;
-	MEM32(edx + 0xC0Cu) = 0x195724u;
-	MEM32(edx + 0xC14u) = 0x195728u;
-	MEM32(edx + 0xC38u) = 0x19572Cu;
-	MEM32(edx + 0xC18u) = 0x195730u;
-	MEM32(edx + 0xC1Cu) = 0x195734u;
-	MEM32(edx + 0xC3Cu) = 0x195738u;
-	MEM32(edx + 0xC20u) = 0x19573Cu;
-	MEM32(edx + 0xC24u) = 0x195740u;
-	MEM32(edx + 0xC28u) = 0x195744u;
-	MEM32(edx + 0xC2Cu) = 0x195748u;
-	MEM32(edx + 0xC68u) = 0x195774u;
-	MEM32(edx + 0xC44u) = 0x19574Cu;
-	MEM32(edx + 0xC48u) = 0x195750u;
-	MEM32(edx + 0xC4Cu) = 0x195754u;
-	MEM32(edx + 0xC50u) = 0x195758u;
-	MEM32(edx + 0xC54u) = 0x19575Cu;
-	MEM32(edx + 0xC58u) = 0x195760u;
-	MEM32(edx + 0xC5Cu) = 0x195764u;
-	MEM32(edx + 0xC60u) = 0x195768u;
-	MEM32(edx + 0xC64u) = 0x19576Cu;
-	MEM32(edx + 0xC6Cu) = 0x195770u;
-	MEM32(edx + 0xC70u) = 0x195778u;
-	MEM32(edx + 0xC74u) = 0x19577Cu;
-	MEM32(edx + 0xC78u) = 0x195780u;
+	MEM32(edx + 0xB84u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xB88u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xB8Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xB90u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xB94u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xB98u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xB9Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xBA0u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xBA4u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xBA8u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xBACu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xBB8u) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBBCu) = VeritechConstants_brake_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC8u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBCCu) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC0u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC4u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD0u) = VeritechConstants_boost_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD4u) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD8u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xBDCu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xBE0u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xBE4u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xBE8u) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBECu) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF4u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF0u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF8u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xBFCu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xC00u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xC04u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xC30u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xC08u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xC10u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xC34u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xC0Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xC14u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xC38u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xC18u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xC1Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xC3Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xC20u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xC24u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xC28u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xC2Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xC68u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xC44u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xC48u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xC4Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xC50u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xC54u) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC58u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xC5Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xC60u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xC64u) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xC6Cu) = VF1JXVeritechBattloidSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xC70u) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC74u) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC78u) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xC40u) = edx + 0x108u;
 	MEM32(edx + 0xC7Cu) = 1u;
 	MEM32(edx + 0xC80u) = ebx;
-	MEM32(edx + 0xB80u) = 0x194C48u;
+	MEM32(edx + 0xB80u) = VF1JXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xC84u, 0u, 0x41u);
-	MEM32(edx + 0xCB4u) = 0x195788u;
+	MEM32(edx + 0xCB4u) = VeritechConstants_radius_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xCB8u) = esi;
-	MEM32(edx + 0xC88u) = 0x195790u;
-	MEM32(edx + 0xC8Cu) = 0x195794u;
-	MEM32(edx + 0xC90u) = 0x195798u;
-	MEM32(edx + 0xC94u) = 0x19579Cu;
-	MEM32(edx + 0xC98u) = 0x1957A0u;
-	MEM32(edx + 0xC9Cu) = 0x1957A4u;
-	MEM32(edx + 0xCA0u) = 0x1957A8u;
-	MEM32(edx + 0xCA4u) = 0x1957ACu;
-	MEM32(edx + 0xCA8u) = 0x1957B0u;
-	MEM32(edx + 0xCACu) = 0x1957B4u;
-	MEM32(edx + 0xCB0u) = 0x195784u;
-	MEM32(edx + 0xCBCu) = 0x1957B8u;
-	MEM32(edx + 0xCC0u) = 0x1957BCu;
-	MEM32(edx + 0xCCCu) = 0x1957C0u;
-	MEM32(edx + 0xCD0u) = 0x1957C4u;
-	MEM32(edx + 0xCC4u) = 0x1957C8u;
-	MEM32(edx + 0xCC8u) = 0x1957CCu;
-	MEM32(edx + 0xCD4u) = 0x195800u;
-	MEM32(edx + 0xCD8u) = 0x195804u;
-	MEM32(edx + 0xCDCu) = 0x1957D0u;
-	MEM32(edx + 0xCE0u) = 0x1957D4u;
-	MEM32(edx + 0xCE4u) = 0x1957D8u;
-	MEM32(edx + 0xCE8u) = 0x1957DCu;
-	MEM32(edx + 0xCECu) = 0x1957E0u;
-	MEM32(edx + 0xCF0u) = 0x1957E4u;
-	MEM32(edx + 0xCF8u) = 0x1957E8u;
-	MEM32(edx + 0xCF4u) = 0x1957ECu;
-	MEM32(edx + 0xCFCu) = 0x1957F0u;
-	MEM32(edx + 0xD00u) = 0x1957F4u;
-	MEM32(edx + 0xD04u) = 0x1957F8u;
-	MEM32(edx + 0xD08u) = 0x1957FCu;
-	MEM32(edx + 0xD34u) = 0x195808u;
-	MEM32(edx + 0xD0Cu) = 0x19580Cu;
-	MEM32(edx + 0xD14u) = 0x195810u;
-	MEM32(edx + 0xD38u) = 0x195814u;
-	MEM32(edx + 0xD10u) = 0x195818u;
-	MEM32(edx + 0xD18u) = 0x19581Cu;
-	MEM32(edx + 0xD3Cu) = 0x195820u;
-	MEM32(edx + 0xD1Cu) = 0x195824u;
-	MEM32(edx + 0xD20u) = 0x195828u;
-	MEM32(edx + 0xD40u) = 0x19582Cu;
-	MEM32(edx + 0xD24u) = 0x195830u;
-	MEM32(edx + 0xD28u) = 0x195834u;
-	MEM32(edx + 0xD2Cu) = 0x195838u;
-	MEM32(edx + 0xD30u) = 0x19583Cu;
-	MEM32(edx + 0xD6Cu) = 0x195868u;
-	MEM32(edx + 0xD48u) = 0x195840u;
-	MEM32(edx + 0xD4Cu) = 0x195844u;
-	MEM32(edx + 0xD50u) = 0x195848u;
-	MEM32(edx + 0xD54u) = 0x19584Cu;
-	MEM32(edx + 0xD58u) = 0x195850u;
-	MEM32(edx + 0xD5Cu) = 0x195854u;
-	MEM32(edx + 0xD60u) = 0x195858u;
-	MEM32(edx + 0xD64u) = 0x19585Cu;
-	MEM32(edx + 0xD68u) = 0x195860u;
-	MEM32(edx + 0xD70u) = 0x195864u;
-	MEM32(edx + 0xD74u) = 0x19586Cu;
-	MEM32(edx + 0xD78u) = 0x195870u;
-	MEM32(edx + 0xD7Cu) = 0x195874u;
+	MEM32(edx + 0xC88u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xC8Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xC90u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xC94u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xC98u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xC9Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xCA0u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xCA4u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xCA8u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xCACu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xCB0u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xCBCu) = VeritechConstants_thrust_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC0u) = VeritechConstants_brake_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCCCu) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD0u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC4u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC8u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD4u) = VeritechConstants_boost_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD8u) = VeritechConstants_boost_force_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCDCu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xCE0u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xCE4u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xCE8u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xCECu) = VeritechConstants_speed_forward_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF0u) = VeritechConstants_speed_backward_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF8u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF4u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCFCu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xD00u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xD04u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xD08u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xD34u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xD0Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xD14u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xD38u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xD10u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xD18u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xD3Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xD1Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xD20u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xD40u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xD24u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xD28u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xD2Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xD30u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xD6Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xD48u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xD4Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xD50u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xD54u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xD58u) = VeritechConstants_camera_lag_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD5Cu) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xD60u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xD64u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xD68u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xD70u) = VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xD74u) = VeritechConstants_explode_chance_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD78u) = VeritechConstants_death_wait_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD7Cu) = VeritechConstants_fade_time_VA(VF1JXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xD44u) = edx + 0x404u;
 	MEM32(edx + 0xD80u) = 1u;
 	MEM32(edx + 0xD84u) = ebx;
-	MEM32(edx + 0xC84u) = 0x194C48u;
+	MEM32(edx + 0xC84u) = VF1JXVeritechHitPoints_VA;
 	ebx = edx + 0xD88u;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xDB8u) = 0x19587Cu;
+	MEM32(edx + 0xDB8u) = VeritechConstants_radius_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xDBCu) = esi;
-	MEM32(edx + 0xD8Cu) = 0x195884u;
-	MEM32(edx + 0xD90u) = 0x195888u;
-	MEM32(edx + 0xD94u) = 0x19588Cu;
-	MEM32(edx + 0xD98u) = 0x195890u;
-	MEM32(edx + 0xD9Cu) = 0x195894u;
-	MEM32(edx + 0xDA0u) = 0x195898u;
-	MEM32(edx + 0xDA4u) = 0x19589Cu;
-	MEM32(edx + 0xDA8u) = 0x1958A0u;
-	MEM32(edx + 0xDACu) = 0x1958A4u;
-	MEM32(edx + 0xDB0u) = 0x1958A8u;
-	MEM32(edx + 0xDB4u) = 0x195878u;
-	MEM32(edx + 0xDC0u) = 0x1958ACu;
-	MEM32(edx + 0xDC4u) = 0x1958B0u;
-	MEM32(edx + 0xDD0u) = 0x1958B4u;
-	MEM32(edx + 0xDD4u) = 0x1958B8u;
-	MEM32(edx + 0xDC8u) = 0x1958BCu;
-	MEM32(edx + 0xDCCu) = 0x1958C0u;
-	MEM32(edx + 0xDD8u) = 0x1958F4u;
-	MEM32(edx + 0xDDCu) = 0x1958F8u;
-	MEM32(edx + 0xDE0u) = 0x1958C4u;
-	MEM32(edx + 0xDE4u) = 0x1958C8u;
-	MEM32(edx + 0xDE8u) = 0x1958CCu;
-	MEM32(edx + 0xDECu) = 0x1958D0u;
-	MEM32(edx + 0xDF0u) = 0x1958D4u;
-	MEM32(edx + 0xDF4u) = 0x1958D8u;
-	MEM32(edx + 0xDFCu) = 0x1958DCu;
-	MEM32(edx + 0xDF8u) = 0x1958E0u;
-	MEM32(edx + 0xE00u) = 0x1958E4u;
-	MEM32(edx + 0xE04u) = 0x1958E8u;
-	MEM32(edx + 0xE08u) = 0x1958ECu;
-	MEM32(edx + 0xE0Cu) = 0x1958F0u;
-	MEM32(edx + 0xE38u) = 0x1958FCu;
-	MEM32(edx + 0xE10u) = 0x195900u;
-	MEM32(edx + 0xE18u) = 0x195904u;
-	MEM32(edx + 0xE3Cu) = 0x195908u;
-	MEM32(edx + 0xE14u) = 0x19590Cu;
-	MEM32(edx + 0xE1Cu) = 0x195910u;
-	MEM32(edx + 0xE40u) = 0x195914u;
-	MEM32(edx + 0xE20u) = 0x195918u;
-	MEM32(edx + 0xE24u) = 0x19591Cu;
-	MEM32(edx + 0xE44u) = 0x195920u;
-	MEM32(edx + 0xE28u) = 0x195924u;
-	MEM32(edx + 0xE2Cu) = 0x195928u;
-	MEM32(edx + 0xE30u) = 0x19592Cu;
-	MEM32(edx + 0xE34u) = 0x195930u;
-	MEM32(edx + 0xE70u) = 0x19595Cu;
-	MEM32(edx + 0xE4Cu) = 0x195934u;
-	MEM32(edx + 0xE50u) = 0x195938u;
-	MEM32(edx + 0xE54u) = 0x19593Cu;
-	MEM32(edx + 0xE58u) = 0x195940u;
-	MEM32(edx + 0xE5Cu) = 0x195944u;
-	MEM32(edx + 0xE60u) = 0x195948u;
-	MEM32(edx + 0xE64u) = 0x19594Cu;
-	MEM32(edx + 0xE68u) = 0x195950u;
-	MEM32(edx + 0xE6Cu) = 0x195954u;
-	MEM32(edx + 0xE74u) = 0x195958u;
-	MEM32(edx + 0xE78u) = 0x195960u;
-	MEM32(edx + 0xE7Cu) = 0x195964u;
-	MEM32(edx + 0xE80u) = 0x195968u;
+	MEM32(edx + 0xD8Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xD90u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xD94u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xD98u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xD9Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xDA0u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xDA4u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xDA8u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xDACu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xDB0u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xDB4u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xDC0u) = VeritechConstants_thrust_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC4u) = VeritechConstants_brake_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD0u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD4u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC8u) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDCCu) = VeritechConstants_brake_vertical_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD8u) = VeritechConstants_boost_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDDCu) = VeritechConstants_boost_force_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDE0u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xDE4u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xDE8u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xDECu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xDF0u) = VeritechConstants_speed_forward_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF4u) = VeritechConstants_speed_backward_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDFCu) = VeritechConstants_speed_sideways_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF8u) = VeritechConstants_speed_vertical_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE00u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xE04u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xE08u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xE0Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xE38u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xE10u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xE18u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xE3Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xE14u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xE1Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xE40u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xE20u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xE24u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xE44u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xE28u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xE2Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xE30u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xE34u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xE70u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xE4Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xE50u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xE54u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xE58u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xE5Cu) = VeritechConstants_camera_lag_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE60u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xE64u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xE68u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xE6Cu) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xE74u) = VF1JXVeritechGuardianSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xE78u) = VeritechConstants_explode_chance_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE7Cu) = VeritechConstants_death_wait_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE80u) = VeritechConstants_fade_time_VA(VF1JXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xE48u) = edx + 0x65Cu;
 	MEM32(edx + 0xE84u) = 1u;
 	MEM32(edx + 0xE88u) = edx + 0x68Cu;
-	MEM32(ebx) = 0x194C48u;
+	MEM32(ebx) = VF1JXVeritechHitPoints_VA;
 	ebx = edx + 0xE8Cu;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xEBCu) = 0x195970u;
+	MEM32(edx + 0xEBCu) = VeritechConstants_radius_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xEC0u) = esi;
-	MEM32(edx + 0xE90u) = 0x195978u;
-	MEM32(edx + 0xE94u) = 0x19597Cu;
-	MEM32(edx + 0xE98u) = 0x195980u;
-	MEM32(edx + 0xE9Cu) = 0x195984u;
-	MEM32(edx + 0xEA0u) = 0x195988u;
-	MEM32(edx + 0xEA4u) = 0x19598Cu;
-	MEM32(edx + 0xEA8u) = 0x195990u;
-	MEM32(edx + 0xEACu) = 0x195994u;
-	MEM32(edx + 0xEB0u) = 0x195998u;
-	MEM32(edx + 0xEB4u) = 0x19599Cu;
-	MEM32(edx + 0xEB8u) = 0x19596Cu;
-	MEM32(edx + 0xEC4u) = 0x1959A0u;
-	MEM32(edx + 0xEC8u) = 0x1959A4u;
-	MEM32(edx + 0xED4u) = 0x1959A8u;
-	MEM32(edx + 0xED8u) = 0x1959ACu;
-	MEM32(edx + 0xECCu) = 0x1959B0u;
-	MEM32(edx + 0xED0u) = 0x1959B4u;
-	MEM32(edx + 0xEDCu) = 0x1959E8u;
-	MEM32(edx + 0xEE0u) = 0x1959ECu;
-	MEM32(edx + 0xEE4u) = 0x1959B8u;
-	MEM32(edx + 0xEE8u) = 0x1959BCu;
-	MEM32(edx + 0xEECu) = 0x1959C0u;
-	MEM32(edx + 0xEF0u) = 0x1959C4u;
-	MEM32(edx + 0xEF4u) = 0x1959C8u;
-	MEM32(edx + 0xEF8u) = 0x1959CCu;
-	MEM32(edx + 0xF00u) = 0x1959D0u;
-	MEM32(edx + 0xEFCu) = 0x1959D4u;
-	MEM32(edx + 0xF04u) = 0x1959D8u;
-	MEM32(edx + 0xF08u) = 0x1959DCu;
-	MEM32(edx + 0xF0Cu) = 0x1959E4u;
-	MEM32(edx + 0xF10u) = 0x1959E0u;
-	MEM32(edx + 0xF3Cu) = 0x1959F0u;
-	MEM32(edx + 0xF14u) = 0x1959F4u;
-	MEM32(edx + 0xF1Cu) = 0x1959F8u;
-	MEM32(edx + 0xF40u) = 0x1959FCu;
-	MEM32(edx + 0xF18u) = 0x195A00u;
-	MEM32(edx + 0xF20u) = 0x195A04u;
-	MEM32(edx + 0xF44u) = 0x195A08u;
-	MEM32(edx + 0xF24u) = 0x195A0Cu;
-	MEM32(edx + 0xF28u) = 0x195A10u;
-	MEM32(edx + 0xF48u) = 0x195A14u;
-	MEM32(edx + 0xF2Cu) = 0x195A18u;
-	MEM32(edx + 0xF30u) = 0x195A1Cu;
-	MEM32(edx + 0xF34u) = 0x195A20u;
-	MEM32(edx + 0xF38u) = 0x195A24u;
-	MEM32(edx + 0xF74u) = 0x195A50u;
-	MEM32(edx + 0xF50u) = 0x195A28u;
-	MEM32(edx + 0xF54u) = 0x195A2Cu;
-	MEM32(edx + 0xF58u) = 0x195A30u;
-	MEM32(edx + 0xF5Cu) = 0x195A34u;
-	MEM32(edx + 0xF60u) = 0x195A38u;
-	MEM32(edx + 0xF64u) = 0x195A3Cu;
-	MEM32(edx + 0xF68u) = 0x195A40u;
-	MEM32(edx + 0xF6Cu) = 0x195A44u;
-	MEM32(edx + 0xF70u) = 0x195A48u;
-	MEM32(edx + 0xF78u) = 0x195A4Cu;
-	MEM32(edx + 0xF7Cu) = 0x195A54u;
-	MEM32(edx + 0xF80u) = 0x195A58u;
-	MEM32(edx + 0xF84u) = 0x195A5Cu;
+	MEM32(edx + 0xE90u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xE94u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xE98u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xE9Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xEA0u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xEA4u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xEA8u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xEACu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xEB0u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xEB4u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xEB8u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xEC4u) = VeritechConstants_thrust_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEC8u) = VeritechConstants_brake_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED4u) = VeritechConstants_thrust_sideways_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED8u) = VeritechConstants_brake_sideways_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xECCu) = VeritechConstants_thrust_vertical_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED0u) = VeritechConstants_brake_vertical_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEDCu) = VeritechConstants_boost_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE0u) = VeritechConstants_boost_force_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE4u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xEE8u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xEECu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xEF0u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xEF4u) = VeritechConstants_speed_forward_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEF8u) = VeritechConstants_speed_backward_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF00u) = VeritechConstants_speed_sideways_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEFCu) = VeritechConstants_speed_vertical_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF04u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xF08u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xF0Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xF10u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xF3Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xF14u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xF1Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xF40u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xF18u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xF20u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xF44u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xF24u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xF28u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xF48u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xF2Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xF30u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xF34u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xF38u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xF74u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xF50u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xF54u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xF58u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xF5Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xF60u) = VeritechConstants_camera_lag_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF64u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xF68u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xF6Cu) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xF70u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xF78u) = VF1JXVeritechFighterSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xF7Cu) = VeritechConstants_explode_chance_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF80u) = VeritechConstants_death_wait_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF84u) = VeritechConstants_fade_time_VA(VF1JXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xF4Cu) = edx + 0x834u;
 	MEM32(edx + 0xF88u) = 1u;
 	MEM32(edx + 0xF8Cu) = edx + 0x850u;
-	MEM32(ebx) = 0x194C48u;
+	MEM32(ebx) = VF1JXVeritechHitPoints_VA;
 	MEM32(edx + 0xF90u) = 4u;
 	MEM32(edx + 0xF94u) = 4u;
 	MEM32(edx + 0xF98u) = 0u;
@@ -85077,7 +85077,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FBA3u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1950CCu;
+		stack_18 = Vf1jGenericHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85125,7 +85125,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FC05u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195138u;
+		stack_18 = Vf1jJack01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85173,7 +85173,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FC67u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195394u;
+		stack_18 = Vf1jJack02HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85221,7 +85221,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FCC9u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195404u;
+		stack_18 = Vf1jWolf01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85269,7 +85269,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FD2Bu, 2, arg0_2, arg1_2);
-		stack_18 = 0x1951FCu;
+		stack_18 = Vf1jRickHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85317,7 +85317,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FD8Du, 2, arg0_2, arg1_2);
-		stack_18 = 0x195468u;
+		stack_18 = Vf1jRoyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85365,7 +85365,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FDEFu, 2, arg0_2, arg1_2);
-		stack_18 = 0x19519Cu;
+		stack_18 = Vf1jIzzyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85413,7 +85413,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FE51u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1952BCu;
+		stack_18 = Vf1jMiryaHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85461,7 +85461,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FEB3u, 2, arg0_2, arg1_2);
-		stack_18 = 0x19525Cu;
+		stack_18 = Vf1jMaxHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85509,7 +85509,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FF15u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195328u;
+		stack_18 = Vf1jPatriotHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85557,7 +85557,7 @@ void sub_0005FB70(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x0005FF77u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195060u;
+		stack_18 = Vf1jTrainerHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -85626,7 +85626,7 @@ uint32_t VF1BX_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x195A60u;
+	arg0 = VF1BXText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -85664,666 +85664,666 @@ void sub_000600C0(uint32_t arg0)
 	esi = edx + 0xFE8u;
 	ebx = edx + 0x25Cu;
 	MEM32(edx + 0xC4u) = edx + 0x108u;
-	MEM32(edx + 0x34u) = 0x195A8Cu;
+	MEM32(edx + 0x34u) = VeritechConstants_radius_VA(VF1BXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x38u) = esi;
-	MEM32(edx + 8u) = 0x195A94u;
-	MEM32(edx + 0xCu) = 0x195A98u;
-	MEM32(edx + 0x10u) = 0x195A9Cu;
-	MEM32(edx + 0x14u) = 0x195AA0u;
-	MEM32(edx + 0x18u) = 0x195AA4u;
-	MEM32(edx + 0x1Cu) = 0x195AA8u;
-	MEM32(edx + 0x20u) = 0x195AACu;
-	MEM32(edx + 0x24u) = 0x195AB0u;
-	MEM32(edx + 0x28u) = 0x195AB4u;
-	MEM32(edx + 0x2Cu) = 0x195AB8u;
-	MEM32(edx + 0x30u) = 0x195A88u;
-	MEM32(edx + 0x3Cu) = 0x195ABCu;
-	MEM32(edx + 0x40u) = 0x195AC0u;
-	MEM32(edx + 0x4Cu) = 0x195AC4u;
-	MEM32(edx + 0x50u) = 0x195AC8u;
-	MEM32(edx + 0x44u) = 0x195ACCu;
-	MEM32(edx + 0x48u) = 0x195AD0u;
-	MEM32(edx + 0x54u) = 0x195B04u;
-	MEM32(edx + 0x58u) = 0x195B08u;
-	MEM32(edx + 0x5Cu) = 0x195AD4u;
-	MEM32(edx + 0x60u) = 0x195AD8u;
-	MEM32(edx + 0x64u) = 0x195ADCu;
-	MEM32(edx + 0x68u) = 0x195AE0u;
-	MEM32(edx + 0x6Cu) = 0x195AE4u;
-	MEM32(edx + 0x70u) = 0x195AE8u;
-	MEM32(edx + 0x78u) = 0x195AECu;
-	MEM32(edx + 0x74u) = 0x195AF0u;
-	MEM32(edx + 0x7Cu) = 0x195AF4u;
-	MEM32(edx + 0x80u) = 0x195AF8u;
-	MEM32(edx + 0x84u) = 0x195AFCu;
-	MEM32(edx + 0x88u) = 0x195B00u;
-	MEM32(edx + 0xB4u) = 0x195B0Cu;
-	MEM32(edx + 0x8Cu) = 0x195B10u;
-	MEM32(edx + 0x94u) = 0x195B14u;
-	MEM32(edx + 0xB8u) = 0x195B18u;
-	MEM32(edx + 0x90u) = 0x195B1Cu;
-	MEM32(edx + 0x98u) = 0x195B20u;
-	MEM32(edx + 0xBCu) = 0x195B24u;
-	MEM32(edx + 0x9Cu) = 0x195B28u;
-	MEM32(edx + 0xA0u) = 0x195B2Cu;
-	MEM32(edx + 0xC0u) = 0x195B30u;
-	MEM32(edx + 0xA4u) = 0x195B34u;
-	MEM32(edx + 0xA8u) = 0x195B38u;
-	MEM32(edx + 0xACu) = 0x195B3Cu;
-	MEM32(edx + 0xB0u) = 0x195B40u;
-	MEM32(edx + 0xECu) = 0x195B6Cu;
-	MEM32(edx + 0xC8u) = 0x195B44u;
-	MEM32(edx + 0xCCu) = 0x195B48u;
-	MEM32(edx + 0xD0u) = 0x195B4Cu;
-	MEM32(edx + 0xD4u) = 0x195B50u;
-	MEM32(edx + 0xD8u) = 0x195B54u;
-	MEM32(edx + 0xDCu) = 0x195B58u;
-	MEM32(edx + 0xE0u) = 0x195B5Cu;
-	MEM32(edx + 0xE4u) = 0x195B60u;
-	MEM32(edx + 0xE8u) = 0x195B64u;
-	MEM32(edx + 0xF0u) = 0x195B68u;
-	MEM32(edx + 0xF4u) = 0x195B70u;
-	MEM32(edx + 0xF8u) = 0x195B74u;
-	MEM32(edx + 0xFCu) = 0x195B78u;
+	MEM32(edx + 8u) = VF1BXVeritechBattloidConstants_VA + 0xCu;
+	MEM32(edx + 0xCu) = VF1BXVeritechBattloidConstants_VA + 0x10u;
+	MEM32(edx + 0x10u) = VF1BXVeritechBattloidConstants_VA + 0x14u;
+	MEM32(edx + 0x14u) = VF1BXVeritechBattloidConstants_VA + 0x18u;
+	MEM32(edx + 0x18u) = VF1BXVeritechBattloidConstants_VA + 0x1Cu;
+	MEM32(edx + 0x1Cu) = VF1BXVeritechBattloidConstants_VA + 0x20u;
+	MEM32(edx + 0x20u) = VF1BXVeritechBattloidConstants_VA + 0x24u;
+	MEM32(edx + 0x24u) = VF1BXVeritechBattloidConstants_VA + 0x28u;
+	MEM32(edx + 0x28u) = VF1BXVeritechBattloidConstants_VA + 0x2Cu;
+	MEM32(edx + 0x2Cu) = VF1BXVeritechBattloidConstants_VA + 0x30u;
+	MEM32(edx + 0x30u) = VF1BXVeritechBattloidConstants_VA;
+	MEM32(edx + 0x3Cu) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x40u) = VeritechConstants_brake_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x4Cu) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x50u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x44u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x48u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x54u) = VeritechConstants_boost_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x58u) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x5Cu) = VF1BXVeritechBattloidConstants_VA + 0x4Cu;
+	MEM32(edx + 0x60u) = VF1BXVeritechBattloidConstants_VA + 0x50u;
+	MEM32(edx + 0x64u) = VF1BXVeritechBattloidConstants_VA + 0x54u;
+	MEM32(edx + 0x68u) = VF1BXVeritechBattloidConstants_VA + 0x58u;
+	MEM32(edx + 0x6Cu) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x70u) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x78u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x74u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x7Cu) = VF1BXVeritechBattloidConstants_VA + 0x6Cu;
+	MEM32(edx + 0x80u) = VF1BXVeritechBattloidConstants_VA + 0x70u;
+	MEM32(edx + 0x84u) = VF1BXVeritechBattloidConstants_VA + 0x74u;
+	MEM32(edx + 0x88u) = VF1BXVeritechBattloidConstants_VA + 0x78u;
+	MEM32(edx + 0xB4u) = VF1BXVeritechBattloidConstants_VA + 0x84u;
+	MEM32(edx + 0x8Cu) = VF1BXVeritechBattloidConstants_VA + 0x88u;
+	MEM32(edx + 0x94u) = VF1BXVeritechBattloidConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB8u) = VF1BXVeritechBattloidConstants_VA + 0x90u;
+	MEM32(edx + 0x90u) = VF1BXVeritechBattloidConstants_VA + 0x94u;
+	MEM32(edx + 0x98u) = VF1BXVeritechBattloidConstants_VA + 0x98u;
+	MEM32(edx + 0xBCu) = VF1BXVeritechBattloidConstants_VA + 0x9Cu;
+	MEM32(edx + 0x9Cu) = VF1BXVeritechBattloidConstants_VA + 0xA0u;
+	MEM32(edx + 0xA0u) = VF1BXVeritechBattloidConstants_VA + 0xA4u;
+	MEM32(edx + 0xC0u) = VF1BXVeritechBattloidConstants_VA + 0xA8u;
+	MEM32(edx + 0xA4u) = VF1BXVeritechBattloidConstants_VA + 0xACu;
+	MEM32(edx + 0xA8u) = VF1BXVeritechBattloidConstants_VA + 0xB0u;
+	MEM32(edx + 0xACu) = VF1BXVeritechBattloidConstants_VA + 0xB4u;
+	MEM32(edx + 0xB0u) = VF1BXVeritechBattloidConstants_VA + 0xB8u;
+	MEM32(edx + 0xECu) = VF1BXVeritechBattloidConstants_VA + 0xE4u;
+	MEM32(edx + 0xC8u) = VF1BXVeritechBattloidConstants_VA + 0xBCu;
+	MEM32(edx + 0xCCu) = VF1BXVeritechBattloidConstants_VA + 0xC0u;
+	MEM32(edx + 0xD0u) = VF1BXVeritechBattloidConstants_VA + 0xC4u;
+	MEM32(edx + 0xD4u) = VF1BXVeritechBattloidConstants_VA + 0xC8u;
+	MEM32(edx + 0xD8u) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xDCu) = VF1BXVeritechBattloidConstants_VA + 0xD0u;
+	MEM32(edx + 0xE0u) = VF1BXVeritechBattloidConstants_VA + 0xD4u;
+	MEM32(edx + 0xE4u) = VF1BXVeritechBattloidConstants_VA + 0xD8u;
+	MEM32(edx + 0xE8u) = VF1BXVeritechBattloidConstants_VA + 0xDCu;
+	MEM32(edx + 0xF0u) = VF1BXVeritechBattloidConstants_VA + 0xE0u;
+	MEM32(edx + 0xF4u) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xF8u) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xFCu) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x100u) = 1u;
 	MEM32(edx + 0x104u) = ebx;
-	MEM32(edx + 4u) = 0x195A68u;
+	MEM32(edx + 4u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x300u, 0u, 0x41u);
-	MEM32(edx + 0x330u) = 0x195B80u;
+	MEM32(edx + 0x330u) = VeritechConstants_radius_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x334u) = esi;
-	MEM32(edx + 0x304u) = 0x195B88u;
-	MEM32(edx + 0x308u) = 0x195B8Cu;
-	MEM32(edx + 0x30Cu) = 0x195B90u;
-	MEM32(edx + 0x310u) = 0x195B94u;
-	MEM32(edx + 0x314u) = 0x195B98u;
-	MEM32(edx + 0x318u) = 0x195B9Cu;
-	MEM32(edx + 0x31Cu) = 0x195BA0u;
-	MEM32(edx + 0x320u) = 0x195BA4u;
-	MEM32(edx + 0x324u) = 0x195BA8u;
-	MEM32(edx + 0x328u) = 0x195BACu;
-	MEM32(edx + 0x32Cu) = 0x195B7Cu;
-	MEM32(edx + 0x338u) = 0x195BB0u;
-	MEM32(edx + 0x33Cu) = 0x195BB4u;
-	MEM32(edx + 0x348u) = 0x195BB8u;
-	MEM32(edx + 0x34Cu) = 0x195BBCu;
-	MEM32(edx + 0x340u) = 0x195BC0u;
-	MEM32(edx + 0x344u) = 0x195BC4u;
-	MEM32(edx + 0x350u) = 0x195BF8u;
-	MEM32(edx + 0x354u) = 0x195BFCu;
-	MEM32(edx + 0x358u) = 0x195BC8u;
-	MEM32(edx + 0x35Cu) = 0x195BCCu;
-	MEM32(edx + 0x360u) = 0x195BD0u;
-	MEM32(edx + 0x364u) = 0x195BD4u;
-	MEM32(edx + 0x368u) = 0x195BD8u;
-	MEM32(edx + 0x36Cu) = 0x195BDCu;
-	MEM32(edx + 0x374u) = 0x195BE0u;
-	MEM32(edx + 0x370u) = 0x195BE4u;
-	MEM32(edx + 0x378u) = 0x195BE8u;
-	MEM32(edx + 0x37Cu) = 0x195BECu;
-	MEM32(edx + 0x380u) = 0x195BF0u;
-	MEM32(edx + 0x384u) = 0x195BF4u;
-	MEM32(edx + 0x3B0u) = 0x195C00u;
-	MEM32(edx + 0x388u) = 0x195C04u;
-	MEM32(edx + 0x390u) = 0x195C08u;
-	MEM32(edx + 0x3B4u) = 0x195C0Cu;
-	MEM32(edx + 0x38Cu) = 0x195C10u;
-	MEM32(edx + 0x394u) = 0x195C14u;
-	MEM32(edx + 0x3B8u) = 0x195C18u;
-	MEM32(edx + 0x398u) = 0x195C1Cu;
-	MEM32(edx + 0x39Cu) = 0x195C20u;
-	MEM32(edx + 0x3BCu) = 0x195C24u;
-	MEM32(edx + 0x3A0u) = 0x195C28u;
-	MEM32(edx + 0x3A4u) = 0x195C2Cu;
-	MEM32(edx + 0x3A8u) = 0x195C30u;
-	MEM32(edx + 0x3ACu) = 0x195C34u;
-	MEM32(edx + 0x3E8u) = 0x195C60u;
-	MEM32(edx + 0x3C4u) = 0x195C38u;
-	MEM32(edx + 0x3C8u) = 0x195C3Cu;
-	MEM32(edx + 0x3CCu) = 0x195C40u;
-	MEM32(edx + 0x3D0u) = 0x195C44u;
-	MEM32(edx + 0x3D4u) = 0x195C48u;
-	MEM32(edx + 0x3D8u) = 0x195C4Cu;
-	MEM32(edx + 0x3DCu) = 0x195C50u;
-	MEM32(edx + 0x3E0u) = 0x195C54u;
-	MEM32(edx + 0x3E4u) = 0x195C58u;
-	MEM32(edx + 0x3ECu) = 0x195C5Cu;
-	MEM32(edx + 0x3F0u) = 0x195C64u;
-	MEM32(edx + 0x3F4u) = 0x195C68u;
-	MEM32(edx + 0x3F8u) = 0x195C6Cu;
+	MEM32(edx + 0x304u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xCu;
+	MEM32(edx + 0x308u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x10u;
+	MEM32(edx + 0x30Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x14u;
+	MEM32(edx + 0x310u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x18u;
+	MEM32(edx + 0x314u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x1Cu;
+	MEM32(edx + 0x318u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x20u;
+	MEM32(edx + 0x31Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x24u;
+	MEM32(edx + 0x320u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x28u;
+	MEM32(edx + 0x324u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x2Cu;
+	MEM32(edx + 0x328u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x30u;
+	MEM32(edx + 0x32Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA;
+	MEM32(edx + 0x338u) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x33Cu) = VeritechConstants_brake_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x348u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x34Cu) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x340u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x344u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x350u) = VeritechConstants_boost_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x354u) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x358u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x4Cu;
+	MEM32(edx + 0x35Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x50u;
+	MEM32(edx + 0x360u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x54u;
+	MEM32(edx + 0x364u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x58u;
+	MEM32(edx + 0x368u) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x36Cu) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x374u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x370u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x378u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x6Cu;
+	MEM32(edx + 0x37Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x70u;
+	MEM32(edx + 0x380u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x74u;
+	MEM32(edx + 0x384u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x78u;
+	MEM32(edx + 0x3B0u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x84u;
+	MEM32(edx + 0x388u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x88u;
+	MEM32(edx + 0x390u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x8Cu;
+	MEM32(edx + 0x3B4u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x90u;
+	MEM32(edx + 0x38Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x94u;
+	MEM32(edx + 0x394u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x98u;
+	MEM32(edx + 0x3B8u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0x9Cu;
+	MEM32(edx + 0x398u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xA0u;
+	MEM32(edx + 0x39Cu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xA4u;
+	MEM32(edx + 0x3BCu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xA8u;
+	MEM32(edx + 0x3A0u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xACu;
+	MEM32(edx + 0x3A4u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xB0u;
+	MEM32(edx + 0x3A8u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xB4u;
+	MEM32(edx + 0x3ACu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xB8u;
+	MEM32(edx + 0x3E8u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xE4u;
+	MEM32(edx + 0x3C4u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xBCu;
+	MEM32(edx + 0x3C8u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xC0u;
+	MEM32(edx + 0x3CCu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xC4u;
+	MEM32(edx + 0x3D0u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xC8u;
+	MEM32(edx + 0x3D4u) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3D8u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xD0u;
+	MEM32(edx + 0x3DCu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xD4u;
+	MEM32(edx + 0x3E0u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xD8u;
+	MEM32(edx + 0x3E4u) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xDCu;
+	MEM32(edx + 0x3ECu) = VF1BXVeritechBattloidNoTerrainConstants_VA + 0xE0u;
+	MEM32(edx + 0x3F0u) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F4u) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F8u) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x3C0u) = edx + 0x404u;
 	MEM32(edx + 0x3FCu) = 1u;
 	MEM32(edx + 0x400u) = ebx;
-	MEM32(edx + 0x300u) = 0x195A68u;
+	MEM32(edx + 0x300u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x558u, 0u, 0x41u);
-	MEM32(edx + 0x588u) = 0x195C74u;
+	MEM32(edx + 0x588u) = VeritechConstants_radius_VA(VF1BXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x58Cu) = esi;
-	MEM32(edx + 0x55Cu) = 0x195C7Cu;
-	MEM32(edx + 0x560u) = 0x195C80u;
-	MEM32(edx + 0x564u) = 0x195C84u;
-	MEM32(edx + 0x568u) = 0x195C88u;
-	MEM32(edx + 0x56Cu) = 0x195C8Cu;
-	MEM32(edx + 0x570u) = 0x195C90u;
-	MEM32(edx + 0x574u) = 0x195C94u;
-	MEM32(edx + 0x578u) = 0x195C98u;
-	MEM32(edx + 0x57Cu) = 0x195C9Cu;
-	MEM32(edx + 0x580u) = 0x195CA0u;
-	MEM32(edx + 0x584u) = 0x195C70u;
-	MEM32(edx + 0x590u) = 0x195CA4u;
-	MEM32(edx + 0x594u) = 0x195CA8u;
-	MEM32(edx + 0x5A0u) = 0x195CACu;
-	MEM32(edx + 0x5A4u) = 0x195CB0u;
-	MEM32(edx + 0x598u) = 0x195CB4u;
-	MEM32(edx + 0x59Cu) = 0x195CB8u;
-	MEM32(edx + 0x5A8u) = 0x195CECu;
-	MEM32(edx + 0x5ACu) = 0x195CF0u;
-	MEM32(edx + 0x5B0u) = 0x195CBCu;
-	MEM32(edx + 0x5B4u) = 0x195CC0u;
-	MEM32(edx + 0x5B8u) = 0x195CC4u;
-	MEM32(edx + 0x5BCu) = 0x195CC8u;
-	MEM32(edx + 0x5C0u) = 0x195CCCu;
-	MEM32(edx + 0x5C4u) = 0x195CD0u;
-	MEM32(edx + 0x5CCu) = 0x195CD4u;
-	MEM32(edx + 0x5C8u) = 0x195CD8u;
-	MEM32(edx + 0x5D0u) = 0x195CDCu;
-	MEM32(edx + 0x5D4u) = 0x195CE0u;
-	MEM32(edx + 0x5D8u) = 0x195CE4u;
-	MEM32(edx + 0x5DCu) = 0x195CE8u;
-	MEM32(edx + 0x608u) = 0x195CF4u;
-	MEM32(edx + 0x5E0u) = 0x195CF8u;
-	MEM32(edx + 0x5E8u) = 0x195CFCu;
-	MEM32(edx + 0x60Cu) = 0x195D00u;
-	MEM32(edx + 0x5E4u) = 0x195D04u;
-	MEM32(edx + 0x5ECu) = 0x195D08u;
-	MEM32(edx + 0x610u) = 0x195D0Cu;
-	MEM32(edx + 0x5F0u) = 0x195D10u;
-	MEM32(edx + 0x5F4u) = 0x195D14u;
-	MEM32(edx + 0x614u) = 0x195D18u;
-	MEM32(edx + 0x5F8u) = 0x195D1Cu;
-	MEM32(edx + 0x5FCu) = 0x195D20u;
-	MEM32(edx + 0x600u) = 0x195D24u;
-	MEM32(edx + 0x604u) = 0x195D28u;
-	MEM32(edx + 0x640u) = 0x195D54u;
-	MEM32(edx + 0x61Cu) = 0x195D2Cu;
-	MEM32(edx + 0x620u) = 0x195D30u;
-	MEM32(edx + 0x624u) = 0x195D34u;
-	MEM32(edx + 0x628u) = 0x195D38u;
-	MEM32(edx + 0x62Cu) = 0x195D3Cu;
-	MEM32(edx + 0x630u) = 0x195D40u;
-	MEM32(edx + 0x634u) = 0x195D44u;
-	MEM32(edx + 0x638u) = 0x195D48u;
-	MEM32(edx + 0x63Cu) = 0x195D4Cu;
-	MEM32(edx + 0x644u) = 0x195D50u;
-	MEM32(edx + 0x648u) = 0x195D58u;
-	MEM32(edx + 0x64Cu) = 0x195D5Cu;
-	MEM32(edx + 0x650u) = 0x195D60u;
+	MEM32(edx + 0x55Cu) = VF1BXVeritechGuardianConstants_VA + 0xCu;
+	MEM32(edx + 0x560u) = VF1BXVeritechGuardianConstants_VA + 0x10u;
+	MEM32(edx + 0x564u) = VF1BXVeritechGuardianConstants_VA + 0x14u;
+	MEM32(edx + 0x568u) = VF1BXVeritechGuardianConstants_VA + 0x18u;
+	MEM32(edx + 0x56Cu) = VF1BXVeritechGuardianConstants_VA + 0x1Cu;
+	MEM32(edx + 0x570u) = VF1BXVeritechGuardianConstants_VA + 0x20u;
+	MEM32(edx + 0x574u) = VF1BXVeritechGuardianConstants_VA + 0x24u;
+	MEM32(edx + 0x578u) = VF1BXVeritechGuardianConstants_VA + 0x28u;
+	MEM32(edx + 0x57Cu) = VF1BXVeritechGuardianConstants_VA + 0x2Cu;
+	MEM32(edx + 0x580u) = VF1BXVeritechGuardianConstants_VA + 0x30u;
+	MEM32(edx + 0x584u) = VF1BXVeritechGuardianConstants_VA;
+	MEM32(edx + 0x590u) = VeritechConstants_thrust_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x594u) = VeritechConstants_brake_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A0u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A4u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x598u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x59Cu) = VeritechConstants_brake_vertical_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A8u) = VeritechConstants_boost_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5ACu) = VeritechConstants_boost_force_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5B0u) = VF1BXVeritechGuardianConstants_VA + 0x4Cu;
+	MEM32(edx + 0x5B4u) = VF1BXVeritechGuardianConstants_VA + 0x50u;
+	MEM32(edx + 0x5B8u) = VF1BXVeritechGuardianConstants_VA + 0x54u;
+	MEM32(edx + 0x5BCu) = VF1BXVeritechGuardianConstants_VA + 0x58u;
+	MEM32(edx + 0x5C0u) = VeritechConstants_speed_forward_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C4u) = VeritechConstants_speed_backward_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5CCu) = VeritechConstants_speed_sideways_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C8u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5D0u) = VF1BXVeritechGuardianConstants_VA + 0x6Cu;
+	MEM32(edx + 0x5D4u) = VF1BXVeritechGuardianConstants_VA + 0x70u;
+	MEM32(edx + 0x5D8u) = VF1BXVeritechGuardianConstants_VA + 0x74u;
+	MEM32(edx + 0x5DCu) = VF1BXVeritechGuardianConstants_VA + 0x78u;
+	MEM32(edx + 0x608u) = VF1BXVeritechGuardianConstants_VA + 0x84u;
+	MEM32(edx + 0x5E0u) = VF1BXVeritechGuardianConstants_VA + 0x88u;
+	MEM32(edx + 0x5E8u) = VF1BXVeritechGuardianConstants_VA + 0x8Cu;
+	MEM32(edx + 0x60Cu) = VF1BXVeritechGuardianConstants_VA + 0x90u;
+	MEM32(edx + 0x5E4u) = VF1BXVeritechGuardianConstants_VA + 0x94u;
+	MEM32(edx + 0x5ECu) = VF1BXVeritechGuardianConstants_VA + 0x98u;
+	MEM32(edx + 0x610u) = VF1BXVeritechGuardianConstants_VA + 0x9Cu;
+	MEM32(edx + 0x5F0u) = VF1BXVeritechGuardianConstants_VA + 0xA0u;
+	MEM32(edx + 0x5F4u) = VF1BXVeritechGuardianConstants_VA + 0xA4u;
+	MEM32(edx + 0x614u) = VF1BXVeritechGuardianConstants_VA + 0xA8u;
+	MEM32(edx + 0x5F8u) = VF1BXVeritechGuardianConstants_VA + 0xACu;
+	MEM32(edx + 0x5FCu) = VF1BXVeritechGuardianConstants_VA + 0xB0u;
+	MEM32(edx + 0x600u) = VF1BXVeritechGuardianConstants_VA + 0xB4u;
+	MEM32(edx + 0x604u) = VF1BXVeritechGuardianConstants_VA + 0xB8u;
+	MEM32(edx + 0x640u) = VF1BXVeritechGuardianConstants_VA + 0xE4u;
+	MEM32(edx + 0x61Cu) = VF1BXVeritechGuardianConstants_VA + 0xBCu;
+	MEM32(edx + 0x620u) = VF1BXVeritechGuardianConstants_VA + 0xC0u;
+	MEM32(edx + 0x624u) = VF1BXVeritechGuardianConstants_VA + 0xC4u;
+	MEM32(edx + 0x628u) = VF1BXVeritechGuardianConstants_VA + 0xC8u;
+	MEM32(edx + 0x62Cu) = VeritechConstants_camera_lag_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x630u) = VF1BXVeritechGuardianConstants_VA + 0xD0u;
+	MEM32(edx + 0x634u) = VF1BXVeritechGuardianConstants_VA + 0xD4u;
+	MEM32(edx + 0x638u) = VF1BXVeritechGuardianConstants_VA + 0xD8u;
+	MEM32(edx + 0x63Cu) = VF1BXVeritechGuardianConstants_VA + 0xDCu;
+	MEM32(edx + 0x644u) = VF1BXVeritechGuardianConstants_VA + 0xE0u;
+	MEM32(edx + 0x648u) = VeritechConstants_explode_chance_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x64Cu) = VeritechConstants_death_wait_VA(VF1BXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x650u) = VeritechConstants_fade_time_VA(VF1BXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x618u) = edx + 0x65Cu;
 	MEM32(edx + 0x654u) = 1u;
 	MEM32(edx + 0x658u) = edx + 0x68Cu;
-	MEM32(edx + 0x558u) = 0x195A68u;
+	MEM32(edx + 0x558u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x730u, 0u, 0x41u);
-	MEM32(edx + 0x760u) = 0x195D68u;
+	MEM32(edx + 0x760u) = VeritechConstants_radius_VA(VF1BXVeritechFighterConstants_VA);
 	MEM32(edx + 0x764u) = esi;
-	MEM32(edx + 0x734u) = 0x195D70u;
-	MEM32(edx + 0x738u) = 0x195D74u;
-	MEM32(edx + 0x73Cu) = 0x195D78u;
-	MEM32(edx + 0x740u) = 0x195D7Cu;
-	MEM32(edx + 0x744u) = 0x195D80u;
-	MEM32(edx + 0x748u) = 0x195D84u;
-	MEM32(edx + 0x74Cu) = 0x195D88u;
-	MEM32(edx + 0x750u) = 0x195D8Cu;
-	MEM32(edx + 0x754u) = 0x195D90u;
-	MEM32(edx + 0x758u) = 0x195D94u;
-	MEM32(edx + 0x75Cu) = 0x195D64u;
-	MEM32(edx + 0x768u) = 0x195D98u;
-	MEM32(edx + 0x76Cu) = 0x195D9Cu;
-	MEM32(edx + 0x778u) = 0x195DA0u;
-	MEM32(edx + 0x77Cu) = 0x195DA4u;
-	MEM32(edx + 0x770u) = 0x195DA8u;
-	MEM32(edx + 0x774u) = 0x195DACu;
-	MEM32(edx + 0x780u) = 0x195DE0u;
-	MEM32(edx + 0x784u) = 0x195DE4u;
-	MEM32(edx + 0x788u) = 0x195DB0u;
-	MEM32(edx + 0x78Cu) = 0x195DB4u;
-	MEM32(edx + 0x790u) = 0x195DB8u;
-	MEM32(edx + 0x794u) = 0x195DBCu;
-	MEM32(edx + 0x798u) = 0x195DC0u;
-	MEM32(edx + 0x79Cu) = 0x195DC4u;
-	MEM32(edx + 0x7A4u) = 0x195DC8u;
-	MEM32(edx + 0x7A0u) = 0x195DCCu;
-	MEM32(edx + 0x7A8u) = 0x195DD0u;
-	MEM32(edx + 0x7ACu) = 0x195DD4u;
-	MEM32(edx + 0x7B0u) = 0x195DDCu;
-	MEM32(edx + 0x7B4u) = 0x195DD8u;
-	MEM32(edx + 0x7E0u) = 0x195DE8u;
-	MEM32(edx + 0x7B8u) = 0x195DECu;
-	MEM32(edx + 0x7C0u) = 0x195DF0u;
-	MEM32(edx + 0x7E4u) = 0x195DF4u;
-	MEM32(edx + 0x7BCu) = 0x195DF8u;
-	MEM32(edx + 0x7C4u) = 0x195DFCu;
-	MEM32(edx + 0x7E8u) = 0x195E00u;
-	MEM32(edx + 0x7C8u) = 0x195E04u;
-	MEM32(edx + 0x7CCu) = 0x195E08u;
-	MEM32(edx + 0x7ECu) = 0x195E0Cu;
-	MEM32(edx + 0x7D0u) = 0x195E10u;
-	MEM32(edx + 0x7D4u) = 0x195E14u;
-	MEM32(edx + 0x7D8u) = 0x195E18u;
-	MEM32(edx + 0x7DCu) = 0x195E1Cu;
-	MEM32(edx + 0x818u) = 0x195E48u;
-	MEM32(edx + 0x7F4u) = 0x195E20u;
-	MEM32(edx + 0x7F8u) = 0x195E24u;
-	MEM32(edx + 0x7FCu) = 0x195E28u;
-	MEM32(edx + 0x800u) = 0x195E2Cu;
-	MEM32(edx + 0x804u) = 0x195E30u;
-	MEM32(edx + 0x808u) = 0x195E34u;
-	MEM32(edx + 0x80Cu) = 0x195E38u;
-	MEM32(edx + 0x810u) = 0x195E3Cu;
-	MEM32(edx + 0x814u) = 0x195E40u;
-	MEM32(edx + 0x81Cu) = 0x195E44u;
-	MEM32(edx + 0x820u) = 0x195E4Cu;
-	MEM32(edx + 0x824u) = 0x195E50u;
-	MEM32(edx + 0x828u) = 0x195E54u;
+	MEM32(edx + 0x734u) = VF1BXVeritechFighterConstants_VA + 0xCu;
+	MEM32(edx + 0x738u) = VF1BXVeritechFighterConstants_VA + 0x10u;
+	MEM32(edx + 0x73Cu) = VF1BXVeritechFighterConstants_VA + 0x14u;
+	MEM32(edx + 0x740u) = VF1BXVeritechFighterConstants_VA + 0x18u;
+	MEM32(edx + 0x744u) = VF1BXVeritechFighterConstants_VA + 0x1Cu;
+	MEM32(edx + 0x748u) = VF1BXVeritechFighterConstants_VA + 0x20u;
+	MEM32(edx + 0x74Cu) = VF1BXVeritechFighterConstants_VA + 0x24u;
+	MEM32(edx + 0x750u) = VF1BXVeritechFighterConstants_VA + 0x28u;
+	MEM32(edx + 0x754u) = VF1BXVeritechFighterConstants_VA + 0x2Cu;
+	MEM32(edx + 0x758u) = VF1BXVeritechFighterConstants_VA + 0x30u;
+	MEM32(edx + 0x75Cu) = VF1BXVeritechFighterConstants_VA;
+	MEM32(edx + 0x768u) = VeritechConstants_thrust_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x76Cu) = VeritechConstants_brake_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x778u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x77Cu) = VeritechConstants_brake_sideways_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x770u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x774u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x780u) = VeritechConstants_boost_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x784u) = VeritechConstants_boost_force_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x788u) = VF1BXVeritechFighterConstants_VA + 0x4Cu;
+	MEM32(edx + 0x78Cu) = VF1BXVeritechFighterConstants_VA + 0x50u;
+	MEM32(edx + 0x790u) = VF1BXVeritechFighterConstants_VA + 0x54u;
+	MEM32(edx + 0x794u) = VF1BXVeritechFighterConstants_VA + 0x58u;
+	MEM32(edx + 0x798u) = VeritechConstants_speed_forward_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x79Cu) = VeritechConstants_speed_backward_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A4u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A0u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A8u) = VF1BXVeritechFighterConstants_VA + 0x6Cu;
+	MEM32(edx + 0x7ACu) = VF1BXVeritechFighterConstants_VA + 0x70u;
+	MEM32(edx + 0x7B0u) = VF1BXVeritechFighterConstants_VA + 0x78u;
+	MEM32(edx + 0x7B4u) = VF1BXVeritechFighterConstants_VA + 0x74u;
+	MEM32(edx + 0x7E0u) = VF1BXVeritechFighterConstants_VA + 0x84u;
+	MEM32(edx + 0x7B8u) = VF1BXVeritechFighterConstants_VA + 0x88u;
+	MEM32(edx + 0x7C0u) = VF1BXVeritechFighterConstants_VA + 0x8Cu;
+	MEM32(edx + 0x7E4u) = VF1BXVeritechFighterConstants_VA + 0x90u;
+	MEM32(edx + 0x7BCu) = VF1BXVeritechFighterConstants_VA + 0x94u;
+	MEM32(edx + 0x7C4u) = VF1BXVeritechFighterConstants_VA + 0x98u;
+	MEM32(edx + 0x7E8u) = VF1BXVeritechFighterConstants_VA + 0x9Cu;
+	MEM32(edx + 0x7C8u) = VF1BXVeritechFighterConstants_VA + 0xA0u;
+	MEM32(edx + 0x7CCu) = VF1BXVeritechFighterConstants_VA + 0xA4u;
+	MEM32(edx + 0x7ECu) = VF1BXVeritechFighterConstants_VA + 0xA8u;
+	MEM32(edx + 0x7D0u) = VF1BXVeritechFighterConstants_VA + 0xACu;
+	MEM32(edx + 0x7D4u) = VF1BXVeritechFighterConstants_VA + 0xB0u;
+	MEM32(edx + 0x7D8u) = VF1BXVeritechFighterConstants_VA + 0xB4u;
+	MEM32(edx + 0x7DCu) = VF1BXVeritechFighterConstants_VA + 0xB8u;
+	MEM32(edx + 0x818u) = VF1BXVeritechFighterConstants_VA + 0xE4u;
+	MEM32(edx + 0x7F4u) = VF1BXVeritechFighterConstants_VA + 0xBCu;
+	MEM32(edx + 0x7F8u) = VF1BXVeritechFighterConstants_VA + 0xC0u;
+	MEM32(edx + 0x7FCu) = VF1BXVeritechFighterConstants_VA + 0xC4u;
+	MEM32(edx + 0x800u) = VF1BXVeritechFighterConstants_VA + 0xC8u;
+	MEM32(edx + 0x804u) = VeritechConstants_camera_lag_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x808u) = VF1BXVeritechFighterConstants_VA + 0xD0u;
+	MEM32(edx + 0x80Cu) = VF1BXVeritechFighterConstants_VA + 0xD4u;
+	MEM32(edx + 0x810u) = VF1BXVeritechFighterConstants_VA + 0xD8u;
+	MEM32(edx + 0x814u) = VF1BXVeritechFighterConstants_VA + 0xDCu;
+	MEM32(edx + 0x81Cu) = VF1BXVeritechFighterConstants_VA + 0xE0u;
+	MEM32(edx + 0x820u) = VeritechConstants_explode_chance_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x824u) = VeritechConstants_death_wait_VA(VF1BXVeritechFighterConstants_VA);
+	MEM32(edx + 0x828u) = VeritechConstants_fade_time_VA(VF1BXVeritechFighterConstants_VA);
 	MEM32(edx + 0x7F0u) = edx + 0x834u;
 	MEM32(edx + 0x82Cu) = 1u;
 	MEM32(edx + 0x830u) = edx + 0x850u;
-	MEM32(edx + 0x730u) = 0x195A68u;
+	MEM32(edx + 0x730u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x978u, 0u, 0x41u);
-	MEM32(edx + 0x9A8u) = 0x1962CCu;
+	MEM32(edx + 0x9A8u) = VeritechConstants_radius_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0x9ACu) = esi;
-	MEM32(edx + 0x97Cu) = 0x1962D4u;
-	MEM32(edx + 0x980u) = 0x1962D8u;
-	MEM32(edx + 0x984u) = 0x1962DCu;
-	MEM32(edx + 0x988u) = 0x1962E0u;
-	MEM32(edx + 0x98Cu) = 0x1962E4u;
-	MEM32(edx + 0x990u) = 0x1962E8u;
-	MEM32(edx + 0x994u) = 0x1962ECu;
-	MEM32(edx + 0x998u) = 0x1962F0u;
-	MEM32(edx + 0x99Cu) = 0x1962F4u;
-	MEM32(edx + 0x9A0u) = 0x1962F8u;
-	MEM32(edx + 0x9A4u) = 0x1962C8u;
-	MEM32(edx + 0x9B0u) = 0x1962FCu;
-	MEM32(edx + 0x9B4u) = 0x196300u;
-	MEM32(edx + 0x9C0u) = 0x196304u;
-	MEM32(edx + 0x9C4u) = 0x196308u;
-	MEM32(edx + 0x9B8u) = 0x19630Cu;
-	MEM32(edx + 0x9BCu) = 0x196310u;
-	MEM32(edx + 0x9C8u) = 0x196344u;
-	MEM32(edx + 0x9CCu) = 0x196348u;
-	MEM32(edx + 0x9D0u) = 0x196314u;
-	MEM32(edx + 0x9D4u) = 0x196318u;
-	MEM32(edx + 0x9D8u) = 0x19631Cu;
-	MEM32(edx + 0x9DCu) = 0x196320u;
-	MEM32(edx + 0x9E0u) = 0x196324u;
-	MEM32(edx + 0x9E4u) = 0x196328u;
-	MEM32(edx + 0x9ECu) = 0x19632Cu;
-	MEM32(edx + 0x9E8u) = 0x196330u;
-	MEM32(edx + 0x9F0u) = 0x196334u;
-	MEM32(edx + 0x9F4u) = 0x196338u;
-	MEM32(edx + 0x9F8u) = 0x19633Cu;
-	MEM32(edx + 0x9FCu) = 0x196340u;
-	MEM32(edx + 0xA28u) = 0x19634Cu;
-	MEM32(edx + 0xA00u) = 0x196350u;
-	MEM32(edx + 0xA08u) = 0x196354u;
-	MEM32(edx + 0xA2Cu) = 0x196358u;
-	MEM32(edx + 0xA04u) = 0x19635Cu;
-	MEM32(edx + 0xA0Cu) = 0x196360u;
-	MEM32(edx + 0xA30u) = 0x196364u;
-	MEM32(edx + 0xA10u) = 0x196368u;
-	MEM32(edx + 0xA14u) = 0x19636Cu;
-	MEM32(edx + 0xA34u) = 0x196370u;
-	MEM32(edx + 0xA18u) = 0x196374u;
-	MEM32(edx + 0xA1Cu) = 0x196378u;
-	MEM32(edx + 0xA20u) = 0x19637Cu;
-	MEM32(edx + 0xA24u) = 0x196380u;
-	MEM32(edx + 0xA60u) = 0x1963ACu;
-	MEM32(edx + 0xA3Cu) = 0x196384u;
-	MEM32(edx + 0xA40u) = 0x196388u;
-	MEM32(edx + 0xA44u) = 0x19638Cu;
-	MEM32(edx + 0xA48u) = 0x196390u;
-	MEM32(edx + 0xA4Cu) = 0x196394u;
-	MEM32(edx + 0xA50u) = 0x196398u;
-	MEM32(edx + 0xA54u) = 0x19639Cu;
-	MEM32(edx + 0xA58u) = 0x1963A0u;
-	MEM32(edx + 0xA5Cu) = 0x1963A4u;
-	MEM32(edx + 0xA64u) = 0x1963A8u;
-	MEM32(edx + 0xA68u) = 0x1963B0u;
-	MEM32(edx + 0xA6Cu) = 0x1963B4u;
-	MEM32(edx + 0xA70u) = 0x1963B8u;
+	MEM32(edx + 0x97Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0x980u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0x984u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0x988u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0x98Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0x990u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0x994u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0x998u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0x99Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0x9A0u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0x9A4u) = VF1BXVeritechBattloidSumoPackConstants_VA;
+	MEM32(edx + 0x9B0u) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B4u) = VeritechConstants_brake_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C0u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C4u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B8u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9BCu) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C8u) = VeritechConstants_boost_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9CCu) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9D0u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0x9D4u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0x9D8u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0x9DCu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0x9E0u) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E4u) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9ECu) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E8u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9F0u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0x9F4u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0x9F8u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0x9FCu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xA28u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xA00u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xA08u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xA2Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xA04u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xA0Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xA30u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xA10u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xA14u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xA34u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xA18u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xA1Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xA20u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xA24u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xA60u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xA3Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xA40u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xA44u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xA48u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xA4Cu) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA50u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xA54u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xA58u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xA5Cu) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xA64u) = VF1BXVeritechBattloidSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xA68u) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA6Cu) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA70u) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0xA38u) = edx + 0x108u;
 	MEM32(edx + 0xA74u) = 1u;
 	MEM32(edx + 0xA78u) = ebx;
-	MEM32(edx + 0x978u) = 0x195A68u;
+	MEM32(edx + 0x978u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xA7Cu, 0u, 0x41u);
-	MEM32(edx + 0xAACu) = 0x1963C0u;
+	MEM32(edx + 0xAACu) = VeritechConstants_radius_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xAB0u) = esi;
-	MEM32(edx + 0xA80u) = 0x1963C8u;
-	MEM32(edx + 0xA84u) = 0x1963CCu;
-	MEM32(edx + 0xA88u) = 0x1963D0u;
-	MEM32(edx + 0xA8Cu) = 0x1963D4u;
-	MEM32(edx + 0xA90u) = 0x1963D8u;
-	MEM32(edx + 0xA94u) = 0x1963DCu;
-	MEM32(edx + 0xA98u) = 0x1963E0u;
-	MEM32(edx + 0xA9Cu) = 0x1963E4u;
-	MEM32(edx + 0xAA0u) = 0x1963E8u;
-	MEM32(edx + 0xAA4u) = 0x1963ECu;
-	MEM32(edx + 0xAA8u) = 0x1963BCu;
-	MEM32(edx + 0xAB4u) = 0x1963F0u;
-	MEM32(edx + 0xAB8u) = 0x1963F4u;
-	MEM32(edx + 0xAC4u) = 0x1963F8u;
-	MEM32(edx + 0xAC8u) = 0x1963FCu;
-	MEM32(edx + 0xABCu) = 0x196400u;
-	MEM32(edx + 0xAC0u) = 0x196404u;
-	MEM32(edx + 0xACCu) = 0x196438u;
-	MEM32(edx + 0xAD0u) = 0x19643Cu;
-	MEM32(edx + 0xAD4u) = 0x196408u;
-	MEM32(edx + 0xAD8u) = 0x19640Cu;
-	MEM32(edx + 0xADCu) = 0x196410u;
-	MEM32(edx + 0xAE0u) = 0x196414u;
-	MEM32(edx + 0xAE4u) = 0x196418u;
-	MEM32(edx + 0xAE8u) = 0x19641Cu;
-	MEM32(edx + 0xAF0u) = 0x196420u;
-	MEM32(edx + 0xAECu) = 0x196424u;
-	MEM32(edx + 0xAF4u) = 0x196428u;
-	MEM32(edx + 0xAF8u) = 0x19642Cu;
-	MEM32(edx + 0xAFCu) = 0x196430u;
-	MEM32(edx + 0xB00u) = 0x196434u;
-	MEM32(edx + 0xB2Cu) = 0x196440u;
-	MEM32(edx + 0xB04u) = 0x196444u;
-	MEM32(edx + 0xB0Cu) = 0x196448u;
-	MEM32(edx + 0xB30u) = 0x19644Cu;
-	MEM32(edx + 0xB08u) = 0x196450u;
-	MEM32(edx + 0xB10u) = 0x196454u;
-	MEM32(edx + 0xB34u) = 0x196458u;
-	MEM32(edx + 0xB14u) = 0x19645Cu;
-	MEM32(edx + 0xB18u) = 0x196460u;
-	MEM32(edx + 0xB38u) = 0x196464u;
-	MEM32(edx + 0xB1Cu) = 0x196468u;
-	MEM32(edx + 0xB20u) = 0x19646Cu;
-	MEM32(edx + 0xB24u) = 0x196470u;
-	MEM32(edx + 0xB28u) = 0x196474u;
-	MEM32(edx + 0xB64u) = 0x1964A0u;
-	MEM32(edx + 0xB40u) = 0x196478u;
-	MEM32(edx + 0xB44u) = 0x19647Cu;
-	MEM32(edx + 0xB48u) = 0x196480u;
-	MEM32(edx + 0xB4Cu) = 0x196484u;
-	MEM32(edx + 0xB50u) = 0x196488u;
-	MEM32(edx + 0xB54u) = 0x19648Cu;
-	MEM32(edx + 0xB58u) = 0x196490u;
-	MEM32(edx + 0xB5Cu) = 0x196494u;
-	MEM32(edx + 0xB60u) = 0x196498u;
-	MEM32(edx + 0xB68u) = 0x19649Cu;
-	MEM32(edx + 0xB6Cu) = 0x1964A4u;
-	MEM32(edx + 0xB70u) = 0x1964A8u;
-	MEM32(edx + 0xB74u) = 0x1964ACu;
+	MEM32(edx + 0xA80u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0xA84u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0xA88u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0xA8Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0xA90u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xA94u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0xA98u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0xA9Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0xAA0u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xAA4u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0xAA8u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA;
+	MEM32(edx + 0xAB4u) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAB8u) = VeritechConstants_brake_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC4u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC8u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xABCu) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC0u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xACCu) = VeritechConstants_boost_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD0u) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD4u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xAD8u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0xADCu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0xAE0u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0xAE4u) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAE8u) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF0u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAECu) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF4u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xAF8u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0xAFCu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0xB00u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xB2Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xB04u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xB0Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB30u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xB08u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xB10u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xB34u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xB14u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xB18u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xB38u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xB1Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xB20u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xB24u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xB28u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xB64u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xB40u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xB44u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xB48u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xB4Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xB50u) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB54u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xB58u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xB5Cu) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xB60u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xB68u) = VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xB6Cu) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB70u) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB74u) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xB3Cu) = edx + 0x404u;
 	MEM32(edx + 0xB78u) = 1u;
 	MEM32(edx + 0xB7Cu) = ebx;
-	MEM32(edx + 0xA7Cu) = 0x195A68u;
+	MEM32(edx + 0xA7Cu) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xB80u, 0u, 0x41u);
-	MEM32(edx + 0xBB0u) = 0x1964B4u;
+	MEM32(edx + 0xBB0u) = VeritechConstants_radius_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xBB4u) = esi;
-	MEM32(edx + 0xB84u) = 0x1964BCu;
-	MEM32(edx + 0xB88u) = 0x1964C0u;
-	MEM32(edx + 0xB8Cu) = 0x1964C4u;
-	MEM32(edx + 0xB90u) = 0x1964C8u;
-	MEM32(edx + 0xB94u) = 0x1964CCu;
-	MEM32(edx + 0xB98u) = 0x1964D0u;
-	MEM32(edx + 0xB9Cu) = 0x1964D4u;
-	MEM32(edx + 0xBA0u) = 0x1964D8u;
-	MEM32(edx + 0xBA4u) = 0x1964DCu;
-	MEM32(edx + 0xBA8u) = 0x1964E0u;
-	MEM32(edx + 0xBACu) = 0x1964B0u;
-	MEM32(edx + 0xBB8u) = 0x1964E4u;
-	MEM32(edx + 0xBBCu) = 0x1964E8u;
-	MEM32(edx + 0xBC8u) = 0x1964ECu;
-	MEM32(edx + 0xBCCu) = 0x1964F0u;
-	MEM32(edx + 0xBC0u) = 0x1964F4u;
-	MEM32(edx + 0xBC4u) = 0x1964F8u;
-	MEM32(edx + 0xBD0u) = 0x19652Cu;
-	MEM32(edx + 0xBD4u) = 0x196530u;
-	MEM32(edx + 0xBD8u) = 0x1964FCu;
-	MEM32(edx + 0xBDCu) = 0x196500u;
-	MEM32(edx + 0xBE0u) = 0x196504u;
-	MEM32(edx + 0xBE4u) = 0x196508u;
-	MEM32(edx + 0xBE8u) = 0x19650Cu;
-	MEM32(edx + 0xBECu) = 0x196510u;
-	MEM32(edx + 0xBF4u) = 0x196514u;
-	MEM32(edx + 0xBF0u) = 0x196518u;
-	MEM32(edx + 0xBF8u) = 0x19651Cu;
-	MEM32(edx + 0xBFCu) = 0x196520u;
-	MEM32(edx + 0xC00u) = 0x196524u;
-	MEM32(edx + 0xC04u) = 0x196528u;
-	MEM32(edx + 0xC30u) = 0x196534u;
-	MEM32(edx + 0xC08u) = 0x196538u;
-	MEM32(edx + 0xC10u) = 0x19653Cu;
-	MEM32(edx + 0xC34u) = 0x196540u;
-	MEM32(edx + 0xC0Cu) = 0x196544u;
-	MEM32(edx + 0xC14u) = 0x196548u;
-	MEM32(edx + 0xC38u) = 0x19654Cu;
-	MEM32(edx + 0xC18u) = 0x196550u;
-	MEM32(edx + 0xC1Cu) = 0x196554u;
-	MEM32(edx + 0xC3Cu) = 0x196558u;
-	MEM32(edx + 0xC20u) = 0x19655Cu;
-	MEM32(edx + 0xC24u) = 0x196560u;
-	MEM32(edx + 0xC28u) = 0x196564u;
-	MEM32(edx + 0xC2Cu) = 0x196568u;
-	MEM32(edx + 0xC68u) = 0x196594u;
-	MEM32(edx + 0xC44u) = 0x19656Cu;
-	MEM32(edx + 0xC48u) = 0x196570u;
-	MEM32(edx + 0xC4Cu) = 0x196574u;
-	MEM32(edx + 0xC50u) = 0x196578u;
-	MEM32(edx + 0xC54u) = 0x19657Cu;
-	MEM32(edx + 0xC58u) = 0x196580u;
-	MEM32(edx + 0xC5Cu) = 0x196584u;
-	MEM32(edx + 0xC60u) = 0x196588u;
-	MEM32(edx + 0xC64u) = 0x19658Cu;
-	MEM32(edx + 0xC6Cu) = 0x196590u;
-	MEM32(edx + 0xC70u) = 0x196598u;
-	MEM32(edx + 0xC74u) = 0x19659Cu;
-	MEM32(edx + 0xC78u) = 0x1965A0u;
+	MEM32(edx + 0xB84u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xB88u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xB8Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xB90u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xB94u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xB98u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xB9Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xBA0u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xBA4u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xBA8u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xBACu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xBB8u) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBBCu) = VeritechConstants_brake_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC8u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBCCu) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC0u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC4u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD0u) = VeritechConstants_boost_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD4u) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD8u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xBDCu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xBE0u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xBE4u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xBE8u) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBECu) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF4u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF0u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF8u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xBFCu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xC00u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xC04u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xC30u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xC08u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xC10u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xC34u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xC0Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xC14u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xC38u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xC18u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xC1Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xC3Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xC20u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xC24u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xC28u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xC2Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xC68u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xC44u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xC48u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xC4Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xC50u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xC54u) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC58u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xC5Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xC60u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xC64u) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xC6Cu) = VF1BXVeritechBattloidSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xC70u) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC74u) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC78u) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xC40u) = edx + 0x108u;
 	MEM32(edx + 0xC7Cu) = 1u;
 	MEM32(edx + 0xC80u) = ebx;
-	MEM32(edx + 0xB80u) = 0x195A68u;
+	MEM32(edx + 0xB80u) = VF1BXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xC84u, 0u, 0x41u);
-	MEM32(edx + 0xCB4u) = 0x1965A8u;
+	MEM32(edx + 0xCB4u) = VeritechConstants_radius_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xCB8u) = esi;
-	MEM32(edx + 0xC88u) = 0x1965B0u;
-	MEM32(edx + 0xC8Cu) = 0x1965B4u;
-	MEM32(edx + 0xC90u) = 0x1965B8u;
-	MEM32(edx + 0xC94u) = 0x1965BCu;
-	MEM32(edx + 0xC98u) = 0x1965C0u;
-	MEM32(edx + 0xC9Cu) = 0x1965C4u;
-	MEM32(edx + 0xCA0u) = 0x1965C8u;
-	MEM32(edx + 0xCA4u) = 0x1965CCu;
-	MEM32(edx + 0xCA8u) = 0x1965D0u;
-	MEM32(edx + 0xCACu) = 0x1965D4u;
-	MEM32(edx + 0xCB0u) = 0x1965A4u;
-	MEM32(edx + 0xCBCu) = 0x1965D8u;
-	MEM32(edx + 0xCC0u) = 0x1965DCu;
-	MEM32(edx + 0xCCCu) = 0x1965E0u;
-	MEM32(edx + 0xCD0u) = 0x1965E4u;
-	MEM32(edx + 0xCC4u) = 0x1965E8u;
-	MEM32(edx + 0xCC8u) = 0x1965ECu;
-	MEM32(edx + 0xCD4u) = 0x196620u;
-	MEM32(edx + 0xCD8u) = 0x196624u;
-	MEM32(edx + 0xCDCu) = 0x1965F0u;
-	MEM32(edx + 0xCE0u) = 0x1965F4u;
-	MEM32(edx + 0xCE4u) = 0x1965F8u;
-	MEM32(edx + 0xCE8u) = 0x1965FCu;
-	MEM32(edx + 0xCECu) = 0x196600u;
-	MEM32(edx + 0xCF0u) = 0x196604u;
-	MEM32(edx + 0xCF8u) = 0x196608u;
-	MEM32(edx + 0xCF4u) = 0x19660Cu;
-	MEM32(edx + 0xCFCu) = 0x196610u;
-	MEM32(edx + 0xD00u) = 0x196614u;
-	MEM32(edx + 0xD04u) = 0x196618u;
-	MEM32(edx + 0xD08u) = 0x19661Cu;
-	MEM32(edx + 0xD34u) = 0x196628u;
-	MEM32(edx + 0xD0Cu) = 0x19662Cu;
-	MEM32(edx + 0xD14u) = 0x196630u;
-	MEM32(edx + 0xD38u) = 0x196634u;
-	MEM32(edx + 0xD10u) = 0x196638u;
-	MEM32(edx + 0xD18u) = 0x19663Cu;
-	MEM32(edx + 0xD3Cu) = 0x196640u;
-	MEM32(edx + 0xD1Cu) = 0x196644u;
-	MEM32(edx + 0xD20u) = 0x196648u;
-	MEM32(edx + 0xD40u) = 0x19664Cu;
-	MEM32(edx + 0xD24u) = 0x196650u;
-	MEM32(edx + 0xD28u) = 0x196654u;
-	MEM32(edx + 0xD2Cu) = 0x196658u;
-	MEM32(edx + 0xD30u) = 0x19665Cu;
-	MEM32(edx + 0xD6Cu) = 0x196688u;
-	MEM32(edx + 0xD48u) = 0x196660u;
-	MEM32(edx + 0xD4Cu) = 0x196664u;
-	MEM32(edx + 0xD50u) = 0x196668u;
-	MEM32(edx + 0xD54u) = 0x19666Cu;
-	MEM32(edx + 0xD58u) = 0x196670u;
-	MEM32(edx + 0xD5Cu) = 0x196674u;
-	MEM32(edx + 0xD60u) = 0x196678u;
-	MEM32(edx + 0xD64u) = 0x19667Cu;
-	MEM32(edx + 0xD68u) = 0x196680u;
-	MEM32(edx + 0xD70u) = 0x196684u;
-	MEM32(edx + 0xD74u) = 0x19668Cu;
-	MEM32(edx + 0xD78u) = 0x196690u;
-	MEM32(edx + 0xD7Cu) = 0x196694u;
+	MEM32(edx + 0xC88u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xC8Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xC90u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xC94u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xC98u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xC9Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xCA0u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xCA4u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xCA8u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xCACu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xCB0u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xCBCu) = VeritechConstants_thrust_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC0u) = VeritechConstants_brake_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCCCu) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD0u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC4u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC8u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD4u) = VeritechConstants_boost_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD8u) = VeritechConstants_boost_force_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCDCu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xCE0u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xCE4u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xCE8u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xCECu) = VeritechConstants_speed_forward_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF0u) = VeritechConstants_speed_backward_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF8u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF4u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCFCu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xD00u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xD04u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xD08u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xD34u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xD0Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xD14u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xD38u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xD10u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xD18u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xD3Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xD1Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xD20u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xD40u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xD24u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xD28u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xD2Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xD30u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xD6Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xD48u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xD4Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xD50u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xD54u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xD58u) = VeritechConstants_camera_lag_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD5Cu) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xD60u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xD64u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xD68u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xD70u) = VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xD74u) = VeritechConstants_explode_chance_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD78u) = VeritechConstants_death_wait_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD7Cu) = VeritechConstants_fade_time_VA(VF1BXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xD44u) = edx + 0x404u;
 	MEM32(edx + 0xD80u) = 1u;
 	MEM32(edx + 0xD84u) = ebx;
-	MEM32(edx + 0xC84u) = 0x195A68u;
+	MEM32(edx + 0xC84u) = VF1BXVeritechHitPoints_VA;
 	ebx = edx + 0xD88u;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xDB8u) = 0x19669Cu;
+	MEM32(edx + 0xDB8u) = VeritechConstants_radius_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xDBCu) = esi;
-	MEM32(edx + 0xD8Cu) = 0x1966A4u;
-	MEM32(edx + 0xD90u) = 0x1966A8u;
-	MEM32(edx + 0xD94u) = 0x1966ACu;
-	MEM32(edx + 0xD98u) = 0x1966B0u;
-	MEM32(edx + 0xD9Cu) = 0x1966B4u;
-	MEM32(edx + 0xDA0u) = 0x1966B8u;
-	MEM32(edx + 0xDA4u) = 0x1966BCu;
-	MEM32(edx + 0xDA8u) = 0x1966C0u;
-	MEM32(edx + 0xDACu) = 0x1966C4u;
-	MEM32(edx + 0xDB0u) = 0x1966C8u;
-	MEM32(edx + 0xDB4u) = 0x196698u;
-	MEM32(edx + 0xDC0u) = 0x1966CCu;
-	MEM32(edx + 0xDC4u) = 0x1966D0u;
-	MEM32(edx + 0xDD0u) = 0x1966D4u;
-	MEM32(edx + 0xDD4u) = 0x1966D8u;
-	MEM32(edx + 0xDC8u) = 0x1966DCu;
-	MEM32(edx + 0xDCCu) = 0x1966E0u;
-	MEM32(edx + 0xDD8u) = 0x196714u;
-	MEM32(edx + 0xDDCu) = 0x196718u;
-	MEM32(edx + 0xDE0u) = 0x1966E4u;
-	MEM32(edx + 0xDE4u) = 0x1966E8u;
-	MEM32(edx + 0xDE8u) = 0x1966ECu;
-	MEM32(edx + 0xDECu) = 0x1966F0u;
-	MEM32(edx + 0xDF0u) = 0x1966F4u;
-	MEM32(edx + 0xDF4u) = 0x1966F8u;
-	MEM32(edx + 0xDFCu) = 0x1966FCu;
-	MEM32(edx + 0xDF8u) = 0x196700u;
-	MEM32(edx + 0xE00u) = 0x196704u;
-	MEM32(edx + 0xE04u) = 0x196708u;
-	MEM32(edx + 0xE08u) = 0x19670Cu;
-	MEM32(edx + 0xE0Cu) = 0x196710u;
-	MEM32(edx + 0xE38u) = 0x19671Cu;
-	MEM32(edx + 0xE10u) = 0x196720u;
-	MEM32(edx + 0xE18u) = 0x196724u;
-	MEM32(edx + 0xE3Cu) = 0x196728u;
-	MEM32(edx + 0xE14u) = 0x19672Cu;
-	MEM32(edx + 0xE1Cu) = 0x196730u;
-	MEM32(edx + 0xE40u) = 0x196734u;
-	MEM32(edx + 0xE20u) = 0x196738u;
-	MEM32(edx + 0xE24u) = 0x19673Cu;
-	MEM32(edx + 0xE44u) = 0x196740u;
-	MEM32(edx + 0xE28u) = 0x196744u;
-	MEM32(edx + 0xE2Cu) = 0x196748u;
-	MEM32(edx + 0xE30u) = 0x19674Cu;
-	MEM32(edx + 0xE34u) = 0x196750u;
-	MEM32(edx + 0xE70u) = 0x19677Cu;
-	MEM32(edx + 0xE4Cu) = 0x196754u;
-	MEM32(edx + 0xE50u) = 0x196758u;
-	MEM32(edx + 0xE54u) = 0x19675Cu;
-	MEM32(edx + 0xE58u) = 0x196760u;
-	MEM32(edx + 0xE5Cu) = 0x196764u;
-	MEM32(edx + 0xE60u) = 0x196768u;
-	MEM32(edx + 0xE64u) = 0x19676Cu;
-	MEM32(edx + 0xE68u) = 0x196770u;
-	MEM32(edx + 0xE6Cu) = 0x196774u;
-	MEM32(edx + 0xE74u) = 0x196778u;
-	MEM32(edx + 0xE78u) = 0x196780u;
-	MEM32(edx + 0xE7Cu) = 0x196784u;
-	MEM32(edx + 0xE80u) = 0x196788u;
+	MEM32(edx + 0xD8Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xD90u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xD94u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xD98u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xD9Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xDA0u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xDA4u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xDA8u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xDACu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xDB0u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xDB4u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xDC0u) = VeritechConstants_thrust_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC4u) = VeritechConstants_brake_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD0u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD4u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC8u) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDCCu) = VeritechConstants_brake_vertical_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD8u) = VeritechConstants_boost_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDDCu) = VeritechConstants_boost_force_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDE0u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xDE4u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xDE8u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xDECu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xDF0u) = VeritechConstants_speed_forward_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF4u) = VeritechConstants_speed_backward_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDFCu) = VeritechConstants_speed_sideways_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF8u) = VeritechConstants_speed_vertical_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE00u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xE04u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xE08u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xE0Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xE38u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xE10u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xE18u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xE3Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xE14u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xE1Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xE40u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xE20u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xE24u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xE44u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xE28u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xE2Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xE30u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xE34u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xE70u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xE4Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xE50u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xE54u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xE58u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xE5Cu) = VeritechConstants_camera_lag_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE60u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xE64u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xE68u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xE6Cu) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xE74u) = VF1BXVeritechGuardianSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xE78u) = VeritechConstants_explode_chance_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE7Cu) = VeritechConstants_death_wait_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE80u) = VeritechConstants_fade_time_VA(VF1BXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xE48u) = edx + 0x65Cu;
 	MEM32(edx + 0xE84u) = 1u;
 	MEM32(edx + 0xE88u) = edx + 0x68Cu;
-	MEM32(ebx) = 0x195A68u;
+	MEM32(ebx) = VF1BXVeritechHitPoints_VA;
 	ebx = edx + 0xE8Cu;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xEBCu) = 0x196790u;
+	MEM32(edx + 0xEBCu) = VeritechConstants_radius_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xEC0u) = esi;
-	MEM32(edx + 0xE90u) = 0x196798u;
-	MEM32(edx + 0xE94u) = 0x19679Cu;
-	MEM32(edx + 0xE98u) = 0x1967A0u;
-	MEM32(edx + 0xE9Cu) = 0x1967A4u;
-	MEM32(edx + 0xEA0u) = 0x1967A8u;
-	MEM32(edx + 0xEA4u) = 0x1967ACu;
-	MEM32(edx + 0xEA8u) = 0x1967B0u;
-	MEM32(edx + 0xEACu) = 0x1967B4u;
-	MEM32(edx + 0xEB0u) = 0x1967B8u;
-	MEM32(edx + 0xEB4u) = 0x1967BCu;
-	MEM32(edx + 0xEB8u) = 0x19678Cu;
-	MEM32(edx + 0xEC4u) = 0x1967C0u;
-	MEM32(edx + 0xEC8u) = 0x1967C4u;
-	MEM32(edx + 0xED4u) = 0x1967C8u;
-	MEM32(edx + 0xED8u) = 0x1967CCu;
-	MEM32(edx + 0xECCu) = 0x1967D0u;
-	MEM32(edx + 0xED0u) = 0x1967D4u;
-	MEM32(edx + 0xEDCu) = 0x196808u;
-	MEM32(edx + 0xEE0u) = 0x19680Cu;
-	MEM32(edx + 0xEE4u) = 0x1967D8u;
-	MEM32(edx + 0xEE8u) = 0x1967DCu;
-	MEM32(edx + 0xEECu) = 0x1967E0u;
-	MEM32(edx + 0xEF0u) = 0x1967E4u;
-	MEM32(edx + 0xEF4u) = 0x1967E8u;
-	MEM32(edx + 0xEF8u) = 0x1967ECu;
-	MEM32(edx + 0xF00u) = 0x1967F0u;
-	MEM32(edx + 0xEFCu) = 0x1967F4u;
-	MEM32(edx + 0xF04u) = 0x1967F8u;
-	MEM32(edx + 0xF08u) = 0x1967FCu;
-	MEM32(edx + 0xF0Cu) = 0x196804u;
-	MEM32(edx + 0xF10u) = 0x196800u;
-	MEM32(edx + 0xF3Cu) = 0x196810u;
-	MEM32(edx + 0xF14u) = 0x196814u;
-	MEM32(edx + 0xF1Cu) = 0x196818u;
-	MEM32(edx + 0xF40u) = 0x19681Cu;
-	MEM32(edx + 0xF18u) = 0x196820u;
-	MEM32(edx + 0xF20u) = 0x196824u;
-	MEM32(edx + 0xF44u) = 0x196828u;
-	MEM32(edx + 0xF24u) = 0x19682Cu;
-	MEM32(edx + 0xF28u) = 0x196830u;
-	MEM32(edx + 0xF48u) = 0x196834u;
-	MEM32(edx + 0xF2Cu) = 0x196838u;
-	MEM32(edx + 0xF30u) = 0x19683Cu;
-	MEM32(edx + 0xF34u) = 0x196840u;
-	MEM32(edx + 0xF38u) = 0x196844u;
-	MEM32(edx + 0xF74u) = 0x196870u;
-	MEM32(edx + 0xF50u) = 0x196848u;
-	MEM32(edx + 0xF54u) = 0x19684Cu;
-	MEM32(edx + 0xF58u) = 0x196850u;
-	MEM32(edx + 0xF5Cu) = 0x196854u;
-	MEM32(edx + 0xF60u) = 0x196858u;
-	MEM32(edx + 0xF64u) = 0x19685Cu;
-	MEM32(edx + 0xF68u) = 0x196860u;
-	MEM32(edx + 0xF6Cu) = 0x196864u;
-	MEM32(edx + 0xF70u) = 0x196868u;
-	MEM32(edx + 0xF78u) = 0x19686Cu;
-	MEM32(edx + 0xF7Cu) = 0x196874u;
-	MEM32(edx + 0xF80u) = 0x196878u;
-	MEM32(edx + 0xF84u) = 0x19687Cu;
+	MEM32(edx + 0xE90u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xE94u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xE98u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xE9Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xEA0u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xEA4u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xEA8u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xEACu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xEB0u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xEB4u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xEB8u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xEC4u) = VeritechConstants_thrust_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEC8u) = VeritechConstants_brake_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED4u) = VeritechConstants_thrust_sideways_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED8u) = VeritechConstants_brake_sideways_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xECCu) = VeritechConstants_thrust_vertical_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED0u) = VeritechConstants_brake_vertical_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEDCu) = VeritechConstants_boost_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE0u) = VeritechConstants_boost_force_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE4u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xEE8u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xEECu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xEF0u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xEF4u) = VeritechConstants_speed_forward_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEF8u) = VeritechConstants_speed_backward_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF00u) = VeritechConstants_speed_sideways_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEFCu) = VeritechConstants_speed_vertical_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF04u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xF08u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xF0Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xF10u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xF3Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xF14u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xF1Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xF40u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xF18u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xF20u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xF44u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xF24u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xF28u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xF48u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xF2Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xF30u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xF34u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xF38u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xF74u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xF50u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xF54u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xF58u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xF5Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xF60u) = VeritechConstants_camera_lag_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF64u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xF68u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xF6Cu) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xF70u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xF78u) = VF1BXVeritechFighterSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xF7Cu) = VeritechConstants_explode_chance_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF80u) = VeritechConstants_death_wait_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF84u) = VeritechConstants_fade_time_VA(VF1BXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xF4Cu) = edx + 0x834u;
 	MEM32(edx + 0xF88u) = 1u;
 	MEM32(edx + 0xF8Cu) = edx + 0x850u;
-	MEM32(ebx) = 0x195A68u;
+	MEM32(ebx) = VF1BXVeritechHitPoints_VA;
 	MEM32(edx + 0xF90u) = 5u;
 	MEM32(edx + 0xF94u) = 4u;
 	MEM32(edx + 0xF98u) = 0u;
@@ -86357,7 +86357,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061A83u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195EECu;
+		stack_18 = Vf1rGenericHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86405,7 +86405,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061AE5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195F58u;
+		stack_18 = Vf1rJack01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86453,7 +86453,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061B47u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1961B4u;
+		stack_18 = Vf1rJack02HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86501,7 +86501,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061BA9u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196224u;
+		stack_18 = Vf1rWolf01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86549,7 +86549,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061C0Bu, 2, arg0_2, arg1_2);
-		stack_18 = 0x19601Cu;
+		stack_18 = Vf1rRickHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86597,7 +86597,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061C6Du, 2, arg0_2, arg1_2);
-		stack_18 = 0x196288u;
+		stack_18 = Vf1rRoyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86645,7 +86645,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061CCFu, 2, arg0_2, arg1_2);
-		stack_18 = 0x195FBCu;
+		stack_18 = Vf1rIzzyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86693,7 +86693,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061D31u, 2, arg0_2, arg1_2);
-		stack_18 = 0x1960DCu;
+		stack_18 = Vf1rMiryaHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86741,7 +86741,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061D93u, 2, arg0_2, arg1_2);
-		stack_18 = 0x19607Cu;
+		stack_18 = Vf1rMaxHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86789,7 +86789,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061DF5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196148u;
+		stack_18 = Vf1rPatriotHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86837,7 +86837,7 @@ void sub_00061A50(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00061E57u, 2, arg0_2, arg1_2);
-		stack_18 = 0x195E80u;
+		stack_18 = Vf1rTrainerHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -86905,7 +86905,7 @@ uint32_t sub_00061F50(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x196880u;
+	arg0 = VF1AXText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -86942,666 +86942,666 @@ void sub_00061FA0(uint32_t arg0)
 	esi = edx + 0xFE8u;
 	ebx = edx + 0x25Cu;
 	MEM32(edx + 0xC4u) = edx + 0x108u;
-	MEM32(edx + 0x34u) = 0x1968ACu;
+	MEM32(edx + 0x34u) = VeritechConstants_radius_VA(VF1AXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x38u) = esi;
-	MEM32(edx + 8u) = 0x1968B4u;
-	MEM32(edx + 0xCu) = 0x1968B8u;
-	MEM32(edx + 0x10u) = 0x1968BCu;
-	MEM32(edx + 0x14u) = 0x1968C0u;
-	MEM32(edx + 0x18u) = 0x1968C4u;
-	MEM32(edx + 0x1Cu) = 0x1968C8u;
-	MEM32(edx + 0x20u) = 0x1968CCu;
-	MEM32(edx + 0x24u) = 0x1968D0u;
-	MEM32(edx + 0x28u) = 0x1968D4u;
-	MEM32(edx + 0x2Cu) = 0x1968D8u;
-	MEM32(edx + 0x30u) = 0x1968A8u;
-	MEM32(edx + 0x3Cu) = 0x1968DCu;
-	MEM32(edx + 0x40u) = 0x1968E0u;
-	MEM32(edx + 0x4Cu) = 0x1968E4u;
-	MEM32(edx + 0x50u) = 0x1968E8u;
-	MEM32(edx + 0x44u) = 0x1968ECu;
-	MEM32(edx + 0x48u) = 0x1968F0u;
-	MEM32(edx + 0x54u) = 0x196924u;
-	MEM32(edx + 0x58u) = 0x196928u;
-	MEM32(edx + 0x5Cu) = 0x1968F4u;
-	MEM32(edx + 0x60u) = 0x1968F8u;
-	MEM32(edx + 0x64u) = 0x1968FCu;
-	MEM32(edx + 0x68u) = 0x196900u;
-	MEM32(edx + 0x6Cu) = 0x196904u;
-	MEM32(edx + 0x70u) = 0x196908u;
-	MEM32(edx + 0x78u) = 0x19690Cu;
-	MEM32(edx + 0x74u) = 0x196910u;
-	MEM32(edx + 0x7Cu) = 0x196914u;
-	MEM32(edx + 0x80u) = 0x196918u;
-	MEM32(edx + 0x84u) = 0x19691Cu;
-	MEM32(edx + 0x88u) = 0x196920u;
-	MEM32(edx + 0xB4u) = 0x19692Cu;
-	MEM32(edx + 0x8Cu) = 0x196930u;
-	MEM32(edx + 0x94u) = 0x196934u;
-	MEM32(edx + 0xB8u) = 0x196938u;
-	MEM32(edx + 0x90u) = 0x19693Cu;
-	MEM32(edx + 0x98u) = 0x196940u;
-	MEM32(edx + 0xBCu) = 0x196944u;
-	MEM32(edx + 0x9Cu) = 0x196948u;
-	MEM32(edx + 0xA0u) = 0x19694Cu;
-	MEM32(edx + 0xC0u) = 0x196950u;
-	MEM32(edx + 0xA4u) = 0x196954u;
-	MEM32(edx + 0xA8u) = 0x196958u;
-	MEM32(edx + 0xACu) = 0x19695Cu;
-	MEM32(edx + 0xB0u) = 0x196960u;
-	MEM32(edx + 0xECu) = 0x19698Cu;
-	MEM32(edx + 0xC8u) = 0x196964u;
-	MEM32(edx + 0xCCu) = 0x196968u;
-	MEM32(edx + 0xD0u) = 0x19696Cu;
-	MEM32(edx + 0xD4u) = 0x196970u;
-	MEM32(edx + 0xD8u) = 0x196974u;
-	MEM32(edx + 0xDCu) = 0x196978u;
-	MEM32(edx + 0xE0u) = 0x19697Cu;
-	MEM32(edx + 0xE4u) = 0x196980u;
-	MEM32(edx + 0xE8u) = 0x196984u;
-	MEM32(edx + 0xF0u) = 0x196988u;
-	MEM32(edx + 0xF4u) = 0x196990u;
-	MEM32(edx + 0xF8u) = 0x196994u;
-	MEM32(edx + 0xFCu) = 0x196998u;
+	MEM32(edx + 8u) = VF1AXVeritechBattloidConstants_VA + 0xCu;
+	MEM32(edx + 0xCu) = VF1AXVeritechBattloidConstants_VA + 0x10u;
+	MEM32(edx + 0x10u) = VF1AXVeritechBattloidConstants_VA + 0x14u;
+	MEM32(edx + 0x14u) = VF1AXVeritechBattloidConstants_VA + 0x18u;
+	MEM32(edx + 0x18u) = VF1AXVeritechBattloidConstants_VA + 0x1Cu;
+	MEM32(edx + 0x1Cu) = VF1AXVeritechBattloidConstants_VA + 0x20u;
+	MEM32(edx + 0x20u) = VF1AXVeritechBattloidConstants_VA + 0x24u;
+	MEM32(edx + 0x24u) = VF1AXVeritechBattloidConstants_VA + 0x28u;
+	MEM32(edx + 0x28u) = VF1AXVeritechBattloidConstants_VA + 0x2Cu;
+	MEM32(edx + 0x2Cu) = VF1AXVeritechBattloidConstants_VA + 0x30u;
+	MEM32(edx + 0x30u) = VF1AXVeritechBattloidConstants_VA;
+	MEM32(edx + 0x3Cu) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x40u) = VeritechConstants_brake_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x4Cu) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x50u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x44u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x48u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x54u) = VeritechConstants_boost_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x58u) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x5Cu) = VF1AXVeritechBattloidConstants_VA + 0x4Cu;
+	MEM32(edx + 0x60u) = VF1AXVeritechBattloidConstants_VA + 0x50u;
+	MEM32(edx + 0x64u) = VF1AXVeritechBattloidConstants_VA + 0x54u;
+	MEM32(edx + 0x68u) = VF1AXVeritechBattloidConstants_VA + 0x58u;
+	MEM32(edx + 0x6Cu) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x70u) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x78u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x74u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x7Cu) = VF1AXVeritechBattloidConstants_VA + 0x6Cu;
+	MEM32(edx + 0x80u) = VF1AXVeritechBattloidConstants_VA + 0x70u;
+	MEM32(edx + 0x84u) = VF1AXVeritechBattloidConstants_VA + 0x74u;
+	MEM32(edx + 0x88u) = VF1AXVeritechBattloidConstants_VA + 0x78u;
+	MEM32(edx + 0xB4u) = VF1AXVeritechBattloidConstants_VA + 0x84u;
+	MEM32(edx + 0x8Cu) = VF1AXVeritechBattloidConstants_VA + 0x88u;
+	MEM32(edx + 0x94u) = VF1AXVeritechBattloidConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB8u) = VF1AXVeritechBattloidConstants_VA + 0x90u;
+	MEM32(edx + 0x90u) = VF1AXVeritechBattloidConstants_VA + 0x94u;
+	MEM32(edx + 0x98u) = VF1AXVeritechBattloidConstants_VA + 0x98u;
+	MEM32(edx + 0xBCu) = VF1AXVeritechBattloidConstants_VA + 0x9Cu;
+	MEM32(edx + 0x9Cu) = VF1AXVeritechBattloidConstants_VA + 0xA0u;
+	MEM32(edx + 0xA0u) = VF1AXVeritechBattloidConstants_VA + 0xA4u;
+	MEM32(edx + 0xC0u) = VF1AXVeritechBattloidConstants_VA + 0xA8u;
+	MEM32(edx + 0xA4u) = VF1AXVeritechBattloidConstants_VA + 0xACu;
+	MEM32(edx + 0xA8u) = VF1AXVeritechBattloidConstants_VA + 0xB0u;
+	MEM32(edx + 0xACu) = VF1AXVeritechBattloidConstants_VA + 0xB4u;
+	MEM32(edx + 0xB0u) = VF1AXVeritechBattloidConstants_VA + 0xB8u;
+	MEM32(edx + 0xECu) = VF1AXVeritechBattloidConstants_VA + 0xE4u;
+	MEM32(edx + 0xC8u) = VF1AXVeritechBattloidConstants_VA + 0xBCu;
+	MEM32(edx + 0xCCu) = VF1AXVeritechBattloidConstants_VA + 0xC0u;
+	MEM32(edx + 0xD0u) = VF1AXVeritechBattloidConstants_VA + 0xC4u;
+	MEM32(edx + 0xD4u) = VF1AXVeritechBattloidConstants_VA + 0xC8u;
+	MEM32(edx + 0xD8u) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xDCu) = VF1AXVeritechBattloidConstants_VA + 0xD0u;
+	MEM32(edx + 0xE0u) = VF1AXVeritechBattloidConstants_VA + 0xD4u;
+	MEM32(edx + 0xE4u) = VF1AXVeritechBattloidConstants_VA + 0xD8u;
+	MEM32(edx + 0xE8u) = VF1AXVeritechBattloidConstants_VA + 0xDCu;
+	MEM32(edx + 0xF0u) = VF1AXVeritechBattloidConstants_VA + 0xE0u;
+	MEM32(edx + 0xF4u) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xF8u) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xFCu) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x100u) = 1u;
 	MEM32(edx + 0x104u) = ebx;
-	MEM32(edx + 4u) = 0x196888u;
+	MEM32(edx + 4u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x300u, 0u, 0x41u);
-	MEM32(edx + 0x330u) = 0x1969A0u;
+	MEM32(edx + 0x330u) = VeritechConstants_radius_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x334u) = esi;
-	MEM32(edx + 0x304u) = 0x1969A8u;
-	MEM32(edx + 0x308u) = 0x1969ACu;
-	MEM32(edx + 0x30Cu) = 0x1969B0u;
-	MEM32(edx + 0x310u) = 0x1969B4u;
-	MEM32(edx + 0x314u) = 0x1969B8u;
-	MEM32(edx + 0x318u) = 0x1969BCu;
-	MEM32(edx + 0x31Cu) = 0x1969C0u;
-	MEM32(edx + 0x320u) = 0x1969C4u;
-	MEM32(edx + 0x324u) = 0x1969C8u;
-	MEM32(edx + 0x328u) = 0x1969CCu;
-	MEM32(edx + 0x32Cu) = 0x19699Cu;
-	MEM32(edx + 0x338u) = 0x1969D0u;
-	MEM32(edx + 0x33Cu) = 0x1969D4u;
-	MEM32(edx + 0x348u) = 0x1969D8u;
-	MEM32(edx + 0x34Cu) = 0x1969DCu;
-	MEM32(edx + 0x340u) = 0x1969E0u;
-	MEM32(edx + 0x344u) = 0x1969E4u;
-	MEM32(edx + 0x350u) = 0x196A18u;
-	MEM32(edx + 0x354u) = 0x196A1Cu;
-	MEM32(edx + 0x358u) = 0x1969E8u;
-	MEM32(edx + 0x35Cu) = 0x1969ECu;
-	MEM32(edx + 0x360u) = 0x1969F0u;
-	MEM32(edx + 0x364u) = 0x1969F4u;
-	MEM32(edx + 0x368u) = 0x1969F8u;
-	MEM32(edx + 0x36Cu) = 0x1969FCu;
-	MEM32(edx + 0x374u) = 0x196A00u;
-	MEM32(edx + 0x370u) = 0x196A04u;
-	MEM32(edx + 0x378u) = 0x196A08u;
-	MEM32(edx + 0x37Cu) = 0x196A0Cu;
-	MEM32(edx + 0x380u) = 0x196A10u;
-	MEM32(edx + 0x384u) = 0x196A14u;
-	MEM32(edx + 0x3B0u) = 0x196A20u;
-	MEM32(edx + 0x388u) = 0x196A24u;
-	MEM32(edx + 0x390u) = 0x196A28u;
-	MEM32(edx + 0x3B4u) = 0x196A2Cu;
-	MEM32(edx + 0x38Cu) = 0x196A30u;
-	MEM32(edx + 0x394u) = 0x196A34u;
-	MEM32(edx + 0x3B8u) = 0x196A38u;
-	MEM32(edx + 0x398u) = 0x196A3Cu;
-	MEM32(edx + 0x39Cu) = 0x196A40u;
-	MEM32(edx + 0x3BCu) = 0x196A44u;
-	MEM32(edx + 0x3A0u) = 0x196A48u;
-	MEM32(edx + 0x3A4u) = 0x196A4Cu;
-	MEM32(edx + 0x3A8u) = 0x196A50u;
-	MEM32(edx + 0x3ACu) = 0x196A54u;
-	MEM32(edx + 0x3E8u) = 0x196A80u;
-	MEM32(edx + 0x3C4u) = 0x196A58u;
-	MEM32(edx + 0x3C8u) = 0x196A5Cu;
-	MEM32(edx + 0x3CCu) = 0x196A60u;
-	MEM32(edx + 0x3D0u) = 0x196A64u;
-	MEM32(edx + 0x3D4u) = 0x196A68u;
-	MEM32(edx + 0x3D8u) = 0x196A6Cu;
-	MEM32(edx + 0x3DCu) = 0x196A70u;
-	MEM32(edx + 0x3E0u) = 0x196A74u;
-	MEM32(edx + 0x3E4u) = 0x196A78u;
-	MEM32(edx + 0x3ECu) = 0x196A7Cu;
-	MEM32(edx + 0x3F0u) = 0x196A84u;
-	MEM32(edx + 0x3F4u) = 0x196A88u;
-	MEM32(edx + 0x3F8u) = 0x196A8Cu;
+	MEM32(edx + 0x304u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xCu;
+	MEM32(edx + 0x308u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x10u;
+	MEM32(edx + 0x30Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x14u;
+	MEM32(edx + 0x310u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x18u;
+	MEM32(edx + 0x314u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x1Cu;
+	MEM32(edx + 0x318u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x20u;
+	MEM32(edx + 0x31Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x24u;
+	MEM32(edx + 0x320u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x28u;
+	MEM32(edx + 0x324u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x2Cu;
+	MEM32(edx + 0x328u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x30u;
+	MEM32(edx + 0x32Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA;
+	MEM32(edx + 0x338u) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x33Cu) = VeritechConstants_brake_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x348u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x34Cu) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x340u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x344u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x350u) = VeritechConstants_boost_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x354u) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x358u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x4Cu;
+	MEM32(edx + 0x35Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x50u;
+	MEM32(edx + 0x360u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x54u;
+	MEM32(edx + 0x364u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x58u;
+	MEM32(edx + 0x368u) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x36Cu) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x374u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x370u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x378u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x6Cu;
+	MEM32(edx + 0x37Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x70u;
+	MEM32(edx + 0x380u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x74u;
+	MEM32(edx + 0x384u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x78u;
+	MEM32(edx + 0x3B0u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x84u;
+	MEM32(edx + 0x388u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x88u;
+	MEM32(edx + 0x390u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x8Cu;
+	MEM32(edx + 0x3B4u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x90u;
+	MEM32(edx + 0x38Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x94u;
+	MEM32(edx + 0x394u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x98u;
+	MEM32(edx + 0x3B8u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0x9Cu;
+	MEM32(edx + 0x398u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xA0u;
+	MEM32(edx + 0x39Cu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xA4u;
+	MEM32(edx + 0x3BCu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xA8u;
+	MEM32(edx + 0x3A0u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xACu;
+	MEM32(edx + 0x3A4u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xB0u;
+	MEM32(edx + 0x3A8u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xB4u;
+	MEM32(edx + 0x3ACu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xB8u;
+	MEM32(edx + 0x3E8u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xE4u;
+	MEM32(edx + 0x3C4u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xBCu;
+	MEM32(edx + 0x3C8u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xC0u;
+	MEM32(edx + 0x3CCu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xC4u;
+	MEM32(edx + 0x3D0u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xC8u;
+	MEM32(edx + 0x3D4u) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3D8u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xD0u;
+	MEM32(edx + 0x3DCu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xD4u;
+	MEM32(edx + 0x3E0u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xD8u;
+	MEM32(edx + 0x3E4u) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xDCu;
+	MEM32(edx + 0x3ECu) = VF1AXVeritechBattloidNoTerrainConstants_VA + 0xE0u;
+	MEM32(edx + 0x3F0u) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F4u) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F8u) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x3C0u) = edx + 0x404u;
 	MEM32(edx + 0x3FCu) = 1u;
 	MEM32(edx + 0x400u) = ebx;
-	MEM32(edx + 0x300u) = 0x196888u;
+	MEM32(edx + 0x300u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x558u, 0u, 0x41u);
-	MEM32(edx + 0x588u) = 0x196A94u;
+	MEM32(edx + 0x588u) = VeritechConstants_radius_VA(VF1AXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x58Cu) = esi;
-	MEM32(edx + 0x55Cu) = 0x196A9Cu;
-	MEM32(edx + 0x560u) = 0x196AA0u;
-	MEM32(edx + 0x564u) = 0x196AA4u;
-	MEM32(edx + 0x568u) = 0x196AA8u;
-	MEM32(edx + 0x56Cu) = 0x196AACu;
-	MEM32(edx + 0x570u) = 0x196AB0u;
-	MEM32(edx + 0x574u) = 0x196AB4u;
-	MEM32(edx + 0x578u) = 0x196AB8u;
-	MEM32(edx + 0x57Cu) = 0x196ABCu;
-	MEM32(edx + 0x580u) = 0x196AC0u;
-	MEM32(edx + 0x584u) = 0x196A90u;
-	MEM32(edx + 0x590u) = 0x196AC4u;
-	MEM32(edx + 0x594u) = 0x196AC8u;
-	MEM32(edx + 0x5A0u) = 0x196ACCu;
-	MEM32(edx + 0x5A4u) = 0x196AD0u;
-	MEM32(edx + 0x598u) = 0x196AD4u;
-	MEM32(edx + 0x59Cu) = 0x196AD8u;
-	MEM32(edx + 0x5A8u) = 0x196B0Cu;
-	MEM32(edx + 0x5ACu) = 0x196B10u;
-	MEM32(edx + 0x5B0u) = 0x196ADCu;
-	MEM32(edx + 0x5B4u) = 0x196AE0u;
-	MEM32(edx + 0x5B8u) = 0x196AE4u;
-	MEM32(edx + 0x5BCu) = 0x196AE8u;
-	MEM32(edx + 0x5C0u) = 0x196AECu;
-	MEM32(edx + 0x5C4u) = 0x196AF0u;
-	MEM32(edx + 0x5CCu) = 0x196AF4u;
-	MEM32(edx + 0x5C8u) = 0x196AF8u;
-	MEM32(edx + 0x5D0u) = 0x196AFCu;
-	MEM32(edx + 0x5D4u) = 0x196B00u;
-	MEM32(edx + 0x5D8u) = 0x196B04u;
-	MEM32(edx + 0x5DCu) = 0x196B08u;
-	MEM32(edx + 0x608u) = 0x196B14u;
-	MEM32(edx + 0x5E0u) = 0x196B18u;
-	MEM32(edx + 0x5E8u) = 0x196B1Cu;
-	MEM32(edx + 0x60Cu) = 0x196B20u;
-	MEM32(edx + 0x5E4u) = 0x196B24u;
-	MEM32(edx + 0x5ECu) = 0x196B28u;
-	MEM32(edx + 0x610u) = 0x196B2Cu;
-	MEM32(edx + 0x5F0u) = 0x196B30u;
-	MEM32(edx + 0x5F4u) = 0x196B34u;
-	MEM32(edx + 0x614u) = 0x196B38u;
-	MEM32(edx + 0x5F8u) = 0x196B3Cu;
-	MEM32(edx + 0x5FCu) = 0x196B40u;
-	MEM32(edx + 0x600u) = 0x196B44u;
-	MEM32(edx + 0x604u) = 0x196B48u;
-	MEM32(edx + 0x640u) = 0x196B74u;
-	MEM32(edx + 0x61Cu) = 0x196B4Cu;
-	MEM32(edx + 0x620u) = 0x196B50u;
-	MEM32(edx + 0x624u) = 0x196B54u;
-	MEM32(edx + 0x628u) = 0x196B58u;
-	MEM32(edx + 0x62Cu) = 0x196B5Cu;
-	MEM32(edx + 0x630u) = 0x196B60u;
-	MEM32(edx + 0x634u) = 0x196B64u;
-	MEM32(edx + 0x638u) = 0x196B68u;
-	MEM32(edx + 0x63Cu) = 0x196B6Cu;
-	MEM32(edx + 0x644u) = 0x196B70u;
-	MEM32(edx + 0x648u) = 0x196B78u;
-	MEM32(edx + 0x64Cu) = 0x196B7Cu;
-	MEM32(edx + 0x650u) = 0x196B80u;
+	MEM32(edx + 0x55Cu) = VF1AXVeritechGuardianConstants_VA + 0xCu;
+	MEM32(edx + 0x560u) = VF1AXVeritechGuardianConstants_VA + 0x10u;
+	MEM32(edx + 0x564u) = VF1AXVeritechGuardianConstants_VA + 0x14u;
+	MEM32(edx + 0x568u) = VF1AXVeritechGuardianConstants_VA + 0x18u;
+	MEM32(edx + 0x56Cu) = VF1AXVeritechGuardianConstants_VA + 0x1Cu;
+	MEM32(edx + 0x570u) = VF1AXVeritechGuardianConstants_VA + 0x20u;
+	MEM32(edx + 0x574u) = VF1AXVeritechGuardianConstants_VA + 0x24u;
+	MEM32(edx + 0x578u) = VF1AXVeritechGuardianConstants_VA + 0x28u;
+	MEM32(edx + 0x57Cu) = VF1AXVeritechGuardianConstants_VA + 0x2Cu;
+	MEM32(edx + 0x580u) = VF1AXVeritechGuardianConstants_VA + 0x30u;
+	MEM32(edx + 0x584u) = VF1AXVeritechGuardianConstants_VA;
+	MEM32(edx + 0x590u) = VeritechConstants_thrust_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x594u) = VeritechConstants_brake_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A0u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A4u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x598u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x59Cu) = VeritechConstants_brake_vertical_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A8u) = VeritechConstants_boost_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5ACu) = VeritechConstants_boost_force_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5B0u) = VF1AXVeritechGuardianConstants_VA + 0x4Cu;
+	MEM32(edx + 0x5B4u) = VF1AXVeritechGuardianConstants_VA + 0x50u;
+	MEM32(edx + 0x5B8u) = VF1AXVeritechGuardianConstants_VA + 0x54u;
+	MEM32(edx + 0x5BCu) = VF1AXVeritechGuardianConstants_VA + 0x58u;
+	MEM32(edx + 0x5C0u) = VeritechConstants_speed_forward_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C4u) = VeritechConstants_speed_backward_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5CCu) = VeritechConstants_speed_sideways_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C8u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5D0u) = VF1AXVeritechGuardianConstants_VA + 0x6Cu;
+	MEM32(edx + 0x5D4u) = VF1AXVeritechGuardianConstants_VA + 0x70u;
+	MEM32(edx + 0x5D8u) = VF1AXVeritechGuardianConstants_VA + 0x74u;
+	MEM32(edx + 0x5DCu) = VF1AXVeritechGuardianConstants_VA + 0x78u;
+	MEM32(edx + 0x608u) = VF1AXVeritechGuardianConstants_VA + 0x84u;
+	MEM32(edx + 0x5E0u) = VF1AXVeritechGuardianConstants_VA + 0x88u;
+	MEM32(edx + 0x5E8u) = VF1AXVeritechGuardianConstants_VA + 0x8Cu;
+	MEM32(edx + 0x60Cu) = VF1AXVeritechGuardianConstants_VA + 0x90u;
+	MEM32(edx + 0x5E4u) = VF1AXVeritechGuardianConstants_VA + 0x94u;
+	MEM32(edx + 0x5ECu) = VF1AXVeritechGuardianConstants_VA + 0x98u;
+	MEM32(edx + 0x610u) = VF1AXVeritechGuardianConstants_VA + 0x9Cu;
+	MEM32(edx + 0x5F0u) = VF1AXVeritechGuardianConstants_VA + 0xA0u;
+	MEM32(edx + 0x5F4u) = VF1AXVeritechGuardianConstants_VA + 0xA4u;
+	MEM32(edx + 0x614u) = VF1AXVeritechGuardianConstants_VA + 0xA8u;
+	MEM32(edx + 0x5F8u) = VF1AXVeritechGuardianConstants_VA + 0xACu;
+	MEM32(edx + 0x5FCu) = VF1AXVeritechGuardianConstants_VA + 0xB0u;
+	MEM32(edx + 0x600u) = VF1AXVeritechGuardianConstants_VA + 0xB4u;
+	MEM32(edx + 0x604u) = VF1AXVeritechGuardianConstants_VA + 0xB8u;
+	MEM32(edx + 0x640u) = VF1AXVeritechGuardianConstants_VA + 0xE4u;
+	MEM32(edx + 0x61Cu) = VF1AXVeritechGuardianConstants_VA + 0xBCu;
+	MEM32(edx + 0x620u) = VF1AXVeritechGuardianConstants_VA + 0xC0u;
+	MEM32(edx + 0x624u) = VF1AXVeritechGuardianConstants_VA + 0xC4u;
+	MEM32(edx + 0x628u) = VF1AXVeritechGuardianConstants_VA + 0xC8u;
+	MEM32(edx + 0x62Cu) = VeritechConstants_camera_lag_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x630u) = VF1AXVeritechGuardianConstants_VA + 0xD0u;
+	MEM32(edx + 0x634u) = VF1AXVeritechGuardianConstants_VA + 0xD4u;
+	MEM32(edx + 0x638u) = VF1AXVeritechGuardianConstants_VA + 0xD8u;
+	MEM32(edx + 0x63Cu) = VF1AXVeritechGuardianConstants_VA + 0xDCu;
+	MEM32(edx + 0x644u) = VF1AXVeritechGuardianConstants_VA + 0xE0u;
+	MEM32(edx + 0x648u) = VeritechConstants_explode_chance_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x64Cu) = VeritechConstants_death_wait_VA(VF1AXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x650u) = VeritechConstants_fade_time_VA(VF1AXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x618u) = edx + 0x65Cu;
 	MEM32(edx + 0x654u) = 1u;
 	MEM32(edx + 0x658u) = edx + 0x68Cu;
-	MEM32(edx + 0x558u) = 0x196888u;
+	MEM32(edx + 0x558u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x730u, 0u, 0x41u);
-	MEM32(edx + 0x760u) = 0x196B88u;
+	MEM32(edx + 0x760u) = VeritechConstants_radius_VA(VF1AXVeritechFighterConstants_VA);
 	MEM32(edx + 0x764u) = esi;
-	MEM32(edx + 0x734u) = 0x196B90u;
-	MEM32(edx + 0x738u) = 0x196B94u;
-	MEM32(edx + 0x73Cu) = 0x196B98u;
-	MEM32(edx + 0x740u) = 0x196B9Cu;
-	MEM32(edx + 0x744u) = 0x196BA0u;
-	MEM32(edx + 0x748u) = 0x196BA4u;
-	MEM32(edx + 0x74Cu) = 0x196BA8u;
-	MEM32(edx + 0x750u) = 0x196BACu;
-	MEM32(edx + 0x754u) = 0x196BB0u;
-	MEM32(edx + 0x758u) = 0x196BB4u;
-	MEM32(edx + 0x75Cu) = 0x196B84u;
-	MEM32(edx + 0x768u) = 0x196BB8u;
-	MEM32(edx + 0x76Cu) = 0x196BBCu;
-	MEM32(edx + 0x778u) = 0x196BC0u;
-	MEM32(edx + 0x77Cu) = 0x196BC4u;
-	MEM32(edx + 0x770u) = 0x196BC8u;
-	MEM32(edx + 0x774u) = 0x196BCCu;
-	MEM32(edx + 0x780u) = 0x196C00u;
-	MEM32(edx + 0x784u) = 0x196C04u;
-	MEM32(edx + 0x788u) = 0x196BD0u;
-	MEM32(edx + 0x78Cu) = 0x196BD4u;
-	MEM32(edx + 0x790u) = 0x196BD8u;
-	MEM32(edx + 0x794u) = 0x196BDCu;
-	MEM32(edx + 0x798u) = 0x196BE0u;
-	MEM32(edx + 0x79Cu) = 0x196BE4u;
-	MEM32(edx + 0x7A4u) = 0x196BE8u;
-	MEM32(edx + 0x7A0u) = 0x196BECu;
-	MEM32(edx + 0x7A8u) = 0x196BF0u;
-	MEM32(edx + 0x7ACu) = 0x196BF4u;
-	MEM32(edx + 0x7B0u) = 0x196BFCu;
-	MEM32(edx + 0x7B4u) = 0x196BF8u;
-	MEM32(edx + 0x7E0u) = 0x196C08u;
-	MEM32(edx + 0x7B8u) = 0x196C0Cu;
-	MEM32(edx + 0x7C0u) = 0x196C10u;
-	MEM32(edx + 0x7E4u) = 0x196C14u;
-	MEM32(edx + 0x7BCu) = 0x196C18u;
-	MEM32(edx + 0x7C4u) = 0x196C1Cu;
-	MEM32(edx + 0x7E8u) = 0x196C20u;
-	MEM32(edx + 0x7C8u) = 0x196C24u;
-	MEM32(edx + 0x7CCu) = 0x196C28u;
-	MEM32(edx + 0x7ECu) = 0x196C2Cu;
-	MEM32(edx + 0x7D0u) = 0x196C30u;
-	MEM32(edx + 0x7D4u) = 0x196C34u;
-	MEM32(edx + 0x7D8u) = 0x196C38u;
-	MEM32(edx + 0x7DCu) = 0x196C3Cu;
-	MEM32(edx + 0x818u) = 0x196C68u;
-	MEM32(edx + 0x7F4u) = 0x196C40u;
-	MEM32(edx + 0x7F8u) = 0x196C44u;
-	MEM32(edx + 0x7FCu) = 0x196C48u;
-	MEM32(edx + 0x800u) = 0x196C4Cu;
-	MEM32(edx + 0x804u) = 0x196C50u;
-	MEM32(edx + 0x808u) = 0x196C54u;
-	MEM32(edx + 0x80Cu) = 0x196C58u;
-	MEM32(edx + 0x810u) = 0x196C5Cu;
-	MEM32(edx + 0x814u) = 0x196C60u;
-	MEM32(edx + 0x81Cu) = 0x196C64u;
-	MEM32(edx + 0x820u) = 0x196C6Cu;
-	MEM32(edx + 0x824u) = 0x196C70u;
-	MEM32(edx + 0x828u) = 0x196C74u;
+	MEM32(edx + 0x734u) = VF1AXVeritechFighterConstants_VA + 0xCu;
+	MEM32(edx + 0x738u) = VF1AXVeritechFighterConstants_VA + 0x10u;
+	MEM32(edx + 0x73Cu) = VF1AXVeritechFighterConstants_VA + 0x14u;
+	MEM32(edx + 0x740u) = VF1AXVeritechFighterConstants_VA + 0x18u;
+	MEM32(edx + 0x744u) = VF1AXVeritechFighterConstants_VA + 0x1Cu;
+	MEM32(edx + 0x748u) = VF1AXVeritechFighterConstants_VA + 0x20u;
+	MEM32(edx + 0x74Cu) = VF1AXVeritechFighterConstants_VA + 0x24u;
+	MEM32(edx + 0x750u) = VF1AXVeritechFighterConstants_VA + 0x28u;
+	MEM32(edx + 0x754u) = VF1AXVeritechFighterConstants_VA + 0x2Cu;
+	MEM32(edx + 0x758u) = VF1AXVeritechFighterConstants_VA + 0x30u;
+	MEM32(edx + 0x75Cu) = VF1AXVeritechFighterConstants_VA;
+	MEM32(edx + 0x768u) = VeritechConstants_thrust_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x76Cu) = VeritechConstants_brake_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x778u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x77Cu) = VeritechConstants_brake_sideways_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x770u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x774u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x780u) = VeritechConstants_boost_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x784u) = VeritechConstants_boost_force_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x788u) = VF1AXVeritechFighterConstants_VA + 0x4Cu;
+	MEM32(edx + 0x78Cu) = VF1AXVeritechFighterConstants_VA + 0x50u;
+	MEM32(edx + 0x790u) = VF1AXVeritechFighterConstants_VA + 0x54u;
+	MEM32(edx + 0x794u) = VF1AXVeritechFighterConstants_VA + 0x58u;
+	MEM32(edx + 0x798u) = VeritechConstants_speed_forward_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x79Cu) = VeritechConstants_speed_backward_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A4u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A0u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A8u) = VF1AXVeritechFighterConstants_VA + 0x6Cu;
+	MEM32(edx + 0x7ACu) = VF1AXVeritechFighterConstants_VA + 0x70u;
+	MEM32(edx + 0x7B0u) = VF1AXVeritechFighterConstants_VA + 0x78u;
+	MEM32(edx + 0x7B4u) = VF1AXVeritechFighterConstants_VA + 0x74u;
+	MEM32(edx + 0x7E0u) = VF1AXVeritechFighterConstants_VA + 0x84u;
+	MEM32(edx + 0x7B8u) = VF1AXVeritechFighterConstants_VA + 0x88u;
+	MEM32(edx + 0x7C0u) = VF1AXVeritechFighterConstants_VA + 0x8Cu;
+	MEM32(edx + 0x7E4u) = VF1AXVeritechFighterConstants_VA + 0x90u;
+	MEM32(edx + 0x7BCu) = VF1AXVeritechFighterConstants_VA + 0x94u;
+	MEM32(edx + 0x7C4u) = VF1AXVeritechFighterConstants_VA + 0x98u;
+	MEM32(edx + 0x7E8u) = VF1AXVeritechFighterConstants_VA + 0x9Cu;
+	MEM32(edx + 0x7C8u) = VF1AXVeritechFighterConstants_VA + 0xA0u;
+	MEM32(edx + 0x7CCu) = VF1AXVeritechFighterConstants_VA + 0xA4u;
+	MEM32(edx + 0x7ECu) = VF1AXVeritechFighterConstants_VA + 0xA8u;
+	MEM32(edx + 0x7D0u) = VF1AXVeritechFighterConstants_VA + 0xACu;
+	MEM32(edx + 0x7D4u) = VF1AXVeritechFighterConstants_VA + 0xB0u;
+	MEM32(edx + 0x7D8u) = VF1AXVeritechFighterConstants_VA + 0xB4u;
+	MEM32(edx + 0x7DCu) = VF1AXVeritechFighterConstants_VA + 0xB8u;
+	MEM32(edx + 0x818u) = VF1AXVeritechFighterConstants_VA + 0xE4u;
+	MEM32(edx + 0x7F4u) = VF1AXVeritechFighterConstants_VA + 0xBCu;
+	MEM32(edx + 0x7F8u) = VF1AXVeritechFighterConstants_VA + 0xC0u;
+	MEM32(edx + 0x7FCu) = VF1AXVeritechFighterConstants_VA + 0xC4u;
+	MEM32(edx + 0x800u) = VF1AXVeritechFighterConstants_VA + 0xC8u;
+	MEM32(edx + 0x804u) = VeritechConstants_camera_lag_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x808u) = VF1AXVeritechFighterConstants_VA + 0xD0u;
+	MEM32(edx + 0x80Cu) = VF1AXVeritechFighterConstants_VA + 0xD4u;
+	MEM32(edx + 0x810u) = VF1AXVeritechFighterConstants_VA + 0xD8u;
+	MEM32(edx + 0x814u) = VF1AXVeritechFighterConstants_VA + 0xDCu;
+	MEM32(edx + 0x81Cu) = VF1AXVeritechFighterConstants_VA + 0xE0u;
+	MEM32(edx + 0x820u) = VeritechConstants_explode_chance_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x824u) = VeritechConstants_death_wait_VA(VF1AXVeritechFighterConstants_VA);
+	MEM32(edx + 0x828u) = VeritechConstants_fade_time_VA(VF1AXVeritechFighterConstants_VA);
 	MEM32(edx + 0x7F0u) = edx + 0x834u;
 	MEM32(edx + 0x82Cu) = 1u;
 	MEM32(edx + 0x830u) = edx + 0x850u;
-	MEM32(edx + 0x730u) = 0x196888u;
+	MEM32(edx + 0x730u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x978u, 0u, 0x41u);
-	MEM32(edx + 0x9A8u) = 0x1970ECu;
+	MEM32(edx + 0x9A8u) = VeritechConstants_radius_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0x9ACu) = esi;
-	MEM32(edx + 0x97Cu) = 0x1970F4u;
-	MEM32(edx + 0x980u) = 0x1970F8u;
-	MEM32(edx + 0x984u) = 0x1970FCu;
-	MEM32(edx + 0x988u) = 0x197100u;
-	MEM32(edx + 0x98Cu) = 0x197104u;
-	MEM32(edx + 0x990u) = 0x197108u;
-	MEM32(edx + 0x994u) = 0x19710Cu;
-	MEM32(edx + 0x998u) = 0x197110u;
-	MEM32(edx + 0x99Cu) = 0x197114u;
-	MEM32(edx + 0x9A0u) = 0x197118u;
-	MEM32(edx + 0x9A4u) = 0x1970E8u;
-	MEM32(edx + 0x9B0u) = 0x19711Cu;
-	MEM32(edx + 0x9B4u) = 0x197120u;
-	MEM32(edx + 0x9C0u) = 0x197124u;
-	MEM32(edx + 0x9C4u) = 0x197128u;
-	MEM32(edx + 0x9B8u) = 0x19712Cu;
-	MEM32(edx + 0x9BCu) = 0x197130u;
-	MEM32(edx + 0x9C8u) = 0x197164u;
-	MEM32(edx + 0x9CCu) = 0x197168u;
-	MEM32(edx + 0x9D0u) = 0x197134u;
-	MEM32(edx + 0x9D4u) = 0x197138u;
-	MEM32(edx + 0x9D8u) = 0x19713Cu;
-	MEM32(edx + 0x9DCu) = 0x197140u;
-	MEM32(edx + 0x9E0u) = 0x197144u;
-	MEM32(edx + 0x9E4u) = 0x197148u;
-	MEM32(edx + 0x9ECu) = 0x19714Cu;
-	MEM32(edx + 0x9E8u) = 0x197150u;
-	MEM32(edx + 0x9F0u) = 0x197154u;
-	MEM32(edx + 0x9F4u) = 0x197158u;
-	MEM32(edx + 0x9F8u) = 0x19715Cu;
-	MEM32(edx + 0x9FCu) = 0x197160u;
-	MEM32(edx + 0xA28u) = 0x19716Cu;
-	MEM32(edx + 0xA00u) = 0x197170u;
-	MEM32(edx + 0xA08u) = 0x197174u;
-	MEM32(edx + 0xA2Cu) = 0x197178u;
-	MEM32(edx + 0xA04u) = 0x19717Cu;
-	MEM32(edx + 0xA0Cu) = 0x197180u;
-	MEM32(edx + 0xA30u) = 0x197184u;
-	MEM32(edx + 0xA10u) = 0x197188u;
-	MEM32(edx + 0xA14u) = 0x19718Cu;
-	MEM32(edx + 0xA34u) = 0x197190u;
-	MEM32(edx + 0xA18u) = 0x197194u;
-	MEM32(edx + 0xA1Cu) = 0x197198u;
-	MEM32(edx + 0xA20u) = 0x19719Cu;
-	MEM32(edx + 0xA24u) = 0x1971A0u;
-	MEM32(edx + 0xA60u) = 0x1971CCu;
-	MEM32(edx + 0xA3Cu) = 0x1971A4u;
-	MEM32(edx + 0xA40u) = 0x1971A8u;
-	MEM32(edx + 0xA44u) = 0x1971ACu;
-	MEM32(edx + 0xA48u) = 0x1971B0u;
-	MEM32(edx + 0xA4Cu) = 0x1971B4u;
-	MEM32(edx + 0xA50u) = 0x1971B8u;
-	MEM32(edx + 0xA54u) = 0x1971BCu;
-	MEM32(edx + 0xA58u) = 0x1971C0u;
-	MEM32(edx + 0xA5Cu) = 0x1971C4u;
-	MEM32(edx + 0xA64u) = 0x1971C8u;
-	MEM32(edx + 0xA68u) = 0x1971D0u;
-	MEM32(edx + 0xA6Cu) = 0x1971D4u;
-	MEM32(edx + 0xA70u) = 0x1971D8u;
+	MEM32(edx + 0x97Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0x980u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0x984u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0x988u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0x98Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0x990u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0x994u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0x998u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0x99Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0x9A0u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0x9A4u) = VF1AXVeritechBattloidSumoPackConstants_VA;
+	MEM32(edx + 0x9B0u) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B4u) = VeritechConstants_brake_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C0u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C4u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B8u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9BCu) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C8u) = VeritechConstants_boost_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9CCu) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9D0u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0x9D4u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0x9D8u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0x9DCu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0x9E0u) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E4u) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9ECu) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E8u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9F0u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0x9F4u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0x9F8u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0x9FCu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xA28u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xA00u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xA08u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xA2Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xA04u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xA0Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xA30u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xA10u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xA14u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xA34u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xA18u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xA1Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xA20u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xA24u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xA60u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xA3Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xA40u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xA44u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xA48u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xA4Cu) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA50u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xA54u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xA58u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xA5Cu) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xA64u) = VF1AXVeritechBattloidSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xA68u) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA6Cu) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA70u) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0xA38u) = edx + 0x108u;
 	MEM32(edx + 0xA74u) = 1u;
 	MEM32(edx + 0xA78u) = ebx;
-	MEM32(edx + 0x978u) = 0x196888u;
+	MEM32(edx + 0x978u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xA7Cu, 0u, 0x41u);
-	MEM32(edx + 0xAACu) = 0x1971E0u;
+	MEM32(edx + 0xAACu) = VeritechConstants_radius_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xAB0u) = esi;
-	MEM32(edx + 0xA80u) = 0x1971E8u;
-	MEM32(edx + 0xA84u) = 0x1971ECu;
-	MEM32(edx + 0xA88u) = 0x1971F0u;
-	MEM32(edx + 0xA8Cu) = 0x1971F4u;
-	MEM32(edx + 0xA90u) = 0x1971F8u;
-	MEM32(edx + 0xA94u) = 0x1971FCu;
-	MEM32(edx + 0xA98u) = 0x197200u;
-	MEM32(edx + 0xA9Cu) = 0x197204u;
-	MEM32(edx + 0xAA0u) = 0x197208u;
-	MEM32(edx + 0xAA4u) = 0x19720Cu;
-	MEM32(edx + 0xAA8u) = 0x1971DCu;
-	MEM32(edx + 0xAB4u) = 0x197210u;
-	MEM32(edx + 0xAB8u) = 0x197214u;
-	MEM32(edx + 0xAC4u) = 0x197218u;
-	MEM32(edx + 0xAC8u) = 0x19721Cu;
-	MEM32(edx + 0xABCu) = 0x197220u;
-	MEM32(edx + 0xAC0u) = 0x197224u;
-	MEM32(edx + 0xACCu) = 0x197258u;
-	MEM32(edx + 0xAD0u) = 0x19725Cu;
-	MEM32(edx + 0xAD4u) = 0x197228u;
-	MEM32(edx + 0xAD8u) = 0x19722Cu;
-	MEM32(edx + 0xADCu) = 0x197230u;
-	MEM32(edx + 0xAE0u) = 0x197234u;
-	MEM32(edx + 0xAE4u) = 0x197238u;
-	MEM32(edx + 0xAE8u) = 0x19723Cu;
-	MEM32(edx + 0xAF0u) = 0x197240u;
-	MEM32(edx + 0xAECu) = 0x197244u;
-	MEM32(edx + 0xAF4u) = 0x197248u;
-	MEM32(edx + 0xAF8u) = 0x19724Cu;
-	MEM32(edx + 0xAFCu) = 0x197250u;
-	MEM32(edx + 0xB00u) = 0x197254u;
-	MEM32(edx + 0xB2Cu) = 0x197260u;
-	MEM32(edx + 0xB04u) = 0x197264u;
-	MEM32(edx + 0xB0Cu) = 0x197268u;
-	MEM32(edx + 0xB30u) = 0x19726Cu;
-	MEM32(edx + 0xB08u) = 0x197270u;
-	MEM32(edx + 0xB10u) = 0x197274u;
-	MEM32(edx + 0xB34u) = 0x197278u;
-	MEM32(edx + 0xB14u) = 0x19727Cu;
-	MEM32(edx + 0xB18u) = 0x197280u;
-	MEM32(edx + 0xB38u) = 0x197284u;
-	MEM32(edx + 0xB1Cu) = 0x197288u;
-	MEM32(edx + 0xB20u) = 0x19728Cu;
-	MEM32(edx + 0xB24u) = 0x197290u;
-	MEM32(edx + 0xB28u) = 0x197294u;
-	MEM32(edx + 0xB64u) = 0x1972C0u;
-	MEM32(edx + 0xB40u) = 0x197298u;
-	MEM32(edx + 0xB44u) = 0x19729Cu;
-	MEM32(edx + 0xB48u) = 0x1972A0u;
-	MEM32(edx + 0xB4Cu) = 0x1972A4u;
-	MEM32(edx + 0xB50u) = 0x1972A8u;
-	MEM32(edx + 0xB54u) = 0x1972ACu;
-	MEM32(edx + 0xB58u) = 0x1972B0u;
-	MEM32(edx + 0xB5Cu) = 0x1972B4u;
-	MEM32(edx + 0xB60u) = 0x1972B8u;
-	MEM32(edx + 0xB68u) = 0x1972BCu;
-	MEM32(edx + 0xB6Cu) = 0x1972C4u;
-	MEM32(edx + 0xB70u) = 0x1972C8u;
-	MEM32(edx + 0xB74u) = 0x1972CCu;
+	MEM32(edx + 0xA80u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0xA84u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0xA88u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0xA8Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0xA90u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xA94u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0xA98u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0xA9Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0xAA0u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xAA4u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0xAA8u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA;
+	MEM32(edx + 0xAB4u) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAB8u) = VeritechConstants_brake_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC4u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC8u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xABCu) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC0u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xACCu) = VeritechConstants_boost_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD0u) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD4u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xAD8u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0xADCu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0xAE0u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0xAE4u) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAE8u) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF0u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAECu) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF4u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xAF8u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0xAFCu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0xB00u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xB2Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xB04u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xB0Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB30u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xB08u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xB10u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xB34u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xB14u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xB18u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xB38u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xB1Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xB20u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xB24u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xB28u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xB64u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xB40u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xB44u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xB48u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xB4Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xB50u) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB54u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xB58u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xB5Cu) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xB60u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xB68u) = VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xB6Cu) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB70u) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB74u) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xB3Cu) = edx + 0x404u;
 	MEM32(edx + 0xB78u) = 1u;
 	MEM32(edx + 0xB7Cu) = ebx;
-	MEM32(edx + 0xA7Cu) = 0x196888u;
+	MEM32(edx + 0xA7Cu) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xB80u, 0u, 0x41u);
-	MEM32(edx + 0xBB0u) = 0x1972D4u;
+	MEM32(edx + 0xBB0u) = VeritechConstants_radius_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xBB4u) = esi;
-	MEM32(edx + 0xB84u) = 0x1972DCu;
-	MEM32(edx + 0xB88u) = 0x1972E0u;
-	MEM32(edx + 0xB8Cu) = 0x1972E4u;
-	MEM32(edx + 0xB90u) = 0x1972E8u;
-	MEM32(edx + 0xB94u) = 0x1972ECu;
-	MEM32(edx + 0xB98u) = 0x1972F0u;
-	MEM32(edx + 0xB9Cu) = 0x1972F4u;
-	MEM32(edx + 0xBA0u) = 0x1972F8u;
-	MEM32(edx + 0xBA4u) = 0x1972FCu;
-	MEM32(edx + 0xBA8u) = 0x197300u;
-	MEM32(edx + 0xBACu) = 0x1972D0u;
-	MEM32(edx + 0xBB8u) = 0x197304u;
-	MEM32(edx + 0xBBCu) = 0x197308u;
-	MEM32(edx + 0xBC8u) = 0x19730Cu;
-	MEM32(edx + 0xBCCu) = 0x197310u;
-	MEM32(edx + 0xBC0u) = 0x197314u;
-	MEM32(edx + 0xBC4u) = 0x197318u;
-	MEM32(edx + 0xBD0u) = 0x19734Cu;
-	MEM32(edx + 0xBD4u) = 0x197350u;
-	MEM32(edx + 0xBD8u) = 0x19731Cu;
-	MEM32(edx + 0xBDCu) = 0x197320u;
-	MEM32(edx + 0xBE0u) = 0x197324u;
-	MEM32(edx + 0xBE4u) = 0x197328u;
-	MEM32(edx + 0xBE8u) = 0x19732Cu;
-	MEM32(edx + 0xBECu) = 0x197330u;
-	MEM32(edx + 0xBF4u) = 0x197334u;
-	MEM32(edx + 0xBF0u) = 0x197338u;
-	MEM32(edx + 0xBF8u) = 0x19733Cu;
-	MEM32(edx + 0xBFCu) = 0x197340u;
-	MEM32(edx + 0xC00u) = 0x197344u;
-	MEM32(edx + 0xC04u) = 0x197348u;
-	MEM32(edx + 0xC30u) = 0x197354u;
-	MEM32(edx + 0xC08u) = 0x197358u;
-	MEM32(edx + 0xC10u) = 0x19735Cu;
-	MEM32(edx + 0xC34u) = 0x197360u;
-	MEM32(edx + 0xC0Cu) = 0x197364u;
-	MEM32(edx + 0xC14u) = 0x197368u;
-	MEM32(edx + 0xC38u) = 0x19736Cu;
-	MEM32(edx + 0xC18u) = 0x197370u;
-	MEM32(edx + 0xC1Cu) = 0x197374u;
-	MEM32(edx + 0xC3Cu) = 0x197378u;
-	MEM32(edx + 0xC20u) = 0x19737Cu;
-	MEM32(edx + 0xC24u) = 0x197380u;
-	MEM32(edx + 0xC28u) = 0x197384u;
-	MEM32(edx + 0xC2Cu) = 0x197388u;
-	MEM32(edx + 0xC68u) = 0x1973B4u;
-	MEM32(edx + 0xC44u) = 0x19738Cu;
-	MEM32(edx + 0xC48u) = 0x197390u;
-	MEM32(edx + 0xC4Cu) = 0x197394u;
-	MEM32(edx + 0xC50u) = 0x197398u;
-	MEM32(edx + 0xC54u) = 0x19739Cu;
-	MEM32(edx + 0xC58u) = 0x1973A0u;
-	MEM32(edx + 0xC5Cu) = 0x1973A4u;
-	MEM32(edx + 0xC60u) = 0x1973A8u;
-	MEM32(edx + 0xC64u) = 0x1973ACu;
-	MEM32(edx + 0xC6Cu) = 0x1973B0u;
-	MEM32(edx + 0xC70u) = 0x1973B8u;
-	MEM32(edx + 0xC74u) = 0x1973BCu;
-	MEM32(edx + 0xC78u) = 0x1973C0u;
+	MEM32(edx + 0xB84u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xB88u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xB8Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xB90u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xB94u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xB98u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xB9Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xBA0u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xBA4u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xBA8u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xBACu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xBB8u) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBBCu) = VeritechConstants_brake_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC8u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBCCu) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC0u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC4u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD0u) = VeritechConstants_boost_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD4u) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD8u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xBDCu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xBE0u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xBE4u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xBE8u) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBECu) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF4u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF0u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF8u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xBFCu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xC00u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xC04u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xC30u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xC08u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xC10u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xC34u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xC0Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xC14u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xC38u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xC18u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xC1Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xC3Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xC20u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xC24u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xC28u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xC2Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xC68u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xC44u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xC48u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xC4Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xC50u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xC54u) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC58u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xC5Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xC60u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xC64u) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xC6Cu) = VF1AXVeritechBattloidSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xC70u) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC74u) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC78u) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xC40u) = edx + 0x108u;
 	MEM32(edx + 0xC7Cu) = 1u;
 	MEM32(edx + 0xC80u) = ebx;
-	MEM32(edx + 0xB80u) = 0x196888u;
+	MEM32(edx + 0xB80u) = VF1AXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xC84u, 0u, 0x41u);
-	MEM32(edx + 0xCB4u) = 0x1973C8u;
+	MEM32(edx + 0xCB4u) = VeritechConstants_radius_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xCB8u) = esi;
-	MEM32(edx + 0xC88u) = 0x1973D0u;
-	MEM32(edx + 0xC8Cu) = 0x1973D4u;
-	MEM32(edx + 0xC90u) = 0x1973D8u;
-	MEM32(edx + 0xC94u) = 0x1973DCu;
-	MEM32(edx + 0xC98u) = 0x1973E0u;
-	MEM32(edx + 0xC9Cu) = 0x1973E4u;
-	MEM32(edx + 0xCA0u) = 0x1973E8u;
-	MEM32(edx + 0xCA4u) = 0x1973ECu;
-	MEM32(edx + 0xCA8u) = 0x1973F0u;
-	MEM32(edx + 0xCACu) = 0x1973F4u;
-	MEM32(edx + 0xCB0u) = 0x1973C4u;
-	MEM32(edx + 0xCBCu) = 0x1973F8u;
-	MEM32(edx + 0xCC0u) = 0x1973FCu;
-	MEM32(edx + 0xCCCu) = 0x197400u;
-	MEM32(edx + 0xCD0u) = 0x197404u;
-	MEM32(edx + 0xCC4u) = 0x197408u;
-	MEM32(edx + 0xCC8u) = 0x19740Cu;
-	MEM32(edx + 0xCD4u) = 0x197440u;
-	MEM32(edx + 0xCD8u) = 0x197444u;
-	MEM32(edx + 0xCDCu) = 0x197410u;
-	MEM32(edx + 0xCE0u) = 0x197414u;
-	MEM32(edx + 0xCE4u) = 0x197418u;
-	MEM32(edx + 0xCE8u) = 0x19741Cu;
-	MEM32(edx + 0xCECu) = 0x197420u;
-	MEM32(edx + 0xCF0u) = 0x197424u;
-	MEM32(edx + 0xCF8u) = 0x197428u;
-	MEM32(edx + 0xCF4u) = 0x19742Cu;
-	MEM32(edx + 0xCFCu) = 0x197430u;
-	MEM32(edx + 0xD00u) = 0x197434u;
-	MEM32(edx + 0xD04u) = 0x197438u;
-	MEM32(edx + 0xD08u) = 0x19743Cu;
-	MEM32(edx + 0xD34u) = 0x197448u;
-	MEM32(edx + 0xD0Cu) = 0x19744Cu;
-	MEM32(edx + 0xD14u) = 0x197450u;
-	MEM32(edx + 0xD38u) = 0x197454u;
-	MEM32(edx + 0xD10u) = 0x197458u;
-	MEM32(edx + 0xD18u) = 0x19745Cu;
-	MEM32(edx + 0xD3Cu) = 0x197460u;
-	MEM32(edx + 0xD1Cu) = 0x197464u;
-	MEM32(edx + 0xD20u) = 0x197468u;
-	MEM32(edx + 0xD40u) = 0x19746Cu;
-	MEM32(edx + 0xD24u) = 0x197470u;
-	MEM32(edx + 0xD28u) = 0x197474u;
-	MEM32(edx + 0xD2Cu) = 0x197478u;
-	MEM32(edx + 0xD30u) = 0x19747Cu;
-	MEM32(edx + 0xD6Cu) = 0x1974A8u;
-	MEM32(edx + 0xD48u) = 0x197480u;
-	MEM32(edx + 0xD4Cu) = 0x197484u;
-	MEM32(edx + 0xD50u) = 0x197488u;
-	MEM32(edx + 0xD54u) = 0x19748Cu;
-	MEM32(edx + 0xD58u) = 0x197490u;
-	MEM32(edx + 0xD5Cu) = 0x197494u;
-	MEM32(edx + 0xD60u) = 0x197498u;
-	MEM32(edx + 0xD64u) = 0x19749Cu;
-	MEM32(edx + 0xD68u) = 0x1974A0u;
-	MEM32(edx + 0xD70u) = 0x1974A4u;
-	MEM32(edx + 0xD74u) = 0x1974ACu;
-	MEM32(edx + 0xD78u) = 0x1974B0u;
-	MEM32(edx + 0xD7Cu) = 0x1974B4u;
+	MEM32(edx + 0xC88u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xC8Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xC90u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xC94u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xC98u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xC9Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xCA0u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xCA4u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xCA8u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xCACu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xCB0u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xCBCu) = VeritechConstants_thrust_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC0u) = VeritechConstants_brake_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCCCu) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD0u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC4u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC8u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD4u) = VeritechConstants_boost_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD8u) = VeritechConstants_boost_force_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCDCu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xCE0u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xCE4u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xCE8u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xCECu) = VeritechConstants_speed_forward_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF0u) = VeritechConstants_speed_backward_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF8u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF4u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCFCu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xD00u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xD04u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xD08u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xD34u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xD0Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xD14u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xD38u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xD10u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xD18u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xD3Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xD1Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xD20u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xD40u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xD24u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xD28u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xD2Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xD30u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xD6Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xD48u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xD4Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xD50u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xD54u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xD58u) = VeritechConstants_camera_lag_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD5Cu) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xD60u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xD64u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xD68u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xD70u) = VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xD74u) = VeritechConstants_explode_chance_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD78u) = VeritechConstants_death_wait_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD7Cu) = VeritechConstants_fade_time_VA(VF1AXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xD44u) = edx + 0x404u;
 	MEM32(edx + 0xD80u) = 1u;
 	MEM32(edx + 0xD84u) = ebx;
-	MEM32(edx + 0xC84u) = 0x196888u;
+	MEM32(edx + 0xC84u) = VF1AXVeritechHitPoints_VA;
 	ebx = edx + 0xD88u;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xDB8u) = 0x1974BCu;
+	MEM32(edx + 0xDB8u) = VeritechConstants_radius_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xDBCu) = esi;
-	MEM32(edx + 0xD8Cu) = 0x1974C4u;
-	MEM32(edx + 0xD90u) = 0x1974C8u;
-	MEM32(edx + 0xD94u) = 0x1974CCu;
-	MEM32(edx + 0xD98u) = 0x1974D0u;
-	MEM32(edx + 0xD9Cu) = 0x1974D4u;
-	MEM32(edx + 0xDA0u) = 0x1974D8u;
-	MEM32(edx + 0xDA4u) = 0x1974DCu;
-	MEM32(edx + 0xDA8u) = 0x1974E0u;
-	MEM32(edx + 0xDACu) = 0x1974E4u;
-	MEM32(edx + 0xDB0u) = 0x1974E8u;
-	MEM32(edx + 0xDB4u) = 0x1974B8u;
-	MEM32(edx + 0xDC0u) = 0x1974ECu;
-	MEM32(edx + 0xDC4u) = 0x1974F0u;
-	MEM32(edx + 0xDD0u) = 0x1974F4u;
-	MEM32(edx + 0xDD4u) = 0x1974F8u;
-	MEM32(edx + 0xDC8u) = 0x1974FCu;
-	MEM32(edx + 0xDCCu) = 0x197500u;
-	MEM32(edx + 0xDD8u) = 0x197534u;
-	MEM32(edx + 0xDDCu) = 0x197538u;
-	MEM32(edx + 0xDE0u) = 0x197504u;
-	MEM32(edx + 0xDE4u) = 0x197508u;
-	MEM32(edx + 0xDE8u) = 0x19750Cu;
-	MEM32(edx + 0xDECu) = 0x197510u;
-	MEM32(edx + 0xDF0u) = 0x197514u;
-	MEM32(edx + 0xDF4u) = 0x197518u;
-	MEM32(edx + 0xDFCu) = 0x19751Cu;
-	MEM32(edx + 0xDF8u) = 0x197520u;
-	MEM32(edx + 0xE00u) = 0x197524u;
-	MEM32(edx + 0xE04u) = 0x197528u;
-	MEM32(edx + 0xE08u) = 0x19752Cu;
-	MEM32(edx + 0xE0Cu) = 0x197530u;
-	MEM32(edx + 0xE38u) = 0x19753Cu;
-	MEM32(edx + 0xE10u) = 0x197540u;
-	MEM32(edx + 0xE18u) = 0x197544u;
-	MEM32(edx + 0xE3Cu) = 0x197548u;
-	MEM32(edx + 0xE14u) = 0x19754Cu;
-	MEM32(edx + 0xE1Cu) = 0x197550u;
-	MEM32(edx + 0xE40u) = 0x197554u;
-	MEM32(edx + 0xE20u) = 0x197558u;
-	MEM32(edx + 0xE24u) = 0x19755Cu;
-	MEM32(edx + 0xE44u) = 0x197560u;
-	MEM32(edx + 0xE28u) = 0x197564u;
-	MEM32(edx + 0xE2Cu) = 0x197568u;
-	MEM32(edx + 0xE30u) = 0x19756Cu;
-	MEM32(edx + 0xE34u) = 0x197570u;
-	MEM32(edx + 0xE70u) = 0x19759Cu;
-	MEM32(edx + 0xE4Cu) = 0x197574u;
-	MEM32(edx + 0xE50u) = 0x197578u;
-	MEM32(edx + 0xE54u) = 0x19757Cu;
-	MEM32(edx + 0xE58u) = 0x197580u;
-	MEM32(edx + 0xE5Cu) = 0x197584u;
-	MEM32(edx + 0xE60u) = 0x197588u;
-	MEM32(edx + 0xE64u) = 0x19758Cu;
-	MEM32(edx + 0xE68u) = 0x197590u;
-	MEM32(edx + 0xE6Cu) = 0x197594u;
-	MEM32(edx + 0xE74u) = 0x197598u;
-	MEM32(edx + 0xE78u) = 0x1975A0u;
-	MEM32(edx + 0xE7Cu) = 0x1975A4u;
-	MEM32(edx + 0xE80u) = 0x1975A8u;
+	MEM32(edx + 0xD8Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xD90u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xD94u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xD98u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xD9Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xDA0u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xDA4u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xDA8u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xDACu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xDB0u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xDB4u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xDC0u) = VeritechConstants_thrust_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC4u) = VeritechConstants_brake_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD0u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD4u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC8u) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDCCu) = VeritechConstants_brake_vertical_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD8u) = VeritechConstants_boost_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDDCu) = VeritechConstants_boost_force_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDE0u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xDE4u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xDE8u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xDECu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xDF0u) = VeritechConstants_speed_forward_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF4u) = VeritechConstants_speed_backward_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDFCu) = VeritechConstants_speed_sideways_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF8u) = VeritechConstants_speed_vertical_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE00u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xE04u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xE08u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xE0Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xE38u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xE10u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xE18u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xE3Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xE14u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xE1Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xE40u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xE20u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xE24u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xE44u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xE28u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xE2Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xE30u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xE34u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xE70u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xE4Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xE50u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xE54u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xE58u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xE5Cu) = VeritechConstants_camera_lag_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE60u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xE64u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xE68u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xE6Cu) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xE74u) = VF1AXVeritechGuardianSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xE78u) = VeritechConstants_explode_chance_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE7Cu) = VeritechConstants_death_wait_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE80u) = VeritechConstants_fade_time_VA(VF1AXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xE48u) = edx + 0x65Cu;
 	MEM32(edx + 0xE84u) = 1u;
 	MEM32(edx + 0xE88u) = edx + 0x68Cu;
-	MEM32(ebx) = 0x196888u;
+	MEM32(ebx) = VF1AXVeritechHitPoints_VA;
 	ebx = edx + 0xE8Cu;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xEBCu) = 0x1975B0u;
+	MEM32(edx + 0xEBCu) = VeritechConstants_radius_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xEC0u) = esi;
-	MEM32(edx + 0xE90u) = 0x1975B8u;
-	MEM32(edx + 0xE94u) = 0x1975BCu;
-	MEM32(edx + 0xE98u) = 0x1975C0u;
-	MEM32(edx + 0xE9Cu) = 0x1975C4u;
-	MEM32(edx + 0xEA0u) = 0x1975C8u;
-	MEM32(edx + 0xEA4u) = 0x1975CCu;
-	MEM32(edx + 0xEA8u) = 0x1975D0u;
-	MEM32(edx + 0xEACu) = 0x1975D4u;
-	MEM32(edx + 0xEB0u) = 0x1975D8u;
-	MEM32(edx + 0xEB4u) = 0x1975DCu;
-	MEM32(edx + 0xEB8u) = 0x1975ACu;
-	MEM32(edx + 0xEC4u) = 0x1975E0u;
-	MEM32(edx + 0xEC8u) = 0x1975E4u;
-	MEM32(edx + 0xED4u) = 0x1975E8u;
-	MEM32(edx + 0xED8u) = 0x1975ECu;
-	MEM32(edx + 0xECCu) = 0x1975F0u;
-	MEM32(edx + 0xED0u) = 0x1975F4u;
-	MEM32(edx + 0xEDCu) = 0x197628u;
-	MEM32(edx + 0xEE0u) = 0x19762Cu;
-	MEM32(edx + 0xEE4u) = 0x1975F8u;
-	MEM32(edx + 0xEE8u) = 0x1975FCu;
-	MEM32(edx + 0xEECu) = 0x197600u;
-	MEM32(edx + 0xEF0u) = 0x197604u;
-	MEM32(edx + 0xEF4u) = 0x197608u;
-	MEM32(edx + 0xEF8u) = 0x19760Cu;
-	MEM32(edx + 0xF00u) = 0x197610u;
-	MEM32(edx + 0xEFCu) = 0x197614u;
-	MEM32(edx + 0xF04u) = 0x197618u;
-	MEM32(edx + 0xF08u) = 0x19761Cu;
-	MEM32(edx + 0xF0Cu) = 0x197624u;
-	MEM32(edx + 0xF10u) = 0x197620u;
-	MEM32(edx + 0xF3Cu) = 0x197630u;
-	MEM32(edx + 0xF14u) = 0x197634u;
-	MEM32(edx + 0xF1Cu) = 0x197638u;
-	MEM32(edx + 0xF40u) = 0x19763Cu;
-	MEM32(edx + 0xF18u) = 0x197640u;
-	MEM32(edx + 0xF20u) = 0x197644u;
-	MEM32(edx + 0xF44u) = 0x197648u;
-	MEM32(edx + 0xF24u) = 0x19764Cu;
-	MEM32(edx + 0xF28u) = 0x197650u;
-	MEM32(edx + 0xF48u) = 0x197654u;
-	MEM32(edx + 0xF2Cu) = 0x197658u;
-	MEM32(edx + 0xF30u) = 0x19765Cu;
-	MEM32(edx + 0xF34u) = 0x197660u;
-	MEM32(edx + 0xF38u) = 0x197664u;
-	MEM32(edx + 0xF74u) = 0x197690u;
-	MEM32(edx + 0xF50u) = 0x197668u;
-	MEM32(edx + 0xF54u) = 0x19766Cu;
-	MEM32(edx + 0xF58u) = 0x197670u;
-	MEM32(edx + 0xF5Cu) = 0x197674u;
-	MEM32(edx + 0xF60u) = 0x197678u;
-	MEM32(edx + 0xF64u) = 0x19767Cu;
-	MEM32(edx + 0xF68u) = 0x197680u;
-	MEM32(edx + 0xF6Cu) = 0x197684u;
-	MEM32(edx + 0xF70u) = 0x197688u;
-	MEM32(edx + 0xF78u) = 0x19768Cu;
-	MEM32(edx + 0xF7Cu) = 0x197694u;
-	MEM32(edx + 0xF80u) = 0x197698u;
-	MEM32(edx + 0xF84u) = 0x19769Cu;
+	MEM32(edx + 0xE90u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xE94u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xE98u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xE9Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xEA0u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xEA4u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xEA8u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xEACu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xEB0u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xEB4u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xEB8u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xEC4u) = VeritechConstants_thrust_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEC8u) = VeritechConstants_brake_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED4u) = VeritechConstants_thrust_sideways_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED8u) = VeritechConstants_brake_sideways_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xECCu) = VeritechConstants_thrust_vertical_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED0u) = VeritechConstants_brake_vertical_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEDCu) = VeritechConstants_boost_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE0u) = VeritechConstants_boost_force_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE4u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xEE8u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xEECu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xEF0u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xEF4u) = VeritechConstants_speed_forward_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEF8u) = VeritechConstants_speed_backward_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF00u) = VeritechConstants_speed_sideways_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEFCu) = VeritechConstants_speed_vertical_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF04u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xF08u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xF0Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xF10u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xF3Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xF14u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xF1Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xF40u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xF18u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xF20u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xF44u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xF24u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xF28u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xF48u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xF2Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xF30u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xF34u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xF38u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xF74u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xF50u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xF54u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xF58u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xF5Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xF60u) = VeritechConstants_camera_lag_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF64u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xF68u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xF6Cu) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xF70u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xF78u) = VF1AXVeritechFighterSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xF7Cu) = VeritechConstants_explode_chance_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF80u) = VeritechConstants_death_wait_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF84u) = VeritechConstants_fade_time_VA(VF1AXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xF4Cu) = edx + 0x834u;
 	MEM32(edx + 0xF88u) = 1u;
 	MEM32(edx + 0xF8Cu) = edx + 0x850u;
-	MEM32(ebx) = 0x196888u;
+	MEM32(ebx) = VF1AXVeritechHitPoints_VA;
 	MEM32(edx + 0xF90u) = 4u;
 	MEM32(edx + 0xF94u) = 4u;
 	MEM32(edx + 0xF98u) = 0u;
@@ -87635,7 +87635,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063963u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196D0Cu;
+		stack_18 = Vf1aGenericHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87683,7 +87683,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x000639C5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196D78u;
+		stack_18 = Vf1aJack01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87731,7 +87731,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063A27u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196FD4u;
+		stack_18 = Vf1aJack02HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87779,7 +87779,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063A89u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197044u;
+		stack_18 = Vf1aWolf01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87827,7 +87827,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063AEBu, 2, arg0_2, arg1_2);
-		stack_18 = 0x196E3Cu;
+		stack_18 = Vf1aRickHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87875,7 +87875,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063B4Du, 2, arg0_2, arg1_2);
-		stack_18 = 0x1970A8u;
+		stack_18 = Vf1aRoyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87923,7 +87923,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063BAFu, 2, arg0_2, arg1_2);
-		stack_18 = 0x196DDCu;
+		stack_18 = Vf1aIzzyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -87971,7 +87971,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063C11u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196EFCu;
+		stack_18 = Vf1aMiryaHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -88019,7 +88019,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063C73u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196E9Cu;
+		stack_18 = Vf1aMaxHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -88067,7 +88067,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063CD5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196F68u;
+		stack_18 = Vf1aPatriotHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -88115,7 +88115,7 @@ void sub_00063930(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00063D37u, 2, arg0_2, arg1_2);
-		stack_18 = 0x196CA0u;
+		stack_18 = Vf1aTrainerHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -88182,7 +88182,7 @@ uint32_t VF1DX_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x1976A0u;
+	arg0 = VF1DXText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -88220,666 +88220,666 @@ void sub_00063E80(uint32_t arg0)
 	esi = edx + 0xFE8u;
 	ebx = edx + 0x25Cu;
 	MEM32(edx + 0xC4u) = edx + 0x108u;
-	MEM32(edx + 0x34u) = 0x1976CCu;
+	MEM32(edx + 0x34u) = VeritechConstants_radius_VA(VF1DXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x38u) = esi;
-	MEM32(edx + 8u) = 0x1976D4u;
-	MEM32(edx + 0xCu) = 0x1976D8u;
-	MEM32(edx + 0x10u) = 0x1976DCu;
-	MEM32(edx + 0x14u) = 0x1976E0u;
-	MEM32(edx + 0x18u) = 0x1976E4u;
-	MEM32(edx + 0x1Cu) = 0x1976E8u;
-	MEM32(edx + 0x20u) = 0x1976ECu;
-	MEM32(edx + 0x24u) = 0x1976F0u;
-	MEM32(edx + 0x28u) = 0x1976F4u;
-	MEM32(edx + 0x2Cu) = 0x1976F8u;
-	MEM32(edx + 0x30u) = 0x1976C8u;
-	MEM32(edx + 0x3Cu) = 0x1976FCu;
-	MEM32(edx + 0x40u) = 0x197700u;
-	MEM32(edx + 0x4Cu) = 0x197704u;
-	MEM32(edx + 0x50u) = 0x197708u;
-	MEM32(edx + 0x44u) = 0x19770Cu;
-	MEM32(edx + 0x48u) = 0x197710u;
-	MEM32(edx + 0x54u) = 0x197744u;
-	MEM32(edx + 0x58u) = 0x197748u;
-	MEM32(edx + 0x5Cu) = 0x197714u;
-	MEM32(edx + 0x60u) = 0x197718u;
-	MEM32(edx + 0x64u) = 0x19771Cu;
-	MEM32(edx + 0x68u) = 0x197720u;
-	MEM32(edx + 0x6Cu) = 0x197724u;
-	MEM32(edx + 0x70u) = 0x197728u;
-	MEM32(edx + 0x78u) = 0x19772Cu;
-	MEM32(edx + 0x74u) = 0x197730u;
-	MEM32(edx + 0x7Cu) = 0x197734u;
-	MEM32(edx + 0x80u) = 0x197738u;
-	MEM32(edx + 0x84u) = 0x19773Cu;
-	MEM32(edx + 0x88u) = 0x197740u;
-	MEM32(edx + 0xB4u) = 0x19774Cu;
-	MEM32(edx + 0x8Cu) = 0x197750u;
-	MEM32(edx + 0x94u) = 0x197754u;
-	MEM32(edx + 0xB8u) = 0x197758u;
-	MEM32(edx + 0x90u) = 0x19775Cu;
-	MEM32(edx + 0x98u) = 0x197760u;
-	MEM32(edx + 0xBCu) = 0x197764u;
-	MEM32(edx + 0x9Cu) = 0x197768u;
-	MEM32(edx + 0xA0u) = 0x19776Cu;
-	MEM32(edx + 0xC0u) = 0x197770u;
-	MEM32(edx + 0xA4u) = 0x197774u;
-	MEM32(edx + 0xA8u) = 0x197778u;
-	MEM32(edx + 0xACu) = 0x19777Cu;
-	MEM32(edx + 0xB0u) = 0x197780u;
-	MEM32(edx + 0xECu) = 0x1977ACu;
-	MEM32(edx + 0xC8u) = 0x197784u;
-	MEM32(edx + 0xCCu) = 0x197788u;
-	MEM32(edx + 0xD0u) = 0x19778Cu;
-	MEM32(edx + 0xD4u) = 0x197790u;
-	MEM32(edx + 0xD8u) = 0x197794u;
-	MEM32(edx + 0xDCu) = 0x197798u;
-	MEM32(edx + 0xE0u) = 0x19779Cu;
-	MEM32(edx + 0xE4u) = 0x1977A0u;
-	MEM32(edx + 0xE8u) = 0x1977A4u;
-	MEM32(edx + 0xF0u) = 0x1977A8u;
-	MEM32(edx + 0xF4u) = 0x1977B0u;
-	MEM32(edx + 0xF8u) = 0x1977B4u;
-	MEM32(edx + 0xFCu) = 0x1977B8u;
+	MEM32(edx + 8u) = VF1DXVeritechBattloidConstants_VA + 0xCu;
+	MEM32(edx + 0xCu) = VF1DXVeritechBattloidConstants_VA + 0x10u;
+	MEM32(edx + 0x10u) = VF1DXVeritechBattloidConstants_VA + 0x14u;
+	MEM32(edx + 0x14u) = VF1DXVeritechBattloidConstants_VA + 0x18u;
+	MEM32(edx + 0x18u) = VF1DXVeritechBattloidConstants_VA + 0x1Cu;
+	MEM32(edx + 0x1Cu) = VF1DXVeritechBattloidConstants_VA + 0x20u;
+	MEM32(edx + 0x20u) = VF1DXVeritechBattloidConstants_VA + 0x24u;
+	MEM32(edx + 0x24u) = VF1DXVeritechBattloidConstants_VA + 0x28u;
+	MEM32(edx + 0x28u) = VF1DXVeritechBattloidConstants_VA + 0x2Cu;
+	MEM32(edx + 0x2Cu) = VF1DXVeritechBattloidConstants_VA + 0x30u;
+	MEM32(edx + 0x30u) = VF1DXVeritechBattloidConstants_VA;
+	MEM32(edx + 0x3Cu) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x40u) = VeritechConstants_brake_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x4Cu) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x50u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x44u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x48u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x54u) = VeritechConstants_boost_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x58u) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x5Cu) = VF1DXVeritechBattloidConstants_VA + 0x4Cu;
+	MEM32(edx + 0x60u) = VF1DXVeritechBattloidConstants_VA + 0x50u;
+	MEM32(edx + 0x64u) = VF1DXVeritechBattloidConstants_VA + 0x54u;
+	MEM32(edx + 0x68u) = VF1DXVeritechBattloidConstants_VA + 0x58u;
+	MEM32(edx + 0x6Cu) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x70u) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x78u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x74u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0x7Cu) = VF1DXVeritechBattloidConstants_VA + 0x6Cu;
+	MEM32(edx + 0x80u) = VF1DXVeritechBattloidConstants_VA + 0x70u;
+	MEM32(edx + 0x84u) = VF1DXVeritechBattloidConstants_VA + 0x74u;
+	MEM32(edx + 0x88u) = VF1DXVeritechBattloidConstants_VA + 0x78u;
+	MEM32(edx + 0xB4u) = VF1DXVeritechBattloidConstants_VA + 0x84u;
+	MEM32(edx + 0x8Cu) = VF1DXVeritechBattloidConstants_VA + 0x88u;
+	MEM32(edx + 0x94u) = VF1DXVeritechBattloidConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB8u) = VF1DXVeritechBattloidConstants_VA + 0x90u;
+	MEM32(edx + 0x90u) = VF1DXVeritechBattloidConstants_VA + 0x94u;
+	MEM32(edx + 0x98u) = VF1DXVeritechBattloidConstants_VA + 0x98u;
+	MEM32(edx + 0xBCu) = VF1DXVeritechBattloidConstants_VA + 0x9Cu;
+	MEM32(edx + 0x9Cu) = VF1DXVeritechBattloidConstants_VA + 0xA0u;
+	MEM32(edx + 0xA0u) = VF1DXVeritechBattloidConstants_VA + 0xA4u;
+	MEM32(edx + 0xC0u) = VF1DXVeritechBattloidConstants_VA + 0xA8u;
+	MEM32(edx + 0xA4u) = VF1DXVeritechBattloidConstants_VA + 0xACu;
+	MEM32(edx + 0xA8u) = VF1DXVeritechBattloidConstants_VA + 0xB0u;
+	MEM32(edx + 0xACu) = VF1DXVeritechBattloidConstants_VA + 0xB4u;
+	MEM32(edx + 0xB0u) = VF1DXVeritechBattloidConstants_VA + 0xB8u;
+	MEM32(edx + 0xECu) = VF1DXVeritechBattloidConstants_VA + 0xE4u;
+	MEM32(edx + 0xC8u) = VF1DXVeritechBattloidConstants_VA + 0xBCu;
+	MEM32(edx + 0xCCu) = VF1DXVeritechBattloidConstants_VA + 0xC0u;
+	MEM32(edx + 0xD0u) = VF1DXVeritechBattloidConstants_VA + 0xC4u;
+	MEM32(edx + 0xD4u) = VF1DXVeritechBattloidConstants_VA + 0xC8u;
+	MEM32(edx + 0xD8u) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xDCu) = VF1DXVeritechBattloidConstants_VA + 0xD0u;
+	MEM32(edx + 0xE0u) = VF1DXVeritechBattloidConstants_VA + 0xD4u;
+	MEM32(edx + 0xE4u) = VF1DXVeritechBattloidConstants_VA + 0xD8u;
+	MEM32(edx + 0xE8u) = VF1DXVeritechBattloidConstants_VA + 0xDCu;
+	MEM32(edx + 0xF0u) = VF1DXVeritechBattloidConstants_VA + 0xE0u;
+	MEM32(edx + 0xF4u) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xF8u) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidConstants_VA);
+	MEM32(edx + 0xFCu) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidConstants_VA);
 	MEM32(edx + 0x100u) = 1u;
 	MEM32(edx + 0x104u) = ebx;
-	MEM32(edx + 4u) = 0x1976A8u;
+	MEM32(edx + 4u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x300u, 0u, 0x41u);
-	MEM32(edx + 0x330u) = 0x1977C0u;
+	MEM32(edx + 0x330u) = VeritechConstants_radius_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x334u) = esi;
-	MEM32(edx + 0x304u) = 0x1977C8u;
-	MEM32(edx + 0x308u) = 0x1977CCu;
-	MEM32(edx + 0x30Cu) = 0x1977D0u;
-	MEM32(edx + 0x310u) = 0x1977D4u;
-	MEM32(edx + 0x314u) = 0x1977D8u;
-	MEM32(edx + 0x318u) = 0x1977DCu;
-	MEM32(edx + 0x31Cu) = 0x1977E0u;
-	MEM32(edx + 0x320u) = 0x1977E4u;
-	MEM32(edx + 0x324u) = 0x1977E8u;
-	MEM32(edx + 0x328u) = 0x1977ECu;
-	MEM32(edx + 0x32Cu) = 0x1977BCu;
-	MEM32(edx + 0x338u) = 0x1977F0u;
-	MEM32(edx + 0x33Cu) = 0x1977F4u;
-	MEM32(edx + 0x348u) = 0x1977F8u;
-	MEM32(edx + 0x34Cu) = 0x1977FCu;
-	MEM32(edx + 0x340u) = 0x197800u;
-	MEM32(edx + 0x344u) = 0x197804u;
-	MEM32(edx + 0x350u) = 0x197838u;
-	MEM32(edx + 0x354u) = 0x19783Cu;
-	MEM32(edx + 0x358u) = 0x197808u;
-	MEM32(edx + 0x35Cu) = 0x19780Cu;
-	MEM32(edx + 0x360u) = 0x197810u;
-	MEM32(edx + 0x364u) = 0x197814u;
-	MEM32(edx + 0x368u) = 0x197818u;
-	MEM32(edx + 0x36Cu) = 0x19781Cu;
-	MEM32(edx + 0x374u) = 0x197820u;
-	MEM32(edx + 0x370u) = 0x197824u;
-	MEM32(edx + 0x378u) = 0x197828u;
-	MEM32(edx + 0x37Cu) = 0x19782Cu;
-	MEM32(edx + 0x380u) = 0x197830u;
-	MEM32(edx + 0x384u) = 0x197834u;
-	MEM32(edx + 0x3B0u) = 0x197840u;
-	MEM32(edx + 0x388u) = 0x197844u;
-	MEM32(edx + 0x390u) = 0x197848u;
-	MEM32(edx + 0x3B4u) = 0x19784Cu;
-	MEM32(edx + 0x38Cu) = 0x197850u;
-	MEM32(edx + 0x394u) = 0x197854u;
-	MEM32(edx + 0x3B8u) = 0x197858u;
-	MEM32(edx + 0x398u) = 0x19785Cu;
-	MEM32(edx + 0x39Cu) = 0x197860u;
-	MEM32(edx + 0x3BCu) = 0x197864u;
-	MEM32(edx + 0x3A0u) = 0x197868u;
-	MEM32(edx + 0x3A4u) = 0x19786Cu;
-	MEM32(edx + 0x3A8u) = 0x197870u;
-	MEM32(edx + 0x3ACu) = 0x197874u;
-	MEM32(edx + 0x3E8u) = 0x1978A0u;
-	MEM32(edx + 0x3C4u) = 0x197878u;
-	MEM32(edx + 0x3C8u) = 0x19787Cu;
-	MEM32(edx + 0x3CCu) = 0x197880u;
-	MEM32(edx + 0x3D0u) = 0x197884u;
-	MEM32(edx + 0x3D4u) = 0x197888u;
-	MEM32(edx + 0x3D8u) = 0x19788Cu;
-	MEM32(edx + 0x3DCu) = 0x197890u;
-	MEM32(edx + 0x3E0u) = 0x197894u;
-	MEM32(edx + 0x3E4u) = 0x197898u;
-	MEM32(edx + 0x3ECu) = 0x19789Cu;
-	MEM32(edx + 0x3F0u) = 0x1978A4u;
-	MEM32(edx + 0x3F4u) = 0x1978A8u;
-	MEM32(edx + 0x3F8u) = 0x1978ACu;
+	MEM32(edx + 0x304u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xCu;
+	MEM32(edx + 0x308u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x10u;
+	MEM32(edx + 0x30Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x14u;
+	MEM32(edx + 0x310u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x18u;
+	MEM32(edx + 0x314u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x1Cu;
+	MEM32(edx + 0x318u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x20u;
+	MEM32(edx + 0x31Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x24u;
+	MEM32(edx + 0x320u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x28u;
+	MEM32(edx + 0x324u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x2Cu;
+	MEM32(edx + 0x328u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x30u;
+	MEM32(edx + 0x32Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA;
+	MEM32(edx + 0x338u) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x33Cu) = VeritechConstants_brake_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x348u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x34Cu) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x340u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x344u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x350u) = VeritechConstants_boost_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x354u) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x358u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x4Cu;
+	MEM32(edx + 0x35Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x50u;
+	MEM32(edx + 0x360u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x54u;
+	MEM32(edx + 0x364u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x58u;
+	MEM32(edx + 0x368u) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x36Cu) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x374u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x370u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x378u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x6Cu;
+	MEM32(edx + 0x37Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x70u;
+	MEM32(edx + 0x380u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x74u;
+	MEM32(edx + 0x384u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x78u;
+	MEM32(edx + 0x3B0u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x84u;
+	MEM32(edx + 0x388u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x88u;
+	MEM32(edx + 0x390u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x8Cu;
+	MEM32(edx + 0x3B4u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x90u;
+	MEM32(edx + 0x38Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x94u;
+	MEM32(edx + 0x394u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x98u;
+	MEM32(edx + 0x3B8u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0x9Cu;
+	MEM32(edx + 0x398u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xA0u;
+	MEM32(edx + 0x39Cu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xA4u;
+	MEM32(edx + 0x3BCu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xA8u;
+	MEM32(edx + 0x3A0u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xACu;
+	MEM32(edx + 0x3A4u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xB0u;
+	MEM32(edx + 0x3A8u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xB4u;
+	MEM32(edx + 0x3ACu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xB8u;
+	MEM32(edx + 0x3E8u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xE4u;
+	MEM32(edx + 0x3C4u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xBCu;
+	MEM32(edx + 0x3C8u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xC0u;
+	MEM32(edx + 0x3CCu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xC4u;
+	MEM32(edx + 0x3D0u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xC8u;
+	MEM32(edx + 0x3D4u) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3D8u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xD0u;
+	MEM32(edx + 0x3DCu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xD4u;
+	MEM32(edx + 0x3E0u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xD8u;
+	MEM32(edx + 0x3E4u) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xDCu;
+	MEM32(edx + 0x3ECu) = VF1DXVeritechBattloidNoTerrainConstants_VA + 0xE0u;
+	MEM32(edx + 0x3F0u) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F4u) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
+	MEM32(edx + 0x3F8u) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidNoTerrainConstants_VA);
 	MEM32(edx + 0x3C0u) = edx + 0x404u;
 	MEM32(edx + 0x3FCu) = 1u;
 	MEM32(edx + 0x400u) = ebx;
-	MEM32(edx + 0x300u) = 0x1976A8u;
+	MEM32(edx + 0x300u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x558u, 0u, 0x41u);
-	MEM32(edx + 0x588u) = 0x1978B4u;
+	MEM32(edx + 0x588u) = VeritechConstants_radius_VA(VF1DXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x58Cu) = esi;
-	MEM32(edx + 0x55Cu) = 0x1978BCu;
-	MEM32(edx + 0x560u) = 0x1978C0u;
-	MEM32(edx + 0x564u) = 0x1978C4u;
-	MEM32(edx + 0x568u) = 0x1978C8u;
-	MEM32(edx + 0x56Cu) = 0x1978CCu;
-	MEM32(edx + 0x570u) = 0x1978D0u;
-	MEM32(edx + 0x574u) = 0x1978D4u;
-	MEM32(edx + 0x578u) = 0x1978D8u;
-	MEM32(edx + 0x57Cu) = 0x1978DCu;
-	MEM32(edx + 0x580u) = 0x1978E0u;
-	MEM32(edx + 0x584u) = 0x1978B0u;
-	MEM32(edx + 0x590u) = 0x1978E4u;
-	MEM32(edx + 0x594u) = 0x1978E8u;
-	MEM32(edx + 0x5A0u) = 0x1978ECu;
-	MEM32(edx + 0x5A4u) = 0x1978F0u;
-	MEM32(edx + 0x598u) = 0x1978F4u;
-	MEM32(edx + 0x59Cu) = 0x1978F8u;
-	MEM32(edx + 0x5A8u) = 0x19792Cu;
-	MEM32(edx + 0x5ACu) = 0x197930u;
-	MEM32(edx + 0x5B0u) = 0x1978FCu;
-	MEM32(edx + 0x5B4u) = 0x197900u;
-	MEM32(edx + 0x5B8u) = 0x197904u;
-	MEM32(edx + 0x5BCu) = 0x197908u;
-	MEM32(edx + 0x5C0u) = 0x19790Cu;
-	MEM32(edx + 0x5C4u) = 0x197910u;
-	MEM32(edx + 0x5CCu) = 0x197914u;
-	MEM32(edx + 0x5C8u) = 0x197918u;
-	MEM32(edx + 0x5D0u) = 0x19791Cu;
-	MEM32(edx + 0x5D4u) = 0x197920u;
-	MEM32(edx + 0x5D8u) = 0x197924u;
-	MEM32(edx + 0x5DCu) = 0x197928u;
-	MEM32(edx + 0x608u) = 0x197934u;
-	MEM32(edx + 0x5E0u) = 0x197938u;
-	MEM32(edx + 0x5E8u) = 0x19793Cu;
-	MEM32(edx + 0x60Cu) = 0x197940u;
-	MEM32(edx + 0x5E4u) = 0x197944u;
-	MEM32(edx + 0x5ECu) = 0x197948u;
-	MEM32(edx + 0x610u) = 0x19794Cu;
-	MEM32(edx + 0x5F0u) = 0x197950u;
-	MEM32(edx + 0x5F4u) = 0x197954u;
-	MEM32(edx + 0x614u) = 0x197958u;
-	MEM32(edx + 0x5F8u) = 0x19795Cu;
-	MEM32(edx + 0x5FCu) = 0x197960u;
-	MEM32(edx + 0x600u) = 0x197964u;
-	MEM32(edx + 0x604u) = 0x197968u;
-	MEM32(edx + 0x640u) = 0x197994u;
-	MEM32(edx + 0x61Cu) = 0x19796Cu;
-	MEM32(edx + 0x620u) = 0x197970u;
-	MEM32(edx + 0x624u) = 0x197974u;
-	MEM32(edx + 0x628u) = 0x197978u;
-	MEM32(edx + 0x62Cu) = 0x19797Cu;
-	MEM32(edx + 0x630u) = 0x197980u;
-	MEM32(edx + 0x634u) = 0x197984u;
-	MEM32(edx + 0x638u) = 0x197988u;
-	MEM32(edx + 0x63Cu) = 0x19798Cu;
-	MEM32(edx + 0x644u) = 0x197990u;
-	MEM32(edx + 0x648u) = 0x197998u;
-	MEM32(edx + 0x64Cu) = 0x19799Cu;
-	MEM32(edx + 0x650u) = 0x1979A0u;
+	MEM32(edx + 0x55Cu) = VF1DXVeritechGuardianConstants_VA + 0xCu;
+	MEM32(edx + 0x560u) = VF1DXVeritechGuardianConstants_VA + 0x10u;
+	MEM32(edx + 0x564u) = VF1DXVeritechGuardianConstants_VA + 0x14u;
+	MEM32(edx + 0x568u) = VF1DXVeritechGuardianConstants_VA + 0x18u;
+	MEM32(edx + 0x56Cu) = VF1DXVeritechGuardianConstants_VA + 0x1Cu;
+	MEM32(edx + 0x570u) = VF1DXVeritechGuardianConstants_VA + 0x20u;
+	MEM32(edx + 0x574u) = VF1DXVeritechGuardianConstants_VA + 0x24u;
+	MEM32(edx + 0x578u) = VF1DXVeritechGuardianConstants_VA + 0x28u;
+	MEM32(edx + 0x57Cu) = VF1DXVeritechGuardianConstants_VA + 0x2Cu;
+	MEM32(edx + 0x580u) = VF1DXVeritechGuardianConstants_VA + 0x30u;
+	MEM32(edx + 0x584u) = VF1DXVeritechGuardianConstants_VA;
+	MEM32(edx + 0x590u) = VeritechConstants_thrust_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x594u) = VeritechConstants_brake_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A0u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A4u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x598u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x59Cu) = VeritechConstants_brake_vertical_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5A8u) = VeritechConstants_boost_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5ACu) = VeritechConstants_boost_force_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5B0u) = VF1DXVeritechGuardianConstants_VA + 0x4Cu;
+	MEM32(edx + 0x5B4u) = VF1DXVeritechGuardianConstants_VA + 0x50u;
+	MEM32(edx + 0x5B8u) = VF1DXVeritechGuardianConstants_VA + 0x54u;
+	MEM32(edx + 0x5BCu) = VF1DXVeritechGuardianConstants_VA + 0x58u;
+	MEM32(edx + 0x5C0u) = VeritechConstants_speed_forward_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C4u) = VeritechConstants_speed_backward_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5CCu) = VeritechConstants_speed_sideways_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5C8u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x5D0u) = VF1DXVeritechGuardianConstants_VA + 0x6Cu;
+	MEM32(edx + 0x5D4u) = VF1DXVeritechGuardianConstants_VA + 0x70u;
+	MEM32(edx + 0x5D8u) = VF1DXVeritechGuardianConstants_VA + 0x74u;
+	MEM32(edx + 0x5DCu) = VF1DXVeritechGuardianConstants_VA + 0x78u;
+	MEM32(edx + 0x608u) = VF1DXVeritechGuardianConstants_VA + 0x84u;
+	MEM32(edx + 0x5E0u) = VF1DXVeritechGuardianConstants_VA + 0x88u;
+	MEM32(edx + 0x5E8u) = VF1DXVeritechGuardianConstants_VA + 0x8Cu;
+	MEM32(edx + 0x60Cu) = VF1DXVeritechGuardianConstants_VA + 0x90u;
+	MEM32(edx + 0x5E4u) = VF1DXVeritechGuardianConstants_VA + 0x94u;
+	MEM32(edx + 0x5ECu) = VF1DXVeritechGuardianConstants_VA + 0x98u;
+	MEM32(edx + 0x610u) = VF1DXVeritechGuardianConstants_VA + 0x9Cu;
+	MEM32(edx + 0x5F0u) = VF1DXVeritechGuardianConstants_VA + 0xA0u;
+	MEM32(edx + 0x5F4u) = VF1DXVeritechGuardianConstants_VA + 0xA4u;
+	MEM32(edx + 0x614u) = VF1DXVeritechGuardianConstants_VA + 0xA8u;
+	MEM32(edx + 0x5F8u) = VF1DXVeritechGuardianConstants_VA + 0xACu;
+	MEM32(edx + 0x5FCu) = VF1DXVeritechGuardianConstants_VA + 0xB0u;
+	MEM32(edx + 0x600u) = VF1DXVeritechGuardianConstants_VA + 0xB4u;
+	MEM32(edx + 0x604u) = VF1DXVeritechGuardianConstants_VA + 0xB8u;
+	MEM32(edx + 0x640u) = VF1DXVeritechGuardianConstants_VA + 0xE4u;
+	MEM32(edx + 0x61Cu) = VF1DXVeritechGuardianConstants_VA + 0xBCu;
+	MEM32(edx + 0x620u) = VF1DXVeritechGuardianConstants_VA + 0xC0u;
+	MEM32(edx + 0x624u) = VF1DXVeritechGuardianConstants_VA + 0xC4u;
+	MEM32(edx + 0x628u) = VF1DXVeritechGuardianConstants_VA + 0xC8u;
+	MEM32(edx + 0x62Cu) = VeritechConstants_camera_lag_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x630u) = VF1DXVeritechGuardianConstants_VA + 0xD0u;
+	MEM32(edx + 0x634u) = VF1DXVeritechGuardianConstants_VA + 0xD4u;
+	MEM32(edx + 0x638u) = VF1DXVeritechGuardianConstants_VA + 0xD8u;
+	MEM32(edx + 0x63Cu) = VF1DXVeritechGuardianConstants_VA + 0xDCu;
+	MEM32(edx + 0x644u) = VF1DXVeritechGuardianConstants_VA + 0xE0u;
+	MEM32(edx + 0x648u) = VeritechConstants_explode_chance_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x64Cu) = VeritechConstants_death_wait_VA(VF1DXVeritechGuardianConstants_VA);
+	MEM32(edx + 0x650u) = VeritechConstants_fade_time_VA(VF1DXVeritechGuardianConstants_VA);
 	MEM32(edx + 0x618u) = edx + 0x65Cu;
 	MEM32(edx + 0x654u) = 1u;
 	MEM32(edx + 0x658u) = edx + 0x68Cu;
-	MEM32(edx + 0x558u) = 0x1976A8u;
+	MEM32(edx + 0x558u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x730u, 0u, 0x41u);
-	MEM32(edx + 0x760u) = 0x1979A8u;
+	MEM32(edx + 0x760u) = VeritechConstants_radius_VA(VF1DXVeritechFighterConstants_VA);
 	MEM32(edx + 0x764u) = esi;
-	MEM32(edx + 0x734u) = 0x1979B0u;
-	MEM32(edx + 0x738u) = 0x1979B4u;
-	MEM32(edx + 0x73Cu) = 0x1979B8u;
-	MEM32(edx + 0x740u) = 0x1979BCu;
-	MEM32(edx + 0x744u) = 0x1979C0u;
-	MEM32(edx + 0x748u) = 0x1979C4u;
-	MEM32(edx + 0x74Cu) = 0x1979C8u;
-	MEM32(edx + 0x750u) = 0x1979CCu;
-	MEM32(edx + 0x754u) = 0x1979D0u;
-	MEM32(edx + 0x758u) = 0x1979D4u;
-	MEM32(edx + 0x75Cu) = 0x1979A4u;
-	MEM32(edx + 0x768u) = 0x1979D8u;
-	MEM32(edx + 0x76Cu) = 0x1979DCu;
-	MEM32(edx + 0x778u) = 0x1979E0u;
-	MEM32(edx + 0x77Cu) = 0x1979E4u;
-	MEM32(edx + 0x770u) = 0x1979E8u;
-	MEM32(edx + 0x774u) = 0x1979ECu;
-	MEM32(edx + 0x780u) = 0x197A20u;
-	MEM32(edx + 0x784u) = 0x197A24u;
-	MEM32(edx + 0x788u) = 0x1979F0u;
-	MEM32(edx + 0x78Cu) = 0x1979F4u;
-	MEM32(edx + 0x790u) = 0x1979F8u;
-	MEM32(edx + 0x794u) = 0x1979FCu;
-	MEM32(edx + 0x798u) = 0x197A00u;
-	MEM32(edx + 0x79Cu) = 0x197A04u;
-	MEM32(edx + 0x7A4u) = 0x197A08u;
-	MEM32(edx + 0x7A0u) = 0x197A0Cu;
-	MEM32(edx + 0x7A8u) = 0x197A10u;
-	MEM32(edx + 0x7ACu) = 0x197A14u;
-	MEM32(edx + 0x7B0u) = 0x197A1Cu;
-	MEM32(edx + 0x7B4u) = 0x197A18u;
-	MEM32(edx + 0x7E0u) = 0x197A28u;
-	MEM32(edx + 0x7B8u) = 0x197A2Cu;
-	MEM32(edx + 0x7C0u) = 0x197A30u;
-	MEM32(edx + 0x7E4u) = 0x197A34u;
-	MEM32(edx + 0x7BCu) = 0x197A38u;
-	MEM32(edx + 0x7C4u) = 0x197A3Cu;
-	MEM32(edx + 0x7E8u) = 0x197A40u;
-	MEM32(edx + 0x7C8u) = 0x197A44u;
-	MEM32(edx + 0x7CCu) = 0x197A48u;
-	MEM32(edx + 0x7ECu) = 0x197A4Cu;
-	MEM32(edx + 0x7D0u) = 0x197A50u;
-	MEM32(edx + 0x7D4u) = 0x197A54u;
-	MEM32(edx + 0x7D8u) = 0x197A58u;
-	MEM32(edx + 0x7DCu) = 0x197A5Cu;
-	MEM32(edx + 0x818u) = 0x197A88u;
-	MEM32(edx + 0x7F4u) = 0x197A60u;
-	MEM32(edx + 0x7F8u) = 0x197A64u;
-	MEM32(edx + 0x7FCu) = 0x197A68u;
-	MEM32(edx + 0x800u) = 0x197A6Cu;
-	MEM32(edx + 0x804u) = 0x197A70u;
-	MEM32(edx + 0x808u) = 0x197A74u;
-	MEM32(edx + 0x80Cu) = 0x197A78u;
-	MEM32(edx + 0x810u) = 0x197A7Cu;
-	MEM32(edx + 0x814u) = 0x197A80u;
-	MEM32(edx + 0x81Cu) = 0x197A84u;
-	MEM32(edx + 0x820u) = 0x197A8Cu;
-	MEM32(edx + 0x824u) = 0x197A90u;
-	MEM32(edx + 0x828u) = 0x197A94u;
+	MEM32(edx + 0x734u) = VF1DXVeritechFighterConstants_VA + 0xCu;
+	MEM32(edx + 0x738u) = VF1DXVeritechFighterConstants_VA + 0x10u;
+	MEM32(edx + 0x73Cu) = VF1DXVeritechFighterConstants_VA + 0x14u;
+	MEM32(edx + 0x740u) = VF1DXVeritechFighterConstants_VA + 0x18u;
+	MEM32(edx + 0x744u) = VF1DXVeritechFighterConstants_VA + 0x1Cu;
+	MEM32(edx + 0x748u) = VF1DXVeritechFighterConstants_VA + 0x20u;
+	MEM32(edx + 0x74Cu) = VF1DXVeritechFighterConstants_VA + 0x24u;
+	MEM32(edx + 0x750u) = VF1DXVeritechFighterConstants_VA + 0x28u;
+	MEM32(edx + 0x754u) = VF1DXVeritechFighterConstants_VA + 0x2Cu;
+	MEM32(edx + 0x758u) = VF1DXVeritechFighterConstants_VA + 0x30u;
+	MEM32(edx + 0x75Cu) = VF1DXVeritechFighterConstants_VA;
+	MEM32(edx + 0x768u) = VeritechConstants_thrust_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x76Cu) = VeritechConstants_brake_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x778u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x77Cu) = VeritechConstants_brake_sideways_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x770u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x774u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x780u) = VeritechConstants_boost_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x784u) = VeritechConstants_boost_force_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x788u) = VF1DXVeritechFighterConstants_VA + 0x4Cu;
+	MEM32(edx + 0x78Cu) = VF1DXVeritechFighterConstants_VA + 0x50u;
+	MEM32(edx + 0x790u) = VF1DXVeritechFighterConstants_VA + 0x54u;
+	MEM32(edx + 0x794u) = VF1DXVeritechFighterConstants_VA + 0x58u;
+	MEM32(edx + 0x798u) = VeritechConstants_speed_forward_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x79Cu) = VeritechConstants_speed_backward_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A4u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A0u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x7A8u) = VF1DXVeritechFighterConstants_VA + 0x6Cu;
+	MEM32(edx + 0x7ACu) = VF1DXVeritechFighterConstants_VA + 0x70u;
+	MEM32(edx + 0x7B0u) = VF1DXVeritechFighterConstants_VA + 0x78u;
+	MEM32(edx + 0x7B4u) = VF1DXVeritechFighterConstants_VA + 0x74u;
+	MEM32(edx + 0x7E0u) = VF1DXVeritechFighterConstants_VA + 0x84u;
+	MEM32(edx + 0x7B8u) = VF1DXVeritechFighterConstants_VA + 0x88u;
+	MEM32(edx + 0x7C0u) = VF1DXVeritechFighterConstants_VA + 0x8Cu;
+	MEM32(edx + 0x7E4u) = VF1DXVeritechFighterConstants_VA + 0x90u;
+	MEM32(edx + 0x7BCu) = VF1DXVeritechFighterConstants_VA + 0x94u;
+	MEM32(edx + 0x7C4u) = VF1DXVeritechFighterConstants_VA + 0x98u;
+	MEM32(edx + 0x7E8u) = VF1DXVeritechFighterConstants_VA + 0x9Cu;
+	MEM32(edx + 0x7C8u) = VF1DXVeritechFighterConstants_VA + 0xA0u;
+	MEM32(edx + 0x7CCu) = VF1DXVeritechFighterConstants_VA + 0xA4u;
+	MEM32(edx + 0x7ECu) = VF1DXVeritechFighterConstants_VA + 0xA8u;
+	MEM32(edx + 0x7D0u) = VF1DXVeritechFighterConstants_VA + 0xACu;
+	MEM32(edx + 0x7D4u) = VF1DXVeritechFighterConstants_VA + 0xB0u;
+	MEM32(edx + 0x7D8u) = VF1DXVeritechFighterConstants_VA + 0xB4u;
+	MEM32(edx + 0x7DCu) = VF1DXVeritechFighterConstants_VA + 0xB8u;
+	MEM32(edx + 0x818u) = VF1DXVeritechFighterConstants_VA + 0xE4u;
+	MEM32(edx + 0x7F4u) = VF1DXVeritechFighterConstants_VA + 0xBCu;
+	MEM32(edx + 0x7F8u) = VF1DXVeritechFighterConstants_VA + 0xC0u;
+	MEM32(edx + 0x7FCu) = VF1DXVeritechFighterConstants_VA + 0xC4u;
+	MEM32(edx + 0x800u) = VF1DXVeritechFighterConstants_VA + 0xC8u;
+	MEM32(edx + 0x804u) = VeritechConstants_camera_lag_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x808u) = VF1DXVeritechFighterConstants_VA + 0xD0u;
+	MEM32(edx + 0x80Cu) = VF1DXVeritechFighterConstants_VA + 0xD4u;
+	MEM32(edx + 0x810u) = VF1DXVeritechFighterConstants_VA + 0xD8u;
+	MEM32(edx + 0x814u) = VF1DXVeritechFighterConstants_VA + 0xDCu;
+	MEM32(edx + 0x81Cu) = VF1DXVeritechFighterConstants_VA + 0xE0u;
+	MEM32(edx + 0x820u) = VeritechConstants_explode_chance_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x824u) = VeritechConstants_death_wait_VA(VF1DXVeritechFighterConstants_VA);
+	MEM32(edx + 0x828u) = VeritechConstants_fade_time_VA(VF1DXVeritechFighterConstants_VA);
 	MEM32(edx + 0x7F0u) = edx + 0x834u;
 	MEM32(edx + 0x82Cu) = 1u;
 	MEM32(edx + 0x830u) = edx + 0x850u;
-	MEM32(edx + 0x730u) = 0x1976A8u;
+	MEM32(edx + 0x730u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0x978u, 0u, 0x41u);
-	MEM32(edx + 0x9A8u) = 0x197F0Cu;
+	MEM32(edx + 0x9A8u) = VeritechConstants_radius_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0x9ACu) = esi;
-	MEM32(edx + 0x97Cu) = 0x197F14u;
-	MEM32(edx + 0x980u) = 0x197F18u;
-	MEM32(edx + 0x984u) = 0x197F1Cu;
-	MEM32(edx + 0x988u) = 0x197F20u;
-	MEM32(edx + 0x98Cu) = 0x197F24u;
-	MEM32(edx + 0x990u) = 0x197F28u;
-	MEM32(edx + 0x994u) = 0x197F2Cu;
-	MEM32(edx + 0x998u) = 0x197F30u;
-	MEM32(edx + 0x99Cu) = 0x197F34u;
-	MEM32(edx + 0x9A0u) = 0x197F38u;
-	MEM32(edx + 0x9A4u) = 0x197F08u;
-	MEM32(edx + 0x9B0u) = 0x197F3Cu;
-	MEM32(edx + 0x9B4u) = 0x197F40u;
-	MEM32(edx + 0x9C0u) = 0x197F44u;
-	MEM32(edx + 0x9C4u) = 0x197F48u;
-	MEM32(edx + 0x9B8u) = 0x197F4Cu;
-	MEM32(edx + 0x9BCu) = 0x197F50u;
-	MEM32(edx + 0x9C8u) = 0x197F84u;
-	MEM32(edx + 0x9CCu) = 0x197F88u;
-	MEM32(edx + 0x9D0u) = 0x197F54u;
-	MEM32(edx + 0x9D4u) = 0x197F58u;
-	MEM32(edx + 0x9D8u) = 0x197F5Cu;
-	MEM32(edx + 0x9DCu) = 0x197F60u;
-	MEM32(edx + 0x9E0u) = 0x197F64u;
-	MEM32(edx + 0x9E4u) = 0x197F68u;
-	MEM32(edx + 0x9ECu) = 0x197F6Cu;
-	MEM32(edx + 0x9E8u) = 0x197F70u;
-	MEM32(edx + 0x9F0u) = 0x197F74u;
-	MEM32(edx + 0x9F4u) = 0x197F78u;
-	MEM32(edx + 0x9F8u) = 0x197F7Cu;
-	MEM32(edx + 0x9FCu) = 0x197F80u;
-	MEM32(edx + 0xA28u) = 0x197F8Cu;
-	MEM32(edx + 0xA00u) = 0x197F90u;
-	MEM32(edx + 0xA08u) = 0x197F94u;
-	MEM32(edx + 0xA2Cu) = 0x197F98u;
-	MEM32(edx + 0xA04u) = 0x197F9Cu;
-	MEM32(edx + 0xA0Cu) = 0x197FA0u;
-	MEM32(edx + 0xA30u) = 0x197FA4u;
-	MEM32(edx + 0xA10u) = 0x197FA8u;
-	MEM32(edx + 0xA14u) = 0x197FACu;
-	MEM32(edx + 0xA34u) = 0x197FB0u;
-	MEM32(edx + 0xA18u) = 0x197FB4u;
-	MEM32(edx + 0xA1Cu) = 0x197FB8u;
-	MEM32(edx + 0xA20u) = 0x197FBCu;
-	MEM32(edx + 0xA24u) = 0x197FC0u;
-	MEM32(edx + 0xA60u) = 0x197FECu;
-	MEM32(edx + 0xA3Cu) = 0x197FC4u;
-	MEM32(edx + 0xA40u) = 0x197FC8u;
-	MEM32(edx + 0xA44u) = 0x197FCCu;
-	MEM32(edx + 0xA48u) = 0x197FD0u;
-	MEM32(edx + 0xA4Cu) = 0x197FD4u;
-	MEM32(edx + 0xA50u) = 0x197FD8u;
-	MEM32(edx + 0xA54u) = 0x197FDCu;
-	MEM32(edx + 0xA58u) = 0x197FE0u;
-	MEM32(edx + 0xA5Cu) = 0x197FE4u;
-	MEM32(edx + 0xA64u) = 0x197FE8u;
-	MEM32(edx + 0xA68u) = 0x197FF0u;
-	MEM32(edx + 0xA6Cu) = 0x197FF4u;
-	MEM32(edx + 0xA70u) = 0x197FF8u;
+	MEM32(edx + 0x97Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0x980u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0x984u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0x988u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0x98Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0x990u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0x994u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0x998u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0x99Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0x9A0u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0x9A4u) = VF1DXVeritechBattloidSumoPackConstants_VA;
+	MEM32(edx + 0x9B0u) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B4u) = VeritechConstants_brake_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C0u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C4u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9B8u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9BCu) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9C8u) = VeritechConstants_boost_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9CCu) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9D0u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0x9D4u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0x9D8u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0x9DCu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0x9E0u) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E4u) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9ECu) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9E8u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0x9F0u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0x9F4u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0x9F8u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0x9FCu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xA28u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xA00u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xA08u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xA2Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xA04u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xA0Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xA30u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xA10u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xA14u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xA34u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xA18u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xA1Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xA20u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xA24u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xA60u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xA3Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xA40u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xA44u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xA48u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xA4Cu) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA50u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xA54u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xA58u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xA5Cu) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xA64u) = VF1DXVeritechBattloidSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xA68u) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA6Cu) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
+	MEM32(edx + 0xA70u) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidSumoPackConstants_VA);
 	MEM32(edx + 0xA38u) = edx + 0x108u;
 	MEM32(edx + 0xA74u) = 1u;
 	MEM32(edx + 0xA78u) = ebx;
-	MEM32(edx + 0x978u) = 0x1976A8u;
+	MEM32(edx + 0x978u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xA7Cu, 0u, 0x41u);
-	MEM32(edx + 0xAACu) = 0x198000u;
+	MEM32(edx + 0xAACu) = VeritechConstants_radius_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xAB0u) = esi;
-	MEM32(edx + 0xA80u) = 0x198008u;
-	MEM32(edx + 0xA84u) = 0x19800Cu;
-	MEM32(edx + 0xA88u) = 0x198010u;
-	MEM32(edx + 0xA8Cu) = 0x198014u;
-	MEM32(edx + 0xA90u) = 0x198018u;
-	MEM32(edx + 0xA94u) = 0x19801Cu;
-	MEM32(edx + 0xA98u) = 0x198020u;
-	MEM32(edx + 0xA9Cu) = 0x198024u;
-	MEM32(edx + 0xAA0u) = 0x198028u;
-	MEM32(edx + 0xAA4u) = 0x19802Cu;
-	MEM32(edx + 0xAA8u) = 0x197FFCu;
-	MEM32(edx + 0xAB4u) = 0x198030u;
-	MEM32(edx + 0xAB8u) = 0x198034u;
-	MEM32(edx + 0xAC4u) = 0x198038u;
-	MEM32(edx + 0xAC8u) = 0x19803Cu;
-	MEM32(edx + 0xABCu) = 0x198040u;
-	MEM32(edx + 0xAC0u) = 0x198044u;
-	MEM32(edx + 0xACCu) = 0x198078u;
-	MEM32(edx + 0xAD0u) = 0x19807Cu;
-	MEM32(edx + 0xAD4u) = 0x198048u;
-	MEM32(edx + 0xAD8u) = 0x19804Cu;
-	MEM32(edx + 0xADCu) = 0x198050u;
-	MEM32(edx + 0xAE0u) = 0x198054u;
-	MEM32(edx + 0xAE4u) = 0x198058u;
-	MEM32(edx + 0xAE8u) = 0x19805Cu;
-	MEM32(edx + 0xAF0u) = 0x198060u;
-	MEM32(edx + 0xAECu) = 0x198064u;
-	MEM32(edx + 0xAF4u) = 0x198068u;
-	MEM32(edx + 0xAF8u) = 0x19806Cu;
-	MEM32(edx + 0xAFCu) = 0x198070u;
-	MEM32(edx + 0xB00u) = 0x198074u;
-	MEM32(edx + 0xB2Cu) = 0x198080u;
-	MEM32(edx + 0xB04u) = 0x198084u;
-	MEM32(edx + 0xB0Cu) = 0x198088u;
-	MEM32(edx + 0xB30u) = 0x19808Cu;
-	MEM32(edx + 0xB08u) = 0x198090u;
-	MEM32(edx + 0xB10u) = 0x198094u;
-	MEM32(edx + 0xB34u) = 0x198098u;
-	MEM32(edx + 0xB14u) = 0x19809Cu;
-	MEM32(edx + 0xB18u) = 0x1980A0u;
-	MEM32(edx + 0xB38u) = 0x1980A4u;
-	MEM32(edx + 0xB1Cu) = 0x1980A8u;
-	MEM32(edx + 0xB20u) = 0x1980ACu;
-	MEM32(edx + 0xB24u) = 0x1980B0u;
-	MEM32(edx + 0xB28u) = 0x1980B4u;
-	MEM32(edx + 0xB64u) = 0x1980E0u;
-	MEM32(edx + 0xB40u) = 0x1980B8u;
-	MEM32(edx + 0xB44u) = 0x1980BCu;
-	MEM32(edx + 0xB48u) = 0x1980C0u;
-	MEM32(edx + 0xB4Cu) = 0x1980C4u;
-	MEM32(edx + 0xB50u) = 0x1980C8u;
-	MEM32(edx + 0xB54u) = 0x1980CCu;
-	MEM32(edx + 0xB58u) = 0x1980D0u;
-	MEM32(edx + 0xB5Cu) = 0x1980D4u;
-	MEM32(edx + 0xB60u) = 0x1980D8u;
-	MEM32(edx + 0xB68u) = 0x1980DCu;
-	MEM32(edx + 0xB6Cu) = 0x1980E4u;
-	MEM32(edx + 0xB70u) = 0x1980E8u;
-	MEM32(edx + 0xB74u) = 0x1980ECu;
+	MEM32(edx + 0xA80u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xCu;
+	MEM32(edx + 0xA84u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x10u;
+	MEM32(edx + 0xA88u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x14u;
+	MEM32(edx + 0xA8Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x18u;
+	MEM32(edx + 0xA90u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xA94u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x20u;
+	MEM32(edx + 0xA98u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x24u;
+	MEM32(edx + 0xA9Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x28u;
+	MEM32(edx + 0xAA0u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xAA4u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x30u;
+	MEM32(edx + 0xAA8u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA;
+	MEM32(edx + 0xAB4u) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAB8u) = VeritechConstants_brake_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC4u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC8u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xABCu) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAC0u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xACCu) = VeritechConstants_boost_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD0u) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAD4u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xAD8u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x50u;
+	MEM32(edx + 0xADCu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x54u;
+	MEM32(edx + 0xAE0u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x58u;
+	MEM32(edx + 0xAE4u) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAE8u) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF0u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAECu) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xAF4u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xAF8u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x70u;
+	MEM32(edx + 0xAFCu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x74u;
+	MEM32(edx + 0xB00u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x78u;
+	MEM32(edx + 0xB2Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x84u;
+	MEM32(edx + 0xB04u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x88u;
+	MEM32(edx + 0xB0Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xB30u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x90u;
+	MEM32(edx + 0xB08u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x94u;
+	MEM32(edx + 0xB10u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x98u;
+	MEM32(edx + 0xB34u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xB14u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xB18u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xB38u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xB1Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xACu;
+	MEM32(edx + 0xB20u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xB24u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xB28u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xB64u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xB40u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xB44u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xB48u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xB4Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xB50u) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB54u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xB58u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xB5Cu) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xB60u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xB68u) = VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xB6Cu) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB70u) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
+	MEM32(edx + 0xB74u) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidNoTerrainSumoPackConstants_VA);
 	MEM32(edx + 0xB3Cu) = edx + 0x404u;
 	MEM32(edx + 0xB78u) = 1u;
 	MEM32(edx + 0xB7Cu) = ebx;
-	MEM32(edx + 0xA7Cu) = 0x1976A8u;
+	MEM32(edx + 0xA7Cu) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xB80u, 0u, 0x41u);
-	MEM32(edx + 0xBB0u) = 0x1980F4u;
+	MEM32(edx + 0xBB0u) = VeritechConstants_radius_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xBB4u) = esi;
-	MEM32(edx + 0xB84u) = 0x1980FCu;
-	MEM32(edx + 0xB88u) = 0x198100u;
-	MEM32(edx + 0xB8Cu) = 0x198104u;
-	MEM32(edx + 0xB90u) = 0x198108u;
-	MEM32(edx + 0xB94u) = 0x19810Cu;
-	MEM32(edx + 0xB98u) = 0x198110u;
-	MEM32(edx + 0xB9Cu) = 0x198114u;
-	MEM32(edx + 0xBA0u) = 0x198118u;
-	MEM32(edx + 0xBA4u) = 0x19811Cu;
-	MEM32(edx + 0xBA8u) = 0x198120u;
-	MEM32(edx + 0xBACu) = 0x1980F0u;
-	MEM32(edx + 0xBB8u) = 0x198124u;
-	MEM32(edx + 0xBBCu) = 0x198128u;
-	MEM32(edx + 0xBC8u) = 0x19812Cu;
-	MEM32(edx + 0xBCCu) = 0x198130u;
-	MEM32(edx + 0xBC0u) = 0x198134u;
-	MEM32(edx + 0xBC4u) = 0x198138u;
-	MEM32(edx + 0xBD0u) = 0x19816Cu;
-	MEM32(edx + 0xBD4u) = 0x198170u;
-	MEM32(edx + 0xBD8u) = 0x19813Cu;
-	MEM32(edx + 0xBDCu) = 0x198140u;
-	MEM32(edx + 0xBE0u) = 0x198144u;
-	MEM32(edx + 0xBE4u) = 0x198148u;
-	MEM32(edx + 0xBE8u) = 0x19814Cu;
-	MEM32(edx + 0xBECu) = 0x198150u;
-	MEM32(edx + 0xBF4u) = 0x198154u;
-	MEM32(edx + 0xBF0u) = 0x198158u;
-	MEM32(edx + 0xBF8u) = 0x19815Cu;
-	MEM32(edx + 0xBFCu) = 0x198160u;
-	MEM32(edx + 0xC00u) = 0x198164u;
-	MEM32(edx + 0xC04u) = 0x198168u;
-	MEM32(edx + 0xC30u) = 0x198174u;
-	MEM32(edx + 0xC08u) = 0x198178u;
-	MEM32(edx + 0xC10u) = 0x19817Cu;
-	MEM32(edx + 0xC34u) = 0x198180u;
-	MEM32(edx + 0xC0Cu) = 0x198184u;
-	MEM32(edx + 0xC14u) = 0x198188u;
-	MEM32(edx + 0xC38u) = 0x19818Cu;
-	MEM32(edx + 0xC18u) = 0x198190u;
-	MEM32(edx + 0xC1Cu) = 0x198194u;
-	MEM32(edx + 0xC3Cu) = 0x198198u;
-	MEM32(edx + 0xC20u) = 0x19819Cu;
-	MEM32(edx + 0xC24u) = 0x1981A0u;
-	MEM32(edx + 0xC28u) = 0x1981A4u;
-	MEM32(edx + 0xC2Cu) = 0x1981A8u;
-	MEM32(edx + 0xC68u) = 0x1981D4u;
-	MEM32(edx + 0xC44u) = 0x1981ACu;
-	MEM32(edx + 0xC48u) = 0x1981B0u;
-	MEM32(edx + 0xC4Cu) = 0x1981B4u;
-	MEM32(edx + 0xC50u) = 0x1981B8u;
-	MEM32(edx + 0xC54u) = 0x1981BCu;
-	MEM32(edx + 0xC58u) = 0x1981C0u;
-	MEM32(edx + 0xC5Cu) = 0x1981C4u;
-	MEM32(edx + 0xC60u) = 0x1981C8u;
-	MEM32(edx + 0xC64u) = 0x1981CCu;
-	MEM32(edx + 0xC6Cu) = 0x1981D0u;
-	MEM32(edx + 0xC70u) = 0x1981D8u;
-	MEM32(edx + 0xC74u) = 0x1981DCu;
-	MEM32(edx + 0xC78u) = 0x1981E0u;
+	MEM32(edx + 0xB84u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xB88u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xB8Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xB90u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xB94u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xB98u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xB9Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xBA0u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xBA4u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xBA8u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xBACu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xBB8u) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBBCu) = VeritechConstants_brake_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC8u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBCCu) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC0u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBC4u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD0u) = VeritechConstants_boost_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD4u) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBD8u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xBDCu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xBE0u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xBE4u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xBE8u) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBECu) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF4u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF0u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xBF8u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xBFCu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xC00u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xC04u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xC30u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xC08u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xC10u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xC34u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xC0Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xC14u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xC38u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xC18u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xC1Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xC3Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xC20u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xC24u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xC28u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xC2Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xC68u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xC44u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xC48u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xC4Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xC50u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xC54u) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC58u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xC5Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xC60u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xC64u) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xC6Cu) = VF1DXVeritechBattloidSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xC70u) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC74u) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xC78u) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xC40u) = edx + 0x108u;
 	MEM32(edx + 0xC7Cu) = 1u;
 	MEM32(edx + 0xC80u) = ebx;
-	MEM32(edx + 0xB80u) = 0x1976A8u;
+	MEM32(edx + 0xB80u) = VF1DXVeritechHitPoints_VA;
 	x86_rep_stos32(edx + 0xC84u, 0u, 0x41u);
-	MEM32(edx + 0xCB4u) = 0x1981E8u;
+	MEM32(edx + 0xCB4u) = VeritechConstants_radius_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xCB8u) = esi;
-	MEM32(edx + 0xC88u) = 0x1981F0u;
-	MEM32(edx + 0xC8Cu) = 0x1981F4u;
-	MEM32(edx + 0xC90u) = 0x1981F8u;
-	MEM32(edx + 0xC94u) = 0x1981FCu;
-	MEM32(edx + 0xC98u) = 0x198200u;
-	MEM32(edx + 0xC9Cu) = 0x198204u;
-	MEM32(edx + 0xCA0u) = 0x198208u;
-	MEM32(edx + 0xCA4u) = 0x19820Cu;
-	MEM32(edx + 0xCA8u) = 0x198210u;
-	MEM32(edx + 0xCACu) = 0x198214u;
-	MEM32(edx + 0xCB0u) = 0x1981E4u;
-	MEM32(edx + 0xCBCu) = 0x198218u;
-	MEM32(edx + 0xCC0u) = 0x19821Cu;
-	MEM32(edx + 0xCCCu) = 0x198220u;
-	MEM32(edx + 0xCD0u) = 0x198224u;
-	MEM32(edx + 0xCC4u) = 0x198228u;
-	MEM32(edx + 0xCC8u) = 0x19822Cu;
-	MEM32(edx + 0xCD4u) = 0x198260u;
-	MEM32(edx + 0xCD8u) = 0x198264u;
-	MEM32(edx + 0xCDCu) = 0x198230u;
-	MEM32(edx + 0xCE0u) = 0x198234u;
-	MEM32(edx + 0xCE4u) = 0x198238u;
-	MEM32(edx + 0xCE8u) = 0x19823Cu;
-	MEM32(edx + 0xCECu) = 0x198240u;
-	MEM32(edx + 0xCF0u) = 0x198244u;
-	MEM32(edx + 0xCF8u) = 0x198248u;
-	MEM32(edx + 0xCF4u) = 0x19824Cu;
-	MEM32(edx + 0xCFCu) = 0x198250u;
-	MEM32(edx + 0xD00u) = 0x198254u;
-	MEM32(edx + 0xD04u) = 0x198258u;
-	MEM32(edx + 0xD08u) = 0x19825Cu;
-	MEM32(edx + 0xD34u) = 0x198268u;
-	MEM32(edx + 0xD0Cu) = 0x19826Cu;
-	MEM32(edx + 0xD14u) = 0x198270u;
-	MEM32(edx + 0xD38u) = 0x198274u;
-	MEM32(edx + 0xD10u) = 0x198278u;
-	MEM32(edx + 0xD18u) = 0x19827Cu;
-	MEM32(edx + 0xD3Cu) = 0x198280u;
-	MEM32(edx + 0xD1Cu) = 0x198284u;
-	MEM32(edx + 0xD20u) = 0x198288u;
-	MEM32(edx + 0xD40u) = 0x19828Cu;
-	MEM32(edx + 0xD24u) = 0x198290u;
-	MEM32(edx + 0xD28u) = 0x198294u;
-	MEM32(edx + 0xD2Cu) = 0x198298u;
-	MEM32(edx + 0xD30u) = 0x19829Cu;
-	MEM32(edx + 0xD6Cu) = 0x1982C8u;
-	MEM32(edx + 0xD48u) = 0x1982A0u;
-	MEM32(edx + 0xD4Cu) = 0x1982A4u;
-	MEM32(edx + 0xD50u) = 0x1982A8u;
-	MEM32(edx + 0xD54u) = 0x1982ACu;
-	MEM32(edx + 0xD58u) = 0x1982B0u;
-	MEM32(edx + 0xD5Cu) = 0x1982B4u;
-	MEM32(edx + 0xD60u) = 0x1982B8u;
-	MEM32(edx + 0xD64u) = 0x1982BCu;
-	MEM32(edx + 0xD68u) = 0x1982C0u;
-	MEM32(edx + 0xD70u) = 0x1982C4u;
-	MEM32(edx + 0xD74u) = 0x1982CCu;
-	MEM32(edx + 0xD78u) = 0x1982D0u;
-	MEM32(edx + 0xD7Cu) = 0x1982D4u;
+	MEM32(edx + 0xC88u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xC8Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xC90u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xC94u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xC98u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xC9Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xCA0u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xCA4u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xCA8u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xCACu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xCB0u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xCBCu) = VeritechConstants_thrust_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC0u) = VeritechConstants_brake_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCCCu) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD0u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC4u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCC8u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD4u) = VeritechConstants_boost_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCD8u) = VeritechConstants_boost_force_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCDCu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xCE0u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xCE4u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xCE8u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xCECu) = VeritechConstants_speed_forward_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF0u) = VeritechConstants_speed_backward_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF8u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCF4u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xCFCu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xD00u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xD04u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xD08u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xD34u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xD0Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xD14u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xD38u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xD10u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xD18u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xD3Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xD1Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xD20u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xD40u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xD24u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xD28u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xD2Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xD30u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xD6Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xD48u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xD4Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xD50u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xD54u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xD58u) = VeritechConstants_camera_lag_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD5Cu) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xD60u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xD64u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xD68u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xD70u) = VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xD74u) = VeritechConstants_explode_chance_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD78u) = VeritechConstants_death_wait_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xD7Cu) = VeritechConstants_fade_time_VA(VF1DXVeritechBattloidNoTerrainSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xD44u) = edx + 0x404u;
 	MEM32(edx + 0xD80u) = 1u;
 	MEM32(edx + 0xD84u) = ebx;
-	MEM32(edx + 0xC84u) = 0x1976A8u;
+	MEM32(edx + 0xC84u) = VF1DXVeritechHitPoints_VA;
 	ebx = edx + 0xD88u;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xDB8u) = 0x1982DCu;
+	MEM32(edx + 0xDB8u) = VeritechConstants_radius_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xDBCu) = esi;
-	MEM32(edx + 0xD8Cu) = 0x1982E4u;
-	MEM32(edx + 0xD90u) = 0x1982E8u;
-	MEM32(edx + 0xD94u) = 0x1982ECu;
-	MEM32(edx + 0xD98u) = 0x1982F0u;
-	MEM32(edx + 0xD9Cu) = 0x1982F4u;
-	MEM32(edx + 0xDA0u) = 0x1982F8u;
-	MEM32(edx + 0xDA4u) = 0x1982FCu;
-	MEM32(edx + 0xDA8u) = 0x198300u;
-	MEM32(edx + 0xDACu) = 0x198304u;
-	MEM32(edx + 0xDB0u) = 0x198308u;
-	MEM32(edx + 0xDB4u) = 0x1982D8u;
-	MEM32(edx + 0xDC0u) = 0x19830Cu;
-	MEM32(edx + 0xDC4u) = 0x198310u;
-	MEM32(edx + 0xDD0u) = 0x198314u;
-	MEM32(edx + 0xDD4u) = 0x198318u;
-	MEM32(edx + 0xDC8u) = 0x19831Cu;
-	MEM32(edx + 0xDCCu) = 0x198320u;
-	MEM32(edx + 0xDD8u) = 0x198354u;
-	MEM32(edx + 0xDDCu) = 0x198358u;
-	MEM32(edx + 0xDE0u) = 0x198324u;
-	MEM32(edx + 0xDE4u) = 0x198328u;
-	MEM32(edx + 0xDE8u) = 0x19832Cu;
-	MEM32(edx + 0xDECu) = 0x198330u;
-	MEM32(edx + 0xDF0u) = 0x198334u;
-	MEM32(edx + 0xDF4u) = 0x198338u;
-	MEM32(edx + 0xDFCu) = 0x19833Cu;
-	MEM32(edx + 0xDF8u) = 0x198340u;
-	MEM32(edx + 0xE00u) = 0x198344u;
-	MEM32(edx + 0xE04u) = 0x198348u;
-	MEM32(edx + 0xE08u) = 0x19834Cu;
-	MEM32(edx + 0xE0Cu) = 0x198350u;
-	MEM32(edx + 0xE38u) = 0x19835Cu;
-	MEM32(edx + 0xE10u) = 0x198360u;
-	MEM32(edx + 0xE18u) = 0x198364u;
-	MEM32(edx + 0xE3Cu) = 0x198368u;
-	MEM32(edx + 0xE14u) = 0x19836Cu;
-	MEM32(edx + 0xE1Cu) = 0x198370u;
-	MEM32(edx + 0xE40u) = 0x198374u;
-	MEM32(edx + 0xE20u) = 0x198378u;
-	MEM32(edx + 0xE24u) = 0x19837Cu;
-	MEM32(edx + 0xE44u) = 0x198380u;
-	MEM32(edx + 0xE28u) = 0x198384u;
-	MEM32(edx + 0xE2Cu) = 0x198388u;
-	MEM32(edx + 0xE30u) = 0x19838Cu;
-	MEM32(edx + 0xE34u) = 0x198390u;
-	MEM32(edx + 0xE70u) = 0x1983BCu;
-	MEM32(edx + 0xE4Cu) = 0x198394u;
-	MEM32(edx + 0xE50u) = 0x198398u;
-	MEM32(edx + 0xE54u) = 0x19839Cu;
-	MEM32(edx + 0xE58u) = 0x1983A0u;
-	MEM32(edx + 0xE5Cu) = 0x1983A4u;
-	MEM32(edx + 0xE60u) = 0x1983A8u;
-	MEM32(edx + 0xE64u) = 0x1983ACu;
-	MEM32(edx + 0xE68u) = 0x1983B0u;
-	MEM32(edx + 0xE6Cu) = 0x1983B4u;
-	MEM32(edx + 0xE74u) = 0x1983B8u;
-	MEM32(edx + 0xE78u) = 0x1983C0u;
-	MEM32(edx + 0xE7Cu) = 0x1983C4u;
-	MEM32(edx + 0xE80u) = 0x1983C8u;
+	MEM32(edx + 0xD8Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xD90u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xD94u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xD98u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xD9Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xDA0u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xDA4u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xDA8u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xDACu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xDB0u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xDB4u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xDC0u) = VeritechConstants_thrust_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC4u) = VeritechConstants_brake_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD0u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD4u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDC8u) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDCCu) = VeritechConstants_brake_vertical_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDD8u) = VeritechConstants_boost_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDDCu) = VeritechConstants_boost_force_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDE0u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xDE4u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xDE8u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xDECu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xDF0u) = VeritechConstants_speed_forward_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF4u) = VeritechConstants_speed_backward_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDFCu) = VeritechConstants_speed_sideways_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xDF8u) = VeritechConstants_speed_vertical_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE00u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xE04u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xE08u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xE0Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xE38u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xE10u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xE18u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xE3Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xE14u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xE1Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xE40u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xE20u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xE24u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xE44u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xE28u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xE2Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xE30u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xE34u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xE70u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xE4Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xE50u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xE54u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xE58u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xE5Cu) = VeritechConstants_camera_lag_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE60u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xE64u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xE68u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xE6Cu) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xE74u) = VF1DXVeritechGuardianSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xE78u) = VeritechConstants_explode_chance_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE7Cu) = VeritechConstants_death_wait_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xE80u) = VeritechConstants_fade_time_VA(VF1DXVeritechGuardianSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xE48u) = edx + 0x65Cu;
 	MEM32(edx + 0xE84u) = 1u;
 	MEM32(edx + 0xE88u) = edx + 0x68Cu;
-	MEM32(ebx) = 0x1976A8u;
+	MEM32(ebx) = VF1DXVeritechHitPoints_VA;
 	ebx = edx + 0xE8Cu;
 	x86_rep_stos32(ebx, 0u, 0x41u);
-	MEM32(edx + 0xEBCu) = 0x1983D0u;
+	MEM32(edx + 0xEBCu) = VeritechConstants_radius_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xEC0u) = esi;
-	MEM32(edx + 0xE90u) = 0x1983D8u;
-	MEM32(edx + 0xE94u) = 0x1983DCu;
-	MEM32(edx + 0xE98u) = 0x1983E0u;
-	MEM32(edx + 0xE9Cu) = 0x1983E4u;
-	MEM32(edx + 0xEA0u) = 0x1983E8u;
-	MEM32(edx + 0xEA4u) = 0x1983ECu;
-	MEM32(edx + 0xEA8u) = 0x1983F0u;
-	MEM32(edx + 0xEACu) = 0x1983F4u;
-	MEM32(edx + 0xEB0u) = 0x1983F8u;
-	MEM32(edx + 0xEB4u) = 0x1983FCu;
-	MEM32(edx + 0xEB8u) = 0x1983CCu;
-	MEM32(edx + 0xEC4u) = 0x198400u;
-	MEM32(edx + 0xEC8u) = 0x198404u;
-	MEM32(edx + 0xED4u) = 0x198408u;
-	MEM32(edx + 0xED8u) = 0x19840Cu;
-	MEM32(edx + 0xECCu) = 0x198410u;
-	MEM32(edx + 0xED0u) = 0x198414u;
-	MEM32(edx + 0xEDCu) = 0x198448u;
-	MEM32(edx + 0xEE0u) = 0x19844Cu;
-	MEM32(edx + 0xEE4u) = 0x198418u;
-	MEM32(edx + 0xEE8u) = 0x19841Cu;
-	MEM32(edx + 0xEECu) = 0x198420u;
-	MEM32(edx + 0xEF0u) = 0x198424u;
-	MEM32(edx + 0xEF4u) = 0x198428u;
-	MEM32(edx + 0xEF8u) = 0x19842Cu;
-	MEM32(edx + 0xF00u) = 0x198430u;
-	MEM32(edx + 0xEFCu) = 0x198434u;
-	MEM32(edx + 0xF04u) = 0x198438u;
-	MEM32(edx + 0xF08u) = 0x19843Cu;
-	MEM32(edx + 0xF0Cu) = 0x198444u;
-	MEM32(edx + 0xF10u) = 0x198440u;
-	MEM32(edx + 0xF3Cu) = 0x198450u;
-	MEM32(edx + 0xF14u) = 0x198454u;
-	MEM32(edx + 0xF1Cu) = 0x198458u;
-	MEM32(edx + 0xF40u) = 0x19845Cu;
-	MEM32(edx + 0xF18u) = 0x198460u;
-	MEM32(edx + 0xF20u) = 0x198464u;
-	MEM32(edx + 0xF44u) = 0x198468u;
-	MEM32(edx + 0xF24u) = 0x19846Cu;
-	MEM32(edx + 0xF28u) = 0x198470u;
-	MEM32(edx + 0xF48u) = 0x198474u;
-	MEM32(edx + 0xF2Cu) = 0x198478u;
-	MEM32(edx + 0xF30u) = 0x19847Cu;
-	MEM32(edx + 0xF34u) = 0x198480u;
-	MEM32(edx + 0xF38u) = 0x198484u;
-	MEM32(edx + 0xF74u) = 0x1984B0u;
-	MEM32(edx + 0xF50u) = 0x198488u;
-	MEM32(edx + 0xF54u) = 0x19848Cu;
-	MEM32(edx + 0xF58u) = 0x198490u;
-	MEM32(edx + 0xF5Cu) = 0x198494u;
-	MEM32(edx + 0xF60u) = 0x198498u;
-	MEM32(edx + 0xF64u) = 0x19849Cu;
-	MEM32(edx + 0xF68u) = 0x1984A0u;
-	MEM32(edx + 0xF6Cu) = 0x1984A4u;
-	MEM32(edx + 0xF70u) = 0x1984A8u;
-	MEM32(edx + 0xF78u) = 0x1984ACu;
-	MEM32(edx + 0xF7Cu) = 0x1984B4u;
-	MEM32(edx + 0xF80u) = 0x1984B8u;
-	MEM32(edx + 0xF84u) = 0x1984BCu;
+	MEM32(edx + 0xE90u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xCu;
+	MEM32(edx + 0xE94u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x10u;
+	MEM32(edx + 0xE98u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x14u;
+	MEM32(edx + 0xE9Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x18u;
+	MEM32(edx + 0xEA0u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x1Cu;
+	MEM32(edx + 0xEA4u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x20u;
+	MEM32(edx + 0xEA8u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x24u;
+	MEM32(edx + 0xEACu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x28u;
+	MEM32(edx + 0xEB0u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x2Cu;
+	MEM32(edx + 0xEB4u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x30u;
+	MEM32(edx + 0xEB8u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA;
+	MEM32(edx + 0xEC4u) = VeritechConstants_thrust_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEC8u) = VeritechConstants_brake_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED4u) = VeritechConstants_thrust_sideways_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED8u) = VeritechConstants_brake_sideways_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xECCu) = VeritechConstants_thrust_vertical_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xED0u) = VeritechConstants_brake_vertical_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEDCu) = VeritechConstants_boost_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE0u) = VeritechConstants_boost_force_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEE4u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x4Cu;
+	MEM32(edx + 0xEE8u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x50u;
+	MEM32(edx + 0xEECu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x54u;
+	MEM32(edx + 0xEF0u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x58u;
+	MEM32(edx + 0xEF4u) = VeritechConstants_speed_forward_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEF8u) = VeritechConstants_speed_backward_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF00u) = VeritechConstants_speed_sideways_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xEFCu) = VeritechConstants_speed_vertical_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF04u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x6Cu;
+	MEM32(edx + 0xF08u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x70u;
+	MEM32(edx + 0xF0Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x78u;
+	MEM32(edx + 0xF10u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x74u;
+	MEM32(edx + 0xF3Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x84u;
+	MEM32(edx + 0xF14u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x88u;
+	MEM32(edx + 0xF1Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x8Cu;
+	MEM32(edx + 0xF40u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x90u;
+	MEM32(edx + 0xF18u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x94u;
+	MEM32(edx + 0xF20u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x98u;
+	MEM32(edx + 0xF44u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0x9Cu;
+	MEM32(edx + 0xF24u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xA0u;
+	MEM32(edx + 0xF28u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xA4u;
+	MEM32(edx + 0xF48u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xA8u;
+	MEM32(edx + 0xF2Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xACu;
+	MEM32(edx + 0xF30u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xB0u;
+	MEM32(edx + 0xF34u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xB4u;
+	MEM32(edx + 0xF38u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xB8u;
+	MEM32(edx + 0xF74u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xE4u;
+	MEM32(edx + 0xF50u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xBCu;
+	MEM32(edx + 0xF54u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xC0u;
+	MEM32(edx + 0xF58u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xC4u;
+	MEM32(edx + 0xF5Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xC8u;
+	MEM32(edx + 0xF60u) = VeritechConstants_camera_lag_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF64u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xD0u;
+	MEM32(edx + 0xF68u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xD4u;
+	MEM32(edx + 0xF6Cu) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xD8u;
+	MEM32(edx + 0xF70u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xDCu;
+	MEM32(edx + 0xF78u) = VF1DXVeritechFighterSuperVeritechPackConstants_VA + 0xE0u;
+	MEM32(edx + 0xF7Cu) = VeritechConstants_explode_chance_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF80u) = VeritechConstants_death_wait_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
+	MEM32(edx + 0xF84u) = VeritechConstants_fade_time_VA(VF1DXVeritechFighterSuperVeritechPackConstants_VA);
 	MEM32(edx + 0xF4Cu) = edx + 0x834u;
 	MEM32(edx + 0xF88u) = 1u;
 	MEM32(edx + 0xF8Cu) = edx + 0x850u;
-	MEM32(ebx) = 0x1976A8u;
+	MEM32(ebx) = VF1DXVeritechHitPoints_VA;
 	MEM32(edx + 0xF90u) = 3u;
 	MEM32(edx + 0xF94u) = 4u;
 	MEM32(edx + 0xF98u) = 0u;
@@ -88913,7 +88913,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065843u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197B2Cu;
+		stack_18 = Vf1dGenericHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -88961,7 +88961,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x000658A5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197B98u;
+		stack_18 = Vf1dJack01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89009,7 +89009,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065907u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197DF4u;
+		stack_18 = Vf1dJack02HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89057,7 +89057,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065969u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197E64u;
+		stack_18 = Vf1dWolf01HeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89105,7 +89105,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x000659CBu, 2, arg0_2, arg1_2);
-		stack_18 = 0x197C5Cu;
+		stack_18 = Vf1dRickHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89153,7 +89153,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065A2Du, 2, arg0_2, arg1_2);
-		stack_18 = 0x197EC8u;
+		stack_18 = Vf1dRoyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89201,7 +89201,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065A8Fu, 2, arg0_2, arg1_2);
-		stack_18 = 0x197BFCu;
+		stack_18 = Vf1dIzzyHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89249,7 +89249,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065AF1u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197D1Cu;
+		stack_18 = Vf1dMiryaHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89297,7 +89297,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065B53u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197CBCu;
+		stack_18 = Vf1dMaxHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89345,7 +89345,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065BB5u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197D88u;
+		stack_18 = Vf1dPatriotHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -89393,7 +89393,7 @@ void sub_00065810(uint32_t esi, uint32_t arg0, uint32_t arg1)
 		arg0_2 = stack_14;
 		arg1_2 = stack_10;
 		eax = x86_call(vcObjectGet_entry, 0x00065C17u, 2, arg0_2, arg1_2);
-		stack_18 = 0x197AC0u;
+		stack_18 = Vf1dTrainerHeadText_VA;
 		stack_1C = 2u;
 		MEM32(esi_2 + 8u) = eax;
 		arg0_2 = stack_1C;
@@ -91859,7 +91859,7 @@ uint32_t ZenReconCollision_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x199710u;
+	arg1 = ZenReconCollisionText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006AB5Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -92359,7 +92359,7 @@ uint32_t ZenShuttleCollision_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x199818u;
+	arg1 = ZenShuttleCollisionText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006B38Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -92855,7 +92855,7 @@ uint32_t SeaSergeantCollision_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x199924u;
+	arg1 = SeaSergeantCollisionText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006BBBEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -93411,7 +93411,7 @@ uint32_t RepCollisionHull_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x199A30u;
+	arg1 = RepCollisionHullText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0006C47Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -106106,7 +106106,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DB00u;
+	MEM32(g_esp) = Mak2Text_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -106128,7 +106128,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x19DC30u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DC10u;
+	MEM32(g_esp) = MK2LeftarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 0u;
@@ -106174,7 +106174,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -106202,7 +106202,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = x86_call(vcObjectGet_entry, 0x0007F72Fu, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DC84u;
+	MEM32(g_esp) = Mak2IdleText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20851Cu) = eax;
@@ -106220,7 +106220,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208524u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F765u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DCA8u;
+	MEM32(g_esp) = Mak2RunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x208528u) = eax;
@@ -106373,7 +106373,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208588u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F917u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE10u;
+	MEM32(g_esp) = Mak2AlertPoseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20858Cu) = eax;
@@ -106410,13 +106410,13 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x2085A0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F980u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DDF4u;
+	MEM32(g_esp) = Mak2AimArmsText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x2085A4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0007F991u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE04u;
+	MEM32(g_esp) = Mak2FireText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x208720u) = eax;
@@ -106429,7 +106429,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM16(edi_2 + 6u) = 1u;
 	MEM32(edi_2) = 0x3F000000u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DED4u;
+	MEM32(g_esp) = Exhaust01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	arg0 = MEM32(g_esp);
@@ -106440,7 +106440,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208418u) = eax;
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DED4u;
+	MEM32(g_esp) = Exhaust01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x56u;
@@ -106454,7 +106454,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208418u) = eax;
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEC8u;
+	MEM32(g_esp) = Exhaust02Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x45u;
@@ -106468,7 +106468,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208418u) = eax;
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -106483,7 +106483,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -106497,7 +106497,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208418u) = eax;
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x11u;
@@ -106511,7 +106511,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208418u) = eax;
 	edi_2 = eax * 3u * 4u + 0x208424u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x57u;
@@ -106524,7 +106524,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	esi_2 = MEM32(0x20841Cu);
 	MEM32(0x208418u) = MEM32(0x208418u) + 1u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DDB8u;
+	MEM32(g_esp) = Mak2Death1Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	esi_2 = esi_2 * 8u + 0x20849Cu;
@@ -106534,7 +106534,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(esi_2 + 4u) = 1u;
 	ecx = MEM32(0x20841Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEC0u;
+	MEM32(g_esp) = Gun01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x20841Cu) = ecx + 1u;
@@ -106544,7 +106544,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x208400u) = eax;
 	eax = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEB8u;
+	MEM32(g_esp) = Gun02Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -106552,7 +106552,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEB0u;
+	MEM32(g_esp) = Gun03Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MEM32(0x208404u) = eax;
@@ -106561,7 +106561,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEA8u;
+	MEM32(g_esp) = Gun04Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x208408u) = eax;
@@ -106572,7 +106572,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = MacIIModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE98u;
+	MEM32(g_esp) = GunArmLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -106580,7 +106580,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE88u;
+	MEM32(g_esp) = GunArmRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MacIIGunArmLeftNode = eax;
@@ -106589,7 +106589,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEC8u;
+	MEM32(g_esp) = Exhaust02Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MacIIGunArmRightNode = eax;
@@ -106599,7 +106599,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MacIIExhaust02Node = eax;
 	eax = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DED4u;
+	MEM32(g_esp) = Exhaust01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -106607,7 +106607,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEC0u;
+	MEM32(g_esp) = Gun01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MacIIExhaust01Node = eax;
@@ -106616,7 +106616,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEB8u;
+	MEM32(g_esp) = Gun02Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x2083E0u) = eax;
@@ -106626,7 +106626,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(0x2083E4u) = eax;
 	eax = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEB0u;
+	MEM32(g_esp) = Gun03Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -106634,7 +106634,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DEA8u;
+	MEM32(g_esp) = Gun04Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MEM32(0x2083E8u) = eax;
@@ -106644,7 +106644,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	edx = MacIIModel;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE7Cu;
+	MEM32(g_esp) = Gunvent01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x2083ECu) = eax;
@@ -106654,7 +106654,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MacIIGunvent01Node = eax;
 	eax = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE70u;
+	MEM32(g_esp) = Gunvent02Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -106663,7 +106663,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MacIIGunvent02Node = eax;
 	ecx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE64u;
+	MEM32(g_esp) = Gunvent03Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -106671,7 +106671,7 @@ uint32_t MacII_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MacIIModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19DE58u;
+	MEM32(g_esp) = Gunvent04Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MacIIGunvent03Node = eax;
@@ -109694,16 +109694,16 @@ uint32_t Flare_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ignored = 0;
 
-	arg0 = 0x19E298u;
+	arg0 = FxFlareCapsuleText_VA;
 	eax = sub_00133CF0(arg0);
-	arg1 = 0x19E2D8u;
+	arg1 = FxFlareExplosionText_VA;
 	arg0 = 0xBu;
 	FlareSceneObject = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008315Bu, 2, arg0, arg1);
 	arg0 = eax;
 	FlareFxFlareExplosionParticles = eax;
 	sub_001334F0(arg0);
-	arg1 = 0x19E318u;
+	arg1 = FxFlareText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x00083172u, 2, arg0, arg1);
 	arg0 = eax;
@@ -109720,7 +109720,7 @@ uint32_t Flare_Startup(void)
 	ignored = x86_call(vcSceneObjectSetFlags_entry, 0x000831A6u, 2, arg0, arg1);
 	arg4 = 0x447A0000u;
 	arg3 = 0x43480000u;
-	arg2 = 0x19E370u;
+	arg2 = FlareFiremissile4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x208C68u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -110824,19 +110824,19 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00083FC1u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x208F3Cu);
 	arg0 = stack_24;
 	arg1 = stack_20;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x1B1850u) = eax;
-	stack_28 = 0x19E4CCu;
+	stack_28 = PodSpacePoseText_VA;
 	stack_2C = 9u;
 	x86_rep_stos32(0x208E1Cu, 0u, 7u);
 	arg0 = stack_2C;
 	arg1 = stack_28;
 	eax = x86_call(vcObjectGet_entry, 0x00083FF0u, 2, arg0, arg1);
-	stack_30 = 0x19E4DCu;
+	stack_30 = PodScoutSpacePodSpaceBoostText_VA;
 	stack_34 = 9u;
 	MEM32(0x208E1Cu) = eax;
 	arg0 = stack_34;
@@ -110880,35 +110880,35 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	arg0 = 9u;
 	MEM32(0x208E28u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00084059u, 2, arg0, arg1);
-	arg1 = 0x19E554u;
+	arg1 = FootjetLText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	MEM32(0x208E34u) = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x19E548u;
+	arg1 = FootjetRText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	PodScoutSpaceFootjetLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	PodScoutSpaceFootjetRNode = eax;
-	arg1 = 0x19E53Cu;
+	arg1 = EarjetLText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x19E530u;
+	arg1 = EarjetRText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	PodScoutSpaceEarjetLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x19E51Cu;
+	arg1 = DummyScoutBeaconText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	PodScoutSpaceEarjetRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	PodScoutSpaceDummyScoutBeaconNode = eax;
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	arg0 = MEM32(0x208F3Cu);
 	eax = sub_0011EA70(arg0, arg1);
 	esi = MEM32(0x208F3Cu);
 	PodScoutSpaceTargetNode = eax;
 	x86_rep_stos32(0x208D78u, 0u, 0x29u);
 	edi = MEM32(0x208D78u) * 3u * 4u + 0x208D84u;
-	stack = 0x19C548u;
+	stack = DamageNodeText_VA;
 	stack_14 = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -110920,7 +110920,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x208D78u) + 1u;
 	MEM32(0x208D78u) = eax;
 	edi = eax * 3u * 4u + 0x208D84u;
-	stack_18 = 0x19C548u;
+	stack_18 = DamageNodeText_VA;
 	stack_1C = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -110956,7 +110956,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x208D78u) + 1u;
 	MEM32(0x208D78u) = eax;
 	edi = eax * 3u * 4u + 0x208D84u;
-	stack_30 = 0x191C70u;
+	stack_30 = TargetText_VA;
 	stack_34 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 2u;
@@ -110968,7 +110968,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x208D78u) + 1u;
 	MEM32(0x208D78u) = eax;
 	edi = eax * 3u * 4u + 0x208D84u;
-	stack_38 = 0x191C70u;
+	stack_38 = TargetText_VA;
 	stack_3C = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 4u;
@@ -110981,7 +110981,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	edi = eax * 3u * 4u + 0x208D84u;
 	MEM32(0x208D78u) = eax;
 	MEM16(edi + 4u) = 0xAu;
-	stack_40 = 0x191C70u;
+	stack_40 = TargetText_VA;
 	stack_44 = esi;
 	MEM16(edi + 6u) = 1u;
 	MEM32(edi) = 0xBE4CCCCDu;
@@ -110990,7 +110990,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(edi + 8u) = eax;
 	esi = MEM32(0x208D7Cu);
-	arg1 = 0x19E4F4u;
+	arg1 = PodScoutSpacePodSpaceDeathText_VA;
 	arg0 = 9u;
 	MEM32(0x208D78u) = MEM32(0x208D78u) + 1u;
 	esi = esi * 8u + 0x208DFCu;
@@ -111041,7 +111041,7 @@ uint32_t PodScoutSpace_Startup(uint32_t ebx, uint32_t ebp)
 	GameObjectTypeUse(arg0, arg1);
 	arg4 = 0x451C4000u;
 	arg3 = 0x43FA0000u;
-	arg2 = 0x19E504u;
+	arg2 = PodScoutSpaceScoutpodcallstrike1WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x208D18u;
 	eax = sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -111584,7 +111584,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E560u;
+	MEM32(g_esp) = GladiatorText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -111608,7 +111608,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(g_esp + 0x38u) = ecx;
 	ecx = MEM32(0x19E68Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E670u;
+	MEM32(g_esp) = Bone03Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	esi_2 = edx;
@@ -111633,7 +111633,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	sub_0011E770(arg0, arg1, arg2);
 	eax = GladiatorModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -111654,7 +111654,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209308u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000850EDu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E6B8u;
+	MEM32(g_esp) = GladiatorGladiatorRunBackText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209310u) = eax;
@@ -111673,25 +111673,25 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209318u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085123u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E6ECu;
+	MEM32(g_esp) = GladiatorWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20931Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085134u, 0);
 	MEM32(0x209320u) = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E6FCu;
+	MEM32(g_esp) = GladiatorGladiatorRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x00085145u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E70Cu;
+	MEM32(g_esp) = GladiatorSlideForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209324u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085156u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E724u;
+	MEM32(g_esp) = GladiatorSlideLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209328u) = eax;
@@ -111709,7 +111709,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209330u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00085189u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E76Cu;
+	MEM32(g_esp) = GladiatorSlideRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209334u) = eax;
@@ -111832,13 +111832,13 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209380u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852E6u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E91Cu;
+	MEM32(g_esp) = GladiatorAlertPoseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209384u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000852F7u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E934u;
+	MEM32(g_esp) = GladiatorAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209388u) = eax;
@@ -111869,7 +111869,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209398u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008534Fu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E904u;
+	MEM32(g_esp) = GladiatorHatchesOpenText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20939Cu) = eax;
@@ -111879,7 +111879,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	x86_rep_stos32(0x209210u, 0u, 0x29u);
 	edi_2 = MEM32(0x209210u) * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x42u;
@@ -111893,7 +111893,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209210u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x56u;
@@ -111907,7 +111907,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209210u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x44u;
@@ -111921,7 +111921,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209210u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -111935,7 +111935,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209210u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -111949,7 +111949,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x209210u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x10u;
@@ -111964,7 +111964,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	edi_2 = eax * 3u * 4u + 0x20921Cu;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x57u;
@@ -111977,7 +111977,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	ecx = MEM32(0x209210u);
 	esi_2 = MEM32(0x209214u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E888u;
+	MEM32(g_esp) = GladiatorDeath1Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x209210u) = ecx + 1u;
@@ -111987,7 +111987,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x209214u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E89Cu;
+	MEM32(g_esp) = GladiatorDeath2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax++;
@@ -111999,7 +111999,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(esi_2 + 4u) = 1u;
 	MEM32(0x209214u) = MEM32(0x209214u) + 1u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19E978u;
+	MEM32(g_esp) = ChestGunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -112007,7 +112007,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	eax = sub_0011EA70(arg0, arg1);
 	edx = GladiatorModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x198964u;
+	MEM32(g_esp) = ChestMissileLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	GladiatorChestGunNode = eax;
@@ -112017,7 +112017,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	MEM32(0x208F90u) = eax;
 	eax = GladiatorModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x198950u;
+	MEM32(g_esp) = ChestMissileRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -112052,7 +112052,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	} while ((int32_t)ecx < 0x208FC4);
 	ecx = GladiatorModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x198964u;
+	MEM32(g_esp) = ChestMissileLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MEM32(0x209204u) = ebx_2;
@@ -112066,7 +112066,7 @@ uint32_t Gladiator_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	eax = sub_0011EA70(arg0, arg1);
 	edx = GladiatorModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x198950u;
+	MEM32(g_esp) = ChestMissileRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x208FB4u) = eax;
@@ -114537,7 +114537,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EDF0u;
+	MEM32(g_esp) = ZenCruiserTurretMissile02Text_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -114561,7 +114561,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp + 0x38u) = ecx;
 	ecx = MEM32(0x19EF40u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EF14u;
+	MEM32(g_esp) = ZenTurretMissileMidText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	esi_2 = edx;
@@ -114586,7 +114586,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	sub_0011E770(arg0, arg1, arg2);
 	eax = ZenCruiserMissileTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EFF8u;
+	MEM32(g_esp) = Targetnode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -114609,7 +114609,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(0x20A1ECu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00088AE3u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EF8Cu;
+	MEM32(g_esp) = ZenCruiserTurretMissile02OpenText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20A1F0u) = eax;
@@ -114630,7 +114630,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM16(esi_2 + 6u) = 4u;
 	MEM32(esi_2) = 0u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EFF8u;
+	MEM32(g_esp) = Targetnode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	arg0 = MEM32(g_esp);
@@ -114641,7 +114641,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(0x20A148u) = eax;
 	esi_2 = eax * 3u * 4u + 0x20A154u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EFF8u;
+	MEM32(g_esp) = Targetnode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebp_2;
 	MEM16(esi_2 + 4u) = 0x10u;
@@ -114665,7 +114665,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20A14Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EFF8u;
+	MEM32(g_esp) = Targetnode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM32(0x20A14Cu) = eax + 1u;
@@ -114702,7 +114702,7 @@ uint32_t ZenCruiserMissileTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	} while ((int32_t)ecx < 0x209EFC);
 	eax = ZenCruiserMissileTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19EFF8u;
+	MEM32(g_esp) = Targetnode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	MEM32(0x20A13Cu) = ebx_2;
@@ -115721,7 +115721,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F3D8u;
+	MEM32(g_esp) = ZenWarriorNoarmourText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -115743,7 +115743,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x19F514u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F4F4u;
+	MEM32(g_esp) = ZenWarriorNoArmourBoneWaistText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 4u;
@@ -115789,7 +115789,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ZenWarriorNoArmourModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -115810,14 +115810,14 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20AA78u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008AA82u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F564u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRunBackwardsText_VA;
 	MEM32(0x20AA80u) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008AA93u, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F584u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA84u) = eax;
@@ -115829,56 +115829,56 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20AA88u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAB8u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F5B4u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA8Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAC9u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F5CCu;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA90u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AADAu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F5E4u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA94u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAEBu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F600u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA98u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AAFCu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F618u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AA9Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB0Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F638u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAA0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F658u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAA4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB32u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F670u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAA8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB43u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F694u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAACu) = eax;
@@ -115890,13 +115890,13 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20AAB0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB65u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F6C8u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAB4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AB76u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F6E4u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAB8u) = eax;
@@ -115988,25 +115988,25 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20AAF0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC7Bu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F8A8u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAF4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC8Cu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F8C0u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAF8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008AC9Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F8D8u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AAFCu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACAEu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F8FCu;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AB00u) = eax;
@@ -116025,7 +116025,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20AB08u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008ACE4u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F890u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AB0Cu) = eax;
@@ -116035,7 +116035,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	x86_rep_stos32(0x20A980u, 0u, 0x29u);
 	esi_2 = MEM32(0x20A980u) * 3u * 4u + 0x20A98Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM16(esi_2 + 4u) = 0xFFFFu;
@@ -116048,7 +116048,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	ecx = MEM32(0x20A980u);
 	esi_2 = MEM32(0x20A984u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F800u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteDieText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20A980u) = ecx + 1u;
@@ -116058,7 +116058,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20A984u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F818u;
+	MEM32(g_esp) = ZenWarriorNoArmourZenWarriorLiteDie2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax++;
@@ -116070,7 +116070,7 @@ uint32_t ZenWarriorNoArmour_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(0x20A984u) = MEM32(0x20A984u) + 1u;
 	eax = ZenWarriorNoArmourModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F924u;
+	MEM32(g_esp) = LiteWeaponText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -117120,7 +117120,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F930u;
+	MEM32(g_esp) = ZenWarriorHeavyText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -117142,7 +117142,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x19FA68u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FA48u;
+	MEM32(g_esp) = ZenWarriorHeavyBoneWaistText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 4u;
@@ -117188,7 +117188,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ZenWarriorHeavyModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -117209,14 +117209,14 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20ADD0u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008BC82u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FAB8u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRunBackwardsText_VA;
 	MEM32(0x20ADD8u) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008BC93u, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FAD8u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADDCu) = eax;
@@ -117228,56 +117228,56 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20ADE0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCB8u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB08u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADE4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCC9u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB20u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADE8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCDAu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB38u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADECu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCEBu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB54u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADF0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BCFCu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB6Cu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADF4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD0Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FB8Cu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADF8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FBACu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ADFCu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD32u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FBC4u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE00u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD43u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FBE8u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE04u) = eax;
@@ -117289,13 +117289,13 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20AE08u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD65u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FC1Cu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE0Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BD76u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FC38u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE10u) = eax;
@@ -117387,25 +117387,25 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20AE48u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE7Bu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FDFCu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE4Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE8Cu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FE14u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE50u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BE9Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FE2Cu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE54u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEAEu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FE50u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE58u) = eax;
@@ -117424,7 +117424,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20AE60u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008BEE4u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FDE4u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20AE64u) = eax;
@@ -117434,7 +117434,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	x86_rep_stos32(0x20ACD8u, 0u, 0x29u);
 	esi_2 = MEM32(0x20ACD8u) * 3u * 4u + 0x20ACE4u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM16(esi_2 + 4u) = 0xFFFFu;
@@ -117447,7 +117447,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	ecx = MEM32(0x20ACD8u);
 	esi_2 = MEM32(0x20ACDCu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FD54u;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteDieText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20ACD8u) = ecx + 1u;
@@ -117457,7 +117457,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20ACDCu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FD6Cu;
+	MEM32(g_esp) = ZenWarriorHeavyZenWarriorLiteDie2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax++;
@@ -117469,7 +117469,7 @@ uint32_t ZenWarriorHeavy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	MEM32(0x20ACDCu) = MEM32(0x20ACDCu) + 1u;
 	eax = ZenWarriorHeavyModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FE78u;
+	MEM32(g_esp) = HeavyWeaponText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -118521,7 +118521,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FE88u;
+	MEM32(g_esp) = ZenWarriorLiteText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -118543,7 +118543,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x19FFC0u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19FFA0u;
+	MEM32(g_esp) = ZenWarriorLiteBoneWaistText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 4u;
@@ -118589,7 +118589,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ZenWarriorLiteModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -118610,14 +118610,14 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B128u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x0008CE82u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0010u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRunBackwardsText_VA;
 	MEM32(0x20B130u) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x0008CE93u, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0030u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B134u) = eax;
@@ -118629,56 +118629,56 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B138u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEB8u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0060u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B13Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEC9u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0078u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B140u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEDAu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0090u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B144u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEEBu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A00ACu;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B148u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CEFCu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A00C4u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B14Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF0Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A00E4u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B150u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF1Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0104u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B154u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF32u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A011Cu;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B158u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF43u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0140u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B15Cu) = eax;
@@ -118690,13 +118690,13 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B160u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF65u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0174u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B164u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008CF76u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0190u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B168u) = eax;
@@ -118788,25 +118788,25 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B1A0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D07Bu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0354u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1A4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D08Cu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A036Cu;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1A8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D09Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0384u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1ACu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0AEu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A03A8u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1B0u) = eax;
@@ -118825,7 +118825,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B1B8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0008D0E4u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A033Cu;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B1BCu) = eax;
@@ -118835,7 +118835,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	x86_rep_stos32(0x20B030u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B030u) * 3u * 4u + 0x20B03Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM16(esi_2 + 4u) = 0xFFFFu;
@@ -118848,7 +118848,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ecx = MEM32(0x20B030u);
 	esi_2 = MEM32(0x20B034u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A02ACu;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteDieText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20B030u) = ecx + 1u;
@@ -118858,7 +118858,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20B034u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A02C4u;
+	MEM32(g_esp) = ZenWarriorLiteZenWarriorLiteDie2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax++;
@@ -118870,7 +118870,7 @@ uint32_t ZenWarriorLite_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x20B034u) = MEM32(0x20B034u) + 1u;
 	eax = ZenWarriorLiteModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A03D0u;
+	MEM32(g_esp) = MediumWeaponText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -120162,7 +120162,7 @@ uint32_t ZenScoutShip_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A03E0u;
+	arg1 = ZenScoutShipText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x0008E28Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -122380,7 +122380,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A07E0u;
+	MEM32(g_esp) = ARMDTurretText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -122402,7 +122402,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x1A0910u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A08F0u;
+	MEM32(g_esp) = ARMDBaseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 0u;
@@ -122448,7 +122448,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ARMDTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -122472,14 +122472,14 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	eax = x86_call(vcObjectGet_entry, 0x000905DCu, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A096Cu;
+	MEM32(g_esp) = ArmdTurretIdleText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	ARMDTurretZenCruiserTurretCloseMotion = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000905F0u, 0);
 	ARMDTurretIdleMotion = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0980u;
+	MEM32(g_esp) = ARMDTurretZenCruiserTurretIdleCloseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x00090601u, 0);
@@ -122488,7 +122488,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	x86_rep_stos32(0x20B7D8u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B7D8u) * 3u * 4u + 0x20B7E4u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	ebx_2 = edx;
@@ -122503,7 +122503,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(0x20B7D8u) = eax;
 	esi_2 = eax * 3u * 4u + 0x20B7E4u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM16(esi_2 + 4u) = 0xBu;
@@ -122527,7 +122527,7 @@ uint32_t ARMDTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	MEM32(esi_2 + 4u) = 1u;
 	ecx = MEM32(0x20B7DCu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A09BCu;
+	MEM32(g_esp) = ArmdTurretLazerNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	MEM32(0x20B7DCu) = ecx + 1u;
@@ -123279,7 +123279,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A09D8u;
+	MEM32(g_esp) = ZenCruiserTurretText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -123301,7 +123301,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x1A0B14u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0AF0u;
+	MEM32(g_esp) = ZenTurretMidText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 0u;
@@ -123347,7 +123347,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ZenCruiserTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -123371,14 +123371,14 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	eax = x86_call(vcObjectGet_entry, 0x000913CCu, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0B78u;
+	MEM32(g_esp) = ZenCruiserTurretIdleText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	ZenCruiserTurretCloseMotion = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000913E0u, 0);
 	ZenCruiserTurretIdleMotion = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0B90u;
+	MEM32(g_esp) = ZenCruiserTurretZenCruiserTurretIdleCloseText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x000913F1u, 0);
@@ -123387,7 +123387,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	x86_rep_stos32(0x20B9E0u, 0u, 0x29u);
 	esi_2 = MEM32(0x20B9E0u) * 3u * 4u + 0x20B9ECu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	ebx_2 = edx;
@@ -123402,7 +123402,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(0x20B9E0u) = eax;
 	esi_2 = eax * 3u * 4u + 0x20B9ECu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM16(esi_2 + 4u) = 0x10u;
@@ -123426,7 +123426,7 @@ uint32_t ZenCruiserTurret_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	MEM32(0x20B9E4u) = MEM32(0x20B9E4u) + 1u;
 	eax = ZenCruiserTurretModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x192D18u;
+	MEM32(g_esp) = ZenTurretLazerNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -124144,7 +124144,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0BCCu;
+	MEM32(g_esp) = VehicleMilSeaSergeantText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -124158,7 +124158,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00091F23u, 0);
 	eax = SeaSergeantModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -124228,7 +124228,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BF58u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00091FFCu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0DC8u;
+	MEM32(g_esp) = VehicleMilSeaSergeantBackText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20BF5Cu) = eax;
@@ -124306,7 +124306,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	x86_rep_stos32(0x20BEB0u, 0u, 0x29u);
 	edi_2 = MEM32(0x20BEB0u) * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0FC0u;
+	MEM32(g_esp) = SeaSergeantDamageNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x42u;
@@ -124320,7 +124320,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0FC0u;
+	MEM32(g_esp) = SeaSergeantDamageNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x56u;
@@ -124334,7 +124334,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0FC0u;
+	MEM32(g_esp) = SeaSergeantDamageNode01Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0x44u;
@@ -124348,7 +124348,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -124362,7 +124362,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0u;
@@ -124376,7 +124376,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	MEM32(0x20BEB0u) = eax;
 	edi_2 = eax * 3u * 4u + 0x20BEBCu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2 + 4u) = 0xDu;
@@ -124389,7 +124389,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	edx = MEM32(0x20BEB0u);
 	esi_2 = MEM32(0x20BEB4u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0F08u;
+	MEM32(g_esp) = VehicleMilSeaSergeantDeathText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20BEB0u) = edx + 1u;
@@ -124401,7 +124401,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	edx = MEM32(0x20BEB4u) + 1u;
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0FB0u;
+	MEM32(g_esp) = SSLeftMissileText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	MEM32(0x20BEB4u) = edx;
@@ -124410,7 +124410,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	eax = sub_0011EA70(arg0, arg1);
 	edx = SeaSergeantModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0F9Cu;
+	MEM32(g_esp) = SSRightMissileText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	SeaSergeantSSLeftMissileNode = eax;
@@ -124512,7 +124512,7 @@ uint32_t SeaSergeant_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43C80000u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A0F88u;
+	MEM32(g_esp) = SeasgtLoop1WavText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 5u;
 	g_esp = g_esp - 4u;
@@ -126398,7 +126398,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp) = edi;
 	sub_00018A20();
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1238u;
+	MEM32(g_esp) = ZenWarriorScavengerText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp_2);
 	g_esp = g_esp - 4u;
@@ -126420,7 +126420,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(g_esp + 0x44u) = edx;
 	edx = MEM32(0x1A1374u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1354u;
+	MEM32(g_esp) = ZenWarriorScavengerBoneWaistText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM32(g_esp + 0x2Cu) = 4u;
@@ -126466,7 +126466,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	sub_0011E770(arg0, arg1, arg2);
 	ecx = ZenWarriorScavengerModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -126487,14 +126487,14 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C430u) = 0u;
 	eax = x86_call(vcObjectGet_entry, 0x000945D2u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A13C4u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRunBackwardsText_VA;
 	MEM32(0x20C438u) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax = x86_call(vcObjectGet_entry, 0x000945E3u, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A13E4u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteIdle2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C43Cu) = eax;
@@ -126506,56 +126506,56 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C440u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094608u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1414u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteWalkText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C444u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094619u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A142Cu;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRunText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C448u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009462Au, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1444u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteForwardText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C44Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009463Bu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1460u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C450u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009464Cu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1478u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteStrafeLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C454u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009465Du, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1498u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteStrafeRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C458u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x0009466Eu, 0);
 	g_esp = g_esp + 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A14B8u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C45Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094682u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A14D0u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceTempText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C460u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094693u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A14F4u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C464u) = eax;
@@ -126567,13 +126567,13 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C468u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946B5u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1528u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLandSoftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C46Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000946C6u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1544u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteLandText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C470u) = eax;
@@ -126665,25 +126665,25 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C4A8u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947CBu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1708u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAlertText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4ACu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947DCu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1720u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4B0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947EDu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1738u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceAlarm2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4B4u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000947FEu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A175Cu;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteTurninplaceAlarmText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4B8u) = eax;
@@ -126702,7 +126702,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C4C0u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00094834u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A16F0u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteAimText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C4C4u) = eax;
@@ -126712,7 +126712,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	x86_rep_stos32(0x20C338u, 0u, 0x29u);
 	esi_2 = MEM32(0x20C338u) * 3u * 4u + 0x20C344u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C70u;
+	MEM32(g_esp) = TargetText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEM16(esi_2 + 4u) = 0xFFFFu;
@@ -126725,7 +126725,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	ecx = MEM32(0x20C338u);
 	esi_2 = MEM32(0x20C33Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1660u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteDieText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	MEM32(0x20C338u) = ecx + 1u;
@@ -126735,7 +126735,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(esi_2 + 4u) = 1u;
 	eax = MEM32(0x20C33Cu);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A1678u;
+	MEM32(g_esp) = ZenWarriorScavengerZenWarriorLiteDie2Text_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 9u;
 	eax++;
@@ -126747,7 +126747,7 @@ uint32_t ZenWarriorScavenger_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	MEM32(0x20C33Cu) = MEM32(0x20C33Cu) + 1u;
 	eax = ZenWarriorScavengerModel;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x19F924u;
+	MEM32(g_esp) = LiteWeaponText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0 = MEM32(g_esp);
@@ -128563,7 +128563,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, saved_eax = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, stack_2C = 0, stack_30 = 0, stack_34 = 0, stack_38 = 0, stack_3C = 0, stack_40 = 0, stack_44 = 0;
 
 	sub_00018A20();
-	stack = 0x1A1B54u;
+	stack = VehicleMilCatsEyeText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_14 = 0u;
@@ -128576,7 +128576,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00096ED1u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_20 = 0x191C70u;
+	stack_20 = TargetText_VA;
 	stack_24 = MEM32(0x20CE8Cu);
 	arg0 = stack_24;
 	arg1 = stack_20;
@@ -128636,7 +128636,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x20CD84u) = eax;
 	x86_rep_stos32(0x20CCC8u, 0u, 0x29u);
 	edi = MEM32(0x20CCC8u) * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x19B520u;
+	arg1 = DamageNode02Text_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -128646,7 +128646,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CCC8u) + 1u;
 	MEM32(0x20CCC8u) = eax;
 	edi = eax * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x19B520u;
+	arg1 = DamageNode02Text_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -128656,7 +128656,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CCC8u) + 1u;
 	MEM32(0x20CCC8u) = eax;
 	edi = eax * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x19C548u;
+	arg1 = DamageNodeText_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0x44u;
 	MEM16(edi + 6u) = 1u;
@@ -128666,7 +128666,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CCC8u) + 1u;
 	MEM32(0x20CCC8u) = eax;
 	edi = eax * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 2u;
@@ -128676,7 +128676,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CCC8u) + 1u;
 	MEM32(0x20CCC8u) = eax;
 	edi = eax * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 4u;
@@ -128686,7 +128686,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CCC8u) + 1u;
 	MEM32(0x20CCC8u) = eax;
 	edi = eax * 3u * 4u + 0x20CCD4u;
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0x13u;
 	MEM16(edi + 6u) = 1u;
@@ -128694,7 +128694,7 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(edi + 8u) = eax;
 	esi = MEM32(0x20CCCCu);
-	arg1 = 0x1A1CB4u;
+	arg1 = VehicleMilCatsEyeDeathText_VA;
 	arg0 = 9u;
 	MEM32(0x20CCC8u) = MEM32(0x20CCC8u) + 1u;
 	esi = esi * 8u + 0x20CD4Cu;
@@ -128702,24 +128702,24 @@ uint32_t CatsEye_Startup(uint32_t ebx, uint32_t ebp)
 	ecx = MEM32(0x20CE8Cu);
 	MEM32(esi) = eax;
 	MEM32(esi + 4u) = 1u;
-	arg1 = 0x1A1D0Cu;
+	arg1 = CatseyeExhaustL01Text_VA;
 	arg0 = ecx;
 	MEM32(0x20CCCCu) = MEM32(0x20CCCCu) + 1u;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A1CF8u;
+	arg1 = CatseyeExhaustL02Text_VA;
 	arg0 = MEM32(0x20CE8Cu);
 	CatsEyeExhaustL01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	CatsEyeExhaustL02Node = eax;
-	arg1 = 0x1A1CE4u;
+	arg1 = CatseyeExhaustR01Text_VA;
 	arg0 = MEM32(0x20CE8Cu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A1CD0u;
+	arg1 = CatseyeExhaustR02Text_VA;
 	arg0 = MEM32(0x20CE8Cu);
 	CatsEyeExhaustR01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	edx = MEM32(0x20CE8Cu);
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	CatsEyeExhaustR02Node = eax;
 	arg0 = edx;
 	eax = sub_0011EA70(arg0, arg1);
@@ -129107,7 +129107,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t stack = 0, stack_18 = 0, stack_1C = 0, stack_20 = 0, stack_24 = 0, stack_28 = 0, stack_2C = 0, stack_30 = 0, stack_34 = 0, stack_38 = 0, stack_3C = 0, stack_40 = 0, stack_44 = 0, stack_48 = 0;
 
 	sub_00018A20();
-	stack = 0x1A1D20u;
+	stack = PodScoutText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_18 = 0u;
@@ -129120,7 +129120,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00097BF3u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_24 = 0x191C70u;
+	stack_24 = TargetText_VA;
 	stack_28 = MEM32(0x20D274u);
 	arg0 = stack_28;
 	arg1 = stack_24;
@@ -129387,7 +129387,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x20D0FCu) = eax;
 	x86_rep_stos32(0x20CF70u, 0u, 0x29u);
 	edi = MEM32(0x20CF70u) * 3u * 4u + 0x20CF7Cu;
-	arg1 = 0x19C548u;
+	arg1 = DamageNodeText_VA;
 	arg0 = esi;
 	MEM16(edi + 4u) = 0x42u;
 	MEM16(edi + 6u) = 1u;
@@ -129397,7 +129397,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CF70u) + 1u;
 	MEM32(0x20CF70u) = eax;
 	edi = eax * 3u * 4u + 0x20CF7Cu;
-	stack = 0x19C548u;
+	stack = DamageNodeText_VA;
 	stack_18 = esi;
 	MEM16(edi + 4u) = 0x56u;
 	MEM16(edi + 6u) = 1u;
@@ -129433,7 +129433,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CF70u) + 1u;
 	MEM32(0x20CF70u) = eax;
 	edi = eax * 3u * 4u + 0x20CF7Cu;
-	stack_2C = 0x191C70u;
+	stack_2C = TargetText_VA;
 	stack_30 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 2u;
@@ -129445,7 +129445,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CF70u) + 1u;
 	MEM32(0x20CF70u) = eax;
 	edi = eax * 3u * 4u + 0x20CF7Cu;
-	stack_34 = 0x191C70u;
+	stack_34 = TargetText_VA;
 	stack_38 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 4u;
@@ -129457,7 +129457,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CF70u) + 1u;
 	MEM32(0x20CF70u) = eax;
 	edi = eax * 3u * 4u + 0x20CF7Cu;
-	stack_3C = 0x191C70u;
+	stack_3C = TargetText_VA;
 	stack_40 = esi;
 	MEM16(edi + 4u) = 0xAu;
 	MEM16(edi + 6u) = 1u;
@@ -129469,7 +129469,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20CF70u) + 1u;
 	MEM32(0x20CF70u) = eax;
 	edi = eax * 3u * 4u + 0x20CF7Cu;
-	stack_44 = 0x191C70u;
+	stack_44 = TargetText_VA;
 	stack_48 = esi;
 	MEM16(edi + 4u) = 0x57u;
 	MEM16(edi + 6u) = 1u;
@@ -129509,7 +129509,7 @@ uint32_t PodScout_Startup(uint32_t ebx, uint32_t ebp)
 	ecx = MEM32(0x20D274u);
 	MEM32(esi) = eax;
 	MEM32(esi + 4u) = 1u;
-	arg1 = 0x19E51Cu;
+	arg1 = DummyScoutBeaconText_VA;
 	arg0 = ecx;
 	MEM32(0x20CF74u) = MEM32(0x20CF74u) + 1u;
 	eax = sub_0011EA70(arg0, arg1);
@@ -131283,7 +131283,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	uint32_t t1 = 0;
 
 	sub_00018A20();
-	stack = 0x1A2494u;
+	stack = ZenFighterPodText_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	ebx_2 = 0u;
@@ -131297,19 +131297,19 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x0009A6B3u, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_24 = 0x191C70u;
+	stack_24 = TargetText_VA;
 	stack_28 = MEM32(0x20DACCu);
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x1B18A4u) = eax;
-	stack_2C = 0x1A25A8u;
+	stack_2C = FighterpodFlapsOpenText_VA;
 	stack_30 = 9u;
 	x86_rep_stos32(0x20D9ACu, 0u, 7u);
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x0009A6E2u, 2, arg0, arg1);
-	stack_34 = 0x1A25C0u;
+	stack_34 = FighterpodFlapsClosedText_VA;
 	stack_38 = 9u;
 	MEM32(0x20D9ACu) = eax;
 	arg0 = stack_38;
@@ -131361,7 +131361,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(0x20D9C4u) = eax;
 	x86_rep_stos32(0x20D908u, 0u, 0x29u);
 	edi = MEM32(0x20D908u) * 3u * 4u + 0x20D914u;
-	stack_24 = 0x19C548u;
+	stack_24 = DamageNodeText_VA;
 	stack_28 = esi;
 	MEM16(edi + 4u) = 0x48u;
 	MEM16(edi + 6u) = 1u;
@@ -131373,7 +131373,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20D908u) + 1u;
 	MEM32(0x20D908u) = eax;
 	edi = eax * 3u * 4u + 0x20D914u;
-	stack_2C = 0x19C548u;
+	stack_2C = DamageNodeText_VA;
 	stack_30 = esi;
 	MEM16(edi + 4u) = 0x43u;
 	MEM16(edi + 6u) = 1u;
@@ -131385,7 +131385,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20D908u) + 1u;
 	MEM32(0x20D908u) = eax;
 	edi = eax * 3u * 4u + 0x20D914u;
-	stack_34 = 0x191C70u;
+	stack_34 = TargetText_VA;
 	stack_38 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 2u;
@@ -131397,7 +131397,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20D908u) + 1u;
 	MEM32(0x20D908u) = eax;
 	edi = eax * 3u * 4u + 0x20D914u;
-	stack_3C = 0x191C70u;
+	stack_3C = TargetText_VA;
 	stack_40 = esi;
 	MEM16(edi + 4u) = 0u;
 	MEM16(edi + 6u) = 4u;
@@ -131409,7 +131409,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = MEM32(0x20D908u) + 1u;
 	MEM32(0x20D908u) = eax;
 	edi = eax * 3u * 4u + 0x20D914u;
-	stack_44 = 0x191C70u;
+	stack_44 = TargetText_VA;
 	stack_48 = esi;
 	MEM16(edi + 4u) = 0x10u;
 	MEM16(edi + 6u) = 1u;
@@ -131419,7 +131419,7 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	eax = sub_0011EA70(arg0, arg1);
 	MEM16(edi + 8u) = eax;
 	esi = MEM32(0x20D90Cu);
-	arg1 = 0x1A25E0u;
+	arg1 = FighterpodDeathText_VA;
 	arg0 = 9u;
 	MEM32(0x20D908u) = MEM32(0x20D908u) + 1u;
 	esi = esi * 8u + 0x20D98Cu;
@@ -131442,33 +131442,33 @@ uint32_t FighterPod_Startup(uint32_t ebx, uint32_t ebp)
 	MEM32(esi) = eax;
 	ebp_2 = 3u;
 	MEM32(esi + 4u) = 3u;
-	arg1 = 0x19C040u;
+	arg1 = Thruster1Text_VA;
 	arg0 = ecx;
 	MEM32(0x20D90Cu) = MEM32(0x20D90Cu) + 1u;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A2624u;
+	arg1 = Thruster2Text_VA;
 	arg0 = MEM32(0x20DACCu);
 	FighterPodThruster1Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	FighterPodThruster2Node = eax;
-	arg1 = 0x1A2618u;
+	arg1 = Thruster3Text_VA;
 	arg0 = MEM32(0x20DACCu);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x191C70u;
+	arg1 = TargetText_VA;
 	arg0 = MEM32(0x20DACCu);
 	FighterPodThruster3Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A260Cu;
+	arg1 = FrontGunText_VA;
 	arg0 = MEM32(0x20DACCu);
 	FighterPodTargetNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	FighterPodFrontGunNode = eax;
-	arg1 = 0x1A2600u;
+	arg1 = MissileLText_VA;
 	arg0 = MEM32(0x20DACCu);
 	eax = sub_0011EA70(arg0, arg1);
 	ecx = MEM32(0x20DACCu);
 	FighterPodMissileLNode = eax;
-	arg1 = 0x1A25F4u;
+	arg1 = MissileRText_VA;
 	arg0 = ecx;
 	eax = sub_0011EA70(arg0, arg1);
 	MEM32(0x20D68Cu) = eax;
@@ -131941,7 +131941,7 @@ uint32_t sub_0009B180(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg0 = 0x1A2730u;
+	arg0 = RdfHeavyMissileText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -138587,7 +138587,7 @@ void sub_0009F990(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_e
 			}
 			eax = MEM32(edi_2 + 0x194u);
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1A2758u;
+			MEM32(g_esp) = SpawnText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			arg0_2 = MEM32(g_esp);
@@ -140013,7 +140013,7 @@ uint32_t sub_000A0FE0(void)
 
 	x86_rep_stos32(EffectFamily_VA, 0u, 0x86u);
 	arg0 = EffectFamily_VA;
-	GameObjectFamily_name(EffectFamily_VA) = 0x1A27A8u;
+	GameObjectFamily_name(EffectFamily_VA) = EffectText_VA;
 	GameObjectFamily_startup(EffectFamily_VA) = 0u;
 	GameObjectFamily_shutdown(EffectFamily_VA) = 0u;
 	GameObjectFamily_version(EffectFamily_VA) = 0u;
@@ -141474,7 +141474,7 @@ void sub_000A1B10(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 			break;
 		case 0x0A2089u:
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1A27F0u;
+			MEM32(g_esp) = GUIHeadingsProfileTgaText_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 1u;
 			eax_2 = x86_call(vcObjectGet_entry, 0x000A2095u, 0);
@@ -141965,7 +141965,7 @@ uint32_t sub_000A2450(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x43FA0000u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A27B0u;
+	MEM32(g_esp) = ToggleWavText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 2u;
 	g_esp = g_esp - 4u;
@@ -143354,25 +143354,25 @@ void sub_000A3630(void)
 	{
 		arg4 = 0x43340000u;
 		arg3 = 0x41A00000u;
-		arg2 = 0x1A2848u;
+		arg2 = Splash1MWavText_VA;
 		arg1 = 1u;
 		arg0 = 0x20F290u;
 		sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 		arg4 = 0x43340000u;
 		arg3 = 0x41A00000u;
-		arg2 = 0x1A2838u;
+		arg2 = Splash2MWavText_VA;
 		arg1 = 1u;
 		arg0 = 0x20F2D8u;
 		sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 		arg4 = 0x43340000u;
 		arg3 = 0x41A00000u;
-		arg2 = 0x1A2828u;
+		arg2 = Splash3MWavText_VA;
 		arg1 = 1u;
 		arg0 = 0x20F320u;
 		sub_0010F670(arg0, arg1, arg2, arg3, arg4);
 		arg4 = 0x447A0000u;
 		arg3 = 0x42C80000u;
-		arg2 = 0x1A2810u;
+		arg2 = BulletHitsWaterMWavText_VA;
 		arg1 = 2u;
 		arg0 = 0x20F248u;
 		sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -144306,7 +144306,7 @@ uint32_t WaterNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, 
 		MEM32(g_esp) = 0x1Du;
 		eax = x86_call(vcObjectCreate_entry, 0x000A415Bu, 0);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x1A2888u;
+		MEM32(g_esp) = RollingThunderLoopMWavText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0xFu;
 		MEM32(0x20F374u) = eax;
@@ -146496,7 +146496,7 @@ uint32_t sub_000A57C0(uint32_t arg0)
 	edx = x86_urem64(0u, eax, 0x64u);
 	if (MEM32(edi + 0x298u) == 0xFFFFFFFFu)
 	{
-		t1 = MEM32(0x1AEC80u);
+		t1 = Difficulty;
 		eax = t1;
 		if (t1 == 0u)
 			esi = 0xFFFFFFF6u;
@@ -146882,7 +146882,7 @@ void sub_000A5C30(uint32_t arg0)
 					MEM32(ecx + 0x2FCu) = 0u;
 				return;
 			}
-			t1 = MEM32(0x1AEC80u);
+			t1 = Difficulty;
 			eax = t1;
 			if (t1 == 0u)
 				f0 = x87_round(FLOAT_AT(ecx + 0x2FCu) + 15.0);
@@ -146912,7 +146912,7 @@ void sub_000A5C30(uint32_t arg0)
 					MEM32(ecx + 0x2FCu) = 0u;
 				return;
 			}
-			t1 = MEM32(0x1AEC80u);
+			t1 = Difficulty;
 			eax = t1;
 			if (t1 == 0u)
 				f0 = x87_round(FLOAT_AT(ecx + 0x2FCu) + 15.0);
@@ -146941,7 +146941,7 @@ void sub_000A5C30(uint32_t arg0)
 			MEM32(ecx + 0x2FCu) = 0u;
 		return;
 	}
-	t1 = MEM32(0x1AEC80u);
+	t1 = Difficulty;
 	eax = t1;
 	if (t1 == 0u)
 		f0 = x87_round(FLOAT_AT(ecx + 0x2FCu) + 15.0);
@@ -150149,7 +150149,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 		MEM32(g_esp) = 0x40u;
 		eax = g_esp + 0x1Cu;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x1A2A04u;
+		MEM32(g_esp) = MovementPatternFigure1Text_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		MEM32(g_esp + 0x64u) = esi_2;
@@ -150288,7 +150288,7 @@ void sub_000A7E20(uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 		MEM32(g_esp) = 0x40u;
 		edx = g_esp + 0x1Cu;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x1A29ECu;
+		MEM32(g_esp) = MovementPatternFigure3Text_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx;
 		MEM32(g_esp + 0x64u) = esi_2;
@@ -156928,7 +156928,7 @@ void sub_000ACA70(uint32_t eax, uint32_t esi, uint32_t edi)
 		x86_call(vcObjectCreate_entry, 0x000ACB06u, 1, arg0);
 		eax_2 = g_eax;
 		ignored = g_edx;
-		arg1 = 0x1A2A34u;
+		arg1 = StarmaterialText_VA;
 		arg0 = eax_2;
 		MEM32(esi + 0xD4u) = eax_2;
 		sub_00134F50(arg0, arg1);
@@ -158810,7 +158810,7 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	MEM32(esi_2 + 0x180u) = 0u;
 	MEM32(esi_2 + 0x184u) = 0u;
 	MEM32(esi_2 + 0x188u) = 0u;
-	ecx = MEM32(0x1AEC88u);
+	ecx = VersusKillLimit;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x118u;
 	MEM32(esi_2 + 0x164u) = ecx;
@@ -159400,7 +159400,7 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_000C73A0(arg0_2, arg1_2);
 		g_esp = g_esp + 0x1Cu;
-		if (MEM32(0x1AEC88u) == 3u)
+		if ((uint32_t)VersusKillLimit == 3u)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(esi_2 + 0x158u);
@@ -159475,7 +159475,7 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_000C73A0(arg0_2, arg1_2);
 		g_esp = g_esp + 0x1Cu;
-		if (MEM32(0x1AEC88u) == 5u)
+		if ((uint32_t)VersusKillLimit == 5u)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(esi_2 + 0x15Cu);
@@ -159550,7 +159550,7 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_000C73A0(arg0_2, arg1_2);
 		g_esp = g_esp + 0x1Cu;
-		if (MEM32(0x1AEC88u) == 7u)
+		if ((uint32_t)VersusKillLimit == 7u)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(esi_2 + 0x160u);
@@ -160669,7 +160669,7 @@ void sub_000AF200(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 		arg0 = MEM32(esi + 0x138u);
 		eax = sub_0003CCB0(arg0);
 		MEM32(0x1BC6B4u) = eax;
-		MEM32(0x1AEC88u) = MEM32(esi + 0x164u);
+		VersusKillLimit = MEM32(esi + 0x164u);
 		arg0 = MEM32(esi + 0x170u);
 		eax = sub_0003CCB0(arg0);
 		MEM32(0x1BC6BCu) = eax;
@@ -161817,7 +161817,7 @@ void sub_000B0430(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		sub_000BFC20(arg0_2);
 		ecx = MEM32(esi + 0x124u);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = MEM32(0x1AEC80u);
+		MEM32(g_esp) = Difficulty;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -161856,7 +161856,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 		arg0 = MEM32(esi + 0x124u);
 		MEM32(esi + 0x12Cu) = edi;
 		sub_000BF7D0(arg0, &eax_2, &ignored);
-		MEM32(0x1AEC80u) = eax_2;
+		Difficulty = eax_2;
 	}
 	eax_2 = MEM32(esi + 0x18u);
 	if ((int32_t)eax_2 >= 0)
@@ -161866,7 +161866,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 		{
 			eax_2 = MEM32(esi + 0x124u);
 			MEM32(esi + 0x128u) = edi;
-			arg1 = MEM32(0x1AEC80u);
+			arg1 = Difficulty;
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
 			MenuCancelSoundAsked = edi;
@@ -161877,7 +161877,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 		{
 			eax_2 = MEM32(esi + 0x124u);
 			MEM32(esi + 0x128u) = edi;
-			arg1 = MEM32(0x1AEC80u);
+			arg1 = Difficulty;
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
 			MenuCancelSoundAsked = edi;
@@ -161888,7 +161888,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 	{
 		eax_2 = MEM32(esi + 0x124u);
 		MEM32(esi + 0x128u) = edi;
-		arg1 = MEM32(0x1AEC80u);
+		arg1 = Difficulty;
 		arg0 = eax_2;
 		sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
 		MenuCancelSoundAsked = edi;
@@ -161900,7 +161900,7 @@ void sub_000B0630(uint32_t eax, uint32_t esi)
 		{
 			eax_2 = MEM32(esi + 0x124u);
 			MEM32(esi + 0x128u) = edi;
-			arg1 = MEM32(0x1AEC80u);
+			arg1 = Difficulty;
 			arg0 = eax_2;
 			sub_000BFC90(arg0, arg1, &ignored_2, &ignored_3, &ignored_4);
 			MenuCancelSoundAsked = edi;
@@ -163542,10 +163542,10 @@ void sub_000B1CE0(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp + 0x14u) = MEM32(esi + 8u) - eax;
 	f0 = (double)(int32_t)MEM32(g_esp + 0x14u);
 	MEM32(g_esp + 0x18u) = eax;
-	edx_2 = MEM32(0x1B1D78u);
+	edx_2 = MusicVolume;
 	ebx_2 = x87_ftol(x87_round(x87_round(f0 * 0.5) + (double)(int32_t)MEM32(g_esp + 0x18u)));
 	ebp_2 = 0u;
-	MEM32(0x20FD24u) = MEM32(0x1B1D7Cu);
+	MEM32(0x20FD24u) = SoundVolume;
 	x86_rep_stos32(g_esp + 0x1Cu, 0u, 7u);
 	edi_2 = MEM32(g_esp + 0x14u);
 	ecx = MEM32(g_esp + 0x40u);
@@ -163875,8 +163875,8 @@ void sub_000B2000(uint32_t eax, uint32_t edx)
 	ecx = MEM32(0x20FD24u);
 	esi = eax;
 	arg0 = edx;
-	MEM32(0x1B1D78u) = MEM32(0x20FD20u);
-	MEM32(0x1B1D7Cu) = ecx;
+	MusicVolume = MEM32(0x20FD20u);
+	SoundVolume = ecx;
 	sub_000205A0(arg0, &ignored, &edx);
 	eax_2 = MEM32(esi + 0x128u);
 	if (eax_2 != 0u)
@@ -163936,16 +163936,16 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	ebp = 1u;
 	if ((int32_t)ecx >= 1)
 	{
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (MEM32(esi + 0x134u) != ebx_2)
-			eax_2 = MEM32(0x1B1D84u);
+			eax_2 = VolumeBarAlphas(1);
 		ecx--;
 		t1 = ecx - ebx_2;
 		overflow = x86_overflow_sub32(ecx, ebx_2, 0u);
 		zero = t1 == 0u;
 		negative = t1 >> 31;
 		edi_2 = (((negative ^ overflow) | zero) - 1u) & ecx;
-		arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+		arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 		arg0 = 0x20FC30u;
 		stack_8 = edi_2;
 		sub_00126D00(arg0, arg1);
@@ -163957,10 +163957,10 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		arg0 = 0x20FC30u;
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 		t2 = MEM32(esi + 0x134u);
-		eax_2 = MEM32(0x1B1D84u);
+		eax_2 = VolumeBarAlphas(1);
 		if (t2 != ebx_2)
-			eax_2 = MEM32(0x1B1D88u);
-		arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+			eax_2 = VolumeBarAlphas(2);
+		arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 		arg0 = 0x20FC30u;
 		sub_00126D00(arg0, arg1);
 		edi_2 = 0u;
@@ -163984,14 +163984,14 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	}
 	ebx_2 = 0u;
 	if (MEM32(esi + 0x134u) != 0u)
-		eax_2 = MEM32(0x1B1D84u);
+		eax_2 = VolumeBarAlphas(1);
 	else
 	{
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (MEM32(esi + 0x138u) == ebx_2)
-			eax_2 = MEM32(0x1B1D84u);
+			eax_2 = VolumeBarAlphas(1);
 	}
-	arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+	arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 	arg0 = 0x20FCA8u;
 	sub_00126D00(arg0, arg1);
 	stack = MEM32(esi + 4u) + 0x49u;
@@ -164002,14 +164002,14 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg0 = 0x20FCA8u;
 	sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 	if (MEM32(esi + 0x134u) != ebx_2)
-		eax_2 = MEM32(0x1B1D84u);
+		eax_2 = VolumeBarAlphas(1);
 	else
 	{
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (MEM32(esi + 0x13Cu) == ebx_2)
-			eax_2 = MEM32(0x1B1D84u);
+			eax_2 = VolumeBarAlphas(1);
 	}
-	arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+	arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 	arg0 = 0x20FCE4u;
 	sub_00126D00(arg0, arg1);
 	stack = MEM32(esi + 4u) + 0x40u;
@@ -164036,16 +164036,16 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	ecx = MEM32(0x20FD24u);
 	if ((int32_t)ebp <= (int32_t)ecx)
 	{
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (MEM32(esi + 0x134u) != ebp)
-			eax_2 = MEM32(0x1B1D84u);
+			eax_2 = VolumeBarAlphas(1);
 		ecx--;
 		t3 = ecx - ebx_2;
 		overflow = x86_overflow_sub32(ecx, ebx_2, 0u);
 		zero = t3 == 0u;
 		negative = t3 >> 31;
 		edi_2 = (((negative ^ overflow) | zero) - 1u) & ecx;
-		arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+		arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 		arg0 = 0x20FC30u;
 		stack_8 = edi_2;
 		sub_00126D00(arg0, arg1);
@@ -164057,10 +164057,10 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		arg0 = 0x20FC30u;
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 		t4 = MEM32(esi + 0x134u);
-		eax_2 = MEM32(0x1B1D84u);
+		eax_2 = VolumeBarAlphas(1);
 		if (t4 != ebp)
-			eax_2 = MEM32(0x1B1D88u);
-		arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+			eax_2 = VolumeBarAlphas(2);
+		arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 		arg0 = 0x20FC30u;
 		sub_00126D00(arg0, arg1);
 		edi_2 = 0u;
@@ -164083,15 +164083,15 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		}
 	}
 	if (MEM32(esi + 0x134u) != ebp)
-		eax_2 = MEM32(0x1B1D84u);
+		eax_2 = VolumeBarAlphas(1);
 	else
 	{
 		t5 = MEM32(esi + 0x138u);
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (t5 == 0u)
-			eax_2 = MEM32(0x1B1D84u);
+			eax_2 = VolumeBarAlphas(1);
 	}
-	arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+	arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 	arg0 = 0x20FCA8u;
 	sub_00126D00(arg0, arg1);
 	stack = MEM32(esi + 4u) + 0x73u;
@@ -164104,10 +164104,10 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	if (MEM32(esi + 0x134u) == ebp)
 	{
 		t6 = MEM32(esi + 0x13Cu);
-		eax_2 = MEM32(0x1B1D80u);
+		eax_2 = VolumeBarAlphas(0);
 		if (t6 == 0u)
-			eax_2 = MEM32(0x1B1D84u);
-		arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+			eax_2 = VolumeBarAlphas(1);
+		arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 		arg0 = 0x20FCE4u;
 		sub_00126D00(arg0, arg1);
 		stack = MEM32(esi + 4u) + 0x6Au;
@@ -164119,8 +164119,8 @@ void sub_000B2070(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		sub_00126890(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 		return;
 	}
-	eax_2 = MEM32(0x1B1D84u);
-	arg1 = (((((MEM32(0x1B1D8Cu) & 0xFFu) | (eax_2 << 8)) << 8) | (MEM32(0x1B1D90u) & 0xFFu)) << 8) | (MEM32(0x1B1D94u) & 0xFFu);
+	eax_2 = VolumeBarAlphas(1);
+	arg1 = (((((VolumeBarColor(0) & 0xFFu) | (eax_2 << 8)) << 8) | (VolumeBarColor(1) & 0xFFu)) << 8) | (VolumeBarColor(2) & 0xFFu);
 	arg0 = 0x20FCE4u;
 	sub_00126D00(arg0, arg1);
 	stack = MEM32(esi + 4u) + 0x6Au;
@@ -164166,8 +164166,8 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			edx = MEM32(0x20FD24u);
 			ebx = 1u;
 			MenuConfirmSoundAsked = 1u;
-			MEM32(0x1B1D78u) = ecx;
-			MEM32(0x1B1D7Cu) = edx;
+			MusicVolume = ecx;
+			SoundVolume = edx;
 			MEM32(esi + 0x144u) = 1u;
 		}
 		else
@@ -164175,7 +164175,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			zero = vcPad_pressed_start(vcPads(3)) - edi == 0u;
 			if (zero)
 			{
-				ecx = MEM32(0x1B1D78u);
+				ecx = MusicVolume;
 				ebx = 1u;
 			}
 			else
@@ -164184,8 +164184,8 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				edx = MEM32(0x20FD24u);
 				ebx = 1u;
 				MenuConfirmSoundAsked = 1u;
-				MEM32(0x1B1D78u) = ecx;
-				MEM32(0x1B1D7Cu) = edx;
+				MusicVolume = ecx;
+				SoundVolume = edx;
 				MEM32(esi + 0x144u) = 1u;
 			}
 		}
@@ -164199,8 +164199,8 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			edx = MEM32(0x20FD24u);
 			ebx = 1u;
 			MenuConfirmSoundAsked = 1u;
-			MEM32(0x1B1D78u) = ecx;
-			MEM32(0x1B1D7Cu) = edx;
+			MusicVolume = ecx;
+			SoundVolume = edx;
 			MEM32(esi + 0x144u) = 1u;
 		}
 		else
@@ -164208,7 +164208,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			zero = MEM32(eax_2 + vcPad_pressed_start_VA(vcPads_VA)) - edi == 0u;
 			if (zero)
 			{
-				ecx = MEM32(0x1B1D78u);
+				ecx = MusicVolume;
 				ebx = 1u;
 			}
 			else
@@ -164217,8 +164217,8 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				edx = MEM32(0x20FD24u);
 				ebx = 1u;
 				MenuConfirmSoundAsked = 1u;
-				MEM32(0x1B1D78u) = ecx;
-				MEM32(0x1B1D7Cu) = edx;
+				MusicVolume = ecx;
+				SoundVolume = edx;
 				MEM32(esi + 0x144u) = 1u;
 			}
 		}
@@ -164254,7 +164254,7 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack = (((negative ^ overflow) | zero) - 1u) & ecx;
 		arg0 = float_to_bits((float)x87_round((double)(int32_t)stack * 0.071428575f));
 		sub_00026F90(arg0);
-		eax_2 = MEM32(0x1B1D7Cu);
+		eax_2 = SoundVolume;
 		t2 = eax_2 - edi;
 		overflow = x86_overflow_sub32(eax_2, edi, 0u);
 		zero = t2 == 0u;
@@ -164262,8 +164262,8 @@ void sub_000B2670(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		stack = (((negative ^ overflow) | zero) - 1u) & eax_2;
 		arg0 = float_to_bits((float)x87_round((double)(int32_t)stack * 0.071428575f));
 		sub_0010E310(arg0, &ignored, &ignored_2, &ignored64);
-		eax_2 = MEM32(0x1B1D7Cu);
-		MEM32(0x20FD20u) = MEM32(0x1B1D78u);
+		eax_2 = SoundVolume;
+		MEM32(0x20FD20u) = MusicVolume;
 		MEM32(0x20FD24u) = eax_2;
 		MEM32(esi + 0x140u) = ebx;
 	}
@@ -165183,7 +165183,7 @@ uint32_t sub_000B36A0(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1B1D78u);
+	eax = MusicVolume;
 	return eax;
 }
 
@@ -165191,7 +165191,7 @@ uint32_t sub_000B36B0(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1B1D7Cu);
+	eax = SoundVolume;
 	return eax;
 }
 
@@ -165206,7 +165206,7 @@ uint32_t sub_000B36C0(uint32_t arg0)
 	overflow = 0u;
 	zero = eax == 0u;
 	negative = eax >> 31;
-	MEM32(0x1B1D78u) = eax;
+	MusicVolume = eax;
 	stack_200000 = (((negative ^ overflow) | zero) - 1u) & eax;
 	stack = float_to_bits((float)x87_round((double)(int32_t)stack_200000 * 0.071428575f));
 	arg0_2 = stack;
@@ -165226,7 +165226,7 @@ uint32_t sub_000B36F0(uint32_t arg0)
 	overflow = 0u;
 	zero = eax == 0u;
 	negative = eax >> 31;
-	MEM32(0x1B1D7Cu) = eax;
+	SoundVolume = eax;
 	stack_200000 = (((negative ^ overflow) | zero) - 1u) & eax;
 	stack = float_to_bits((float)x87_round((double)(int32_t)stack_200000 * 0.071428575f));
 	arg0_2 = stack;
@@ -165300,7 +165300,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 	{
 		if (saved_arg1 == 0u)
 		{
-			arg0_2 = MEM32(0x1AEC84u);
+			arg0_2 = VibrationOn;
 			sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 			return;
 		}
@@ -165313,7 +165313,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 		sub_0003CC90(arg0_2, arg1_2, &ignored, &ignored_2);
 		eax_2 = MEM32(0x20FD80u);
 		arg0_2 = eax_2;
-		MEM32(0x1AEC84u) = eax_2;
+		VibrationOn = eax_2;
 		sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 		esi = MEM32(esi + 0x18u);
 		if ((int32_t)esi < 0)
@@ -165342,7 +165342,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 				edi += 0x210u;
 				esi++;
 			} while ((int32_t)edi < 0x2BE9E0);
-			arg0_2 = MEM32(0x1AEC84u);
+			arg0_2 = VibrationOn;
 			sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 			return;
 		}
@@ -165350,7 +165350,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 		arg1_2 = 3u;
 		arg0_2 = esi;
 		sub_0010FBE0(arg0_2, arg1_2, arg2_2, &ignored, &ignored_2);
-		arg0_2 = MEM32(0x1AEC84u);
+		arg0_2 = VibrationOn;
 		sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 		return;
 	}
@@ -165363,7 +165363,7 @@ void sub_000B3760(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t arg0, uint3
 	sub_0003CCF0(arg0_2, arg1_2);
 	ecx_2 = MEM32(0x20FD80u);
 	arg0_2 = ecx_2;
-	MEM32(0x1AEC84u) = ecx_2;
+	VibrationOn = ecx_2;
 	sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 }
 
@@ -165609,7 +165609,7 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	f0 = (double)(int32_t)MEM32(g_esp + 0x40u);
 	MEM32(g_esp + 0x14u) = eax;
 	ebx_2 = x87_ftol(x87_round(x87_round(f0 * 0.5) + (double)(int32_t)MEM32(g_esp + 0x14u)));
-	MEM32(0x20FD80u) = MEM32(0x1B1D98u);
+	MEM32(0x20FD80u) = VibrationKept;
 	x86_rep_stos32(g_esp + 0x1Cu, 0u, 7u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x41900000u;
@@ -166533,7 +166533,7 @@ void sub_000B44C0(uint32_t eax, uint32_t ecx, uint32_t edx)
 
 	esi = eax;
 	arg0 = ecx;
-	MEM32(0x1B1D98u) = MEM32(0x20FD80u);
+	VibrationKept = MEM32(0x20FD80u);
 	sub_000205A0(arg0, &ignored, &edx);
 	eax_2 = MEM32(esi + 0x124u);
 	if (eax_2 != 0u)
@@ -166635,7 +166635,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			edx = MEM32(0x20FD7Cu);
 			eax_2 = MEM32(0x20FD78u);
 			esi = saved_arg1;
-			MEM32(0x1B1D98u) = MEM32(0x20FD80u);
+			VibrationKept = MEM32(0x20FD80u);
 			MEM32(0x1BC49Cu) = edx;
 			MEM32(0x1BC4A0u) = eax_2;
 			sub_000B3BA0(esi, edi);
@@ -166650,7 +166650,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				edx = MEM32(0x20FD7Cu);
 				eax_2 = MEM32(0x20FD78u);
 				esi = saved_arg1;
-				MEM32(0x1B1D98u) = MEM32(0x20FD80u);
+				VibrationKept = MEM32(0x20FD80u);
 				MEM32(0x1BC49Cu) = edx;
 				MEM32(0x1BC4A0u) = eax_2;
 				sub_000B3BA0(esi, edi);
@@ -166667,7 +166667,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			edx = MEM32(0x20FD7Cu);
 			eax_2 = MEM32(0x20FD78u);
 			esi = saved_arg1;
-			MEM32(0x1B1D98u) = MEM32(0x20FD80u);
+			VibrationKept = MEM32(0x20FD80u);
 			MEM32(0x1BC49Cu) = edx;
 			MEM32(0x1BC4A0u) = eax_2;
 			sub_000B3BA0(esi, edi);
@@ -166682,7 +166682,7 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 				edx = MEM32(0x20FD7Cu);
 				eax_2 = MEM32(0x20FD78u);
 				esi = saved_arg1;
-				MEM32(0x1B1D98u) = MEM32(0x20FD80u);
+				VibrationKept = MEM32(0x20FD80u);
 				MEM32(0x1BC49Cu) = edx;
 				MEM32(0x1BC4A0u) = eax_2;
 				sub_000B3BA0(esi, edi);
@@ -166696,14 +166696,14 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	{
 		if (vcPad_pressed_b(vcPads(0)) != ebp || vcPad_pressed_back(vcPads(0)) != ebp || vcPad_pressed_b(vcPads(1)) != ebp || vcPad_pressed_back(vcPads(1)) != ebp || vcPad_pressed_b(vcPads(2)) != ebp || vcPad_pressed_back(vcPads(2)) != ebp || vcPad_pressed_b(vcPads(3)) != ebp)
 		{
-			eax_2 = MEM32(0x1B1D98u);
+			eax_2 = VibrationKept;
 			arg0 = eax_2;
-			MEM32(0x1AEC84u) = eax_2;
+			VibrationOn = eax_2;
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			edx = MEM32(0x1BC49Cu);
 			eax_2 = MEM32(0x1BC4A0u);
 			esi = saved_arg1;
-			MEM32(0x20FD80u) = MEM32(0x1B1D98u);
+			MEM32(0x20FD80u) = VibrationKept;
 			MEM32(0x20FD7Cu) = edx;
 			MEM32(0x20FD78u) = eax_2;
 			sub_000B3BA0(esi, edi);
@@ -166715,14 +166715,14 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			zero = vcPad_pressed_back(vcPads(3)) - ebp == 0u;
 			if (zero == 0u)
 			{
-				eax_2 = MEM32(0x1B1D98u);
+				eax_2 = VibrationKept;
 				arg0 = eax_2;
-				MEM32(0x1AEC84u) = eax_2;
+				VibrationOn = eax_2;
 				sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 				edx = MEM32(0x1BC49Cu);
 				eax_2 = MEM32(0x1BC4A0u);
 				esi = saved_arg1;
-				MEM32(0x20FD80u) = MEM32(0x1B1D98u);
+				MEM32(0x20FD80u) = VibrationKept;
 				MEM32(0x20FD7Cu) = edx;
 				MEM32(0x20FD78u) = eax_2;
 				sub_000B3BA0(esi, edi);
@@ -166736,14 +166736,14 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 		eax_2 = eax_2 * 0x210u;
 		if (MEM32(eax_2 + vcPad_pressed_b_VA(vcPads_VA)) != ebp)
 		{
-			eax_2 = MEM32(0x1B1D98u);
+			eax_2 = VibrationKept;
 			arg0 = eax_2;
-			MEM32(0x1AEC84u) = eax_2;
+			VibrationOn = eax_2;
 			sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 			edx = MEM32(0x1BC49Cu);
 			eax_2 = MEM32(0x1BC4A0u);
 			esi = saved_arg1;
-			MEM32(0x20FD80u) = MEM32(0x1B1D98u);
+			MEM32(0x20FD80u) = VibrationKept;
 			MEM32(0x20FD7Cu) = edx;
 			MEM32(0x20FD78u) = eax_2;
 			sub_000B3BA0(esi, edi);
@@ -166755,14 +166755,14 @@ void sub_000B45B0(uint32_t eax, uint32_t arg1, uint32_t arg2)
 			zero = MEM32(eax_2 + vcPad_pressed_back_VA(vcPads_VA)) - ebp == 0u;
 			if (zero == 0u)
 			{
-				eax_2 = MEM32(0x1B1D98u);
+				eax_2 = VibrationKept;
 				arg0 = eax_2;
-				MEM32(0x1AEC84u) = eax_2;
+				VibrationOn = eax_2;
 				sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 				edx = MEM32(0x1BC49Cu);
 				eax_2 = MEM32(0x1BC4A0u);
 				esi = saved_arg1;
-				MEM32(0x20FD80u) = MEM32(0x1B1D98u);
+				MEM32(0x20FD80u) = VibrationKept;
 				MEM32(0x20FD7Cu) = edx;
 				MEM32(0x20FD78u) = eax_2;
 				sub_000B3BA0(esi, edi);
@@ -167462,8 +167462,8 @@ uint32_t sub_000B5310(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, ignored = 0, ignored_2 = 0;
 
-	ecx = MEM32(0x1AEC84u);
-	MEM32(0x1B1D98u) = arg0;
+	ecx = VibrationOn;
+	VibrationKept = arg0;
 	arg0_2 = ecx;
 	sub_0010F9F0(arg0_2, &eax, &ignored, &ignored_2);
 	return eax;
@@ -168887,7 +168887,7 @@ uint32_t AwardsScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = edx;
 	x86_call(vcRectSet_entry, 0x000B60E3u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BE8u;
+	MEM32(g_esp) = GUIHeadingsAwardsTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B60EFu, 0);
@@ -168910,7 +168910,7 @@ uint32_t AwardsScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B6114u, 0);
@@ -171273,7 +171273,7 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 
 	g_esp = g_esp - 0x24u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A35F8u;
+	MEM32(g_esp) = GUIHeadingsCreditsTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B822Fu, 0);
@@ -171362,13 +171362,13 @@ uint32_t CreditsScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	f0 = (double)(int32_t)MEM32(g_esp + 0x20u);
 	MEM32(g_esp + 0x20u) = edx - eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A35ECu;
+	MEM32(g_esp) = RdfTpTestText_VA;
 	vcSprite_width(CreditsScreenGUIMainMenuSprite_VA) = (float)f0;
 	vcSprite_height(CreditsScreenGUIMainMenuSprite_VA) = (float)(double)(int32_t)MEM32(g_esp + 0x24u);
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A35D8u;
+	MEM32(g_esp) = IconTexoverTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	CreditsScreenModel = eax;
@@ -172563,7 +172563,7 @@ uint32_t sub_000B93A0(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B93AFu, 0);
@@ -172618,7 +172618,7 @@ uint32_t sub_000B93A0(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B940Cu, 0);
@@ -172673,7 +172673,7 @@ uint32_t sub_000B93A0(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000B9465u, 0);
@@ -173520,7 +173520,7 @@ void sub_000B9BF0(uint32_t eax, uint32_t edx, uint32_t esi)
 	}
 	if (MEM32(esi + 0x164u) != 0u)
 	{
-		stack = MEM32(0x1AEC84u);
+		stack = VibrationOn;
 		arg0 = stack;
 		sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 	}
@@ -176490,7 +176490,7 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 		esi_2 += 0x3Cu;
 	} while ((int32_t)edi_2 < 0x4B);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BC9D9u, 0);
@@ -176526,7 +176526,7 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	MEM32(0x21B184u) = 0x42A80000u;
@@ -176583,7 +176583,7 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BCA8Cu, 0);
@@ -176638,7 +176638,7 @@ uint32_t sub_000BC930(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BCAEBu, 0);
@@ -177721,7 +177721,7 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 		esi_2 += 0x3Cu;
 	} while ((int32_t)edi_2 < 0x4B);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BDDA9u, 0);
@@ -177757,7 +177757,7 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	MEM32(0x21C58Cu) = 0x42A80000u;
@@ -177814,7 +177814,7 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BDE5Cu, 0);
@@ -177869,7 +177869,7 @@ uint32_t sub_000BDD00(uint32_t ebx, uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000BDEBBu, 0);
@@ -181918,7 +181918,7 @@ uint32_t sub_000C1CE0(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000C1D48u, 0);
@@ -181955,7 +181955,7 @@ uint32_t sub_000C1CE0(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000C1D88u, 0);
@@ -184386,7 +184386,7 @@ void sub_000C37D0(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp
 	MEM32(esi + 0x124u) = ebx_2;
 	MEM32(esi + 0x12Cu) = 0xFFFFFFFFu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = MEM32(0x1AEC84u);
+	MEM32(g_esp) = VibrationOn;
 	arg0_2 = MEM32(g_esp);
 	sub_0010F9F0(arg0_2, &ignored, &ignored_2, &ignored_3);
 	x86_rep_stos32(g_esp + 0x20u, 0u, 9u);
@@ -186057,18 +186057,18 @@ uint32_t PauseScreen_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	f0 = x87_round((double)vcSprite_height(PauseScreenGUIMainMenuSprite_VA) + 3.0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A3810u;
+	MEM32(g_esp) = PauseScreenConfirmSWavText_VA;
 	MEM32(vcSprite_width_VA(PauseScreenGUIMainMenuSprite_VA)) = 0x43960000u;
 	vcSprite_height(PauseScreenGUIMainMenuSprite_VA) = (float)f0;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A37D0u;
+	MEM32(g_esp) = PauseScreenCancelBackSWavText_VA;
 	PauseScreenConfirmSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A3850u;
+	MEM32(g_esp) = PauseScreenCursorWavText_VA;
 	PauseScreenCancelBackSSound = eax;
 	arg0 = MEM32(g_esp);
 	eax = sub_0010E920(arg0);
@@ -186928,24 +186928,24 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x14u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A3904u;
+	MEM32(g_esp) = SniperSideTopTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000C560Fu, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A38ECu;
+	MEM32(g_esp) = SniperSideBottomTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	SniperScreenSniperSideTopTexture = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000C5620u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A38D4u;
+	MEM32(g_esp) = SniperSideMiddleTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	SniperScreenSniperSideBottomTexture = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000C5631u, 0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A38C0u;
+	MEM32(g_esp) = SniperCenterTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	SniperScreenSniperSideMiddleTexture = eax;
@@ -186973,7 +186973,7 @@ uint32_t SniperScreen_Startup(uint32_t esi, uint32_t edi)
 	arg3 = MEM32(g_esp + 0xCu);
 	sub_00126D20(arg0, arg1, arg2, arg3);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A38ACu;
+	MEM32(g_esp) = SniperRotateTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000C5697u, 0);
@@ -191400,11 +191400,11 @@ uint32_t sub_000C8B30(void)
 
 	arg4 = 0x44FA0000u;
 	arg3 = 0x43C80000u;
-	arg2 = 0x1A3B28u;
+	arg2 = RailgunMWavText_VA;
 	arg1 = 8u;
 	arg0 = 0x21D49Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
-	arg1 = 0x1A3AE8u;
+	arg1 = FxMissileContrailAnimText_VA;
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000C8B57u, 2, arg0, arg1);
 	arg1 = 0x35u;
@@ -192020,7 +192020,7 @@ uint32_t MacIICannonWeapon_Startup(void)
 	eax = x86_call(vcObjectGet_entry, 0x000C930Cu, 2, arg0, arg1);
 	arg4 = 0x453B8000u;
 	arg3 = 0x44160000u;
-	arg2 = 0x1A3D68u;
+	arg2 = MAC2FireCannonMWavText_VA;
 	arg1 = 8u;
 	arg0 = 0x21D720u;
 	MEM32(0x21D768u) = eax;
@@ -192586,50 +192586,50 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
 
 	eax = sub_000271D0(esi, edi);
-	arg0 = 0x1A3E10u;
+	arg0 = SumoPackWeaponSumoBackpackText_VA;
 	saved_eax = eax;
 	MEM32(0x21D7D4u) = 0xFu;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3E50u;
+	arg0 = SumoPackWeaponSumoChestText_VA;
 	SumoPackWeaponModels(0) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3E90u;
+	arg0 = SumoPackWeaponSumoCrotchpieceText_VA;
 	SumoPackWeaponModels(1) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3ED0u;
+	arg0 = SumoPackWeaponSumoLeftshoulderText_VA;
 	SumoPackWeaponModels(2) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3F10u;
+	arg0 = SumoPackWeaponSumoRightshoulderText_VA;
 	SumoPackWeaponModels(3) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3F50u;
+	arg0 = SumoPackWeaponSumoLeftthighText_VA;
 	SumoPackWeaponModels(4) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3F90u;
+	arg0 = SumoPackWeaponSumoRightthighText_VA;
 	SumoPackWeaponModels(5) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A3FD0u;
+	arg0 = SumoPackWeaponSumoLeftlegFrontText_VA;
 	SumoPackWeaponModels(6) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4010u;
+	arg0 = SumoPackWeaponSumoLeftlegBackText_VA;
 	SumoPackWeaponModels(7) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4050u;
+	arg0 = SumoPackWeaponSumoRightlegFrontText_VA;
 	SumoPackWeaponModels(8) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4090u;
+	arg0 = SumoPackWeaponSumoRightlegBackText_VA;
 	SumoPackWeaponModels(9) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A40D0u;
+	arg0 = SumoPackWeaponSumoLeftarmFrontText_VA;
 	SumoPackWeaponModels(10) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4110u;
+	arg0 = SumoPackWeaponSumoLeftarmBackText_VA;
 	SumoPackWeaponModels(11) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4150u;
+	arg0 = SumoPackWeaponSumoRightarmFrontText_VA;
 	SumoPackWeaponModels(12) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
-	arg0 = 0x1A4190u;
+	arg0 = SumoPackWeaponSumoRightarmBackText_VA;
 	SumoPackWeaponModels(13) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	SumoPackWeaponModels(14) = eax;
@@ -192646,7 +192646,7 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		ignored_2 = g_edx;
 		edi_2 += ebx_2;
 	} while ((int32_t)edi_2 < 0x21D814);
-	arg0 = 0x1A3DD0u;
+	arg0 = SumoPackWeaponVf1axText_VA;
 	sub_00121DF0(arg0, &eax, &ebx_2, &ebp);
 	edi_2 = eax;
 	arg0 = edi_2;
@@ -192656,51 +192656,51 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ignored = g_eax;
 	ignored_3 = g_ecx;
 	ignored_2 = g_edx;
-	arg1 = 0x1A43C0u;
+	arg1 = SumoChestLText_VA;
 	arg0 = SumoPackWeaponModels(1);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A43B0u;
+	arg1 = SumoChestRText_VA;
 	arg0 = SumoPackWeaponModels(1);
 	SumoPackWeaponSumoChestLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	SumoPackWeaponSumoChestRNode = eax;
-	arg1 = 0x1A43A0u;
+	arg1 = SumoShoulderLText_VA;
 	arg0 = SumoPackWeaponModels(3);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4390u;
+	arg1 = SumoShoulderRText_VA;
 	arg0 = SumoPackWeaponModels(4);
 	SumoPackWeaponSumoShoulderLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4384u;
+	arg1 = SumoHipLText_VA;
 	arg0 = SumoPackWeaponModels(5);
 	SumoPackWeaponSumoShoulderRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	SumoPackWeaponSumoHipLNode = eax;
-	arg1 = 0x1A4378u;
+	arg1 = SumoHipRText_VA;
 	arg0 = SumoPackWeaponModels(6);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4368u;
+	arg1 = SumoLegL01Text_VA;
 	arg0 = SumoPackWeaponModels(7);
 	SumoPackWeaponSumoHipRNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4358u;
+	arg1 = SumoLegL03Text_VA;
 	arg0 = SumoPackWeaponModels(8);
 	SumoPackWeaponSumoLegL01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	SumoPackWeaponSumoLegL03Node = eax;
-	arg1 = 0x1A4348u;
+	arg1 = SumoLegR01Text_VA;
 	arg0 = SumoPackWeaponModels(9);
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4338u;
+	arg1 = SumoLegR03Text_VA;
 	arg0 = SumoPackWeaponModels(10);
 	SumoPackWeaponSumoLegR01Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A4328u;
+	arg1 = SumoWristLText_VA;
 	arg0 = SumoPackWeaponModels(12);
 	SumoPackWeaponSumoLegR03Node = eax;
 	eax = sub_0011EA70(arg0, arg1);
 	SumoPackWeaponSumoWristLNode = eax;
-	arg1 = 0x1A4318u;
+	arg1 = SumoWristRText_VA;
 	arg0 = SumoPackWeaponModels(14);
 	eax = sub_0011EA70(arg0, arg1);
 	SumoPackWeaponSumoWristRNode = eax;
@@ -192905,7 +192905,7 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ecx = SumoPackWeaponModels(0);
 	MEM32(0x21DD9Cu) = eax;
 	eax = SumoPackWeaponSumoHipRNode;
-	arg1 = 0x1A4300u;
+	arg1 = SumoJetpackEffectLText_VA;
 	arg0 = ecx;
 	MEM32(0x21DFECu) = esi_2;
 	MEM32(0x21DFF0u) = esi_2;
@@ -192964,7 +192964,7 @@ uint32_t SumoPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(0x21DE64u) = 0u;
 	MEM32(0x21DE68u) = 0u;
 	eax = sub_0011EA70(arg0, arg1);
-	arg1 = 0x1A42E8u;
+	arg1 = SumoJetpackEffectRText_VA;
 	arg0 = SumoPackWeaponModels(0);
 	SumoPackWeaponSumoJetpackEffectLNode = eax;
 	eax = sub_0011EA70(arg0, arg1);
@@ -193059,38 +193059,38 @@ uint32_t sub_000CA590(uint32_t arg0)
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, esi = 0;
 
 	esi = arg0;
-	arg1 = 0x1A45B0u;
+	arg1 = SVBackboostersText_VA;
 	arg0_2 = esi;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x1A45A0u;
+	arg1 = SVLegboosterLText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E354u) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x1A4590u;
+	arg1 = SVLegboosterRText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E358u) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x1A4580u;
+	arg1 = SVArmboosterLText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E35Cu) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x1A4570u;
+	arg1 = SVArmboosterRText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E360u) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x191C58u;
+	arg1 = GuardianMisslesLeftText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E364u) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x191C40u;
+	arg1 = GuardianMisslesRightText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E3ACu) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x191C30u;
+	arg1 = MisslesLeftText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E3B0u) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
-	arg1 = 0x191C20u;
+	arg1 = MisslesRightText_VA;
 	arg0_2 = esi;
 	MEM32(0x21E89Cu) = eax;
 	eax = sub_0011EA70(arg0_2, arg1);
@@ -193113,28 +193113,28 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp) = edi;
 	eax = sub_000271D0(esi, edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A4430u;
+	MEM32(g_esp) = SvBackboostersText_VA;
 	MEM32(g_esp + 0x14u) = eax;
 	MEM32(0x21E2D4u) = 5u;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A4470u;
+	MEM32(g_esp) = SvLegboosterLText_VA;
 	SuperVeritechPackWeaponModels(0) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A44B0u;
+	MEM32(g_esp) = SvLegboosterRText_VA;
 	SuperVeritechPackWeaponModels(1) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A44F0u;
+	MEM32(g_esp) = SvArmboosterLText_VA;
 	SuperVeritechPackWeaponModels(2) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A4530u;
+	MEM32(g_esp) = SvArmboosterRText_VA;
 	SuperVeritechPackWeaponModels(3) = eax;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
@@ -193156,7 +193156,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 		edi_2 += 4u;
 	} while ((int32_t)edi_2 < 0x21E2EC);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A43F0u;
+	MEM32(g_esp) = SuperVeritechPackWeaponVf1axText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	edi_2 = eax;
@@ -193167,7 +193167,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	sub_000CA590(arg0);
 	ecx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A45FCu;
+	MEM32(g_esp) = SVBackMissileLText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -193175,7 +193175,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	eax = sub_0011EA70(arg0, arg1);
 	edx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A45E8u;
+	MEM32(g_esp) = SVBackMissileRText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	SuperVeritechPackWeaponSVBackMissileLNode = eax;
@@ -193210,7 +193210,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 		ecx += 4u;
 	} while ((int32_t)ecx < 0x21E3BC);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C58u;
+	MEM32(g_esp) = GuardianMisslesLeftText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
 	MEM32(0x21E390u) = esi_2;
@@ -193223,7 +193223,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	arg1 = MEM32(g_esp + 4u);
 	eax = sub_0011EA70(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C40u;
+	MEM32(g_esp) = GuardianMisslesRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
 	MEM32(0x21E3ACu) = eax;
@@ -193389,7 +193389,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	edx = MEM32(g_esp + 0xCu);
 	MEM32(0x21E884u) = edi_2;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C30u;
+	MEM32(g_esp) = MisslesLeftText_VA;
 	edi_2 = 3u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
@@ -193404,7 +193404,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(0x21E89Cu) = eax;
 	eax = MEM32(g_esp + 0x14u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x191C20u;
+	MEM32(g_esp) = MisslesRightText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	MEM32(0x21E8ACu) = 0x3F800000u;
@@ -193524,7 +193524,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	x86_call(vcObjectRelease_entry, 0x000CB05Bu, 0);
 	ecx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A45D4u;
+	MEM32(g_esp) = SVExhaustEffectLText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0 = MEM32(g_esp);
@@ -193532,7 +193532,7 @@ uint32_t SuperVeritechPackWeapon_Startup(uint32_t ebx, uint32_t ebp, uint32_t es
 	eax = sub_0011EA70(arg0, arg1);
 	edx = SuperVeritechPackWeaponModels(0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A45C0u;
+	MEM32(g_esp) = SVExhaustEffectRText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	SuperVeritechPackWeaponSVExhaustEffectLNode = eax;
@@ -201437,7 +201437,7 @@ uint32_t sub_000D1FF0(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000D1FFFu, 0);
@@ -201473,7 +201473,7 @@ uint32_t sub_000D1FF0(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000D2045u, 0);
@@ -201510,7 +201510,7 @@ uint32_t sub_000D1FF0(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000D2091u, 0);
@@ -201547,7 +201547,7 @@ uint32_t sub_000D1FF0(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000D20D7u, 0);
@@ -202949,7 +202949,7 @@ void sub_000D2FD0(void)
 
 	x86_rep_stos32(TriggerFamily_VA, 0u, 0x86u);
 	arg0 = TriggerFamily_VA;
-	GameObjectFamily_name(TriggerFamily_VA) = 0x1A5C04u;
+	GameObjectFamily_name(TriggerFamily_VA) = TriggerText_VA;
 	GameObjectFamily_startup(TriggerFamily_VA) = 0u;
 	GameObjectFamily_shutdown(TriggerFamily_VA) = 0u;
 	GameObjectFamily_version(TriggerFamily_VA) = 0u;
@@ -208601,7 +208601,7 @@ void sub_000D7220(void)
 
 	x86_rep_stos32(ComponentFamily_VA, 0u, 0x86u);
 	arg0 = ComponentFamily_VA;
-	GameObjectFamily_name(ComponentFamily_VA) = 0x1A5C34u;
+	GameObjectFamily_name(ComponentFamily_VA) = ComponentText_VA;
 	GameObjectFamily_startup(ComponentFamily_VA) = 0u;
 	GameObjectFamily_shutdown(ComponentFamily_VA) = 0u;
 	GameObjectFamily_version(ComponentFamily_VA) = 3u;
@@ -209057,7 +209057,7 @@ void sub_000D76A0(void)
 
 	x86_rep_stos32(ItemFamily_VA, 0u, 0x86u);
 	arg0 = ItemFamily_VA;
-	GameObjectFamily_name(ItemFamily_VA) = 0x1A5C44u;
+	GameObjectFamily_name(ItemFamily_VA) = ItemText_VA;
 	GameObjectFamily_startup(ItemFamily_VA) = 0u;
 	GameObjectFamily_shutdown(ItemFamily_VA) = 0u;
 	GameObjectFamily_version(ItemFamily_VA) = 0u;
@@ -211313,36 +211313,36 @@ uint32_t CiviliansNode_Startup(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000D9209u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	stack_14 = 0x1A5C64u;
+	stack_14 = Male01Average140Text_VA;
 	stack_18 = 6u;
 	arg0 = stack_18;
 	arg1 = stack_14;
 	eax = x86_call(vcObjectGet_entry, 0x000D9215u, 2, arg0, arg1);
-	stack_1C = 0x1A5C78u;
+	stack_1C = Female01Average150Text_VA;
 	stack_20 = 6u;
 	MEM32(0x221834u) = eax;
 	arg0 = stack_20;
 	arg1 = stack_1C;
 	eax = x86_call(vcObjectGet_entry, 0x000D9226u, 2, arg0, arg1);
-	stack_24 = 0x1A5C90u;
+	stack_24 = Male02PhattBoy140Text_VA;
 	stack_28 = 6u;
 	MEM32(0x221838u) = eax;
 	arg0 = stack_28;
 	arg1 = stack_24;
 	eax = x86_call(vcObjectGet_entry, 0x000D9237u, 2, arg0, arg1);
-	stack_2C = 0x1A5CA8u;
+	stack_2C = Female02ShortSkirt177Text_VA;
 	stack_30 = 6u;
 	MEM32(0x22183Cu) = eax;
 	arg0 = stack_30;
 	arg1 = stack_2C;
 	eax = x86_call(vcObjectGet_entry, 0x000D9248u, 2, arg0, arg1);
-	stack_34 = 0x1A5CE4u;
+	stack_34 = PeopleSwatches01Text_VA;
 	stack_38 = 2u;
 	MEM32(0x221840u) = eax;
 	arg0 = stack_38;
 	arg1 = stack_34;
 	eax = x86_call(vcObjectGet_entry, 0x000D9259u, 2, arg0, arg1);
-	arg1 = 0x1A5CF8u;
+	arg1 = PeopleSwatches02Text_VA;
 	arg0 = 2u;
 	MEM32(0x221854u) = eax;
 	arg2 = stack_38;
@@ -211360,31 +211360,31 @@ uint32_t CiviliansNode_Startup(uint32_t ebx, uint32_t ebp)
 	arg14 = stack_8;
 	arg15 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x000D926Au, 16, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-	arg1 = 0x1A5D0Cu;
+	arg1 = PeopleSwatches03Text_VA;
 	arg0 = 2u;
 	MEM32(0x221858u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D927Eu, 2, arg0, arg1);
-	arg1 = 0x1A5D20u;
+	arg1 = PeopleRdfSwatches01Text_VA;
 	arg0 = 2u;
 	MEM32(0x22185Cu) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D928Fu, 2, arg0, arg1);
-	arg1 = 0x1A5CC4u;
+	arg1 = CiviliansNodePhIdleText_VA;
 	arg0 = 9u;
 	MEM32(0x221860u) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92A0u, 2, arg0, arg1);
-	arg1 = 0x1A5CCCu;
+	arg1 = PhWalkText_VA;
 	arg0 = 9u;
 	CiviliansNodeMotions(0) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92B1u, 2, arg0, arg1);
-	arg1 = 0x1A5CD4u;
+	arg1 = PhRunText_VA;
 	arg0 = 9u;
 	CiviliansNodeMotions(1) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92C2u, 2, arg0, arg1);
-	arg1 = 0x1A5CDCu;
+	arg1 = PhDieText_VA;
 	arg0 = 9u;
 	CiviliansNodeMotions(2) = eax;
 	eax = x86_call(vcObjectGet_entry, 0x000D92D3u, 2, arg0, arg1);
-	arg0 = 0x1A5C5Cu;
+	arg0 = Male01Text_VA;
 	CiviliansNodeMotions(3) = eax;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
@@ -213760,7 +213760,7 @@ void sub_000DAFF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A5DB0u;
+	MEM32(g_esp) = Point1WidthText_VA;
 	MEM32(g_esp + 0x50u) = ebx;
 	MEM32(g_esp + 0x60u) = 0x3F800000u;
 	MEM32(g_esp + 0x70u) = 0x3F800000u;
@@ -213801,7 +213801,7 @@ void sub_000DAFF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x40u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A5D9Cu;
+	MEM32(g_esp) = Point2BreadthText_VA;
 	MEM32(esi + 0xFCu) = edi_2;
 	MEM32(g_esp + 0x54u) = eax_2;
 	MEM32(g_esp + 0x58u) = ecx;
@@ -217560,7 +217560,7 @@ void sub_000DD9B0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp + 8u;
 	if (MEM8(edi_2) == 0u)
 	{
-		x86_rep_movs32(ebx, 0x1A5E00u, 5u);
+		x86_rep_movs32(ebx, PlayerStandInMSOText_VA, 5u);
 		MEM32(ebx + 0xD0u) = 0u;
 		esi_2 = 0u;
 		edx = MEM32(ebp_2 + 8u);
@@ -219004,12 +219004,12 @@ void sub_000DE890(uint32_t edx, uint32_t esi, uint32_t arg2)
 	uint32_t saved_arg2 = 0;
 
 	saved_arg2 = arg2;
-	edi = 0x1A5E58u;
+	edi = OpenText_VA;
 	if (MEM32(esi + 0x50u) == 0u)
-		edi = 0x1A5E50u;
+		edi = CloseText_VA;
 	eax = MEM32(esi + 0x48u);
 	if (eax == 0u)
-		eax = 0x1A5E40u;
+		eax = NotAssignedText_VA;
 	else
 	{
 		arg0 = eax;
@@ -219131,73 +219131,73 @@ void sub_000DEA10(uint32_t esi)
 	overflow = 0u;
 	zero = t1 == 0u;
 	negative = t1 >> 7;
-	edx = MEM32(0x2AEB24u);
-	MEM32(0x2AEB20u) = MEM32(0x2AEB20u) | (((negative ^ overflow) | zero) == 0u);
+	edx = ControllerItems_b(ControllerItemsDisabled_VA);
+	ControllerItems_x(ControllerItemsDisabled_VA) = ControllerItems_x(ControllerItemsDisabled_VA) | (((negative ^ overflow) | zero) == 0u);
 	t2 = MEM8(esi + 0x50u) & 2u;
 	overflow = 0u;
 	zero = t2 == 0u;
 	negative = t2 >> 7;
-	eax = MEM32(0x2AEB28u);
-	MEM32(0x2AEB24u) = edx | (((negative ^ overflow) | zero) == 0u);
+	eax = ControllerItems_y(ControllerItemsDisabled_VA);
+	ControllerItems_b(ControllerItemsDisabled_VA) = edx | (((negative ^ overflow) | zero) == 0u);
 	t3 = MEM8(esi + 0x50u) & 4u;
 	overflow = 0u;
 	zero = t3 == 0u;
 	negative = t3 >> 7;
-	ecx = MEM32(0x2AEB2Cu);
-	MEM32(0x2AEB28u) = eax | (((negative ^ overflow) | zero) == 0u);
+	ecx = ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA);
+	ControllerItems_y(ControllerItemsDisabled_VA) = eax | (((negative ^ overflow) | zero) == 0u);
 	t4 = MEM8(esi + 0x50u) & 8u;
 	overflow = 0u;
 	zero = t4 == 0u;
 	negative = t4 >> 7;
-	edx = MEM32(0x2AEB30u);
-	MEM32(0x2AEB2Cu) = ecx | (((negative ^ overflow) | zero) == 0u);
+	edx = ControllerItems_right_stick(ControllerItemsDisabled_VA);
+	ControllerItems_white_black_right_thumb(ControllerItemsDisabled_VA) = ecx | (((negative ^ overflow) | zero) == 0u);
 	t5 = MEM8(esi + 0x50u) & 0x10u;
 	overflow = 0u;
 	zero = t5 == 0u;
 	negative = t5 >> 7;
-	eax = MEM32(0x2AEB34u);
-	MEM32(0x2AEB30u) = edx | (((negative ^ overflow) | zero) == 0u);
+	eax = ControllerItems_dpad_left(ControllerItemsDisabled_VA);
+	ControllerItems_right_stick(ControllerItemsDisabled_VA) = edx | (((negative ^ overflow) | zero) == 0u);
 	t6 = MEM8(esi + 0x50u) & 0x20u;
 	overflow = 0u;
 	zero = t6 == 0u;
 	negative = t6 >> 7;
-	ecx = MEM32(0x2AEB38u);
-	MEM32(0x2AEB34u) = eax | (((negative ^ overflow) | zero) == 0u);
+	ecx = ControllerItems_dpad_up_down(ControllerItemsDisabled_VA);
+	ControllerItems_dpad_left(ControllerItemsDisabled_VA) = eax | (((negative ^ overflow) | zero) == 0u);
 	t7 = MEM8(esi + 0x50u) & 0x40u;
 	overflow = 0u;
 	zero = t7 == 0u;
 	negative = t7 >> 7;
-	edx = MEM32(0x2AEB3Cu);
-	MEM32(0x2AEB38u) = ecx | (((negative ^ overflow) | zero) == 0u);
+	edx = ControllerItems_dpad_right(ControllerItemsDisabled_VA);
+	ControllerItems_dpad_up_down(ControllerItemsDisabled_VA) = ecx | (((negative ^ overflow) | zero) == 0u);
 	t8 = MEM32(esi + 0x50u) & 0x80u;
 	overflow = 0u;
 	zero = t8 == 0u;
 	negative = t8 >> 31;
-	eax = MEM32(0x2AEB40u);
-	MEM32(0x2AEB3Cu) = edx | (((negative ^ overflow) | zero) == 0u);
+	eax = ControllerItems_triggers(ControllerItemsDisabled_VA);
+	ControllerItems_dpad_right(ControllerItemsDisabled_VA) = edx | (((negative ^ overflow) | zero) == 0u);
 	t9 = MEM32(esi + 0x50u) & 0x100u;
 	overflow = 0u;
 	zero = t9 == 0u;
 	negative = t9 >> 31;
-	ecx = MEM32(0x2AEB44u);
-	MEM32(0x2AEB40u) = eax | (((negative ^ overflow) | zero) == 0u);
+	ecx = ControllerItems_a(ControllerItemsDisabled_VA);
+	ControllerItems_triggers(ControllerItemsDisabled_VA) = eax | (((negative ^ overflow) | zero) == 0u);
 	t10 = MEM32(esi + 0x50u) & 0x200u;
 	overflow = 0u;
 	zero = t10 == 0u;
 	negative = t10 >> 31;
-	edx = MEM32(0x2AEB48u);
-	MEM32(0x2AEB44u) = ecx | (((negative ^ overflow) | zero) == 0u);
+	edx = ControllerItems_left_x(ControllerItemsDisabled_VA);
+	ControllerItems_a(ControllerItemsDisabled_VA) = ecx | (((negative ^ overflow) | zero) == 0u);
 	t11 = MEM32(esi + 0x50u) & 0x400u;
 	overflow = 0u;
 	zero = t11 == 0u;
 	negative = t11 >> 31;
-	eax = MEM32(0x2AEB4Cu);
-	MEM32(0x2AEB48u) = edx | (((negative ^ overflow) | zero) == 0u);
+	eax = ControllerItems_left_y(ControllerItemsDisabled_VA);
+	ControllerItems_left_x(ControllerItemsDisabled_VA) = edx | (((negative ^ overflow) | zero) == 0u);
 	t12 = MEM32(esi + 0x50u) & 0x800u;
 	overflow = 0u;
 	zero = t12 == 0u;
 	negative = t12 >> 31;
-	MEM32(0x2AEB4Cu) = eax | (((negative ^ overflow) | zero) == 0u);
+	ControllerItems_left_y(ControllerItemsDisabled_VA) = eax | (((negative ^ overflow) | zero) == 0u);
 	MEM32(esi + 0x40u) = 1u;
 }
 
@@ -219253,8 +219253,8 @@ uint32_t DisableControllerItemsAction_StateMachine(uint32_t arg0, uint32_t arg1,
 	}
 	eax = arg1;
 	edi = eax;
-	x86_rep_movs32(edi, 0x1A5E60u, 6u);
-	MEM8(edi + 0x18u) = MEM8(0x1A5E78u);
+	x86_rep_movs32(edi, DisableControllerItemsText_VA, 6u);
+	MEM8(edi + 0x18u) = MEM8(DisableControllerItemsText_VA + 0x18u);
 	MEM32(eax + 0x48u) = 0u;
 	MEM32(eax + 0x4Cu) = 0u;
 	MEM32(eax + 0x40u) = 0u;
@@ -219291,7 +219291,7 @@ void sub_000DECB0(uint32_t esi)
 		sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
 		return;
 	}
-	if (MEM32(0x1AEC84u) == 0u)
+	if ((uint32_t)VibrationOn == 0u)
 		return;
 	arg0 = 1u;
 	sub_0010F9F0(arg0, &ignored, &ignored_2, &ignored_3);
@@ -220122,10 +220122,10 @@ uint32_t AIActivateWeaponSetAction_StateMachine(uint32_t arg0, uint32_t arg1, ui
 	}
 	eax = arg1;
 	edi = eax;
-	x86_rep_movs32(edi, 0x1A5ECCu, 5u);
+	x86_rep_movs32(edi, AIActivateWeaponSetText_VA, 5u);
 	edi += 0x14u;
-	MEM16(edi) = MEM16(0x1A5EE0u);
-	MEM8(edi + 2u) = MEM8(0x1A5EE2u);
+	MEM16(edi) = MEM16(AIActivateWeaponSetText_VA + 0x14u);
+	MEM8(edi + 2u) = MEM8(AIActivateWeaponSetText_VA + 0x16u);
 	MEM32(eax + 0x48u) = 0u;
 	MEM32(eax + 0x4Cu) = 0u;
 	MEM32(eax + 0x40u) = 0u;
@@ -220454,9 +220454,9 @@ void sub_000DFBD0(uint32_t eax, uint32_t edx, uint32_t esi)
 		return;
 	}
 	t1 = MEM32(eax + 0x6Cu);
-	edx_2 = 0x1A5F40u;
+	edx_2 = UserValText_VA;
 	if (t1 == 0u)
-		edx_2 = 0x1A5F34u;
+		edx_2 = GlobalValText_VA;
 	arg6 = MEM32(eax + 0x5Cu);
 	arg5 = MEM32(eax + 0x54u);
 	arg4 = edx_2;
@@ -223970,9 +223970,9 @@ void sub_000E2B20(uint32_t esi, uint32_t arg2)
 	uint32_t stack = 0, saved_eax = 0, saved_arg2 = 0;
 
 	saved_arg2 = arg2;
-	edi = 0x1A6098u;
+	edi = SuccessText_VA;
 	if (MEM32(esi + 0x58u) == 0u)
-		edi = 0x1A6090u;
+		edi = FailText_VA;
 	stack = MEM32(esi + 0x64u);
 	eax = sub_000248B0();
 	saved_eax = eax;
@@ -224279,7 +224279,7 @@ uint32_t CompleteObjectiveAction_Startup(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 
-	arg0 = 0x1A60A8u;
+	arg0 = LoadSaveCompleteSWavText_VA;
 	eax = sub_0010E920(arg0);
 	CompleteObjectiveActionSound = eax;
 	return eax;
@@ -224846,7 +224846,7 @@ uint32_t ApplyDamageAction_StateMachine(uint32_t edi, uint32_t arg0, uint32_t ar
 		esi = arg1;
 		eax = MEM32(esi + 0x48u);
 		if (eax == 0u)
-			eax = 0x1A5E40u;
+			eax = NotAssignedText_VA;
 		else
 		{
 			arg0_2 = eax;
@@ -226574,7 +226574,7 @@ void sub_000E47D0(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 	eax = MEM32(ecx + 0x48u);
 	if (eax == 0u)
-		eax = 0x1A5E40u;
+		eax = NotAssignedText_VA;
 	else
 	{
 		g_esp = g_esp - 4u;
@@ -227215,7 +227215,7 @@ uint32_t sub_000E51C0(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E51CFu, 0);
@@ -227262,7 +227262,7 @@ uint32_t sub_000E51C0(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E5257u, 0);
@@ -227311,7 +227311,7 @@ uint32_t sub_000E51C0(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E52E8u, 0);
@@ -227720,7 +227720,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A61B0u;
+	MEM32(g_esp) = RetFriendly03TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E58DFu, 0);
@@ -227767,7 +227767,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A619Cu;
+	MEM32(g_esp) = RetFriendly01TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E5935u, 0);
@@ -227804,7 +227804,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6188u;
+	MEM32(g_esp) = RetFriendly02TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E597Bu, 0);
@@ -227845,7 +227845,7 @@ uint32_t FriendlyReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6174u;
+	MEM32(g_esp) = RetFriendly04TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E59C5u, 0);
@@ -230180,7 +230180,7 @@ uint32_t sub_000E7660(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A2BD0u;
+	MEM32(g_esp) = GUIMissionMenuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E766Fu, 0);
@@ -230255,7 +230255,7 @@ uint32_t sub_000E7660(uint32_t esi, uint32_t edi)
 	MEM32(0x222A7Cu) = MEM8(0x222AEAu);
 	eax_2 = (uint16_t)MEM32(0x222AE8u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A61ECu;
+	MEM32(g_esp) = GUIMissionScreens16TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	MEM32(0x222AC8u) = 0x42840000u;
@@ -230590,7 +230590,7 @@ uint32_t sub_000E7AE0(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6208u;
+	MEM32(g_esp) = RetTrack2TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E7AEFu, 0);
@@ -231381,7 +231381,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6294u;
+	MEM32(g_esp) = RetCircleActiveDotTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E835Fu, 0);
@@ -231421,7 +231421,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A627Cu;
+	MEM32(g_esp) = Ret2LockedSolidTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E83A6u, 0);
@@ -231462,7 +231462,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6268u;
+	MEM32(g_esp) = Ret2Piece1TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E83F0u, 0);
@@ -231499,7 +231499,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6254u;
+	MEM32(g_esp) = Ret2Piece2TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E8436u, 0);
@@ -231539,7 +231539,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6240u;
+	MEM32(g_esp) = Ret2Piece3TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E8483u, 0);
@@ -231580,7 +231580,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A622Cu;
+	MEM32(g_esp) = Ret2Piece4aTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E84D3u, 0);
@@ -231617,7 +231617,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6218u;
+	MEM32(g_esp) = Ret2Piece4bTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E8519u, 0);
@@ -231653,7 +231653,7 @@ uint32_t sub_000E8350(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6208u;
+	MEM32(g_esp) = RetTrack2TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E855Cu, 0);
@@ -232799,7 +232799,7 @@ void sub_000E9240(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	{
 		ecx = MEM32(esi_2 + 0x194u);
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x19005Cu;
+		MEM32(g_esp) = GunEffectsText_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0 = MEM32(g_esp);
@@ -233115,7 +233115,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6324u;
+	MEM32(g_esp) = PickUpRet05TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E96EFu, 0);
@@ -233155,7 +233155,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6310u;
+	MEM32(g_esp) = PickUpRet03TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E9736u, 0);
@@ -233196,7 +233196,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A62FCu;
+	MEM32(g_esp) = PickUpRet01TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E9780u, 0);
@@ -233233,7 +233233,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x48u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A62E8u;
+	MEM32(g_esp) = PickUpRet02TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E97C6u, 0);
@@ -233273,7 +233273,7 @@ uint32_t PickupReticleElement_Startup(uint32_t esi, uint32_t edi)
 	arg0 = MEM32(g_esp);
 	sub_00126CE0(arg0);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A62D4u;
+	MEM32(g_esp) = PickUpRet04TgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000E9813u, 0);
@@ -234320,7 +234320,7 @@ uint32_t sub_000EA610(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6358u;
+	MEM32(g_esp) = HudLogoPuTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EA61Fu, 0);
@@ -234924,7 +234924,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EAE1Fu, 0);
@@ -234971,7 +234971,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EAEADu, 0);
@@ -235020,7 +235020,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EAF3Eu, 0);
@@ -235193,7 +235193,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6574u;
+	MEM32(g_esp) = HudPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB188u, 0);
@@ -235230,7 +235230,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x50u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6574u;
+	MEM32(g_esp) = HudPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB1D4u, 0);
@@ -235279,7 +235279,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	x86_call(vcRectSet_entry, 0x000EB223u, 0);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6560u;
+	MEM32(g_esp) = HUDEnemyDsTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB232u, 0);
@@ -235302,7 +235302,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A654Cu;
+	MEM32(g_esp) = HUDEnemyDeTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB257u, 0);
@@ -235325,7 +235325,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A653Cu;
+	MEM32(g_esp) = HUDEnemyZTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB27Cu, 0);
@@ -235349,7 +235349,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A652Cu;
+	MEM32(g_esp) = HUDEnemyVTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB2A4u, 0);
@@ -235372,7 +235372,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6518u;
+	MEM32(g_esp) = HUDEnemyGhmtTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB2C9u, 0);
@@ -235396,7 +235396,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6504u;
+	MEM32(g_esp) = HUDEnemyGlmtTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB2F1u, 0);
@@ -235419,7 +235419,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A64F0u;
+	MEM32(g_esp) = HUDEnemyGltTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB316u, 0);
@@ -235442,7 +235442,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A64DCu;
+	MEM32(g_esp) = HUDEnemyMpaTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB33Bu, 0);
@@ -235466,7 +235466,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A64C8u;
+	MEM32(g_esp) = HudEnemyRpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB363u, 0);
@@ -235489,7 +235489,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A64B8u;
+	MEM32(g_esp) = HudEnemyTTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB388u, 0);
@@ -235513,7 +235513,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A64A4u;
+	MEM32(g_esp) = HudEnemyHapTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB3B0u, 0);
@@ -235536,7 +235536,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6490u;
+	MEM32(g_esp) = HudEnemyLapTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB3D5u, 0);
@@ -235559,7 +235559,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A647Cu;
+	MEM32(g_esp) = HudEnemySpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB3FAu, 0);
@@ -235583,7 +235583,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6468u;
+	MEM32(g_esp) = HudEnemyBpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB422u, 0);
@@ -235606,7 +235606,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6454u;
+	MEM32(g_esp) = HudEnemyFpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB447u, 0);
@@ -235630,7 +235630,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6440u;
+	MEM32(g_esp) = HudEnemyOpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB46Fu, 0);
@@ -235653,7 +235653,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6430u;
+	MEM32(g_esp) = HUDEnemyCTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB494u, 0);
@@ -235676,7 +235676,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A6420u;
+	MEM32(g_esp) = HUDEnemyMTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB4B9u, 0);
@@ -235700,7 +235700,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A640Cu;
+	MEM32(g_esp) = HUDEnemyZwsaTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB4E1u, 0);
@@ -235723,7 +235723,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A63F8u;
+	MEM32(g_esp) = HUDEnemyZwhaTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB506u, 0);
@@ -235747,7 +235747,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A63E4u;
+	MEM32(g_esp) = HUDEnemyZwlaTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB52Eu, 0);
@@ -235770,7 +235770,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A63D0u;
+	MEM32(g_esp) = HUDEnemyZsTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB553u, 0);
@@ -235793,7 +235793,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A63BCu;
+	MEM32(g_esp) = HudEnemyShpTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB578u, 0);
@@ -235817,7 +235817,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A63ACu;
+	MEM32(g_esp) = HUDEnemyNTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB5A0u, 0);
@@ -235840,7 +235840,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A639Cu;
+	MEM32(g_esp) = HUDEnemyGTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB5C5u, 0);
@@ -235864,7 +235864,7 @@ uint32_t sub_000EAE10(uint32_t esi, uint32_t edi)
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A638Cu;
+	MEM32(g_esp) = HUDEnemyHTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EB5EDu, 0);
@@ -236356,7 +236356,7 @@ uint32_t sub_000EBD00(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EBD0Fu, 0);
@@ -236403,7 +236403,7 @@ uint32_t sub_000EBD00(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EBD97u, 0);
@@ -236452,7 +236452,7 @@ uint32_t sub_000EBD00(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EBE28u, 0);
@@ -237028,7 +237028,7 @@ uint32_t sub_000EC680(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EC68Fu, 0);
@@ -237075,7 +237075,7 @@ uint32_t sub_000EC680(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EC714u, 0);
@@ -237124,7 +237124,7 @@ uint32_t sub_000EC680(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000EC7A5u, 0);
@@ -237639,7 +237639,7 @@ uint32_t sub_000ECE80(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000ECE8Fu, 0);
@@ -237686,7 +237686,7 @@ uint32_t sub_000ECE80(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000ECF14u, 0);
@@ -237735,7 +237735,7 @@ uint32_t sub_000ECE80(uint32_t esi, uint32_t edi)
 	arg1 = MEM32(g_esp + 4u);
 	sub_00126D00(arg0, arg1);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000ECFA5u, 0);
@@ -237990,7 +237990,7 @@ void sub_000ED1E0(uint32_t arg2)
 			{
 				ecx = stack_18;
 				eax = MEM32(ecx + 0x48u);
-				if ((eax == 3u || eax == 4u) && MEM32(0x2AEB24u) == 0u)
+				if ((eax == 3u || eax == 4u) && ControllerItems_b(ControllerItemsDisabled_VA) == 0u)
 				{
 					eax = MEM32(ecx + 0x4Cu) * 0x210u;
 					if (MEM32(eax + vcPad_pressed_b_VA(vcPads_VA)) != 0u || FLOAT_AT(eax + vcPad_b_VA(vcPads_VA)) != 0.0f)
@@ -238077,7 +238077,7 @@ uint32_t sub_000ED450(uint32_t esi, uint32_t edi)
 
 	g_esp = g_esp - 0x10u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000ED45Fu, 0);
@@ -238113,7 +238113,7 @@ uint32_t sub_000ED450(uint32_t esi, uint32_t edi)
 	arg4 = MEM32(g_esp + 0x10u);
 	sub_00126D90(arg0, arg1, arg2, arg3, arg4, &ignored, &ignored_2, &esi, &edi);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x18F8D0u;
+	MEM32(g_esp) = HUDPiecesTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x000ED4A2u, 0);
@@ -238661,7 +238661,7 @@ void sub_000ED8C0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (eax_2 == vcObjectCacheHandle)
 		{
 			eax_2 = vcObjectCacheData;
-			MEM32(0x1B77E0u) = MEM32(eax_2 + 0x11Cu);
+			MEM32(RadarRange_VA) = MEM32(eax_2 + 0x11Cu);
 			MEM32(ebp_2 + 0x18u) = 0xFFFFFFFFu;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -238673,7 +238673,7 @@ void sub_000ED8C0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if ((eax_2 & ~0xFFFFFFu) != 0u)
 		{
 			eax_2 = 0u;
-			MEM32(0x1B77E0u) = MEM32(eax_2 + 0x11Cu);
+			MEM32(RadarRange_VA) = MEM32(eax_2 + 0x11Cu);
 			MEM32(ebp_2 + 0x18u) = 0xFFFFFFFFu;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -238686,7 +238686,7 @@ void sub_000ED8C0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		vcObjectCacheHandle = eax_2;
 		eax_2 = MEM32((eax_2 & 0xFFFFu) * 0x4Cu + MEM32(ecx + 0x6Cu));
 		vcObjectCacheData = eax_2;
-		MEM32(0x1B77E0u) = MEM32(eax_2 + 0x11Cu);
+		MEM32(RadarRange_VA) = MEM32(eax_2 + 0x11Cu);
 		MEM32(ebp_2 + 0x18u) = 0xFFFFFFFFu;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -240392,7 +240392,7 @@ uint32_t RadarElement_Startup(void)
 		ignored_3 = g_ecx;
 		ignored = g_edx;
 	}
-	arg0 = 0x1A65C8u;
+	arg0 = GuiBlipRedText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -240401,7 +240401,7 @@ uint32_t RadarElement_Startup(void)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EEFD5u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	arg0 = 0x1A6688u;
+	arg0 = GuiBlipBlueText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -240410,7 +240410,7 @@ uint32_t RadarElement_Startup(void)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EEFEEu, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	arg0 = 0x1A6608u;
+	arg0 = GuiBlipGreenText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -240419,7 +240419,7 @@ uint32_t RadarElement_Startup(void)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF007u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	arg0 = 0x1A6708u;
+	arg0 = GuiBlipShadowText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -240428,7 +240428,7 @@ uint32_t RadarElement_Startup(void)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF020u, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	arg0 = 0x1A6748u;
+	arg0 = FxStaticText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -240437,7 +240437,7 @@ uint32_t RadarElement_Startup(void)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x000EF03Cu, 3, arg0, arg1, arg2);
 	ignored_2 = g_eax;
 	ignored = g_edx;
-	arg0 = 0x1A6648u;
+	arg0 = GuiBlipYellowText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x14u;
@@ -247834,7 +247834,7 @@ uint32_t sub_000F67B0(void)
 
 	arg4 = MEM32(0x1A6880u);
 	arg3 = MEM32(0x1A687Cu);
-	arg2 = 0x1A6838u;
+	arg2 = SparksloopMWavText_VA;
 	arg1 = 0xAu;
 	arg0 = 0x2246F8u;
 	eax = sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -247894,7 +247894,7 @@ uint32_t ReconLightEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A6888u;
+	arg1 = FxLightReconText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000F687Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -248007,7 +248007,7 @@ uint32_t SmokeLight02Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
-	arg1 = 0x1A68C8u;
+	arg1 = FxSmokeLight02Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F69FCu, 2, arg0, arg1);
 	SmokeLight02EffectParticles = eax;
@@ -251100,7 +251100,7 @@ uint32_t ScoutPodRadarEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A7040u;
+	arg1 = FxScoutpodRadarText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F905Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251177,7 +251177,7 @@ uint32_t BuildingExplosion03Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7088u;
+	arg1 = BuildingExplosion03Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F913Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251254,7 +251254,7 @@ uint32_t BuildingExplosion02Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A70C8u;
+	arg1 = BuildingExplosion02Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F925Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251331,7 +251331,7 @@ uint32_t BuildingExplosion01Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7108u;
+	arg1 = BuildingExplosion01Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F937Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251408,7 +251408,7 @@ uint32_t BuildingGlass03Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7148u;
+	arg1 = BuildingGlass03Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F949Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251485,7 +251485,7 @@ uint32_t BuildingGlass02Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7188u;
+	arg1 = BuildingGlass02Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F95BCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251562,7 +251562,7 @@ uint32_t BuildingGlass01Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A71C8u;
+	arg1 = BuildingGlass01Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F96DCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251639,7 +251639,7 @@ uint32_t BuildingSmoke03Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7208u;
+	arg1 = BuildingSmoke03Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F97FCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251716,7 +251716,7 @@ uint32_t BuildingSmoke02Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7248u;
+	arg1 = BuildingSmoke02Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F991Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251793,7 +251793,7 @@ uint32_t BuildingSmoke01Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
-	arg1 = 0x1A7288u;
+	arg1 = BuildingSmoke01Text_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9A3Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251853,7 +251853,7 @@ uint32_t DamageSmokeFastMediumEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A72C8u;
+	arg1 = DamagesmokeFastMediumText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9B3Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251913,7 +251913,7 @@ uint32_t DamageSmokeFastSmallEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A7310u;
+	arg1 = DamagesmokeFastSmallText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9BFCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -251973,7 +251973,7 @@ uint32_t DamageSmokeZenLargeEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A7358u;
+	arg1 = DamagesmokeZenLargeText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9CBCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -252033,7 +252033,7 @@ uint32_t DamageSmokeEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A73A0u;
+	arg1 = DamagesmokeText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9D7Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -252092,7 +252092,7 @@ uint32_t DamageSmokeZenSmallEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A73E8u;
+	arg1 = DamagesmokeZenSmallText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9E3Cu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -252152,7 +252152,7 @@ uint32_t DamageFireEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A7430u;
+	arg1 = FXDamagefireText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9EFCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -252211,7 +252211,7 @@ uint32_t SparksEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg1 = 0x1A7478u;
+	arg1 = FXSparksText_VA;
 	arg0 = 0xBu;
 	eax = x86_call(vcObjectGet_entry, 0x000F9FBCu, 2, arg0, arg1);
 	arg2 = 0u;
@@ -252289,7 +252289,7 @@ uint32_t DustFlybyEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A74C0u;
+	arg1 = FxDustFlybyText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA09Du, 3, arg0, arg1, arg2);
@@ -252382,7 +252382,7 @@ uint32_t VeritechBulletsEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7500u;
+	arg1 = VeritechBulletsText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA1EDu, 3, arg0, arg1, arg2);
@@ -252478,7 +252478,7 @@ uint32_t CrateExplosionEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7540u;
+	arg1 = CrateExplosionText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA34Du, 3, arg0, arg1, arg2);
@@ -252491,7 +252491,7 @@ uint32_t CrateExplosionEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43C80000u;
 	arg3 = 0x437A0000u;
-	arg2 = 0x1A7580u;
+	arg2 = CrateExplosionEffectExplosion4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225734u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -252580,7 +252580,7 @@ uint32_t CyclopsExplosionEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A75C0u;
+	arg1 = FxExplosionCyclopsText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA4BDu, 3, arg0, arg1, arg2);
@@ -252593,7 +252593,7 @@ uint32_t CyclopsExplosionEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43C80000u;
 	arg3 = 0x437A0000u;
-	arg2 = 0x1A7600u;
+	arg2 = CyclopsExplosionEffectExplosion4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x2257CCu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -252682,7 +252682,7 @@ uint32_t Explosion01LargeEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7640u;
+	arg1 = FXExplosion01LargeText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA62Du, 3, arg0, arg1, arg2);
@@ -252695,7 +252695,7 @@ uint32_t Explosion01LargeEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43C80000u;
 	arg3 = 0x437A0000u;
-	arg2 = 0x1A7680u;
+	arg2 = Explosion01LargeEffectExplosion4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225864u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -252784,7 +252784,7 @@ uint32_t Explosion01MedEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A76C0u;
+	arg1 = FXExplosion01MedText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA79Du, 3, arg0, arg1, arg2);
@@ -252797,7 +252797,7 @@ uint32_t Explosion01MedEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43C80000u;
 	arg3 = 0x437A0000u;
-	arg2 = 0x1A7700u;
+	arg2 = Explosion01MedEffectExplosion4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x2258FCu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -252885,7 +252885,7 @@ uint32_t Explosion01Effect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7740u;
+	arg1 = FXExplosion01Text_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FA90Du, 3, arg0, arg1, arg2);
@@ -252898,7 +252898,7 @@ uint32_t Explosion01Effect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43C80000u;
 	arg3 = 0x437A0000u;
-	arg2 = 0x1A7780u;
+	arg2 = Explosion01EffectExplosion4WavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225994u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -252980,7 +252980,7 @@ uint32_t FootDustEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A77C0u;
+	arg1 = FxFootDustText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FAA6Du, 3, arg0, arg1, arg2);
@@ -253069,7 +253069,7 @@ uint32_t SmokeLightEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7800u;
+	arg1 = FXSmokeLightText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FABBDu, 3, arg0, arg1, arg2);
@@ -253164,7 +253164,7 @@ uint32_t RockChunksEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7840u;
+	arg1 = FxRockChunksText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FAD1Du, 3, arg0, arg1, arg2);
@@ -253177,7 +253177,7 @@ uint32_t RockChunksEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43960000u;
 	arg3 = 0x42480000u;
-	arg2 = 0x1A7880u;
+	arg2 = RockChunksEffectLaserhitWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225B5Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -253265,7 +253265,7 @@ uint32_t WaterSplashEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A78C0u;
+	arg1 = WaterSplashEffectFxWaterSplash01Text_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FAE8Du, 3, arg0, arg1, arg2);
@@ -253278,7 +253278,7 @@ uint32_t WaterSplashEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43960000u;
 	arg3 = 0x42480000u;
-	arg2 = 0x1A7900u;
+	arg2 = WaterSplashEffectLaserhitWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225BF4u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -253366,7 +253366,7 @@ uint32_t DustLaserHitEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7940u;
+	arg1 = FxDustLaserHitText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FAFFDu, 3, arg0, arg1, arg2);
@@ -253379,7 +253379,7 @@ uint32_t DustLaserHitEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43960000u;
 	arg3 = 0x42480000u;
-	arg2 = 0x1A7980u;
+	arg2 = DustLaserHitEffectLaserhitWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225C8Cu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -253467,7 +253467,7 @@ uint32_t HitSpotBlueEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A79C0u;
+	arg1 = FXHitSpotBlueText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FB16Du, 3, arg0, arg1, arg2);
@@ -253480,7 +253480,7 @@ uint32_t HitSpotBlueEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43480000u;
 	arg3 = 0x42C80000u;
-	arg2 = 0x1A7A00u;
+	arg2 = HitSpotBlueEffectLaserhitWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225D24u;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -253568,7 +253568,7 @@ uint32_t HitSpotRedEffect_Startup(uint32_t esi)
 	double f0 = 0, t1 = 0;
 
 	saved_esi = esi;
-	arg1 = 0x1A7A40u;
+	arg1 = FXHitSpotRedText_VA;
 	arg0 = 0xBu;
 	arg2 = saved_esi;
 	eax = x86_call(vcObjectGet_entry, 0x000FB2DDu, 3, arg0, arg1, arg2);
@@ -253581,7 +253581,7 @@ uint32_t HitSpotRedEffect_Startup(uint32_t esi)
 	ignored_2 = g_edx;
 	arg4 = 0x43480000u;
 	arg3 = 0x42C80000u;
-	arg2 = 0x1A7A80u;
+	arg2 = HitSpotRedEffectLaserhitWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x225DBCu;
 	sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -253779,7 +253779,7 @@ uint32_t ZenDestroidMuzzleEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7B08u;
+	arg1 = FxZenDestriodMuzzleText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FB5E0u, 2, arg0, arg1);
 	ebp = eax;
@@ -253894,7 +253894,7 @@ uint32_t CyclopsTurretMuzzleEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7B50u;
+	arg1 = FxCyclopsturretmuzzleText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FB770u, 2, arg0, arg1);
 	ebp = eax;
@@ -254009,7 +254009,7 @@ uint32_t RDFTurretMuzzleEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7B98u;
+	arg1 = FxRdfturretmuzzleText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FB900u, 2, arg0, arg1);
 	ebp = eax;
@@ -254123,7 +254123,7 @@ uint32_t MPASniperEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7BE0u;
+	arg1 = FxMpaSniperText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FBA90u, 2, arg0, arg1);
 	ebp = eax;
@@ -254238,7 +254238,7 @@ uint32_t FPAMuzzleFlashEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7C28u;
+	arg1 = FXFpaMuzzleFlashText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FBC20u, 2, arg0, arg1);
 	ebp = eax;
@@ -254353,7 +254353,7 @@ uint32_t SpartanCannonEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7C70u;
+	arg1 = FXSpartanCannonText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FBDB0u, 2, arg0, arg1);
 	ebp = eax;
@@ -254467,7 +254467,7 @@ uint32_t MakkArmLaserEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7CB8u;
+	arg1 = FXMakkArmLaserText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FBF40u, 2, arg0, arg1);
 	ebp = eax;
@@ -254581,7 +254581,7 @@ uint32_t MakkCannonEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7D00u;
+	arg1 = FXMakkCannonText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC0D0u, 2, arg0, arg1);
 	ebp = eax;
@@ -254806,7 +254806,7 @@ uint32_t MuzzleFlashBlueEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7D90u;
+	arg1 = FXMuzzleFlashBlue01Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC3F0u, 2, arg0, arg1);
 	ebp = eax;
@@ -254921,7 +254921,7 @@ uint32_t RDFDestroidMuzzleFlashEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7DD8u;
+	arg1 = FxRdfDestriodMFlashText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC580u, 2, arg0, arg1);
 	ebp = eax;
@@ -255036,7 +255036,7 @@ uint32_t VeritechMuzzleFlashEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
-	arg1 = 0x1A7E20u;
+	arg1 = FXVeritechMuzzleFlash00Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC710u, 2, arg0, arg1);
 	ebp = eax;
@@ -255143,7 +255143,7 @@ uint32_t CatsEyeThrustEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7E68u;
+	arg1 = FxCatseyeThrustText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC88Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255251,7 +255251,7 @@ uint32_t ZenMPALegThrustEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7EA8u;
+	arg1 = FxZenMpaLegthrust01Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FC9BEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255359,7 +255359,7 @@ uint32_t ZenMPABackThrustEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7EE8u;
+	arg1 = FxZenMpaBackthrust01Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FCAEEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255466,7 +255466,7 @@ uint32_t FPAThrustersEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7F28u;
+	arg1 = FxFpaThrusters02Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FCC1Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255574,7 +255574,7 @@ uint32_t CyclopsThrustEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7F68u;
+	arg1 = FxCyclopsThrustText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FCD4Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255682,7 +255682,7 @@ uint32_t ZenShuttleNewEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7FA8u;
+	arg1 = FXZenShuttleNewText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FCE7Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255790,7 +255790,7 @@ uint32_t ThrustRed01BigEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A7FE8u;
+	arg1 = FxThrustRed01BigText_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FCFAEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -255897,7 +255897,7 @@ uint32_t ThrustRed01Effect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A8028u;
+	arg1 = FxThrustRed01Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FD0DEu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -256107,7 +256107,7 @@ uint32_t ThrustBPBlueEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
-	arg1 = 0x1A80A8u;
+	arg1 = FXThrustBpblueAnim01Text_VA;
 	arg0 = 8u;
 	eax = x86_call(vcObjectGet_entry, 0x000FD33Eu, 2, arg0, arg1);
 	ecx = vcObjectCacheHandle;
@@ -256404,7 +256404,7 @@ uint32_t MotionTrailEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
-	arg1 = 0x1A8168u;
+	arg1 = FxMotionTrailText_VA;
 	arg0 = 2u;
 	eax = x86_call(vcObjectGet_entry, 0x000FD69Cu, 2, arg0, arg1);
 	MEM32(0x2266B0u) = eax;
@@ -263283,10 +263283,10 @@ void sub_00102610(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 		arg0_2 = eax_2;
 		sub_000D3110(arg0_2, arg1_2, arg2);
 		edi = ebx;
-		x86_rep_movs32(edi, 0x1A861Cu, 6u);
+		x86_rep_movs32(edi, EntityToEntityProximityText_VA, 6u);
 		edi += 0x18u;
-		MEM16(edi) = MEM16(0x1A8634u);
-		MEM8(edi + 2u) = MEM8(0x1A8636u);
+		MEM16(edi) = MEM16(EntityToEntityProximityText_VA + 0x18u);
+		MEM8(edi + 2u) = MEM8(EntityToEntityProximityText_VA + 0x1Au);
 		MEM32(ebx + 0x40u) = 0u;
 		MEM32(ebx + 0x44u) = 0u;
 		MEM32(ebx + 0x48u) = 0x43FA0000u;
@@ -268398,7 +268398,7 @@ uint32_t TrainingBeacon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg0 = 0x1A86C8u;
+	arg0 = TrainingBeaconText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -268470,8 +268470,8 @@ void sub_00105AC0(uint32_t eax, uint32_t esi, uint32_t edi)
 	arg2 = eax;
 	arg1 = esi;
 	sub_000D7880(arg1, arg2);
-	eax_2 = 0x1A8718u;
-	edx = esi + 0x5Cu - 0x1A8718u;
+	eax_2 = Male01Pilot3Text_VA;
+	edx = esi + 0x5Cu - Male01Pilot3Text_VA;
 	do
 	{
 		ecx = MEM8(eax_2);
@@ -268673,7 +268673,7 @@ uint32_t sub_00105D40(uint32_t ebx, uint32_t ebp)
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, arg9 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_C = 0, saved_eax = 0, stack_14 = 0, stack_18 = 0, stack_1C = 0, stack_20 = 0;
 
-	stack = 0x1A8718u;
+	stack = Male01Pilot3Text_VA;
 	arg0 = stack;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	stack_8 = 0u;
@@ -268686,7 +268686,7 @@ uint32_t sub_00105D40(uint32_t ebx, uint32_t ebp)
 	x86_call(vcSceneObjectChangeFlags_entry, 0x00105D5Cu, 3, arg0, arg1, arg2);
 	ignored = g_eax;
 	ignored_2 = g_edx;
-	stack_14 = 0x1A8768u;
+	stack_14 = PhCheerText_VA;
 	stack_18 = 9u;
 	MEM32(0x227318u) = 0xFFFFFFFFu;
 	arg0 = stack_18;
@@ -268698,7 +268698,7 @@ uint32_t sub_00105D40(uint32_t ebx, uint32_t ebp)
 	arg0 = stack_20;
 	arg1 = stack_1C;
 	eax = x86_call(vcObjectGet_entry, 0x00105D83u, 2, arg0, arg1);
-	arg1 = 0x1A87E8u;
+	arg1 = PhScareText_VA;
 	arg0 = 9u;
 	MEM32(0x2272F0u) = eax;
 	arg2 = stack_20;
@@ -268864,7 +268864,7 @@ uint32_t ZenCratesMunitionsPickup_Startup(uint32_t ebx, uint32_t ebp)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x1A8828u;
+	arg0 = ZenCratesMunitionsPickupText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -269218,7 +269218,7 @@ uint32_t ZenCratesPickup_Startup(uint32_t ebx, uint32_t ebp)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
-	arg0 = 0x1A8890u;
+	arg0 = ZenCratesPickupText_VA;
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -269737,7 +269737,7 @@ uint32_t NoseconePickup_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg0 = 0x1A88E0u;
+	arg0 = NoseconePickupText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -269976,7 +269976,7 @@ uint32_t SpyCapsule_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0;
 
-	arg0 = 0x1A8930u;
+	arg0 = SpyCapsuleText_VA;
 	eax = sub_00133CF0(arg0);
 	arg2 = 0u;
 	arg1 = 0x1014u;
@@ -271414,7 +271414,7 @@ uint32_t Building_Startup(void)
 	GameObjectTypeUse(arg0, arg1);
 	arg4 = 0x453B8000u;
 	arg3 = 0x44160000u;
-	arg2 = 0x1A8988u;
+	arg2 = BuildingExplosionWavText_VA;
 	arg1 = 4u;
 	arg0 = 0x227618u;
 	eax = sub_0010F670(arg0, arg1, arg2, arg3, arg4);
@@ -274478,7 +274478,7 @@ void sub_00109F30(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	arg1_2 = ebp;
 	arg0_2 = MEM32(esi + 0x4Cu);
 	x86_call(vcSceneObjectSetUser_entry, 0x00109FC9u, 2, arg0_2, arg1_2);
-	arg1_2 = 0x1A89DCu;
+	arg1_2 = DummyTargetText_VA;
 	arg0_2 = edi;
 	eax = x86_call(crt_stricmp, 0x00109FD4u, 2, arg0_2, arg1_2);
 	if (eax == 0u)
@@ -300051,14 +300051,14 @@ uint32_t vcTerrain_Create(uint32_t edx, uint32_t arg0)
 	arg1 = esi;
 	arg0_2 = saved_arg0;
 	x86_call(vcSceneObjectInit_entry, 0x00122D5Fu, 3, arg0_2, arg1, arg2);
-	arg1 = 0x1A8BB8u;
+	arg1 = FxScorch03TgaText_VA;
 	arg0_2 = 1u;
 	eax = x86_call(vcObjectGet_entry, 0x00122D6Bu, 2, arg0_2, arg1);
-	arg1 = 0x1A8BA8u;
+	arg1 = FxScorch04TgaText_VA;
 	arg0_2 = 1u;
 	edi = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00122D79u, 2, arg0_2, arg1);
-	arg1 = 0x1A8B98u;
+	arg1 = FxScorch05TgaText_VA;
 	arg0_2 = 1u;
 	ebx = eax;
 	eax = x86_call(vcObjectGet_entry, 0x00122D87u, 2, arg0_2, arg1);
@@ -312944,7 +312944,7 @@ uint32_t sub_0012DCE0(uint32_t edx)
 	uint32_t arg0 = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0;
 
-	stack = MEM32(0x248D4Cu);
+	stack = vcStorageDevices;
 	arg0 = stack;
 	g_edx = edx;
 	x86_call(crt_free, 0x0012DCEBu, 1, arg0);
@@ -312962,12 +312962,12 @@ uint32_t sub_0012DCF0(uint32_t edi)
 
 	arg0 = 0x1871E8u;
 	eax = x86_call(XGetDevices, 0x0012DCFCu, 1, arg0);
-	esi = MEM32(0x248D4Cu);
+	esi = vcStorageDevices;
 	ebx = 0u;
-	MEM32(0x248D58u) = eax | 0x80000000u;
-	MEM32(0x248D5Cu) = 0u;
+	vcMemoryUnitsInserted = eax | 0x80000000u;
+	vcMemoryUnitsRemoved = 0u;
 	sub_0012DA40(esi, &ignored, &edi);
-	if (MEM32(0x248D44u) <= 0u)
+	if (vcMemoryUnitCount <= 0u)
 		return edi;
 	saved_edi = edi;
 	edi_2 = 0u;
@@ -312979,9 +312979,9 @@ uint32_t sub_0012DCF0(uint32_t edi)
 		edx = t1;
 		if (t1 != 0u)
 			eax = eax << 16;
-		if ((MEM32(0x248D58u) & eax) != 0u)
+		if ((vcMemoryUnitsInserted & eax) != 0u)
 		{
-			eax = MEM32(0x248D4Cu);
+			eax = vcStorageDevices;
 			MEM32(edi_2 + eax + 0x3DC58u) = edx;
 			MEM32(edi_2 + eax + 0x3DC54u) = ecx;
 			esi = edi_2 + eax + 0x3DC40u;
@@ -312990,13 +312990,13 @@ uint32_t sub_0012DCF0(uint32_t edi)
 			eax = x86_call(sub_0012DAB0, 0x0012DD6Bu, 0);
 			if (eax == 0u)
 			{
-				esi = edi_2 + MEM32(0x248D4Cu) + 0x3DC40u;
+				esi = edi_2 + vcStorageDevices + 0x3DC40u;
 				sub_0012DA40(esi, &ignored, &edi_2);
 			}
 		}
 		edi_2 += 0x3DC40u;
 		ebx++;
-	} while (ebx < MEM32(0x248D44u));
+	} while (ebx < vcMemoryUnitCount);
 	edi = saved_edi;
 	return edi;
 }
@@ -313005,7 +313005,7 @@ uint32_t sub_0012DE70(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x248D48u);
+	eax = vcStorageDeviceCount;
 	return eax;
 }
 
@@ -313013,11 +313013,11 @@ uint32_t sub_0012DE80(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x248D50u);
+	eax = vcStorageEvent;
 	MEM32(arg1) = MEM32(0x248D54u);
 	MEM32(arg0) = MEM32(0x1BAC54u);
 	if (eax != 0u)
-		MEM32(0x248D50u) = 0u;
+		vcStorageEvent = 0u;
 	return eax;
 }
 
@@ -313025,7 +313025,7 @@ uint32_t sub_0012DEB0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(arg0 * 0x3DC40u + MEM32(0x248D4Cu) + 0xCu);
+	eax = MEM32(arg0 * 0x3DC40u + vcStorageDevices + 0xCu);
 	return eax;
 }
 
@@ -313033,7 +313033,7 @@ uint32_t sub_0012DED0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = arg0 * 0x3DC40u + MEM32(0x248D4Cu);
+	eax = arg0 * 0x3DC40u + vcStorageDevices;
 	if (MEM32(eax + 0xCu) == 0u || MEM32(eax + 0x10u) == 0u)
 	{
 		eax = 0u;
@@ -313047,7 +313047,7 @@ uint32_t sub_0012DF00(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = arg0 * 0x3DC40u + MEM32(0x248D4Cu);
+	eax = arg0 * 0x3DC40u + vcStorageDevices;
 	if (MEM32(eax + 0xCu) == 0u)
 	{
 		eax = 0u;
@@ -313066,7 +313066,7 @@ uint32_t sub_0012DF30(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = arg0 * 0x3DC40u + MEM32(0x248D4Cu);
+	eax = arg0 * 0x3DC40u + vcStorageDevices;
 	if (MEM32(eax + 0xCu) != 0u)
 	{
 		eax = MEM32(eax + 0x38u);
@@ -313081,7 +313081,7 @@ void sub_0012DF50(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	uint32_t eax = 0, ecx = 0, esi = 0;
 
 	eax = arg0 * 0x3DC40u;
-	esi = MEM32(0x248D4Cu);
+	esi = vcStorageDevices;
 	ecx = MEM32(eax + esi + 0x38u);
 	eax += esi;
 	if ((int32_t)ecx <= 0)
@@ -313093,7 +313093,7 @@ uint32_t sub_0012DFA0(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	eax = arg0 * 0x3DC40u + MEM32(0x248D4Cu);
+	eax = arg0 * 0x3DC40u + vcStorageDevices;
 	if (MEM32(eax + 0xCu) == 0u)
 	{
 		eax = 0u;
@@ -313145,7 +313145,7 @@ uint32_t sub_0012E010(uint32_t arg0, uint32_t arg1)
 		g_esp = g_esp + 0xCu;
 		return eax;
 	}
-	eax = eax * 0x3DC40u + MEM32(0x248D4Cu);
+	eax = eax * 0x3DC40u + vcStorageDevices;
 	if (MEM32(eax + 0x10u) == 0u)
 	{
 		eax = 0u;
@@ -313233,14 +313233,14 @@ uint32_t sub_0012E0B0(uint32_t esi, uint32_t edi)
 	}
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
-	edx = (~ecx & MEM32(0x248D58u)) | eax;
+	edx = (~ecx & vcMemoryUnitsInserted) | eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = (~eax & MEM32(0x248D5Cu)) | ecx;
-	ecx = MEM32(0x248D50u);
+	eax = (~eax & vcMemoryUnitsRemoved) | ecx;
+	ecx = vcStorageEvent;
 	MEM32(0x1BAC54u) = 1u;
-	MEM32(0x248D58u) = edx;
-	MEM32(0x248D5Cu) = eax;
+	vcMemoryUnitsInserted = edx;
+	vcMemoryUnitsRemoved = eax;
 	if (ecx != 0u)
 	{
 		eax = 1u;
@@ -313259,7 +313259,7 @@ uint32_t sub_0012E0B0(uint32_t esi, uint32_t edi)
 			g_esp = g_esp + 8u;
 			return eax;
 		}
-		edi_2 = MEM32(0x248D44u);
+		edi_2 = vcMemoryUnitCount;
 		edx = 0u;
 		if (edi_2 == 0u)
 		{
@@ -313289,8 +313289,8 @@ uint32_t sub_0012E0B0(uint32_t esi, uint32_t edi)
 		esi_2 = shl32(1u, (int)((edx >> 1) & 0x1Fu));
 		if ((edx & 1u) != 0u)
 			esi_2 = esi_2 << 16;
-		MEM32(0x248D5Cu) = eax & ~esi_2;
-		MEM32(0x248D50u) = 0xCu;
+		vcMemoryUnitsRemoved = eax & ~esi_2;
+		vcStorageEvent = 0xCu;
 		MEM32(0x248D54u) = edx + 1u;
 		eax = 1u;
 		g_esp = g_esp + 4u;
@@ -313300,7 +313300,7 @@ uint32_t sub_0012E0B0(uint32_t esi, uint32_t edi)
 	}
 	if ((int32_t)edx >= 0)
 	{
-		edi_2 = MEM32(0x248D44u);
+		edi_2 = vcMemoryUnitCount;
 		eax = 0u;
 		if (edi_2 == 0u)
 		{
@@ -313331,16 +313331,16 @@ uint32_t sub_0012E0B0(uint32_t esi, uint32_t edi)
 		if ((eax & 1u) != 0u)
 			esi_2 = esi_2 << 16;
 		MEM32(0x248D54u) = eax + 1u;
-		MEM32(0x248D58u) = edx & ~esi_2;
-		MEM32(0x248D50u) = 0xBu;
+		vcMemoryUnitsInserted = edx & ~esi_2;
+		vcStorageEvent = 0xBu;
 		eax = 1u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 8u;
 		return eax;
 	}
-	MEM32(0x248D58u) = edx & 0x7FFFFFFFu;
-	MEM32(0x248D50u) = 0xBu;
+	vcMemoryUnitsInserted = edx & 0x7FFFFFFFu;
+	vcStorageEvent = 0xBu;
 	MEM32(0x248D54u) = 0u;
 	eax = 1u;
 	g_esp = g_esp + 4u;
@@ -313378,14 +313378,14 @@ uint32_t sub_0012E390(uint32_t edi, uint32_t arg0)
 
 	saved_arg0 = arg0;
 	eax = arg0;
-	esi = eax * 0x3DC40u + MEM32(0x248D4Cu);
+	esi = eax * 0x3DC40u + vcStorageDevices;
 	MEM32(0x248D54u) = eax;
 	ebx = 0u;
 	if (MEM32(esi + 0xCu) == 0u || MEM32(esi + 0x10u) == ebx)
 	{
 		MEM32(0x1BAC54u) = ebx;
 		eax = 0u;
-		MEM32(0x248D50u) = 5u;
+		vcStorageEvent = 5u;
 		return eax;
 	}
 	sub_0012DA40(esi, &ignored, &edi);
@@ -313398,7 +313398,7 @@ uint32_t sub_0012E390(uint32_t edi, uint32_t arg0)
 	{
 		MEM32(0x1BAC54u) = ebx;
 		eax = 0u;
-		MEM32(0x248D50u) = 5u;
+		vcStorageEvent = 5u;
 		return eax;
 	}
 	arg1 = esi + 0x9B80u;
@@ -313425,7 +313425,7 @@ uint32_t sub_0012E390(uint32_t edi, uint32_t arg0)
 	{
 		eax = 1u;
 		MEM32(0x1BAC54u) = 1u;
-		MEM32(0x248D50u) = 5u;
+		vcStorageEvent = 5u;
 		return eax;
 	}
 	ebp = esi + 0x9A80u;
@@ -313447,7 +313447,7 @@ uint32_t sub_0012E390(uint32_t edi, uint32_t arg0)
 	} while ((int32_t)ebx < (int32_t)MEM32(esi + 0x38u));
 	eax = 1u;
 	MEM32(0x1BAC54u) = 1u;
-	MEM32(0x248D50u) = 5u;
+	vcStorageEvent = 5u;
 	return eax;
 }
 
@@ -313456,7 +313456,7 @@ uint32_t sub_0012E8E0(uint32_t arg0, uint32_t arg1)
 	uint32_t arg0_2 = 0, eax = 0, esi = 0;
 
 	eax = arg0;
-	esi = eax * 0x3DC40u + MEM32(0x248D4Cu);
+	esi = eax * 0x3DC40u + vcStorageDevices;
 	MEM32(0x248D54u) = eax;
 	if (MEM32(esi + 0xCu) != 0u && MEM32(esi + 0x10u) != 0u)
 	{
@@ -313465,7 +313465,7 @@ uint32_t sub_0012E8E0(uint32_t arg0, uint32_t arg1)
 		x86_call(xapi_XDeleteSaveGame, 0x0012E923u, 2, arg0_2, arg1);
 		MEM32(esi + 0x38u) = 0u;
 		MEM32(0x1BAC54u) = 0u;
-		MEM32(0x248D50u) = 8u;
+		vcStorageEvent = 8u;
 	}
 	eax = 0u;
 	return eax;
@@ -320017,7 +320017,7 @@ uint32_t vcSpaceScene_Load(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t
 		eax = 1u;
 		return eax;
 	}
-	arg1_2 = 0x1A2A34u;
+	arg1_2 = StarmaterialText_VA;
 	arg0_2 = saved_arg0;
 	sub_00134F50(arg0_2, arg1_2);
 	eax = 1u;
@@ -322937,7 +322937,7 @@ uint32_t sub_00137380(void)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
-	ecx = MEM32(0x248D68u);
+	ecx = vcVertexShaderLoadedCount;
 	edx = 0u;
 	eax = 0u;
 	if (ecx > 0u)
@@ -322948,8 +322948,8 @@ uint32_t sub_00137380(void)
 			eax++;
 		} while (eax < ecx);
 	}
-	MEM32(0x248D68u) = edx;
-	MEM32(0x248D64u) = edx;
+	vcVertexShaderLoadedCount = edx;
+	vcVertexShaderNextAddress = edx;
 	return ecx;
 }
 
@@ -323039,19 +323039,19 @@ uint32_t sub_001374A0(uint32_t edx, uint32_t arg0)
 	esi = (edi << 4) + 0x2BF480u;
 	if (MEM32(esi + 0xCu) != 0u)
 		return edx;
-	if (MEM32(esi + 4u) + MEM32(0x248D64u) > 0x88u)
+	if (MEM32(esi + 4u) + vcVertexShaderNextAddress > 0x88u)
 		sub_00137380();
-	arg1 = MEM32(0x248D64u);
+	arg1 = vcVertexShaderNextAddress;
 	arg0_2 = MEM32(esi);
 	x86_call(D3DDevice_LoadVertexShader, 0x001374DCu, 2, arg0_2, arg1);
-	eax = MEM32(0x248D64u);
+	eax = vcVertexShaderNextAddress;
 	edx = MEM32(esi + 4u);
 	MEM32(esi + 8u) = eax;
-	MEM32(0x248D64u) = eax + edx;
-	eax = MEM32(0x248D68u);
+	vcVertexShaderNextAddress = eax + edx;
+	eax = vcVertexShaderLoadedCount;
 	MEM32(eax * 4u + 0x2BE020u) = edi;
 	MEM32(esi + 0xCu) = 1u;
-	MEM32(0x248D68u) = eax + 1u;
+	vcVertexShaderLoadedCount = eax + 1u;
 	return edx;
 }
 
@@ -323067,13 +323067,13 @@ uint32_t sub_00137510(uint32_t edx, uint32_t arg0)
 		edx = sub_001374A0(edx, arg0_2);
 	}
 	eax = MEM32(esi);
-	if (MEM32(0x248D60u) != eax)
+	if (vcVertexShaderCurrent != eax)
 	{
 		arg1 = MEM32(esi + 8u);
 		arg0_2 = eax;
 		x86_call(D3DDevice_SelectVertexShader, 0x00137544u, 2, arg0_2, arg1);
 		edx = MEM32(esi);
-		MEM32(0x248D60u) = edx;
+		vcVertexShaderCurrent = edx;
 	}
 	return edx;
 }
@@ -323083,7 +323083,7 @@ void sub_00137550(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
 	uint32_t ecx = *p_ecx;
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0;
 
-	eax = MEM32(0x248D60u);
+	eax = vcVertexShaderCurrent;
 	esi = arg0;
 	if (eax != esi)
 	{
@@ -323094,7 +323094,7 @@ void sub_00137550(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
 		eax = g_eax;
 		ecx = g_ecx;
 		ignored = g_edx;
-		MEM32(0x248D60u) = esi;
+		vcVertexShaderCurrent = esi;
 	}
 	*p_eax = eax;
 	*p_ecx = ecx;
@@ -323106,7 +323106,7 @@ uint32_t sub_00137580(uint32_t ebx, uint32_t ebp)
 
 	g_esp = g_esp - 0x30u;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A35ECu;
+	MEM32(g_esp) = RdfTpTestText_VA;
 	arg0 = MEM32(g_esp);
 	sub_00121DF0(arg0, &eax, &ebx, &ebp);
 	g_esp = g_esp + 4u;
@@ -323153,7 +323153,7 @@ uint32_t sub_00137580(uint32_t ebx, uint32_t ebp)
 	}
 	eax = MEM32(eax + 0x50u);
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1A35D8u;
+	MEM32(g_esp) = IconTexoverTgaText_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	MEM32(0x248D70u) = eax;
@@ -329366,7 +329366,7 @@ uint32_t vcSFXBank_Create(uint32_t edx, uint32_t arg0)
 	esi = saved_arg0;
 	ebx = eax;
 	arg1 = esi;
-	arg0_2 = 0x1A8EBCu;
+	arg0_2 = Transform13WavText_VA;
 	MEM32(ebx + 0x104u) = 0u;
 	MEM32(ebx + 0x100u) = 0u;
 	MEM32(ebx + 0x108u) = 0u;
@@ -329388,7 +329388,7 @@ uint32_t vcSFXBank_Create(uint32_t edx, uint32_t arg0)
 	arg0_2 = 0x1A8E60u;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
-	arg0_2 = 0x1A8E50u;
+	arg0_2 = Gu11Short1WavText_VA;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
 	arg0_2 = 0x1A8E3Cu;
@@ -329400,7 +329400,7 @@ uint32_t vcSFXBank_Create(uint32_t edx, uint32_t arg0)
 	arg0_2 = 0x1A8E24u;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
-	arg0_2 = 0x1A8E18u;
+	arg0_2 = BackWavText_VA;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
 	arg0_2 = 0x1A8E08u;
@@ -329424,13 +329424,13 @@ uint32_t vcSFXBank_Create(uint32_t edx, uint32_t arg0)
 	arg0_2 = 0x1A8DC8u;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
-	arg0_2 = 0x18F8B8u;
+	arg0_2 = TargetAcquiredMWavText_VA;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
-	arg0_2 = 0x18F8A4u;
+	arg0_2 = TargetSwitchWavText_VA;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
-	arg0_2 = 0x1A8DB4u;
+	arg0_2 = MissileReleaseWavText_VA;
 	sub_0013CEA0(ebx, arg0_2, arg1);
 	arg1 = esi;
 	arg0_2 = 0x1A8D98u;
@@ -330163,7 +330163,7 @@ uint32_t sub_0013E3F0(uint32_t edx)
 		if (ebx != edi)
 		{
 			sub_00107EB0(&eax, &ignored);
-			arg1 = 0x1A8F0Cu;
+			arg1 = ShadowFillMaterialText_VA;
 			arg0 = ebx;
 			esi = eax;
 			x86_call(vcObjectSetName_entry, 0x0013E44Du, 2, arg0, arg1);
