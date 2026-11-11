@@ -37,6 +37,7 @@ import json
 import os
 import re
 import sys
+import time
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(TOOLS, "core"))
@@ -705,7 +706,15 @@ def write(out_dir, for_build=False):
 def write_once(out_dir, for_build, refused):
     """write's round: the functions the C writer refused, for the build, before anything is written;
     else nothing."""
+    # how long each stage takes, for the build's last line: where its half hour goes
+    clock, stages = [time.time()], []
+
+    def stage(name):
+        now = time.time()
+        stages.append("%s %.0f s" % (name, now - clock[0]))
+        clock[0] = now
     program, built, flow, found = analyse(quiet=True, for_build=for_build, refused=refused)
+    stage("the analysis")
     sym = symbols.load()
     names = {entry: program.functions[entry][1] for entry in built}
     # a function called that stays recompiled, by the name the recompiled code calls it by: the entry of
@@ -741,11 +750,13 @@ def write_once(out_dir, for_build, refused):
         knownbits.simplify(f, found[entry], signatures.CONTEXT, results_of_calls)
         expressions.simplify_function(f)
         live_after[entry], live_at_start[entry] = after, start
+    stage("each function tidied")
     emit.use_memory_map()
     known = NoNames()
     typing = Typing(built, flow, found, {entry: call_results(f, found, flow) for entry, f in built.items()},
                     (), known.targets, {}, {})
     fields, accesses = typing.run()
+    stage("the typing")
     named = memory.Memory(known, memory.accesses_of(built.values()), {})
     always = {entry: set(summary.always) for entry, summary in list(flow.summaries.items()) + list(flow.outside.items())}
     emitter = emit.X86Emitter(built, found, names, named, always, pointers.Layouts(accesses, known))
@@ -799,6 +810,8 @@ def write_once(out_dir, for_build, refused):
             key = "%s: %s" % (type(problem).__name__, str(problem).split(":")[-1].strip()[:60])
             problems[key] += 1
             examples.setdefault(key, entry)
+    stage("each function written")
+    print("  " + ", ".join(stages))
     if for_build and len(texts) < len(built):
         for key, count in problems.most_common(15):
             print("  %5d  %s  e.g. %08X" % (count, key, examples[key]))

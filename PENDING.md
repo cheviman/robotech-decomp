@@ -761,6 +761,71 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   from 0x1EA7B4 and 0x1EA7D0, a float at 0x1EA7FC it prints); 0x2BF2F4 and 0x2BF2F8 (45 reads: the right
   edge its lines end 5 pixels before, by its looks); and the floats of `.data` to name now that a float
   goes by its name (about 1,000 reads through `FLOAT_AT` of a raw address).
+- **Ghidra for reading, and the entities' record read with it** (11-11-2026, Sebas: Ghidra alone, headless,
+  as a reading aid; its C never goes into the build). `tools/ghidra/`: `prepare.py` writes the XBE's
+  sections as one flat image at their addresses and the list of function starts and names;
+  `RobotechSeed.java` marks them before the analysis and turns the analysis of non-returning functions off
+  (Ghidra took GameObjectFromHandle, vcObjectRelease and twelve more for functions that never return and
+  ended their callers at the call); `RobotechDecompileAll.java` writes every function's C to
+  `analysis/ghidra/out/all.c` (6,598 functions, one not decompiled; the import and the analysis take 32
+  seconds); `show.py` prints some functions of it and `readers.py` lists who reads each word of the record
+  an object's first word points at. No XBE loader is needed (BinaryLoader at 0x11000, x86:LE:32:default,
+  the windows compiler spec); Ghidra 12.2 at `D:\ghidra`, a JDK of 25 or newer. What it adds: the 2,200
+  functions tools/decompile.py does not lift, as C. 48 of the 65 words of the entities' record have a
+  reader in it, against 35 in the project's own C. Read so far (each word a pointer to the constant, but
+  for the three that point at other things): +0x00 the hit points (an entity's own count starts from it,
+  and the damage that finishes it is this times a factor); +0x2C the mass (a change of speed times it is
+  the force; a collision's damage is speed times it); +0x30 the radius (the box around its position, how
+  near counts as arrived, two radii summed for a collision); +0x34 points at the number of the model's
+  node "target"; +0x38 and +0x3C the forces that speed it up and stop it forward, +0x40 and +0x44 up and
+  down, +0x48 and +0x4C sideways (sub_0004EDB0 works out, for each of its three axes, the force that takes
+  its speed to the top speed times what the entity asks for at +0x20, +0x28 and +0x24, and keeps it within
+  the second of the pair where it goes against the speed, the first otherwise); +0x50 what the top speeds
+  are multiplied by, and +0x54 what those limits are, while it boosts (the entity's +0x2C above 0); +0x68 and +0x6C the top speed forward and backward;
+  +0x70 the top speed up and down and +0x74 sideways (its speed along each of its axes over these is what
+  it keeps at +0x20 to +0x28); +0x78 the speed it starts at (over +0x68; 100 for the pod officer, 0 for
+  the rest); +0xC0 points at its record of motions; +0xC4, +0xCC and +0xD0 the camera's place behind it
+  (added to the player's own, the first doubled with two players), +0xD4 a count of at most 60 for the
+  camera and +0xD8 to +0xE4 two pairs for its two angles; +0xEC the angle in degrees of the cone ahead of
+  it a point is tested against (120, 90, 160); +0xF0 the chance it blows up when its death's motion ends
+  (it goes on to fade otherwise), +0xF4 the milliseconds it waits after that motion before either (its
+  state's timer is the motion's length plus this), +0xF8 the milliseconds its remains take to fade; +0x100 points at its
+  record of death motions (two lists of pairs, a motion and how many times it plays, counted at +4 and +8,
+  from +0x84 and +0x94; one is picked at random). Not read yet: +0x04 (0 for every type), +0x08, +0x10 and
+  +0x18 (copied to the entity at +0xA8, +0xB0 and +0x178 when it is set up), +0x24 and +0x28 (a value
+  scaled by a factor of the entity's side, sub_0002D450), +0x64 (a limit of the vector at +0x78), +0xB0 and
+  +0xB8, +0xE8 (a flag), +0xFC, and the 17 with no reader. The words from +0x0C to +0x2C also show
+  readers that are another record's (sub_000218F0 copies them from an object that is not an entity: the
+  weapons' record, by its looks). `RobotechTypes.java` gives Ghidra what the project knows, from the `types.txt` `prepare.py` writes:
+  symbols.txt's 19 structures and 538 variables at their addresses, and the registers and stack arguments
+  of the 1,607 functions that take a register (`analysis/decompiled_signatures.json`, less the four a
+  function only saves). In its C of the whole program: a field by its name 461 to 5,699 times
+  (`vcPads[0].pressed_a`), `unaff_` registers 14,432 to 10,263, `in_E..` 5,305 to 2,420, addresses as
+  `DAT_` 50,876 to 44,825. Next for Ghidra: the entities' record and the entity itself as structures, with
+  the types' callbacks' second argument as a pointer to one, so that it writes those fields through
+  pointers by name; and each round's new names (run `prepare.py` and the three scripts again).
+- **The entities' record typed: `EntitySpec`** (11-11-2026). The record of 65 words an entity's first word
+  points at is a structure, with the 21 fields read so far (above: `hit_points`, `mass`, `radius`,
+  `target_node`, the six forces `thrust`, `brake` and their `_vertical` and `_sideways`, `boost`,
+  `boost_force`, the four top speeds `speed_forward`, `speed_backward`, `speed_vertical`,
+  `speed_sideways`, `motions`, `explode_chance`, `death_wait`, `fade_time`, `death_motions`), each a
+  pointer to the constant, and the records of the 48 types with a name are in place (`MacIISpec`,
+  `GladiatorSpec`): `EntitySpec_hit_points(MacIISpec_VA) = 0x19DB24u;` where it was
+  `MEM32(0x208618u) = 0x19DB24u;`. Measured: reads and writes at a raw address 14,392 to 11,519; memory
+  at a named place no field names 65 to 2,009, as it was meant to: the 44 words nobody has read yet, in 48
+  records (`MEM32(MacIISpec_VA + 0x4u)`), each of which goes by its name in all of them once it is read;
+  data addresses written as numbers 13,651 to 13,565; the XBE's untyped bytes 851,805 to 847,773, its
+  unknown bytes 3,845, as before. `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios frame
+  for frame as their references, two of them (ambush_hills from frame 2520, besieged from 2760) only on a
+  second run alone: the first went beside another project's decompilation. `tools/decompile.py build` now
+  ends with the seconds each of its four stages took (the analysis, each function tidied, the typing, each
+  function written), to see what of its 28 minutes can be shared among processes or kept between builds
+  (a change of names only changes the last stage); what of that falls in `tools/core` goes to
+  arcade-decomp first. Left: the 13 records of types without a name and the player's veritech's
+  (0x1EB740); the constants themselves, each type's block in `.rdata` that these words point at (the
+  vehicles' are `VehicleParameters`), which the same field names would type; the 44 words not read; the
+  weapons' record (19 words a type, 18 types with a name, with 7 more words before it; an object that is
+  not an entity points at it the same way) and the effects'.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

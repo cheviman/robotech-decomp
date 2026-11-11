@@ -1590,6 +1590,84 @@ field   vcSprite  38  colour_bottom_right  u32
 001EA7F4  var   MissionCompleteScreenLineY  f32       # the top of the next line, in pixels
 001EA7F8  var   MissionCompleteScreenLineX  f32       # the left of the lines
 
+# What an entity type's objects are made to: a record of 65 words (0x104 bytes) that the type's X_Register
+# clears and fills, and that an entity's first word points at. Each word points at one of the type's
+# constants in .rdata (a float or a count), but for target_node, motions and death_motions, which point at
+# data of the type's own. The shared code reads a constant as the float at the pointer at a word of the
+# record at the entity's first word. Read so far, with Ghidra (PENDING.md has how each was told), 21 of the
+# 65; a word nobody has read has no field. Here the records of the types with a name: 13 more belong to
+# types without one, and the player's veritech's (0x1EB740) is filled by code of its own.
+struct  EntitySpec  104                             # an entity type's record of where its constants are
+field   EntitySpec  000  hit_points      u32         # points at its hit points: an entity's own count starts from them
+field   EntitySpec  02C  mass            u32         # points at its mass: a change of its speed times it is the force that takes
+field   EntitySpec  030  radius          u32         # points at its radius: the box around its place, how near counts as there, what two entities' are summed to for a collision
+field   EntitySpec  034  target_node     u32         # points at the number of its model's node "target", where it is aimed at
+field   EntitySpec  038  thrust          u32         # points at the force that speeds it up
+field   EntitySpec  03C  brake           u32         # points at the force that stops it
+field   EntitySpec  040  thrust_vertical   u32       # points at the force that speeds it up, up or down
+field   EntitySpec  044  brake_vertical    u32       # points at the force that stops it, up or down
+field   EntitySpec  048  thrust_sideways   u32       # points at the force that speeds it up sideways
+field   EntitySpec  04C  brake_sideways    u32       # points at the force that stops it sideways
+field   EntitySpec  050  boost           u32         # points at what its top speeds are multiplied by while it boosts: 2, or 3
+field   EntitySpec  054  boost_force     u32         # points at what those six forces are multiplied by while it boosts: 5
+field   EntitySpec  068  speed_forward   u32         # points at its top speed forward
+field   EntitySpec  06C  speed_backward  u32         # points at its top speed backward
+field   EntitySpec  070  speed_vertical  u32         # points at its top speed up and down: 0 for what stays on the ground
+field   EntitySpec  074  speed_sideways  u32         # points at its top speed sideways
+field   EntitySpec  0C0  motions         u32         # points at its record of motions (0x55 words); 0 for a type with none
+field   EntitySpec  0F0  explode_chance  u32         # points at the chance, 0 to 1, that it blows up when its death's motion ends; it fades otherwise
+field   EntitySpec  0F4  death_wait      u32         # points at the milliseconds it waits after its death's motion before either
+field   EntitySpec  0F8  fade_time       u32         # points at the milliseconds its remains take to fade
+field   EntitySpec  100  death_motions   u32         # points at its record of death motions: two lists of a motion and how many times it plays, one picked at random
+001EB9F8  var   ZenRetrievalSpec                         EntitySpec
+001EBD50  var   CentipedeSpec                            EntitySpec
+001EC0A8  var   MilitaryTransportSpec                    EntitySpec
+001EC400  var   MechHaulerSpec                           EntitySpec
+001ECAE8  var   ZenHeavyMissileTurretSpec                EntitySpec
+001ECFD8  var   ZenLightMissileTurretSpec                EntitySpec
+001ED1E8  var   ZenCruiserTurret1Spec                    EntitySpec
+001ED688  var   VF1SXFighterSpec                         EntitySpec
+001EDB28  var   VF1AXFighterSpec                         EntitySpec
+001EDCC4  var   PodOfficerSledMissileSpec                EntitySpec
+001EDEF4  var   FPAMissileSpec                           EntitySpec
+001EE584  var   ZenHeavyMissileSpec                      EntitySpec
+001EE7B4  var   ZenLightMissileSpec                      EntitySpec
+00203B04  var   ExcaliburSpec                            EntitySpec
+00204358  var   ZenReconCollisionSpec                    EntitySpec
+002044A8  var   ZenShuttleCollisionSpec                  EntitySpec
+002045F8  var   SeaSergeantCollisionSpec                 EntitySpec
+00206244  var   MalePowerArmorSpec                       EntitySpec
+00206C78  var   PodOfficerSledSpec                       EntitySpec
+00206FD0  var   PodOfficerSkarredDisabledSpec            EntitySpec
+00207328  var   PodOfficerSkarredSpec                    EntitySpec
+00207710  var   PodOfficerSpec                           EntitySpec
+00207938  var   ZenReEntryPodSpec                        EntitySpec
+00207F30  var   SpartanSpec                              EntitySpec
+00208288  var   RaiderXSpec                              EntitySpec
+00208618  var   MacIISpec                                EntitySpec
+00208B00  var   ZenReconShipSpec                         EntitySpec
+00208E38  var   PodScoutSpaceSpec                        EntitySpec
+00209410  var   GladiatorSpec                            EntitySpec
+002098C8  var   PodHeavyArtillerySpaceSpec               EntitySpec
+00209D78  var   PodLightArtillerySpaceSpec               EntitySpec
+0020A200  var   ZenCruiserMissileTurretSpec              EntitySpec
+0020A828  var   PodHeavyArtillerySpec                    EntitySpec
+0020AB80  var   ZenWarriorNoArmourSpec                   EntitySpec
+0020AED8  var   ZenWarriorHeavySpec                      EntitySpec
+0020B230  var   ZenWarriorLiteSpec                       EntitySpec
+0020B430  var   ZenScoutShipSpec                         EntitySpec
+0020B678  var   ZenShuttleSpec                           EntitySpec
+0020B890  var   ARMDTurretSpec                           EntitySpec
+0020BA98  var   ZenCruiserTurretSpec                     EntitySpec
+0020BFA0  var   SeaSergeantSpec                          EntitySpec
+0020C1E0  var   PodStandardWarriorSpaceSpec              EntitySpec
+0020C538  var   ZenWarriorScavengerSpec                  EntitySpec
+0020CB60  var   PodLightArtillerySpec                    EntitySpec
+0020CD88  var   CatsEyeSpec                              EntitySpec
+0020D170  var   PodScoutSpec                             EntitySpec
+0020D520  var   PodStandardWarriorSpec                   EntitySpec
+0020D9C8  var   FighterPodSpec                           EntitySpec
+
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
 00026E80  func  gcLevel_Destroy                     # gcLevel's slot +38
