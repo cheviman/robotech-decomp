@@ -826,6 +826,28 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   vehicles' are `VehicleParameters`), which the same field names would type; the 44 words not read; the
   weapons' record (19 words a type, 18 types with a name, with 7 more words before it; an object that is
   not an entity points at it the same way) and the effects'.
+- **`tools/decompile.py build` from 26 minutes to 2 and a quarter, or 10 and a half** (11-11-2026, Sebas:
+  under 10). Measured first, by stage: the analysis of the whole program 1,360 s of 1,534 (the data flow,
+  solved five times, 80 % of it), each function tidied 89 s, the typing 25 s, each function written 60 s.
+  Three things, each leaving `src/decompiled` byte for byte as it was: (1) the analysis is kept
+  (`analysis/decompile_analysis.pickle`, 61 MB, the tool's own file) and read by the next build when
+  nothing it is worked out from has changed (`analysis_key`: the XBE and what the disassembler found, the
+  functions' names and files, the ones left recompiled, the calls through a pointer seen, and the code of
+  the analysis; not symbols.txt's variables, structures and fields, nor the code that only writes the C):
+  a round of names or of the emitter takes 136 s; `--fresh` works it out again. (2) The data flow goes
+  through a function again only where its summary can come out different (`Flow.solve_summaries`: the
+  summaries it looked up, what is live where it ends, its code or the summary kept has changed), in the
+  core's order, each seeing what it sees in the core's rounds: 280,000 times a function is gone through
+  to 32,875, every summary, signature and exit the same as before (compared one by one). (3) Python 3.14
+  in place of 3.10 (1.28 times as fast, the same C) with its own compiler on (`PYTHON_JIT=1`, which the
+  tool sets by itself; an eighth less): run it as `py -3.14 tools/decompile.py build`, the launcher's
+  default being the free-threaded 3.14t, which has no such compiler and is slower. A build that works the
+  analysis out: 625 s (lifting 46, the calls' summaries 91, the data flow 307, each function tidied 51,
+  the typing 16, written 40). Tried and left out: the writing shared among six processes (slower, and a
+  prototype's widths are known only to the process that wrote the function); threads on 3.14t (the
+  structurer keeps its modes in the module's globals). Left: the data flow's part belongs in the core
+  (`decompiler/dataflow.py`, arcade-decomp), for the other games; what is left of the analysis is the
+  calls' summaries (91 s) and the data flow's three solves after the first.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

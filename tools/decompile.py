@@ -33,10 +33,14 @@ import argparse
 import bisect
 import glob
 import collections
+import hashlib
 import json
 import os
+import pickle
 import re
+import subprocess
 import sys
+import threading
 import time
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
@@ -298,6 +302,22 @@ def outside_problem(program, builder, caller, target, return_address, summary, t
     return None
 
 
+class Watched(dict):
+    """The functions' summaries, noting which are looked up while 'seen' is a set: the ones a function's
+    own summary is worked out from (Flow.solve_summaries)."""
+    seen = None
+
+    def get(self, key, default=None):
+        if self.seen is not None:
+            self.seen.add(key)
+        return dict.get(self, key, default)
+
+    def __getitem__(self, key):
+        if self.seen is not None:
+            self.seen.add(key)
+        return dict.__getitem__(self, key)
+
+
 class Flow(dataflow.Program):
     """The decompiler's data flow (tools/core/decompiler/dataflow.py) over the functions decompiled, with
     the ones they call that stay recompiled known by summaries of their own ('outside': entry ->
@@ -307,6 +327,82 @@ class Flow(dataflow.Program):
         super().__init__(functions, analysis, [], (stack.MEMORY_SP,))
         self.outside = outside
         self.float_results = set()  # the functions decompiled that hand back a float in st(0)
+        self.carry = False          # whether the next solve starts from what the one before went through
+        self.forget()
+
+    def forget(self):
+        """Nothing known of what each function was last gone through with: every one is, the next time."""
+        self.version = collections.Counter()    # function -> how many times its summary has changed
+        self.kept_key = {}      # function -> the key of its summary as solve_summaries left it
+        self.read = {}          # function -> {summary it looked up: that summary's version then}
+        self.own = {}           # function -> its own summary's version once it was gone through
+        self.exit_seen = {}     # function -> what was live where it ends then
+        self.touched = set()    # functions whose code has changed since (analyse says)
+
+    def reset(self):
+        super().reset()
+        self.forget()
+
+    def solve(self):
+        """The core's, each of its rounds of summaries going through only what may come out different
+        (solve_summaries). With 'carry', analyse's word that between the solve before and this one only
+        the code of the functions in 'touched' has changed, what was gone through before stands; without
+        it every function is gone through in the first round, as in the core."""
+        if not self.carry:
+            self.forget()
+        else:
+            # a summary changed where it was since (context_passes adds to its passes) is another value
+            # to whoever looked it up, and no longer what its own function comes out with
+            for entry, summary in dict.items(self.summaries):
+                if entry in self.kept_key and summary.key() != self.kept_key[entry]:
+                    self.version[entry] += 1
+                    self.kept_key[entry] = summary.key()
+        super().solve()
+
+    def stale(self, entry):
+        """Whether going through a function again may give another summary than the one kept: its code,
+        what is live where it ends, a summary it looked up or the one kept has changed since."""
+        read = self.read.get(entry)
+        if read is None or entry in self.touched or self.own[entry] != self.version[entry] \
+                or self.exit_seen[entry] != self.exit_live.get(entry, frozenset()):
+            return True
+        version = self.version
+        return any(version[key] != seen for key, seen in read.items())
+
+    def solve_summaries(self):
+        """The core's summaries of every function, repeated until none changes, without the work that
+        cannot change anything. A function's summary comes from its own code, what is live where it ends
+        and the summaries it looks up (Watched notes which); so a function is left as it is where none of
+        those has changed since it was last gone through and its summary is still the one it came out
+        with then, which is when the core would work out the same summary again. The functions go in the
+        core's order and each sees what it sees in the core's rounds: every summary comes out the same.
+        Of the 280,000 times the core goes through a function of this game, some 40,000 are left."""
+        if not isinstance(self.summaries, Watched):
+            self.summaries = Watched(self.summaries)
+        summaries, version = self.summaries, self.version
+        rounds, changed = 0, True
+        while changed:
+            changed = False
+            rounds += 1
+            for entry in self.functions:
+                if not self.stale(entry):
+                    continue
+                summaries.seen = seen = set()
+                try:
+                    new = self.solve_function(entry)
+                finally:
+                    summaries.seen = None
+                ANALYSIS_SECONDS["functions gone through"] += 1
+                self.read[entry] = {key: version[key] for key in seen}      # as it saw them: before its own
+                if new.key() != dict.__getitem__(summaries, entry).key():
+                    summaries[entry] = new
+                    version[entry] += 1
+                    changed = True
+                self.kept_key[entry] = dict.__getitem__(summaries, entry).key()
+                self.own[entry] = version[entry]
+                self.exit_seen[entry] = self.exit_live.get(entry, frozenset())
+                self.touched.discard(entry)
+        return rounds
 
     def solve_function(self, entry):
         """The core's summary, the x87's registers as a caller sees them: where a function calls another
@@ -429,8 +525,18 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
     builder = function.Builder(program)
     icalls = certain_icalls(program, summaries)
     chosen = None
+    ANALYSIS_SECONDS.clear()
+    mark = [time.time()]
+
+    def spent(name):
+        now = time.time()
+        ANALYSIS_SECONDS[name] += now - mark[0]
+        mark[0] = now
+    spent("its start")
     while True:
+        ANALYSIS_SECONDS["rounds"] += 1
         built = lifted(program, chosen, skip, subject, icalls)
+        spent("lifting")
         taken = {}      # the words of arguments a function whose stack stays in memory lays out
         changed = True
         while changed:
@@ -461,6 +567,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
                 if any(problems):
                     del built[entry]
                     changed = True
+        spent("the calls' summaries")
         # the calls of the ones that count their arguments by their callers, each a target of its own
         aliases, outside_counts, indirect = {}, {}, {}
         for entry, f in built.items():
@@ -509,6 +616,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
             arguments.rewrite(built, {**outside_counts, **counts}, escaping_calls(program, built, summaries))
         except arguments.Straddles as problem:
             raise SystemExit(str(problem))
+        spent("the arguments")
         float_returns = {target for target in outside_counts
                          if builder.x87.effect(aliases.get(target, target)) == (0, 1)}
         flow = Flow(built, Analysis(), {target: outside_summary(summaries.found[aliases.get(target, target)], count,
@@ -530,14 +638,28 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
         for entry, f in built.items():
             if getattr(f, "memory_stack", False):
                 flow.declared.setdefault(entry, set()).add(stack.MEMORY_SP)
+        spent("the flow set up")
         flow.solve()
-        while sum(len(preserved.analyse(f, flow.call_writes)) for f in built.values()):
+        spent("the data flow, first")
+        # between these solves only the functions found to save a register and put it back change (their
+        # 'preserved', which their own summary reads): the rest stands from the solve before (Flow.solve)
+        flow.carry = True
+        while True:
+            newly = {entry for entry, f in built.items() if preserved.analyse(f, flow.call_writes)}
+            if not newly:
+                break
+            ANALYSIS_SECONDS["solves for the preserved"] += 1
+            flow.touched |= newly
             flow.solve()
+        flow.carry = False
+        spent("the preserved registers")
         changed = sum(conditions.recover(f, flow) for f in built.values())
         if changed:
             flow.reset()
             flow.solve()
+        spent("the conditions")
         found = signatures.compute(flow)
+        spent("the signatures")
         flow.conditions_recovered = changed
         # a flag read after a call of a recompiled function, which the C does not hand back: the caller
         # stays recompiled, and the analysis goes again without it
@@ -703,9 +825,108 @@ def write(out_dir, for_build=False):
             json.dump(["0x%08X" % address for address in sorted(refused)], out, indent=1)
 
 
+ANALYSIS_KEPT = os.path.join(REPO, "analysis", "decompile_analysis.pickle")
+FRESH = False   # --fresh: the analysis again, whatever is kept
+
+
+def analysis_key(for_build, refused):
+    """A hash of all the analysis is worked out from: the XBE and what the disassembler found in it, the
+    functions' names and files, the ones left to the recompiled code (written by hand, refused), the calls
+    through a pointer the runs saw, and the code that does the analysis. symbols.txt's variables,
+    structures, fields and comments are not in it, nor the code that only writes the C (tools/x86/emit.py,
+    the core's emit.py and cprint.py): a change of those leaves the analysis as it was."""
+    digest = hashlib.sha256()
+    tools = os.path.dirname(os.path.abspath(__file__))
+    writing = {os.path.join(tools, "x86", "emit.py"), os.path.join(tools, "core", "decompiler", "emit.py"),
+               os.path.join(tools, "core", "decompiler", "cprint.py")}
+    # of this file, what the analysis is made of: all of it down to where the writing of the C starts
+    own = open(os.path.abspath(__file__), encoding="utf-8").read()
+    digest.update(own[:own.index("\nclass NoNames:")].encode())
+    paths = [os.path.join(tools, "hand_functions.py"), os.path.join(tools, "symbols.py")]
+    for folder in (("x86",), ("core", "decompiler"), ("core", "v60")):
+        paths += sorted(glob.glob(os.path.join(tools, *folder, "*.py")))
+    paths += [disassembler.XBE, disassembler.ANALYSIS_JSON, disassembler.FUNCTIONS, ICALL_SITES, MANUAL,
+              recompiled.KERNEL_BRIDGE]
+    paths += sorted(glob.glob(os.path.join(REPO, "src", "game", "**", "*.c"), recursive=True))
+    paths += sorted(glob.glob(os.path.join(REPO, "src", "*.c")))
+    for path in paths:
+        if path in writing:
+            continue
+        digest.update(os.path.relpath(path, REPO).encode())
+        digest.update(open(path, "rb").read() if os.path.exists(path) else b"(none)")
+    sym = symbols.load()
+    digest.update(repr((sorted(sym["func"].items()), sorted(sym["files"]), sorted(hand_functions.hand_functions()[0]),
+                        for_build, sorted(refused), sys.version_info[:2])).encode())
+    return digest.hexdigest()
+
+
+def deep(work):
+    """What 'work' hands back, run where a structure nested thousands deep can be gone through (a
+    function's statements, in a file and out of it): a thread with a stack of 200 MB and no limit to speak
+    of on the calls within calls."""
+    result = {}
+
+    def run():
+        limit = sys.getrecursionlimit()
+        sys.setrecursionlimit(1000000)
+        try:
+            result["value"] = work()
+        except BaseException as problem:    # handed on to the caller
+            result["problem"] = problem
+        finally:
+            sys.setrecursionlimit(limit)
+    size = threading.stack_size(200 * 1024 * 1024)
+    try:
+        thread = threading.Thread(target=run)
+        thread.start()
+        thread.join()
+    finally:
+        threading.stack_size(size)
+    if "problem" in result:
+        raise result["problem"]
+    return result["value"]
+
+
+def kept_analysis(for_build, refused):
+    """analyse's result, from the file the build before left if nothing it is worked out from has changed
+    (analysis_key); else worked out and left there. The file is this tool's own, written and
+    read on this machine in analysis/ (pickle runs what a file says: never one from elsewhere). (program,
+    built, flow, found, whether it was read)."""
+    key = analysis_key(for_build, refused)
+    if not FRESH and os.path.exists(ANALYSIS_KEPT):
+        try:
+            with open(ANALYSIS_KEPT, "rb") as kept:
+                if pickle.load(kept) == key:
+                    built, flow, found, opened = deep(lambda: pickle.load(kept))
+                    # what analyse sets up before its work, which the writing of the C counts on too
+                    cpu.use(X86)
+                    dataflow.configure()
+                    dataflow.HANDLER_SLOTS = (None,)
+                    signatures.CONTEXT = (stack.MEMORY_SP,)
+                    signatures.OPEN = opened
+                    return disassembler.Program(symbols.load()["func"]), built, flow, found, True
+        except Exception as problem:    # a file cut short, or of another version of the code: the analysis again
+            print("  the analysis kept could not be read (%s): worked out again" % type(problem).__name__)
+    program, built, flow, found = analyse(quiet=True, for_build=for_build, refused=refused)
+    flow.forget()       # what the solves kept for themselves: nothing the writing of the C reads
+    summaries, flow.recompiled = flow.recompiled, None      # the disassembler's own objects do not go in a file
+    try:
+        with open(ANALYSIS_KEPT + ".part", "wb") as kept:
+            pickle.dump(key, kept, protocol=pickle.HIGHEST_PROTOCOL)
+            deep(lambda: pickle.dump((built, flow, found, signatures.OPEN), kept, protocol=pickle.HIGHEST_PROTOCOL))
+        os.replace(ANALYSIS_KEPT + ".part", ANALYSIS_KEPT)
+    except Exception as problem:
+        print("  the analysis could not be kept (%s: %s)" % (type(problem).__name__, str(problem)[:120]))
+    flow.recompiled = summaries
+    return program, built, flow, found, False
+
+
+ANALYSIS_SECONDS = collections.Counter()    # what each part of analyse took the last time, and its rounds
 def write_once(out_dir, for_build, refused):
     """write's round: the functions the C writer refused, for the build, before anything is written;
-    else nothing."""
+    else nothing. (The writing shared among processes was tried, 11-11-2026, and left out: each had to
+    tidy and type every function before writing its share, six at once ran slower than one, and a
+    prototype's parameter widths are only known to the process that wrote the function.)"""
     # how long each stage takes, for the build's last line: where its half hour goes
     clock, stages = [time.time()], []
 
@@ -713,8 +934,9 @@ def write_once(out_dir, for_build, refused):
         now = time.time()
         stages.append("%s %.0f s" % (name, now - clock[0]))
         clock[0] = now
-    program, built, flow, found = analyse(quiet=True, for_build=for_build, refused=refused)
-    stage("the analysis")
+    program, built, flow, found, read = kept_analysis(for_build, refused)
+    stage("the analysis read from the build before" if read else
+          "the analysis (%s)" % ", ".join("%s %.0f" % item for item in ANALYSIS_SECONDS.items()))
     sym = symbols.load()
     names = {entry: program.functions[entry][1] for entry in built}
     # a function called that stays recompiled, by the name the recompiled code calls it by: the entry of
@@ -975,12 +1197,27 @@ def classify(text):
     return words[0] if words else text
 
 
+def with_jit():
+    """Runs this again with Python's own compiler on (PYTHON_JIT=1) where the interpreter has one and it is
+    off: the same C an eighth sooner (Python 3.14; the free-threaded build has none). Left as it is where
+    PYTHON_JIT is set, whatever to."""
+    jit = getattr(sys, "_jit", None)
+    if jit is None or not jit.is_available() or jit.is_enabled() or "PYTHON_JIT" in os.environ:
+        return
+    sys.exit(subprocess.call([sys.executable] + sys.argv, env={**os.environ, "PYTHON_JIT": "1"}))
+
+
 def main():
+    with_jit()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("command", choices=["check", "analyse", "write", "build", "subset"])
     parser.add_argument("out_dir", nargs="?")
     parser.add_argument("high", nargs="?")
+    parser.add_argument("--fresh", action="store_true",
+                        help="work the analysis out again, whatever the build before left (build, write)")
     args = parser.parse_args()
+    global FRESH
+    FRESH = args.fresh
     if args.command == "check":
         check()
     elif args.command == "analyse":
