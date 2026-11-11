@@ -845,9 +845,11 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   analysis out: 625 s (lifting 46, the calls' summaries 91, the data flow 307, each function tidied 51,
   the typing 16, written 40). Tried and left out: the writing shared among six processes (slower, and a
   prototype's widths are known only to the process that wrote the function); threads on 3.14t (the
-  structurer keeps its modes in the module's globals). Left: the data flow's part belongs in the core
-  (`decompiler/dataflow.py`, arcade-decomp), for the other games; what is left of the analysis is the
-  calls' summaries (91 s) and the data flow's three solves after the first.
+  structurer keeps its modes in the module's globals). The data flow's part is in the core since
+  (`decompiler/dataflow.py`, `Program.solve_summaries`; arcade-decomp's branch `faster-summaries`, 59b4f57,
+  on c069e35, which `tools/core` points at), for the other games, whose C has to come out the same before
+  it joins arcade-decomp's main; Robotech's own Flow keeps only what is the x87's. Left: what is left of
+  the analysis is the calls' summaries (91 s) and the data flow's three solves after the first.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

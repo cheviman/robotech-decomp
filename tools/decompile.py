@@ -302,22 +302,6 @@ def outside_problem(program, builder, caller, target, return_address, summary, t
     return None
 
 
-class Watched(dict):
-    """The functions' summaries, noting which are looked up while 'seen' is a set: the ones a function's
-    own summary is worked out from (Flow.solve_summaries)."""
-    seen = None
-
-    def get(self, key, default=None):
-        if self.seen is not None:
-            self.seen.add(key)
-        return dict.get(self, key, default)
-
-    def __getitem__(self, key):
-        if self.seen is not None:
-            self.seen.add(key)
-        return dict.__getitem__(self, key)
-
-
 class Flow(dataflow.Program):
     """The decompiler's data flow (tools/core/decompiler/dataflow.py) over the functions decompiled, with
     the ones they call that stay recompiled known by summaries of their own ('outside': entry ->
@@ -327,82 +311,6 @@ class Flow(dataflow.Program):
         super().__init__(functions, analysis, [], (stack.MEMORY_SP,))
         self.outside = outside
         self.float_results = set()  # the functions decompiled that hand back a float in st(0)
-        self.carry = False          # whether the next solve starts from what the one before went through
-        self.forget()
-
-    def forget(self):
-        """Nothing known of what each function was last gone through with: every one is, the next time."""
-        self.version = collections.Counter()    # function -> how many times its summary has changed
-        self.kept_key = {}      # function -> the key of its summary as solve_summaries left it
-        self.read = {}          # function -> {summary it looked up: that summary's version then}
-        self.own = {}           # function -> its own summary's version once it was gone through
-        self.exit_seen = {}     # function -> what was live where it ends then
-        self.touched = set()    # functions whose code has changed since (analyse says)
-
-    def reset(self):
-        super().reset()
-        self.forget()
-
-    def solve(self):
-        """The core's, each of its rounds of summaries going through only what may come out different
-        (solve_summaries). With 'carry', analyse's word that between the solve before and this one only
-        the code of the functions in 'touched' has changed, what was gone through before stands; without
-        it every function is gone through in the first round, as in the core."""
-        if not self.carry:
-            self.forget()
-        else:
-            # a summary changed where it was since (context_passes adds to its passes) is another value
-            # to whoever looked it up, and no longer what its own function comes out with
-            for entry, summary in dict.items(self.summaries):
-                if entry in self.kept_key and summary.key() != self.kept_key[entry]:
-                    self.version[entry] += 1
-                    self.kept_key[entry] = summary.key()
-        super().solve()
-
-    def stale(self, entry):
-        """Whether going through a function again may give another summary than the one kept: its code,
-        what is live where it ends, a summary it looked up or the one kept has changed since."""
-        read = self.read.get(entry)
-        if read is None or entry in self.touched or self.own[entry] != self.version[entry] \
-                or self.exit_seen[entry] != self.exit_live.get(entry, frozenset()):
-            return True
-        version = self.version
-        return any(version[key] != seen for key, seen in read.items())
-
-    def solve_summaries(self):
-        """The core's summaries of every function, repeated until none changes, without the work that
-        cannot change anything. A function's summary comes from its own code, what is live where it ends
-        and the summaries it looks up (Watched notes which); so a function is left as it is where none of
-        those has changed since it was last gone through and its summary is still the one it came out
-        with then, which is when the core would work out the same summary again. The functions go in the
-        core's order and each sees what it sees in the core's rounds: every summary comes out the same.
-        Of the 280,000 times the core goes through a function of this game, some 40,000 are left."""
-        if not isinstance(self.summaries, Watched):
-            self.summaries = Watched(self.summaries)
-        summaries, version = self.summaries, self.version
-        rounds, changed = 0, True
-        while changed:
-            changed = False
-            rounds += 1
-            for entry in self.functions:
-                if not self.stale(entry):
-                    continue
-                summaries.seen = seen = set()
-                try:
-                    new = self.solve_function(entry)
-                finally:
-                    summaries.seen = None
-                ANALYSIS_SECONDS["functions gone through"] += 1
-                self.read[entry] = {key: version[key] for key in seen}      # as it saw them: before its own
-                if new.key() != dict.__getitem__(summaries, entry).key():
-                    summaries[entry] = new
-                    version[entry] += 1
-                    changed = True
-                self.kept_key[entry] = dict.__getitem__(summaries, entry).key()
-                self.own[entry] = version[entry]
-                self.exit_seen[entry] = self.exit_live.get(entry, frozenset())
-                self.touched.discard(entry)
-        return rounds
 
     def solve_function(self, entry):
         """The core's summary, the x87's registers as a caller sees them: where a function calls another
@@ -669,6 +577,7 @@ def analyse(quiet=False, for_build=False, refused=frozenset()):
             break
         chosen = set(built) - flagged
     outside_signatures(flow, built, found)
+    ANALYSIS_SECONDS["functions gone through"] = flow.gone_through
     # what writes the C from here (pointers.py, emit.py) looks a callee up among the summaries; the
     # analysis, which works the summaries of its own functions out, is done
     for target, summary in flow.outside.items():
