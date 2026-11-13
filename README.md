@@ -172,7 +172,10 @@ hand.
   hand (`vcClassDesc_create(p)`, `vcClassByType(type)`). A `var` whose type is a structure is records of
   it in place (`var Levels Level[76]`), which the decompiled C reads by field (`Level_chapter(Levels(level))`);
   an address of a place with a name goes by it where the C uses it as a value (`ecx = Levels_VA;`). `tools/symbols.py merge` and `layout` write the tools' findings into its generated sections;
-  a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C.
+  a line written by hand wins. Then `py -3 tools/pipeline.py names` regenerates the C. A function the
+  decompiler writes that gets a name needs the decompiled C first: `py -3.14 tools/decompile.py build`,
+  then `py -3 tools/pipeline.py hand` (or `names` after it), or the recompiled code still calls it by its
+  `sub_` name and the link fails (`sub_0001A700_entry` unresolved).
 - **A function written by hand**: C in `src/game/`, by its name in `symbols.txt` and with a signature
   of its own, the guest's memory read through `symbols.h`'s accessors. Beside it, its entry
   (`ENTRY_CDECL2(vcObjectFind)`, `src/game/decomp.h`) is the function as the recompiled code calls
@@ -245,6 +248,7 @@ symbols/registries.json the game's object types and their functions, by family
 symbols/symbols.txt     the one place of the names, descriptions and files of the C
 tools/pipeline.py       xboxrecomp's pipeline, with every output inside this repository
 tools/symbols.py        writes the tools' names and the file lines into symbols/symbols.txt
+tools/string_table.py   lists the game's texts by their number, from main.pak's string table (into analysis/)
 tools/apply_names.py    writes the names of symbols.txt into the disassembly before recompiling
 tools/apply_files.py    tells the recompiler each function's file, from symbols.txt
 tools/organize_gen.py   lays the recompiled C out in its files, each function with its description

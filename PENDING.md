@@ -1292,6 +1292,61 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   type's record and what follows it, which nothing reaches, less three bytes of each missile's constants
   now inside a record). `tools/verify_c.py` 209 vectors, 0 different, twice. The nine scenarios frame for
   frame as their references, at the first run.
+- **The cheats, each bit by where it acts** (13-11-2026, Sebas: the codes' part). Read here, without an
+  agent: the readers are 30 lines of Ghidra's C in 14 functions. What settled each bit is the game's own
+  answer to its code: `MainMenuEnterCode` hands the string table a number (0x78E to 0x798, 0x7B6), and the
+  table is in `main.pak` (from 0x400FC, 2,049 records of a name of 16 bytes, `IDS_CHEAT_P1`, and an
+  offset from 0x4A110 to its text): WEWILLWIN 2 "unlocked all missions", WHERESMAX 4 and 0x2000 "all
+  veritechs and awards", SUPERMECH 1 "invincibility", SPACEFOLD 8 "faster gunpod ammo refresh", MARSBASE
+  0x10 "faster missile refresh", MIRIYA both, MISSMACROSS 0x80 "all veritech designs", BACKSTABBER 0x400
+  "one shot kills", SNIPER 0x800 "one shot sniper kills", MULTIMAYHEM 0x100 "all multiplayer missions",
+  DEATHGRIP 0x4000 "press the fire button to instantly kill targets". Each reader agrees with its text:
+  `EntityTakeDamage` (the damage message 0xF001's answer) makes it 0 on a player's entity under 1;
+  `EntityRecharge` fills the gun ammo (the entity's +0xA8) at every update under 8 and brings the missiles
+  (+0xB0) back at 0.099 instead of 0.033 under 0x10; `GunHit` (Weapon 0, 1, 23, 24, 34) and `SniperHit`
+  (Weapon 2) send 100000 under 0x400, and only `SniperHit` under 0x800; `Player_Update` sends 100000 to
+  the entity's first target locked on, once it has stayed 250 ms, at X under 0x4000; 4 meets every
+  requirement of the veritechs to choose (`VeritechRequirementMet`), 0x2000 makes every award's rank 3
+  (`AwardRank`), 0x80 opens every paint design (`PaintDesignIsOpen`). A player's entity is told by its
+  +0x18C, the handle of what controls it: of the Player family. The tables the unlocks read, in place:
+  `VeritechChoices` (16 of `VeritechChoice`: the name's text, two requirements, the model; the plain
+  ones, the armored ones, which also ask for award 9 and a versus arena, the super ones, which ask for
+  level 35, and the female power armour), `PaintDesignNames` (11), `AwardRanks` (19 shorts) and
+  `PaintDesignsEarned` (11 words), the last two in the saved game. And five words of `EntitySpec` by
+  `EntityRecharge`: `hit_points_refill` (0 for every type), `gun_ammo`, `gun_ammo_refill`, `missiles`,
+  `missiles_refill`. 13 functions named, with `LevelRequirementsMet` and `LevelNext` (the level the game
+  goes on to). Left as leads, not checked: tally 1 of `Stats` also makes a player invincible
+  (`EntityTakeDamage`); sub_0002EFF0 applies the saved game's image to the game (the levels finished, 29
+  tallies, the options by the save's version) and clears the cheats of a save before version 6; the main
+  menu clears them where a new game starts (sub_00035B80, after the dialog of the free blocks, text
+  0x4BA). Measured: functions without a name in the decompiled C 3,324 to 3,311, without a description
+  3,527 to 3,514; parameters named by their place 88,503 to 87,971; reads at a raw address 8,692 to 8,685;
+  data addresses written as numbers 6,243 to 6,213; memory at a named place no field names 2,318 to
+  2,085 (the five new words of the `EntitySpec` records in place); the XBE's untyped bytes 827,995 to
+  826,547, its unknown bytes 3,855 to 3,859 (the 0 that ends `PaintDesignNames`, which nothing reaches,
+  counted before with the word it follows). `tools/verify_c.py` 209 vectors, 0 different, twice. The nine
+  scenarios frame for frame as their references, at the first run. The build's order mattered: the
+  pipeline's recompilation ran before `tools/decompile.py build` and called the newly named functions
+  by their `sub_` names (13 unresolved at the link); `pipeline.py hand` after the decompiler mended it
+  (README has it now).
+- **The game's texts by their number: `tools/string_table.py`** (13-11-2026, Sebas: the short part). The
+  texts are not in the XBE: the code asks `vcStringManagerGetText` for one by its number, of the
+  vcStringManager object "stringtable" (`StringTable`; `StringTableInit` gets it, `StringTableRelease`
+  lets it go, `StringTableGet` hands it back), which `main.pak` holds: after the object's class (0x12),
+  its name and a GUID, the count (2,049) and the size of the texts' block twice, then a record a text (its
+  name, `IDS_...`, in 16 bytes, and its text's offset from the end of the records), then the texts. The
+  tool finds the object by its name and writes `analysis/string_table.txt` (number, name, text: the
+  game's, so not in git), or prints the ones asked for (`py -3 tools/string_table.py 796 7B6`). Left, the
+  long part: the decompiled C still writes `MainMenuCodeAnswer = 0x796u`, and the emitter has no way to
+  write a number by a name (no enum, no constant by its use); where the code hands a text's number on
+  (`vcStringManagerGetText`'s second argument, 115 calls in the decompiled C; `Level.title_string`,
+  `VeritechChoice.name_string`, `PaintDesignNames`, `MainMenuCodeAnswer`), a header of `#define IDS_...`
+  or a comment, Sebas's call. Measured: functions without a name in the decompiled C 3,311 to 3,307,
+  without a description 3,514 to 3,510; parameters named by their place 87,971 to 87,504; reads at a raw
+  address 8,685 to 8,678; the XBE's untyped bytes 826,547 to 826,543. With functions named the analysis
+  was worked out again (829 s). `tools/verify_c.py` 209 vectors, 0 different, three times (one run in
+  between stopped at "the harness could not map the XBE's code in 12 runs", right after the build). The
+  nine scenarios frame for frame as their references, at the first run.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

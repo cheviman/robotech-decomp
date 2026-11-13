@@ -49,7 +49,7 @@ uint32_t sub_00011000(uint32_t arg0)
 uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, port = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0, port = 0;
 	uint32_t saved_esi = 0;
 	double ignored64 = 0;
 
@@ -66,7 +66,7 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	saved_esi = esi;
 	vcPadUpdate(ebx, ebp, esi, edi);
 	sub_00024940(&ignored, &esi, &edi);
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	esi_2 = eax;
 	if (Players(0) != 0u)
 	{
@@ -78,9 +78,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			arg1 = PlayerPorts(0);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
-			arg1 = 0x7EEu;
-			arg0 = esi_2;
-			sub_00111CF0(arg0, arg1, &eax, &ignored_2, &edx);
+			number = 0x7EEu;
+			manager = esi_2;
+			vcStringManagerGetText(manager, number, &eax, &ignored_2, &edx);
 			arg1 = eax;
 			arg0 = 0x1BC300u;
 			g_edx = edx;
@@ -106,9 +106,9 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 			arg1 = PlayerPorts(1);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
-			arg1 = 0x7EEu;
-			arg0 = esi_2;
-			sub_00111CF0(arg0, arg1, &eax, &ignored_2, &edx);
+			number = 0x7EEu;
+			manager = esi_2;
+			vcStringManagerGetText(manager, number, &eax, &ignored_2, &edx);
 			arg1 = eax;
 			arg0 = 0x1BC300u;
 			g_edx = edx;
@@ -323,7 +323,7 @@ uint32_t sub_00011080(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, port = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0, port = 0;
 	uint32_t saved_esi = 0;
 	double ignored64 = 0;
 
@@ -339,7 +339,7 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	saved_esi = esi;
 	vcPadUpdate(ebx, ebp, esi, edi);
 	sub_00024940(&ignored, &esi, &edi);
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	esi_2 = eax_2;
 	if (Players(0) != 0u)
 	{
@@ -351,9 +351,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			arg1 = PlayerPorts(0);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
-			arg1 = 0x7EEu;
-			arg0 = esi_2;
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &edx);
+			number = 0x7EEu;
+			manager = esi_2;
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &edx);
 			arg1 = eax_2;
 			arg0 = 0x1BC300u;
 			g_edx = edx;
@@ -379,9 +379,9 @@ uint32_t sub_00011085(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 			arg1 = PlayerPorts(1);
 			arg0 = 1u;
 			sub_000245D0(arg0, arg1, arg2, &ignored, &ebx, &esi_2, &edi);
-			arg1 = 0x7EEu;
-			arg0 = esi_2;
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &edx);
+			number = 0x7EEu;
+			manager = esi_2;
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &edx);
 			arg1 = eax_2;
 			arg0 = 0x1BC300u;
 			g_edx = edx;
@@ -1491,7 +1491,7 @@ void sub_00016B80(uint32_t eax, uint32_t edx, uint32_t arg1)
 
 uint32_t sub_00016BF0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t t1 = 0;
 
 	g_esp = g_esp - 0x14u;
@@ -1709,12 +1709,12 @@ uint32_t sub_00016BF0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = MEM32(ebp_2);
 						MEM8(g_esp + 0x17u) = 0u;
-						eax = sub_000248B0();
+						eax = StringTableGet();
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = eax;
-						arg0_2 = MEM32(g_esp);
-						arg1_2 = MEM32(g_esp + 4u);
-						sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+						manager = MEM32(g_esp);
+						number = MEM32(g_esp + 4u);
+						vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 						g_esp = g_esp + 8u;
 						if (eax == 0u)
 							eax = g_esp + 0x13u;
@@ -3484,7 +3484,7 @@ uint32_t sub_00017F80(void)
 
 uint32_t sub_00017FC0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
+	uint32_t arg0_2 = 0, design = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 	uint32_t saved_arg2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -3506,14 +3506,14 @@ uint32_t sub_00017FC0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	edi = saved_arg1;
 	if (edi != 0xFFFFFFFFu)
 	{
-		arg0_2 = edi;
-		eax = sub_0002F1A0(arg0_2);
+		design = edi;
+		eax = PaintDesignIsEarned(design);
 		if (eax != 0u)
 			edi = 0xFFFFFFFFu;
 		else
 		{
-			arg0_2 = edi;
-			sub_0002F180(arg0_2);
+			design = edi;
+			PaintDesignEarn(design);
 		}
 	}
 	esi = saved_arg2;
@@ -3557,7 +3557,7 @@ uint32_t sub_00017FC0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 uint32_t sub_00018060(void)
 {
 	uint16_t arg0_2 = 0, ebp = 0, edi = 0, esi = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, esi_2 = 0, level = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, award = 0, design = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, esi_2 = 0, level = 0;
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0;
 	uint32_t jump_target = 0;
 
@@ -3660,8 +3660,8 @@ uint32_t sub_00018060(void)
 			}
 			break;
 		case 0x018151u:
-			arg0 = 0xCu;
-			eax = sub_0002F1C0(arg0);
+			award = 0xCu;
+			eax = AwardRank(award);
 			edi = (uint16_t)eax;
 			if ((int32_t)(((int16_t)edi + 1u) * 3u) <= (int32_t)(int16_t)esi)
 			{
@@ -3726,9 +3726,9 @@ uint32_t sub_00018060(void)
 			eax = LevelGetCurrent();
 			arg0 = eax;
 			eax = sub_0002F280(arg0);
-			arg0 = 0x11u;
+			award = 0x11u;
 			esi = (uint16_t)eax;
-			eax = sub_0002F1C0(arg0);
+			eax = AwardRank(award);
 			if ((int32_t)(((int16_t)eax + 1u) * 3u) <= (int32_t)(int16_t)esi)
 			{
 				stack = 0x3Fu;
@@ -3744,8 +3744,8 @@ uint32_t sub_00018060(void)
 			break;
 		}
 	}
-	arg0 = 2u;
-	eax = sub_0002F1C0(arg0);
+	award = 2u;
+	eax = AwardRank(award);
 	arg0 = 0xDu;
 	esi = (uint16_t)eax;
 	eax = sub_000304F0(arg0);
@@ -3773,8 +3773,8 @@ uint32_t sub_00018060(void)
 			}
 		}
 	}
-	arg0 = 4u;
-	eax = sub_0002F1C0(arg0);
+	award = 4u;
+	eax = AwardRank(award);
 	esi = (uint16_t)eax;
 	eax = sub_0002F2B0();
 	if ((int32_t)((int16_t)esi * 2u + 2u) <= (int32_t)eax)
@@ -3802,23 +3802,23 @@ uint32_t sub_00018060(void)
 		}
 	}
 	ebp = 6u;
-	arg0 = 6u;
-	eax = sub_0002F1C0(arg0);
+	award = 6u;
+	eax = AwardRank(award);
 	edi_2 = 0x32u;
 	esi = (uint16_t)eax;
 	if ((uint16_t)esi == 3u)
 	{
 		ebp = 7u;
-		arg0 = 7u;
-		eax = sub_0002F1C0(arg0);
+		award = 7u;
+		eax = AwardRank(award);
 		edi_2 = 0x4Bu;
 		ebx = 0x96u;
 		esi = (uint16_t)eax;
 		if ((uint16_t)esi == 3u)
 		{
 			ebp = 8u;
-			arg0 = 8u;
-			eax = sub_0002F1C0(arg0);
+			award = 8u;
+			eax = AwardRank(award);
 			edi_2 = 0x64u;
 			ebx = 0x12Cu;
 			esi = (uint16_t)eax;
@@ -3849,20 +3849,20 @@ uint32_t sub_00018060(void)
 			}
 		}
 	}
-	arg0 = 6u;
-	eax = sub_0002F1C0(arg0);
+	award = 6u;
+	eax = AwardRank(award);
 	if ((uint16_t)eax == 3u)
 	{
-		arg0 = 7u;
-		eax = sub_0002F1C0(arg0);
+		award = 7u;
+		eax = AwardRank(award);
 		if ((uint16_t)eax == 3u)
 		{
-			arg0 = 8u;
-			eax = sub_0002F1C0(arg0);
+			award = 8u;
+			eax = AwardRank(award);
 			if ((uint16_t)eax == 3u)
 			{
-				arg0 = 9u;
-				eax = sub_0002F1C0(arg0);
+				award = 9u;
+				eax = AwardRank(award);
 				if ((uint16_t)eax == 0u)
 				{
 					arg2 = 0x45u;
@@ -3873,8 +3873,8 @@ uint32_t sub_00018060(void)
 			}
 		}
 	}
-	arg0 = 0xEu;
-	eax = sub_0002F1C0(arg0);
+	award = 0xEu;
+	eax = AwardRank(award);
 	arg0 = 0x2Cu;
 	esi = (uint16_t)eax;
 	eax = sub_000304F0(arg0);
@@ -3885,14 +3885,14 @@ uint32_t sub_00018060(void)
 		eax = sub_0002F1F0(arg0);
 		if (eax != 0u && MEM32(0x2B5E60u) != esi_2)
 		{
-			arg0 = esi_2;
-			eax = sub_0002F1A0(arg0);
+			design = esi_2;
+			eax = PaintDesignIsEarned(design);
 			if (eax != 0u)
 				esi_2 = edi_2;
 			else
 			{
-				arg0 = esi_2;
-				sub_0002F180(arg0);
+				design = esi_2;
+				PaintDesignEarn(design);
 			}
 			ecx = MEM32(0x2B5E60u);
 			eax = (ecx * 3u) << 2;
@@ -3902,8 +3902,8 @@ uint32_t sub_00018060(void)
 			MEM32(0x2B5E60u) = ecx + 1u;
 		}
 	}
-	arg0 = 0x10u;
-	eax = sub_0002F1C0(arg0);
+	award = 0x10u;
+	eax = AwardRank(award);
 	arg0 = 0xFu;
 	esi = (uint16_t)eax;
 	eax = sub_000304F0(arg0);
@@ -4379,22 +4379,28 @@ uint32_t sub_00018B90(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, u
 	return eax;
 }
 
-uint32_t sub_00018C10(uint32_t eax)
+/* Brings an entity's stores back up over an update, each by a rate of its EntitySpec times 0.033 up to
+   its most: with one player its hit points (+0x174, hit_points_refill, 0 for every type); its gun ammo
+   (+0xA8, gun_ammo_refill up to gun_ammo) unless its flag 4, or its flags 8 and 2, are on, full at once
+   on an entity a player controls under SPACEFOLD's cheat (Cheats' 8); its missiles (+0xB0,
+   missiles_refill up to missiles) unless its flag 8 is on, three times as fast on an entity a player
+   controls under MARSBASE's (0x10); and its +0x178 by the words at +0x1C and +0x18 of its EntitySpec. */
+uint32_t EntityRecharge(uint32_t handle)
 {
-	uint32_t ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, mask = 0;
+	uint32_t ecx = 0, edi = 0, esi = 0, handle_2 = 0, ignored = 0, ignored_2 = 0, mask = 0;
 	uint32_t stack = 0;
 	double f0 = 0, f1 = 0, t1 = 0, t2 = 0;
 
-	if (eax != GameObjectLastHandle)
+	if (handle != GameObjectLastHandle)
 	{
-		handle = eax;
-		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
-		esi = eax;
+		handle_2 = handle;
+		GameObjectFromHandle(handle_2, &handle, &ignored, &ignored_2);
+		esi = handle;
 	}
 	else
 		esi = GameObjectLastObject;
 	if (esi == 0u)
-		return eax;
+		return handle;
 	edi = MEM32(esi);
 	if (PlayerCount <= 1)
 	{
@@ -4404,22 +4410,22 @@ uint32_t sub_00018C10(uint32_t eax)
 		if (f0 > FLOAT_AT(ecx))
 			MEM32(esi + 0x174u) = MEM32(ecx);
 	}
-	eax = MEM32(esi + 4u);
-	if ((eax & 4u) == 0u && ((eax & 8u) == 0u || (eax & 2u) == 0u))
+	handle = MEM32(esi + 4u);
+	if ((handle & 4u) == 0u && ((handle & 8u) == 0u || (handle & 2u) == 0u))
 	{
 		f0 = x87_round(x87_round(FLOAT_AT(MEM32(edi + 0xCu)) * 0.033f) + FLOAT_AT(esi + 0xA8u));
 		MEMF(esi + 0xA8u) = (float)f0;
 		ecx = MEM32(edi + 8u);
 		if (f0 > FLOAT_AT(ecx))
 		{
-			eax = MEM32(ecx);
-			MEM32(esi + 0xA8u) = eax;
+			handle = MEM32(ecx);
+			MEM32(esi + 0xA8u) = handle;
 		}
 		if ((MEM32(esi + 0x18Cu) & 0x7C0000u) == 0x40000u)
 		{
 			mask = 8u;
-			eax = CheatIsOn(mask);
-			if (eax != 0u)
+			handle = CheatIsOn(mask);
+			if (handle != 0u)
 				MEMF(esi + 0xA8u) = (float)FLOAT_AT(MEM32(edi + 8u));
 		}
 	}
@@ -4427,8 +4433,8 @@ uint32_t sub_00018C10(uint32_t eax)
 	{
 		if ((MEM32(esi + 0x18Cu) & 0x7C0000u) != 0x40000u)
 		{
-			eax = MEM32(edi + 0x14u);
-			f0 = x87_round(x87_round(FLOAT_AT(eax) * 0.033f) + FLOAT_AT(esi + 0xB0u));
+			handle = MEM32(edi + 0x14u);
+			f0 = x87_round(x87_round(FLOAT_AT(handle) * 0.033f) + FLOAT_AT(esi + 0xB0u));
 			MEMF(esi + 0xB0u) = (float)f0;
 			ecx = MEM32(edi + 0x10u);
 			if (f0 > FLOAT_AT(ecx))
@@ -4437,11 +4443,11 @@ uint32_t sub_00018C10(uint32_t eax)
 		else
 		{
 			mask = 0x10u;
-			eax = CheatIsOn(mask);
-			if (eax == 0u)
+			handle = CheatIsOn(mask);
+			if (handle == 0u)
 			{
-				eax = MEM32(edi + 0x14u);
-				f0 = x87_round(x87_round(FLOAT_AT(eax) * 0.033f) + FLOAT_AT(esi + 0xB0u));
+				handle = MEM32(edi + 0x14u);
+				f0 = x87_round(x87_round(FLOAT_AT(handle) * 0.033f) + FLOAT_AT(esi + 0xB0u));
 				MEMF(esi + 0xB0u) = (float)f0;
 				ecx = MEM32(edi + 0x10u);
 				if (f0 > FLOAT_AT(ecx))
@@ -4461,9 +4467,9 @@ uint32_t sub_00018C10(uint32_t eax)
 	{
 		f0 = FLOAT_AT(esi + 0x178u);
 		t1 = 0.0f;
-		eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t1, 0u);
+		handle = (handle & ~0xFFFFu) | (uint16_t)x87_status(f0, t1, 0u);
 		if (!(f0 <= t1))
-			return eax;
+			return handle;
 	}
 	f0 = FLOAT_AT(esi + 0x178u);
 	f1 = x87_round(x87_round(FLOAT_AT(MEM32(edi + 0x1Cu)) * 0.033f) + FLOAT_AT(esi + 0x178u));
@@ -4471,16 +4477,16 @@ uint32_t sub_00018C10(uint32_t eax)
 	MEMF(esi + 0x178u) = (float)f1;
 	if (f0 < 0.0f && x87_float(stack) > 0.0f)
 	{
-		eax = MEM32(edi + 0x18u);
-		MEMF(esi + 0x178u) = (float)x87_round(FLOAT_AT(eax) * 0.1f);
+		handle = MEM32(edi + 0x18u);
+		MEMF(esi + 0x178u) = (float)x87_round(FLOAT_AT(handle) * 0.1f);
 	}
 	edi = MEM32(edi + 0x18u);
 	f0 = FLOAT_AT(esi + 0x178u);
 	t2 = FLOAT_AT(edi);
-	eax = (eax & ~0xFFFFu) | (uint16_t)x87_status(f0, t2, 0u);
+	handle = (handle & ~0xFFFFu) | (uint16_t)x87_status(f0, t2, 0u);
 	if (f0 > t2)
 		MEM32(esi + 0x178u) = MEM32(edi);
-	return eax;
+	return handle;
 }
 
 uint32_t sub_00019090(uint32_t arg0, uint32_t arg1)
@@ -6375,21 +6381,27 @@ void sub_00019FD0(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	}
 }
 
-void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* An entity's answer to the damage message (0xF001; the message's third word the amount, its second who
+   dealt it): takes the amount off its +0x17C while that is above 0 and the rest off its hit points
+   (+0x174). On an entity a player controls, with one player, the amount is 0 under SUPERMECH's
+   invincibility (Cheats' 1) or while the count of Stats' tally 1 is above 0, and in the play mode 2
+   (sub_000A1710) it is scaled by Difficulty, 0.7 on 0 and 1.1 on 2. Then the effects of its record of
+   damage by how much of its hit points is left. */
+void EntityTakeDamage(uint32_t handle, uint32_t entity, uint32_t damage, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t ebp = *p_ebp;
 	uint32_t esi = *p_esi;
 	uint32_t edi = *p_edi;
 	uint8_t eax_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
 	uint32_t t1 = 0, t3 = 0, t10 = 0, jump_target = 0;
 	double f0 = 0, f0_2 = 0, f1 = 0, t2 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0, t9 = 0, t11 = 0, t12 = 0, t13 = 0, t14 = 0, t15 = 0, t16 = 0, t17 = 0;
 
 	g_esp = g_esp - 0x10u;
-	MEM32(g_esp + 4u) = arg0;
-	MEM32(g_esp + 8u) = arg1;
-	MEM32(g_esp + 0xCu) = arg2;
+	MEM32(g_esp + 4u) = handle;
+	MEM32(g_esp + 8u) = entity;
+	MEM32(g_esp + 0xCu) = damage;
 	g_esp = g_esp - 0x4Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx;
@@ -6413,8 +6425,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 1u;
-		arg0_2 = MEM32(g_esp);
-		eax = sub_00030530(arg0_2);
+		arg0 = MEM32(g_esp);
+		eax = sub_00030530(arg0);
 		g_esp = g_esp + 4u;
 		if ((int32_t)ebp_2 < (int32_t)MEM32(eax + 8u))
 			MEM32(esi_2 + 8u) = ebp_2;
@@ -6478,16 +6490,16 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0_2 = MEM32(g_esp);
-		eax = sub_0009C960(arg0_2);
+		arg0 = MEM32(g_esp);
+		eax = sub_0009C960(arg0);
 		ecx = MEM32(edi_2 + 0x184u);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		eax = sub_0002CBF0(arg0_2, arg1_2);
+		arg0 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		eax = sub_0002CBF0(arg0, arg1);
 		g_esp = g_esp + 0xCu;
 		if (eax != 0u)
 		{
@@ -6595,14 +6607,14 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 							MEM32(g_esp) = eax;
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = ecx;
-							arg0_2 = MEM32(g_esp);
-							arg1_2 = MEM32(g_esp + 4u);
-							arg2_2 = MEM32(g_esp + 8u);
+							arg0 = MEM32(g_esp);
+							arg1 = MEM32(g_esp + 4u);
+							arg2 = MEM32(g_esp + 8u);
 							arg3 = MEM32(g_esp + 0xCu);
 							arg4 = MEM32(g_esp + 0x10u);
 							arg5 = MEM32(g_esp + 0x14u);
 							arg6 = MEM32(g_esp + 0x18u);
-							sub_000A1560(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, arg6, &eax, &ignored, &edi_2);
+							sub_000A1560(arg0, arg1, arg2, arg3, arg4, arg5, arg6, &eax, &ignored, &edi_2);
 							MEM32(edi_2) = eax;
 							ebx_2++;
 							edi_2 += 4u;
@@ -6634,9 +6646,9 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = edx;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = eax;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				sub_000A0F50(arg0_2, arg1_2);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				sub_000A0F50(arg0, arg1);
 				g_esp = g_esp + 8u;
 			}
 			t10 = ebx_2;
@@ -6652,9 +6664,9 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		edi_2 = sub_0009D230(ebx_2, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
+		arg0 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		edi_2 = sub_0009D230(ebx_2, ebp_2, esi_2, edi_2, arg0, arg1);
 		esi_2 = MEM32(g_esp + 0x68u);
 		ebx_2 = MEM32(g_esp + 0x70u);
 		g_esp = g_esp + 8u;
@@ -6668,12 +6680,12 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		esi_2 = MEM32(g_esp + 0x60u);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2;
-		arg0_2 = MEM32(g_esp);
-		sub_0009EFC0(arg0_2);
+		arg0 = MEM32(g_esp);
+		sub_0009EFC0(arg0);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2;
-		arg0_2 = MEM32(g_esp);
-		sub_0009E4C0(arg0_2);
+		arg0 = MEM32(g_esp);
+		sub_0009E4C0(arg0);
 		ebx_2 = MEM32(g_esp + 0x70u);
 		eax = MEM32(ebx_2 + 4u);
 		g_esp = g_esp + 8u;
@@ -6682,15 +6694,15 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
-			arg0_2 = MEM32(g_esp);
-			eax = sub_0009C960(arg0_2);
+			arg0 = MEM32(g_esp);
+			eax = sub_0009C960(arg0);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(edi_2 + 0x184u);
-			arg0_2 = MEM32(g_esp);
-			arg1_2 = MEM32(g_esp + 4u);
-			eax = sub_0002CBF0(arg0_2, arg1_2);
+			arg0 = MEM32(g_esp);
+			arg1 = MEM32(g_esp + 4u);
+			eax = sub_0002CBF0(arg0, arg1);
 			g_esp = g_esp + 0xCu;
 			if (eax != 0u)
 			{
@@ -6712,10 +6724,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = eax;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ecx;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_000197D0(arg0_2, arg1_2, arg2_2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi_2);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_000197D0(arg0, arg1, arg2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi_2);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -6744,10 +6756,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = eax + 0xAu;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_000305E0(arg0_2, arg1_2, arg2_2);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_000305E0(arg0, arg1, arg2);
 					ecx = Players(0);
 					g_esp = g_esp + 0xCu;
 				}
@@ -6790,10 +6802,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x2Cu;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_000305E0(arg0_2, arg1_2, arg2_2);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_000305E0(arg0, arg1, arg2);
 					ecx = Players(0);
 					g_esp = g_esp + 0xCu;
 				}
@@ -6832,22 +6844,22 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				{
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x41u;
-					arg0_2 = MEM32(g_esp);
-					eax = sub_000304F0(arg0_2);
+					arg0 = MEM32(g_esp);
+					eax = sub_000304F0(arg0);
 					g_esp = g_esp + 4u;
 					if (eax == VersusKillLimit - 1u)
 					{
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = 0x42u;
-						arg0_2 = MEM32(g_esp);
-						eax = sub_000304F0(arg0_2);
+						arg0 = MEM32(g_esp);
+						eax = sub_000304F0(arg0);
 						g_esp = g_esp + 4u;
 						if (eax == 0u)
 						{
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = 1u;
-							arg0_2 = MEM32(g_esp);
-							sub_000284D0(arg0_2);
+							arg0 = MEM32(g_esp);
+							sub_000284D0(arg0);
 							g_esp = g_esp + 4u;
 						}
 					}
@@ -6857,10 +6869,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x42u;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_000305E0(arg0_2, arg1_2, arg2_2);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_000305E0(arg0, arg1, arg2);
 					g_esp = g_esp + 0xCu;
 					edx = Players(1);
 					ecx = Players(0);
@@ -6870,22 +6882,22 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 			{
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0x42u;
-				arg0_2 = MEM32(g_esp);
-				eax = sub_000304F0(arg0_2);
+				arg0 = MEM32(g_esp);
+				eax = sub_000304F0(arg0);
 				g_esp = g_esp + 4u;
 				if (eax == VersusKillLimit - 1u)
 				{
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 0x41u;
-					arg0_2 = MEM32(g_esp);
-					eax = sub_000304F0(arg0_2);
+					arg0 = MEM32(g_esp);
+					eax = sub_000304F0(arg0);
 					g_esp = g_esp + 4u;
 					if (eax == 0u)
 					{
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = eax;
-						arg0_2 = MEM32(g_esp);
-						sub_000284D0(arg0_2);
+						arg0 = MEM32(g_esp);
+						sub_000284D0(arg0);
 						g_esp = g_esp + 4u;
 					}
 				}
@@ -6895,10 +6907,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = 0u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0x41u;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_000305E0(arg0_2, arg1_2, arg2_2);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_000305E0(arg0, arg1, arg2);
 				g_esp = g_esp + 0xCu;
 				edx = Players(1);
 				ecx = Players(0);
@@ -6979,10 +6991,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 1u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 1u;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_000284E0(arg0_2, arg1_2, arg2_2);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_000284E0(arg0, arg1, arg2);
 					g_esp = g_esp + 0xCu;
 				}
 			}
@@ -7022,10 +7034,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 						MEM32(g_esp) = 1u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = 1u;
-						arg0_2 = MEM32(g_esp);
-						arg1_2 = MEM32(g_esp + 4u);
-						arg2_2 = MEM32(g_esp + 8u);
-						sub_000284E0(arg0_2, arg1_2, arg2_2);
+						arg0 = MEM32(g_esp);
+						arg1 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						sub_000284E0(arg0, arg1, arg2);
 						g_esp = g_esp + 0xCu;
 					}
 				}
@@ -7038,10 +7050,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = 1u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0u;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_000284E0(arg0_2, arg1_2, arg2_2);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_000284E0(arg0, arg1, arg2);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -7070,10 +7082,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 0u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 1u;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_000284E0(arg0_2, arg1_2, arg2_2);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_000284E0(arg0, arg1, arg2);
 					g_esp = g_esp + 0xCu;
 				}
 			}
@@ -7113,10 +7125,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 						MEM32(g_esp) = 0u;
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = 1u;
-						arg0_2 = MEM32(g_esp);
-						arg1_2 = MEM32(g_esp + 4u);
-						arg2_2 = MEM32(g_esp + 8u);
-						sub_000284E0(arg0_2, arg1_2, arg2_2);
+						arg0 = MEM32(g_esp);
+						arg1 = MEM32(g_esp + 4u);
+						arg2 = MEM32(g_esp + 8u);
+						sub_000284E0(arg0, arg1, arg2);
 						g_esp = g_esp + 0xCu;
 					}
 				}
@@ -7129,10 +7141,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = 0u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 0u;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_000284E0(arg0_2, arg1_2, arg2_2);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_000284E0(arg0, arg1, arg2);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -7143,8 +7155,8 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0_2 = MEM32(g_esp);
-		sub_0003E8F0(arg0_2, &eax, &ecx);
+		arg0 = MEM32(g_esp);
+		sub_0003E8F0(arg0, &eax, &ecx);
 		esi_2 = eax;
 		eax_2 = (uint8_t)MEM32(ebx_2);
 		g_esp = g_esp + 4u;
@@ -7158,18 +7170,18 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = 3u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_0010FBE0(arg0_2, arg1_2, arg2_2, &ignored_3, &ecx);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_0010FBE0(arg0, arg1, arg2, &ignored_3, &ecx);
 				g_esp = g_esp + 0xCu;
 			}
 			else if ((eax_2 & 0x10u) == 0u)
 			{
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
-				arg0_2 = MEM32(g_esp);
-				eax = sub_0010FA20(arg0_2);
+				arg0 = MEM32(g_esp);
+				eax = sub_0010FA20(arg0);
 				g_esp = g_esp + 4u;
 				if (eax != 4u && eax != 9u)
 				{
@@ -7179,10 +7191,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 					MEM32(g_esp) = 3u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = esi_2;
-					arg0_2 = MEM32(g_esp);
-					arg1_2 = MEM32(g_esp + 4u);
-					arg2_2 = MEM32(g_esp + 8u);
-					sub_0010FBE0(arg0_2, arg1_2, arg2_2, &ignored_3, &ecx);
+					arg0 = MEM32(g_esp);
+					arg1 = MEM32(g_esp + 4u);
+					arg2 = MEM32(g_esp + 8u);
+					sub_0010FBE0(arg0, arg1, arg2, &ignored_3, &ecx);
 					g_esp = g_esp + 0xCu;
 				}
 			}
@@ -7194,10 +7206,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 				MEM32(g_esp) = 4u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
-				arg0_2 = MEM32(g_esp);
-				arg1_2 = MEM32(g_esp + 4u);
-				arg2_2 = MEM32(g_esp + 8u);
-				sub_0010FBE0(arg0_2, arg1_2, arg2_2, &ignored_3, &ecx);
+				arg0 = MEM32(g_esp);
+				arg1 = MEM32(g_esp + 4u);
+				arg2 = MEM32(g_esp + 8u);
+				sub_0010FBE0(arg0, arg1, arg2, &ignored_3, &ecx);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -7209,10 +7221,10 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 			MEM32(g_esp) = 4u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2;
-			arg0_2 = MEM32(g_esp);
-			arg1_2 = MEM32(g_esp + 4u);
-			arg2_2 = MEM32(g_esp + 8u);
-			sub_0010FBE0(arg0_2, arg1_2, arg2_2, &ignored_3, &ecx);
+			arg0 = MEM32(g_esp);
+			arg1 = MEM32(g_esp + 4u);
+			arg2 = MEM32(g_esp + 8u);
+			sub_0010FBE0(arg0, arg1, arg2, &ignored_3, &ecx);
 			g_esp = g_esp + 0xCu;
 		}
 	}
@@ -7442,7 +7454,7 @@ void sub_0001A700(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 
 void sub_0001B1F0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_ebp)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, edi_2 = 0, edx = 0;
+	uint32_t damage = 0, eax = 0, edi_2 = 0, edx = 0, entity = 0, handle = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -7465,11 +7477,11 @@ void sub_0001B1F0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint3
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	MEMF(g_esp + 0x18u) = (float)x87_round(f0 * 1e+02);
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	arg2 = MEM32(g_esp + 8u);
+	handle = MEM32(g_esp);
+	entity = MEM32(g_esp + 4u);
+	damage = MEM32(g_esp + 8u);
 	edi_2 += 0x28u;
-	sub_0001A700(arg0_2, arg1_2, arg2, &eax, p_ecx, &ebx, p_ebp, &esi, &edi_2);
+	EntityTakeDamage(handle, entity, damage, &eax, p_ecx, &ebx, p_ebp, &esi, &edi_2);
 	g_esp = g_esp + 0xCu;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x28u;
@@ -14688,7 +14700,7 @@ void sub_00020A30(uint32_t *p_esi, uint32_t *p_edi)
 	uint32_t esi = *p_esi;
 	uint32_t edi = *p_edi;
 	uint8_t edx_2 = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 0xD8u;
@@ -14816,12 +14828,12 @@ void sub_00020A30(uint32_t *p_esi, uint32_t *p_edi)
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x343u;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp + 8u;
 	edi_2 = MEM32(g_esp);
 	g_esp = g_esp + 4u;
@@ -18188,7 +18200,7 @@ void sub_00023110(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	uint32_t zero = 0;
 	uint8_t ecx_2 = 0;
 	uint16_t edi_3 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t jump_target = 0;
 	double f0 = 0;
 
@@ -18524,12 +18536,12 @@ void sub_00023110(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		g_esp = g_esp + 0x20u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x33Eu;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x1Cu;
 		ecx = g_esp + 0x20u;
@@ -20372,12 +20384,14 @@ uint32_t sub_00024720(uint32_t edx)
 	unreachable();
 }
 
-uint32_t sub_00024830(uint32_t edx)
+/* Once: gets the vcStringManager object "stringtable" (vcObjectGet, class 0x12) into StringTable, or
+   makes one of that name, and hands it to sub_00111BC0. Hands back 0 if it has none. */
+uint32_t StringTableInit(uint32_t edx)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, edx_2 = 0;
 	uint32_t stack = 0;
 
-	if (MEM32(0x1E62DCu) != 0u)
+	if (StringTable != 0u)
 	{
 		eax = 1u;
 		return eax;
@@ -20388,19 +20402,19 @@ uint32_t sub_00024830(uint32_t edx)
 	arg0 = 0x12u;
 	arg2 = stack;
 	eax = x86_call(vcObjectGet_entry, 0x0002484Bu, 3, arg0, arg1, arg2);
-	MEM32(0x1E62DCu) = eax;
+	StringTable = eax;
 	if (eax == 0u)
 	{
 		arg0 = 0x12u;
 		x86_call(vcObjectCreate_entry, 0x0002485Eu, 1, arg0);
 		eax = g_eax;
 		edx_2 = g_edx;
-		MEM32(0x1E62DCu) = eax;
+		StringTable = eax;
 		eax = sub_00024720(edx_2);
 		arg1 = eax;
-		arg0 = MEM32(0x1E62DCu);
+		arg0 = StringTable;
 		x86_call(vcObjectSetName_entry, 0x00024879u, 2, arg0, arg1);
-		eax = MEM32(0x1E62DCu);
+		eax = StringTable;
 		if (eax == 0u)
 			return eax;
 	}
@@ -20410,12 +20424,13 @@ uint32_t sub_00024830(uint32_t edx)
 	return eax;
 }
 
-uint32_t sub_000248A0(void)
+/* Lets go of StringTable (vcObjectRelease). */
+uint32_t StringTableRelease(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
 
-	eax = MEM32(0x1E62DCu);
+	eax = StringTable;
 	saved_eax = eax;
 	arg0 = saved_eax;
 	g_eax = eax;
@@ -20426,11 +20441,12 @@ uint32_t sub_000248A0(void)
 	return eax;
 }
 
-uint32_t sub_000248B0(void)
+/* The game's string table, StringTable: what vcStringManagerGetText is handed with a text's number. */
+uint32_t StringTableGet(void)
 {
 	uint32_t eax = 0;
 
-	eax = MEM32(0x1E62DCu);
+	eax = StringTable;
 	return eax;
 }
 
@@ -21435,13 +21451,16 @@ uint32_t LevelGetChapter(uint32_t level)
 	return eax;
 }
 
-uint32_t sub_000251F0(uint32_t arg0)
+/* Whether a requirement of a veritech to choose (VeritechChoices) is met: -1 none; -2 that the level
+   being played is not the training's (chapter 5); -3, -4 and -5 that award 5, 9 and 15 is won (AwardRank
+   above 0); a level's number that it is finished. Every one under WHERESMAX's cheat (Cheats' 4). */
+uint32_t VeritechRequirementMet(uint32_t requirement)
 {
 	uint32_t zero = 0, negative = 0, overflow = 0;
-	uint32_t arg0_2 = 0, eax = 0, esi = 0, mask = 0;
+	uint32_t award = 0, eax = 0, esi = 0, mask = 0;
 	uint32_t stack = 0;
 
-	esi = arg0;
+	esi = requirement;
 	if (esi == 0xFFFFFFFFu)
 	{
 		eax = 1u;
@@ -21463,8 +21482,8 @@ uint32_t sub_000251F0(uint32_t arg0)
 	if (esi == 0xFFFFFFFDu)
 	{
 		stack = 5u;
-		arg0_2 = stack;
-		eax = sub_0002F1C0(arg0_2);
+		award = stack;
+		eax = AwardRank(award);
 		overflow = 0u;
 		zero = (uint16_t)eax == 0u;
 		negative = (uint16_t)eax >> 15;
@@ -21484,16 +21503,16 @@ uint32_t sub_000251F0(uint32_t arg0)
 			return eax;
 		}
 		stack = 9u;
-		arg0_2 = stack;
-		eax = sub_0002F1C0(arg0_2);
+		award = stack;
+		eax = AwardRank(award);
 		overflow = 0u;
 		zero = (uint16_t)eax == 0u;
 		negative = (uint16_t)eax >> 15;
 		eax = ((negative ^ overflow) | zero) == 0u;
 		return eax;
 	}
-	arg0_2 = 0xFu;
-	eax = sub_0002F1C0(arg0_2);
+	award = 0xFu;
+	eax = AwardRank(award);
 	overflow = 0u;
 	zero = (uint16_t)eax == 0u;
 	negative = (uint16_t)eax >> 15;
@@ -21641,14 +21660,17 @@ uint32_t sub_00025540(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00025560(uint32_t arg0)
+/* Whether what a level requires is done: never for one not shown on its own; one with its flag 8 once
+   every other level of its chapter shown on its own is finished; any other once the levels it requires
+   are finished. */
+uint32_t LevelRequirementsMet(uint32_t level)
 {
 	uint8_t eax_2 = 0, ebx = 0;
 	uint16_t eax_3 = 0, esi_2 = 0;
 	uint32_t eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t t1 = 0;
 
-	edi = arg0;
+	edi = level;
 	t1 = Levels(edi);
 	esi = t1;
 	if (t1 != 0u)
@@ -21732,13 +21754,17 @@ uint32_t sub_00025560(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00025620(uint32_t arg0)
+/* The level the game goes on to after one: a story's level, with WEWILLWIN's cheat (Cheats' 2) the next
+   shown on its own (0 past the last), otherwise the next whose requirements are met and that is not
+   finished, after it and then from the first; the training's 50 to 52 and 52 to 54; a versus arena
+   itself. -1 for none. */
+uint32_t LevelNext(uint32_t level)
 {
-	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, mask = 0;
-	uint32_t saved_arg0 = 0;
+	uint32_t eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, mask = 0;
+	uint32_t saved_level = 0;
 
-	saved_arg0 = arg0;
-	ebx = saved_arg0;
+	saved_level = level;
+	ebx = saved_level;
 	if ((int32_t)ebx >= 0x32)
 	{
 		if ((int32_t)ebx >= 0x3B)
@@ -21769,8 +21795,8 @@ uint32_t sub_00025620(uint32_t arg0)
 			esi = Levels(edi);
 			do
 			{
-				arg0_2 = edi;
-				eax = sub_00025560(arg0_2);
+				level = edi;
+				eax = LevelRequirementsMet(level);
 				if (eax != 0u && (esi == 0u || (MEM32(esi) & 1u) == 0u))
 				{
 					eax = edi;
@@ -21789,8 +21815,8 @@ uint32_t sub_00025620(uint32_t arg0)
 		edi = Levels_VA;
 		for (;;)
 		{
-			arg0_2 = esi;
-			eax = sub_00025560(arg0_2);
+			level = esi;
+			eax = LevelRequirementsMet(level);
 			if (eax != 0u && (edi == 0u || (MEM32(edi) & 1u) == 0u))
 				break;
 			esi++;
@@ -35248,9 +35274,9 @@ void sub_0002EFF0(void)
 	if ((int32_t)eax < 1)
 		return;
 	VibrationOn = MEM32(0x1EA570u);
-	MEM32(0x1EA5A0u) = esi;
-	MEM32(0x1EA5A4u) = esi;
-	MEM32(0x1EA59Cu) = esi;
+	PaintDesignsEarned(1) = esi;
+	PaintDesignsEarned(2) = esi;
+	PaintDesignsEarned(0) = esi;
 	if ((int32_t)eax < 4)
 		return;
 	arg0 = MEM32(0x1EA5DCu);
@@ -35300,30 +35326,34 @@ uint32_t sub_0002F120(void)
 	return eax;
 }
 
-void sub_0002F180(uint32_t arg0)
+/* Marks a paint design earned (PaintDesignsEarned). */
+void PaintDesignEarn(uint32_t design)
 {
 	uint32_t eax = 0;
 
-	eax = arg0;
+	eax = design;
 	if ((int32_t)eax >= 0 && (int32_t)eax < 0xB)
-		MEM32(eax * 4u + 0x1EA59Cu) = 1u;
+		PaintDesignsEarned(eax) = 1u;
 }
 
-uint32_t sub_0002F1A0(uint32_t arg0)
+/* Whether a paint design is earned (PaintDesignsEarned); 0 for a number out of 0 to 10. */
+uint32_t PaintDesignIsEarned(uint32_t design)
 {
 	uint32_t eax = 0;
 
-	eax = arg0;
+	eax = design;
 	if ((int32_t)eax < 0 || (int32_t)eax >= 0xB)
 	{
 		eax = 0u;
 		return eax;
 	}
-	eax = MEM32(eax * 4u + 0x1EA59Cu);
+	eax = PaintDesignsEarned(eax);
 	return eax;
 }
 
-uint32_t sub_0002F1C0(uint32_t arg0)
+/* An award's rank in AwardRanks, 0 for one not won up to 3, and 0 for a number out of 0 to 18; 3 for
+   every one under WHERESMAX's cheat (Cheats' 0x2000). */
+uint32_t AwardRank(uint32_t award)
 {
 	uint32_t eax = 0;
 
@@ -35333,13 +35363,13 @@ uint32_t sub_0002F1C0(uint32_t arg0)
 		eax = (eax & ~0xFFFFu) | 3u;
 		return eax;
 	}
-	eax = arg0;
+	eax = award;
 	if ((int32_t)eax < 0 || (int32_t)eax >= 0x13)
 	{
 		eax &= ~0xFFFFu;
 		return eax;
 	}
-	eax = (eax & ~0xFFFFu) | MEM16(eax * 2u + 0x1EA574u);
+	eax = (eax & ~0xFFFFu) | (uint16_t)AwardRanks(eax);
 	return eax;
 }
 
@@ -35351,10 +35381,10 @@ uint32_t sub_0002F1F0(uint32_t arg0)
 	ecx = arg0;
 	if ((int32_t)ecx >= 0 && (int32_t)ecx < 0x13)
 	{
-		eax = MEM16(ecx * 2u + 0x1EA574u);
+		eax = (uint16_t)AwardRanks(ecx);
 		if (eax != 3u)
 		{
-			MEM16(ecx * 2u + 0x1EA574u) = eax + 1u;
+			AwardRanks(ecx) = eax + 1u;
 			eax_2 = 1u;
 			return eax_2;
 		}
@@ -35543,9 +35573,9 @@ void sub_0002F450(void)
 	LevelSetFinished(level, finished);
 	arg0 = 0x3Bu;
 	sub_000252C0(arg0);
-	MEM32(0x1EA5A0u) = 1u;
-	MEM32(0x1EA5A4u) = 1u;
-	MEM32(0x1EA59Cu) = 1u;
+	PaintDesignsEarned(1) = 1u;
+	PaintDesignsEarned(2) = 1u;
+	PaintDesignsEarned(0) = 1u;
 	MEM16(0x1EA5D8u) = 0xFFFFu;
 }
 
@@ -40274,7 +40304,7 @@ void sub_00032440(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 
 uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t t1 = 0, t2 = 0;
 	double f0 = 0, f0_2 = 0;
 
@@ -40321,12 +40351,12 @@ uint32_t sub_00032810(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	MEM32(g_esp) = MEM32(esi_2 + 0x140u) + 1u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x342u;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp + 8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
@@ -41659,8 +41689,8 @@ void sub_00032FF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		sub_000BFC90(arg0_2, arg1, &ignored, &ebx, &ebp_2);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(esi + 0x13Cu);
-		arg0_2 = MEM32(g_esp);
-		eax_2 = sub_00025620(arg0_2);
+		level = MEM32(g_esp);
+		eax_2 = LevelNext(level);
 		g_esp = g_esp + 0xCu;
 		if ((MEM32(0x1E6308u) == ebp_2 || eax_2 == 0xFFFFFFFFu) && MEM32(esi + 0x140u) != edi_2)
 		{
@@ -42083,7 +42113,7 @@ void sub_000337F0(uint32_t eax, uint32_t ecx, uint32_t edx)
 void sub_00033870(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint8_t ecx_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0, f1 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -42266,12 +42296,12 @@ void sub_00033870(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		MEM32(g_esp) = eax_2 + 1u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x342u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
@@ -42495,12 +42525,12 @@ void sub_00033870(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x343u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp + 8u;
 		edx = g_esp + 0x20u;
 		do
@@ -43050,7 +43080,7 @@ uint32_t sub_000341A0(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 
 uint32_t sub_00034230(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0, manager = 0, number = 0;
 	double f0 = 0;
 
 	edx = MEM32(vcScreenRect_VA);
@@ -43084,22 +43114,22 @@ uint32_t sub_00034230(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	g_esp = g_esp + 0xCu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(MEM32(esi + 0x124u) * 5u * 4u + 0x1B0AFCu);
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	MEM32(esi + 0x12Cu) = eax_2;
 	g_esp = g_esp + 8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(MEM32(esi + 0x124u) * 5u * 4u + 0x1B0AF8u);
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	MEM32(esi + 0x130u) = eax_2;
 	g_esp = g_esp + 8u;
 	if (MEM32(MEM32(esi + 0x124u) * 5u * 4u + 0x1B0B08u) != 0xFFFFFFFFu)
@@ -43111,12 +43141,12 @@ uint32_t sub_00034230(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	}
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(edx * 4u + 0x1B0A90u);
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	MEM32(esi + 0x134u) = eax_2;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi + 0x128u);
@@ -43647,7 +43677,7 @@ uint32_t MainMenuCodeSequence(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
    to C3_MONO.wav, picked by vcRandomCosmetic. */
 uint32_t MainMenuEnterCode(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg2)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, mask = 0, number = 0;
 	uint32_t stack = 0, stack_C = 0, stack_10 = 0, stack_14 = 0, stack_18 = 0;
 
 	esi = arg2;
@@ -43841,10 +43871,10 @@ uint32_t MainMenuEnterCode(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t ar
 	stack_10 = 0u;
 	stack_14 = 0u;
 	stack_18 = MainMenuCodeAnswer;
-	eax = sub_000248B0();
-	arg0 = eax;
-	arg1 = stack_18;
-	sub_00111CF0(arg0, arg1, &eax, &ignored_2, &ignored_3);
+	eax = StringTableGet();
+	manager = eax;
+	number = stack_18;
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	arg1 = eax;
 	arg0 = 0u;
 	arg2_2 = stack_14;
@@ -44908,9 +44938,9 @@ uint32_t sub_00035870(uint32_t ebx, uint32_t ebp)
 
 void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, edx = 0, esi = 0, ignored = 0, port = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, edx = 0, esi = 0, ignored = 0, manager = 0, number = 0, port = 0;
 
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	esi = eax;
 	if (MEM32(0x1BC6C4u) != 0u)
 	{
@@ -44918,9 +44948,9 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		eax = vcPadIsOpen(port);
 		if (eax == 0u)
 		{
-			arg1 = 0x7EEu;
-			arg0 = esi;
-			sub_00111CF0(arg0, arg1, &eax, &ignored, &edx);
+			number = 0x7EEu;
+			manager = esi;
+			vcStringManagerGetText(manager, number, &eax, &ignored, &edx);
 			arg1 = eax;
 			arg0 = 0x1EA9D0u;
 			g_edx = edx;
@@ -44950,9 +44980,9 @@ void sub_000358A0(uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p
 		*p_eax = eax;
 		return;
 	}
-	arg1 = 0x7EEu;
-	arg0 = esi;
-	sub_00111CF0(arg0, arg1, &eax, &ignored, &edx);
+	number = 0x7EEu;
+	manager = esi;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &edx);
 	arg1 = eax;
 	arg0 = 0x1EA9D0u;
 	g_edx = edx;
@@ -56821,15 +56851,21 @@ uint32_t sub_00040740(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* A Player's update, every frame (its GameObjectEntry's update, set by sub_00040B60): while its entity's
+   flag 0x2000 is on, a sound of the set at 0x1EB398 every 165 ms; with two players, once its +0x3B8's
+   time has passed, its entity's model's scene flag 0x10 off; with one player and DEATHGRIP's cheat
+   (Cheats' 0x4000), once its entity's first target locked on (the entity's +0x1A8) has stayed the same
+   for 250 ms, X on its pad (unless ControllerItemsDisabled has it off) sends that target a damage of
+   100000. With its entity gone, its +0x3A0 becomes sub_0003F980. */
+uint32_t Player_Update(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t entry, uint32_t player, uint32_t time)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, mask = 0;
+	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, mask = 0;
 	double f0 = 0, t1 = 0;
 
 	g_esp = g_esp - 0x10u;
-	MEM32(g_esp + 4u) = arg0;
-	MEM32(g_esp + 8u) = arg1;
-	MEM32(g_esp + 0xCu) = arg2;
+	MEM32(g_esp + 4u) = entry;
+	MEM32(g_esp + 8u) = player;
+	MEM32(g_esp + 0xCu) = time;
 	eax = MEM32(g_esp + 4u);
 	ecx = GameObjectLastHandle;
 	g_esp = g_esp - 0x28u;
@@ -56874,8 +56910,8 @@ uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	}
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
-	arg0_2 = MEM32(g_esp);
-	sub_000178B0(arg0_2, &eax, &ebp);
+	arg0 = MEM32(g_esp);
+	sub_000178B0(arg0, &eax, &ebp);
 	g_esp = g_esp + 4u;
 	if (edi_2 == 0u)
 	{
@@ -56897,14 +56933,14 @@ uint32_t sub_000409A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(g_esp) = edi_2 + 8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x1EB398u;
-		arg0_2 = MEM32(g_esp);
-		eax = sub_0010E370(arg0_2);
+		arg0 = MEM32(g_esp);
+		eax = sub_0010E370(arg0);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_0010F1B0(arg0_2, arg1_2, &eax, &ebx_2, &ebp, &esi_2, &edi_2);
+		arg0 = MEM32(g_esp);
+		arg1 = MEM32(g_esp + 4u);
+		sub_0010F1B0(arg0, arg1, &eax, &ebx_2, &ebp, &esi_2, &edi_2);
 		MEM32(esi_2 + 0x400u) = ebx_2;
 		g_esp = g_esp + 8u;
 	}
@@ -64206,7 +64242,7 @@ uint32_t sub_000477F0(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 
 uint32_t sub_000479C0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, ignored = 0;
+	uint32_t arg0 = 0, arg1 = 0, damage = 0, eax_2 = 0, entity = 0, handle = 0, ignored = 0;
 	double f0 = 0, t1 = 0;
 
 	if ((MEM8(esi + 4u) & 0x40u) != 0u && (eax & 0x7C0000u) == 0x80000u)
@@ -64215,10 +64251,10 @@ uint32_t sub_000479C0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, ui
 		if (eax == 0x49u || eax == 0x48u)
 			return eax;
 	}
-	arg2 = edx;
-	arg1 = esi;
-	arg0 = edi;
-	sub_0001A700(arg0, arg1, arg2, &eax, &ignored, &ebx, &ebp, &esi, &edi);
+	damage = edx;
+	entity = esi;
+	handle = edi;
+	EntityTakeDamage(handle, entity, damage, &eax, &ignored, &ebx, &ebp, &esi, &edi);
 	if (eax != 0u)
 	{
 		eax_2 = MEM32(ebx + 0x10u) | 1u;
@@ -64987,68 +65023,71 @@ uint32_t sub_000492C0(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00049A60(uint32_t eax)
+/* Whether a veritech of VeritechChoices can be chosen: its requirements met (VeritechRequirementMet),
+   the armored ones (whose second is -4) only in a versus arena (a level past 58); the female power
+   armour, the 16th, once award 16 is won and in a versus arena. */
+uint32_t VeritechChoiceIsOpen(uint32_t choice)
 {
-	uint32_t arg0 = 0, eax_2 = 0, esi = 0;
+	uint32_t award = 0, eax = 0, esi = 0, requirement = 0;
 
-	esi = eax;
+	esi = choice;
 	if (esi == 0xFu)
 	{
-		arg0 = 0x10u;
-		eax_2 = sub_0002F1C0(arg0);
-		if ((int16_t)eax_2 > 0)
+		award = 0x10u;
+		eax = AwardRank(award);
+		if ((int16_t)eax > 0)
 		{
-			eax_2 = LevelGetCurrent();
-			if ((int32_t)eax_2 >= 0x3B)
+			eax = LevelGetCurrent();
+			if ((int32_t)eax >= 0x3B)
 			{
-				eax_2 = 1u;
-				return eax_2;
+				choice = 1u;
+				return choice;
 			}
 		}
-		eax_2 = 0u;
-		return eax_2;
+		choice = 0u;
+		return choice;
 	}
 	esi = esi << 4;
-	if (MEM32(esi + 0x1B1408u) == 0xFFFFFFFFu)
+	if (MEM32(esi + VeritechChoice_requires_also_VA(VeritechChoices_VA)) == 0xFFFFFFFFu)
 	{
-		arg0 = MEM32(esi + 0x1B1404u);
-		eax_2 = sub_000251F0(arg0);
-		return eax_2;
+		requirement = MEM32(esi + VeritechChoice_requires_VA(VeritechChoices_VA));
+		eax = VeritechRequirementMet(requirement);
+		return eax;
 	}
-	eax_2 = LevelGetCurrent();
-	if ((int32_t)eax_2 >= 0x3B || MEM32(esi + 0x1B1408u) != 0xFFFFFFFCu)
+	eax = LevelGetCurrent();
+	if ((int32_t)eax >= 0x3B || MEM32(esi + VeritechChoice_requires_also_VA(VeritechChoices_VA)) != 0xFFFFFFFCu)
 	{
-		arg0 = MEM32(esi + 0x1B1408u);
-		eax_2 = sub_000251F0(arg0);
-		if (eax_2 == 0u)
+		requirement = MEM32(esi + VeritechChoice_requires_also_VA(VeritechChoices_VA));
+		eax = VeritechRequirementMet(requirement);
+		if (eax == 0u)
 		{
-			eax_2 = 0u;
-			return eax_2;
+			choice = 0u;
+			return choice;
 		}
-		arg0 = MEM32(esi + 0x1B1404u);
-		eax_2 = sub_000251F0(arg0);
-		if (eax_2 == 0u)
+		requirement = MEM32(esi + VeritechChoice_requires_VA(VeritechChoices_VA));
+		eax = VeritechRequirementMet(requirement);
+		if (eax == 0u)
 		{
-			eax_2 = 0u;
-			return eax_2;
+			choice = 0u;
+			return choice;
 		}
-		eax_2 = 1u;
-		return eax_2;
+		choice = 1u;
+		return choice;
 	}
-	eax_2 = 0u;
-	return eax_2;
+	choice = 0u;
+	return choice;
 }
 
 uint32_t sub_00049AF0(uint32_t edi)
 {
-	uint32_t arg0 = 0, eax = 0, esi = 0, level = 0;
+	uint32_t eax = 0, esi = 0, level = 0, requirement = 0;
 
 	esi = edi << 4;
-	eax = MEM32(esi + 0x1B1408u);
+	eax = MEM32(esi + VeritechChoice_requires_also_VA(VeritechChoices_VA));
 	if (eax == 0xFFFFFFFFu)
 	{
-		arg0 = MEM32(esi + 0x1B1404u);
-		eax = sub_000251F0(arg0);
+		requirement = MEM32(esi + VeritechChoice_requires_VA(VeritechChoices_VA));
+		eax = VeritechRequirementMet(requirement);
 		if (eax != 0u)
 		{
 			if ((int32_t)edi <= 4 || edi == 0xFu)
@@ -65069,15 +65108,15 @@ uint32_t sub_00049AF0(uint32_t edi)
 		}
 		return eax;
 	}
-	arg0 = eax;
-	eax = sub_000251F0(arg0);
+	requirement = eax;
+	eax = VeritechRequirementMet(requirement);
 	if (eax == 0u)
 	{
 		eax = 0u;
 		return eax;
 	}
-	arg0 = MEM32(esi + 0x1B1404u);
-	eax = sub_000251F0(arg0);
+	requirement = MEM32(esi + VeritechChoice_requires_VA(VeritechChoices_VA));
+	eax = VeritechRequirementMet(requirement);
 	if (eax == 0u)
 	{
 		eax = 0u;
@@ -65102,17 +65141,19 @@ uint32_t sub_00049AF0(uint32_t edi)
 	return eax;
 }
 
-uint32_t sub_00049B70(uint32_t esi)
+/* Whether a paint design can be chosen: in the training (chapter 5) only the first, Trainer; otherwise
+   every one under MISSMACROSS's cheat (Cheats' 0x80), or one earned. */
+uint32_t PaintDesignIsOpen(uint32_t design)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, eax = 0, level = 0, mask = 0;
+	uint32_t design_2 = 0, eax = 0, level = 0, mask = 0;
 
 	eax = LevelGetCurrent();
 	level = eax;
 	eax = LevelGet(level);
 	if (MEM32(eax + 0x50u) == 5u)
 	{
-		zero = esi == 0u;
+		zero = design == 0u;
 		eax = zero;
 		return eax;
 	}
@@ -65120,8 +65161,8 @@ uint32_t sub_00049B70(uint32_t esi)
 	eax = CheatIsOn(mask);
 	if (eax == 0u)
 	{
-		arg0 = esi;
-		eax = sub_0002F1A0(arg0);
+		design_2 = design;
+		eax = PaintDesignIsEarned(design_2);
 		if (eax == 0u)
 			return eax;
 	}
@@ -65215,11 +65256,11 @@ void sub_00049C50(uint8_t eax, uint32_t ecx, uint32_t arg0, uint32_t arg1, uint3
 
 uint32_t sub_00049D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg1)
 {
-	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, port = 0;
+	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0, port = 0;
 	uint32_t stack = 0, stack_C = 0, stack_10 = 0, stack_14 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	esi = eax;
 	eax = saved_arg1;
 	ecx = MEM32(eax + 0x1B4u);
@@ -65244,9 +65285,9 @@ uint32_t sub_00049D70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg1)
 			stack_C = 1u;
 			stack_10 = 0u;
 			stack_14 = 3u;
-			arg1_2 = 0x43Cu;
-			arg0 = esi;
-			sub_00111CF0(arg0, arg1_2, &eax, &ignored, &ignored_2);
+			number = 0x43Cu;
+			manager = esi;
+			vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 			arg1_2 = eax;
 			arg0 = 0u;
 			arg2 = stack_14;
@@ -65333,7 +65374,7 @@ void sub_00049DF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	else
 		MEM32(MEM32(esi + 0x12Cu) * 4u + 0x1EB94Cu) = ebx_2;
 	eax_2 = MEM32(esi + 0x124u);
-	eax_2 = sub_00049A60(eax_2);
+	eax_2 = VeritechChoiceIsOpen(eax_2);
 	if (eax_2 == 0u)
 	{
 		do
@@ -65343,12 +65384,12 @@ void sub_00049DF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 			if ((int32_t)ecx >= 0x10)
 				MEM32(esi + 0x124u) = ebx_2;
 			eax_2 = MEM32(esi + 0x124u);
-			eax_2 = sub_00049A60(eax_2);
+			eax_2 = VeritechChoiceIsOpen(eax_2);
 		} while (eax_2 == 0u);
 	}
 	eax_2 = MEM32(esi + 0x124u) << 4;
-	edx_2 = MEM32(eax_2 + 0x1B1408u);
-	eax_2 = MEM32(eax_2 + 0x1B140Cu);
+	edx_2 = MEM32(eax_2 + VeritechChoice_requires_also_VA(VeritechChoices_VA));
+	eax_2 = MEM32(eax_2 + VeritechChoice_model_VA(VeritechChoices_VA));
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	g_esp = g_esp - 4u;
@@ -65817,7 +65858,7 @@ void sub_00049DF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_000C73A0(arg0_2, arg1_2);
 		ecx = MEM32(esi + 0x15Cu);
-		eax_2 = MEM32((MEM32(esi + 0x124u) << 4) + 0x1B1400u);
+		eax_2 = VeritechChoice_name_string(VeritechChoices(MEM32(esi + 0x124u)));
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 2u;
 		g_esp = g_esp - 4u;
@@ -66051,7 +66092,7 @@ void sub_00049DF0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
 		sub_000C73A0(arg0_2, arg1_2);
-		eax_2 = MEM32(MEM32(esi + 0x128u) * 4u + 0x1B1500u);
+		eax_2 = PaintDesignNames(MEM32(esi + 0x128u));
 		ecx = MEM32(esi + 0x16Cu);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 2u;
@@ -66347,7 +66388,7 @@ void sub_0004A840(uint32_t eax, uint32_t ecx, uint32_t edx)
 void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint8_t eax_3 = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x14u;
@@ -66390,12 +66431,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x6ECu;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0 = MEM32(g_esp);
-			arg1 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0, arg1, &eax_2, &ecx, &ignored_3);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ecx, &ignored_3);
 			f0 = x87_round(FLOAT_AT(g_esp + 0xCu) + 3.0);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp - 4u;
@@ -66411,12 +66452,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp + 0x10u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x6ECu;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0 = MEM32(g_esp);
-			arg1 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
 			eax_2 = MEM32(g_esp + 0x10u);
@@ -66429,12 +66470,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		{
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x6EBu;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0 = MEM32(g_esp);
-			arg1 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0, arg1, &eax_2, &ecx, &ignored_3);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ecx, &ignored_3);
 			f0 = x87_round(FLOAT_AT(g_esp + 0xCu) + 3.0);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp - 4u;
@@ -66450,12 +66491,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 			g_esp = g_esp + 0x10u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x6EBu;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0 = MEM32(g_esp);
-			arg1 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 			edx = MEM32(g_esp + 0xCu);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
@@ -66501,12 +66542,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0xCu;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x5F6u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		g_esp = g_esp - 4u;
@@ -66533,12 +66574,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x10u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x5F7u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		g_esp = g_esp - 4u;
@@ -66565,12 +66606,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x10u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x5F8u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		g_esp = g_esp - 4u;
@@ -66597,12 +66638,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x10u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x5F9u;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		g_esp = g_esp - 4u;
@@ -66629,12 +66670,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		g_esp = g_esp + 0x10u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0x5FAu;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		g_esp = g_esp - 4u;
@@ -66701,12 +66742,12 @@ void sub_0004A960(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = 0x4D5u;
 		MEM32(g_esp + 0x10u) = edx - 0xFAu;
 		MEM32(g_esp + 0x14u) = eax_2 - 0x12Cu;
-		eax_2 = sub_000248B0();
+		eax_2 = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
@@ -66817,7 +66858,7 @@ uint32_t sub_0004AE00(uint32_t ebx, uint32_t ebp)
 	arg1 = 0u;
 	MEM32(0x1EB94Cu) = 0u;
 	MEM32(0x1EB950u) = 0u;
-	eax = MEM32(0x1B141Cu);
+	eax = VeritechChoice_model(VeritechChoices(1));
 	arg0 = eax;
 	MEM32(0x1B13E8u) = 2u;
 	MEM32(0x1B13ECu) = 2u;
@@ -66833,7 +66874,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 {
 	bool L_04B01F = false, L_04B021 = false, L_04B0C4 = false, L_04B194 = false, L_04B24A = false, L_04B2E1 = false, L_04B3B1 = false, L_04B4D2 = false, L_04B4D4 = false, L_04B5C8 = false, L_04B70F = false, L_04B711 = false, L_04B7B5 = false, L_04B883 = false, L_04B93C = false, L_04B9C5 = false, L_04BA93 = false, L_04BC4A = false, L_04BDE0 = false, L_04BDE8 = false, L_04BE08 = false, L_04BF47 = false, L_04C094 = false, L_04C09A = false, L_04C1FE = false, L_04C2D3 = false, L_04C39F = false;
 	uint32_t zero = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0, mask = 0, port = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, design = 0, design_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0, mask = 0, port = 0;
 	uint32_t t1 = 0, t2 = 0, jump_target = 0, t3 = 0, t4 = 0, t5 = 0, jump_target_2 = 0, t6 = 0, t7 = 0, t8 = 0;
 	double f0 = 0;
 
@@ -67380,13 +67421,13 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					MEM32(ebp_2 + 0x124u) = 0xFu;
 				}
 				eax = MEM32(ebp_2 + 0x124u);
-				eax = sub_00049A60(eax);
+				eax = VeritechChoiceIsOpen(eax);
 			} while (eax == 0u);
 			ecx_2 = MEM32(ebp_2 + 0x124u);
 			eax = ebp_2;
 			sub_00049BC0(eax, ecx_2);
 			edx = MEM32(ebp_2 + 0x15Cu);
-			ecx_2 = MEM32((MEM32(ebp_2 + 0x124u) << 4) + 0x1B1400u);
+			ecx_2 = VeritechChoice_name_string(VeritechChoices(MEM32(ebp_2 + 0x124u)));
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 2u;
 			g_esp = g_esp - 4u;
@@ -67406,7 +67447,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (t5 != 0xFu)
 			{
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = MEM32(MEM32(ebp_2 + 0x128u) * 4u + 0x1B1500u);
+				MEM32(g_esp) = PaintDesignNames(MEM32(ebp_2 + 0x128u));
 			}
 			else
 			{
@@ -67420,10 +67461,10 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			arg2_2 = MEM32(g_esp + 8u);
 			sub_000C7330(arg0_2, arg1_2, arg2_2, &ignored, &ignored_3);
 			eax = MEM32(ebp_2 + 0x124u) << 4;
-			edx = MEM32(eax + 0x1B140Cu);
+			edx = MEM32(eax + VeritechChoice_model_VA(VeritechChoices_VA));
 			g_esp = g_esp + 0xCu;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = MEM32(eax + 0x1B1408u);
+			MEM32(g_esp) = MEM32(eax + VeritechChoice_requires_also_VA(VeritechChoices_VA));
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
 			arg0_2 = MEM32(g_esp);
@@ -67498,13 +67539,13 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							if ((int32_t)MEM32(ebp_2 + 0x124u) >= 0x10)
 								MEM32(ebp_2 + 0x124u) = esi_2;
 							eax = MEM32(ebp_2 + 0x124u);
-							eax = sub_00049A60(eax);
+							eax = VeritechChoiceIsOpen(eax);
 						} while (eax == 0u);
 						ecx_2 = MEM32(ebp_2 + 0x124u);
 						eax = ebp_2;
 						sub_00049BC0(eax, ecx_2);
 						ecx_2 = MEM32(ebp_2 + 0x15Cu);
-						eax = MEM32((MEM32(ebp_2 + 0x124u) << 4) + 0x1B1400u);
+						eax = VeritechChoice_name_string(VeritechChoices(MEM32(ebp_2 + 0x124u)));
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = 2u;
 						g_esp = g_esp - 4u;
@@ -67523,7 +67564,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						if (eax != edi_2)
 						{
 							g_esp = g_esp - 4u;
-							MEM32(g_esp) = MEM32(MEM32(ebp_2 + 0x128u) * 4u + 0x1B1500u);
+							MEM32(g_esp) = PaintDesignNames(MEM32(ebp_2 + 0x128u));
 						}
 						else
 						{
@@ -67537,10 +67578,10 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						arg2_2 = MEM32(g_esp + 8u);
 						sub_000C7330(arg0_2, arg1_2, arg2_2, &ignored, &ignored_3);
 						eax = MEM32(ebp_2 + 0x124u) << 4;
-						edx = MEM32(eax + 0x1B140Cu);
+						edx = MEM32(eax + VeritechChoice_model_VA(VeritechChoices_VA));
 						g_esp = g_esp + 0xCu;
 						g_esp = g_esp - 4u;
-						MEM32(g_esp) = MEM32(eax + 0x1B1408u);
+						MEM32(g_esp) = MEM32(eax + VeritechChoice_requires_also_VA(VeritechChoices_VA));
 						g_esp = g_esp - 4u;
 						MEM32(g_esp) = edx;
 						arg0_2 = MEM32(g_esp);
@@ -67574,7 +67615,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (MEM32(ebp_2 + 0x124u) != 0xFu)
 		{
 			eax = 0xAu;
-			eax = sub_00049A60(eax);
+			eax = VeritechChoiceIsOpen(eax);
 			if (eax != 0u)
 			{
 				ecx_2 = MEM32(ebp_2 + 0x150u);
@@ -67604,12 +67645,12 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		if (L_04BDE8)
 		{
 			eax = 0xAu;
-			eax = sub_00049A60(eax);
+			eax = VeritechChoiceIsOpen(eax);
 			L_04BE08 = eax != 0u;
 			if (!L_04BE08)
 			{
 				eax = 5u;
-				eax = sub_00049A60(eax);
+				eax = VeritechChoiceIsOpen(eax);
 				L_04BE08 = eax != 0u;
 			}
 			if (L_04BE08)
@@ -67623,7 +67664,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						if ((int32_t)edi_2 < (int32_t)esi_2)
 							esi_2 = x86_srem64((uint32_t)((int32_t)esi_2 >> 31), esi_2, 5u);
 						eax = esi_2;
-						eax = sub_00049A60(eax);
+						eax = VeritechChoiceIsOpen(eax);
 					} while (eax == 0u);
 					MEM32(ebp_2 + 0x124u) = esi_2;
 					if (esi_2 != edi_2)
@@ -67632,7 +67673,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 						MEM32(ebp_2 + 0x1B8u) = edx + (edx >> 31);
 					}
 					edx = MEM32(ebp_2 + 0x15Cu);
-					ecx_2 = MEM32((esi_2 << 4) + 0x1B1400u);
+					ecx_2 = VeritechChoice_name_string(VeritechChoices(esi_2));
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 2u;
 					g_esp = g_esp - 4u;
@@ -67647,9 +67688,9 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					eax = ebp_2;
 					sub_00049BC0(eax, ecx_2);
 					eax = MEM32(ebp_2 + 0x124u) << 4;
-					edx = MEM32(eax + 0x1B140Cu);
+					edx = MEM32(eax + VeritechChoice_model_VA(VeritechChoices_VA));
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = MEM32(eax + 0x1B1408u);
+					MEM32(g_esp) = MEM32(eax + VeritechChoice_requires_also_VA(VeritechChoices_VA));
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = edx;
 					arg0_2 = MEM32(g_esp);
@@ -67984,8 +68025,8 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					break;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = esi_2;
-				arg0_2 = MEM32(g_esp);
-				eax = sub_0002F1A0(arg0_2);
+				design_2 = MEM32(g_esp);
+				eax = PaintDesignIsEarned(design_2);
 				g_esp = g_esp + 4u;
 				if (eax != 0u)
 					break;
@@ -67996,7 +68037,7 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			if (eax != 0u)
 				break;
 		}
-		edx = MEM32(MEM32(ebp_2 + 0x128u) * 4u + 0x1B1500u);
+		edx = PaintDesignNames(MEM32(ebp_2 + 0x128u));
 		eax = MEM32(ebp_2 + 0x16Cu);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 2u;
@@ -68042,10 +68083,10 @@ void sub_0004AE70(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								MEM32(ebp_2 + 0x128u) = ecx_2;
 								if ((int32_t)ecx_2 >= 0xB)
 									MEM32(ebp_2 + 0x128u) = ebx_2;
-								esi_2 = MEM32(ebp_2 + 0x128u);
-								eax = sub_00049B70(esi_2);
+								design = MEM32(ebp_2 + 0x128u);
+								eax = PaintDesignIsOpen(design);
 							} while (eax == 0u);
-							eax = MEM32(MEM32(ebp_2 + 0x128u) * 4u + 0x1B1500u);
+							eax = PaintDesignNames(MEM32(ebp_2 + 0x128u));
 							ecx_2 = MEM32(ebp_2 + 0x16Cu);
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = 2u;
@@ -72216,11 +72257,11 @@ void ZenRetrieval_Register(uint32_t arg0)
 	EntitySpec_radius(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x8u;
 	EntitySpec_target_node(ZenRetrievalSpec_VA) = 0x1EBCF4u;
 	EntitySpec_hit_points(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0xCu;
-	MEM32(ZenRetrievalSpec_VA + 0x4u) = ZenRetrievalParameters_VA + 0x10u;
-	MEM32(ZenRetrievalSpec_VA + 0x8u) = ZenRetrievalParameters_VA + 0x14u;
-	MEM32(ZenRetrievalSpec_VA + 0xCu) = ZenRetrievalParameters_VA + 0x18u;
-	MEM32(ZenRetrievalSpec_VA + 0x10u) = ZenRetrievalParameters_VA + 0x1Cu;
-	MEM32(ZenRetrievalSpec_VA + 0x14u) = ZenRetrievalParameters_VA + 0x20u;
+	EntitySpec_hit_points_refill(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x10u;
+	EntitySpec_gun_ammo(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x14u;
+	EntitySpec_gun_ammo_refill(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x18u;
+	EntitySpec_missiles(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x1Cu;
+	EntitySpec_missiles_refill(ZenRetrievalSpec_VA) = ZenRetrievalParameters_VA + 0x20u;
 	MEM32(ZenRetrievalSpec_VA + 0x18u) = ZenRetrievalParameters_VA + 0x24u;
 	MEM32(ZenRetrievalSpec_VA + 0x1Cu) = ZenRetrievalParameters_VA + 0x28u;
 	MEM32(ZenRetrievalSpec_VA + 0x20u) = ZenRetrievalParameters_VA + 0x2Cu;
@@ -72489,11 +72530,11 @@ void Centipede_Register(uint32_t arg0)
 	EntitySpec_radius(CentipedeSpec_VA) = CentipedeParameters_VA + 0x8u;
 	EntitySpec_target_node(CentipedeSpec_VA) = 0x1EC04Cu;
 	EntitySpec_hit_points(CentipedeSpec_VA) = CentipedeParameters_VA + 0xCu;
-	MEM32(CentipedeSpec_VA + 0x4u) = CentipedeParameters_VA + 0x10u;
-	MEM32(CentipedeSpec_VA + 0x8u) = CentipedeParameters_VA + 0x14u;
-	MEM32(CentipedeSpec_VA + 0xCu) = CentipedeParameters_VA + 0x18u;
-	MEM32(CentipedeSpec_VA + 0x10u) = CentipedeParameters_VA + 0x1Cu;
-	MEM32(CentipedeSpec_VA + 0x14u) = CentipedeParameters_VA + 0x20u;
+	EntitySpec_hit_points_refill(CentipedeSpec_VA) = CentipedeParameters_VA + 0x10u;
+	EntitySpec_gun_ammo(CentipedeSpec_VA) = CentipedeParameters_VA + 0x14u;
+	EntitySpec_gun_ammo_refill(CentipedeSpec_VA) = CentipedeParameters_VA + 0x18u;
+	EntitySpec_missiles(CentipedeSpec_VA) = CentipedeParameters_VA + 0x1Cu;
+	EntitySpec_missiles_refill(CentipedeSpec_VA) = CentipedeParameters_VA + 0x20u;
 	MEM32(CentipedeSpec_VA + 0x18u) = CentipedeParameters_VA + 0x24u;
 	MEM32(CentipedeSpec_VA + 0x1Cu) = CentipedeParameters_VA + 0x28u;
 	MEM32(CentipedeSpec_VA + 0x20u) = CentipedeParameters_VA + 0x2Cu;
@@ -72770,11 +72811,11 @@ void MilitaryTransport_Register(uint32_t arg0)
 	EntitySpec_radius(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x8u;
 	EntitySpec_target_node(MilitaryTransportSpec_VA) = 0x1EC3A4u;
 	EntitySpec_hit_points(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0xCu;
-	MEM32(MilitaryTransportSpec_VA + 0x4u) = MilitaryTransportParameters_VA + 0x10u;
-	MEM32(MilitaryTransportSpec_VA + 0x8u) = MilitaryTransportParameters_VA + 0x14u;
-	MEM32(MilitaryTransportSpec_VA + 0xCu) = MilitaryTransportParameters_VA + 0x18u;
-	MEM32(MilitaryTransportSpec_VA + 0x10u) = MilitaryTransportParameters_VA + 0x1Cu;
-	MEM32(MilitaryTransportSpec_VA + 0x14u) = MilitaryTransportParameters_VA + 0x20u;
+	EntitySpec_hit_points_refill(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x10u;
+	EntitySpec_gun_ammo(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x14u;
+	EntitySpec_gun_ammo_refill(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x18u;
+	EntitySpec_missiles(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x1Cu;
+	EntitySpec_missiles_refill(MilitaryTransportSpec_VA) = MilitaryTransportParameters_VA + 0x20u;
 	MEM32(MilitaryTransportSpec_VA + 0x18u) = MilitaryTransportParameters_VA + 0x24u;
 	MEM32(MilitaryTransportSpec_VA + 0x1Cu) = MilitaryTransportParameters_VA + 0x28u;
 	MEM32(MilitaryTransportSpec_VA + 0x20u) = MilitaryTransportParameters_VA + 0x2Cu;
@@ -73047,11 +73088,11 @@ void MechHauler_Register(uint32_t arg0)
 	EntitySpec_radius(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x8u;
 	EntitySpec_target_node(MechHaulerSpec_VA) = 0x1EC6FCu;
 	EntitySpec_hit_points(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0xCu;
-	MEM32(MechHaulerSpec_VA + 0x4u) = MechHaulerParameters_VA + 0x10u;
-	MEM32(MechHaulerSpec_VA + 0x8u) = MechHaulerParameters_VA + 0x14u;
-	MEM32(MechHaulerSpec_VA + 0xCu) = MechHaulerParameters_VA + 0x18u;
-	MEM32(MechHaulerSpec_VA + 0x10u) = MechHaulerParameters_VA + 0x1Cu;
-	MEM32(MechHaulerSpec_VA + 0x14u) = MechHaulerParameters_VA + 0x20u;
+	EntitySpec_hit_points_refill(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x10u;
+	EntitySpec_gun_ammo(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x14u;
+	EntitySpec_gun_ammo_refill(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x18u;
+	EntitySpec_missiles(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x1Cu;
+	EntitySpec_missiles_refill(MechHaulerSpec_VA) = MechHaulerParameters_VA + 0x20u;
 	MEM32(MechHaulerSpec_VA + 0x18u) = MechHaulerParameters_VA + 0x24u;
 	MEM32(MechHaulerSpec_VA + 0x1Cu) = MechHaulerParameters_VA + 0x28u;
 	MEM32(MechHaulerSpec_VA + 0x20u) = MechHaulerParameters_VA + 0x2Cu;
@@ -73272,7 +73313,7 @@ uint32_t sub_00052B70(uint32_t eax, uint32_t edi)
    answered. */
 uint32_t Vehicle_StateMachine(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	edx = arg2;
 	eax = arg3;
@@ -73306,9 +73347,9 @@ uint32_t Vehicle_StateMachine(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32
 						eax = 1u;
 						return eax;
 					}
-					arg2_2 = arg4;
-					arg0_2 = ebp;
-					sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+					damage = arg4;
+					handle = ebp;
+					EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 					eax = 1u;
 					return eax;
 				}
@@ -73371,9 +73412,9 @@ uint32_t Vehicle_StateMachine(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32
 		{
 			if (eax == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ebp;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebp;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -74339,7 +74380,7 @@ void sub_000537A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenHeavyMissileTurret_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4_2 = 0, saved_arg1 = 0, saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -74374,9 +74415,9 @@ uint32_t ZenHeavyMissileTurret_StateMachine(uint32_t ebp, uint32_t esi, uint32_t
 						eax = 1u;
 						return eax;
 					}
-					arg2_2 = arg4;
-					arg0_2 = ebx;
-					sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+					damage = arg4;
+					handle = ebx;
+					EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 					eax = 1u;
 					return eax;
 				}
@@ -74409,10 +74450,10 @@ uint32_t ZenHeavyMissileTurret_StateMachine(uint32_t ebp, uint32_t esi, uint32_t
 			{
 				saved_arg4_2 = arg4;
 				saved_arg1 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1;
-				arg2_2 = saved_arg4_2;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1;
+				damage = saved_arg4_2;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -74510,10 +74551,10 @@ uint32_t ZenHeavyMissileTurret_StateMachine(uint32_t ebp, uint32_t esi, uint32_t
 			{
 				saved_arg4_2 = arg4;
 				saved_arg1 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1;
-				arg2_2 = saved_arg4_2;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1;
+				damage = saved_arg4_2;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -74677,11 +74718,11 @@ void ZenHeavyMissileTurret_Register(uint32_t arg0)
 	EntitySpec_radius(ZenHeavyMissileTurretSpec_VA) = EntityConstants_radius_VA(ZenHeavyMissileTurretConstants_VA);
 	EntitySpec_target_node(ZenHeavyMissileTurretSpec_VA) = 0x1B16BCu;
 	EntitySpec_hit_points(ZenHeavyMissileTurretSpec_VA) = EntityConstants_hit_points_VA(ZenHeavyMissileTurretConstants_VA);
-	MEM32(ZenHeavyMissileTurretSpec_VA + 0x4u) = ZenHeavyMissileTurretConstants_VA + 0xCu;
-	MEM32(ZenHeavyMissileTurretSpec_VA + 0x8u) = ZenHeavyMissileTurretConstants_VA + 0x10u;
-	MEM32(ZenHeavyMissileTurretSpec_VA + 0xCu) = ZenHeavyMissileTurretConstants_VA + 0x14u;
-	MEM32(ZenHeavyMissileTurretSpec_VA + 0x10u) = ZenHeavyMissileTurretConstants_VA + 0x18u;
-	MEM32(ZenHeavyMissileTurretSpec_VA + 0x14u) = ZenHeavyMissileTurretConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenHeavyMissileTurretSpec_VA) = ZenHeavyMissileTurretConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenHeavyMissileTurretSpec_VA) = ZenHeavyMissileTurretConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenHeavyMissileTurretSpec_VA) = ZenHeavyMissileTurretConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenHeavyMissileTurretSpec_VA) = ZenHeavyMissileTurretConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenHeavyMissileTurretSpec_VA) = ZenHeavyMissileTurretConstants_VA + 0x1Cu;
 	MEM32(ZenHeavyMissileTurretSpec_VA + 0x18u) = ZenHeavyMissileTurretConstants_VA + 0x20u;
 	MEM32(ZenHeavyMissileTurretSpec_VA + 0x1Cu) = ZenHeavyMissileTurretConstants_VA + 0x24u;
 	MEM32(ZenHeavyMissileTurretSpec_VA + 0x20u) = ZenHeavyMissileTurretConstants_VA + 0x28u;
@@ -75432,7 +75473,7 @@ uint32_t sub_000546C0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenLightMissileTurret_StateMachine(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -75470,9 +75511,9 @@ uint32_t ZenLightMissileTurret_StateMachine(uint32_t ebx, uint32_t arg0, uint32_
 						eax = ebp;
 						return eax;
 					}
-					arg2_2 = arg4;
-					arg0_2 = ecx;
-					sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+					damage = arg4;
+					handle = ecx;
+					EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 					eax = ebp;
 					return eax;
 				}
@@ -75503,9 +75544,9 @@ uint32_t ZenLightMissileTurret_StateMachine(uint32_t ebx, uint32_t arg0, uint32_
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = ebp;
@@ -75602,9 +75643,9 @@ uint32_t ZenLightMissileTurret_StateMachine(uint32_t ebx, uint32_t arg0, uint32_
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = ebp;
@@ -75743,11 +75784,11 @@ void ZenLightMissileTurret_Register(uint32_t arg0)
 	EntitySpec_radius(ZenLightMissileTurretSpec_VA) = EntityConstants_radius_VA(ZenLightMissileTurretConstants_VA);
 	EntitySpec_target_node(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretTargetNode_VA;
 	EntitySpec_hit_points(ZenLightMissileTurretSpec_VA) = EntityConstants_hit_points_VA(ZenLightMissileTurretConstants_VA);
-	MEM32(ZenLightMissileTurretSpec_VA + 0x4u) = ZenLightMissileTurretConstants_VA + 0xCu;
-	MEM32(ZenLightMissileTurretSpec_VA + 0x8u) = ZenLightMissileTurretConstants_VA + 0x10u;
-	MEM32(ZenLightMissileTurretSpec_VA + 0xCu) = ZenLightMissileTurretConstants_VA + 0x14u;
-	MEM32(ZenLightMissileTurretSpec_VA + 0x10u) = ZenLightMissileTurretConstants_VA + 0x18u;
-	MEM32(ZenLightMissileTurretSpec_VA + 0x14u) = ZenLightMissileTurretConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenLightMissileTurretSpec_VA) = ZenLightMissileTurretConstants_VA + 0x1Cu;
 	MEM32(ZenLightMissileTurretSpec_VA + 0x18u) = ZenLightMissileTurretConstants_VA + 0x20u;
 	MEM32(ZenLightMissileTurretSpec_VA + 0x1Cu) = ZenLightMissileTurretConstants_VA + 0x24u;
 	MEM32(ZenLightMissileTurretSpec_VA + 0x20u) = ZenLightMissileTurretConstants_VA + 0x28u;
@@ -76012,7 +76053,7 @@ void sub_000550F0(uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1_2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -76051,9 +76092,9 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 							eax = 1u;
 							return eax;
 						}
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 						eax = 1u;
 						return eax;
 					}
@@ -76076,10 +76117,10 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 				{
 					saved_arg4 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = ebx;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = ebx;
+					entity = saved_arg1_2;
+					damage = saved_arg4;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -76132,10 +76173,10 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 				{
 					saved_arg4 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = ebx;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = ebx;
+					entity = saved_arg1_2;
+					damage = saved_arg4;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -76212,10 +76253,10 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 				{
 					saved_arg4 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = ebx;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = ebx;
+					entity = saved_arg1_2;
+					damage = saved_arg4;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -76676,11 +76717,11 @@ void ZenCruiserTurret1_Register(uint32_t arg0)
 	EntitySpec_radius(ZenCruiserTurret1Spec_VA) = 0x192B50u;
 	EntitySpec_target_node(ZenCruiserTurret1Spec_VA) = ZenCruiserTurret1TargetNode_VA;
 	EntitySpec_hit_points(ZenCruiserTurret1Spec_VA) = 0x192B54u;
-	MEM32(ZenCruiserTurret1Spec_VA + 0x4u) = 0x192B58u;
-	MEM32(ZenCruiserTurret1Spec_VA + 0x8u) = 0x192B5Cu;
-	MEM32(ZenCruiserTurret1Spec_VA + 0xCu) = 0x192B60u;
-	MEM32(ZenCruiserTurret1Spec_VA + 0x10u) = 0x192B64u;
-	MEM32(ZenCruiserTurret1Spec_VA + 0x14u) = 0x192B68u;
+	EntitySpec_hit_points_refill(ZenCruiserTurret1Spec_VA) = 0x192B58u;
+	EntitySpec_gun_ammo(ZenCruiserTurret1Spec_VA) = 0x192B5Cu;
+	EntitySpec_gun_ammo_refill(ZenCruiserTurret1Spec_VA) = 0x192B60u;
+	EntitySpec_missiles(ZenCruiserTurret1Spec_VA) = 0x192B64u;
+	EntitySpec_missiles_refill(ZenCruiserTurret1Spec_VA) = 0x192B68u;
 	MEM32(ZenCruiserTurret1Spec_VA + 0x18u) = 0x192B6Cu;
 	MEM32(ZenCruiserTurret1Spec_VA + 0x1Cu) = 0x192B70u;
 	MEM32(ZenCruiserTurret1Spec_VA + 0x20u) = 0x192B74u;
@@ -77302,7 +77343,7 @@ void sub_00056670(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t VF1SXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -77336,9 +77377,9 @@ uint32_t VF1SXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, ui
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -77397,9 +77438,9 @@ uint32_t VF1SXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, ui
 			}
 			if (ecx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -77518,11 +77559,11 @@ void VF1SXFighter_Register(uint32_t arg0)
 	EntitySpec_radius(VF1SXFighterSpec_VA) = EntityConstants_radius_VA(VF1SXFighterConstants_VA);
 	EntitySpec_target_node(VF1SXFighterSpec_VA) = 0x1B16CCu;
 	EntitySpec_hit_points(VF1SXFighterSpec_VA) = EntityConstants_hit_points_VA(VF1SXFighterConstants_VA);
-	MEM32(VF1SXFighterSpec_VA + 0x4u) = VF1SXFighterConstants_VA + 0xCu;
-	MEM32(VF1SXFighterSpec_VA + 0x8u) = VF1SXFighterConstants_VA + 0x10u;
-	MEM32(VF1SXFighterSpec_VA + 0xCu) = VF1SXFighterConstants_VA + 0x14u;
-	MEM32(VF1SXFighterSpec_VA + 0x10u) = VF1SXFighterConstants_VA + 0x18u;
-	MEM32(VF1SXFighterSpec_VA + 0x14u) = VF1SXFighterConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(VF1SXFighterSpec_VA) = VF1SXFighterConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(VF1SXFighterSpec_VA) = VF1SXFighterConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(VF1SXFighterSpec_VA) = VF1SXFighterConstants_VA + 0x14u;
+	EntitySpec_missiles(VF1SXFighterSpec_VA) = VF1SXFighterConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(VF1SXFighterSpec_VA) = VF1SXFighterConstants_VA + 0x1Cu;
 	MEM32(VF1SXFighterSpec_VA + 0x18u) = VF1SXFighterConstants_VA + 0x20u;
 	MEM32(VF1SXFighterSpec_VA + 0x1Cu) = VF1SXFighterConstants_VA + 0x24u;
 	MEM32(VF1SXFighterSpec_VA + 0x20u) = VF1SXFighterConstants_VA + 0x28u;
@@ -78110,7 +78151,7 @@ void sub_000576E0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t VF1AXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -78144,9 +78185,9 @@ uint32_t VF1AXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, ui
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -78205,9 +78246,9 @@ uint32_t VF1AXFighter_StateMachine(uint32_t ebp, uint32_t esi, uint32_t arg0, ui
 			}
 			if (ecx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -78326,11 +78367,11 @@ void VF1AXFighter_Register(uint32_t arg0)
 	EntitySpec_radius(VF1AXFighterSpec_VA) = EntityConstants_radius_VA(VF1AXFighterConstants_VA);
 	EntitySpec_target_node(VF1AXFighterSpec_VA) = 0x1B16D0u;
 	EntitySpec_hit_points(VF1AXFighterSpec_VA) = EntityConstants_hit_points_VA(VF1AXFighterConstants_VA);
-	MEM32(VF1AXFighterSpec_VA + 0x4u) = VF1AXFighterConstants_VA + 0xCu;
-	MEM32(VF1AXFighterSpec_VA + 0x8u) = VF1AXFighterConstants_VA + 0x10u;
-	MEM32(VF1AXFighterSpec_VA + 0xCu) = VF1AXFighterConstants_VA + 0x14u;
-	MEM32(VF1AXFighterSpec_VA + 0x10u) = VF1AXFighterConstants_VA + 0x18u;
-	MEM32(VF1AXFighterSpec_VA + 0x14u) = VF1AXFighterConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(VF1AXFighterSpec_VA) = VF1AXFighterConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(VF1AXFighterSpec_VA) = VF1AXFighterConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(VF1AXFighterSpec_VA) = VF1AXFighterConstants_VA + 0x14u;
+	EntitySpec_missiles(VF1AXFighterSpec_VA) = VF1AXFighterConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(VF1AXFighterSpec_VA) = VF1AXFighterConstants_VA + 0x1Cu;
 	MEM32(VF1AXFighterSpec_VA + 0x18u) = VF1AXFighterConstants_VA + 0x20u;
 	MEM32(VF1AXFighterSpec_VA + 0x1Cu) = VF1AXFighterConstants_VA + 0x24u;
 	MEM32(VF1AXFighterSpec_VA + 0x20u) = VF1AXFighterConstants_VA + 0x28u;
@@ -78542,7 +78583,7 @@ void PodOfficerSledMissile_Register(uint32_t arg0)
 	x86_rep_stos32(PodOfficerSledMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(PodOfficerSledMissileSpec_VA) = 0x193184u;
 	EntitySpec_hit_points(PodOfficerSledMissileSpec_VA) = 0x1930E4u;
-	MEM32(PodOfficerSledMissileSpec_VA + 0x4u) = 0x1930E8u;
+	EntitySpec_hit_points_refill(PodOfficerSledMissileSpec_VA) = 0x1930E8u;
 	MEM32(PodOfficerSledMissileSpec_VA + 0xE8u) = 0x1930ECu;
 }
 
@@ -78697,7 +78738,7 @@ void FPAMissile_Register(uint32_t arg0)
 	x86_rep_stos32(FPAMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(FPAMissileSpec_VA) = 0x193288u;
 	EntitySpec_hit_points(FPAMissileSpec_VA) = 0x1931E8u;
-	MEM32(FPAMissileSpec_VA + 0x4u) = 0x1931ECu;
+	EntitySpec_hit_points_refill(FPAMissileSpec_VA) = 0x1931ECu;
 	MEM32(FPAMissileSpec_VA + 0xE8u) = 0x1931F0u;
 }
 
@@ -78853,7 +78894,7 @@ void PlayerRDFHeavyMissile_Register(uint32_t arg0)
 	x86_rep_stos32(PlayerRDFHeavyMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(PlayerRDFHeavyMissileSpec_VA) = 0x19338Cu;
 	EntitySpec_hit_points(PlayerRDFHeavyMissileSpec_VA) = 0x1932ECu;
-	MEM32(PlayerRDFHeavyMissileSpec_VA + 0x4u) = 0x1932F0u;
+	EntitySpec_hit_points_refill(PlayerRDFHeavyMissileSpec_VA) = 0x1932F0u;
 	MEM32(PlayerRDFHeavyMissileSpec_VA + 0xE8u) = 0x1932F4u;
 }
 
@@ -79009,7 +79050,7 @@ void PlayerRDFLightMissile_Register(uint32_t arg0)
 	x86_rep_stos32(PlayerRDFLightMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(PlayerRDFLightMissileSpec_VA) = 0x193490u;
 	EntitySpec_hit_points(PlayerRDFLightMissileSpec_VA) = 0x1933F0u;
-	MEM32(PlayerRDFLightMissileSpec_VA + 0x4u) = 0x1933F4u;
+	EntitySpec_hit_points_refill(PlayerRDFLightMissileSpec_VA) = 0x1933F4u;
 	MEM32(PlayerRDFLightMissileSpec_VA + 0xE8u) = 0x1933F8u;
 }
 
@@ -79164,7 +79205,7 @@ void ZenHeavyMissile_Register(uint32_t arg0)
 	x86_rep_stos32(ZenHeavyMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(ZenHeavyMissileSpec_VA) = 0x193594u;
 	EntitySpec_hit_points(ZenHeavyMissileSpec_VA) = 0x1934F4u;
-	MEM32(ZenHeavyMissileSpec_VA + 0x4u) = 0x1934F8u;
+	EntitySpec_hit_points_refill(ZenHeavyMissileSpec_VA) = 0x1934F8u;
 	MEM32(ZenHeavyMissileSpec_VA + 0xE8u) = 0x1934FCu;
 }
 
@@ -79319,7 +79360,7 @@ void ZenLightMissile_Register(uint32_t arg0)
 	x86_rep_stos32(ZenLightMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(ZenLightMissileSpec_VA) = 0x193698u;
 	EntitySpec_hit_points(ZenLightMissileSpec_VA) = 0x1935F8u;
-	MEM32(ZenLightMissileSpec_VA + 0x4u) = 0x1935FCu;
+	EntitySpec_hit_points_refill(ZenLightMissileSpec_VA) = 0x1935FCu;
 	MEM32(ZenLightMissileSpec_VA + 0xE8u) = 0x193600u;
 }
 
@@ -79480,7 +79521,7 @@ void RDFHeavyMissile_Register(uint32_t arg0)
 	x86_rep_stos32(RDFHeavyMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(RDFHeavyMissileSpec_VA) = 0x19379Cu;
 	EntitySpec_hit_points(RDFHeavyMissileSpec_VA) = 0x1936FCu;
-	MEM32(RDFHeavyMissileSpec_VA + 0x4u) = 0x193700u;
+	EntitySpec_hit_points_refill(RDFHeavyMissileSpec_VA) = 0x193700u;
 	MEM32(RDFHeavyMissileSpec_VA + 0xE8u) = 0x193704u;
 }
 
@@ -79635,7 +79676,7 @@ void RDFLightMissile_Register(uint32_t arg0)
 	x86_rep_stos32(RDFLightMissileSpec_VA, 0u, 0x41u);
 	EntitySpec_radius(RDFLightMissileSpec_VA) = 0x1938A0u;
 	EntitySpec_hit_points(RDFLightMissileSpec_VA) = 0x193800u;
-	MEM32(RDFLightMissileSpec_VA + 0x4u) = 0x193804u;
+	EntitySpec_hit_points_refill(RDFLightMissileSpec_VA) = 0x193804u;
 	MEM32(RDFLightMissileSpec_VA + 0xE8u) = 0x193808u;
 }
 
@@ -90899,11 +90940,11 @@ void Excalibur_Register(uint32_t arg0)
 	EntitySpec_radius(ExcaliburSpec_VA) = EntityConstants_radius_VA(ExcaliburConstants_VA);
 	EntitySpec_target_node(ExcaliburSpec_VA) = 0x204308u;
 	EntitySpec_hit_points(ExcaliburSpec_VA) = EntityConstants_hit_points_VA(ExcaliburConstants_VA);
-	MEM32(ExcaliburSpec_VA + 0x4u) = ExcaliburConstants_VA + 0xCu;
-	MEM32(ExcaliburSpec_VA + 0x8u) = ExcaliburConstants_VA + 0x10u;
-	MEM32(ExcaliburSpec_VA + 0xCu) = ExcaliburConstants_VA + 0x14u;
-	MEM32(ExcaliburSpec_VA + 0x10u) = ExcaliburConstants_VA + 0x18u;
-	MEM32(ExcaliburSpec_VA + 0x14u) = ExcaliburConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ExcaliburSpec_VA) = ExcaliburConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ExcaliburSpec_VA) = ExcaliburConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ExcaliburSpec_VA) = ExcaliburConstants_VA + 0x14u;
+	EntitySpec_missiles(ExcaliburSpec_VA) = ExcaliburConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ExcaliburSpec_VA) = ExcaliburConstants_VA + 0x1Cu;
 	MEM32(ExcaliburSpec_VA + 0x18u) = ExcaliburConstants_VA + 0x20u;
 	MEM32(ExcaliburSpec_VA + 0x1Cu) = ExcaliburConstants_VA + 0x24u;
 	MEM32(ExcaliburSpec_VA + 0x20u) = ExcaliburConstants_VA + 0x28u;
@@ -91973,11 +92014,11 @@ void ZenReconCollision_Register(uint32_t arg0)
 	EntitySpec_radius(ZenReconCollisionSpec_VA) = EntityConstants_radius_VA(ZenReconCollisionConstants_VA);
 	EntitySpec_target_node(ZenReconCollisionSpec_VA) = 0x1B181Cu;
 	EntitySpec_hit_points(ZenReconCollisionSpec_VA) = EntityConstants_hit_points_VA(ZenReconCollisionConstants_VA);
-	MEM32(ZenReconCollisionSpec_VA + 0x4u) = ZenReconCollisionConstants_VA + 0xCu;
-	MEM32(ZenReconCollisionSpec_VA + 0x8u) = ZenReconCollisionConstants_VA + 0x10u;
-	MEM32(ZenReconCollisionSpec_VA + 0xCu) = ZenReconCollisionConstants_VA + 0x14u;
-	MEM32(ZenReconCollisionSpec_VA + 0x10u) = ZenReconCollisionConstants_VA + 0x18u;
-	MEM32(ZenReconCollisionSpec_VA + 0x14u) = ZenReconCollisionConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenReconCollisionSpec_VA) = ZenReconCollisionConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenReconCollisionSpec_VA) = ZenReconCollisionConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenReconCollisionSpec_VA) = ZenReconCollisionConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenReconCollisionSpec_VA) = ZenReconCollisionConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenReconCollisionSpec_VA) = ZenReconCollisionConstants_VA + 0x1Cu;
 	MEM32(ZenReconCollisionSpec_VA + 0x18u) = ZenReconCollisionConstants_VA + 0x20u;
 	MEM32(ZenReconCollisionSpec_VA + 0x1Cu) = ZenReconCollisionConstants_VA + 0x24u;
 	MEM32(ZenReconCollisionSpec_VA + 0x20u) = ZenReconCollisionConstants_VA + 0x28u;
@@ -92473,11 +92514,11 @@ void ZenShuttleCollision_Register(uint32_t arg0)
 	EntitySpec_radius(ZenShuttleCollisionSpec_VA) = EntityConstants_radius_VA(ZenShuttleCollisionConstants_VA);
 	EntitySpec_target_node(ZenShuttleCollisionSpec_VA) = 0x1B1820u;
 	EntitySpec_hit_points(ZenShuttleCollisionSpec_VA) = EntityConstants_hit_points_VA(ZenShuttleCollisionConstants_VA);
-	MEM32(ZenShuttleCollisionSpec_VA + 0x4u) = ZenShuttleCollisionConstants_VA + 0xCu;
-	MEM32(ZenShuttleCollisionSpec_VA + 0x8u) = ZenShuttleCollisionConstants_VA + 0x10u;
-	MEM32(ZenShuttleCollisionSpec_VA + 0xCu) = ZenShuttleCollisionConstants_VA + 0x14u;
-	MEM32(ZenShuttleCollisionSpec_VA + 0x10u) = ZenShuttleCollisionConstants_VA + 0x18u;
-	MEM32(ZenShuttleCollisionSpec_VA + 0x14u) = ZenShuttleCollisionConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenShuttleCollisionSpec_VA) = ZenShuttleCollisionConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenShuttleCollisionSpec_VA) = ZenShuttleCollisionConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenShuttleCollisionSpec_VA) = ZenShuttleCollisionConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenShuttleCollisionSpec_VA) = ZenShuttleCollisionConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenShuttleCollisionSpec_VA) = ZenShuttleCollisionConstants_VA + 0x1Cu;
 	MEM32(ZenShuttleCollisionSpec_VA + 0x18u) = ZenShuttleCollisionConstants_VA + 0x20u;
 	MEM32(ZenShuttleCollisionSpec_VA + 0x1Cu) = ZenShuttleCollisionConstants_VA + 0x24u;
 	MEM32(ZenShuttleCollisionSpec_VA + 0x20u) = ZenShuttleCollisionConstants_VA + 0x28u;
@@ -92969,11 +93010,11 @@ void SeaSergeantCollision_Register(uint32_t arg0)
 	EntitySpec_radius(SeaSergeantCollisionSpec_VA) = EntityConstants_radius_VA(SeaSergeantCollisionConstants_VA);
 	EntitySpec_target_node(SeaSergeantCollisionSpec_VA) = 0x1B1824u;
 	EntitySpec_hit_points(SeaSergeantCollisionSpec_VA) = EntityConstants_hit_points_VA(SeaSergeantCollisionConstants_VA);
-	MEM32(SeaSergeantCollisionSpec_VA + 0x4u) = SeaSergeantCollisionConstants_VA + 0xCu;
-	MEM32(SeaSergeantCollisionSpec_VA + 0x8u) = SeaSergeantCollisionConstants_VA + 0x10u;
-	MEM32(SeaSergeantCollisionSpec_VA + 0xCu) = SeaSergeantCollisionConstants_VA + 0x14u;
-	MEM32(SeaSergeantCollisionSpec_VA + 0x10u) = SeaSergeantCollisionConstants_VA + 0x18u;
-	MEM32(SeaSergeantCollisionSpec_VA + 0x14u) = SeaSergeantCollisionConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(SeaSergeantCollisionSpec_VA) = SeaSergeantCollisionConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(SeaSergeantCollisionSpec_VA) = SeaSergeantCollisionConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(SeaSergeantCollisionSpec_VA) = SeaSergeantCollisionConstants_VA + 0x14u;
+	EntitySpec_missiles(SeaSergeantCollisionSpec_VA) = SeaSergeantCollisionConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(SeaSergeantCollisionSpec_VA) = SeaSergeantCollisionConstants_VA + 0x1Cu;
 	MEM32(SeaSergeantCollisionSpec_VA + 0x18u) = SeaSergeantCollisionConstants_VA + 0x20u;
 	MEM32(SeaSergeantCollisionSpec_VA + 0x1Cu) = SeaSergeantCollisionConstants_VA + 0x24u;
 	MEM32(SeaSergeantCollisionSpec_VA + 0x20u) = SeaSergeantCollisionConstants_VA + 0x28u;
@@ -93525,11 +93566,11 @@ void RepCollisionHull_Register(uint32_t arg0)
 	EntitySpec_radius(RepCollisionHullSpec_VA) = EntityConstants_radius_VA(RepCollisionHullConstants_VA);
 	EntitySpec_target_node(RepCollisionHullSpec_VA) = 0x1B1828u;
 	EntitySpec_hit_points(RepCollisionHullSpec_VA) = EntityConstants_hit_points_VA(RepCollisionHullConstants_VA);
-	MEM32(RepCollisionHullSpec_VA + 0x4u) = RepCollisionHullConstants_VA + 0xCu;
-	MEM32(RepCollisionHullSpec_VA + 0x8u) = RepCollisionHullConstants_VA + 0x10u;
-	MEM32(RepCollisionHullSpec_VA + 0xCu) = RepCollisionHullConstants_VA + 0x14u;
-	MEM32(RepCollisionHullSpec_VA + 0x10u) = RepCollisionHullConstants_VA + 0x18u;
-	MEM32(RepCollisionHullSpec_VA + 0x14u) = RepCollisionHullConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA + 0x14u;
+	EntitySpec_missiles(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(RepCollisionHullSpec_VA) = RepCollisionHullConstants_VA + 0x1Cu;
 	MEM32(RepCollisionHullSpec_VA + 0x18u) = RepCollisionHullConstants_VA + 0x20u;
 	MEM32(RepCollisionHullSpec_VA + 0x1Cu) = RepCollisionHullConstants_VA + 0x24u;
 	MEM32(RepCollisionHullSpec_VA + 0x20u) = RepCollisionHullConstants_VA + 0x28u;
@@ -96598,7 +96639,7 @@ void sub_00070DB0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint3
 uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	bool L_0716C8 = false;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1_2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -96641,9 +96682,9 @@ uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 										eax = 1u;
 										return eax;
 									}
-									arg2_2 = arg4;
-									arg0_2 = edi;
-									sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+									damage = arg4;
+									handle = edi;
+									EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 									eax = 1u;
 									return eax;
 								}
@@ -96683,10 +96724,10 @@ uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 												{
 													saved_arg4 = arg4;
 													saved_arg1_2 = arg1;
-													arg0_2 = edi;
-													arg1_2 = saved_arg1_2;
-													arg2_2 = saved_arg4;
-													sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+													handle = edi;
+													entity = saved_arg1_2;
+													damage = saved_arg4;
+													EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 													if (eax == 0u)
 													{
 														eax = 1u;
@@ -96829,10 +96870,10 @@ uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 										{
 											saved_arg4 = arg4;
 											saved_arg1_2 = arg1;
-											arg0_2 = edi;
-											arg1_2 = saved_arg1_2;
-											arg2_2 = saved_arg4;
-											sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+											handle = edi;
+											entity = saved_arg1_2;
+											damage = saved_arg4;
+											EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 											if (eax == 0u)
 											{
 												eax = 1u;
@@ -98057,11 +98098,11 @@ void MalePowerArmor_Register(uint32_t arg0)
 	EntitySpec_radius(MalePowerArmorSpec_VA) = EntityConstants_radius_VA(MalePowerArmorConstants_VA);
 	EntitySpec_target_node(MalePowerArmorSpec_VA) = 0x2068CCu;
 	EntitySpec_hit_points(MalePowerArmorSpec_VA) = EntityConstants_hit_points_VA(MalePowerArmorConstants_VA);
-	MEM32(MalePowerArmorSpec_VA + 0x4u) = MalePowerArmorConstants_VA + 0xCu;
-	MEM32(MalePowerArmorSpec_VA + 0x8u) = MalePowerArmorConstants_VA + 0x10u;
-	MEM32(MalePowerArmorSpec_VA + 0xCu) = MalePowerArmorConstants_VA + 0x14u;
-	MEM32(MalePowerArmorSpec_VA + 0x10u) = MalePowerArmorConstants_VA + 0x18u;
-	MEM32(MalePowerArmorSpec_VA + 0x14u) = MalePowerArmorConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(MalePowerArmorSpec_VA) = MalePowerArmorConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(MalePowerArmorSpec_VA) = MalePowerArmorConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(MalePowerArmorSpec_VA) = MalePowerArmorConstants_VA + 0x14u;
+	EntitySpec_missiles(MalePowerArmorSpec_VA) = MalePowerArmorConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(MalePowerArmorSpec_VA) = MalePowerArmorConstants_VA + 0x1Cu;
 	MEM32(MalePowerArmorSpec_VA + 0x18u) = MalePowerArmorConstants_VA + 0x20u;
 	MEM32(MalePowerArmorSpec_VA + 0x1Cu) = MalePowerArmorConstants_VA + 0x24u;
 	MEM32(MalePowerArmorSpec_VA + 0x20u) = MalePowerArmorConstants_VA + 0x28u;
@@ -100792,11 +100833,11 @@ void PodOfficerSled_Register(uint32_t arg0)
 	EntitySpec_radius(PodOfficerSledSpec_VA) = EntityConstants_radius_VA(PodOfficerSledConstants_VA);
 	EntitySpec_target_node(PodOfficerSledSpec_VA) = 0x1B182Cu;
 	EntitySpec_hit_points(PodOfficerSledSpec_VA) = EntityConstants_hit_points_VA(PodOfficerSledConstants_VA);
-	MEM32(PodOfficerSledSpec_VA + 0x4u) = PodOfficerSledConstants_VA + 0xCu;
-	MEM32(PodOfficerSledSpec_VA + 0x8u) = PodOfficerSledConstants_VA + 0x10u;
-	MEM32(PodOfficerSledSpec_VA + 0xCu) = PodOfficerSledConstants_VA + 0x14u;
-	MEM32(PodOfficerSledSpec_VA + 0x10u) = PodOfficerSledConstants_VA + 0x18u;
-	MEM32(PodOfficerSledSpec_VA + 0x14u) = PodOfficerSledConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodOfficerSledSpec_VA) = PodOfficerSledConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodOfficerSledSpec_VA) = PodOfficerSledConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodOfficerSledSpec_VA) = PodOfficerSledConstants_VA + 0x14u;
+	EntitySpec_missiles(PodOfficerSledSpec_VA) = PodOfficerSledConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodOfficerSledSpec_VA) = PodOfficerSledConstants_VA + 0x1Cu;
 	MEM32(PodOfficerSledSpec_VA + 0x18u) = PodOfficerSledConstants_VA + 0x20u;
 	MEM32(PodOfficerSledSpec_VA + 0x1Cu) = PodOfficerSledConstants_VA + 0x24u;
 	MEM32(PodOfficerSledSpec_VA + 0x20u) = PodOfficerSledConstants_VA + 0x28u;
@@ -101037,7 +101078,7 @@ uint32_t sub_00077D30(uint32_t ebx, uint32_t arg0)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodOfficerSkarredDisabled_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -101071,9 +101112,9 @@ uint32_t PodOfficerSkarredDisabled_StateMachine(uint32_t esi, uint32_t arg0, uin
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ebx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -101113,9 +101154,9 @@ uint32_t PodOfficerSkarredDisabled_StateMachine(uint32_t esi, uint32_t arg0, uin
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -101544,11 +101585,11 @@ void PodOfficerSkarredDisabled_Register(uint32_t arg0)
 	EntitySpec_radius(PodOfficerSkarredDisabledSpec_VA) = EntityConstants_radius_VA(PodOfficerSkarredDisabledConstants_VA);
 	EntitySpec_target_node(PodOfficerSkarredDisabledSpec_VA) = 0x1B1830u;
 	EntitySpec_hit_points(PodOfficerSkarredDisabledSpec_VA) = EntityConstants_hit_points_VA(PodOfficerSkarredDisabledConstants_VA);
-	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x4u) = PodOfficerSkarredDisabledConstants_VA + 0xCu;
-	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x8u) = PodOfficerSkarredDisabledConstants_VA + 0x10u;
-	MEM32(PodOfficerSkarredDisabledSpec_VA + 0xCu) = PodOfficerSkarredDisabledConstants_VA + 0x14u;
-	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x10u) = PodOfficerSkarredDisabledConstants_VA + 0x18u;
-	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x14u) = PodOfficerSkarredDisabledConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledConstants_VA + 0x14u;
+	EntitySpec_missiles(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodOfficerSkarredDisabledSpec_VA) = PodOfficerSkarredDisabledConstants_VA + 0x1Cu;
 	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x18u) = PodOfficerSkarredDisabledConstants_VA + 0x20u;
 	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x1Cu) = PodOfficerSkarredDisabledConstants_VA + 0x24u;
 	MEM32(PodOfficerSkarredDisabledSpec_VA + 0x20u) = PodOfficerSkarredDisabledConstants_VA + 0x28u;
@@ -101820,7 +101861,7 @@ void sub_00078FE0(uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodOfficerSkarred_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -101854,9 +101895,9 @@ uint32_t PodOfficerSkarred_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -101896,9 +101937,9 @@ uint32_t PodOfficerSkarred_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = edi;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = edi;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -102326,11 +102367,11 @@ void PodOfficerSkarred_Register(uint32_t arg0)
 	EntitySpec_radius(PodOfficerSkarredSpec_VA) = EntityConstants_radius_VA(PodOfficerSkarredConstants_VA);
 	EntitySpec_target_node(PodOfficerSkarredSpec_VA) = 0x1B1834u;
 	EntitySpec_hit_points(PodOfficerSkarredSpec_VA) = EntityConstants_hit_points_VA(PodOfficerSkarredConstants_VA);
-	MEM32(PodOfficerSkarredSpec_VA + 0x4u) = PodOfficerSkarredConstants_VA + 0xCu;
-	MEM32(PodOfficerSkarredSpec_VA + 0x8u) = PodOfficerSkarredConstants_VA + 0x10u;
-	MEM32(PodOfficerSkarredSpec_VA + 0xCu) = PodOfficerSkarredConstants_VA + 0x14u;
-	MEM32(PodOfficerSkarredSpec_VA + 0x10u) = PodOfficerSkarredConstants_VA + 0x18u;
-	MEM32(PodOfficerSkarredSpec_VA + 0x14u) = PodOfficerSkarredConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodOfficerSkarredSpec_VA) = PodOfficerSkarredConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodOfficerSkarredSpec_VA) = PodOfficerSkarredConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodOfficerSkarredSpec_VA) = PodOfficerSkarredConstants_VA + 0x14u;
+	EntitySpec_missiles(PodOfficerSkarredSpec_VA) = PodOfficerSkarredConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodOfficerSkarredSpec_VA) = PodOfficerSkarredConstants_VA + 0x1Cu;
 	MEM32(PodOfficerSkarredSpec_VA + 0x18u) = PodOfficerSkarredConstants_VA + 0x20u;
 	MEM32(PodOfficerSkarredSpec_VA + 0x1Cu) = PodOfficerSkarredConstants_VA + 0x24u;
 	MEM32(PodOfficerSkarredSpec_VA + 0x20u) = PodOfficerSkarredConstants_VA + 0x28u;
@@ -102968,11 +103009,11 @@ void PodOfficer_Register(uint32_t arg0)
 	EntitySpec_radius(PodOfficerSpec_VA) = EntityConstants_radius_VA(PodOfficerConstants_VA);
 	EntitySpec_target_node(PodOfficerSpec_VA) = 0x1B1838u;
 	EntitySpec_hit_points(PodOfficerSpec_VA) = EntityConstants_hit_points_VA(PodOfficerConstants_VA);
-	MEM32(PodOfficerSpec_VA + 0x4u) = PodOfficerConstants_VA + 0xCu;
-	MEM32(PodOfficerSpec_VA + 0x8u) = PodOfficerConstants_VA + 0x10u;
-	MEM32(PodOfficerSpec_VA + 0xCu) = PodOfficerConstants_VA + 0x14u;
-	MEM32(PodOfficerSpec_VA + 0x10u) = PodOfficerConstants_VA + 0x18u;
-	MEM32(PodOfficerSpec_VA + 0x14u) = PodOfficerConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodOfficerSpec_VA) = PodOfficerConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodOfficerSpec_VA) = PodOfficerConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodOfficerSpec_VA) = PodOfficerConstants_VA + 0x14u;
+	EntitySpec_missiles(PodOfficerSpec_VA) = PodOfficerConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodOfficerSpec_VA) = PodOfficerConstants_VA + 0x1Cu;
 	MEM32(PodOfficerSpec_VA + 0x18u) = PodOfficerConstants_VA + 0x20u;
 	MEM32(PodOfficerSpec_VA + 0x1Cu) = PodOfficerConstants_VA + 0x24u;
 	MEM32(PodOfficerSpec_VA + 0x20u) = PodOfficerConstants_VA + 0x28u;
@@ -104075,7 +104116,7 @@ void sub_0007BFA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 uint32_t ZenReEntryPod_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	bool L_07C691 = false;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, entity = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t stack = 0, stack_18 = 0, saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -104156,10 +104197,10 @@ uint32_t ZenReEntryPod_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 										arg1_2 = ecx;
 										arg0_2 = edi;
 										sub_0007B4B0(ecx, arg0_2, arg1_2, &eax, &ebx, &ebp, &esi, &edi);
-										arg2_2 = ebx;
-										arg1_2 = esi;
-										arg0_2 = edi;
-										sub_0001A700(arg0_2, arg1_2, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+										damage = ebx;
+										entity = esi;
+										handle = edi;
+										EntityTakeDamage(handle, entity, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 										eax = 1u;
 										return eax;
 									}
@@ -104200,10 +104241,10 @@ uint32_t ZenReEntryPod_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 								}
 								ebx = arg4;
 								esi = arg1;
-								arg2_2 = ebx;
-								arg1_2 = esi;
-								arg0_2 = edi;
-								sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ecx, &ebx, &ebp, &esi, &edi);
+								damage = ebx;
+								entity = esi;
+								handle = edi;
+								EntityTakeDamage(handle, entity, damage, &eax, &ecx, &ebx, &ebp, &esi, &edi);
 								if (eax == 0u)
 								{
 									eax = 1u;
@@ -104340,10 +104381,10 @@ uint32_t ZenReEntryPod_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 						}
 						ebx = arg4;
 						esi = arg1;
-						arg2_2 = ebx;
-						arg1_2 = esi;
-						arg0_2 = edi;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ecx, &ebx, &ebp, &esi, &edi);
+						damage = ebx;
+						entity = esi;
+						handle = edi;
+						EntityTakeDamage(handle, entity, damage, &eax, &ecx, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -104525,10 +104566,10 @@ uint32_t ZenReEntryPod_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 			}
 			ebx = arg4;
 			esi = arg1;
-			arg2_2 = ebx;
-			arg1_2 = esi;
-			arg0_2 = edi;
-			sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+			damage = ebx;
+			entity = esi;
+			handle = edi;
+			EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 			if (eax == 0u)
 			{
 				eax = 1u;
@@ -104598,11 +104639,11 @@ void ZenReEntryPod_Register(uint32_t arg0)
 	EntitySpec_radius(ZenReEntryPodSpec_VA) = 0x19CEF4u;
 	EntitySpec_target_node(ZenReEntryPodSpec_VA) = 0x1B183Cu;
 	EntitySpec_hit_points(ZenReEntryPodSpec_VA) = 0x19CF00u;
-	MEM32(ZenReEntryPodSpec_VA + 0x4u) = 0x19CF04u;
-	MEM32(ZenReEntryPodSpec_VA + 0x8u) = 0x19CF08u;
-	MEM32(ZenReEntryPodSpec_VA + 0xCu) = 0x19CF0Cu;
-	MEM32(ZenReEntryPodSpec_VA + 0x10u) = 0x19CF10u;
-	MEM32(ZenReEntryPodSpec_VA + 0x14u) = 0x19CF14u;
+	EntitySpec_hit_points_refill(ZenReEntryPodSpec_VA) = 0x19CF04u;
+	EntitySpec_gun_ammo(ZenReEntryPodSpec_VA) = 0x19CF08u;
+	EntitySpec_gun_ammo_refill(ZenReEntryPodSpec_VA) = 0x19CF0Cu;
+	EntitySpec_missiles(ZenReEntryPodSpec_VA) = 0x19CF10u;
+	EntitySpec_missiles_refill(ZenReEntryPodSpec_VA) = 0x19CF14u;
 	MEM32(ZenReEntryPodSpec_VA + 0x18u) = 0x19CF18u;
 	MEM32(ZenReEntryPodSpec_VA + 0x1Cu) = 0x19CF1Cu;
 	MEM32(ZenReEntryPodSpec_VA + 0x20u) = 0x19CF20u;
@@ -105190,11 +105231,11 @@ void Spartan_Register(uint32_t arg0)
 	EntitySpec_radius(SpartanSpec_VA) = EntityConstants_radius_VA(SpartanConstants_VA);
 	EntitySpec_target_node(SpartanSpec_VA) = 0x1B1840u;
 	EntitySpec_hit_points(SpartanSpec_VA) = EntityConstants_hit_points_VA(SpartanConstants_VA);
-	MEM32(SpartanSpec_VA + 0x4u) = SpartanConstants_VA + 0xCu;
-	MEM32(SpartanSpec_VA + 0x8u) = SpartanConstants_VA + 0x10u;
-	MEM32(SpartanSpec_VA + 0xCu) = SpartanConstants_VA + 0x14u;
-	MEM32(SpartanSpec_VA + 0x10u) = SpartanConstants_VA + 0x18u;
-	MEM32(SpartanSpec_VA + 0x14u) = SpartanConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(SpartanSpec_VA) = SpartanConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(SpartanSpec_VA) = SpartanConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(SpartanSpec_VA) = SpartanConstants_VA + 0x14u;
+	EntitySpec_missiles(SpartanSpec_VA) = SpartanConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(SpartanSpec_VA) = SpartanConstants_VA + 0x1Cu;
 	MEM32(SpartanSpec_VA + 0x18u) = SpartanConstants_VA + 0x20u;
 	MEM32(SpartanSpec_VA + 0x1Cu) = SpartanConstants_VA + 0x24u;
 	MEM32(SpartanSpec_VA + 0x20u) = SpartanConstants_VA + 0x28u;
@@ -105713,11 +105754,11 @@ void RaiderX_Register(uint32_t arg0)
 	EntitySpec_radius(RaiderXSpec_VA) = EntityConstants_radius_VA(RaiderXConstants_VA);
 	EntitySpec_target_node(RaiderXSpec_VA) = 0x1B1844u;
 	EntitySpec_hit_points(RaiderXSpec_VA) = EntityConstants_hit_points_VA(RaiderXConstants_VA);
-	MEM32(RaiderXSpec_VA + 0x4u) = RaiderXConstants_VA + 0xCu;
-	MEM32(RaiderXSpec_VA + 0x8u) = RaiderXConstants_VA + 0x10u;
-	MEM32(RaiderXSpec_VA + 0xCu) = RaiderXConstants_VA + 0x14u;
-	MEM32(RaiderXSpec_VA + 0x10u) = RaiderXConstants_VA + 0x18u;
-	MEM32(RaiderXSpec_VA + 0x14u) = RaiderXConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(RaiderXSpec_VA) = RaiderXConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(RaiderXSpec_VA) = RaiderXConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(RaiderXSpec_VA) = RaiderXConstants_VA + 0x14u;
+	EntitySpec_missiles(RaiderXSpec_VA) = RaiderXConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(RaiderXSpec_VA) = RaiderXConstants_VA + 0x1Cu;
 	MEM32(RaiderXSpec_VA + 0x18u) = RaiderXConstants_VA + 0x20u;
 	MEM32(RaiderXSpec_VA + 0x1Cu) = RaiderXConstants_VA + 0x24u;
 	MEM32(RaiderXSpec_VA + 0x20u) = RaiderXConstants_VA + 0x28u;
@@ -107253,11 +107294,11 @@ void MacII_Register(uint32_t arg0)
 	EntitySpec_radius(MacIISpec_VA) = EntityConstants_radius_VA(MacIIConstants_VA);
 	EntitySpec_target_node(MacIISpec_VA) = MacIITargetNode_VA;
 	EntitySpec_hit_points(MacIISpec_VA) = EntityConstants_hit_points_VA(MacIIConstants_VA);
-	MEM32(MacIISpec_VA + 0x4u) = MacIIConstants_VA + 0xCu;
-	MEM32(MacIISpec_VA + 0x8u) = MacIIConstants_VA + 0x10u;
-	MEM32(MacIISpec_VA + 0xCu) = MacIIConstants_VA + 0x14u;
-	MEM32(MacIISpec_VA + 0x10u) = MacIIConstants_VA + 0x18u;
-	MEM32(MacIISpec_VA + 0x14u) = MacIIConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(MacIISpec_VA) = MacIIConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(MacIISpec_VA) = MacIIConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(MacIISpec_VA) = MacIIConstants_VA + 0x14u;
+	EntitySpec_missiles(MacIISpec_VA) = MacIIConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(MacIISpec_VA) = MacIIConstants_VA + 0x1Cu;
 	MEM32(MacIISpec_VA + 0x18u) = MacIIConstants_VA + 0x20u;
 	MEM32(MacIISpec_VA + 0x1Cu) = MacIIConstants_VA + 0x24u;
 	MEM32(MacIISpec_VA + 0x20u) = MacIIConstants_VA + 0x28u;
@@ -108890,7 +108931,7 @@ void sub_00082270(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t stack = 0, saved_arg1_2 = 0, saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -108932,9 +108973,9 @@ uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, u
 								eax = 1u;
 								return eax;
 							}
-							arg2_2 = arg4;
-							arg0_2 = edi;
-							sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+							damage = arg4;
+							handle = edi;
+							EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 							eax = 1u;
 							return eax;
 						}
@@ -108975,10 +109016,10 @@ uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, u
 							{
 								stack = arg4;
 								saved_arg1_2 = arg1;
-								arg0_2 = edi;
-								arg1_2 = saved_arg1_2;
-								arg2_2 = stack;
-								sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+								handle = edi;
+								entity = saved_arg1_2;
+								damage = stack;
+								EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 								if (eax == 0u)
 								{
 									eax = 1u;
@@ -109052,10 +109093,10 @@ uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, u
 						{
 							stack = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = edi;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = stack;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = edi;
+							entity = saved_arg1_2;
+							damage = stack;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -109150,10 +109191,10 @@ uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, u
 						{
 							stack = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = edi;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = stack;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = edi;
+							entity = saved_arg1_2;
+							damage = stack;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -109283,10 +109324,10 @@ uint32_t ZenReconShip_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, u
 				{
 					stack = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = edi;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = stack;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = edi;
+					entity = saved_arg1_2;
+					damage = stack;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -109432,11 +109473,11 @@ void ZenReconShip_Register(uint32_t arg0)
 	EntitySpec_radius(ZenReconShipSpec_VA) = 0x19DFC8u;
 	EntitySpec_target_node(ZenReconShipSpec_VA) = 0x1B184Cu;
 	EntitySpec_hit_points(ZenReconShipSpec_VA) = 0x19DFD4u;
-	MEM32(ZenReconShipSpec_VA + 0x4u) = 0x19DFD8u;
-	MEM32(ZenReconShipSpec_VA + 0x8u) = 0x19DFDCu;
-	MEM32(ZenReconShipSpec_VA + 0xCu) = 0x19DFE0u;
-	MEM32(ZenReconShipSpec_VA + 0x10u) = 0x19DFE4u;
-	MEM32(ZenReconShipSpec_VA + 0x14u) = 0x19DFE8u;
+	EntitySpec_hit_points_refill(ZenReconShipSpec_VA) = 0x19DFD8u;
+	EntitySpec_gun_ammo(ZenReconShipSpec_VA) = 0x19DFDCu;
+	EntitySpec_gun_ammo_refill(ZenReconShipSpec_VA) = 0x19DFE0u;
+	EntitySpec_missiles(ZenReconShipSpec_VA) = 0x19DFE4u;
+	EntitySpec_missiles_refill(ZenReconShipSpec_VA) = 0x19DFE8u;
 	MEM32(ZenReconShipSpec_VA + 0x18u) = 0x19DFECu;
 	MEM32(ZenReconShipSpec_VA + 0x1Cu) = 0x19DFF0u;
 	MEM32(ZenReconShipSpec_VA + 0x20u) = 0x19DFF4u;
@@ -110637,7 +110678,7 @@ void sub_00083C30(uint32_t ebx, uint32_t arg0)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodScoutSpace_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -110671,9 +110712,9 @@ uint32_t PodScoutSpace_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, u
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -110724,9 +110765,9 @@ uint32_t PodScoutSpace_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, u
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -111229,11 +111270,11 @@ void PodScoutSpace_Register(uint32_t arg0)
 	EntitySpec_radius(PodScoutSpaceSpec_VA) = EntityConstants_radius_VA(PodScoutSpaceConstants_VA);
 	EntitySpec_target_node(PodScoutSpaceSpec_VA) = 0x1B1850u;
 	EntitySpec_hit_points(PodScoutSpaceSpec_VA) = EntityConstants_hit_points_VA(PodScoutSpaceConstants_VA);
-	MEM32(PodScoutSpaceSpec_VA + 0x4u) = PodScoutSpaceConstants_VA + 0xCu;
-	MEM32(PodScoutSpaceSpec_VA + 0x8u) = PodScoutSpaceConstants_VA + 0x10u;
-	MEM32(PodScoutSpaceSpec_VA + 0xCu) = PodScoutSpaceConstants_VA + 0x14u;
-	MEM32(PodScoutSpaceSpec_VA + 0x10u) = PodScoutSpaceConstants_VA + 0x18u;
-	MEM32(PodScoutSpaceSpec_VA + 0x14u) = PodScoutSpaceConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodScoutSpaceSpec_VA) = PodScoutSpaceConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodScoutSpaceSpec_VA) = PodScoutSpaceConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodScoutSpaceSpec_VA) = PodScoutSpaceConstants_VA + 0x14u;
+	EntitySpec_missiles(PodScoutSpaceSpec_VA) = PodScoutSpaceConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodScoutSpaceSpec_VA) = PodScoutSpaceConstants_VA + 0x1Cu;
 	MEM32(PodScoutSpaceSpec_VA + 0x18u) = PodScoutSpaceConstants_VA + 0x20u;
 	MEM32(PodScoutSpaceSpec_VA + 0x1Cu) = PodScoutSpaceConstants_VA + 0x24u;
 	MEM32(PodScoutSpaceSpec_VA + 0x20u) = PodScoutSpaceConstants_VA + 0x28u;
@@ -112492,11 +112533,11 @@ void Gladiator_Register(uint32_t arg0)
 	EntitySpec_radius(GladiatorSpec_VA) = EntityConstants_radius_VA(GladiatorConstants_VA);
 	EntitySpec_target_node(GladiatorSpec_VA) = GladiatorTargetNode_VA;
 	EntitySpec_hit_points(GladiatorSpec_VA) = EntityConstants_hit_points_VA(GladiatorConstants_VA);
-	MEM32(GladiatorSpec_VA + 0x4u) = GladiatorConstants_VA + 0xCu;
-	MEM32(GladiatorSpec_VA + 0x8u) = GladiatorConstants_VA + 0x10u;
-	MEM32(GladiatorSpec_VA + 0xCu) = GladiatorConstants_VA + 0x14u;
-	MEM32(GladiatorSpec_VA + 0x10u) = GladiatorConstants_VA + 0x18u;
-	MEM32(GladiatorSpec_VA + 0x14u) = GladiatorConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(GladiatorSpec_VA) = GladiatorConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(GladiatorSpec_VA) = GladiatorConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(GladiatorSpec_VA) = GladiatorConstants_VA + 0x14u;
+	EntitySpec_missiles(GladiatorSpec_VA) = GladiatorConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(GladiatorSpec_VA) = GladiatorConstants_VA + 0x1Cu;
 	MEM32(GladiatorSpec_VA + 0x18u) = GladiatorConstants_VA + 0x20u;
 	MEM32(GladiatorSpec_VA + 0x1Cu) = GladiatorConstants_VA + 0x24u;
 	MEM32(GladiatorSpec_VA + 0x20u) = GladiatorConstants_VA + 0x28u;
@@ -112796,7 +112837,7 @@ uint32_t sub_00086150(uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodHeavyArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -112829,9 +112870,9 @@ uint32_t PodHeavyArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -112871,9 +112912,9 @@ uint32_t PodHeavyArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = edi;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = edi;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -113168,11 +113209,11 @@ void PodHeavyArtillerySpace_Register(uint32_t arg0)
 	EntitySpec_radius(PodHeavyArtillerySpaceSpec_VA) = EntityConstants_radius_VA(PodHeavyArtillerySpaceConstants_VA);
 	EntitySpec_target_node(PodHeavyArtillerySpaceSpec_VA) = 0x1B1858u;
 	EntitySpec_hit_points(PodHeavyArtillerySpaceSpec_VA) = EntityConstants_hit_points_VA(PodHeavyArtillerySpaceConstants_VA);
-	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x4u) = PodHeavyArtillerySpaceConstants_VA + 0xCu;
-	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x8u) = PodHeavyArtillerySpaceConstants_VA + 0x10u;
-	MEM32(PodHeavyArtillerySpaceSpec_VA + 0xCu) = PodHeavyArtillerySpaceConstants_VA + 0x14u;
-	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x10u) = PodHeavyArtillerySpaceConstants_VA + 0x18u;
-	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x14u) = PodHeavyArtillerySpaceConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodHeavyArtillerySpaceSpec_VA) = PodHeavyArtillerySpaceConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodHeavyArtillerySpaceSpec_VA) = PodHeavyArtillerySpaceConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodHeavyArtillerySpaceSpec_VA) = PodHeavyArtillerySpaceConstants_VA + 0x14u;
+	EntitySpec_missiles(PodHeavyArtillerySpaceSpec_VA) = PodHeavyArtillerySpaceConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodHeavyArtillerySpaceSpec_VA) = PodHeavyArtillerySpaceConstants_VA + 0x1Cu;
 	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x18u) = PodHeavyArtillerySpaceConstants_VA + 0x20u;
 	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x1Cu) = PodHeavyArtillerySpaceConstants_VA + 0x24u;
 	MEM32(PodHeavyArtillerySpaceSpec_VA + 0x20u) = PodHeavyArtillerySpaceConstants_VA + 0x28u;
@@ -113503,7 +113544,7 @@ uint32_t sub_000873D0(uint32_t ebx, uint32_t arg0)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodLightArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -113536,9 +113577,9 @@ uint32_t PodLightArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -113578,9 +113619,9 @@ uint32_t PodLightArtillerySpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = edi;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = edi;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -113875,11 +113916,11 @@ void PodLightArtillerySpace_Register(uint32_t arg0)
 	EntitySpec_radius(PodLightArtillerySpaceSpec_VA) = EntityConstants_radius_VA(PodLightArtillerySpaceConstants_VA);
 	EntitySpec_target_node(PodLightArtillerySpaceSpec_VA) = 0x1B185Cu;
 	EntitySpec_hit_points(PodLightArtillerySpaceSpec_VA) = EntityConstants_hit_points_VA(PodLightArtillerySpaceConstants_VA);
-	MEM32(PodLightArtillerySpaceSpec_VA + 0x4u) = PodLightArtillerySpaceConstants_VA + 0xCu;
-	MEM32(PodLightArtillerySpaceSpec_VA + 0x8u) = PodLightArtillerySpaceConstants_VA + 0x10u;
-	MEM32(PodLightArtillerySpaceSpec_VA + 0xCu) = PodLightArtillerySpaceConstants_VA + 0x14u;
-	MEM32(PodLightArtillerySpaceSpec_VA + 0x10u) = PodLightArtillerySpaceConstants_VA + 0x18u;
-	MEM32(PodLightArtillerySpaceSpec_VA + 0x14u) = PodLightArtillerySpaceConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodLightArtillerySpaceSpec_VA) = PodLightArtillerySpaceConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodLightArtillerySpaceSpec_VA) = PodLightArtillerySpaceConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodLightArtillerySpaceSpec_VA) = PodLightArtillerySpaceConstants_VA + 0x14u;
+	EntitySpec_missiles(PodLightArtillerySpaceSpec_VA) = PodLightArtillerySpaceConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodLightArtillerySpaceSpec_VA) = PodLightArtillerySpaceConstants_VA + 0x1Cu;
 	MEM32(PodLightArtillerySpaceSpec_VA + 0x18u) = PodLightArtillerySpaceConstants_VA + 0x20u;
 	MEM32(PodLightArtillerySpaceSpec_VA + 0x1Cu) = PodLightArtillerySpaceConstants_VA + 0x24u;
 	MEM32(PodLightArtillerySpaceSpec_VA + 0x20u) = PodLightArtillerySpaceConstants_VA + 0x28u;
@@ -114127,7 +114168,7 @@ uint32_t sub_00088470(uint32_t esi, uint32_t arg1)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1_2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -114168,9 +114209,9 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 								eax = 1u;
 								return eax;
 							}
-							arg2_2 = arg4;
-							arg0_2 = ebx;
-							sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+							damage = arg4;
+							handle = ebx;
+							EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 							eax = 1u;
 							return eax;
 						}
@@ -114191,10 +114232,10 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 						{
 							saved_arg4 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = ebx;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = ebx;
+							entity = saved_arg1_2;
+							damage = saved_arg4;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -114266,10 +114307,10 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					{
 						saved_arg4 = arg4;
 						saved_arg1_2 = arg1;
-						arg0_2 = ebx;
-						arg1_2 = saved_arg1_2;
-						arg2_2 = saved_arg4;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						handle = ebx;
+						entity = saved_arg1_2;
+						damage = saved_arg4;
+						EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -114337,10 +114378,10 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 				{
 					saved_arg4 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = ebx;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = ebx;
+					entity = saved_arg1_2;
+					damage = saved_arg4;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -114422,10 +114463,10 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 				{
 					saved_arg4 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = ebx;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = ebx;
+					entity = saved_arg1_2;
+					damage = saved_arg4;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -114892,11 +114933,11 @@ void ZenCruiserMissileTurret_Register(uint32_t arg0)
 	EntitySpec_radius(ZenCruiserMissileTurretSpec_VA) = EntityConstants_radius_VA(ZenCruiserMissileTurretConstants_VA);
 	EntitySpec_target_node(ZenCruiserMissileTurretSpec_VA) = 0x1B1860u;
 	EntitySpec_hit_points(ZenCruiserMissileTurretSpec_VA) = EntityConstants_hit_points_VA(ZenCruiserMissileTurretConstants_VA);
-	MEM32(ZenCruiserMissileTurretSpec_VA + 0x4u) = ZenCruiserMissileTurretConstants_VA + 0xCu;
-	MEM32(ZenCruiserMissileTurretSpec_VA + 0x8u) = ZenCruiserMissileTurretConstants_VA + 0x10u;
-	MEM32(ZenCruiserMissileTurretSpec_VA + 0xCu) = ZenCruiserMissileTurretConstants_VA + 0x14u;
-	MEM32(ZenCruiserMissileTurretSpec_VA + 0x10u) = ZenCruiserMissileTurretConstants_VA + 0x18u;
-	MEM32(ZenCruiserMissileTurretSpec_VA + 0x14u) = ZenCruiserMissileTurretConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenCruiserMissileTurretSpec_VA) = ZenCruiserMissileTurretConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenCruiserMissileTurretSpec_VA) = ZenCruiserMissileTurretConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenCruiserMissileTurretSpec_VA) = ZenCruiserMissileTurretConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenCruiserMissileTurretSpec_VA) = ZenCruiserMissileTurretConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenCruiserMissileTurretSpec_VA) = ZenCruiserMissileTurretConstants_VA + 0x1Cu;
 	MEM32(ZenCruiserMissileTurretSpec_VA + 0x18u) = ZenCruiserMissileTurretConstants_VA + 0x20u;
 	MEM32(ZenCruiserMissileTurretSpec_VA + 0x1Cu) = ZenCruiserMissileTurretConstants_VA + 0x24u;
 	MEM32(ZenCruiserMissileTurretSpec_VA + 0x20u) = ZenCruiserMissileTurretConstants_VA + 0x28u;
@@ -115576,11 +115617,11 @@ void PodHeavyArtillery_Register(uint32_t arg0)
 	EntitySpec_radius(PodHeavyArtillerySpec_VA) = EntityConstants_radius_VA(PodHeavyArtilleryConstants_VA);
 	EntitySpec_target_node(PodHeavyArtillerySpec_VA) = 0x1B1864u;
 	EntitySpec_hit_points(PodHeavyArtillerySpec_VA) = EntityConstants_hit_points_VA(PodHeavyArtilleryConstants_VA);
-	MEM32(PodHeavyArtillerySpec_VA + 0x4u) = PodHeavyArtilleryConstants_VA + 0xCu;
-	MEM32(PodHeavyArtillerySpec_VA + 0x8u) = PodHeavyArtilleryConstants_VA + 0x10u;
-	MEM32(PodHeavyArtillerySpec_VA + 0xCu) = PodHeavyArtilleryConstants_VA + 0x14u;
-	MEM32(PodHeavyArtillerySpec_VA + 0x10u) = PodHeavyArtilleryConstants_VA + 0x18u;
-	MEM32(PodHeavyArtillerySpec_VA + 0x14u) = PodHeavyArtilleryConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryConstants_VA + 0x14u;
+	EntitySpec_missiles(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodHeavyArtillerySpec_VA) = PodHeavyArtilleryConstants_VA + 0x1Cu;
 	MEM32(PodHeavyArtillerySpec_VA + 0x18u) = PodHeavyArtilleryConstants_VA + 0x20u;
 	MEM32(PodHeavyArtillerySpec_VA + 0x1Cu) = PodHeavyArtilleryConstants_VA + 0x24u;
 	MEM32(PodHeavyArtillerySpec_VA + 0x20u) = PodHeavyArtilleryConstants_VA + 0x28u;
@@ -116709,7 +116750,7 @@ uint32_t sub_0008B1E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, ui
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenWarriorNoArmour_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -116768,9 +116809,9 @@ uint32_t ZenWarriorNoArmour_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t a
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ebx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -116810,9 +116851,9 @@ uint32_t ZenWarriorNoArmour_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t a
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -116978,11 +117019,11 @@ void ZenWarriorNoArmour_Register(uint32_t arg0)
 	EntitySpec_radius(ZenWarriorNoArmourSpec_VA) = EntityConstants_radius_VA(ZenWarriorNoArmourConstants_VA);
 	EntitySpec_target_node(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourTargetNode_VA;
 	EntitySpec_hit_points(ZenWarriorNoArmourSpec_VA) = EntityConstants_hit_points_VA(ZenWarriorNoArmourConstants_VA);
-	MEM32(ZenWarriorNoArmourSpec_VA + 0x4u) = ZenWarriorNoArmourConstants_VA + 0xCu;
-	MEM32(ZenWarriorNoArmourSpec_VA + 0x8u) = ZenWarriorNoArmourConstants_VA + 0x10u;
-	MEM32(ZenWarriorNoArmourSpec_VA + 0xCu) = ZenWarriorNoArmourConstants_VA + 0x14u;
-	MEM32(ZenWarriorNoArmourSpec_VA + 0x10u) = ZenWarriorNoArmourConstants_VA + 0x18u;
-	MEM32(ZenWarriorNoArmourSpec_VA + 0x14u) = ZenWarriorNoArmourConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenWarriorNoArmourSpec_VA) = ZenWarriorNoArmourConstants_VA + 0x1Cu;
 	MEM32(ZenWarriorNoArmourSpec_VA + 0x18u) = ZenWarriorNoArmourConstants_VA + 0x20u;
 	MEM32(ZenWarriorNoArmourSpec_VA + 0x1Cu) = ZenWarriorNoArmourConstants_VA + 0x24u;
 	MEM32(ZenWarriorNoArmourSpec_VA + 0x20u) = ZenWarriorNoArmourConstants_VA + 0x28u;
@@ -118107,7 +118148,7 @@ void sub_0008C3E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenWarriorHeavy_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -118166,9 +118207,9 @@ uint32_t ZenWarriorHeavy_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ebx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -118208,9 +118249,9 @@ uint32_t ZenWarriorHeavy_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -118376,11 +118417,11 @@ void ZenWarriorHeavy_Register(uint32_t arg0)
 	EntitySpec_radius(ZenWarriorHeavySpec_VA) = EntityConstants_radius_VA(ZenWarriorHeavyConstants_VA);
 	EntitySpec_target_node(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyTargetNode_VA;
 	EntitySpec_hit_points(ZenWarriorHeavySpec_VA) = EntityConstants_hit_points_VA(ZenWarriorHeavyConstants_VA);
-	MEM32(ZenWarriorHeavySpec_VA + 0x4u) = ZenWarriorHeavyConstants_VA + 0xCu;
-	MEM32(ZenWarriorHeavySpec_VA + 0x8u) = ZenWarriorHeavyConstants_VA + 0x10u;
-	MEM32(ZenWarriorHeavySpec_VA + 0xCu) = ZenWarriorHeavyConstants_VA + 0x14u;
-	MEM32(ZenWarriorHeavySpec_VA + 0x10u) = ZenWarriorHeavyConstants_VA + 0x18u;
-	MEM32(ZenWarriorHeavySpec_VA + 0x14u) = ZenWarriorHeavyConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenWarriorHeavySpec_VA) = ZenWarriorHeavyConstants_VA + 0x1Cu;
 	MEM32(ZenWarriorHeavySpec_VA + 0x18u) = ZenWarriorHeavyConstants_VA + 0x20u;
 	MEM32(ZenWarriorHeavySpec_VA + 0x1Cu) = ZenWarriorHeavyConstants_VA + 0x24u;
 	MEM32(ZenWarriorHeavySpec_VA + 0x20u) = ZenWarriorHeavyConstants_VA + 0x28u;
@@ -119508,7 +119549,7 @@ void sub_0008D5E0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenWarriorLite_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -119567,9 +119608,9 @@ uint32_t ZenWarriorLite_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1,
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ebx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -119609,9 +119650,9 @@ uint32_t ZenWarriorLite_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1,
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -119777,11 +119818,11 @@ void ZenWarriorLite_Register(uint32_t arg0)
 	EntitySpec_radius(ZenWarriorLiteSpec_VA) = EntityConstants_radius_VA(ZenWarriorLiteConstants_VA);
 	EntitySpec_target_node(ZenWarriorLiteSpec_VA) = ZenWarriorLiteTargetNode_VA;
 	EntitySpec_hit_points(ZenWarriorLiteSpec_VA) = EntityConstants_hit_points_VA(ZenWarriorLiteConstants_VA);
-	MEM32(ZenWarriorLiteSpec_VA + 0x4u) = ZenWarriorLiteConstants_VA + 0xCu;
-	MEM32(ZenWarriorLiteSpec_VA + 0x8u) = ZenWarriorLiteConstants_VA + 0x10u;
-	MEM32(ZenWarriorLiteSpec_VA + 0xCu) = ZenWarriorLiteConstants_VA + 0x14u;
-	MEM32(ZenWarriorLiteSpec_VA + 0x10u) = ZenWarriorLiteConstants_VA + 0x18u;
-	MEM32(ZenWarriorLiteSpec_VA + 0x14u) = ZenWarriorLiteConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenWarriorLiteSpec_VA) = ZenWarriorLiteConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenWarriorLiteSpec_VA) = ZenWarriorLiteConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenWarriorLiteSpec_VA) = ZenWarriorLiteConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenWarriorLiteSpec_VA) = ZenWarriorLiteConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenWarriorLiteSpec_VA) = ZenWarriorLiteConstants_VA + 0x1Cu;
 	MEM32(ZenWarriorLiteSpec_VA + 0x18u) = ZenWarriorLiteConstants_VA + 0x20u;
 	MEM32(ZenWarriorLiteSpec_VA + 0x1Cu) = ZenWarriorLiteConstants_VA + 0x24u;
 	MEM32(ZenWarriorLiteSpec_VA + 0x20u) = ZenWarriorLiteConstants_VA + 0x28u;
@@ -120017,7 +120058,7 @@ void sub_0008DF00(uint32_t ebx, uint32_t arg1)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenScoutShip_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -120050,9 +120091,9 @@ uint32_t ZenScoutShip_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, ui
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -120100,9 +120141,9 @@ uint32_t ZenScoutShip_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, ui
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -120294,11 +120335,11 @@ void ZenScoutShip_Register(uint32_t arg0)
 	EntitySpec_radius(ZenScoutShipSpec_VA) = EntityConstants_radius_VA(ZenScoutShipConstants_VA);
 	EntitySpec_target_node(ZenScoutShipSpec_VA) = 0x1B1874u;
 	EntitySpec_hit_points(ZenScoutShipSpec_VA) = EntityConstants_hit_points_VA(ZenScoutShipConstants_VA);
-	MEM32(ZenScoutShipSpec_VA + 0x4u) = ZenScoutShipConstants_VA + 0xCu;
-	MEM32(ZenScoutShipSpec_VA + 0x8u) = ZenScoutShipConstants_VA + 0x10u;
-	MEM32(ZenScoutShipSpec_VA + 0xCu) = ZenScoutShipConstants_VA + 0x14u;
-	MEM32(ZenScoutShipSpec_VA + 0x10u) = ZenScoutShipConstants_VA + 0x18u;
-	MEM32(ZenScoutShipSpec_VA + 0x14u) = ZenScoutShipConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenScoutShipSpec_VA) = ZenScoutShipConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenScoutShipSpec_VA) = ZenScoutShipConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenScoutShipSpec_VA) = ZenScoutShipConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenScoutShipSpec_VA) = ZenScoutShipConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenScoutShipSpec_VA) = ZenScoutShipConstants_VA + 0x1Cu;
 	MEM32(ZenScoutShipSpec_VA + 0x18u) = ZenScoutShipConstants_VA + 0x20u;
 	MEM32(ZenScoutShipSpec_VA + 0x1Cu) = ZenScoutShipConstants_VA + 0x24u;
 	MEM32(ZenScoutShipSpec_VA + 0x20u) = ZenScoutShipConstants_VA + 0x28u;
@@ -121176,7 +121217,7 @@ uint32_t sub_0008F0B0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4_2 = 0, saved_arg1_2 = 0, saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -121216,9 +121257,9 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 								eax = 1u;
 								return eax;
 							}
-							arg2_2 = arg4;
-							arg0_2 = edi;
-							sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+							damage = arg4;
+							handle = edi;
+							EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 							eax = 1u;
 							return eax;
 						}
@@ -121250,10 +121291,10 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 							}
 							saved_arg4_2 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = edi;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4_2;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = edi;
+							entity = saved_arg1_2;
+							damage = saved_arg4_2;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -121303,10 +121344,10 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 					{
 						saved_arg4_2 = arg4;
 						saved_arg1_2 = arg1;
-						arg0_2 = edi;
-						arg1_2 = saved_arg1_2;
-						arg2_2 = saved_arg4_2;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						handle = edi;
+						entity = saved_arg1_2;
+						damage = saved_arg4_2;
+						EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -121414,10 +121455,10 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 					}
 					saved_arg4_2 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = edi;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4_2;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = edi;
+					entity = saved_arg1_2;
+					damage = saved_arg4_2;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -121509,10 +121550,10 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 					}
 					saved_arg4_2 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = edi;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4_2;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = edi;
+					entity = saved_arg1_2;
+					damage = saved_arg4_2;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -121629,11 +121670,11 @@ void ZenShuttle_Register(uint32_t arg0)
 	EntitySpec_radius(ZenShuttleSpec_VA) = 0x1A0514u;
 	EntitySpec_target_node(ZenShuttleSpec_VA) = 0x1B1878u;
 	EntitySpec_hit_points(ZenShuttleSpec_VA) = 0x1A0520u;
-	MEM32(ZenShuttleSpec_VA + 0x4u) = 0x1A0524u;
-	MEM32(ZenShuttleSpec_VA + 0x8u) = 0x1A0528u;
-	MEM32(ZenShuttleSpec_VA + 0xCu) = 0x1A052Cu;
-	MEM32(ZenShuttleSpec_VA + 0x10u) = 0x1A0530u;
-	MEM32(ZenShuttleSpec_VA + 0x14u) = 0x1A0534u;
+	EntitySpec_hit_points_refill(ZenShuttleSpec_VA) = 0x1A0524u;
+	EntitySpec_gun_ammo(ZenShuttleSpec_VA) = 0x1A0528u;
+	EntitySpec_gun_ammo_refill(ZenShuttleSpec_VA) = 0x1A052Cu;
+	EntitySpec_missiles(ZenShuttleSpec_VA) = 0x1A0530u;
+	EntitySpec_missiles_refill(ZenShuttleSpec_VA) = 0x1A0534u;
 	MEM32(ZenShuttleSpec_VA + 0x18u) = 0x1A0538u;
 	MEM32(ZenShuttleSpec_VA + 0x1Cu) = 0x1A053Cu;
 	MEM32(ZenShuttleSpec_VA + 0x20u) = 0x1A0540u;
@@ -121909,7 +121950,7 @@ void sub_0008FDD0(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1_2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -121952,9 +121993,9 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 									eax = 1u;
 									return eax;
 								}
-								arg2_2 = arg4;
-								arg0_2 = ebx;
-								sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+								damage = arg4;
+								handle = ebx;
+								EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 								eax = 1u;
 								return eax;
 							}
@@ -121979,10 +122020,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 						{
 							saved_arg4 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = ebx;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = ebx;
+							entity = saved_arg1_2;
+							damage = saved_arg4;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -122034,10 +122075,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 						{
 							saved_arg4 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = ebx;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = ebx;
+							entity = saved_arg1_2;
+							damage = saved_arg4;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -122106,10 +122147,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 					{
 						saved_arg4 = arg4;
 						saved_arg1_2 = arg1;
-						arg0_2 = ebx;
-						arg1_2 = saved_arg1_2;
-						arg2_2 = saved_arg4;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						handle = ebx;
+						entity = saved_arg1_2;
+						damage = saved_arg4;
+						EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -122189,10 +122230,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			{
 				saved_arg4 = arg4;
 				saved_arg1_2 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1_2;
-				arg2_2 = saved_arg4;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1_2;
+				damage = saved_arg4;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -122270,10 +122311,10 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			{
 				saved_arg4 = arg4;
 				saved_arg1_2 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1_2;
-				arg2_2 = saved_arg4;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1_2;
+				damage = saved_arg4;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -122699,11 +122740,11 @@ void ARMDTurret_Register(uint32_t arg0)
 	EntitySpec_radius(ARMDTurretSpec_VA) = EntityConstants_radius_VA(ARMDTurretConstants_VA);
 	EntitySpec_target_node(ARMDTurretSpec_VA) = ARMDTurretTargetNode_VA;
 	EntitySpec_hit_points(ARMDTurretSpec_VA) = EntityConstants_hit_points_VA(ARMDTurretConstants_VA);
-	MEM32(ARMDTurretSpec_VA + 0x4u) = ARMDTurretConstants_VA + 0xCu;
-	MEM32(ARMDTurretSpec_VA + 0x8u) = ARMDTurretConstants_VA + 0x10u;
-	MEM32(ARMDTurretSpec_VA + 0xCu) = ARMDTurretConstants_VA + 0x14u;
-	MEM32(ARMDTurretSpec_VA + 0x10u) = ARMDTurretConstants_VA + 0x18u;
-	MEM32(ARMDTurretSpec_VA + 0x14u) = ARMDTurretConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ARMDTurretSpec_VA) = ARMDTurretConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ARMDTurretSpec_VA) = ARMDTurretConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ARMDTurretSpec_VA) = ARMDTurretConstants_VA + 0x14u;
+	EntitySpec_missiles(ARMDTurretSpec_VA) = ARMDTurretConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ARMDTurretSpec_VA) = ARMDTurretConstants_VA + 0x1Cu;
 	MEM32(ARMDTurretSpec_VA + 0x18u) = ARMDTurretConstants_VA + 0x20u;
 	MEM32(ARMDTurretSpec_VA + 0x1Cu) = ARMDTurretConstants_VA + 0x24u;
 	MEM32(ARMDTurretSpec_VA + 0x20u) = ARMDTurretConstants_VA + 0x28u;
@@ -122804,7 +122845,7 @@ void sub_00090BD0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, damage = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0, saved_arg1_2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -122847,9 +122888,9 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 									eax = 1u;
 									return eax;
 								}
-								arg2_2 = arg4;
-								arg0_2 = ebx;
-								sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+								damage = arg4;
+								handle = ebx;
+								EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 								eax = 1u;
 								return eax;
 							}
@@ -122874,10 +122915,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 						{
 							saved_arg4 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = ebx;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = ebx;
+							entity = saved_arg1_2;
+							damage = saved_arg4;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -122929,10 +122970,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 						{
 							saved_arg4 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = ebx;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = ebx;
+							entity = saved_arg1_2;
+							damage = saved_arg4;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -123001,10 +123042,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 					{
 						saved_arg4 = arg4;
 						saved_arg1_2 = arg1;
-						arg0_2 = ebx;
-						arg1_2 = saved_arg1_2;
-						arg2_2 = saved_arg4;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						handle = ebx;
+						entity = saved_arg1_2;
+						damage = saved_arg4;
+						EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -123084,10 +123125,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			{
 				saved_arg4 = arg4;
 				saved_arg1_2 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1_2;
-				arg2_2 = saved_arg4;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1_2;
+				damage = saved_arg4;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -123165,10 +123206,10 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			{
 				saved_arg4 = arg4;
 				saved_arg1_2 = arg1;
-				arg0_2 = ebx;
-				arg1_2 = saved_arg1_2;
-				arg2_2 = saved_arg4;
-				sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				handle = ebx;
+				entity = saved_arg1_2;
+				damage = saved_arg4;
+				EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -123597,11 +123638,11 @@ void ZenCruiserTurret_Register(uint32_t arg0)
 	EntitySpec_radius(ZenCruiserTurretSpec_VA) = EntityConstants_radius_VA(ZenCruiserTurretConstants_VA);
 	EntitySpec_target_node(ZenCruiserTurretSpec_VA) = ZenCruiserTurretTargetNode_VA;
 	EntitySpec_hit_points(ZenCruiserTurretSpec_VA) = EntityConstants_hit_points_VA(ZenCruiserTurretConstants_VA);
-	MEM32(ZenCruiserTurretSpec_VA + 0x4u) = ZenCruiserTurretConstants_VA + 0xCu;
-	MEM32(ZenCruiserTurretSpec_VA + 0x8u) = ZenCruiserTurretConstants_VA + 0x10u;
-	MEM32(ZenCruiserTurretSpec_VA + 0xCu) = ZenCruiserTurretConstants_VA + 0x14u;
-	MEM32(ZenCruiserTurretSpec_VA + 0x10u) = ZenCruiserTurretConstants_VA + 0x18u;
-	MEM32(ZenCruiserTurretSpec_VA + 0x14u) = ZenCruiserTurretConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenCruiserTurretSpec_VA) = ZenCruiserTurretConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenCruiserTurretSpec_VA) = ZenCruiserTurretConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenCruiserTurretSpec_VA) = ZenCruiserTurretConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenCruiserTurretSpec_VA) = ZenCruiserTurretConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenCruiserTurretSpec_VA) = ZenCruiserTurretConstants_VA + 0x1Cu;
 	MEM32(ZenCruiserTurretSpec_VA + 0x18u) = ZenCruiserTurretConstants_VA + 0x20u;
 	MEM32(ZenCruiserTurretSpec_VA + 0x1Cu) = ZenCruiserTurretConstants_VA + 0x24u;
 	MEM32(ZenCruiserTurretSpec_VA + 0x20u) = ZenCruiserTurretConstants_VA + 0x28u;
@@ -124932,7 +124973,7 @@ void sub_000925E0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, entity = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4_2 = 0, saved_arg1_2 = 0, saved_arg4 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -124972,9 +125013,9 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 								eax = 1u;
 								return eax;
 							}
-							arg2_2 = arg4;
-							arg0_2 = edi;
-							sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+							damage = arg4;
+							handle = edi;
+							EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 							eax = 1u;
 							return eax;
 						}
@@ -125008,10 +125049,10 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 							}
 							saved_arg4_2 = arg4;
 							saved_arg1_2 = arg1;
-							arg0_2 = edi;
-							arg1_2 = saved_arg1_2;
-							arg2_2 = saved_arg4_2;
-							sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+							handle = edi;
+							entity = saved_arg1_2;
+							damage = saved_arg4_2;
+							EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 							if (eax == 0u)
 							{
 								eax = 1u;
@@ -125061,10 +125102,10 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 					{
 						saved_arg4_2 = arg4;
 						saved_arg1_2 = arg1;
-						arg0_2 = edi;
-						arg1_2 = saved_arg1_2;
-						arg2_2 = saved_arg4_2;
-						sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						handle = edi;
+						entity = saved_arg1_2;
+						damage = saved_arg4_2;
+						EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -125172,10 +125213,10 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 					}
 					saved_arg4_2 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = edi;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4_2;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = edi;
+					entity = saved_arg1_2;
+					damage = saved_arg4_2;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -125267,10 +125308,10 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 					}
 					saved_arg4_2 = arg4;
 					saved_arg1_2 = arg1;
-					arg0_2 = edi;
-					arg1_2 = saved_arg1_2;
-					arg2_2 = saved_arg4_2;
-					sub_0001A700(arg0_2, arg1_2, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+					handle = edi;
+					entity = saved_arg1_2;
+					damage = saved_arg4_2;
+					EntityTakeDamage(handle, entity, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 					if (eax == 0u)
 					{
 						eax = 1u;
@@ -125387,11 +125428,11 @@ void SeaSergeant_Register(uint32_t arg0)
 	EntitySpec_radius(SeaSergeantSpec_VA) = 0x1A0BFCu;
 	EntitySpec_target_node(SeaSergeantSpec_VA) = SeaSergeantTargetNode_VA;
 	EntitySpec_hit_points(SeaSergeantSpec_VA) = 0x1A0C08u;
-	MEM32(SeaSergeantSpec_VA + 0x4u) = 0x1A0C0Cu;
-	MEM32(SeaSergeantSpec_VA + 0x8u) = 0x1A0C10u;
-	MEM32(SeaSergeantSpec_VA + 0xCu) = 0x1A0C14u;
-	MEM32(SeaSergeantSpec_VA + 0x10u) = 0x1A0C18u;
-	MEM32(SeaSergeantSpec_VA + 0x14u) = 0x1A0C1Cu;
+	EntitySpec_hit_points_refill(SeaSergeantSpec_VA) = 0x1A0C0Cu;
+	EntitySpec_gun_ammo(SeaSergeantSpec_VA) = 0x1A0C10u;
+	EntitySpec_gun_ammo_refill(SeaSergeantSpec_VA) = 0x1A0C14u;
+	EntitySpec_missiles(SeaSergeantSpec_VA) = 0x1A0C18u;
+	EntitySpec_missiles_refill(SeaSergeantSpec_VA) = 0x1A0C1Cu;
 	MEM32(SeaSergeantSpec_VA + 0x18u) = 0x1A0C20u;
 	MEM32(SeaSergeantSpec_VA + 0x1Cu) = 0x1A0C24u;
 	MEM32(SeaSergeantSpec_VA + 0x20u) = 0x1A0C28u;
@@ -125875,7 +125916,7 @@ void sub_00093560(uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t PodStandardWarriorSpace_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -125908,9 +125949,9 @@ uint32_t PodStandardWarriorSpace_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = edi;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = edi;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -125950,9 +125991,9 @@ uint32_t PodStandardWarriorSpace_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = edi;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = edi;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -126255,11 +126296,11 @@ uint32_t PodStandardWarriorSpace_Register(uint32_t arg0)
 	EntitySpec_radius(PodStandardWarriorSpaceSpec_VA) = EntityConstants_radius_VA(PodStandardWarriorSpaceConstants_VA);
 	EntitySpec_target_node(PodStandardWarriorSpaceSpec_VA) = 0x1B188Cu;
 	EntitySpec_hit_points(PodStandardWarriorSpaceSpec_VA) = EntityConstants_hit_points_VA(PodStandardWarriorSpaceConstants_VA);
-	MEM32(PodStandardWarriorSpaceSpec_VA + 0x4u) = PodStandardWarriorSpaceConstants_VA + 0xCu;
-	MEM32(PodStandardWarriorSpaceSpec_VA + 0x8u) = PodStandardWarriorSpaceConstants_VA + 0x10u;
-	MEM32(PodStandardWarriorSpaceSpec_VA + 0xCu) = PodStandardWarriorSpaceConstants_VA + 0x14u;
-	MEM32(PodStandardWarriorSpaceSpec_VA + 0x10u) = PodStandardWarriorSpaceConstants_VA + 0x18u;
-	MEM32(PodStandardWarriorSpaceSpec_VA + 0x14u) = PodStandardWarriorSpaceConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodStandardWarriorSpaceSpec_VA) = PodStandardWarriorSpaceConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodStandardWarriorSpaceSpec_VA) = PodStandardWarriorSpaceConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodStandardWarriorSpaceSpec_VA) = PodStandardWarriorSpaceConstants_VA + 0x14u;
+	EntitySpec_missiles(PodStandardWarriorSpaceSpec_VA) = PodStandardWarriorSpaceConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodStandardWarriorSpaceSpec_VA) = PodStandardWarriorSpaceConstants_VA + 0x1Cu;
 	MEM32(PodStandardWarriorSpaceSpec_VA + 0x18u) = PodStandardWarriorSpaceConstants_VA + 0x20u;
 	MEM32(PodStandardWarriorSpaceSpec_VA + 0x1Cu) = PodStandardWarriorSpaceConstants_VA + 0x24u;
 	MEM32(PodStandardWarriorSpaceSpec_VA + 0x20u) = PodStandardWarriorSpaceConstants_VA + 0x28u;
@@ -127386,7 +127427,7 @@ void sub_00094D30(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t ZenWarriorScavenger_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -127445,9 +127486,9 @@ uint32_t ZenWarriorScavenger_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t 
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ebx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ebx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -127487,9 +127528,9 @@ uint32_t ZenWarriorScavenger_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t 
 					}
 					if (eax == 0xF001u)
 					{
-						arg2_2 = arg4;
-						arg0_2 = ebx;
-						sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+						damage = arg4;
+						handle = ebx;
+						EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 						if (eax == 0u)
 						{
 							eax = 1u;
@@ -127655,11 +127696,11 @@ void ZenWarriorScavenger_Register(uint32_t arg0)
 	EntitySpec_radius(ZenWarriorScavengerSpec_VA) = EntityConstants_radius_VA(ZenWarriorScavengerConstants_VA);
 	EntitySpec_target_node(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerTargetNode_VA;
 	EntitySpec_hit_points(ZenWarriorScavengerSpec_VA) = EntityConstants_hit_points_VA(ZenWarriorScavengerConstants_VA);
-	MEM32(ZenWarriorScavengerSpec_VA + 0x4u) = ZenWarriorScavengerConstants_VA + 0xCu;
-	MEM32(ZenWarriorScavengerSpec_VA + 0x8u) = ZenWarriorScavengerConstants_VA + 0x10u;
-	MEM32(ZenWarriorScavengerSpec_VA + 0xCu) = ZenWarriorScavengerConstants_VA + 0x14u;
-	MEM32(ZenWarriorScavengerSpec_VA + 0x10u) = ZenWarriorScavengerConstants_VA + 0x18u;
-	MEM32(ZenWarriorScavengerSpec_VA + 0x14u) = ZenWarriorScavengerConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerConstants_VA + 0x14u;
+	EntitySpec_missiles(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(ZenWarriorScavengerSpec_VA) = ZenWarriorScavengerConstants_VA + 0x1Cu;
 	MEM32(ZenWarriorScavengerSpec_VA + 0x18u) = ZenWarriorScavengerConstants_VA + 0x20u;
 	MEM32(ZenWarriorScavengerSpec_VA + 0x1Cu) = ZenWarriorScavengerConstants_VA + 0x24u;
 	MEM32(ZenWarriorScavengerSpec_VA + 0x20u) = ZenWarriorScavengerConstants_VA + 0x28u;
@@ -128228,11 +128269,11 @@ void PodLightArtillery_Register(uint32_t arg0)
 	EntitySpec_radius(PodLightArtillerySpec_VA) = EntityConstants_radius_VA(PodLightArtilleryConstants_VA);
 	EntitySpec_target_node(PodLightArtillerySpec_VA) = 0x1B1894u;
 	EntitySpec_hit_points(PodLightArtillerySpec_VA) = EntityConstants_hit_points_VA(PodLightArtilleryConstants_VA);
-	MEM32(PodLightArtillerySpec_VA + 0x4u) = PodLightArtilleryConstants_VA + 0xCu;
-	MEM32(PodLightArtillerySpec_VA + 0x8u) = PodLightArtilleryConstants_VA + 0x10u;
-	MEM32(PodLightArtillerySpec_VA + 0xCu) = PodLightArtilleryConstants_VA + 0x14u;
-	MEM32(PodLightArtillerySpec_VA + 0x10u) = PodLightArtilleryConstants_VA + 0x18u;
-	MEM32(PodLightArtillerySpec_VA + 0x14u) = PodLightArtilleryConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodLightArtillerySpec_VA) = PodLightArtilleryConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodLightArtillerySpec_VA) = PodLightArtilleryConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodLightArtillerySpec_VA) = PodLightArtilleryConstants_VA + 0x14u;
+	EntitySpec_missiles(PodLightArtillerySpec_VA) = PodLightArtilleryConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodLightArtillerySpec_VA) = PodLightArtilleryConstants_VA + 0x1Cu;
 	MEM32(PodLightArtillerySpec_VA + 0x18u) = PodLightArtilleryConstants_VA + 0x20u;
 	MEM32(PodLightArtillerySpec_VA + 0x1Cu) = PodLightArtilleryConstants_VA + 0x24u;
 	MEM32(PodLightArtillerySpec_VA + 0x20u) = PodLightArtilleryConstants_VA + 0x28u;
@@ -128401,7 +128442,7 @@ void sub_00096B50(uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t CatsEye_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -128434,9 +128475,9 @@ uint32_t CatsEye_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -128487,9 +128528,9 @@ uint32_t CatsEye_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -128917,11 +128958,11 @@ void CatsEye_Register(uint32_t arg0)
 	EntitySpec_radius(CatsEyeSpec_VA) = EntityConstants_radius_VA(CatsEyeConstants_VA);
 	EntitySpec_target_node(CatsEyeSpec_VA) = 0x1B1898u;
 	EntitySpec_hit_points(CatsEyeSpec_VA) = EntityConstants_hit_points_VA(CatsEyeConstants_VA);
-	MEM32(CatsEyeSpec_VA + 0x4u) = CatsEyeConstants_VA + 0xCu;
-	MEM32(CatsEyeSpec_VA + 0x8u) = CatsEyeConstants_VA + 0x10u;
-	MEM32(CatsEyeSpec_VA + 0xCu) = CatsEyeConstants_VA + 0x14u;
-	MEM32(CatsEyeSpec_VA + 0x10u) = CatsEyeConstants_VA + 0x18u;
-	MEM32(CatsEyeSpec_VA + 0x14u) = CatsEyeConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(CatsEyeSpec_VA) = CatsEyeConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(CatsEyeSpec_VA) = CatsEyeConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(CatsEyeSpec_VA) = CatsEyeConstants_VA + 0x14u;
+	EntitySpec_missiles(CatsEyeSpec_VA) = CatsEyeConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(CatsEyeSpec_VA) = CatsEyeConstants_VA + 0x1Cu;
 	MEM32(CatsEyeSpec_VA + 0x18u) = CatsEyeConstants_VA + 0x20u;
 	MEM32(CatsEyeSpec_VA + 0x1Cu) = CatsEyeConstants_VA + 0x24u;
 	MEM32(CatsEyeSpec_VA + 0x20u) = CatsEyeConstants_VA + 0x28u;
@@ -129872,11 +129913,11 @@ void PodScout_Register(uint32_t arg0)
 	EntitySpec_radius(PodScoutSpec_VA) = EntityConstants_radius_VA(PodScoutConstants_VA);
 	EntitySpec_target_node(PodScoutSpec_VA) = 0x1B189Cu;
 	EntitySpec_hit_points(PodScoutSpec_VA) = EntityConstants_hit_points_VA(PodScoutConstants_VA);
-	MEM32(PodScoutSpec_VA + 0x4u) = PodScoutConstants_VA + 0xCu;
-	MEM32(PodScoutSpec_VA + 0x8u) = PodScoutConstants_VA + 0x10u;
-	MEM32(PodScoutSpec_VA + 0xCu) = PodScoutConstants_VA + 0x14u;
-	MEM32(PodScoutSpec_VA + 0x10u) = PodScoutConstants_VA + 0x18u;
-	MEM32(PodScoutSpec_VA + 0x14u) = PodScoutConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodScoutSpec_VA) = PodScoutConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodScoutSpec_VA) = PodScoutConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodScoutSpec_VA) = PodScoutConstants_VA + 0x14u;
+	EntitySpec_missiles(PodScoutSpec_VA) = PodScoutConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodScoutSpec_VA) = PodScoutConstants_VA + 0x1Cu;
 	MEM32(PodScoutSpec_VA + 0x18u) = PodScoutConstants_VA + 0x20u;
 	MEM32(PodScoutSpec_VA + 0x1Cu) = PodScoutConstants_VA + 0x24u;
 	MEM32(PodScoutSpec_VA + 0x20u) = PodScoutConstants_VA + 0x28u;
@@ -130688,11 +130729,11 @@ void PodStandardWarrior_Register(uint32_t arg0)
 	EntitySpec_radius(PodStandardWarriorSpec_VA) = EntityConstants_radius_VA(PodStandardWarriorConstants_VA);
 	EntitySpec_target_node(PodStandardWarriorSpec_VA) = 0x1B18A0u;
 	EntitySpec_hit_points(PodStandardWarriorSpec_VA) = EntityConstants_hit_points_VA(PodStandardWarriorConstants_VA);
-	MEM32(PodStandardWarriorSpec_VA + 0x4u) = PodStandardWarriorConstants_VA + 0xCu;
-	MEM32(PodStandardWarriorSpec_VA + 0x8u) = PodStandardWarriorConstants_VA + 0x10u;
-	MEM32(PodStandardWarriorSpec_VA + 0xCu) = PodStandardWarriorConstants_VA + 0x14u;
-	MEM32(PodStandardWarriorSpec_VA + 0x10u) = PodStandardWarriorConstants_VA + 0x18u;
-	MEM32(PodStandardWarriorSpec_VA + 0x14u) = PodStandardWarriorConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(PodStandardWarriorSpec_VA) = PodStandardWarriorConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(PodStandardWarriorSpec_VA) = PodStandardWarriorConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(PodStandardWarriorSpec_VA) = PodStandardWarriorConstants_VA + 0x14u;
+	EntitySpec_missiles(PodStandardWarriorSpec_VA) = PodStandardWarriorConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(PodStandardWarriorSpec_VA) = PodStandardWarriorConstants_VA + 0x1Cu;
 	MEM32(PodStandardWarriorSpec_VA + 0x18u) = PodStandardWarriorConstants_VA + 0x20u;
 	MEM32(PodStandardWarriorSpec_VA + 0x1Cu) = PodStandardWarriorConstants_VA + 0x24u;
 	MEM32(PodStandardWarriorSpec_VA + 0x20u) = PodStandardWarriorConstants_VA + 0x28u;
@@ -131111,7 +131152,7 @@ void sub_0009A2C0(uint32_t ebx, uint32_t esi)
    (GameObjectDeliver). Hands back whether one was answered. */
 uint32_t FighterPod_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg4 = 0;
 
 	saved_arg4 = arg4;
@@ -131144,9 +131185,9 @@ uint32_t FighterPod_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -131205,9 +131246,9 @@ uint32_t FighterPod_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint
 			}
 			if (edx == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -131725,11 +131766,11 @@ void FighterPod_Register(uint32_t arg0)
 	EntitySpec_radius(FighterPodSpec_VA) = EntityConstants_radius_VA(FighterPodConstants_VA);
 	EntitySpec_target_node(FighterPodSpec_VA) = 0x1B18A4u;
 	EntitySpec_hit_points(FighterPodSpec_VA) = EntityConstants_hit_points_VA(FighterPodConstants_VA);
-	MEM32(FighterPodSpec_VA + 0x4u) = FighterPodConstants_VA + 0xCu;
-	MEM32(FighterPodSpec_VA + 0x8u) = FighterPodConstants_VA + 0x10u;
-	MEM32(FighterPodSpec_VA + 0xCu) = FighterPodConstants_VA + 0x14u;
-	MEM32(FighterPodSpec_VA + 0x10u) = FighterPodConstants_VA + 0x18u;
-	MEM32(FighterPodSpec_VA + 0x14u) = FighterPodConstants_VA + 0x1Cu;
+	EntitySpec_hit_points_refill(FighterPodSpec_VA) = FighterPodConstants_VA + 0xCu;
+	EntitySpec_gun_ammo(FighterPodSpec_VA) = FighterPodConstants_VA + 0x10u;
+	EntitySpec_gun_ammo_refill(FighterPodSpec_VA) = FighterPodConstants_VA + 0x14u;
+	EntitySpec_missiles(FighterPodSpec_VA) = FighterPodConstants_VA + 0x18u;
+	EntitySpec_missiles_refill(FighterPodSpec_VA) = FighterPodConstants_VA + 0x1Cu;
 	MEM32(FighterPodSpec_VA + 0x18u) = FighterPodConstants_VA + 0x20u;
 	MEM32(FighterPodSpec_VA + 0x1Cu) = FighterPodConstants_VA + 0x24u;
 	MEM32(FighterPodSpec_VA + 0x20u) = FighterPodConstants_VA + 0x28u;
@@ -131817,7 +131858,7 @@ void sub_0009AF00(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32
 
 uint32_t sub_0009AF60(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, damage = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -131850,9 +131891,9 @@ uint32_t sub_0009AF60(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 					eax = 1u;
 					return eax;
 				}
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &ignored, &ignored_2, &ebx, &ebp, &esi, &edi);
 				eax = 1u;
 				return eax;
 			}
@@ -131883,9 +131924,9 @@ uint32_t sub_0009AF60(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 		{
 			if (eax == 0xF001u)
 			{
-				arg2_2 = arg4;
-				arg0_2 = ecx;
-				sub_0001A700(arg0_2, arg1, arg2_2, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
+				damage = arg4;
+				handle = ecx;
+				EntityTakeDamage(handle, arg1, damage, &eax, &ignored_2, &ebx, &ebp, &esi, &edi);
 				if (eax == 0u)
 				{
 					eax = 1u;
@@ -144478,15 +144519,15 @@ void WaterNode_Register(uint32_t arg0)
 
 void sub_000A4230(uint32_t esi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_10 = 0;
 	double f0 = 0;
 
 	stack_10 = MEM32(esi + 0x28u);
-	eax = sub_000248B0();
-	arg0 = eax;
-	arg1 = stack_10;
-	sub_00111CF0(arg0, arg1, &eax, &ignored, &ignored_2);
+	eax = StringTableGet();
+	manager = eax;
+	number = stack_10;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	edi = eax;
 	if ((int32_t)MEM32(esi + 0x28u) > 0)
 	{
@@ -158796,7 +158837,7 @@ void sub_000AE080(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t arg0, uint3
 
 void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t jump_target = 0;
 	double f0 = 0, f0_2 = 0, f1 = 0;
 
@@ -158815,7 +158856,7 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	esi_2 = eax;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	MEM32(g_esp + 0x38u) = eax_2;
 	eax_2 = MEM32(g_esp + 0x3Cu);
 	g_esp = g_esp - 4u;
@@ -159365,9 +159406,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AE6C4u, 0);
@@ -159603,9 +159644,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AE8B0u, 0);
@@ -159691,9 +159732,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AE969u, 0);
@@ -159778,9 +159819,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEA1Eu, 0);
@@ -159866,9 +159907,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEAD7u, 0);
@@ -159953,9 +159994,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEB8Cu, 0);
@@ -160041,9 +160082,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEC45u, 0);
@@ -160136,9 +160177,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		MEM32(g_esp + 0x34u) = edi_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		x86_call(vcTextWidth_entry, 0x000AED08u, 0);
@@ -160224,9 +160265,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edx_2;
 		MEM32(g_esp + 0x34u) = edi_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
 		x86_call(vcTextWidth_entry, 0x000AEDCBu, 0);
@@ -160312,9 +160353,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEE98u, 0);
@@ -160400,9 +160441,9 @@ void sub_000AE1B0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
 	MEM32(g_esp + 0x34u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
 	x86_call(vcTextWidth_entry, 0x000AEF51u, 0);
@@ -161699,7 +161740,7 @@ void sub_000B0430(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	ebp_2 = MEM32(g_esp + 0x60u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_000248B0();
+	StringTableGet();
 	eax = MEM32(g_esp + 0x68u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -162118,7 +162159,7 @@ void sub_000B0910(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t arg2)
 
 void sub_000B0970(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 0x10u;
@@ -162132,7 +162173,7 @@ void sub_000B0970(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = ebp;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	ecx = MEM32(g_esp + 0x3Cu);
 	MEM32(g_esp + 0x14u) = eax;
 	eax = MEM32(g_esp + 0x40u);
@@ -162391,9 +162432,9 @@ void sub_000B0970(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x3Cu) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B0BFAu, 0);
@@ -162480,9 +162521,9 @@ void sub_000B0970(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x38u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B0CB8u, 0);
@@ -163563,7 +163604,7 @@ void sub_000B1CE0(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	MEM32(g_esp) = ebp;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_000248B0();
+	StringTableGet();
 	eax = MEM32(g_esp + 0x3Cu);
 	ecx = MEM32(g_esp + 0x38u);
 	g_esp = g_esp - 4u;
@@ -165610,7 +165651,7 @@ void sub_000B3BA0(uint32_t esi, uint32_t edi)
 
 void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 0x10u;
@@ -165625,7 +165666,7 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	ebp_2 = MEM32(g_esp + 0x34u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	edx = MEM32(g_esp + 0x3Cu);
 	ecx = MEM32(0x1BC4A0u);
 	MEM32(g_esp + 0x10u) = eax;
@@ -166011,9 +166052,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x38u) = edi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B404Cu, 0);
@@ -166098,9 +166139,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x34u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B4104u, 0);
@@ -166184,9 +166225,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x34u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B41B7u, 0);
@@ -166271,9 +166312,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x34u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B426Fu, 0);
@@ -166357,9 +166398,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x34u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B4322u, 0);
@@ -166444,9 +166485,9 @@ void sub_000B3CA0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
 	MEM32(g_esp + 0x34u) = 2u;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcTextWidth_entry, 0x000B43DCu, 0);
@@ -168388,7 +168429,7 @@ uint32_t sub_000B5910(uint32_t esi, uint32_t arg0, uint32_t arg1)
 uint32_t sub_000B5BC0(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t zero = 0, negative = 0, overflow = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, award = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	g_esp = g_esp - 0xCu;
 	MEM32(g_esp + 4u) = arg0;
@@ -168482,8 +168523,8 @@ uint32_t sub_000B5BC0(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 	MEM32(g_esp) = MEM32(esi_2 + 0x168u);
 	MEM32(esi_2 + 0x130u) = 0x43070000u;
 	MEM32(esi_2 + 0x12Cu) = 0x42B40000u;
-	arg0_2 = MEM32(g_esp);
-	eax = sub_0002F1C0(arg0_2);
+	award = MEM32(g_esp);
+	eax = AwardRank(award);
 	ecx = (int16_t)eax;
 	overflow = 0u;
 	zero = ecx == 0u;
@@ -169056,7 +169097,7 @@ uint32_t sub_000B6210(uint32_t arg0)
 uint32_t sub_000B6240(uint32_t esi, uint32_t arg0)
 {
 	uint8_t arg3 = 0;
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, award = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t jump_target = 0;
 
 	g_esp = g_esp - 8u;
@@ -169132,8 +169173,8 @@ uint32_t sub_000B6240(uint32_t esi, uint32_t arg0)
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2;
 		MEM32(g_esp + esi_2 * 4u + 0x50u) = esi_2 * 0x3Cu + 0x20FF10u;
-		arg0_2 = MEM32(g_esp);
-		eax = sub_0002F1C0(arg0_2);
+		award = MEM32(g_esp);
+		eax = AwardRank(award);
 		g_esp = g_esp + 4u;
 		if ((int16_t)eax <= 0)
 		{
@@ -169430,7 +169471,7 @@ uint32_t sub_000B6990(uint32_t arg1, uint32_t arg2)
 void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint8_t eax_3 = 0, ebx_3 = 0, ecx_2 = 0, edx_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_3 = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx_3 = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t saved_arg3 = 0, saved_arg2 = 0, saved_arg1 = 0, saved_arg0 = 0;
 
 	saved_arg0 = arg0;
@@ -169438,7 +169479,7 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 	saved_arg2 = arg2;
 	saved_arg3 = arg3;
 	esi = eax;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	ebp = eax_2;
 	arg1_2 = saved_arg2;
 	arg0_2 = saved_arg1;
@@ -169475,12 +169516,12 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(ecx + esi) = edx_2;
 		ecx++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4A6u;
+	number = 0x4A6u;
 	ebx_3 = 0xFu;
-	arg0_2 = ebp;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = 0xFu;
 	MEM32(0x219A04u) = edi_2 + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -169947,11 +169988,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4AFu;
-	arg0_2 = ebp;
+	number = 0x4AFu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170030,11 +170071,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4A5u;
-	arg0_2 = ebp;
+	number = 0x4A5u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	edi_2 = MEM32(0x219A04u);
 	ecx = edi_2 << 8;
 	esi = ecx + 0x2103C8u;
@@ -170057,11 +170098,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + ecx) = edx_2;
 		ecx++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4A6u;
-	arg0_2 = ebp;
+	number = 0x4A6u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = edi_2 + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170117,11 +170158,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4A7u;
-	arg0_2 = ebp;
+	number = 0x4A7u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	edx_3 = MEM32(0x219A04u);
 	ecx = edx_3 << 8;
 	esi = eax_2;
@@ -170155,11 +170196,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = ecx_2;
 		esi++;
 	} while (ecx_2 != 0u);
-	arg1_2 = 0x4A8u;
-	arg0_2 = ebp;
+	number = 0x4A8u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = edx_3 + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170205,11 +170246,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4A9u;
-	arg0_2 = ebp;
+	number = 0x4A9u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170342,11 +170383,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(edi_2 + esi) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4AAu;
-	arg0_2 = ebp;
+	number = 0x4AAu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170491,11 +170532,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4ABu;
-	arg0_2 = ebp;
+	number = 0x4ABu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170540,11 +170581,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4ACu;
-	arg0_2 = ebp;
+	number = 0x4ACu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170612,11 +170653,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4ADu;
-	arg0_2 = ebp;
+	number = 0x4ADu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170662,11 +170703,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4AEu;
-	arg0_2 = ebp;
+	number = 0x4AEu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170766,11 +170807,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x4AFu;
-	arg0_2 = ebp;
+	number = 0x4AFu;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	ecx = MEM32(0x219A04u);
 	edx_3 = ecx << 8;
 	esi = eax_2;
@@ -170904,11 +170945,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = edx_2;
 		esi++;
 	} while (edx_2 != 0u);
-	arg1_2 = 0x7B7u;
-	arg0_2 = ebp;
+	number = 0x7B7u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = ecx + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	edx_3 = MEM32(0x219A04u);
 	ecx = edx_3 << 8;
 	esi = eax_2;
@@ -170942,11 +170983,11 @@ void sub_000B69E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t edi, uint32
 		MEM8(esi + edi_2) = ecx_2;
 		esi++;
 	} while (ecx_2 != 0u);
-	arg1_2 = 0x7B8u;
-	arg0_2 = ebp;
+	number = 0x7B8u;
+	manager = ebp;
 	MEM8(eax_2 + 0x2104C7u) = ebx_3;
 	MEM32(0x219A04u) = edx_3 + 1u;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	edi_2 = MEM32(0x219A04u);
 	ecx = edi_2 << 8;
 	esi = ecx + 0x2103C8u;
@@ -171794,7 +171835,7 @@ void sub_000B83E0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 void sub_000B8640(uint32_t esi, uint32_t arg1)
 {
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, ignored = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, ignored = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_14 = 0, stack_18 = 0, stack_1C = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -172004,7 +172045,7 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 				return;
 		}
 	}
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	edi = 1u;
 	ebx = eax;
 	MenuConfirmSoundAsked = 1u;
@@ -172022,9 +172063,9 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	stack_14 = 0u;
 	stack_18 = 0u;
 	stack_1C = 1u;
-	arg1_2 = eax;
-	arg0 = ebx;
-	sub_00111CF0(arg0, arg1_2, &eax, &ignored, &ignored_3);
+	number = eax;
+	manager = ebx;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_3);
 	arg1_2 = eax;
 	arg0 = saved_arg1;
 	arg2 = stack_1C;
@@ -172040,9 +172081,9 @@ void sub_000B8640(uint32_t esi, uint32_t arg1)
 	stack_14 = 0u;
 	stack_18 = 0xAu;
 	stack_1C = 6u;
-	arg1_2 = 0x49Fu;
-	arg0 = ebx;
-	sub_00111CF0(arg0, arg1_2, &eax, &ignored, &ignored_3);
+	number = 0x49Fu;
+	manager = ebx;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_3);
 	arg1_2 = eax;
 	arg0 = saved_arg1;
 	arg2 = stack_1C;
@@ -172253,7 +172294,7 @@ void sub_000B8D40(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg1)
 	uint32_t stack = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	sub_000248B0();
+	StringTableGet();
 	MEM32(0x219C9Cu) = 0x43220000u;
 	MEM32(0x219C60u) = 0x43222666u;
 	arg2 = float_to_bits((float)(double)(int32_t)MEM32(esi + 0x150u));
@@ -173047,7 +173088,7 @@ void sub_000B9790(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	ebx_2 = eax;
-	sub_000248B0();
+	StringTableGet();
 	edi_2 = MEM32(g_esp + 0x68u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi_2;
@@ -174119,14 +174160,14 @@ void sub_000BA3D0(uint32_t arg0)
 
 uint32_t sub_000BA3E0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x393u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x393u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BA400u, 1, arg0_2);
@@ -174175,14 +174216,14 @@ uint32_t sub_000BA3E0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BA4A0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x392u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x392u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BA4C0u, 1, arg0_2);
@@ -174231,14 +174272,14 @@ uint32_t sub_000BA4A0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BA560(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x391u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x391u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BA580u, 1, arg0_2);
@@ -174287,15 +174328,15 @@ uint32_t sub_000BA560(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BA620(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_10 = 0, saved_arg0 = 0;
 	double f0 = 0, ignored64 = 0;
 
 	saved_arg0 = arg0;
 	edi = eax;
-	arg1 = MEM32(0x1B2850u);
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax_2, &ignored, &ignored_2);
+	number = MEM32(0x1B2850u);
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 	ebp = eax_2;
 	stack_10 = 0x10u;
 	arg0_2 = ebp;
@@ -174353,14 +174394,14 @@ uint32_t sub_000BA620(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t arg0)
 
 uint32_t sub_000BA710(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x390u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x390u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BA730u, 1, arg0_2);
@@ -174409,14 +174450,14 @@ uint32_t sub_000BA710(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BA7D0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x3A1u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x3A1u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BA7F0u, 1, arg0_2);
@@ -174465,7 +174506,7 @@ uint32_t sub_000BA7D0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BA890(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_18 = 0, saved_arg1 = 0, saved_arg0 = 0;
 	double f0 = 0;
 
@@ -174476,9 +174517,9 @@ uint32_t sub_000BA890(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	edi = 0x1B2848u;
 	do
 	{
-		arg1_2 = MEM32(edi);
-		arg0_2 = MEM32(0x219DA8u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+		number = MEM32(edi);
+		manager = MEM32(0x219DA8u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 		ebp = eax_2;
 		stack_18 = 0x10u;
 		arg0_2 = ebp;
@@ -174542,7 +174583,7 @@ uint32_t sub_000BA890(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 uint32_t sub_000BA9A0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_18 = 0, saved_arg1 = 0, saved_arg0 = 0;
 	double f0 = 0;
 
@@ -174553,9 +174594,9 @@ uint32_t sub_000BA9A0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	edi = 0x1B2838u;
 	do
 	{
-		arg1_2 = MEM32(edi);
-		arg0_2 = MEM32(0x219DA8u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+		number = MEM32(edi);
+		manager = MEM32(0x219DA8u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 		ebp = eax_2;
 		stack_18 = 0x10u;
 		arg0_2 = ebp;
@@ -174619,7 +174660,7 @@ uint32_t sub_000BA9A0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 uint32_t sub_000BAAB0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_18 = 0, saved_arg1 = 0, saved_arg0 = 0;
 	double f0 = 0;
 
@@ -174630,9 +174671,9 @@ uint32_t sub_000BAAB0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	edi = 0x1B2840u;
 	do
 	{
-		arg1_2 = MEM32(edi);
-		arg0_2 = MEM32(0x219DA8u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+		number = MEM32(edi);
+		manager = MEM32(0x219DA8u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 		ebp = eax_2;
 		stack_18 = 0x10u;
 		arg0_2 = ebp;
@@ -174696,7 +174737,7 @@ uint32_t sub_000BAAB0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 uint32_t sub_000BABC0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_18 = 0, saved_arg1 = 0, saved_arg0 = 0;
 	double f0 = 0;
 
@@ -174707,9 +174748,9 @@ uint32_t sub_000BABC0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	edi = 0x1B2830u;
 	do
 	{
-		arg1_2 = MEM32(edi);
-		arg0_2 = MEM32(0x219DA8u);
-		sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+		number = MEM32(edi);
+		manager = MEM32(0x219DA8u);
+		vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 		ebp = eax_2;
 		stack_18 = 0x10u;
 		arg0_2 = ebp;
@@ -174773,14 +174814,14 @@ uint32_t sub_000BABC0(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 
 void sub_000BACD0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0;
 	double f0 = 0;
 
 	ebp = arg0;
-	arg1 = 0x395u;
-	arg0_2 = MEM32(0x219DA8u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	number = 0x395u;
+	manager = MEM32(0x219DA8u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	stack = 0x10u;
 	arg0_2 = eax;
 	x86_call(vcTextWidth_entry, 0x000BACF0u, 1, arg0_2);
@@ -174824,7 +174865,7 @@ void sub_000BACD0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 
 void sub_000BAD90(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -174903,7 +174944,7 @@ void sub_000BAD90(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32
 	MEM32(esi_2 + 0x124u) = 0u;
 	x86_call(vcTextSetSize_entry, 0x000BAE5Du, 0);
 	x87_pop();
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x146u;
 	MEM32(0x219DA8u) = eax_2;
@@ -175053,9 +175094,9 @@ void sub_000BAD90(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32
 	MEM32(g_esp) = 0x389u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 	g_esp = g_esp + 0x2Cu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x12u;
@@ -175127,9 +175168,9 @@ void sub_000BAD90(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32
 	MEM32(g_esp) = 0x37Bu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &ignored, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &ignored, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1Eu;
 	g_esp = g_esp - 4u;
@@ -175207,9 +175248,9 @@ void sub_000BAD90(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32
 	MEM32(g_esp) = 0x37Du;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &ignored, &ignored_2, &ignored_3);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &ignored, &ignored_2, &ignored_3);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1Eu;
 	g_esp = g_esp - 4u;
@@ -175518,14 +175559,14 @@ uint32_t sub_000BB540(void)
 
 void sub_000BB750(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_esi)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp = 0, edi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack_C = 0, stack = 0, stack_14 = 0, stack_18 = 0, stack_1C = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
 	ebp = arg0;
 	arg0_2 = MEM32(*p_esi + 0x124u);
 	sub_0002EEA0(arg0_2);
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	edi = eax;
 	if (ebp == 0u)
 	{
@@ -175545,9 +175586,9 @@ void sub_000BB750(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 		stack_14 = 0u;
 		stack_18 = 0u;
 		stack_1C = 0x4B8u;
-		arg0_2 = edi;
-		arg1_2 = stack_1C;
-		sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+		manager = edi;
+		number = stack_1C;
+		vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 		arg1_2 = eax;
 		arg0_2 = ebx;
 		arg2 = stack_18;
@@ -175568,9 +175609,9 @@ void sub_000BB750(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 		stack_14 = 0u;
 		stack_18 = 0u;
 		stack_1C = 0x37Eu;
-		arg0_2 = edi;
-		arg1_2 = stack_1C;
-		sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+		manager = edi;
+		number = stack_1C;
+		vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 		arg1_2 = eax;
 		arg0_2 = ebx;
 		arg2 = stack_18;
@@ -175586,9 +175627,9 @@ void sub_000BB750(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 	stack = 0u;
 	stack_14 = 0u;
 	stack_18 = 1u;
-	arg1_2 = 0x380u;
-	arg0_2 = edi;
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored_2, &ignored_3);
+	number = 0x380u;
+	manager = edi;
+	vcStringManagerGetText(manager, number, &eax, &ignored_2, &ignored_3);
 	arg1_2 = eax;
 	arg0_2 = ebx;
 	arg2 = stack_18;
@@ -175627,7 +175668,7 @@ void sub_000BB840(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t *p_eax, uin
 	MEM32(g_esp) = edi;
 	MEM32(g_esp + 0x14u) = eax;
 	MEM32(g_esp + 0x10u) = 0u;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi + 0x124u);
 	MEM32(g_esp + 0x10u) = eax;
@@ -176032,7 +176073,7 @@ uint32_t sub_000BBD50(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg1)
 	uint32_t saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	sub_000248B0();
+	StringTableGet();
 	esi = saved_arg1;
 	if (MEM32(0x1B09B8u) == 0u)
 	{
@@ -176119,12 +176160,12 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 {
 	bool L_0BC5CF = false, L_0BC5D1 = false, L_0BC61E = false;
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp = 0, ebx = 0, ecx_2 = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, ignored_4 = 0, ignored_5 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp = 0, ebx = 0, ecx_2 = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, ignored_4 = 0, ignored_5 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_18 = 0, stack_1C = 0, stack_20 = 0, stack_24 = 0;
 
 	esi = eax;
 	ebx = ecx;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	ebp = eax_2;
 	arg0 = MEM32(esi + 0x124u);
 	eax_2 = sub_0002EEA0(arg0);
@@ -176174,9 +176215,9 @@ void sub_000BC510(uint32_t eax, uint32_t ecx)
 			stack_1C = 0u;
 			stack_20 = 0u;
 			stack_24 = 0u;
-			arg1 = 0x7E8u;
-			arg0 = ebp;
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+			number = 0x7E8u;
+			manager = ebp;
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 			arg1 = eax_2;
 			arg0 = ebx;
 			arg2 = stack_24;
@@ -177108,7 +177149,7 @@ void sub_000BD0D0(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint3
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	MEM32(g_esp + 0x1Cu) = eax;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	edi_2 = 0u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2 + 0x124u);
@@ -177570,7 +177611,7 @@ uint32_t sub_000BD4D0(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg1)
 	uint32_t saved_arg1 = 0;
 
 	saved_arg1 = arg1;
-	sub_000248B0();
+	StringTableGet();
 	esi = saved_arg1;
 	if (MEM32(0x1B09B8u) == 0u)
 	{
@@ -178087,7 +178128,7 @@ uint32_t sub_000BE060(uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint8_t eax_2 = 0, ecx = 0;
 	uint16_t eax_3 = 0;
-	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
+	uint32_t eax = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 
 	g_esp = g_esp - 8u;
 	MEM32(g_esp + 4u) = arg0;
@@ -178096,15 +178137,15 @@ uint32_t sub_000BE060(uint32_t esi, uint32_t edi, uint32_t arg0)
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	esi_2 = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x4BFu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 8u;
 	edx = g_esp + 8u;
 	do
@@ -178126,9 +178167,9 @@ uint32_t sub_000BE060(uint32_t esi, uint32_t edi, uint32_t arg0)
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	MEM16(edi_2) = eax_3;
-	arg0_2 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 8u;
 	edx = eax;
 	do
@@ -178168,16 +178209,16 @@ uint32_t sub_000BE060(uint32_t esi, uint32_t edi, uint32_t arg0)
 
 uint32_t sub_000BE100(uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_arg1 = 0, saved_arg0 = 0;
 
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	stack = saved_arg1;
-	arg1_2 = 0x4D3u;
-	arg0_2 = eax;
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	number = 0x4D3u;
+	manager = eax;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	esi = saved_arg0;
 	arg1_2 = eax;
 	arg0_2 = esi;
@@ -178190,7 +178231,7 @@ uint32_t sub_000BE100(uint32_t arg0, uint32_t arg1)
 
 uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, eax = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 
 	g_esp = g_esp - 0x10u;
 	MEM32(g_esp + 4u) = arg0;
@@ -178201,7 +178242,7 @@ uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	edi_2 = MEM32(g_esp + 0x10Cu);
 	esi_2 = eax;
 	if (MEM32(edi_2 + 0x124u) == 0u)
@@ -178213,9 +178254,9 @@ uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 		MEM32(g_esp) = 0x4B0u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 		esi_2 = MEM32(g_esp + 0x11Cu);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp - 4u;
@@ -178237,9 +178278,9 @@ uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 	MEM32(g_esp) = 0x4B6u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 8u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -178255,9 +178296,9 @@ uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	esi_2 = MEM32(g_esp + 0x128u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -178280,7 +178321,7 @@ uint32_t sub_000BE130(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint8_t eax_2 = 0, ecx = 0, edx_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 
 	g_esp = g_esp - 0x10u;
 	MEM32(g_esp + 4u) = arg0;
@@ -178295,7 +178336,7 @@ uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	esi_2 = MEM32(g_esp + 0x11Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
@@ -178318,9 +178359,9 @@ uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = 0x4BEu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 8u;
 	edx = g_esp + 0x10u;
 	do
@@ -178343,9 +178384,9 @@ uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		MEM32(g_esp) = 0x4D1u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebx_2;
-		arg0_2 = MEM32(g_esp);
-		arg1_2 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 		g_esp = g_esp + 8u;
 		edx = eax;
 		do
@@ -178391,9 +178432,9 @@ uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = 0x4CDu;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ebx_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	g_esp = g_esp + 8u;
 	edx = eax;
 	do
@@ -178435,16 +178476,16 @@ uint32_t sub_000BE1E0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 
 uint32_t sub_000BE320(uint32_t arg1, uint32_t arg2)
 {
-	uint32_t arg0 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_arg2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	stack = saved_arg2;
-	arg1_2 = 0x6E0u;
-	arg0 = eax;
-	sub_00111CF0(arg0, arg1_2, &eax, &ignored, &ignored_2);
+	number = 0x6E0u;
+	manager = eax;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	esi = saved_arg1;
 	arg1_2 = eax;
 	arg0 = esi;
@@ -178459,7 +178500,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 {
 	bool L_0BE96E = false, L_0BE974 = false, L_0BEA82 = false, L_0BEA86 = false, L_0BEB2C = false, L_0BEB32 = false, L_0BEC31 = false;
 	uint32_t zero = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, ignored_4 = 0, ignored_5 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, ignored_4 = 0, ignored_5 = 0, manager = 0, number = 0;
 
 	g_esp = g_esp - 0xCu;
 	MEM32(g_esp + 4u) = arg0;
@@ -178473,7 +178514,7 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
 	edi_2 = eax;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	MEM32(g_esp + 0xCu) = eax_2;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(edi_2 + 0x124u);
@@ -178873,9 +178914,9 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 								MEM32(g_esp) = 0x7F0u;
 								g_esp = g_esp - 4u;
 								MEM32(g_esp) = eax_2;
-								arg0_2 = MEM32(g_esp);
-								arg1_2 = MEM32(g_esp + 4u);
-								sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+								manager = MEM32(g_esp);
+								number = MEM32(g_esp + 4u);
+								vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 								g_esp = g_esp + 8u;
 								g_esp = g_esp - 4u;
 								MEM32(g_esp) = eax_2;
@@ -178909,9 +178950,9 @@ void sub_000BE8A0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 							MEM32(g_esp) = 0x383u;
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = edx;
-							arg0_2 = MEM32(g_esp);
-							arg1_2 = MEM32(g_esp + 4u);
-							sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored_2, &ignored_3);
+							manager = MEM32(g_esp);
+							number = MEM32(g_esp + 4u);
+							vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 							g_esp = g_esp + 8u;
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = eax_2;
@@ -180131,7 +180172,7 @@ uint32_t sub_000BFA50(uint32_t arg0)
 
 void sub_000BFA80(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t eax = 0, ecx = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_arg2 = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -180159,11 +180200,11 @@ void sub_000BFA80(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 		*p_esi = stack;
 	}
 	stack = MEM32(eax + ecx * 4u + 0x140u);
-	eax = sub_000248B0();
-	arg0_2 = eax;
-	arg1_2 = stack;
+	eax = StringTableGet();
+	manager = eax;
+	number = stack;
 	*p_eax = eax;
-	sub_00111CF0(arg0_2, arg1_2, p_eax, &ignored, &ignored_2);
+	vcStringManagerGetText(manager, number, p_eax, &ignored, &ignored_2);
 }
 
 uint32_t sub_000BFAE0(uint32_t arg0)
@@ -183980,7 +184021,7 @@ void sub_000C31F0(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint32
 void sub_000C3280(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t carry = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0xCu;
@@ -183998,12 +184039,12 @@ void sub_000C3280(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x34Cu;
 	esi_2 = eax;
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 	edi_2 = eax_2;
 	eax_2 = MEM32(g_esp + 0x38u);
 	g_esp = g_esp - 4u;
@@ -184115,12 +184156,12 @@ void sub_000C3280(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			MEM32(g_esp) = 2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0_2 = MEM32(g_esp);
-			arg1_2 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
@@ -184146,12 +184187,12 @@ void sub_000C3280(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			MEM32(g_esp) = 2u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			eax_2 = sub_000248B0();
+			eax_2 = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
-			arg0_2 = MEM32(g_esp);
-			arg1_2 = MEM32(g_esp + 4u);
-			sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_2);
+			manager = MEM32(g_esp);
+			number = MEM32(g_esp + 4u);
+			vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
@@ -185568,7 +185609,7 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 {
 	bool L_0C4860 = false, L_0C4866 = false;
 	uint32_t zero = 0;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebx = 0, ecx_2 = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebx = 0, ecx_2 = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, level = 0, manager = 0, number = 0;
 	uint32_t stack_C = 0, stack = 0, stack_14 = 0, stack_18 = 0, stack_1C = 0;
 	uint32_t jump_target = 0, jump_target_2 = 0;
 
@@ -185841,10 +185882,10 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			stack_14 = 0u;
 			stack_18 = 1u;
 			stack_1C = 0x7B1u;
-			eax_2 = sub_000248B0();
-			arg0 = eax_2;
-			arg1 = stack_1C;
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+			eax_2 = StringTableGet();
+			manager = eax_2;
+			number = stack_1C;
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 			arg1 = eax_2;
 			arg0 = ebx;
 			arg2 = stack_18;
@@ -185874,10 +185915,10 @@ void sub_000C4530(uint32_t eax, uint32_t ecx, uint32_t ebp, uint32_t edi)
 			stack_14 = 0u;
 			stack_18 = 1u;
 			stack_1C = 0x7B2u;
-			eax_2 = sub_000248B0();
-			arg0 = eax_2;
-			arg1 = stack_1C;
-			sub_00111CF0(arg0, arg1, &eax_2, &ignored_2, &ignored_3);
+			eax_2 = StringTableGet();
+			manager = eax_2;
+			number = stack_1C;
+			vcStringManagerGetText(manager, number, &eax_2, &ignored_2, &ignored_3);
 			arg1 = eax_2;
 			arg0 = ebx;
 			arg2 = stack_18;
@@ -188192,7 +188233,7 @@ void sub_000C6460(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t arg0)
 void sub_000C64C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	bool L_0C6686 = false;
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0, f1 = 0;
 
 	eax = MEM32(esi + 0x34u);
@@ -188205,16 +188246,16 @@ void sub_000C64C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	arg0 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0, arg1, &eax, &ecx, &ignored);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ecx, &ignored);
 	edi_2 = eax;
 	ebx_2 = 0u;
 	g_esp = g_esp + 8u;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	ebp_2 = eax;
 	eax = MEM32(esi + 0x30u);
 	MEM32(g_esp + 0x10u) = 0u;
@@ -188236,12 +188277,12 @@ void sub_000C64C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		eax = sub_000248B0();
+		eax = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax, &ecx, &ignored);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ecx, &ignored);
 		ebx_2 = eax;
 		g_esp = g_esp + 8u;
 	}
@@ -188501,9 +188542,9 @@ void sub_000C64C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = ecx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebp_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax, &ignored_3, &ignored);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ignored_3, &ignored);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
@@ -188531,9 +188572,9 @@ void sub_000C64C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = ecx;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebp_2;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax, &ignored_3, &ignored);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ignored_3, &ignored);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
@@ -189043,7 +189084,7 @@ void sub_000C6BF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 {
 	bool L_0C6E5A = false;
 	uint8_t ecx_2 = 0, esi_3 = 0;
-	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0, f0_2 = 0;
 
 	g_esp = g_esp - 8u;
@@ -189074,12 +189115,12 @@ void sub_000C6BF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp + 4u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2 + 0x28u);
-	eax_2 = sub_000248B0();
+	eax_2 = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax_2;
-	arg0_2 = MEM32(g_esp);
-	arg1 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1, &eax_2, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_2);
 	ebx_2 = eax_2;
 	g_esp = g_esp + 8u;
 	MEM32(g_esp + 0x1Cu) = ebx_2;
@@ -189471,7 +189512,7 @@ void sub_000C6BF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 uint32_t sub_000C70A0(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint8_t ecx_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -189495,10 +189536,10 @@ uint32_t sub_000C70A0(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 			{
 				esi = arg1;
 				stack = MEM32(esi + 0x28u);
-				eax = sub_000248B0();
-				arg0_2 = eax;
-				arg1_2 = stack;
-				sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_3);
+				eax = StringTableGet();
+				manager = eax;
+				number = stack;
+				vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_3);
 				edx = eax + 1u;
 				do
 				{
@@ -189753,7 +189794,7 @@ double sub_000C73A0(uint32_t arg0, uint32_t arg1)
 void sub_000C73D0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx)
 {
 	uint8_t ecx = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t eax = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t saved_eax = 0, saved_arg1 = 0;
 
 	saved_arg1 = arg1;
@@ -189780,10 +189821,10 @@ void sub_000C73D0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		return;
 	}
 	saved_eax = eax;
-	eax = sub_000248B0();
-	arg0_2 = eax;
-	arg1_2 = saved_eax;
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	eax = StringTableGet();
+	manager = eax;
+	number = saved_eax;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	edx = eax + 1u;
 	do
 	{
@@ -189866,7 +189907,7 @@ void sub_000C74D0(uint32_t arg0, uint32_t arg1)
 
 double sub_000C7500(uint32_t arg0, uint32_t arg1)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, stack_8 = 0, saved_arg1 = 0;
 	double f0 = 0;
 
@@ -189881,10 +189922,10 @@ double sub_000C7500(uint32_t arg0, uint32_t arg1)
 		eax = GameObjectLastObject;
 	stack = saved_arg1;
 	stack_8 = MEM32(eax + 0x28u);
-	eax = sub_000248B0();
-	arg0_2 = eax;
-	arg1_2 = stack_8;
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	eax = StringTableGet();
+	manager = eax;
+	number = stack_8;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	arg0_2 = eax;
 	arg1_2 = stack;
 	x86_call(vcTextWidthN_entry, 0x000C7539u, 2, arg0_2, arg1_2);
@@ -189900,7 +189941,7 @@ uint32_t sub_000C7540(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	saved_arg0 = arg0;
 	saved_arg1 = arg1;
 	saved_arg2 = arg2;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	ebx = saved_arg1;
 	esi = eax;
 	arg1_2 = ebx;
@@ -199607,10 +199648,13 @@ void sub_000D0B60(uint32_t arg0)
 	MEM32(0x2209D0u) = 0x1A5BE0u;
 }
 
-uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* What a shot of a gun (Weapon 0, 1, 23, 24 and 34: sub_000D16B0 sets it on the shot's scene object)
+   does to what it hits: sends it the damage (0xF001) of the weapon's WeaponSpec, 100000 under
+   BACKSTABBER's cheat (Cheats' 0x400) when an entity a player controls fired it; then the hit's effects. */
+uint32_t GunHit(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t weapon)
 {
 	uint16_t eax_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x1Cu;
@@ -199619,7 +199663,7 @@ uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp + 0xCu) = arg2;
 	MEM32(g_esp + 0x10u) = arg3;
 	MEM32(g_esp + 0x14u) = arg4;
-	MEM32(g_esp + 0x18u) = arg5;
+	MEM32(g_esp + 0x18u) = weapon;
 	eax = MEM32(g_esp + 0x18u);
 	ecx = GameObjectLastHandle;
 	g_esp = g_esp - 0x50u;
@@ -199776,9 +199820,9 @@ uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 				arg2_2 = MEM32(g_esp + 8u);
 				arg3_2 = MEM32(g_esp + 0xCu);
 				arg4_2 = MEM32(g_esp + 0x10u);
-				arg5_2 = MEM32(g_esp + 0x14u);
+				arg5 = MEM32(g_esp + 0x14u);
 				arg6 = MEM32(g_esp + 0x18u);
-				sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+				sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 				g_esp = g_esp + 0x1Cu;
 				g_esp = g_esp + 4u;
 				eax = 0u;
@@ -199809,9 +199853,9 @@ uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			arg2_2 = MEM32(g_esp + 8u);
 			arg3_2 = MEM32(g_esp + 0xCu);
 			arg4_2 = MEM32(g_esp + 0x10u);
-			arg5_2 = MEM32(g_esp + 0x14u);
+			arg5 = MEM32(g_esp + 0x14u);
 			arg6 = MEM32(g_esp + 0x18u);
-			sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+			sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 			g_esp = g_esp + 0x1Cu;
 			g_esp = g_esp + 4u;
 			eax = 0u;
@@ -199873,9 +199917,9 @@ uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3_2 = MEM32(g_esp + 0xCu);
 	arg4_2 = MEM32(g_esp + 0x10u);
-	arg5_2 = MEM32(g_esp + 0x14u);
+	arg5 = MEM32(g_esp + 0x14u);
 	arg6 = MEM32(g_esp + 0x18u);
-	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	edx = g_esp + 0x40u;
@@ -199896,9 +199940,9 @@ uint32_t sub_000D0C90(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3_2 = MEM32(g_esp + 0xCu);
 	arg4_2 = MEM32(g_esp + 0x10u);
-	arg5_2 = MEM32(g_esp + 0x14u);
+	arg5 = MEM32(g_esp + 0x14u);
 	arg6 = MEM32(g_esp + 0x18u);
-	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp + 4u;
 	eax = 0u;
@@ -200179,10 +200223,15 @@ uint32_t sub_000D0EB0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	return eax;
 }
 
-uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* What a shot of Weapon 2 does to what it hits, the one SNIPER's cheat is read for (its text: one shot
+   sniper kills): sends it the damage (0xF001), the weapon's +0x2C (a fixed one past twice its
+   WeaponSpec's damage with two players and the flag at 0x1BC6B4; times the factor at 0x1A5BE4 on Entity
+   41 and 55), 100000 under BACKSTABBER's (0x400) or SNIPER's (0x800) when an entity a player controls
+   fired it; then the hit's effects. */
+uint32_t SniperHit(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t weapon)
 {
 	uint16_t eax_2 = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, mask = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x1Cu;
@@ -200191,7 +200240,7 @@ uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp + 0xCu) = arg2;
 	MEM32(g_esp + 0x10u) = arg3;
 	MEM32(g_esp + 0x14u) = arg4;
-	MEM32(g_esp + 0x18u) = arg5;
+	MEM32(g_esp + 0x18u) = weapon;
 	eax = MEM32(g_esp + 0x18u);
 	ecx = GameObjectLastHandle;
 	g_esp = g_esp - 0x50u;
@@ -200381,9 +200430,9 @@ uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			arg2_2 = MEM32(g_esp + 8u);
 			arg3_2 = MEM32(g_esp + 0xCu);
 			arg4_2 = MEM32(g_esp + 0x10u);
-			arg5_2 = MEM32(g_esp + 0x14u);
+			arg5 = MEM32(g_esp + 0x14u);
 			arg6 = MEM32(g_esp + 0x18u);
-			sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+			sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 			g_esp = g_esp + 0x1Cu;
 			g_esp = g_esp + 4u;
 			eax = 0u;
@@ -200445,9 +200494,9 @@ uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3_2 = MEM32(g_esp + 0xCu);
 	arg4_2 = MEM32(g_esp + 0x10u);
-	arg5_2 = MEM32(g_esp + 0x14u);
+	arg5 = MEM32(g_esp + 0x14u);
 	arg6 = MEM32(g_esp + 0x18u);
-	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	eax = g_esp + 0x40u;
@@ -200468,9 +200517,9 @@ uint32_t sub_000D10C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3_2 = MEM32(g_esp + 0xCu);
 	arg4_2 = MEM32(g_esp + 0x10u);
-	arg5_2 = MEM32(g_esp + 0x14u);
+	arg5 = MEM32(g_esp + 0x14u);
 	arg6 = MEM32(g_esp + 0x18u);
-	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2, arg6, &ignored_3, &ignored, &edi_2);
+	sub_000A1560(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5, arg6, &ignored_3, &ignored, &edi_2);
 	g_esp = g_esp + 0x44u;
 	g_esp = g_esp + 4u;
 	eax = 0u;
@@ -202473,7 +202522,7 @@ void sub_000D28E0(uint32_t ebx, uint32_t edi, uint32_t arg0, uint32_t arg1, uint
 
 void sub_000D29D0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0, manager = 0, number = 0;
 	double f0 = 0;
 
 	g_esp = g_esp - 0x14u;
@@ -202489,12 +202538,12 @@ void sub_000D29D0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		MEM32(g_esp) = edi;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		eax = sub_000248B0();
+		eax = StringTableGet();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		arg0 = MEM32(g_esp);
-		arg1 = MEM32(g_esp + 4u);
-		sub_00111CF0(arg0, arg1, &eax, &ignored, &ignored_2);
+		manager = MEM32(g_esp);
+		number = MEM32(g_esp + 4u);
+		vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 		edi_2 = eax;
 		edx = MEM32(esi + 4u) + 0x19u;
 		MEM32(g_esp + 0xCu) = edx;
@@ -202698,7 +202747,7 @@ void MessageBoxElement_Register(uint32_t arg0)
 
 uint32_t sub_000D2C80(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	double f0 = 0, f1 = 0;
 
 	g_esp = g_esp - 0x14u;
@@ -202747,12 +202796,12 @@ uint32_t sub_000D2C80(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	MEM32(g_esp) = edi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
-	arg0_2 = MEM32(g_esp);
-	arg1_2 = MEM32(g_esp + 4u);
-	sub_00111CF0(arg0_2, arg1_2, &eax, &ignored, &ignored_2);
+	manager = MEM32(g_esp);
+	number = MEM32(g_esp + 4u);
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	edi_2 = eax;
 	g_esp = g_esp + 8u;
 	if (MEM32(esi_2 + 0x50u) == 0u)
@@ -222658,7 +222707,7 @@ void sub_000E18B0(uint32_t ecx, uint32_t esi, uint32_t arg0)
 
 void sub_000E18F0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
+	uint32_t damage = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, entity = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
 	g_esp = g_esp - 0x28u;
 	if (MEM32(ebx + 0x40u) != 0u)
@@ -222707,10 +222756,10 @@ void sub_000E18F0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 				MEM32(g_esp) = eax;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = MEM32(esi_2);
-				arg0 = MEM32(g_esp);
-				arg1 = MEM32(g_esp + 4u);
-				arg2 = MEM32(g_esp + 8u);
-				sub_0001A700(arg0, arg1, arg2, &ignored_3, &ignored, &ebx, &ebp, &esi_2, &edi_2);
+				handle = MEM32(g_esp);
+				entity = MEM32(g_esp + 4u);
+				damage = MEM32(g_esp + 8u);
+				EntityTakeDamage(handle, entity, damage, &ignored_3, &ignored, &ebx, &ebp, &esi_2, &edi_2);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -224024,7 +224073,7 @@ void sub_000E2A60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 
 void sub_000E2B20(uint32_t esi, uint32_t arg2)
 {
-	uint32_t arg0 = 0, arg1 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, eax = 0, edi = 0, edx = 0, ignored = 0, ignored_2 = 0;
+	uint32_t arg0 = 0, arg1 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, eax = 0, edi = 0, edx = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_eax = 0, saved_arg2 = 0;
 
 	saved_arg2 = arg2;
@@ -224032,11 +224081,11 @@ void sub_000E2B20(uint32_t esi, uint32_t arg2)
 	if (MEM32(esi + 0x58u) == 0u)
 		edi = FailText_VA;
 	stack = MEM32(esi + 0x64u);
-	eax = sub_000248B0();
+	eax = StringTableGet();
 	saved_eax = eax;
-	arg0 = saved_eax;
-	arg1 = stack;
-	sub_00111CF0(arg0, arg1, &eax, &ignored, &ignored_2);
+	manager = saved_eax;
+	number = stack;
+	vcStringManagerGetText(manager, number, &eax, &ignored, &ignored_2);
 	edx = saved_arg2;
 	arg5 = eax;
 	arg4 = edi;
@@ -224222,7 +224271,7 @@ uint32_t CompleteObjectiveAction_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, 
 			MEM32(g_esp + 0x14u) = t2 - edx;
 			if (t2 != edx)
 			{
-				eax = sub_000248B0();
+				eax = StringTableGet();
 				ecx = g_esp + 0x28u;
 				ebx_2 = eax;
 				g_esp = g_esp - 4u;
@@ -224534,7 +224583,7 @@ uint32_t PostObjectiveAction_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 		g_esp = g_esp + 0x10u;
 		if ((int32_t)ebp_2 < 3)
 		{
-			eax = sub_000248B0();
+			eax = StringTableGet();
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 0x80u;
 			ecx = g_esp + 0x2Cu;
@@ -225671,7 +225720,7 @@ uint32_t LogTextAction_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 				g_esp = g_esp + 0x14u;
 				return eax;
 			}
-			eax = sub_000248B0();
+			eax = StringTableGet();
 			esi_2 = eax;
 			eax = g_esp + 0x28u;
 			g_esp = g_esp - 4u;
@@ -226751,7 +226800,7 @@ void NodeStateAction_Register(uint32_t arg0)
 void sub_000E49F0(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint8_t ecx = 0;
-	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, edx = 0, ignored = 0, ignored_3 = 0;
+	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, edx = 0, ignored = 0, ignored_3 = 0, manager = 0, number = 0;
 	uint32_t stack = 0, saved_arg1 = 0, saved_arg0 = 0;
 
 	saved_arg0 = arg0;
@@ -226761,10 +226810,10 @@ void sub_000E49F0(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t arg0, uint3
 	arg0_2 = eax;
 	sub_0003CAC0(arg0_2, arg1_2, arg2);
 	stack = 0x4A2u;
-	eax_2 = sub_000248B0();
-	arg0_2 = eax_2;
-	arg1_2 = stack;
-	sub_00111CF0(arg0_2, arg1_2, &eax_2, &ignored, &ignored_3);
+	eax_2 = StringTableGet();
+	manager = eax_2;
+	number = stack;
+	vcStringManagerGetText(manager, number, &eax_2, &ignored, &ignored_3);
 	edx = esi + 0x2Cu;
 	do
 	{
@@ -283444,11 +283493,13 @@ uint32_t vcStringManager_Copy(uint32_t edx, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-void sub_00111CF0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_edx)
+/* A text of a vcStringManager by its number: its record's offset (each record 0x14 bytes, the name in 16
+   and the offset) from where its texts start. 0 for a number past its count or a record without a text. */
+void vcStringManagerGetText(uint32_t manager, uint32_t number, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_edx)
 {
 	uint32_t eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
-	eax = arg0;
+	eax = manager;
 	ecx = vcObjectCacheData;
 	esi = vcObjectCacheHandle;
 	if (eax != esi)
@@ -283504,7 +283555,7 @@ void sub_00111CF0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ecx
 		else
 			edx = ecx;
 	}
-	edi = arg1;
+	edi = number;
 	if (MEM32(edx + 0x10u) <= edi)
 	{
 		eax = 0u;
@@ -283721,11 +283772,11 @@ uint32_t sub_00111E00(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 
 void sub_00111FC0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_edx)
 {
-	uint32_t arg0_2 = 0, arg1 = 0;
+	uint32_t manager = 0, number = 0;
 
-	arg1 = arg0;
-	arg0_2 = MEM32(0x23D284u);
-	sub_00111CF0(arg0_2, arg1, p_eax, p_ecx, p_edx);
+	number = arg0;
+	manager = MEM32(0x23D284u);
+	vcStringManagerGetText(manager, number, p_eax, p_ecx, p_edx);
 }
 
 uint32_t sub_00111FE0(uint32_t arg0, uint32_t arg1)
@@ -338901,9 +338952,9 @@ void sub_00018B90_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00018C10_entry(void)
+void EntityRecharge_entry(void)
 {
-	g_eax = sub_00018C10(g_eax);
+	g_eax = EntityRecharge(g_eax);
 	g_esp += 4u;
 }
 
@@ -339114,7 +339165,7 @@ void sub_00019FD0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001A700_entry(void)
+void EntityTakeDamage_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ecx_out = g_ecx;
@@ -339122,7 +339173,7 @@ void sub_0001A700_entry(void)
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_0001A700(ARG32(0), ARG32(1), ARG32(2), &eax_out, &ecx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	EntityTakeDamage(ARG32(0), ARG32(1), ARG32(2), &eax_out, &ecx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ecx = ecx_out;
 	g_ebx = ebx_out;
@@ -340887,10 +340938,10 @@ void sub_00024720_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00024830_entry(void)
+void StringTableInit_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00024830(g_edx);
+	g_eax = StringTableInit(g_edx);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -340898,10 +340949,10 @@ void sub_00024830_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000248A0_entry(void)
+void StringTableRelease_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000248A0();
+	g_eax = StringTableRelease();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -340909,9 +340960,9 @@ void sub_000248A0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000248B0_entry(void)
+void StringTableGet_entry(void)
 {
-	g_eax = sub_000248B0();
+	g_eax = StringTableGet();
 	g_esp += 4u;
 }
 
@@ -341142,9 +341193,9 @@ void LevelGetChapter_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000251F0_entry(void)
+void VeritechRequirementMet_entry(void)
 {
-	g_eax = sub_000251F0(ARG32(0));
+	g_eax = VeritechRequirementMet(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -341190,15 +341241,15 @@ void sub_00025540_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00025560_entry(void)
+void LevelRequirementsMet_entry(void)
 {
-	g_eax = sub_00025560(ARG32(0));
+	g_eax = LevelRequirementsMet(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_00025620_entry(void)
+void LevelNext_entry(void)
 {
-	g_eax = sub_00025620(ARG32(0));
+	g_eax = LevelNext(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -342983,21 +343034,21 @@ void sub_0002F120_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0002F180_entry(void)
+void PaintDesignEarn_entry(void)
 {
-	sub_0002F180(ARG32(0));
+	PaintDesignEarn(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_0002F1A0_entry(void)
+void PaintDesignIsEarned_entry(void)
 {
-	g_eax = sub_0002F1A0(ARG32(0));
+	g_eax = PaintDesignIsEarned(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_0002F1C0_entry(void)
+void AwardRank_entry(void)
 {
-	g_eax = sub_0002F1C0(ARG32(0));
+	g_eax = AwardRank(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -345515,10 +345566,10 @@ void sub_00040740_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000409A0_entry(void)
+void Player_Update_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000409A0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = Player_Update(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -346115,9 +346166,9 @@ void sub_000492C0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00049A60_entry(void)
+void VeritechChoiceIsOpen_entry(void)
 {
-	g_eax = sub_00049A60(g_eax);
+	g_eax = VeritechChoiceIsOpen(g_eax);
 	g_esp += 4u;
 }
 
@@ -346127,9 +346178,9 @@ void sub_00049AF0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00049B70_entry(void)
+void PaintDesignIsOpen_entry(void)
 {
-	g_eax = sub_00049B70(g_esi);
+	g_eax = PaintDesignIsOpen(g_esi);
 	g_esp += 4u;
 }
 
@@ -360333,10 +360384,10 @@ void sub_000D0B60_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D0C90_entry(void)
+void GunHit_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D0C90(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = GunHit(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360355,10 +360406,10 @@ void sub_000D0EB0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D10C0_entry(void)
+void SniperHit_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D10C0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SniperHit(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372509,12 +372560,12 @@ void vcStringManager_Copy_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00111CF0_entry(void)
+void vcStringManagerGetText_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ecx_out = g_ecx;
 	uint32_t edx_out = g_edx;
-	sub_00111CF0(ARG32(0), ARG32(1), &eax_out, &ecx_out, &edx_out);
+	vcStringManagerGetText(ARG32(0), ARG32(1), &eax_out, &ecx_out, &edx_out);
 	g_eax = eax_out;
 	g_ecx = ecx_out;
 	g_edx = edx_out;

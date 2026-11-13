@@ -1281,9 +1281,28 @@ struct  VehicleParameters  F8                         # a vehicle type's 62 cons
 00192654  var   ZenRetrievalParametersCopy       VehicleParameters   # nothing reads it
 
 # The cheats: a word of bits the game menu's codes set. With L and R held, left, up, down, A, right, B,
-# START open the code keyboard; its text is set against twelve codes (WEWILLWIN, WHERESMAX, SUPERMECH,
-# SPACEFOLD, MARSBASE, MIRIYA, MISSMACROSS, BACKSTABBER, SNIPER, MULTIMAYHEM, DEATHGRIP, and CLEAR, which
-# turns them all off).
+# START open the code keyboard; its text is set against twelve codes, each answered with a text that says
+# what it gives (IDS_CHEAT_P1 to P12 of main.pak's string table), and each bit read where it acts:
+#   WEWILLWIN    2             "unlocked all missions": every level open and counted finished (LevelIsOpen,
+#                              LevelCountsAsFinished, LevelNext); the main menu sets LevelsAllOpen with it
+#   WHERESMAX    4, 0x2000     "all veritechs and awards": every veritech's requirement met (4,
+#                              VeritechRequirementMet), every award at its top rank, 3 (0x2000, AwardRank)
+#   SUPERMECH    1             "invincibility": no damage to an entity a player controls (EntityTakeDamage)
+#   SPACEFOLD    8             "faster gunpod ammo refresh": the gun ammo full at every update (EntityRecharge)
+#   MARSBASE     0x10          "faster missile refresh": the missiles back three times as fast (EntityRecharge)
+#   MIRIYA       8, 0x10       "faster weapon refresh": both
+#   MISSMACROSS  0x80          "all veritech designs": every paint design open (PaintDesignIsOpen)
+#   BACKSTABBER  0x400         "one shot kills": the guns' shots deal 100000 (GunHit, SniperHit)
+#   SNIPER       0x800         "one shot sniper kills": the sniper's shots deal 100000 (SniperHit)
+#   MULTIMAYHEM  0x100         "unlocked all multiplayer missions": every versus arena open (LevelIsOpen)
+#   DEATHGRIP    0x4000        "press the fire button to instantly kill targets": X kills the target locked
+#                              on (Player_Update)
+#   CLEAR                      all off
+# Only an entity a player controls has them (its +0x18C a handle of the Player family); invincibility and
+# DEATHGRIP only with one player. The main menu keeps them aside and clears them for the training
+# (CheatsKeep, CheatsClear; CheatsRestore when it is left), and for a versus match keeps only 0x100, 4 and
+# 0x2000, and 0x80; a saved game of a version before 6 clears them (sub_0002EFF0). 0x20, 0x40, 0x200, 0x1000
+# and the bits from 0x8000 on no code sets or reads.
 0002F350  func  CheatIsOn
 0002F370  func  CheatSet
 0002F390  func  CheatsClear
@@ -1293,7 +1312,7 @@ struct  VehicleParameters  F8                         # a vehicle type's 62 cons
 00034B10  func  MainMenuEnterCode
 param   CheatIsOn  arg0  mask
 param   CheatSet   arg0  mask
-001EA5EC  var   Cheats  u32                           # the cheats on, a bit each: WEWILLWIN's 2 unlocks every mission
+001EA5EC  var   Cheats  u32                           # the cheats on, a bit each (the codes' bits above): kept in the saved game
 001EA614  var   CheatsKept  u32                       # Cheats as CheatsKeep found them
 001EAB40  var   MainMenuCodeStep  u32                 # how many presses of the code sequence have come in order
 001EAB3C  var   MainMenuCodeAnswer  u32               # what the game answers the last code with, a text's number; 0 for no code
@@ -1304,6 +1323,78 @@ comment CheatsKeep Copies Cheats to CheatsKept.
 comment CheatsRestore Copies CheatsKept back to Cheats.
 comment MainMenuCodeSequence Follows the code sequence while L and R are held on any pad: a press of the one expected next moves MainMenuCodeStep on, any other or two at once starts it again, and the seventh hands back 1.
 comment MainMenuEnterCode Sets the text entered on the code keyboard against the codes: each one turns its cheats on (CLEAR all off) and leaves the number of its answer in MainMenuCodeAnswer; a code taken plays one of C1_MONO.wav to C3_MONO.wav, picked by vcRandomCosmetic.
+
+# What the cheats act on. An entity's stores and its damage: the damage message (0xF001) carries its flags,
+# who dealt it and the amount; a kill of the cheats' is an amount of 100000.
+0001A700  func  EntityTakeDamage
+00018C10  func  EntityRecharge
+000409A0  func  Player_Update
+000D0C90  func  GunHit
+000D10C0  func  SniperHit
+param   EntityTakeDamage  arg0  handle
+param   EntityTakeDamage  arg1  entity
+param   EntityTakeDamage  arg2  damage
+param   EntityRecharge    eax   handle
+param   Player_Update     arg0  entry
+param   Player_Update     arg1  player
+param   Player_Update     arg2  time
+param   GunHit            arg5  weapon
+param   SniperHit         arg5  weapon
+comment EntityTakeDamage An entity's answer to the damage message (0xF001; the message's third word the amount, its second who dealt it): takes the amount off its +0x17C while that is above 0 and the rest off its hit points (+0x174). On an entity a player controls, with one player, the amount is 0 under SUPERMECH's invincibility (Cheats' 1) or while the count of Stats' tally 1 is above 0, and in the play mode 2 (sub_000A1710) it is scaled by Difficulty, 0.7 on 0 and 1.1 on 2. Then the effects of its record of damage by how much of its hit points is left.
+comment EntityRecharge Brings an entity's stores back up over an update, each by a rate of its EntitySpec times 0.033 up to its most: with one player its hit points (+0x174, hit_points_refill, 0 for every type); its gun ammo (+0xA8, gun_ammo_refill up to gun_ammo) unless its flag 4, or its flags 8 and 2, are on, full at once on an entity a player controls under SPACEFOLD's cheat (Cheats' 8); its missiles (+0xB0, missiles_refill up to missiles) unless its flag 8 is on, three times as fast on an entity a player controls under MARSBASE's (0x10); and its +0x178 by the words at +0x1C and +0x18 of its EntitySpec.
+comment Player_Update A Player's update, every frame (its GameObjectEntry's update, set by sub_00040B60): while its entity's flag 0x2000 is on, a sound of the set at 0x1EB398 every 165 ms; with two players, once its +0x3B8's time has passed, its entity's model's scene flag 0x10 off; with one player and DEATHGRIP's cheat (Cheats' 0x4000), once its entity's first target locked on (the entity's +0x1A8) has stayed the same for 250 ms, X on its pad (unless ControllerItemsDisabled has it off) sends that target a damage of 100000. With its entity gone, its +0x3A0 becomes sub_0003F980.
+comment GunHit What a shot of a gun (Weapon 0, 1, 23, 24 and 34: sub_000D16B0 sets it on the shot's scene object) does to what it hits: sends it the damage (0xF001) of the weapon's WeaponSpec, 100000 under BACKSTABBER's cheat (Cheats' 0x400) when an entity a player controls fired it; then the hit's effects.
+comment SniperHit What a shot of Weapon 2 does to what it hits, the one SNIPER's cheat is read for (its text: one shot sniper kills): sends it the damage (0xF001), the weapon's +0x2C (a fixed one past twice its WeaponSpec's damage with two players and the flag at 0x1BC6B4; times the factor at 0x1A5BE4 on Entity 41 and 55), 100000 under BACKSTABBER's (0x400) or SNIPER's (0x800) when an entity a player controls fired it; then the hit's effects.
+
+# What the player earns: the veritechs to choose (five models, each plain, armored and super, and the
+# female power armour in a versus match), their paint designs and the awards (the medals' screens).
+struct  VeritechChoice  10                            # a veritech the player can choose, in VeritechChoices
+field   VeritechChoice  00  name_string    u32        # its name's number in the string table: "VT-1D", "Armored VF-1A", "Super YF-1R"...
+field   VeritechChoice  04  requires       s32        # what opens it (VeritechRequirementMet): -1 nothing
+field   VeritechChoice  08  requires_also  s32        # a second; -4 for the armored ones, a level for the super ones, -1 none
+field   VeritechChoice  0C  model          u32        # 0 VT-1D, 1 VF-1A, 2 VF-1J, 3 VF-1S, 4 YF-1R, 5 the female power armour
+001B1400  var   VeritechChoices  VeritechChoice[16]   # the five models plain, armored and super, then the female power armour
+001B1500  var   PaintDesignNames  u32[11]             # each paint design's name, its number in the string table: Trainer, Generic, Jack, Izzy, Rick, Max, Miriya, Patriot, Stealth, Wolf, Skull One
+001EA574  var   AwardRanks  s16[19]                   # each award's rank, 0 not won up to 3: in the saved game
+001EA59C  var   PaintDesignsEarned  u32[11]           # whether each paint design is earned: in the saved game, which earns the first three (sub_0002EFF0)
+00025560  func  LevelRequirementsMet
+00025620  func  LevelNext
+000251F0  func  VeritechRequirementMet
+00049A60  func  VeritechChoiceIsOpen
+0002F1C0  func  AwardRank
+0002F180  func  PaintDesignEarn
+0002F1A0  func  PaintDesignIsEarned
+00049B70  func  PaintDesignIsOpen
+param   LevelRequirementsMet    arg0  level
+param   LevelNext               arg0  level
+param   VeritechRequirementMet  arg0  requirement
+param   VeritechChoiceIsOpen    eax   choice
+param   AwardRank               arg0  award
+param   PaintDesignEarn         arg0  design
+param   PaintDesignIsEarned     arg0  design
+param   PaintDesignIsOpen       esi   design
+comment LevelRequirementsMet Whether what a level requires is done: never for one not shown on its own; one with its flag 8 once every other level of its chapter shown on its own is finished; any other once the levels it requires are finished.
+comment LevelNext The level the game goes on to after one: a story's level, with WEWILLWIN's cheat (Cheats' 2) the next shown on its own (0 past the last), otherwise the next whose requirements are met and that is not finished, after it and then from the first; the training's 50 to 52 and 52 to 54; a versus arena itself. -1 for none.
+comment VeritechRequirementMet Whether a requirement of a veritech to choose (VeritechChoices) is met: -1 none; -2 that the level being played is not the training's (chapter 5); -3, -4 and -5 that award 5, 9 and 15 is won (AwardRank above 0); a level's number that it is finished. Every one under WHERESMAX's cheat (Cheats' 4).
+comment VeritechChoiceIsOpen Whether a veritech of VeritechChoices can be chosen: its requirements met (VeritechRequirementMet), the armored ones (whose second is -4) only in a versus arena (a level past 58); the female power armour, the 16th, once award 16 is won and in a versus arena.
+comment AwardRank An award's rank in AwardRanks, 0 for one not won up to 3, and 0 for a number out of 0 to 18; 3 for every one under WHERESMAX's cheat (Cheats' 0x2000).
+comment PaintDesignEarn Marks a paint design earned (PaintDesignsEarned).
+comment PaintDesignIsEarned Whether a paint design is earned (PaintDesignsEarned); 0 for a number out of 0 to 10.
+comment PaintDesignIsOpen Whether a paint design can be chosen: in the training (chapter 5) only the first, Trainer; otherwise every one under MISSMACROSS's cheat (Cheats' 0x80), or one earned.
+
+# The game's texts: not in the XBE but in main.pak's vcStringManager object "stringtable", 2,049 of them,
+# each asked for by its number (tools/string_table.py lists them: 0x796 IDS_CHEAT_P9...).
+001E62DC  var   StringTable  u32                      # the vcStringManager object "stringtable" the game's texts come from; 0 until StringTableInit
+00024830  func  StringTableInit
+000248A0  func  StringTableRelease
+000248B0  func  StringTableGet
+00111CF0  func  vcStringManagerGetText
+param   vcStringManagerGetText  arg0  manager
+param   vcStringManagerGetText  arg1  number
+comment StringTableInit Once: gets the vcStringManager object "stringtable" (vcObjectGet, class 0x12) into StringTable, or makes one of that name, and hands it to sub_00111BC0. Hands back 0 if it has none.
+comment StringTableRelease Lets go of StringTable (vcObjectRelease).
+comment StringTableGet The game's string table, StringTable: what vcStringManagerGetText is handed with a text's number.
+comment vcStringManagerGetText A text of a vcStringManager by its number: its record's offset (each record 0x14 bytes, the name in 16 and the offset) from where its texts start. 0 for a number past its count or a record without a text.
 
 # The levels: a table of them in place (Levels), each a mission's part, a training or a versus arena,
 # with the chapter it is in and the levels that must be finished before it opens; the menus ask these.
@@ -1612,6 +1703,11 @@ field   vcSprite  38  colour_bottom_right  u32
 # types without one, and the player's veritech's (0x1EB740) is filled by code of its own.
 struct  EntitySpec  104                             # an entity type's record of where its constants are
 field   EntitySpec  000  hit_points      u32         # points at its hit points: an entity's own count starts from them
+field   EntitySpec  004  hit_points_refill  u32      # points at the hit points it gets back an update, times 0.033, with one player (EntityRecharge): 0 for every type
+field   EntitySpec  008  gun_ammo        u32         # points at the most gun ammo it holds (the entity's +0xA8): SPACEFOLD's cheat keeps a player's there
+field   EntitySpec  00C  gun_ammo_refill  u32        # points at the gun ammo it gets back an update, times 0.033 (EntityRecharge)
+field   EntitySpec  010  missiles        u32         # points at the most missiles it holds (the entity's +0xB0)
+field   EntitySpec  014  missiles_refill  u32        # points at the missiles it gets back an update, times 0.033 (EntityRecharge); three times that for a player's under MARSBASE's cheat
 field   EntitySpec  02C  mass            u32         # points at its mass: a change of its speed times it is the force that takes
 field   EntitySpec  030  radius          u32         # points at its radius: the box around its place, how near counts as there, what two entities' are summed to for a collision
 field   EntitySpec  034  target_node     u32         # points at the number of its model's node "target", where it is aimed at
