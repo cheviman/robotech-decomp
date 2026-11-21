@@ -148,6 +148,26 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
     little; xboxrecomp's naming paths need RTTI, assert strings, a map file or a Fusion package, and
     this title has none; nor do the PlayStation 2 and GameCube builds, both stripped, with no map file
     on their discs, nor the sequel, Robotech: Invasion: see the dead hypotheses).
+  - **Named from their decompiled C** (21-11-2026): 2,823 of the 3,307 functions the decompiler writes
+    without a name, in three waves (`tools/naming/`): each function's C with its call sites went to a
+    model (deepseek-v4.1-flash, through cranker-llm's remote worker) for a name and a sentence or a
+    `skip`, its answer's form checked by `check_names.py` (one line a function, a CamelCase name that is
+    no other symbol's, no placeholder); every name then reviewed against the code by a model of another
+    family (gpt-6-luna): OK kept, BETTER takes the reviewer's name, WRONG left out (307 of them), and a
+    name drafted for two functions left out for the next wave. Each wave ran on the C the one before
+    named, so its callees were named: 1,721, 793, 309. In `symbols.txt` they are the three sections
+    "functions named from their decompiled C", a `func` and a `comment` each; the `sub_` names in the
+    comments then rewritten to the names they got. Not read by a person: a name may say less than the
+    function does, or a little more; treat them as a reading to correct, not as a finding.
+    Left: 484 the models skipped (their code says nothing yet: raw memory and other unnamed calls), and
+    the 948 recompiled functions without a name. The descriptions write `arg0`, `MEM32(0x...)` and
+    register names, which `noise_report` counts in the decompiled_ kinds (arguments 87,504 to 88,954).
+    Not understood yet: the recompiled C's counts went down with this round (registers 341,760 to
+    319,971, labels 40,015 to 33,537, gotos 17,847 to 14,902) with its function count the same.
+    To run a wave: `py -3 tools/naming/make_name_tasks.py wN`, the worker's `batch` on
+    `build/cr/names/wN/tasks.jsonl` with `--role draft --prompt-prefix tools/naming/name_prompt.txt`,
+    `merge_names.py wN review`, `batch` on its `review.jsonl` with `--role review --prompt-prefix
+    tools/naming/review_prompt.txt`, `merge_names.py wN merge`; then the decompiler and `pipeline.py names`.
 - **The base for the decompilation** (25-10-2026), done: `symbols/symbols.txt` is the one place of the
   names, descriptions, files and types (SegaSonic's format: `func`, `data`, `var`, `struct`, `field`,
   `file`, `comment`; `tools/symbols.py header` makes `symbols.h`, an accessor per field and variable for

@@ -1,0 +1,15 @@
+The first file holds functions of the game's decompiled C (sub_XXXXXXXX), each headed by its address and its
+call sites. The second file is another model's draft: one line per function, `ADDRESS  Name  description`
+or `ADDRESS  skip  reason`. Review every named line against the code, strictly. A name is right when the
+code shows what it says: the functions it calls, the fields, constants and strings it uses, how callers use
+it. A name that claims more than the code shows (a gameplay meaning nothing in the code supports), that
+describes another function, or that a reader of the code would find misleading, is wrong.
+
+Answer with exactly one line per NAMED line of the draft (nothing for the skip lines), in its order, and
+nothing else:
+
+ADDRESS  OK
+ADDRESS  BETTER  NewName  why (the draft's name is close but this one says it better; CamelCase, subject first)
+ADDRESS  WRONG  why
+
+Be strict but fair: a plain, accurate name for a small leaf (Vector3Add) is OK.

@@ -1,0 +1,20 @@
+The file holds functions of the game's decompiled C that have no name yet (sub_XXXXXXXX), each headed by
+its address, the functions that call it and up to three of its call sites. Name each one from what its code
+does: the functions it calls (their names are real), the fields and globals it touches, the constants it
+compares, the strings it hands on, how its callers use what it returns.
+
+Answer with exactly one line per function, in the file's order, and nothing else (no fences, no headings):
+
+ADDRESS  Name  One sentence: what it does, with the names of what it calls.
+
+or, when the code does not tell what the function is for (only raw memory moves, or calls to other unnamed
+functions with nothing to go on):
+
+ADDRESS  skip  what is missing to name it
+
+ADDRESS is the 8 hexadecimal digits of sub_XXXXXXXX. Name is CamelCase, subject first (what it acts on, then
+what it does: TextureSetFilter, MissionTimerReset, EntityFindNearestEnemy, MenuCursorMoveDown), a C
+identifier, unique in your answer. Never a number, an address or a generic word (Helper, Func, Unknown,
+Handle, Process, Do...). A short leaf that only reads or writes one field can be named for that field
+(EntityGetHealth) when the caller shows what the field is. Prefer `skip` over a guess: a wrong name is worse
+than none.
