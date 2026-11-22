@@ -1975,9 +1975,9 @@ void GamePauseSetOwner(uint32_t arg0)
 }
 
 /* Walks the node list at offset 0xD0 of the object behind the handle, sends message 2 to each node
-   object via GameObjectSendMessageWithParams, dispatches NodeUpdateTransform, sub_0003A410 and
-   sub_0003B700 by node object type, clears the node count at +0xEC and the timer at +0xE0, clears bit 1
-   of the word at +0xF4, clears the global node-family handle at 0x1BC760 and calls
+   object via GameObjectSendMessageWithParams, dispatches NodeUpdateTransform, NodeResetWrappedValue and
+   NodeFamilySavePreviousTransform by node object type, clears the node count at +0xEC and the timer at
+   +0xE0, clears bit 1 of the word at +0xF4, clears the global node-family handle at 0x1BC760 and calls
    VcPadSetVibrationEnabled. */
 uint32_t NodeFamilyUpdateNodes(uint32_t arg0)
 {
@@ -2057,13 +2057,13 @@ uint32_t NodeFamilyUpdateNodes(uint32_t arg0)
 					else
 					{
 						arg0_2 = esi;
-						sub_0003A410(arg0_2);
+						NodeResetWrappedValue(arg0_2);
 					}
 				}
 				else
 				{
 					arg0_2 = esi;
-					sub_0003B700(arg0_2);
+					NodeFamilySavePreviousTransform(arg0_2);
 				}
 			}
 		}
@@ -12321,7 +12321,11 @@ void GameObjectResetTimersAndPools(uint32_t *p_eax, uint32_t *p_edi)
 	*p_eax = MovementPatternFigureNodesDestroy();
 }
 
-void sub_0001EDD0(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Chooses the entity's target by collecting handles of its own family's objects that pass sub_0002CBF0
+   and HandleIsValidTarget (after resolving them with GameObjectFromHandle) and writing a vcRandom-picked
+   one to the entity's +0x70, or, when the entity has flag 4, first scanning the handle list (count at
+   +0x1A4, entries at +0x1A8) of the object returned by EntitySetTarget for a matching family handle. */
+void EntitySelectTarget(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t ebp = *p_ebp;
@@ -13229,7 +13233,9 @@ uint32_t GameObjectsInitializeAndGetResult(uint32_t ebp)
 	return eax;
 }
 
-uint32_t sub_0001F700(uint32_t eax, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Looks up the AI entry of the object with AIDataGetEntryForObject and, when the second argument is set,
+   invokes sub_0001F600 for slot 4 and, if the entry's field at +4 is zero, for slots 1, 2 and 3. */
+uint32_t AIDataInvokeEntryTimers(uint32_t eax, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, ebp = 0, ebx = 0, edi = 0, esi = 0;
 	uint32_t saved_arg3 = 0, saved_arg2 = 0, saved_arg1 = 0, stack = 0;
@@ -13310,7 +13316,7 @@ uint32_t EntitySetAITarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 			arg2 = 0u;
 			arg1_2 = edi;
 			arg0_2 = esi;
-			eax = sub_0001F700(eax, arg0_2, arg1_2, arg2, arg3);
+			eax = AIDataInvokeEntryTimers(eax, arg0_2, arg1_2, arg2, arg3);
 			arg2 = 0u;
 			arg1_2 = edi;
 			arg0_2 = esi;
@@ -13320,7 +13326,9 @@ uint32_t EntitySetAITarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-void sub_0001F7B0(uint32_t arg0, uint32_t arg1)
+/* Does nothing unless both the entity and the game object are non-null, then calls
+   AIDataInvokeEntryTimers on the entity with the game object and flag 1. */
+void EntityInvokeTimersForGameObject(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0;
 
@@ -13334,7 +13342,7 @@ void sub_0001F7B0(uint32_t arg0, uint32_t arg1)
 			arg2 = 1u;
 			arg1_2 = eax;
 			arg0_2 = ecx;
-			sub_0001F700(eax, arg0_2, arg1_2, arg2, arg3);
+			AIDataInvokeEntryTimers(eax, arg0_2, arg1_2, arg2, arg3);
 		}
 	}
 }
@@ -13733,7 +13741,7 @@ void EntityApplyDamageAndInvokeTimers(uint32_t arg0, uint32_t arg1, uint32_t *p_
 		arg2 = 1u;
 		arg1_2 = edi;
 		arg0_2 = esi;
-		sub_0001F700(0u, arg0_2, arg1_2, arg2, arg3);
+		AIDataInvokeEntryTimers(0u, arg0_2, arg1_2, arg2, arg3);
 		if ((MEM32(esi + 4u) & 0x200000u) != 0u)
 		{
 			eax = MEM32(esi + 0x28Cu);
@@ -13842,7 +13850,7 @@ uint32_t sub_0001FC10(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t arg0, u
 	arg0_2 = MEM32(esi + 0x2A4u);
 	EntityListRefreshDispatch(arg0_2, &ebx, &ebp, &edi);
 	arg0_2 = MEM32(esi + 0x2A4u);
-	eax_2 = sub_0009D6C0(arg0_2);
+	eax_2 = EntityListHasEntries(arg0_2);
 	if (eax_2 == 0u)
 	{
 		arg0_2 = MEM32(esi + 0x2A4u);
@@ -14036,7 +14044,11 @@ void GameStart(uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_edi)
 	sub_00111820(arg0);
 }
 
-uint32_t sub_0001FEF0(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
+/* When VibrationOn is set it disables vibration with VcPadSetVibrationEnabled, then destroys the media
+   stream, stops the level music with LevelMusicPlayAction, resets the sound with SoundManagerReset and
+   SoundUpdate, destroys all game objects with GameObjectsDestroyAll and GameObjectClearQueue, and clears
+   the players, ObjectiveListReset and TimerTableReset before GameRun returns. */
+uint32_t GameSessionShutdown(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -14320,7 +14332,7 @@ uint32_t GameFrameProcess(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	arg0 = MEM32(esi + 0x10u);
 	GameObjectModelSetColor(arg0, arg1, arg2, &ignored_3, &ebx, &ebp, &esi, &edi);
 	arg0 = MEM32(esi + 0x10u);
-	sub_001130B0(arg0, &ignored_3, &ignored);
+	GameObjectInvokeChildrenVirtual(arg0, &ignored_3, &ignored);
 	ecx = MEM32(esi + 0x10u);
 	arg0 = ecx;
 	FamilyEmitRandomCosmetic(ecx, arg0, &ignored_3, &ebx, &ebp, &esi, &edi);
@@ -14895,7 +14907,7 @@ void GameObjectListInsert(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_
 
 /* Stores the given handle in global 0x1E61E0, clears 0x1E61E4/0x1E61E8, calls GameStart when
    sub_000269D0 is nonzero, runs GameLoopRun with the tables at 0x1FF70/0x20110/0x20120, then calls
-   sub_0001FEF0 and returns the value at 0x1E61E8. */
+   GameSessionShutdown and returns the value at 0x1E61E8. */
 uint32_t GameRun(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -14920,7 +14932,7 @@ uint32_t GameRun(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 	GameLoopRun(ebp, arg0_2, arg1, arg2, &ignored, &edx, &ebx, &esi, &edi);
 	eax = sub_000269D0();
 	if (eax != 0u)
-		edi = sub_0001FEF0(edx, ebx, esi, edi);
+		edi = GameSessionShutdown(edx, ebx, esi, edi);
 	eax = MEM32(0x1E61E8u);
 	MEM32(0x1E61E0u) = edi;
 	return eax;
@@ -15835,7 +15847,7 @@ void DisplaySlotRender(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, 
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2);
 	arg0_2 = MEM32(g_esp);
-	sub_001130B0(arg0_2, &ignored, &ignored_2);
+	GameObjectInvokeChildrenVirtual(arg0_2, &ignored, &ignored_2);
 	ecx = MEM32(esi_2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
@@ -20110,7 +20122,7 @@ void GameFrameRender(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx)
 	arg0_2 = MEM32(esi + 0x10u);
 	GameObjectModelSetColor(arg0_2, arg1, arg2, &ignored_3, p_ebx, &ebp, &esi, &edi);
 	arg0_2 = MEM32(esi + 0x10u);
-	sub_001130B0(arg0_2, &ignored_3, &ecx);
+	GameObjectInvokeChildrenVirtual(arg0_2, &ignored_3, &ecx);
 	arg0_2 = MEM32(esi + 0x10u);
 	FamilyEmitRandomCosmetic(ecx, arg0_2, &ignored_3, p_ebx, &ebp, &esi, &edi);
 	arg4 = 0u;
@@ -21320,7 +21332,7 @@ void VersusCheckMatchEnd(uint32_t *p_eax, uint32_t *p_ecx)
 			else
 			{
 				arg0 = saved_eax;
-				ecx = sub_00070260(ecx, arg0);
+				ecx = GameObjectResetVelocity(ecx, arg0);
 			}
 		}
 		else
@@ -21350,7 +21362,7 @@ void VersusCheckMatchEnd(uint32_t *p_eax, uint32_t *p_ecx)
 				return;
 			}
 			arg0 = saved_eax;
-			ecx = sub_00070260(ecx, arg0);
+			ecx = GameObjectResetVelocity(ecx, arg0);
 		}
 		MEM32(0x1B09B0u) = 0u;
 		eax = 1u;
@@ -25498,7 +25510,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		MEM32(g_esp) = 0u;
 	}
 	arg0_2 = MEM32(g_esp);
-	sub_000C7AC0(arg0_2);
+	LevelTimeSet(arg0_2);
 	eax = ebp_2;
 	g_esp = g_esp + 4u;
 	LevelUseObjectTypes(eax);
@@ -26125,9 +26137,9 @@ void WeaponFamilyRegister(void)
 	arg0 = WeaponFamily_VA;
 	WeaponFamilyRegisterSecondTypeManager(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000D0590(arg0);
+	WeaponFamilyRegisterThirdTypeManager(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000D03A0(arg0);
+	WeaponFamilyRegisterFourthTypeManager(arg0);
 	arg0 = WeaponFamily_VA;
 	WeaponFamilyClassInit(arg0);
 	arg0 = WeaponFamily_VA;
@@ -33360,7 +33372,7 @@ uint32_t EntityCreateAttachedObjectEnteringState(uint32_t eax, uint32_t arg0, ui
 }
 
 /* Sets bit 2 (arg3 zero) or bit 0x10 on the target object's flags at +0x1C and updates the entity's
-   object at +0xA4 via sub_000D5E40. */
+   object at +0xA4 via GameObjectReplaceFromReference. */
 void EntityUpdateAttachedObjectFlags(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -33440,7 +33452,7 @@ void EntityUpdateAttachedObjectFlags(uint32_t arg0, uint32_t arg1, uint32_t arg2
 	MEM32(g_esp + 0x20u) = 0u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	*p_eax = sub_000D5E40(arg0_2, arg1_2);
+	*p_eax = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	MEM32(esi_2 + 0xA4u) = *p_eax;
 	g_esp = g_esp + 8u;
 	*p_edi = MEM32(g_esp);
@@ -33455,7 +33467,7 @@ void EntityUpdateAttachedObjectFlags(uint32_t arg0, uint32_t arg1, uint32_t arg2
 }
 
 /* Sets bit 0x10 on the target object's flags at +0x1C when arg3 is nonzero and updates the entity's
-   object at +0xA4 via sub_000D5E40. */
+   object at +0xA4 via GameObjectReplaceFromReference. */
 void EntityUpdateAttachedObjectWithFlag(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -33529,7 +33541,7 @@ void EntityUpdateAttachedObjectWithFlag(uint32_t arg0, uint32_t arg1, uint32_t a
 	MEM32(g_esp + 0x20u) = 0u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	*p_eax = sub_000D5E40(arg0_2, arg1_2);
+	*p_eax = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	MEM32(esi_2 + 0xA4u) = *p_eax;
 	g_esp = g_esp + 8u;
 	*p_edi = MEM32(g_esp);
@@ -33544,8 +33556,8 @@ void EntityUpdateAttachedObjectWithFlag(uint32_t arg0, uint32_t arg1, uint32_t a
 }
 
 /* Takes the object from GameObjectFromIndex, writes the given value into its +0xC0 field when its flags
-   allow, and on a change rebuilds the entity's +0xA4 with sub_000D5E40 from a parameter block; the
-   EntityOnTargetAcquired caller suggests +0xC0 is the target. */
+   allow, and on a change rebuilds the entity's +0xA4 with GameObjectReplaceFromReference from a
+   parameter block; the EntityOnTargetAcquired caller suggests +0xC0 is the target. */
 void EntityAssignTarget(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -33600,7 +33612,7 @@ void EntityAssignTarget(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg
 				MEM32(g_esp + 0x24u) = edx;
 				arg0_2 = MEM32(g_esp);
 				arg1_2 = MEM32(g_esp + 4u);
-				eax = sub_000D5E40(arg0_2, arg1_2);
+				eax = GameObjectReplaceFromReference(arg0_2, arg1_2);
 				MEM32(esi_2 + 0xA4u) = eax;
 				g_esp = g_esp + 8u;
 			}
@@ -46523,13 +46535,13 @@ void NodeFamilyRegister(void)
 	arg0 = NodeFamily_VA;
 	NodeFamilyObjectInit(arg0);
 	arg0 = NodeFamily_VA;
-	sub_000DD0A0(arg0);
+	NodeFamilySetVTable(arg0);
 	arg0 = NodeFamily_VA;
 	NodeFamilyInstallTypeDescriptor(arg0);
 	arg0 = NodeFamily_VA;
 	SplineNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	sub_000DCE40(arg0);
+	SplineNodeFamilyInit(arg0);
 	arg0 = NodeFamily_VA;
 	NodeFamilyInitialize(arg0);
 	arg0 = NodeFamily_VA;
@@ -46631,7 +46643,10 @@ void GameObjectSetOrToggleState(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, u
 	MEM32(*p_eax + 0xC8u) = 1u;
 }
 
-void sub_00037F10(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Resolves the object from its handle with GameObjectFromHandle (falling back to GameObjectLastObject)
+   and draws the edges of its transformed bounding box, built from the min/max fields at offsets
+   0x0-0x14, through repeated LineVerticesDrawTransformed calls. */
+void GameObjectDrawTransformedBoundingBox(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t ebp = *p_ebp;
@@ -46922,7 +46937,10 @@ void sub_00037F10(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, ui
 	*p_edi = edi_2;
 }
 
-void sub_000381A0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_esi, uint32_t *p_edi)
+/* Builds a uniform scale transform from a float field (at object+0x10) multiplied by a percentage
+   argument and rounded, then passes it to IndexedLineListDrawTransformed to draw the indexed line list
+   given by its arguments. */
+void IndexedLineListDrawScaled(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0;
 	double f0 = 0, f1 = 0;
@@ -48641,7 +48659,11 @@ void sub_0003920D(void)
 {
 }
 
-void sub_000393B0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Reads a game object handle and, unless it equals GameObjectLastHandle, fetches the object with
+   GameObjectFromHandle, takes its pitch/heading with MatrixGetPitchHeading, builds rotation matrices
+   with MatrixSetEulerAngles (one with 15.0f), transforms 24 vertices by those matrices and a position
+   offset, and draws them as a closed loop of LineVerticesDrawTransformed lines in the caller's colour. */
+void GameObjectDrawOrientedOutline(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5, uint32_t *p_eax, uint32_t *p_ecx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t ebp = *p_ebp;
@@ -49668,7 +49690,7 @@ void ObjectRemoveAction(uint32_t eax, uint32_t arg1)
 
 /* Updates the entity's motion direction at 0xE4/0xE8/0xEC through sub_000395F0 and, for the object
    handle in 0xD0, advances or wraps the path fraction in 0xD4 using GameObjectWrapPathFraction with
-   GameObjectWrapOffsetInRange, EntityPathFollowUpdatePosition and sub_0003C620. */
+   GameObjectWrapOffsetInRange, EntityPathFollowUpdatePosition and EntityPathComputeTransform. */
 void EntityPathFollowUpdate(uint32_t esi, uint32_t edi, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, ecx = 0, edi_2 = 0;
@@ -49731,7 +49753,7 @@ void EntityPathFollowUpdate(uint32_t esi, uint32_t edi, uint32_t *p_eax, uint32_
 	arg2 = stack;
 	arg1 = MEM32(esi + 0xB8u);
 	arg0 = MEM32(esi + 0xD0u);
-	sub_0003C620(esi, edi_2, arg0, arg1, arg2, p_eax, p_ebx, p_ebp);
+	EntityPathComputeTransform(esi, edi_2, arg0, arg1, arg2, p_eax, p_ebx, p_ebp);
 }
 
 /* When the object's state at +0xC8 is 1 and its pointer at +0xB8 is set, calls EntityPathFollowUpdate
@@ -49906,9 +49928,9 @@ uint32_t GameObjectCollectNodes(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-/* Updates a node's transform: resolves the handle, reads a type from +0xD0, sets +0xD4 from sub_0003A3E0
-   or GameObjectGetPath, and if the +0xE4/+0xE8/+0xEC values are non-zero computes a difference from the
-   parent's position and calls sub_000395F0, otherwise calls EntityPathFollowUpdate. */
+/* Updates a node's transform: resolves the handle, reads a type from +0xD0, sets +0xD4 from
+   NodeResolveHandle or GameObjectGetPath, and if the +0xE4/+0xE8/+0xEC values are non-zero computes a
+   difference from the parent's position and calls sub_000395F0, otherwise calls EntityPathFollowUpdate. */
 void NodeUpdateTransform(uint32_t arg0, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -49955,7 +49977,7 @@ void NodeUpdateTransform(uint32_t arg0, uint32_t *p_ebx, uint32_t *p_ebp, uint32
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
-		eax = sub_0003A3E0(arg0_2);
+		eax = NodeResolveHandle(arg0_2);
 		MEMF(esi_2 + 0xD4u) = (float)x87_round((double)(int32_t)MEM32(eax + 0xCu) * 0.0001f);
 		g_esp = g_esp + 4u;
 	}
@@ -50103,7 +50125,9 @@ void NodeFamilyRegisterDescriptor(uint32_t arg0)
 	MEM32(arg0 + 0x58u) = 0x1EAF78u;
 }
 
-uint32_t sub_0003A2F0(uint32_t arg1)
+/* Advances the value at +0xE8 by the increment at +0xEC and wraps it back inside the range [+0xDC,
+   +0xE0], doing nothing unless the field at +0xC8 equals 1. */
+uint32_t NodeAdvanceWrappedValue(uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -50176,7 +50200,9 @@ uint32_t GameObjectGetType(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0003A3E0(uint32_t arg0)
+/* Resolves a node handle through GameObjectLastHandle/GameObjectLastObject and GameObjectFromHandle and
+   returns a pointer to the node's +0xD8 field, or 0 when the handle resolves to no object. */
+uint32_t NodeResolveHandle(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -50197,7 +50223,9 @@ uint32_t sub_0003A3E0(uint32_t arg0)
 	return eax;
 }
 
-void sub_0003A410(uint32_t arg0)
+/* Resolves the handle the same way (GameObjectLastObject or GameObjectFromHandle) and sets the node's
+   +0xE8 value back to the value at +0xE4. */
+void NodeResetWrappedValue(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -50248,7 +50276,7 @@ void GameObjectWrapOffsetInRange(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, 
 /* For each of the spline object's points (count at the object's first word, stride 0x2C) it gets the
    transform with vcSceneObjectGetTransform, formats a name with vcFormat and crt_strncpy, creates
    GameObjects with GameObjectCreate, positions them through Matrix3x3MultiplyVector/sub_000396A0 and
-   initializes them with sub_000DC100/sub_000DC140. */
+   initializes them with GameObjectSetSplineKind/GameObjectSetSplineKindWithData. */
 void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -50369,7 +50397,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 						MEM32(g_esp) = esi_2;
 						arg0_2 = MEM32(g_esp);
 						arg1 = MEM32(g_esp + 4u);
-						sub_000DC100(arg0_2, arg1);
+						GameObjectSetSplineKind(arg0_2, arg1);
 						g_esp = g_esp + 0x24u;
 						if (esi_2 != 0u)
 						{
@@ -50448,7 +50476,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 							arg0_2 = MEM32(g_esp);
 							arg1 = MEM32(g_esp + 4u);
 							arg2 = MEM32(g_esp + 8u);
-							sub_000DC140(arg0_2, arg1, arg2);
+							GameObjectSetSplineKindWithData(arg0_2, arg1, arg2);
 							ecx = MEM32(g_esp + 0x6Cu);
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = ecx + 0xCu;
@@ -50527,7 +50555,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 							arg0_2 = MEM32(g_esp);
 							arg1 = MEM32(g_esp + 4u);
 							arg2 = MEM32(g_esp + 8u);
-							sub_000DC140(arg0_2, arg1, arg2);
+							GameObjectSetSplineKindWithData(arg0_2, arg1, arg2);
 							edx_2 = MEM32(g_esp + 0x6Cu);
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = edx_2 + 0x18u;
@@ -51000,7 +51028,11 @@ void SplineNode_Register(uint32_t arg0)
 	MEM32(arg0 + 0x34u) = SplineNodeType_VA;
 }
 
-void sub_0003AE50(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Using the scene object transform of the game object at field 0xD0 (via vcSceneObjectGetTransform and
+   Matrix3x3Invert) it rewrites the spline control points of the object at field 0xD4 (via
+   Matrix3x3MultiplyVector) for the point indexed by arg2, then calls SplineComputeBounds and
+   vcObjectMarkChanged on both objects. */
+void GameObjectSplineTransformUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	double f1 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0;
@@ -51190,7 +51222,11 @@ void sub_0003AE50(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	g_esp = g_esp + 0x10u;
 }
 
-void sub_0003B0E0(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Resolves the two GameObjects named by the handles with GameObjectFromHandle, reads the first object's
+   vcObjects at fields 0xD0 and 0xD4 through vcSceneObjectGetTransform, computes the target node's offset
+   with Matrix3x3Invert and Matrix3x3MultiplyVector, and marks both of those vcObjects changed with
+   vcObjectMarkChanged. */
+void GameObjectTargetActionApplyTransform(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t2 = 0;
@@ -51675,7 +51711,10 @@ void GameObjectSetPathPoint(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 }
 
-void sub_0003B700(uint32_t arg0)
+/* Resolves the GameObject for a handle with GameObjectFromHandle and copies its field 0xE4 into field
+   0xF0; called by NodeFamilyUpdateNodes for each node, so it probably saves the node's previous value
+   before the node is updated. */
+void NodeFamilySavePreviousTransform(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -52211,7 +52250,7 @@ void PathNodeCreateObject(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t 
 		MEM32(g_esp) = edi_2;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		edx = sub_000DC190(edx, arg0_2, arg1_2);
+		edx = GameObjectSetPathKind(edx, arg0_2, arg1_2);
 		g_esp = g_esp + 0x24u;
 		if (edi_2 != 0u)
 		{
@@ -53042,7 +53081,12 @@ void NodeFamilyAddNode(uint32_t arg0, uint32_t arg1, uint32_t *p_edx, uint32_t *
 	MEM32(ebx + 0xD0u) = MEM32(ebx + 0xD0u) + 1u;
 }
 
-void sub_0003C620(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
+/* Computes the entity's path-follow transform: resolves both handles with GameObjectFromHandle, gets the
+   point at the current fraction with GameObjectGetPathPointAtFraction, optionally samples
+   GameObjectLocalGridValueAtPoint and builds the frame with PathGetDirectionAtDistance and
+   MatrixGetHeadingPitchRoll, subtracts the entity's own position and passes the result to sub_000395F0,
+   writing the transform back through the caller's pointer. */
+void EntityPathComputeTransform(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
 {
 	uint32_t ebp = *p_ebp;
 	bool L_03C6A4 = false;
@@ -53258,7 +53302,7 @@ void ScreenElementFamilyRegister(void)
 	GameObjectFamily_type_count(ScreenElementFamily_VA) = 0x1Cu;
 	RadarElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	sub_000C72E0(arg0);
+	ScreenElementFamilySetClassDescriptor(arg0);
 	arg0 = ScreenElementFamily_VA;
 	ScreenElementFamilySetVTable(arg0);
 	arg0 = ScreenElementFamily_VA;
@@ -53302,7 +53346,7 @@ void ScreenElementFamilyRegister(void)
 	arg0 = ScreenElementFamily_VA;
 	HudPiecesFamilyRegister(arg0);
 	arg0 = ScreenElementFamily_VA;
-	sub_0003D0B0(arg0);
+	ScreenElementFamilyInit(arg0);
 	arg0 = ScreenElementFamily_VA;
 	MessageBoxElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
@@ -53459,7 +53503,9 @@ uint32_t GameObjectDeactivate(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0003CBF0(uint32_t edx, uint32_t arg0)
+/* Resolves a game object handle with GameObjectFromHandle and, when the resolved object's first field is
+   non-zero, frees it with GameObjectFree, returning that result. */
+uint32_t GameObjectFreeByHandle(uint32_t edx, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, eax = 0, handle = 0, ignored = 0;
 
@@ -53777,7 +53823,7 @@ void ScreenElementUpdateViewportRect(uint32_t eax)
 }
 
 /* Dispatches on the command id at arg3, returning 1 when handled and calling ScreenElementReset,
-   ScreenElementUpdateViewportRect or sub_0003CBF0 for the commands it knows. */
+   ScreenElementUpdateViewportRect or GameObjectFreeByHandle for the commands it knows. */
 uint32_t ScreenElementHandleCommand(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -53823,12 +53869,13 @@ uint32_t ScreenElementHandleCommand(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 		return eax;
 	}
 	arg0_2 = ecx;
-	sub_0003CBF0(edx, arg0_2);
+	GameObjectFreeByHandle(edx, arg0_2);
 	eax = 1u;
 	return eax;
 }
 
-void sub_0003D0B0(uint32_t arg0)
+/* Sets up the ScreenElement family's static data and calls UiElementInit for the family's UI element. */
+void ScreenElementFamilyInit(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, ecx = 0;
 
@@ -54114,7 +54161,10 @@ uint32_t PadPressedLeftToStats(uint32_t eax)
 	return eax_2;
 }
 
-uint32_t sub_0003D390(uint32_t arg0)
+/* Updates the pad input object's smoothed float fields from its input value (the -1..1 field and the
+   field clamped to 0..0.3) and calls GameObjectSetLinkedSlotValue on the object linked through its
+   handle. */
+uint32_t GameObjectPadInputSmoothAxis(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ecx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0, f1 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
@@ -57166,7 +57216,10 @@ uint32_t PlayerFireWeapon(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi
 	return eax_2;
 }
 
-uint32_t sub_0003F980(uint32_t ebx, uint32_t ebp, uint32_t arg0)
+/* Resolves the game object from arg0, clears the +0x2C, +0x60, +0x68 and +0x64 fields of the object its
+   +0x44 handle points at, and when that object is null and global 0x1E62F0 is zero calls
+   PlayerFireWeapon once vcGameTime is more than 0xBB8 past the timestamp at +0x3B4. */
+uint32_t PlayerFireWeaponWithCooldown(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -57542,8 +57595,8 @@ uint32_t PlayerUpdatePadInput(uint32_t arg0)
    ControllerItems_left_x/left_y/triggers/a disable it), calls UiControllerInputUpdate and
    GameObjectPadBButtonUpdate, writes the stick and trigger values into the input object at +0x44 (+0x60,
    +0x28, +0x24), steps its +0x20 value between 0, 0.5 and 1 with the pad up/down buttons (0x3E8 ms
-   repeat) and the A button, then calls sub_0003D390 and GameObjectUpdatePadDirections and sends indexed
-   message (2,3) when the object's +0xC timer has passed 60 seconds. */
+   repeat) and the A button, then calls GameObjectPadInputSmoothAxis and GameObjectUpdatePadDirections
+   and sends indexed message (2,3) when the object's +0xC timer has passed 60 seconds. */
 uint32_t GameObjectPadInputUpdate(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -57681,7 +57734,7 @@ uint32_t GameObjectPadInputUpdate(uint32_t arg0)
 			MEM32(esi + 0x20u) = 0x3DCCCCCDu;
 	}
 	arg0_2 = esi;
-	sub_0003D390(arg0_2);
+	GameObjectPadInputSmoothAxis(arg0_2);
 	arg2 = esi;
 	arg1 = ebp;
 	eax = GameObjectUpdatePadDirections(arg1, arg2);
@@ -57701,8 +57754,8 @@ uint32_t GameObjectPadInputUpdate(uint32_t arg0)
 /* Same pad read into the input object at +0x44 (+0x60, +0x64, +0x68, +0x24, +0x20 fixed to 1.0) with
    UiControllerInputUpdate and GameObjectPadBButtonUpdate, but while the object's +0x3E4 flag is clear it
    detects stick-up plus both triggers over 0.5 and then sets +0x3E4, negates the input object's +0x54
-   and sets flag 0x800 in its +4, skipping sub_0003D390 and GameObjectUpdatePadDirections until the combo
-   is released. */
+   and sets flag 0x800 in its +4, skipping GameObjectPadInputSmoothAxis and GameObjectUpdatePadDirections
+   until the combo is released. */
 uint32_t GameObjectPadInputUpdateWithCombo(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -57783,7 +57836,7 @@ uint32_t GameObjectPadInputUpdateWithCombo(uint32_t arg0)
 		if (MEM32(edi + 0x3E4u) == 0u)
 		{
 			arg0_2 = esi;
-			sub_0003D390(arg0_2);
+			GameObjectPadInputSmoothAxis(arg0_2);
 			arg2 = esi;
 			arg1 = edi;
 			GameObjectUpdatePadDirections(arg1, arg2);
@@ -58241,7 +58294,7 @@ uint32_t GameObjectControllerInputUpdateWithBButton(uint32_t arg0)
    its +0x3B8's time has passed, its entity's model's scene flag 0x10 off; with one player and
    DEATHGRIP's cheat (Cheats' 0x4000), once its entity's first target locked on (the entity's +0x1A8) has
    stayed the same for 250 ms, X on its pad (unless ControllerItemsDisabled has it off) sends that target
-   a damage of 100000. With its entity gone, its +0x3A0 becomes sub_0003F980. */
+   a damage of 100000. With its entity gone, its +0x3A0 becomes PlayerFireWeaponWithCooldown. */
 uint32_t Player_Update(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t entry, uint32_t player, uint32_t time)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, mask = 0;
@@ -63329,7 +63382,7 @@ uint32_t sub_00044CC0(uint32_t ecx, uint32_t arg0)
 		MEM32(esi + 0x58u) = eax;
 		MEM32(esi + 0x5Cu) = eax;
 		MEM32(esi + 0x74u) = eax;
-		sub_000C7AC0(arg0_2);
+		LevelTimeSet(arg0_2);
 		MEM32(esi + 0x300u) = 1u;
 	}
 	return ecx;
@@ -70648,7 +70701,7 @@ uint32_t GameObjectFindFamilyObjectByFieldD0(uint32_t arg0)
 }
 
 /* Allocates an entity from the node's pool with EntityPoolAllocate, fills it in via EntityFromHandleGet,
-   TypeIndexSetDifficultyValue and sub_0009B980, and initializes its game object with
+   TypeIndexSetDifficultyValue and EntitySetTypeIndex, and initializes its game object with
    GameObjectInitializeFromObject, storing the handle at the node's 0x198. */
 void PlayerStandInEntityNodeCreateGameObject(uint32_t ebp, uint32_t edi, uint32_t arg0)
 {
@@ -70677,7 +70730,7 @@ void PlayerStandInEntityNodeCreateGameObject(uint32_t ebp, uint32_t edi, uint32_
 	MEM32(esi + 0x34u) = 3u;
 	TypeIndexSetDifficultyValue(arg0_2);
 	arg0_2 = esi;
-	sub_0009B980(arg0_2);
+	EntitySetTypeIndex(arg0_2);
 	MEM32(esi + 0xA4u) = 0x447A0000u;
 	arg1 = edi;
 	arg0_2 = esi;
@@ -71315,7 +71368,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 			arg1_2 = MEM32(g_esp + 4u);
 			arg2_2 = MEM32(g_esp + 8u);
 			arg3 = MEM32(g_esp + 0xCu);
-			sub_000381A0(arg0_2, arg1_2, arg2_2, arg3, &ecx, &ebx_2, &esi, &edi_2);
+			IndexedLineListDrawScaled(arg0_2, arg1_2, arg2_2, arg3, &ecx, &ebx_2, &esi, &edi_2);
 			g_esp = g_esp + 0x10u;
 		}
 		eax_2 = MEM32(edi_2 + 0xD0u);
@@ -71358,7 +71411,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 			arg1_2 = MEM32(g_esp + 4u);
 			arg2_2 = MEM32(g_esp + 8u);
 			arg3 = MEM32(g_esp + 0xCu);
-			sub_00037F10(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
+			GameObjectDrawTransformedBoundingBox(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
 			eax_2 = MEM32(esi);
 			ecx_2 = g_esp + 0x34u;
 			g_esp = g_esp - 4u;
@@ -71484,7 +71537,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 								arg1_2 = MEM32(g_esp + 4u);
 								arg2_2 = MEM32(g_esp + 8u);
 								arg3 = MEM32(g_esp + 0xCu);
-								sub_00037F10(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
+								GameObjectDrawTransformedBoundingBox(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
 								edx = MEM32(esi);
 								eax_2 = g_esp + 0x34u;
 								g_esp = g_esp - 4u;
@@ -71636,7 +71689,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 					eax_2 = MEM32(g_esp + 0x24u);
 					edx = g_esp + 0x3Cu;
 					g_esp = g_esp - 4u;
@@ -71657,7 +71710,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 					ecx_2 = MEM32(ebp_2 + 0xA4u);
 					edx = g_esp + 0x48u;
 					g_esp = g_esp - 4u;
@@ -71679,7 +71732,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 					edx = MEM32(g_esp + 0x54u);
 					g_esp = g_esp + 0x48u;
 					ecx_2 = g_esp + 0x24u;
@@ -71701,7 +71754,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 					f0 = (double)(int32_t)MEM32(ebp_2 + 0x28u);
 					eax_2 = g_esp + 0x30u;
 					g_esp = g_esp - 4u;
@@ -71724,7 +71777,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 					ecx_2 = g_esp + 0x54u;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ecx_2;
@@ -71744,7 +71797,7 @@ void EntityDrawHudOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp
 					arg3 = MEM32(g_esp + 0xCu);
 					arg4 = MEM32(g_esp + 0x10u);
 					arg5 = MEM32(g_esp + 0x14u);
-					sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ecx, &ebx_2, &ebp_2, &esi, &edi_2);
+					GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored, &ecx, &ebx_2, &ebp_2, &esi, &edi_2);
 					g_esp = g_esp + 0x48u;
 					L_04D940 = true;
 				}
@@ -72388,7 +72441,10 @@ uint32_t sub_0004DD70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	return eax;
 }
 
-uint32_t sub_0004E070(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Casts a SceneRayIntersect from the object's position and, for each of up to four hits whose
+   vcSceneObjectGetFlags lacks 0x20, calls SceneObjectReactToNearbyPlayer and then
+   SceneObjectSendUserMessage. */
+uint32_t SceneObjectRaycastReactToNearbyPlayer(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	bool L_04E0CD = false;
 	uint32_t carry = 0;
@@ -72704,7 +72760,9 @@ uint32_t sub_0004ED67(uint32_t eax)
 	return eax;
 }
 
-uint32_t sub_0004ED70(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
+/* Resolves arg0 to a GameObject via GameObjectFromHandle (or uses GameObjectLastObject when it is
+   GameObjectLastHandle) and passes that object to WeaponFireAtTarget. */
+uint32_t WeaponFireAtObjectFromHandle(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -72769,7 +72827,7 @@ uint32_t sub_0004EDB0(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, ui
 	ecx_2 = MEM32(g_esp + 0x14u);
 	t3 = x87_round(FLOAT_AT(ebx_2 + 8u) * FLOAT_AT(ecx_2 + 8u));
 	MEMF(g_esp + 0x20u) = (float)x87_round(t3 + x87_round(x87_round(FLOAT_AT(ebx_2 + 4u) * FLOAT_AT(ecx_2 + 4u)) + x87_round(FLOAT_AT(ebx_2) * FLOAT_AT(ecx_2))));
-	f0 = sub_000C7AD0();
+	f0 = LevelTimeGet();
 	MEMF(g_esp + 0x2Cu) = (float)f0;
 	edx = MEM32(g_esp + 0x40u);
 	eax_2 = 0u;
@@ -73349,7 +73407,10 @@ uint32_t GameObjectUpdateAimRotation(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	return eax;
 }
 
-uint32_t sub_0004F740(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5, uint32_t arg6, uint32_t arg7, uint32_t arg8, uint32_t arg9)
+/* Builds a 3x3 orientation matrix and a heading by normalizing a direction vector, rotating a second
+   vector by an angle scaled by pi/180*0.033, taking their cross product with VectorNormalize, and
+   wrapping the resulting angle into [-180, 180]. */
+uint32_t OrientationBuildFromDirectionAndAngle(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5, uint32_t arg6, uint32_t arg7, uint32_t arg8, uint32_t arg9)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
 	double f0 = 0, f1 = 0, ignored64 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
@@ -75287,7 +75348,7 @@ uint32_t Vehicle_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 			MEM32(g_esp) = edx;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			eax = sub_000D5E40(arg0_2, arg1_2);
+			eax = GameObjectReplaceFromReference(arg0_2, arg1_2);
 			MEM32(esi_2 + 0xA4u) = eax;
 			g_esp = g_esp + 0x10u;
 		}
@@ -77519,7 +77580,10 @@ void ZenLightMissileTurret_Register(uint32_t arg0)
 	EntitySpec_death_motions(ZenLightMissileTurretSpec_VA) = 0x1ECF30u;
 }
 
-uint32_t sub_00054E80(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* Gets the object's target handle with ObjectGetTargetHandle, resolves it with GameObjectFromHandle,
+   intersects the object's transform with the target via SceneObjectRaySphereIntersect, and then sets
+   node positions 0 and 1 with ObjectSetNodePosition from the intersection result. */
+uint32_t ObjectSetNodePositionsFromRaySphereIntersect(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -77815,7 +77879,7 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 					{
 						esi_2 = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi_2, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -77871,7 +77935,7 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 					{
 						esi_2 = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi_2, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -77901,7 +77965,7 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 			arg2_2 = 0u;
 			arg1_2 = MEM32(0x1ED1E0u);
 			arg0_2 = MEM32(esi_2 + 0x194u);
-			sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+			ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 			eax = 1u;
 			return eax;
 		}
@@ -77923,7 +77987,7 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 				{
 					esi_2 = arg1;
 					arg1_2 = arg4;
-					sub_00088470(esi_2, arg1_2);
+					GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 					eax = 1u;
 					return eax;
 				}
@@ -77997,7 +78061,7 @@ uint32_t ZenCruiserTurret1_StateMachine(uint32_t esi, uint32_t arg0, uint32_t ar
 		arg2_2 = 0u;
 		arg1_2 = MEM32(0x1ED1DCu);
 		arg0_2 = MEM32(esi_2 + 0x194u);
-		sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+		ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 		eax = 1u;
 		return eax;
 	}
@@ -82346,7 +82410,7 @@ void ObjectSteerTowardForwardObject(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 	*p_edi = edi_2;
 }
 
-/* Advances the object's velocity at esi+0x14 by a vertical term derived from sub_000C7AD0() and the
+/* Advances the object's velocity at esi+0x14 by a vertical term derived from LevelTimeGet() and the
    float at +4 of the struct at esi+0x274, moves the position at esi+8 by that velocity times the 0.033
    constant, saves the previous position at esi+0x28C, and updates the transform through
    SceneObjectCreateAndInit. */
@@ -82363,7 +82427,7 @@ void ObjectIntegrateMotion(uint32_t ebx, uint32_t esi, uint32_t edi)
 	MEM32(g_esp + 0x18u) = 0u;
 	MEM32(g_esp + 0x1Cu) = 0u;
 	MEM32(g_esp + 0x20u) = 0u;
-	f0 = sub_000C7AD0();
+	f0 = LevelTimeGet();
 	eax = MEM32(esi + 0x274u);
 	MEMF(g_esp + 0x1Cu) = (float)x87_round(f0 * 0.6f);
 	f0_2 = FLOAT_AT(MEM32(eax + 4u));
@@ -82584,7 +82648,12 @@ void sub_0005A40C(void)
 {
 }
 
-uint32_t sub_0005A410(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Moves each active projectile slot of the entity along its velocity, raycasts from the entity with
+   SceneHitTreeRaycast, and on a hit sends GameObjectSendMessage, destroys the slot's scene object with
+   GameObjectDestroy, spawns an EffectCreateInstance, applies EntityApplyRadiusEffect and
+   GameObjectsSendRadialMessage, records EntityAddHit, plays WaterBulletHitPlaySound for water hits, and
+   rebuilds the slot's scene objects with SceneObjectCreateAndInit. */
+uint32_t EntityUpdateProjectiles(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t carry = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -83150,7 +83219,7 @@ uint32_t EntityUpdateMotionAndSceneObjects(uint32_t ebx, uint32_t arg0, uint32_t
    vector from the object's fields at +0x38/+0x44/+0x50 and the parameter block at +0x274, otherwise,
    while the counter at +0x29C is below the passed limit, it steers toward the forward object with
    ObjectSteerTowardForwardObject and advances that counter by the period in the block at +0x274, then
-   runs SceneObjectAdvancePositionAndCreate and sub_0005A410. */
+   runs SceneObjectAdvancePositionAndCreate and EntityUpdateProjectiles. */
 uint32_t EntityUpdateSteeringTowardForwardObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -83250,7 +83319,7 @@ uint32_t EntityUpdateSteeringTowardForwardObject(uint32_t ebx, uint32_t ebp, uin
 	eax = edi_2;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax = sub_0005A410(eax, ebx, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
+	eax = EntityUpdateProjectiles(eax, ebx, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
 	g_esp = g_esp + 0x18u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -97284,7 +97353,9 @@ uint32_t FemalePowerArmorDestroyObjects(uint32_t ebx, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000700A0(uint32_t esi, uint32_t arg1)
+/* Gets the game object at index esi with GameObjectFromIndex and, when it exists, invokes its handler
+   with GameObjectInvokeHandler, returning that call's result. */
+uint32_t GameObjectFromIndexInvokeHandler(uint32_t esi, uint32_t arg1)
 {
 	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, eax = 0;
 	uint32_t stack = 0, saved_esi = 0, saved_arg1 = 0;
@@ -97430,7 +97501,11 @@ uint32_t FemalePowerArmorSwitchMode(uint32_t eax, uint32_t ecx, uint32_t edx)
 	return eax_2;
 }
 
-uint32_t sub_00070260(uint32_t ecx, uint32_t arg0)
+/* Resolves the game object from the given handle with GameObjectFromHandle (or uses GameObjectLastObject
+   when the handle is GameObjectLastHandle) and, when the structure at field 0x29C has a nonzero field at
+   0x8D0, zeroes the object's fields 0x14/0x18/0x1C/0x54/0x58/0x5C/0x74 and sets flag 0x2B4, probably
+   resetting its transform. */
+uint32_t GameObjectResetVelocity(uint32_t ecx, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, handle = 0, ignored = 0;
 
@@ -97457,7 +97532,7 @@ uint32_t sub_00070260(uint32_t ecx, uint32_t arg0)
 			MEM32(esi + 0x58u) = eax;
 			MEM32(esi + 0x5Cu) = eax;
 			MEM32(esi + 0x74u) = eax;
-			sub_000C7AC0(arg0_2);
+			LevelTimeSet(arg0_2);
 			MEM32(esi + 0x2B4u) = 1u;
 		}
 	}
@@ -98716,7 +98791,7 @@ uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 												{
 													esi_2 = arg1;
 													arg1_2 = arg4;
-													sub_000700A0(esi_2, arg1_2);
+													GameObjectFromIndexInvokeHandler(esi_2, arg1_2);
 													eax = 1u;
 													return eax;
 												}
@@ -98862,7 +98937,7 @@ uint32_t FemalePowerArmor_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 										{
 											esi_2 = arg1;
 											arg1_2 = arg4;
-											sub_000700A0(esi_2, arg1_2);
+											GameObjectFromIndexInvokeHandler(esi_2, arg1_2);
 											eax = 1u;
 											return eax;
 										}
@@ -105179,7 +105254,7 @@ void PodOfficer_Register(uint32_t arg0)
 
 /* Called by ZenReEntryPodStartCountdown and ZenReEntryPod_StateMachine, it sets the +4 flag, sends
    message 1000 to the pod's object with GameObjectSendMessage, stores the handle from
-   ObjectCacheGetDurationMs at +0x270, and passes the vcObject at +0x194 to sub_001205C0. */
+   ObjectCacheGetDurationMs at +0x270, and passes the vcObject at +0x194 to ObjectMotionStart. */
 uint32_t ZenReEntryPodBeginCountdown(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0;
@@ -105235,7 +105310,7 @@ uint32_t ZenReEntryPodBeginCountdown(uint32_t esi, uint32_t edi, uint32_t arg0, 
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	eax = sub_001205C0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
+	eax = ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -105598,10 +105673,10 @@ void ZenReEntryPod_ResetAndSendMessage(uint32_t ecx, uint32_t esi, uint32_t arg0
 	g_esp = g_esp + 0xCu;
 }
 
-/* Zeroes the pod's fields at +0x8C..+0x9C and clears its flag bits at +4 and +0x84, calls sub_001205C0
-   on the pod's scene object with the global at 0x207A54, sends GameObjectSendMessage 0x3E8 with value 3
-   and 0x3ED with value 1 to the given object, and changes the scene object's flags with
-   vcSceneObjectChangeFlags. */
+/* Zeroes the pod's fields at +0x8C..+0x9C and clears its flag bits at +4 and +0x84, calls
+   ObjectMotionStart on the pod's scene object with the global at 0x207A54, sends GameObjectSendMessage
+   0x3E8 with value 3 and 0x3ED with value 1 to the given object, and changes the scene object's flags
+   with vcSceneObjectChangeFlags. */
 void ZenReEntryPod_ResetAndSendTwoMessages(uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -105657,7 +105732,7 @@ void ZenReEntryPod_ResetAndSendTwoMessages(uint32_t esi, uint32_t edi, uint32_t 
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_001205C0(arg0_2, arg1, arg2, arg3, arg4, arg5);
+	ObjectMotionStart(arg0_2, arg1, arg2, arg3, arg4, arg5);
 	edx = MEM32(esi + 0x18Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
@@ -105744,7 +105819,10 @@ void ZenReEntryPod_NotifyAndAdvanceState(uint32_t eax, uint32_t ecx, uint32_t es
 	g_esp = g_esp + 8u;
 }
 
-uint32_t sub_0007B880(uint32_t arg0, uint32_t arg1)
+/* Counts the timer at arg1+0x270 down by 0x21, calling sub_0001A480 with MEM32(arg0) while it is still
+   positive, and when it reaches zero clears bit 0x80 of arg1+4 and sets the state context's field at
+   +0xE to 1 and its state-change flag (bit 0 of +0x10), probably enabling that state. */
+uint32_t StateTimerCountdownAndEnable(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -105767,7 +105845,10 @@ uint32_t sub_0007B880(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_0007B8D0(uint32_t arg0, uint32_t arg1)
+/* Same countdown (arg1+0x270 minus 0x21, sub_0001A480 while positive), but on expiry sets the state
+   context's field at +0xE to 0 and its state-change flag (bit 0 of +0x10), probably disabling that
+   state. */
+uint32_t StateTimerCountdownAndDisable(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -106073,8 +106154,8 @@ uint32_t ZenReEntryPod_Shutdown(void)
 }
 
 /* Scans the objects of GameObjectFamilies(2), picks the one nearest to the pod's position at +8 by
-   squared distance, stores its handle at +0x26C, and builds two attachment objects through sub_000D5E40
-   and GameObjectRecreate. */
+   squared distance, stores its handle at +0x26C, and builds two attachment objects through
+   GameObjectReplaceFromReference and GameObjectRecreate. */
 void ZenReEntryPodSelectNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -106205,7 +106286,7 @@ void ZenReEntryPodSelectNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp, 
 	MEM32(g_esp + 0x68u) = 4u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax_2 = sub_000D5E40(arg0_2, arg1_2);
+	eax_2 = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	edx = MEM32(0x19CEFCu);
 	MEM32(ebp_2 + 0xA4u) = eax_2;
 	x86_rep_stos32(g_esp + 0x44u, 0u, 7u);
@@ -107045,7 +107126,10 @@ uint32_t SpartanSpecInit(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi,
 	return eax_2;
 }
 
-uint32_t sub_0007CDC0(uint32_t esi)
+/* Clones the vcObject template at 0x208034, stores the clone in the object's vcObject slot (arg0+0x194)
+   and calls sub_0012FC10 with the object's position (arg0+8, arg0+0xC minus 5.498, arg0+0x10), the
+   clone, GameObjectGetVCObject() and the constants 220.0, 45.0 and 67.5. */
+uint32_t GameObjectSpawnVCObjectCloneA(uint32_t esi)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 	double f0 = 0;
@@ -107575,7 +107659,8 @@ uint32_t RaiderXSpecInit(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp,
 	return eax_2;
 }
 
-uint32_t sub_0007E210(uint32_t esi)
+/* Does the same as GameObjectSpawnVCObjectCloneA but clones the vcObject template at 0x20838C. */
+uint32_t GameObjectSpawnVCObjectCloneB(uint32_t esi)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 	double f0 = 0;
@@ -110126,7 +110211,7 @@ uint32_t ObjectUpdateTargetNodePositions(uint32_t ebx, uint32_t ebp, uint32_t es
 
 /* Sets the 0x80 bit of the flag word at offset 4, sends GameObjectSendMessage to the object at offset
    0x18C, turns the returned handle into a pointer with ObjectCacheGetDurationMs and stores it at offset
-   0x294, then attaches it to the model at offset 0x194 through sub_001205C0. */
+   0x294, then attaches it to the model at offset 0x194 through ObjectMotionStart. */
 void ZenReconShipAttachObject(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi)
 {
 	uint32_t esi = *p_esi;
@@ -110183,7 +110268,7 @@ void ZenReconShipAttachObject(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	eax = sub_001205C0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
+	eax = ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp + 4u;
 	esi_2 = MEM32(g_esp);
@@ -110294,9 +110379,9 @@ void ZenReconShip_StateEnter(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t 
 	g_esp = g_esp + 8u;
 }
 
-/* Clears the ship's +0x8C/+0x90/+0x9C fields and flag bits, calls sub_001205C0 on the node at +0x194,
-   sends GameObjectSendMessage 0x3E8=3 to +0x18C and 0x3ED=1 to +0x290, and sets scene flags 0x10 on the
-   node at +0x194 via vcSceneObjectChangeFlags. */
+/* Clears the ship's +0x8C/+0x90/+0x9C fields and flag bits, calls ObjectMotionStart on the node at
+   +0x194, sends GameObjectSendMessage 0x3E8=3 to +0x18C and 0x3ED=1 to +0x290, and sets scene flags 0x10
+   on the node at +0x194 via vcSceneObjectChangeFlags. */
 uint32_t ZenReconShip_StateActivate(uint32_t ecx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx_2 = 0, edx = 0;
@@ -110329,7 +110414,7 @@ uint32_t ZenReconShip_StateActivate(uint32_t ecx, uint32_t esi, uint32_t edi)
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_001205C0(arg0, arg1, arg2, arg3, arg4, arg5);
+	ObjectMotionStart(arg0, arg1, arg2, arg3, arg4, arg5);
 	edx = MEM32(esi + 0x18Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
@@ -110962,7 +111047,8 @@ uint32_t ZenReconShip_Shutdown(void)
 
 /* Iterates GameObjectFamilies(2), resolving each handle with GameObjectFromHandle, and keeps the object
    whose squared distance to this object's position (ebp+8) is smallest, storing its handle at 0x290 and
-   then building a scene object at that position through sub_000D5E40 and GameObjectRecreate. */
+   then building a scene object at that position through GameObjectReplaceFromReference and
+   GameObjectRecreate. */
 void ZenReconShipFindNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -111093,7 +111179,7 @@ void ZenReconShipFindNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp, uin
 	MEM32(g_esp + 0x68u) = 4u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax_2 = sub_000D5E40(arg0_2, arg1_2);
+	eax_2 = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	edx = MEM32(0x19DFD0u);
 	MEM32(ebp_2 + 0xA4u) = eax_2;
 	x86_rep_stos32(g_esp + 0x44u, 0u, 7u);
@@ -112085,7 +112171,7 @@ uint32_t ObjectGetForwardObject(uint32_t arg0)
 	return eax;
 }
 
-/* Advances the flare age by sub_000C7AD0 scaled by 0.001089, rebuilds its matrix with
+/* Advances the flare age by LevelTimeGet scaled by 0.001089, rebuilds its matrix with
    MatrixSetEulerAngles, and updates the scene objects at 0x194 and 0x270 with SceneObjectCreateAndInit. */
 uint32_t FlareUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
@@ -112104,7 +112190,7 @@ uint32_t FlareUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uin
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	f0 = sub_000C7AD0();
+	f0 = LevelTimeGet();
 	esi_2 = MEM32(g_esp + 0x30u);
 	if (f0 != 0.0f)
 		MEMF(esi_2 + 0x18u) = (float)x87_round(x87_round(f0 * 0.001089f) + FLOAT_AT(esi_2 + 0x18u));
@@ -116433,7 +116519,9 @@ void ZenCruiserMissileTurretInit(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 	MEM32(edi + 0x10u) = eax_2;
 }
 
-uint32_t sub_00088470(uint32_t esi, uint32_t arg1)
+/* Looks the game object up with GameObjectFromIndex and, if it exists, calls GameObjectInvokeHandler on
+   it with that object, its index and arg1. */
+uint32_t GameObjectInvokeHandlerFromIndex(uint32_t esi, uint32_t arg1)
 {
 	uint32_t arg0 = 0, arg1_2 = 0, arg2 = 0, eax = 0;
 	uint32_t saved_arg1 = 0;
@@ -116539,7 +116627,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 							{
 								esi = arg1;
 								arg1_2 = arg4;
-								sub_00088470(esi, arg1_2);
+								GameObjectInvokeHandlerFromIndex(esi, arg1_2);
 								eax = 1u;
 								return eax;
 							}
@@ -116580,7 +116668,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					arg2_2 = 0u;
 					arg1_2 = MEM32(0x20A1F0u);
 					arg0_2 = MEM32(esi + 0x194u);
-					sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
+					ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
 					arg0_2 = MEM32(0x20A1F0u);
 					eax = ObjectCacheGetDurationMs(arg0_2);
 					MEM32(edi + 0x18u) = eax;
@@ -116623,7 +116711,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					{
 						esi = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -116651,7 +116739,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 				arg2_2 = edx;
 				arg1_2 = MEM32(0x20A1ECu);
 				arg0_2 = ecx;
-				sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
+				ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
 				arg0_2 = MEM32(0x20A1ECu);
 				eax = ObjectCacheGetDurationMs(arg0_2);
 				MEM32(edi + 0x18u) = eax;
@@ -116685,7 +116773,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 					{
 						esi = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -116718,7 +116806,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 			arg2_2 = 0u;
 			arg1_2 = MEM32(0x20A1F8u);
 			arg0_2 = MEM32(esi + 0x194u);
-			sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
+			ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
 			eax = ebp;
 			return eax;
 		}
@@ -116742,7 +116830,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 				{
 					esi = arg1;
 					arg1_2 = arg4;
-					sub_00088470(esi, arg1_2);
+					GameObjectInvokeHandlerFromIndex(esi, arg1_2);
 					eax = 1u;
 					return eax;
 				}
@@ -116817,7 +116905,7 @@ uint32_t ZenCruiserMissileTurret_StateMachine(uint32_t ebp, uint32_t arg0, uint3
 		arg2_2 = 0u;
 		arg1_2 = MEM32(0x20A1F4u);
 		arg0_2 = MEM32(esi + 0x194u);
-		sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
+		ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5);
 		eax = 1u;
 		return eax;
 	}
@@ -122747,7 +122835,7 @@ void ZenScoutShip_Register(uint32_t arg0)
 }
 
 /* Sends GameObjectSendMessage 0x3E8, stores ObjectCacheGetDurationMs's result in 0x278 (later
-   decremented as a countdown), and calls sub_001205C0 with the 0x194 object. */
+   decremented as a countdown), and calls ObjectMotionStart with the 0x194 object. */
 void ZenShuttleSetCountdown(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi)
 {
 	uint32_t esi = *p_esi;
@@ -122804,7 +122892,7 @@ void ZenShuttleSetCountdown(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	eax = sub_001205C0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
+	eax = ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp + 4u;
 	esi_2 = MEM32(g_esp);
@@ -122874,8 +122962,8 @@ void ZenShuttleSetCallbacks(uint32_t ecx, uint32_t esi, uint32_t arg0, uint32_t 
 	g_esp = g_esp + 0xCu;
 }
 
-/* Clears the 0x8C..0x9C callback fields and flag bits, calls sub_001205C0 with the 0x194 object, sends
-   GameObjectSendMessage 0x3E8 with 3 and 0x3ED with 1, and changes the 0x194 scene flags. */
+/* Clears the 0x8C..0x9C callback fields and flag bits, calls ObjectMotionStart with the 0x194 object,
+   sends GameObjectSendMessage 0x3E8 with 3 and 0x3ED with 1, and changes the 0x194 scene flags. */
 uint32_t ZenShuttleClearCallbacks(uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ecx = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -122931,7 +123019,7 @@ uint32_t ZenShuttleClearCallbacks(uint32_t esi, uint32_t edi, uint32_t arg0)
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_001205C0(arg0_2, arg1, arg2, arg3, arg4, arg5);
+	ObjectMotionStart(arg0_2, arg1, arg2, arg3, arg4, arg5);
 	edx = MEM32(esi + 0x18Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
@@ -122974,7 +123062,10 @@ uint32_t ZenShuttleClearCallbacks(uint32_t esi, uint32_t edi, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0008E860(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* When the object at arg0 has a zero field, sends message 0x3ED to it with the value at edi+0x274, calls
+   vcSceneObjectChangeFlags on the vcSceneObject at edi+0x194, and sets the state context's field at
+   esi+0xE to 3 and its state-change flag (bit 0 of esi+0x10). */
+uint32_t GameObjectSendMessageAndSetState(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t eax_2 = 0, ecx_2 = 0, edx = 0;
 
@@ -123406,8 +123497,8 @@ uint32_t ZenShuttle_Shutdown(void)
 }
 
 /* walks GameObjectFamilies(2) via GameObjectFromHandle, finds the object nearest to +8, stores its
-   handle at +0x274, creates the two effects through sub_000D5E40 and GameObjectRecreate, and sets state
-   2. */
+   handle at +0x274, creates the two effects through GameObjectReplaceFromReference and
+   GameObjectRecreate, and sets state 2. */
 uint32_t ZenShuttleSelectNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -123538,7 +123629,7 @@ uint32_t ZenShuttleSelectNearestObject(uint32_t eax, uint32_t ebx, uint32_t ebp,
 	MEM32(g_esp + 0x68u) = 4u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax_2 = sub_000D5E40(arg0_2, arg1_2);
+	eax_2 = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	edx = MEM32(0x1A051Cu);
 	MEM32(ebp_2 + 0xA4u) = eax_2;
 	x86_rep_stos32(g_esp + 0x44u, 0u, 7u);
@@ -123845,7 +123936,7 @@ uint32_t ZenShuttle_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uin
 			arg0_2 = edi;
 			edi = arg1;
 			esi = ebx;
-			sub_0008E860(eax, ecx, esi, edi, arg0_2);
+			GameObjectSendMessageAndSetState(eax, ecx, esi, edi, arg0_2);
 			eax = 1u;
 			return eax;
 		}
@@ -124417,7 +124508,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 							{
 								esi_2 = arg1;
 								arg1_2 = arg4;
-								sub_00088470(esi_2, arg1_2);
+								GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 								eax = 1u;
 								return eax;
 							}
@@ -124472,7 +124563,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 							{
 								esi_2 = arg1;
 								arg1_2 = arg4;
-								sub_00088470(esi_2, arg1_2);
+								GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 								eax = 1u;
 								return eax;
 							}
@@ -124510,7 +124601,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 					arg2_2 = 0u;
 					arg1_2 = ARMDTurretZenCruiserTurretCloseMotion;
 					arg0_2 = MEM32(esi_2 + 0x194u);
-					sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+					ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 					arg0_2 = ARMDTurretZenCruiserTurretCloseMotion;
 					eax = ObjectCacheGetDurationMs(arg0_2);
 					MEM32(edi + 0x18u) = eax;
@@ -124551,7 +124642,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 					{
 						esi_2 = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi_2, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -124579,7 +124670,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 				eax = MEM32(arg1 + 0x194u);
 				arg1_2 = MEM32(0x20B87Cu);
 				arg0_2 = eax;
-				sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+				ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 				arg0_2 = MEM32(0x20B87Cu);
 				eax = ObjectCacheGetDurationMs(arg0_2);
 				MEM32(edi + 0x18u) = eax;
@@ -124599,7 +124690,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 				arg2_2 = 0u;
 				arg1_2 = edx;
 				arg0_2 = MEM32(esi_2 + 0x194u);
-				sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+				ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 				eax = 1u;
 				return eax;
 			}
@@ -124634,7 +124725,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			{
 				esi_2 = arg1;
 				arg1_2 = arg4;
-				sub_00088470(esi_2, arg1_2);
+				GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 				eax = 1u;
 				return eax;
 			}
@@ -124661,7 +124752,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			arg2_2 = 0u;
 			arg1_2 = edx;
 			arg0_2 = MEM32(esi_2 + 0x194u);
-			sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+			ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 			eax = 1u;
 			return eax;
 		}
@@ -124680,7 +124771,7 @@ uint32_t ARMDTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg1, uin
 			{
 				esi_2 = arg1;
 				arg1_2 = arg4;
-				sub_00088470(esi_2, arg1_2);
+				GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 				eax = 1u;
 				return eax;
 			}
@@ -125315,7 +125406,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 							{
 								esi_2 = arg1;
 								arg1_2 = arg4;
-								sub_00088470(esi_2, arg1_2);
+								GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 								eax = 1u;
 								return eax;
 							}
@@ -125370,7 +125461,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 							{
 								esi_2 = arg1;
 								arg1_2 = arg4;
-								sub_00088470(esi_2, arg1_2);
+								GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 								eax = 1u;
 								return eax;
 							}
@@ -125408,7 +125499,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 					arg2_2 = 0u;
 					arg1_2 = ZenCruiserTurretCloseMotion;
 					arg0_2 = MEM32(esi_2 + 0x194u);
-					sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+					ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 					arg0_2 = ZenCruiserTurretCloseMotion;
 					eax = ObjectCacheGetDurationMs(arg0_2);
 					MEM32(edi + 0x18u) = eax;
@@ -125449,7 +125540,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 					{
 						esi_2 = arg1;
 						arg1_2 = arg4;
-						sub_00088470(esi_2, arg1_2);
+						GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 						eax = 1u;
 						return eax;
 					}
@@ -125477,7 +125568,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 				eax = MEM32(arg1 + 0x194u);
 				arg1_2 = MEM32(0x20BA84u);
 				arg0_2 = eax;
-				sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+				ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 				arg0_2 = MEM32(0x20BA84u);
 				eax = ObjectCacheGetDurationMs(arg0_2);
 				MEM32(edi + 0x18u) = eax;
@@ -125497,7 +125588,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 				arg2_2 = 0u;
 				arg1_2 = edx;
 				arg0_2 = MEM32(esi_2 + 0x194u);
-				sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+				ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 				eax = 1u;
 				return eax;
 			}
@@ -125532,7 +125623,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			{
 				esi_2 = arg1;
 				arg1_2 = arg4;
-				sub_00088470(esi_2, arg1_2);
+				GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 				eax = 1u;
 				return eax;
 			}
@@ -125559,7 +125650,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			arg2_2 = 0u;
 			arg1_2 = edx;
 			arg0_2 = MEM32(esi_2 + 0x194u);
-			sub_001205C0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
+			ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2, arg5_2);
 			eax = 1u;
 			return eax;
 		}
@@ -125578,7 +125669,7 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 			{
 				esi_2 = arg1;
 				arg1_2 = arg4;
-				sub_00088470(esi_2, arg1_2);
+				GameObjectInvokeHandlerFromIndex(esi_2, arg1_2);
 				eax = 1u;
 				return eax;
 			}
@@ -126138,7 +126229,7 @@ void sub_00091960(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	eax = sub_001205C0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
+	eax = ObjectMotionStart(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5);
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp + 4u;
 	esi_2 = MEM32(g_esp);
@@ -126309,7 +126400,7 @@ uint32_t SeaSergeantResetState(uint32_t esi, uint32_t edi, uint32_t arg0)
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_001205C0(arg0_2, arg1, arg2, arg3, arg4, arg5);
+	ObjectMotionStart(arg0_2, arg1, arg2, arg3, arg4, arg5);
 	edx = MEM32(esi + 0x18Cu);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 4u;
@@ -127199,8 +127290,8 @@ uint32_t SeaSergeant_Shutdown(void)
 
 /* Iterates the GameObjects of GameObjectFamilies(2), picks the one with the smallest squared distance to
    this object's position, stores its handle in this+0x270, then creates two objects at the target's
-   position with sub_000D5E40 and GameObjectRecreate (stored in this+0xA4 and this+0xA0) and sets flags
-   on the component at arg. */
+   position with GameObjectReplaceFromReference and GameObjectRecreate (stored in this+0xA4 and
+   this+0xA0) and sets flags on the component at arg. */
 void SeaSergeantFindNearestGameObject(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -127331,7 +127422,7 @@ void SeaSergeantFindNearestGameObject(uint32_t eax, uint32_t ebx, uint32_t ebp, 
 	MEM32(g_esp + 0x68u) = 4u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax_2 = sub_000D5E40(arg0_2, arg1_2);
+	eax_2 = GameObjectReplaceFromReference(arg0_2, arg1_2);
 	edx = MEM32(0x1A0C04u);
 	MEM32(ebp_2 + 0xA4u) = eax_2;
 	x86_rep_stos32(g_esp + 0x44u, 0u, 7u);
@@ -133254,7 +133345,10 @@ void PodStandardWarrior_Register(uint32_t arg0)
 	EntitySpec_death_motions(PodStandardWarriorSpec_VA) = 0x20D320u;
 }
 
-uint32_t sub_00099FA0(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* When the handle at +0x198 is valid and PairCheckFlagFromHandles reports the pair flag and the entity's
+   byte at +4 has bit 4, it gets the blended value with EntityGetBlendedValue and passes it with the
+   field at +0x27C and the target handle to WeaponFireCreateEffect */
+uint32_t EntityFireWeaponEffect(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	bool L_099FEA = false;
 	uint8_t edx_2 = 0;
@@ -134300,7 +134394,10 @@ void FighterPod_Register(uint32_t arg0)
 	EntitySpec_death_motions(FighterPodSpec_VA) = 0x20D908u;
 }
 
-void sub_0009AF00(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* Sets the vtable at +0, calls EntityInitialize, marks the object at +0x194 with
+   vcSceneObjectChangeFlags, copies the three dwords at +8/+0xC/+0x10 to +0xB8/+0xBC/+0xC0 and sets the
+   flag dword at +0x10. */
+void RdfHeavyMissileInitialize(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, ecx_2 = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -134444,7 +134541,7 @@ uint32_t RdfHeavyMissileHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0,
 	{
 		eax = arg4;
 		esi = arg1;
-		sub_0009AF00(eax, ecx, ebx, ebp, esi, edi);
+		RdfHeavyMissileInitialize(eax, ecx, ebx, ebp, esi, edi);
 		eax = 1u;
 		return eax;
 	}
@@ -134849,7 +134946,9 @@ void GameObjectSetRegistryIndex(uint32_t arg1, uint32_t arg2)
 	MEM32(eax + 0x184u) = 0u;
 }
 
-void sub_0009B750(uint32_t arg0)
+/* Zeroes one 0x2C-byte table entry by clearing 10 dwords with x86_rep_stos32 and the dword at +0x28, as
+   AIDataInitStates and CallbackTableInit do while walking their 0x2C-stride tables. */
+void CallbackEntryClear(uint32_t arg0)
 {
 	uint32_t edi = 0;
 
@@ -135051,7 +135150,10 @@ uint32_t FlagsSetMask(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	return eax;
 }
 
-void sub_0009B980(uint32_t arg0)
+/* Copies the entity's type index at offset 0x34 into the field at offset 0x38 (0 through 4, doing
+   nothing when the index is 5 or greater) and is called by EntityInit, EntityCopy and
+   PlayerStandInEntityNodeCreateGameObject right after the type index is set or copied. */
+void EntitySetTypeIndex(uint32_t arg0)
 {
 	uint32_t eax = 0, ecx = 0;
 	uint32_t jump_target = 0;
@@ -135108,7 +135210,7 @@ void GameObjectPoolReleaseAll(uint32_t arg0)
 	MEM32(edi + 0x7204u) = 0u;
 }
 
-/* Copies the fields of the entity at arg1 into the entity at arg0 and re-runs sub_0009B980,
+/* Copies the fields of the entity at arg1 into the entity at arg0 and re-runs EntitySetTypeIndex,
    EntityCopyState and TypeIndexSetDifficultyValue on the copy. */
 void EntityCopy(uint32_t arg0, uint32_t arg1)
 {
@@ -135142,7 +135244,7 @@ void EntityCopy(uint32_t arg0, uint32_t arg1)
 			MEM32(esi + 0x70u) = MEM32(edi + 0x70u);
 			arg0_2 = esi;
 			MEM32(esi + 0x34u) = MEM32(edi + 0x34u);
-			sub_0009B980(arg0_2);
+			EntitySetTypeIndex(arg0_2);
 			MEM32(esi + 0x30u) = MEM32(edi + 0x30u);
 			MEM32(esi + 0x3Cu) = MEM32(edi + 0x3Cu);
 			MEM32(esi + 0x284u) = MEM32(edi + 0x284u);
@@ -135213,8 +135315,8 @@ void EntityCopy(uint32_t arg0, uint32_t arg1)
 	}
 }
 
-/* Initializes the entity at arg0 with default field values, calling sub_0009B980 to set the state and
-   EntityClearState and TypeIndexSetDifficultyValue to initialize sub-objects. */
+/* Initializes the entity at arg0 with default field values, calling EntitySetTypeIndex to set the state
+   and EntityClearState and TypeIndexSetDifficultyValue to initialize sub-objects. */
 void EntityInit(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, ebx = 0, edi = 0, edx = 0, esi = 0;
@@ -135241,7 +135343,7 @@ void EntityInit(uint32_t arg0)
 		MEM32(esi + 0x24u) = edi;
 		MEM32(esi + 0x28u) = edi;
 		MEM32(esi + 0x50u) = edi;
-		sub_0009B980(arg0_2);
+		EntitySetTypeIndex(arg0_2);
 		edx = MEM32(esi) & ~2u;
 		arg0_2 = esi + 0xD8u;
 		MEM32(esi + 0x2Cu) = edi;
@@ -137524,7 +137626,10 @@ void EntityGroupSetChildTargetHandles(uint32_t arg0)
 	}
 }
 
-uint32_t sub_0009D6C0(uint32_t arg0)
+/* Returns nonzero when arg0 is non-null, its fields at offsets 0 and 4 are non-null and its signed field
+   at offset 0x5C is greater than zero; sub_0001FC10 calls it on the same object it hands to
+   EntityListRefreshDispatch. */
+uint32_t EntityListHasEntries(uint32_t arg0)
 {
 	uint32_t zero = 0, negative = 0, overflow = 0;
 	uint32_t eax = 0, edx = 0;
@@ -137737,7 +137842,9 @@ void sub_0009D6F0(uint32_t esi, uint32_t edi, uint32_t arg0)
 	g_esp = g_esp + 8u;
 }
 
-uint32_t sub_0009D880(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* Walks the child list at +8, counts each child's +0x2A8 index value into a local 1..7 table, clears
+   values outside 1..7, and then gives every cleared child a new index ? the first child 1, the others 7. */
+uint32_t EntityChildListAssignChildIndices(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	bool L_09D8E5 = false, leave_loop = false;
 	uint32_t eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0;
@@ -137944,7 +138051,7 @@ uint32_t sub_0009D880(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0)
 }
 
 /* resets the list's +0x58 index to 0, resolves the entity from the handle at arg1+0x44 with
-   GameObjectFromHandle (or GameObjectLastObject), calls sub_0001F7B0, and invokes
+   GameObjectFromHandle (or GameObjectLastObject), calls EntityInvokeTimersForGameObject, and invokes
    GameObjectTimerListInvokeForObject with the list's +0x4C timer list. */
 uint32_t EntityListResetIndexAndInvokeTimers(uint32_t arg0, uint32_t arg1)
 {
@@ -137967,7 +138074,7 @@ uint32_t EntityListResetIndexAndInvokeTimers(uint32_t arg0, uint32_t arg1)
 			eax = GameObjectLastObject;
 		arg1_2 = eax;
 		arg0_2 = esi;
-		sub_0001F7B0(arg0_2, arg1_2);
+		EntityInvokeTimersForGameObject(arg0_2, arg1_2);
 		eax = MEM32(esi + 0x4Cu);
 		arg1_2 = eax;
 		arg0_2 = MEM32(esi + 0x44u);
@@ -139532,7 +139639,8 @@ void EntityChildListInit(uint32_t arg0, uint32_t arg1)
 }
 
 /* Initializes an entity's child-list container in mode 2, installing callbacks at 0x78/0x80/0x98,
-   marking the entity active, calling EntityChildListAddChild and returning the result of sub_0009D880. */
+   marking the entity active, calling EntityChildListAddChild and returning the result of
+   EntityChildListAssignChildIndices. */
 uint32_t EntityChildListInitSecondary(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, edi = 0, esi = 0;
@@ -139550,7 +139658,7 @@ uint32_t EntityChildListInitSecondary(uint32_t ebx, uint32_t arg0, uint32_t arg1
 		EntityChildListAddChild(arg0_2, arg1_2);
 		arg0_2 = esi;
 		MEM32(edi + 4u) = MEM32(edi + 4u) & ~0x80u;
-		ebx = sub_0009D880(ebx, esi, edi, arg0_2);
+		ebx = EntityChildListAssignChildIndices(ebx, esi, edi, arg0_2);
 	}
 	return ebx;
 }
@@ -140149,7 +140257,7 @@ void GameObjectCreateObjectsFromList(uint32_t ebx, uint32_t arg0, uint32_t *p_ea
 			MEM32(g_esp) = edi_2;
 			arg0_2 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
-			sub_000DC1E0(arg0_2, arg1);
+			GameObjectSetGenericKind(arg0_2, arg1);
 			g_esp = g_esp + 0x24u;
 			if (edi_2 != 0u)
 			{
@@ -141674,7 +141782,7 @@ void EmitterUpdate(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edi_2;
 			arg0_2 = MEM32(g_esp);
-			sub_0009B980(arg0_2);
+			EntitySetTypeIndex(arg0_2);
 			MEM32(edi_2 + 0x2ACu) = MEM32(esi_2 + 0x4A0u);
 			MEM32(edi_2 + 0x2B0u) = MEM32(esi_2 + 0x4A4u);
 			MEM32(edi_2 + 0x2B4u) = MEM32(esi_2 + 0x4A8u);
@@ -142791,9 +142899,9 @@ uint32_t EffectFamilyRegister(void)
 	GameObjectFamily_type_count(EffectFamily_VA) = 0x58u;
 	GameObjectFamilyInitialize(arg0);
 	arg0 = EffectFamily_VA;
-	sub_000FDE70(arg0);
+	EffectFamilyParticleRegister2(arg0);
 	arg0 = EffectFamily_VA;
-	sub_000FDD70(arg0);
+	EffectFamilyParticleRegister(arg0);
 	arg0 = EffectFamily_VA;
 	sub_000FDC70(arg0);
 	arg0 = EffectFamily_VA;
@@ -144026,7 +144134,7 @@ void LevelSelectScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t eb
 		arg2 = MEM32(g_esp + 8u);
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
-		sub_000A50F0(arg0_2, arg1_2, arg2, arg3, arg4);
+		ScreenElementSetRect(arg0_2, arg1_2, arg2, arg3, arg4);
 		g_esp = g_esp + 0x1Cu;
 	}
 	g_esp = g_esp - 4u;
@@ -147927,7 +148035,7 @@ uint32_t sub_000A49A0(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2,
 					return eax;
 				}
 				arg0_2 = edx;
-				sub_0003CBF0(edx, arg0_2);
+				GameObjectFreeByHandle(edx, arg0_2);
 				eax = 1u;
 				return eax;
 			}
@@ -148724,7 +148832,10 @@ uint32_t sub_000A50B0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	return eax;
 }
 
-uint32_t sub_000A50F0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Resolves arg0 with GameObjectFromHandle (or GameObjectLastObject) and stores arg1, arg2, arg3 and arg4
+   into the object's four consecutive fields at 0x40-0x4C, returning the object; the four values are
+   probably a screen element's rectangle. */
+uint32_t ScreenElementSetRect(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg4 = 0, saved_arg3 = 0, saved_arg2 = 0, saved_arg1 = 0;
@@ -150006,8 +150117,8 @@ void sub_000A5E80(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	MEM32(esi + 4u) = MEM32(esi + 4u) | 0x4000u;
 }
 
-/* Clears each 0x2C-byte entry of the callback table from 0x273300 to 0x2734B8 with sub_0009B750, then
-   installs the two callbacks 0xA68C0 and 0xA68D0 and sets the count at 0x20F7E0 to 2. */
+/* Clears each 0x2C-byte entry of the callback table from 0x273300 to 0x2734B8 with CallbackEntryClear,
+   then installs the two callbacks 0xA68C0 and 0xA68D0 and sets the count at 0x20F7E0 to 2. */
 void CallbackTableInit(void)
 {
 	uint32_t arg0 = 0, esi = 0;
@@ -150016,7 +150127,7 @@ void CallbackTableInit(void)
 	do
 	{
 		arg0 = esi;
-		sub_0009B750(arg0);
+		CallbackEntryClear(arg0);
 		esi += 0x2Cu;
 	} while ((int32_t)esi < 0x2734B8);
 	MEM32(0x273300u) = 0xA68C0u;
@@ -150869,12 +150980,14 @@ uint32_t EntitySetSecondThresholdReachedFlag(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000A68C0(uint32_t arg0)
+/* Sets the entity's threshold-reached flag by calling EntitySetThresholdReachedFlag. */
+uint32_t EntityMarkThresholdReached(uint32_t arg0)
 {
 	return EntitySetThresholdReachedFlag(arg0);
 }
 
-uint32_t sub_000A68D0(uint32_t arg0)
+/* Sets the entity's second threshold-reached flag by calling EntitySetSecondThresholdReachedFlag. */
+uint32_t EntityMarkSecondThresholdReached(uint32_t arg0)
 {
 	return EntitySetSecondThresholdReachedFlag(arg0);
 }
@@ -151417,8 +151530,8 @@ uint32_t AIDataProcessState(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t 
 	return eax;
 }
 
-/* Resets each of the ten AI state entries from 0x273140 to 0x2732F8 through sub_0009B750 and installs
-   the two default state handlers 0xA68C0 and 0xA68D0 with the count at 0x20F7E4. */
+/* Resets each of the ten AI state entries from 0x273140 to 0x2732F8 through CallbackEntryClear and
+   installs the two default state handlers 0xA68C0 and 0xA68D0 with the count at 0x20F7E4. */
 void AIDataInitStates(void)
 {
 	uint32_t arg0 = 0, esi = 0;
@@ -151427,7 +151540,7 @@ void AIDataInitStates(void)
 	do
 	{
 		arg0 = esi;
-		sub_0009B750(arg0);
+		CallbackEntryClear(arg0);
 		esi += 0x2Cu;
 	} while ((int32_t)esi < 0x2732F8);
 	MEM32(0x273140u) = 0xA68C0u;
@@ -153001,8 +153114,8 @@ uint32_t EntityReplaceAttachmentAndUpdate(uint32_t eax, uint32_t arg0, uint32_t 
 }
 
 /* Builds a spawn struct from the object's path and target handle and calls VehicleCreateGameObject and
-   sub_000D5E40 to create the vehicle's two game objects, after ObjectStateEnterIfAllowed puts it in
-   state 6. */
+   GameObjectReplaceFromReference to create the vehicle's two game objects, after
+   ObjectStateEnterIfAllowed puts it in state 6. */
 uint32_t VehicleCreateGameObjects(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
@@ -153144,7 +153257,7 @@ uint32_t VehicleCreateGameObjects(uint32_t ebx, uint32_t esi, uint32_t edi, uint
 			MEM32(g_esp + 0x24u) = edi_2;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			eax = sub_000D5E40(arg0_2, arg1_2);
+			eax = GameObjectReplaceFromReference(arg0_2, arg1_2);
 			MEM32(ebx_2 + 0xA4u) = eax;
 			edx = MEM32(esi_2 + 4u) & ~0x12u;
 			MEM32(esi_2 + 4u) = edx;
@@ -154676,7 +154789,11 @@ void GameObjectStateCopy(uint32_t arg0, uint32_t arg1)
 	} while ((int32_t)esi < (int32_t)MEM32(eax + 0xFACu));
 }
 
-uint32_t sub_000A8FA0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Copies the object's offset vector out with GameObjectCopyVector, takes the target's position with
+   GameObjectGetVector, builds the direction between them and normalizes it with VectorNormalize, scales
+   it by a vcRandom distance of 600-900, stores the resulting vector at the object's +0x58, and attaches
+   the object to the target with EntitySetAttachedObjectWithFlags. */
+uint32_t ObjectAttachAtRandomTargetOffset(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
 	double f0 = 0, f1 = 0, ignored64 = 0, t1 = 0, t2 = 0;
@@ -154892,7 +155009,8 @@ uint32_t ObjectSpawnAtTargetOffset(uint32_t ebx, uint32_t esi, uint32_t edi, uin
 }
 
 /* When the object's +4 flag bit 4 is clear, gets its target handle with ObjectGetTargetHandle and, if
-   sub_0009C6E0 accepts it, calls sub_000A8FA0 to compute and send a random point toward the target. */
+   sub_0009C6E0 accepts it, calls ObjectAttachAtRandomTargetOffset to compute and send a random point
+   toward the target. */
 uint32_t ObjectSpawnAtRandomTargetOffsetIfNotFlagged(uint32_t ebp, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -154923,7 +155041,7 @@ uint32_t ObjectSpawnAtRandomTargetOffsetIfNotFlagged(uint32_t ebp, uint32_t arg0
 			arg2 = esi;
 			arg1 = edi;
 			arg0_2 = ebx;
-			eax = sub_000A8FA0(eax, ebx, ebp, esi, edi, arg0_2, arg1, arg2);
+			eax = ObjectAttachAtRandomTargetOffset(eax, ebx, ebp, esi, edi, arg0_2, arg1, arg2);
 		}
 	}
 	return eax;
@@ -154995,8 +155113,8 @@ uint32_t ObjectSpawnAtStoredTargetOffset(uint32_t esi, uint32_t edi, uint32_t ar
 	return eax;
 }
 
-/* When the object's +0 flag bit 0x40 and +4 flag bit 4 are clear, calls sub_000A8FA0 with the handle
-   held in the object's field 0x70 if sub_0009C6E0 accepts it. */
+/* When the object's +0 flag bit 0x40 and +4 flag bit 4 are clear, calls ObjectAttachAtRandomTargetOffset
+   with the handle held in the object's field 0x70 if sub_0009C6E0 accepts it. */
 uint32_t ObjectSpawnAtStoredTargetOffsetIfNotFlagged(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -155023,7 +155141,7 @@ uint32_t ObjectSpawnAtStoredTargetOffsetIfNotFlagged(uint32_t ebx, uint32_t ebp,
 			arg2 = MEM32(esi + 0x70u);
 			arg1 = edi;
 			arg0_2 = esi;
-			eax = sub_000A8FA0(eax, ebx, ebp, esi, edi, arg0_2, arg1, arg2);
+			eax = ObjectAttachAtRandomTargetOffset(eax, ebx, ebp, esi, edi, arg0_2, arg1, arg2);
 		}
 	}
 	return eax;
@@ -155399,7 +155517,10 @@ uint32_t sub_000A9510(uint32_t arg0)
 	return eax;
 }
 
-void sub_000A95F0(uint32_t arg0)
+/* Resets the object's field at 0x2C0 and chooses the first of the six counters at 0x26E280 that is not
+   positive, otherwise the one with the smallest value, then calls ObjectSetSlotTypeAndIndex with slot
+   type 2, that index, and the object's fields at 0x2C4 and 0x2C8. */
+void ObjectAssignLeastUsedSlot(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -155480,7 +155601,9 @@ void sub_000A95F0(uint32_t arg0)
 	ObjectSetSlotTypeAndIndex(arg0_2, arg1, arg2, arg3, arg4);
 }
 
-void sub_000A96D0(void)
+/* Zeroes 0x26E260 and initializes every record of the path node array from 0x259A88 to 0x26E2A8, setting
+   the flag at record-4 to 1 and clearing the record's other fields, as called by PathNodeGraphBuild. */
+void PathNodeReset(void)
 {
 	uint32_t edi = 0, edx = 0, esi = 0;
 
@@ -155613,7 +155736,7 @@ void PathNodeGraphBuild(uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint3
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	sub_000A96D0();
+	PathNodeReset();
 	ebx_2 = 0u;
 	MEM32(g_esp + 0x64u) = 1u;
 	MEM32(g_esp + 0x68u) = 0u;
@@ -156061,7 +156184,12 @@ uint32_t GameObjectValidateAttachmentSlotIndex(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000A9DA0(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* When the guard argument is nonzero, increments the object's slot counter with
+   ObjectIncrementSlotCounterAndCheckValid (calling sub_000A9430 when that check fails) and, if the
+   object's index at 0x2C4 is valid, gets the movement pattern figure's world point with
+   MovementPatternFigureGetWorldPoint and calls EntitySetAttachedObjectWithFlags to attach the entity at
+   that point. */
+uint32_t MovementPatternFigureAttachEntity(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
 	double f0 = 0;
@@ -156231,8 +156359,9 @@ uint32_t MovementPatternFigure1WorldPointApply(uint32_t eax, uint32_t ebx, uint3
 }
 
 /* Gets movement figure 2's world point for the object with MovementPatternFigureGetWorldPoint, first
-   adding the figure with sub_000A95F0 when ObjectIncrementSlotCounterAndCheckValid finds the movement
-   pattern missing, and passes that point plus a scaled float to EntitySetAttachedObjectWithFlags. */
+   adding the figure with ObjectAssignLeastUsedSlot when ObjectIncrementSlotCounterAndCheckValid finds
+   the movement pattern missing, and passes that point plus a scaled float to
+   EntitySetAttachedObjectWithFlags. */
 uint32_t MovementPatternFigure2WorldPointApply(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
@@ -156266,7 +156395,7 @@ uint32_t MovementPatternFigure2WorldPointApply(uint32_t eax, uint32_t ebx, uint3
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = esi_2;
 		arg0_2 = MEM32(g_esp);
-		sub_000A95F0(arg0_2);
+		ObjectAssignLeastUsedSlot(arg0_2);
 		g_esp = g_esp + 4u;
 	}
 	eax = MEM32(esi_2 + 0x2C4u);
@@ -156316,7 +156445,10 @@ uint32_t MovementPatternFigure2WorldPointApply(uint32_t eax, uint32_t ebx, uint3
 	return eax;
 }
 
-uint32_t sub_000A9F20(uint32_t eax, uint32_t arg0)
+/* Returns eax unchanged when the object at arg0 has bit 0x40 at offset 0 or bit 4 at offset 4 set,
+   otherwise resolves its own handle at 0x44 with GameObjectFromHandle, reads its target with
+   ObjectGetTargetHandle and applies MovementPatternFigureAttachEntity to the resolved target object. */
+uint32_t ObjectApplyTargetWorldPoint(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -156346,7 +156478,7 @@ uint32_t sub_000A9F20(uint32_t eax, uint32_t arg0)
 		arg2 = esi;
 		arg1 = edi;
 		arg0_2 = ebx;
-		eax = sub_000A9DA0(eax, ebx, esi, edi, arg0_2, arg1, arg2);
+		eax = MovementPatternFigureAttachEntity(eax, ebx, esi, edi, arg0_2, arg1, arg2);
 	}
 	return eax;
 }
@@ -156427,7 +156559,10 @@ uint32_t ObjectTargetMovementPatternFigure2Apply(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000AA040(uint32_t eax, uint32_t ebx, uint32_t arg0)
+/* Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise
+   resolves its own handle at 0x44 with GameObjectFromHandle and applies
+   MovementPatternFigure1WorldPointApply to the object resolved from the handle at 0x70. */
+uint32_t ObjectApplyMovementPatternFigure1WorldPoint(uint32_t eax, uint32_t ebx, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -156458,7 +156593,10 @@ uint32_t sub_000AA040(uint32_t eax, uint32_t ebx, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000AA090(uint32_t eax, uint32_t ebx, uint32_t arg0)
+/* Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise
+   resolves its own handle at 0x44 with GameObjectFromHandle and applies
+   MovementPatternFigure2WorldPointApply to the object resolved from the handle at 0x70. */
+uint32_t ObjectApplyMovementPatternFigure2WorldPoint(uint32_t eax, uint32_t ebx, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -156489,7 +156627,10 @@ uint32_t sub_000AA090(uint32_t eax, uint32_t ebx, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000AA0E0(uint32_t eax, uint32_t ebx, uint32_t arg0)
+/* Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise
+   resolves its own handle at 0x44 with GameObjectFromHandle and applies
+   MovementPatternFigureAttachEntity to the object resolved from the handle at 0x70. */
+uint32_t ObjectApplyMovementPatternWorldPoint(uint32_t eax, uint32_t ebx, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, eax_2 = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -156515,7 +156656,7 @@ uint32_t sub_000AA0E0(uint32_t eax, uint32_t ebx, uint32_t arg0)
 		arg2 = MEM32(esi + 0x70u);
 		arg1 = edi;
 		arg0_2 = esi;
-		eax = sub_000A9DA0(eax, ebx, esi, edi, arg0_2, arg1, arg2);
+		eax = MovementPatternFigureAttachEntity(eax, ebx, esi, edi, arg0_2, arg1, arg2);
 	}
 	return eax;
 }
@@ -157738,7 +157879,10 @@ uint32_t ObjectMoveTowardTargetHandle(uint32_t ebx, uint32_t ebp, uint32_t esi, 
 	return eax;
 }
 
-void sub_000AACC0(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
+/* Resolves the handle in arg2 with sub_0009C6E0 and writes 0 through p_eax and returns when it is null
+   or the float arg3 is less than the float arg1, otherwise sets bits 6 at offset 0x18 of arg0 and calls
+   ObjectMoveTowardTarget on the resolved object and writes 1 through p_eax. */
+void ObjectMoveTowardTargetIfBeyondTargetLimit(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg3 = 0, saved_arg1 = 0, saved_arg0 = 0;
@@ -158071,8 +158215,9 @@ uint32_t ObjectTryEnterStateTwo(uint32_t arg0)
 }
 
 /* Validates the object and target, gets the target handle with ObjectGetTargetHandle, enters state 2
-   with ObjectStateEnterIfAllowed, and calls sub_000AACC0 with the object's +0x28 value clamped down to
-   the float at the target's +0xAC limit (or unclamped when that limit is absent or zero). */
+   with ObjectStateEnterIfAllowed, and calls ObjectMoveTowardTargetIfBeyondTargetLimit with the object's
+   +0x28 value clamped down to the float at the target's +0xAC limit (or unclamped when that limit is
+   absent or zero). */
 uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
@@ -158109,7 +158254,7 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 		arg2 = ebx;
 		arg1_2 = float_to_bits((float)(double)(int32_t)MEM32(esi + 0x28u));
 		arg0_2 = esi;
-		sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
+		ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
 		return eax;
 	}
 	ecx = MEM32(eax_2 + 8u);
@@ -158119,7 +158264,7 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 		arg2 = ebx;
 		arg1_2 = float_to_bits((float)(double)(int32_t)MEM32(esi + 0x28u));
 		arg0_2 = esi;
-		sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
+		ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
 		return eax;
 	}
 	f0 = (double)(int32_t)MEM32(esi + 0x28u);
@@ -158129,7 +158274,7 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 		arg2 = ebx;
 		arg1_2 = MEM32(ecx);
 		arg0_2 = esi;
-		sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
+		ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
 		return eax_2;
 	}
 	stack = float_to_bits((float)f0);
@@ -158137,7 +158282,7 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 	arg2 = ebx;
 	arg1_2 = stack;
 	arg0_2 = esi;
-	sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
+	ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
 	return eax_2;
 }
 
@@ -158178,7 +158323,7 @@ uint32_t sub_000AAFD0(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 							arg2 = ebx;
 							arg1_2 = MEM32(ecx);
 							arg0_2 = esi;
-							sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
+							ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
 							return eax_2;
 						}
 						stack = float_to_bits((float)f0);
@@ -158186,7 +158331,7 @@ uint32_t sub_000AAFD0(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 						arg2 = ebx;
 						arg1_2 = stack;
 						arg0_2 = esi;
-						sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
+						ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
 						return eax_2;
 					}
 				}
@@ -158200,7 +158345,7 @@ uint32_t sub_000AAFD0(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 						arg2 = ebx;
 						arg1_2 = float_to_bits((float)x87_round((double)(int32_t)MEM32(esi + 0x28u) * 0.25));
 						arg0_2 = esi;
-						sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
+						ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
 						return eax;
 					}
 					f0 = FLOAT_AT(ecx);
@@ -158208,14 +158353,14 @@ uint32_t sub_000AAFD0(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 					arg2 = ebx;
 					arg1_2 = float_to_bits((float)x87_round(f0 + f0));
 					arg0_2 = esi;
-					sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
+					ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax_2, &ebx, &ebp);
 					return eax_2;
 				}
 				arg3 = MEM32(esi + 0xB8u);
 				arg2 = ebx;
 				arg1_2 = float_to_bits((float)x87_round((double)(int32_t)MEM32(esi + 0x28u) * 0.25));
 				arg0_2 = esi;
-				sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
+				ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &eax, &ebx, &ebp);
 				return eax;
 			}
 		}
@@ -158464,7 +158609,7 @@ uint32_t EntityAttachToGameObject(uint32_t eax, uint32_t arg0)
 
 /* Checks the object at +0x70 through sub_0009C6E0, counts up to 3 in +0x2EC, then computes a damage
    amount (a quarter of MEM32(esi+0x28), capped by the target's float at +0xAC->+8) and passes it with
-   the pointers at +0x70 and +0x80 to sub_000AACC0. */
+   the pointers at +0x70 and +0x80 to ObjectMoveTowardTargetIfBeyondTargetLimit. */
 void EntityApplyDamageWithCounter(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -158528,7 +158673,7 @@ void EntityApplyDamageWithCounter(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx,
 					arg0_2 = esi;
 					arg2 = stack;
 					arg3 = stack_C;
-					sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &ignored_3, p_ebx, p_ebp);
+					ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &ignored_3, p_ebx, p_ebp);
 					MEM32(esi + 0x2ECu) = 0u;
 					return;
 				}
@@ -158542,7 +158687,7 @@ void EntityApplyDamageWithCounter(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx,
 			arg0_2 = esi;
 			arg2 = stack;
 			arg3 = stack_C;
-			sub_000AACC0(edi, arg0_2, arg1_2, arg2, arg3, &ignored_3, p_ebx, p_ebp);
+			ObjectMoveTowardTargetIfBeyondTargetLimit(edi, arg0_2, arg1_2, arg2, arg3, &ignored_3, p_ebx, p_ebp);
 			MEM32(esi + 0x2ECu) = 0u;
 		}
 	}
@@ -158611,8 +158756,8 @@ void ObjectAttachToLinkedGameObject(uint32_t arg0, uint32_t arg1)
 	}
 }
 
-/* Re-resolves the game-object handle at +0x70 through sub_0001EDD0 when +0x84 is non-negative, clears
-   the handle and flag bit 8 at +8 when sub_0009C6E0 reports it invalid, sets state 3 through
+/* Re-resolves the game-object handle at +0x70 through EntitySelectTarget when +0x84 is non-negative,
+   clears the handle and flag bit 8 at +8 when sub_0009C6E0 reports it invalid, sets state 3 through
    SlotTableSetValue when EntityGetStateCategory is not 2, and stores the handle at +0xBC. */
 void ObjectValidateGameObjectHandle(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp)
 {
@@ -158632,7 +158777,7 @@ void ObjectValidateGameObjectHandle(uint32_t arg0, uint32_t arg1, uint32_t *p_eb
 	{
 		arg1_2 = edi;
 		arg0_2 = esi;
-		sub_0001EDD0(arg0_2, arg1_2, p_ebx, p_ebp, &esi, &edi);
+		EntitySelectTarget(arg0_2, arg1_2, p_ebx, p_ebp, &esi, &edi);
 		eax = MEM32(esi + 0x70u);
 		L_0AB624 = eax != 0u;
 	}
@@ -158657,7 +158802,7 @@ void ObjectValidateGameObjectHandle(uint32_t arg0, uint32_t arg1, uint32_t *p_eb
 			}
 			arg1_2 = edi;
 			arg0_2 = esi;
-			sub_0001EDD0(arg0_2, arg1_2, p_ebx, p_ebp, &esi, &edi);
+			EntitySelectTarget(arg0_2, arg1_2, p_ebx, p_ebp, &esi, &edi);
 			if (MEM32(esi + 0x70u) == 0u)
 			{
 				return;
@@ -158743,7 +158888,9 @@ uint32_t EntityAttachToTarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000AB760(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Resolves the entity's target handle with ObjectGetTargetHandle and moves the entity toward that handle
+   with ObjectMoveTowardTargetHandle. */
+uint32_t EntityMoveTowardTarget(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax_2 = 0, esi = 0, ignored = 0;
 
@@ -159382,7 +159529,11 @@ uint32_t sub_000ABDB0(uint32_t eax, uint32_t arg0, uint32_t arg2)
 	return eax;
 }
 
-uint32_t sub_000ABDE0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg2)
+/* Enters state 6 on the object with ObjectStateEnterIfAllowed and then, by the integer mode argument,
+   either spawns through ObjectSpawnAtStoredTargetOffset or ObjectSpawnAtStoredTargetOffsetIfNotFlagged,
+   or, for the last mode, picks an unnamed handler from the object's handle type field and the squared
+   length of the vector at offset 0x14 compared against 22500 and 5625. */
+uint32_t ObjectModeActionBySpawnOrDistance(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, eax_2 = 0, ecx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_esi = 0, saved_arg2 = 0;
@@ -159436,7 +159587,7 @@ uint32_t sub_000ABDE0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, ui
 			return eax;
 		saved_esi = esi;
 		arg0_2 = saved_esi;
-		eax = sub_000AA0E0(eax, ebx, arg0_2);
+		eax = ObjectApplyMovementPatternWorldPoint(eax, ebx, arg0_2);
 		return eax;
 	}
 	if (ecx != GameObjectLastHandle)
@@ -159456,7 +159607,7 @@ uint32_t sub_000ABDE0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, ui
 	if (f0 > t4)
 	{
 		arg0_2 = saved_esi;
-		eax = sub_000AA090(eax, ebx, arg0_2);
+		eax = ObjectApplyMovementPatternFigure2WorldPoint(eax, ebx, arg0_2);
 		return eax;
 	}
 	t5 = 5625.0;
@@ -159464,15 +159615,21 @@ uint32_t sub_000ABDE0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t edi, ui
 	if (!(f0 > t5))
 	{
 		arg0_2 = saved_esi;
-		eax = sub_000AA0E0(eax, ebx, arg0_2);
+		eax = ObjectApplyMovementPatternWorldPoint(eax, ebx, arg0_2);
 		return eax;
 	}
 	arg0_2 = saved_esi;
-	eax = sub_000AA040(eax, ebx, arg0_2);
+	eax = ObjectApplyMovementPatternFigure1WorldPoint(eax, ebx, arg0_2);
 	return eax;
 }
 
-uint32_t sub_000ABED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Reads the object's target handle with ObjectGetTargetHandle, bails out if the object's flags at +4
+   have bit 1 or 0x20000 set, enters state 6 with ObjectStateEnterIfAllowed, then by the integer float
+   argument spawns at the target offset (ObjectSpawnAtTargetOffset), at a random target offset
+   (ObjectSpawnAtRandomTargetOffsetIfNotFlagged), or, for a type-2 object, applies
+   ObjectTargetMovementPatternFigure1Apply or ObjectTargetMovementPatternFigure2Apply depending on
+   whether the object's self dot product (Vector3DotProduct) is above 5625.0 or 22500.0. */
+uint32_t ObjectTargetMovementPatternExecute(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
@@ -159581,7 +159738,7 @@ uint32_t sub_000ABED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = edi_2;
 		arg0_2 = MEM32(g_esp);
-		eax = sub_000A9F20(eax, arg0_2);
+		eax = ObjectApplyTargetWorldPoint(eax, arg0_2);
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -159618,7 +159775,7 @@ uint32_t sub_000ABED0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 		if (!(f0 > t5))
 		{
 			arg0_2 = MEM32(g_esp);
-			eax = sub_000A9F20(eax, arg0_2);
+			eax = ObjectApplyTargetWorldPoint(eax, arg0_2);
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -159655,9 +159812,9 @@ uint32_t SteeringFamilyRegister(void)
 	GameObjectFamily_shutdown(SteeringFamily_VA) = 0u;
 	GameObjectFamily_version(SteeringFamily_VA) = 0u;
 	GameObjectFamily_type_count(SteeringFamily_VA) = 0x11u;
-	sub_00100160(arg0);
+	SteeringFamilyInitConfig(arg0);
 	arg0 = SteeringFamily_VA;
-	sub_000FF860(arg0);
+	SteeringFamilyInitState(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilySetup(arg0);
 	arg0 = SteeringFamily_VA;
@@ -159677,7 +159834,7 @@ uint32_t SteeringFamilyRegister(void)
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInstallEventHandler(arg0);
 	arg0 = SteeringFamily_VA;
-	sub_000D62F0(arg0);
+	SteeringFamilyInstallEventTable(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInitCallbacks(arg0);
 	arg0 = SteeringFamily_VA;
@@ -160614,7 +160771,8 @@ void GameObjectResetState(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg
 
 /* Forwards the event to the object's children with GameObjectSendMessageToChildren, then draws its
    indexed line list transformed with color 0xFF00B400 and bounds (-1,-1,-1)..(1,1,1) through
-   IndexedLineListDrawTransformed and sub_00037F10, calling sub_000381A0 with 3.0 when ebp_2 is 0. */
+   IndexedLineListDrawTransformed and GameObjectDrawTransformedBoundingBox, calling
+   IndexedLineListDrawScaled with 3.0 when ebp_2 is 0. */
 void GameObjectDrawIndexedLineList(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -160682,7 +160840,7 @@ void GameObjectDrawIndexedLineList(uint32_t eax, uint32_t ebx, uint32_t ebp, uin
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3_2 = MEM32(g_esp + 0xCu);
-	sub_00037F10(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
+	GameObjectDrawTransformedBoundingBox(arg0_2, arg1_2, arg2_2, arg3_2, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
 	g_esp = g_esp + 0x30u;
 	if (ebp_2 == 0u)
 	{
@@ -160698,7 +160856,7 @@ void GameObjectDrawIndexedLineList(uint32_t eax, uint32_t ebx, uint32_t ebp, uin
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2_2 = MEM32(g_esp + 8u);
 		arg3_2 = MEM32(g_esp + 0xCu);
-		sub_000381A0(arg0_2, arg1_2, arg2_2, arg3_2, &ignored_2, &ebx_2, &esi, &edi_2);
+		IndexedLineListDrawScaled(arg0_2, arg1_2, arg2_2, arg3_2, &ignored_2, &ebx_2, &esi, &edi_2);
 		g_esp = g_esp + 0x10u;
 	}
 	g_esp = g_esp + 4u;
@@ -166736,7 +166894,10 @@ void ScreenFamilySetHandler(uint32_t arg0)
 	MEM32(arg0 + 0x90u) = 0x20FB98u;
 }
 
-uint32_t sub_000B1B30(uint32_t arg0)
+/* Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is
+   GameObjectLastHandle, and returns the object's field 0x148, the child screen handle checked by
+   ScreenFamily_Update. */
+uint32_t ScreenFamilyGetChildScreen(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -166752,7 +166913,9 @@ uint32_t sub_000B1B30(uint32_t arg0)
 	return eax;
 }
 
-void sub_000B1B60(uint32_t arg0)
+/* Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is
+   GameObjectLastHandle, and clears the object's screen handles in fields 0x144 and 0x148. */
+void ScreenFamilyDetachScreen(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -168531,7 +168694,10 @@ void ScreenFamilyRegisterCallbacks(uint32_t arg0)
 	MEM32(arg0 + 0x94u) = 0x20FBE8u;
 }
 
-uint32_t sub_000B3670(uint32_t arg0)
+/* Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is
+   GameObjectLastHandle, and returns the object's field 0x144, the other screen handle checked by
+   ScreenFamily_Update. */
+uint32_t ScreenFamilyGetParentScreen(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -176971,7 +177137,10 @@ void ScreenCreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp,
 	VcPadOpenAll(&ignored, &ignored_3);
 }
 
-void sub_000B9BF0(uint32_t eax, uint32_t edx, uint32_t esi)
+/* Destroys the screen family's widget handles (the objects in its 0x124-0x148 fields) with
+   GameObjectDestroy and turns pad vibration off through VcPadSetVibrationEnabled when its vibration
+   field is set, after GameObjectClearPadAndDestroyChildren. */
+void ScreenFamilyDestroyWidgets(uint32_t eax, uint32_t edx, uint32_t esi)
 {
 	uint32_t arg0 = 0, eax_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t stack = 0;
@@ -177209,7 +177378,7 @@ void ScreenFamily_Update(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi,
 		arg5 = saved_ebp;
 		x86_call(GameObjectSendMessage, 0x000B9EB7u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 		arg0 = MEM32(esi + 0x144u);
-		eax = sub_000B3670(arg0);
+		eax = ScreenFamilyGetParentScreen(arg0);
 		if (eax == 0u)
 		{
 			arg0 = MEM32(esi + 0x144u);
@@ -177236,16 +177405,16 @@ void ScreenFamily_Update(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi,
 		arg5 = saved_ebp;
 		x86_call(GameObjectSendMessage, 0x000B9F29u, 6, arg0, arg1, arg2, arg3, arg4, arg5);
 		arg0 = MEM32(esi + 0x148u);
-		eax = sub_000B1B30(arg0);
+		eax = ScreenFamilyGetChildScreen(arg0);
 		if (eax == 0u)
 		{
 			arg0 = MEM32(esi + 0x148u);
-			eax = sub_000B3670(arg0);
+			eax = ScreenFamilyGetParentScreen(arg0);
 			if (eax == 0u)
 				return;
 		}
 		arg0 = MEM32(esi + 0x148u);
-		sub_000B1B60(arg0);
+		ScreenFamilyDetachScreen(arg0);
 		arg1 = MEM32(0x219D20u);
 		arg0 = MEM32(esi + 0x150u);
 		MEM32(esi + 0x154u) = ebp_2;
@@ -177412,7 +177581,10 @@ void ScreenFamily_Update(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi,
 	}
 }
 
-uint32_t sub_000BA190(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* Handles the message read from arg3 for the screen family: 0x32CA goes to EntitySendMessageToPart,
+   0x32CB to ScreenFamily_Update, 0xFFF9 to ScreenCreateWidgets, 0xFFFA destroys the widgets, returning 1
+   when the message was handled and 0 otherwise. */
+uint32_t ScreenFamilyProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -177460,7 +177632,7 @@ uint32_t sub_000BA190(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 		edx = arg4;
 		esi = arg1;
 		eax = edi;
-		sub_000B9BF0(eax, edx, esi);
+		ScreenFamilyDestroyWidgets(eax, edx, esi);
 		eax = 1u;
 		return eax;
 	}
@@ -179027,7 +179199,9 @@ void sub_000BB440(uint32_t arg0, uint32_t arg1)
 	sub_000A5290(arg0_2, arg1);
 }
 
-uint32_t sub_000BB540(void)
+/* Calls SavedGamesGetDeviceStatus(0) and, when it returns 1, calls ScreenFamilyGetFirstHandle and
+   sub_00024580 with that handle and 1. */
+uint32_t SavedGamesCheckDeviceAndContinue(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 	uint32_t saved_eax = 0;
@@ -183680,10 +183854,10 @@ void ScreenListRefresh(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *
 	GameObjectSetVisible(arg0_2, arg1_2, p_eax, &ignored_2);
 }
 
-/* resolves arg0 through GameObjectFromHandle and forwards the other four arguments to sub_000A50F0 on
-   the object's field at +0x360; its callers (ScreenCreateWidget, MenuObjectCreate, ScreenFamilyOnCreate,
-   PauseScreenSetMenu, MenuObjectSetSelection) are widget creation and selection routines, so it probably
-   adds or updates a widget in the screen's widget list. */
+/* resolves arg0 through GameObjectFromHandle and forwards the other four arguments to
+   ScreenElementSetRect on the object's field at +0x360; its callers (ScreenCreateWidget,
+   MenuObjectCreate, ScreenFamilyOnCreate, PauseScreenSetMenu, MenuObjectSetSelection) are widget
+   creation and selection routines, so it probably adds or updates a widget in the screen's widget list. */
 uint32_t ScreenAddWidget(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -183709,7 +183883,7 @@ uint32_t ScreenAddWidget(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t a
 	arg2_2 = saved_arg2;
 	arg3_2 = saved_arg3;
 	arg4_2 = saved_arg4;
-	return sub_000A50F0(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2);
+	return ScreenElementSetRect(arg0_2, arg1_2, arg2_2, arg3_2, arg4_2);
 }
 
 /* Stores the given index as the list's selection at 0x340, moves the scroll offset at 0x344 when the
@@ -186153,7 +186327,11 @@ void TextLabelInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp, uint3
 	g_esp = g_esp + 8u;
 }
 
-void sub_000C2280(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
+/* Draws the text label object: it forwards a message with
+   GameObjectSendMessageToVisibleChildrenAndGlobal, draws the label's background quads with
+   QuadDrawClipped, and draws the label text with vcTextDrawInRect after sizing it with vcTextSetSize and
+   vcRectSet. */
+void TextLabelDraw(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0, f1 = 0;
@@ -186248,7 +186426,7 @@ void sub_000C2280(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 }
 
 /* Dispatches the element's messages by id, returning 1 for the handled create (0xFFF9, TextLabelInit),
-   draw (0x32CA, sub_000C2280), 0x32C8, 0x32C9 and 0xFFFA cases and 0 otherwise. */
+   draw (0x32CA, TextLabelDraw), 0x32C8, 0x32C9 and 0xFFFA cases and 0 otherwise. */
 uint32_t TextLabelProcessMessage(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
@@ -186295,7 +186473,7 @@ uint32_t TextLabelProcessMessage(uint32_t ebp, uint32_t esi, uint32_t edi, uint3
 		{
 			esi_2 = arg1;
 			eax = ebx;
-			sub_000C2280(eax, ebx, esi_2, edi);
+			TextLabelDraw(eax, ebx, esi_2, edi);
 			eax = 1u;
 			return eax;
 		}
@@ -187074,7 +187252,9 @@ void ScreenFamilySetupObjectType(uint32_t arg0)
 	MEM32(arg0 + 0x78u) = 0x21C960u;
 }
 
-uint32_t sub_000C2C10(uint32_t arg0)
+/* Resolves a game object from a handle with GameObjectFromHandle (or uses GameObjectLastObject), clears
+   its selection field, and passes its selection id to ScreenClearSelection. */
+uint32_t GameObjectClearSelection(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -191833,8 +192013,8 @@ uint32_t FriendlyReticleElementSetTargetPosition(uint32_t esi)
 
 /* The element's message handler: on message 0x7FFF with subcode 0x2EE2 it positions the reticle via
    FriendlyReticleElementSetTargetPosition, with 0xFFF9 it re-initializes via ScreenElementInitialize and
-   sets +0x28 to 0xFF and +0x18 to -1, with 0xFFFA it calls sub_0003CBF0, and it returns 1 for 0xFFFF and
-   0xFFFE. */
+   sets +0x28 to 0xFF and +0x18 to -1, with 0xFFFA it calls GameObjectFreeByHandle, and it returns 1 for
+   0xFFFF and 0xFFFE. */
 uint32_t FriendlyReticleElementHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
@@ -191876,7 +192056,7 @@ uint32_t FriendlyReticleElementHandleMessage(uint32_t arg0, uint32_t arg1, uint3
 			return eax;
 		}
 		arg0_2 = ecx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -192391,7 +192571,7 @@ void ScreenElementDraw(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 
 /* Handles the 0x7FFF process message of a screen element: 0xFFF9 initializes it with
    ScreenElementInitFields, 0x2EE2 draws it with ScreenElementDraw and 0xFFFA destroys it with
-   sub_0003CBF0, returning 1 for each message it handles. */
+   GameObjectFreeByHandle, returning 1 for each message it handles. */
 uint32_t ScreenElementProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
@@ -192430,7 +192610,7 @@ uint32_t ScreenElementProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, u
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -192892,7 +193072,11 @@ void ScreenElementInitializeWithPauseState(uint32_t eax, uint32_t esi, uint32_t 
 	MEM32(edi + 0x10u) = eax_2;
 }
 
-void sub_000C6BF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* Draws a screen element's string: gets its text with vcStringManagerGetText/StringTableGet, sets the
+   size with vcTextSetSize, draws its background quads with QuadDrawClipped, and lays the string out by
+   its alignment (centering with vcTextGetSize/vcTextWidth, drawing with vcTextDraw/vcTextDrawInRect,
+   clipping with vcRectCopy/vcRectOffset) using the element's rect, alpha and colors. */
+void ScreenElementDrawString(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	bool L_0C6E5A = false;
 	uint8_t ecx_2 = 0, esi_3 = 0;
@@ -193323,8 +193507,9 @@ void sub_000C6BF0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 
 /* Handles a ScreenElement message (arg2 type, arg3 data): on 0xFFFD sets the element's text length from
    vcStringManagerGetText, on 0x2EE3 calls ScreenElementNotifyOwner, on 0x2EE4 calls
-   GameObjectDeactivate, on 0xFFF9/0x2EE2 calls ScreenElementInitializeWithPauseState/sub_000C6BF0, and
-   on 0xFFFA calls sub_0003CBF0 and clears fields +0x40/+0x44. */
+   GameObjectDeactivate, on 0xFFF9/0x2EE2 calls
+   ScreenElementInitializeWithPauseState/ScreenElementDrawString, and on 0xFFFA calls
+   GameObjectFreeByHandle and clears fields +0x40/+0x44. */
 uint32_t ScreenElementFamilyReceiveMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint8_t ecx_2 = 0;
@@ -193423,7 +193608,7 @@ uint32_t ScreenElementFamilyReceiveMessage(uint32_t ebx, uint32_t ebp, uint32_t 
 	{
 		eax = arg1;
 		arg0_2 = edi;
-		sub_000C6BF0(eax, ebx, ebp, esi, edi, arg0_2);
+		ScreenElementDrawString(eax, ebx, ebp, esi, edi, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -193433,7 +193618,7 @@ uint32_t ScreenElementFamilyReceiveMessage(uint32_t ebx, uint32_t ebp, uint32_t 
 		return eax;
 	}
 	arg0_2 = eax;
-	sub_0003CBF0(edx, arg0_2);
+	GameObjectFreeByHandle(edx, arg0_2);
 	eax = saved_arg1;
 	MEM32(eax + 0x40u) = 0u;
 	MEM32(eax + 0x44u) = 0u;
@@ -193538,7 +193723,10 @@ uint32_t ScreenElementFamilyCleanup(void)
 	return eax;
 }
 
-void sub_000C72E0(uint32_t arg0)
+/* Fills the static ScreenElement class descriptor at 0x21D130 (object size 0x4C and three method
+   pointers at 0xC7230/0xC72C0/0xC70A0, zeroing the fields at +0x10..+0x20) and stores its address into
+   the family's field at +0x14. */
+void ScreenElementFamilySetClassDescriptor(uint32_t arg0)
 {
 	MEM32(0x21D140u) = 0u;
 	MEM32(0x21D148u) = 0u;
@@ -194140,12 +194328,15 @@ void GameObjectUpdateYawTurn(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32
 	*p_f0 = f0;
 }
 
-void sub_000C7AC0(uint32_t arg0)
+/* Stores arg0 into the global float read by LevelTimeGet, which gcLevel_Load resets to 0. */
+void LevelTimeSet(uint32_t arg0)
 {
 	MEM32(0x1B7708u) = arg0;
 }
 
-double sub_000C7AD0(void)
+/* Returns the global float at 0x1B7708 that LevelTimeSet writes and that effect and motion update
+   functions read. */
+double LevelTimeGet(void)
 {
 	double f0 = 0;
 
@@ -194806,7 +194997,7 @@ void GameObjectDrawBoundingBox(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi, &edi_2);
 			eax_2 = MEM32(g_esp + 0x24u);
 			g_esp = g_esp + 0x18u;
 			t5 = eax_2;
@@ -196137,7 +196328,7 @@ void MacIICannonWeapon_Create(uint32_t edi, uint32_t arg1)
 	arg0 = MEM32(edi + 0x1Cu);
 	SceneObjectSetRefCountedObject(arg0, arg1_2);
 	MEM32(esi + 0xECu) = 0xD3u;
-	f0 = sub_000C7AD0();
+	f0 = LevelTimeGet();
 	if (f0 != 0.0f)
 	{
 		MEM32(esi + 0xBCu) = ebx;
@@ -197737,7 +197928,12 @@ uint32_t sub_000CB250(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000CB2A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* Resolves its handle argument with GameObjectFromHandle and returns 0 unless the handle's type mask
+   0x3F800 is 0x6800, then resolves the object's linked handle at offset 4, reads its blended value with
+   EntityGetBlendedValue and that object's targets with ObjectGetTargetHandles, and sends
+   GameObjectSendMessageReserveMemory to the target handles and to its own handle, cycling the index at
+   offset 0x2A4. */
+uint32_t ObjectSendMessageToTargetHandles(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint8_t eax_2 = 0, ecx_2 = 0, edx_2 = 0;
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -198443,7 +198639,12 @@ void GameObjectSetSceneObjectsUsed(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	} while ((int32_t)edi < (int32_t)MEM32(MEM32(ebx + 0x1Cu) + 0x1Cu));
 }
 
-uint32_t sub_000CBD10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves the handle and its +4 object through GameObjectFromHandle, requires the object type mask
+   0x6000, builds the two muzzle offset vectors (-12,5,0) and (12,5,0) with MatrixRotateZ and
+   Matrix3x3MultiplyVector using EntityGetBlendedValue, and for the incoming action index 1-5 sends
+   message 6 via GameObjectSendMessageReserveMemory to the slot handle while cycling the +0x2A4 index
+   modulo 2, probably the alternating left/right weapon fire. */
+uint32_t GameObjectSendMessageAlternatingWeaponSlot(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	bool L_0CBFA9 = false, L_0CC044 = false;
 	uint8_t eax_2 = 0, ecx_2 = 0, edx_2 = 0;
@@ -198886,7 +199087,12 @@ uint32_t sub_000CBD10(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	}
 }
 
-uint32_t sub_000CC0A0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Takes a handle whose type bits are 0x6000, gets the object and the object it references, blends a
+   value with EntityGetBlendedValue, rotates the referenced object's matrix by its Z angle with
+   MatrixRotateZ, builds two ?10 hardpoint offsets with Matrix3x3MultiplyVector, and sends message 6
+   through GameObjectSendMessageReserveMemory to one of the object's slot handles, alternating between
+   two slots (probably a weapon/muzzle event). */
+uint32_t GameObjectSendHardpointSlotMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	bool L_0CC339 = false, L_0CC3D4 = false;
 	uint8_t eax_2 = 0, ecx_2 = 0, edx_2 = 0;
@@ -199370,7 +199576,7 @@ uint32_t GameObjectUpdateSceneObjectClones(uint32_t ebx, uint32_t ebp, uint32_t 
 	{
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebx;
-		f0 = sub_000C7AD0();
+		f0 = LevelTimeGet();
 		ecx = MEM32(edi_2 + 0x1Cu);
 		MEM32(g_esp + 0x10u) = 0u;
 		MEMF(g_esp + 0x18u) = (float)x87_round(f0 * 0.0005445f);
@@ -203131,7 +203337,10 @@ uint32_t sub_000D02F0(void)
 	return eax;
 }
 
-uint32_t sub_000D0350(void)
+/* Releases the weapon family's fourth type manager's objects: calls vcObjectRelease on the vcObject at
+   0x220684, VcObjectListRelease on the list at 0x220688, and GameObjectTypeRelease for GameObjectTypes
+   0x35, 0x36, 0x38 and 0x2E. */
+uint32_t WeaponFamilyFourthTypeManagerRelease(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203166,7 +203375,10 @@ uint32_t sub_000D0350(void)
 	return eax;
 }
 
-void sub_000D03A0(uint32_t arg0)
+/* Initializes the object type manager at 0x2205F0 (size 0x30 with its create 0xD02F0, release
+   WeaponFamilyFourthTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x6C of the weapon
+   family, then fills its object class-pointer tables. */
+void WeaponFamilyRegisterFourthTypeManager(uint32_t arg0)
 {
 	MEM32(0x220600u) = 0u;
 	MEM32(0x220608u) = 0u;
@@ -203208,7 +203420,10 @@ uint32_t sub_000D04D0(void)
 	return eax;
 }
 
-uint32_t sub_000D04E0(void)
+/* Creates the third type manager's objects by calling ObjectCloneArrayCreate for the 8-entry clone array
+   at 0x220768 (200.0f, 1000.0f), vcObjectGet for vcObject 0x1A5938 into 0x220764, and GameObjectTypeUse
+   for GameObjectTypes 0x34, 0x36, 0x38 and 0x27. */
+uint32_t WeaponFamilyThirdTypeManagerCreate(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -203237,7 +203452,10 @@ uint32_t sub_000D04E0(void)
 	return eax;
 }
 
-uint32_t sub_000D0540(void)
+/* Releases the third type manager's objects: vcObjectRelease on the vcObject at 0x220764,
+   VcObjectListRelease on the list at 0x220768, and GameObjectTypeRelease for GameObjectTypes 0x34, 0x36,
+   0x38 and 0x27. */
+uint32_t WeaponFamilyThirdTypeManagerRelease(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203272,7 +203490,10 @@ uint32_t sub_000D0540(void)
 	return eax;
 }
 
-void sub_000D0590(uint32_t arg0)
+/* Initializes the object type manager at 0x2206D0 (size 0x30 with its create
+   WeaponFamilyThirdTypeManagerCreate, release WeaponFamilyThirdTypeManagerRelease and 0xD1900 callbacks)
+   and stores it at offset 0x98 of the weapon family, then fills its object class-pointer tables. */
+void WeaponFamilyRegisterThirdTypeManager(uint32_t arg0)
 {
 	MEM32(0x2206E0u) = 0u;
 	MEM32(0x2206E8u) = 0u;
@@ -205105,7 +205326,7 @@ void IncomingMissileElementDrawText(uint32_t eax, uint32_t ecx)
 }
 
 /* Handles incoming missile element messages: on 0xFFF9 calls ScreenElementInitialize and resets text
-   fields, on 0x2EE2 calls IncomingMissileElementDrawText, and on 0xFFFA calls sub_0003CBF0. */
+   fields, on 0x2EE2 calls IncomingMissileElementDrawText, and on 0xFFFA calls GameObjectFreeByHandle. */
 uint32_t IncomingMissileElementOnEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -205148,7 +205369,7 @@ uint32_t IncomingMissileElementOnEvent(uint32_t arg0, uint32_t arg1, uint32_t ar
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -205959,8 +206180,8 @@ void HudPieceInitialize(uint32_t ebx, uint32_t esi, uint32_t arg0, uint32_t arg1
 }
 
 /* Handles a HUD piece message (arg2 0x7FFF) by dispatching on the message code: HudPieceInitialize for
-   0xFFF9, HudGaugeQuadsRender for 0x2EE2, releasing the object at +0x2C and calling sub_0003CBF0 for
-   0xFFFA, and returning 1 for 0xFFFF and 0xFFFE. */
+   0xFFF9, HudGaugeQuadsRender for 0x2EE2, releasing the object at +0x2C and calling
+   GameObjectFreeByHandle for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE. */
 uint32_t HudPieceHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
@@ -206012,7 +206233,7 @@ uint32_t HudPieceHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint
 			MEM32(esi + 0x2Cu) = 0u;
 		}
 		arg0_2 = edi;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -206040,7 +206261,10 @@ void HudPiecesFamilyRegister(uint32_t arg0)
 	MEM32(arg0 + 0x6Cu) = 0x220A98u;
 }
 
-uint32_t sub_000D24F0(uint32_t ecx, uint32_t arg1, uint32_t arg2)
+/* Advances a sound stream's fade against vcGameTime: ramps the volume at +0x38 up to 0x14A while the
+   stream plays, calling SoundStreamQueryIsReadComplete and SoundIsPlayingQuery to start and end it, and
+   ramps it back down to 0 when playback is off. */
+uint32_t SoundStreamFadeUpdate(uint32_t ecx, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t zero = 0, negative = 0, overflow = 0;
 	uint32_t eax = 0, edi = 0, edx = 0, esi = 0;
@@ -206769,7 +206993,7 @@ uint32_t MessageBoxElement_StateMachine(uint32_t ebp, uint32_t edi, uint32_t arg
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -209899,7 +210123,10 @@ uint32_t SteeringFamilyHandleFaceTarget(uint32_t ebp, uint32_t arg0, uint32_t ar
 	return eax;
 }
 
-uint32_t sub_000D4F40(uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* Resolves the game object from the handle in arg1 and, if sub_0009C6E0 on its +0xC field returns
+   nonzero, sets its target from arg1 and calls SteeringFamilyFaceTarget, otherwise destroys it with
+   GameObjectDestroyAndSendMessage. */
+uint32_t SteeringFamilyFaceTargetOrDestroy(uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -210038,7 +210265,10 @@ void GameObjectRefCopyWithRandomCountdown(uint32_t eax, uint32_t ebx, uint32_t e
 	}
 }
 
-uint32_t sub_000D50C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Applies the command in arg2 to the object in arg0: modes 0-4 set the object's behavior function at +8
+   and timer at +0x18, or set the steering mode global 0x220F74 and call SteeringFamilyAdvanceMode, while
+   command 0x7FFF handles GameObjectRefCopyWithRandomCountdown and GameObjectRefClearSlot for arg1. */
+uint32_t SteeringFamilyApplyCommand(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
@@ -211367,7 +211597,10 @@ void SteeringFamilySetInputHandler(uint32_t arg0)
 	MEM32(arg0 + 0x2Cu) = 0x220FC8u;
 }
 
-uint32_t sub_000D5E40(uint32_t arg0, uint32_t arg1)
+/* Destroys the GameObject whose handle is arg0 and creates a new GameObject from the handle stored at
+   arg1 via GameObjectFromHandle, GameObjectDestroy and GameObjectCreate(0xA, 0xB, arg1, 0x2C), returning
+   the new handle (0 if the referenced object does not exist). */
+uint32_t GameObjectReplaceFromReference(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg0 = 0;
@@ -211463,7 +211696,10 @@ void sub_000D61B0(uint32_t eax, uint32_t ebx, uint32_t edi)
 	MEM32(ebx + 8u) = eax_2;
 }
 
-uint32_t sub_000D6230(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Handles the steering family's event codes in arg3: on 0xFFF9 it copies a descriptor with sub_000D61B0,
+   on 0xFFFA it clears a GameObjectRef slot with GameObjectRefClearSlot, on 0xFFFB it sets the family's
+   +0x18 from the object's +0xC, and returns 1 when handled and 0 otherwise. */
+uint32_t SteeringFamilyHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -211524,7 +211760,9 @@ uint32_t sub_000D6230(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	return eax;
 }
 
-void sub_000D62F0(uint32_t arg0)
+/* Initializes the steering family's event table at 0x221010 (size 0x34, handler 0xD6230) and stores its
+   pointer at arg0+0x3C. */
+void SteeringFamilyInstallEventTable(uint32_t arg0)
 {
 	MEM32(0x221014u) = 0u;
 	MEM32(0x221018u) = 0u;
@@ -213742,7 +213980,7 @@ void GameObjectTickLifetimeTimer(uint32_t ebp, uint32_t esi, uint32_t arg0, uint
 
 /* Finds or creates a free motion slot for the scene object with MotionListFindFreeSlot and
    MotionListCreateEntry, sets its target from the object's fields, and starts the motion with
-   sub_001205C0 and LinkedObjectUnload. */
+   ObjectMotionStart and LinkedObjectUnload. */
 uint32_t MotionStart(uint32_t arg1)
 {
 	uint8_t ecx = 0;
@@ -213788,7 +214026,7 @@ uint32_t MotionStart(uint32_t arg1)
 			arg3 = stack_14;
 			arg4 = stack;
 			arg5 = stack_C;
-			eax = sub_001205C0(arg0, arg1_2, arg2, arg3, arg4, arg5);
+			eax = ObjectMotionStart(arg0, arg1_2, arg2, arg3, arg4, arg5);
 		}
 	}
 	else
@@ -213808,7 +214046,7 @@ uint32_t MotionStart(uint32_t arg1)
 			arg3 = stack_14;
 			arg4 = stack;
 			arg5 = stack_C;
-			eax = sub_001205C0(arg0, arg1_2, arg2, arg3, arg4, arg5);
+			eax = ObjectMotionStart(arg0, arg1_2, arg2, arg3, arg4, arg5);
 			MEM32(eax + 0x1Cu) = ebx;
 			MEM32(eax + 0x18u) = 0u;
 			arg0 = MEM32(esi + 0x54u);
@@ -214096,7 +214334,7 @@ void GameObjectPlaceOnLocalGrid(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			VectorScaleAdd(arg0_2, arg1_2, arg2_2, arg3, &ignored_3, &ecx);
 			g_esp = g_esp + 0x1Cu;
-			f0 = sub_000C7AD0();
+			f0 = LevelTimeGet();
 			if (f0 != 0.0f)
 			{
 				f0_2 = FLOAT_AT(g_esp + 0x14u);
@@ -216440,7 +216678,7 @@ uint32_t SceneObjectUpdateCosmeticUnits(uint32_t ecx, uint32_t ebx, uint32_t ebp
 }
 
 /* Creates a civilian GameObject for the CiviliansNode entry at index ebx when its +0xF0 is set, naming
-   it via vcFormat and initializing it with sub_000DC2D0 and sub_000395F0. */
+   it via vcFormat and initializing it with GameObjectSetCivilianKind and sub_000395F0. */
 void CiviliansNodeCreateCivilian(uint32_t eax, uint32_t arg0, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
@@ -216525,7 +216763,7 @@ void CiviliansNodeCreateCivilian(uint32_t eax, uint32_t arg0, uint32_t *p_ebx, u
 			MEM32(g_esp) = esi_2;
 			arg0_2 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
-			sub_000DC2D0(arg0_2, arg1);
+			GameObjectSetCivilianKind(arg0_2, arg1);
 			g_esp = g_esp + 0x24u;
 			if (esi_2 != 0u)
 			{
@@ -216988,7 +217226,7 @@ void sub_000D9F70(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			arg3_2 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
 			ecx = MEM32(ebx_2 + 0xD4u);
 			edx = MEM32(ebp_2 + 0xCu);
 			g_esp = g_esp - 4u;
@@ -217012,7 +217250,7 @@ void sub_000D9F70(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 			arg3_2 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
 			break;
 		}
 	}
@@ -217044,7 +217282,7 @@ void sub_000D9F70(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg3_2 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
 		eax_2 = MEM32(ebx_2 + 0xD4u);
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebp_2 - 0x14u;
@@ -217066,7 +217304,7 @@ void sub_000D9F70(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 		arg3_2 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3_2, arg4, arg5, &ignored, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi_2);
 	}
 	if (MEM32(MEM32(ebp_2 + 0x10u) + 0xC8u) == 1u)
 		MEM32(0x221864u) = MEM32(0x221864u) + 1u;
@@ -217500,8 +217738,8 @@ void sub_000DA720(uint32_t arg0)
 }
 
 /* Formats a name with vcFormat from arg0/arg1 and the node's position field at edx+0xD0, creates a game
-   object with GameObjectCreate and hands it to sub_000DC280 and sub_000396A0 together with that
-   transform field. */
+   object with GameObjectCreate and hands it to GameObjectSetChildKind and sub_000396A0 together with
+   that transform field. */
 uint32_t NodeCreateChildGameObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
@@ -217568,7 +217806,7 @@ uint32_t NodeCreateChildGameObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 		MEM32(g_esp) = esi_2;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		sub_000DC280(arg0_2, arg1_2);
+		GameObjectSetChildKind(arg0_2, arg1_2);
 		g_esp = g_esp + 0x24u;
 		if (esi_2 != 0u)
 		{
@@ -217636,8 +217874,8 @@ void NodeInit(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t a
 	}
 }
 
-/* Draws the node twice with sub_000393B0 using the constant 0xFF0000FF and the float at edi+0x104 over
-   the position at edi+0xD0. */
+/* Draws the node twice with GameObjectDrawOrientedOutline using the constant 0xFF0000FF and the float at
+   edi+0x104 over the position at edi+0xD0. */
 void NodeRender(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, ebp_2 = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -217684,7 +217922,7 @@ void NodeRender(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_000393B0(arg0, arg1, arg2, arg3, arg4, arg5, &ignored, &ecx, &ebx, &ebp_2, &esi, &edi);
+	GameObjectDrawOrientedOutline(arg0, arg1, arg2, arg3, arg4, arg5, &ignored, &ecx, &ebx, &ebp_2, &esi, &edi);
 	f0 = (double)(int32_t)MEM32(edi + 0x104u);
 	g_esp = g_esp + 0x18u;
 	edx = g_esp + 0x10u;
@@ -217707,7 +217945,7 @@ void NodeRender(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_000393B0(arg0, arg1, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi);
+	GameObjectDrawOrientedOutline(arg0, arg1, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi);
 	g_esp = g_esp + 0x18u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 0x18u;
@@ -218270,7 +218508,7 @@ void PointTextBoundsInit(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(g_esp) = edi_2;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
-	sub_000DC230(arg0, arg1);
+	GameObjectSetTextKind(arg0, arg1);
 	eax_2 = MEM32(esi + 0xDCu);
 	ecx = MEM32(esi + 0xE0u);
 	edx = MEM32(esi + 0xE4u);
@@ -218308,7 +218546,7 @@ void PointTextBoundsInit(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi,
 	MEM32(g_esp) = edi_2;
 	arg0 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
-	sub_000DC230(arg0, arg1);
+	GameObjectSetTextKind(arg0, arg1);
 	MEM32(esi + 0x100u) = edi_2;
 	g_esp = ebp_2;
 	g_esp = g_esp + 4u;
@@ -218829,9 +219067,9 @@ void GameObjectReleaseSceneObject(uint32_t eax, uint32_t edx, uint32_t esi)
 	ignored_3 = g_edx;
 }
 
-/* Draws lines with sub_000393B0 around the vcObject cached at ebx+0xD0 in two colors, after
-   GameObjectSendMessageToChildren/IndexedLineListDrawTransformed transform setup, only when the object's
-   flag bit is set and ObjectGetRange returns a positive float; probably a marker/selection box. */
+/* Draws lines with GameObjectDrawOrientedOutline around the vcObject cached at ebx+0xD0 in two colors,
+   after GameObjectSendMessageToChildren/IndexedLineListDrawTransformed transform setup, only when the
+   object's flag bit is set and ObjectGetRange returns a positive float; probably a marker/selection box. */
 void NodeFamilyDrawObjectOutline(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp_2 = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -218950,7 +219188,7 @@ void NodeFamilyDrawObjectOutline(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
 		edx = MEM32(g_esp + 0x20u);
 		ecx = g_esp + 0x28u;
 		g_esp = g_esp - 4u;
@@ -218974,7 +219212,7 @@ void NodeFamilyDrawObjectOutline(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
 		g_esp = g_esp + 0x30u;
 	}
 	ecx = MEM32(g_esp + 0xCu);
@@ -219000,7 +219238,7 @@ void NodeFamilyDrawObjectOutline(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_000393B0(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
+	GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
 	eax_2 = MEM32(g_esp + 0x24u);
 	edx = g_esp + 0x28u;
 	g_esp = g_esp - 4u;
@@ -219024,7 +219262,7 @@ void NodeFamilyDrawObjectOutline(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
 	arg5 = MEM32(g_esp + 0x14u);
-	sub_000393B0(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
+	GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2, arg3, arg4, arg5, &ignored, &ignored_2, &ebx, &ebp_2, &esi, &edi_2);
 	g_esp = g_esp + 0x30u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -219105,7 +219343,11 @@ void NodeFamilyUpdateObjectState(uint32_t eax, uint32_t ecx, uint32_t edx, uint3
 	ObjectRemoveFromQuadtree(arg0);
 }
 
-uint32_t sub_000DB960(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* Handles the same node messages as NodeFamilyHandleMessage plus 0x2AF8 NodeFamilyDrawObjectOutline,
+   0x2AF9 ObjectSetPosition from the object's field 0xD0 and position at +0x7C, 0x2AFB returning field
+   0xD0 and 0xFFFA GameObjectReleaseSceneObject, and on 0xFFF9 retains the template's object at +0x74
+   through vcObjectAddRef into +0xD0. */
+uint32_t NodeFamilyHandleMessageWithSceneObject(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219295,7 +219537,7 @@ void GameObjectSetSceneObject(uint32_t arg0, uint32_t arg1)
 }
 
 /* Updates the object's bounding box using vcSceneObjectGetBounds and the cached vcObject dimensions at
-   +0xF4..+0xFC, calling IndexedLineListDrawTransformed and sub_00037F10. */
+   +0xF4..+0xFC, calling IndexedLineListDrawTransformed and GameObjectDrawTransformedBoundingBox. */
 void GameObjectUpdateBounds(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -219398,7 +219640,7 @@ void GameObjectUpdateBounds(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t e
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
-	sub_00037F10(arg0_2, arg1_2, arg2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi);
+	GameObjectDrawTransformedBoundingBox(arg0_2, arg1_2, arg2, arg3, &ignored, &ebx_2, &ebp_2, &esi, &edi);
 	g_esp = g_esp + 0x24u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -219702,7 +219944,10 @@ uint32_t GameObjectGetStateCode(uint32_t arg0)
 	return eax;
 }
 
-void sub_000DC100(uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4, sets the kind at +0xD0 to 0 and raises the 0x80000 bit in
+   the flags at +0x40. */
+void GameObjectSetSplineKind(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219722,7 +219967,10 @@ void sub_000DC100(uint32_t arg0, uint32_t arg1)
 	MEM32(eax + 0x40u) = ecx;
 }
 
-void sub_000DC140(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and arg2 at +0xD8, sets the kind at +0xD0 to 1 and raises
+   the 0x80000 bit in the flags at +0x40. */
+void GameObjectSetSplineKindWithData(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t eax = 0, ecx = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg2 = 0, saved_arg1 = 0;
@@ -219744,7 +219992,9 @@ void sub_000DC140(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	MEM32(eax + 0x40u) = ecx;
 }
 
-uint32_t sub_000DC190(uint32_t edx, uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 2. */
+uint32_t GameObjectSetPathKind(uint32_t edx, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, edx_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219766,7 +220016,9 @@ uint32_t sub_000DC190(uint32_t edx, uint32_t arg0, uint32_t arg1)
 	return edx_2;
 }
 
-void sub_000DC1E0(uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 3. */
+void GameObjectSetGenericKind(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219786,7 +220038,9 @@ void sub_000DC1E0(uint32_t arg0, uint32_t arg1)
 	MEM32(eax + 0xD0u) = 3u;
 }
 
-void sub_000DC230(uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 4. */
+void GameObjectSetTextKind(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219806,7 +220060,9 @@ void sub_000DC230(uint32_t arg0, uint32_t arg1)
 	MEM32(eax + 0xD0u) = 4u;
 }
 
-void sub_000DC280(uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 5. */
+void GameObjectSetChildKind(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219826,7 +220082,9 @@ void sub_000DC280(uint32_t arg0, uint32_t arg1)
 	MEM32(eax + 0xD0u) = 5u;
 }
 
-void sub_000DC2D0(uint32_t arg0, uint32_t arg1)
+/* Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals
+   GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 6. */
+void GameObjectSetCivilianKind(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -220021,7 +220279,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 				arg3 = MEM32(g_esp + 0xCu);
 				arg4 = MEM32(g_esp + 0x10u);
 				arg5 = MEM32(g_esp + 0x14u);
-				sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+				GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 				ecx_2 = g_esp + 0x60u;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ecx_2;
@@ -220041,7 +220299,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 				arg3 = MEM32(g_esp + 0xCu);
 				arg4 = MEM32(g_esp + 0x10u);
 				arg5 = MEM32(g_esp + 0x14u);
-				sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+				GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 				g_esp = g_esp + 0x30u;
 			}
 		}
@@ -220071,7 +220329,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			eax_2 = g_esp + 0x24u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
@@ -220094,7 +220352,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			eax_2 = MEM32(edi);
 			ecx_2 = g_esp + 0x4Cu;
 			g_esp = g_esp - 4u;
@@ -220176,7 +220434,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 				arg1_2 = MEM32(g_esp + 4u);
 				arg2_2 = MEM32(g_esp + 8u);
 				arg3 = MEM32(g_esp + 0xCu);
-				sub_00037F10(arg0_2, arg1_2, arg2_2, arg3, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi);
+				GameObjectDrawTransformedBoundingBox(arg0_2, arg1_2, arg2_2, arg3, &ignored_2, &ebx_2, &ebp_2, &esi_2, &edi);
 				g_esp = g_esp + 0x10u;
 			}
 			g_esp = g_esp + 4u;
@@ -220442,7 +220700,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 		eax_2 = g_esp + 0x24u;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
@@ -220465,7 +220723,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 		arg3 = MEM32(g_esp + 0xCu);
 		arg4 = MEM32(g_esp + 0x10u);
 		arg5 = MEM32(g_esp + 0x14u);
-		sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+		GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 		eax_2 = MEM32(edi);
 		ecx_2 = g_esp + 0x4Cu;
 		g_esp = g_esp - 4u;
@@ -220519,7 +220777,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 	arg1_2 = MEM32(g_esp + 4u);
 	arg2_2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
-	sub_000381A0(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &esi_2, &edi);
+	IndexedLineListDrawScaled(arg0_2, arg1_2, arg2_2, arg3, &ignored, &ebx_2, &esi_2, &edi);
 	eax_2 = MEM32(ebx_2 + 0xD0u);
 	g_esp = g_esp + 0x24u;
 	if (eax_2 != 2u)
@@ -220597,7 +220855,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			ecx_2 = g_esp + 0x74u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ecx_2;
@@ -220617,7 +220875,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			g_esp = g_esp + 0x44u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(0x2BE050u);
@@ -220680,7 +220938,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			eax_2 = g_esp + 0x74u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
@@ -220700,7 +220958,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			g_esp = g_esp + 0x44u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = MEM32(0x2BE050u);
@@ -220854,7 +221112,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			edx = g_esp + 0x60u;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx;
@@ -220875,7 +221133,7 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 			arg3 = MEM32(g_esp + 0xCu);
 			arg4 = MEM32(g_esp + 0x10u);
 			arg5 = MEM32(g_esp + 0x14u);
-			sub_000393B0(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
+			GameObjectDrawOrientedOutline(arg0_2, arg1_2, arg2_2, arg3, arg4, arg5, &ignored_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi);
 			g_esp = g_esp + 0x30u;
 		}
 		eax_2 = MEM32(ebx_2 + 0x40u);
@@ -220891,7 +221149,8 @@ void GameObjectDrawDebugOverlay(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32
 
 /* Reads the state index at object+0xD0 and applies the matching action to GameObjectGetStateTarget,
    calling GameObjectSetPathPoint, GameObjectCopyMatrixToSlot, CiviliansNodeUpdateEntryBounds,
-   sub_0003AE50, sub_0003B0E0 or GameObjectSetBoundsRelativeTo. */
+   GameObjectSplineTransformUpdate, GameObjectTargetActionApplyTransform or
+   GameObjectSetBoundsRelativeTo. */
 void GameObjectDispatchStateTargetAction(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, edx = 0;
@@ -220912,7 +221171,7 @@ void GameObjectDispatchStateTargetAction(uint32_t eax, uint32_t ecx, uint32_t eb
 		arg0 = eax_2;
 		arg1 = stack_8;
 		arg2 = stack;
-		sub_0003AE50(ebx, ebp, esi, edi, arg0, arg1, arg2);
+		GameObjectSplineTransformUpdate(ebx, ebp, esi, edi, arg0, arg1, arg2);
 		return;
 	case 0x0DCC91u:
 		stack_8 = MEM32(ecx + 0xD8u);
@@ -220924,7 +221183,7 @@ void GameObjectDispatchStateTargetAction(uint32_t eax, uint32_t ecx, uint32_t eb
 		arg1 = saved_eax;
 		arg2 = stack_C;
 		arg3 = stack_8;
-		sub_0003B0E0(ebx, esi, edi, arg0, arg1, arg2, arg3);
+		GameObjectTargetActionApplyTransform(ebx, esi, edi, arg0, arg1, arg2, arg3);
 		return;
 	case 0x0DCCB5u:
 		stack = MEM32(ecx + 0xD4u);
@@ -221052,7 +221311,9 @@ uint32_t NodeDispatchStateMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint
 	return eax;
 }
 
-void sub_000DCE40(uint32_t arg0)
+/* Fills the static NodeFamily descriptor at 0x221A18 with the object size 0xDC and the four callbacks
+   0x59010, 0xDCD40, 0xDC050 and 0x385E0, then stores its address at arg0+0x38. */
+void SplineNodeFamilyInit(uint32_t arg0)
 {
 	MEM32(0x221A34u) = 0u;
 	MEM32(0x221A38u) = 0u;
@@ -221241,7 +221502,10 @@ uint32_t NodeLoadVCObject(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg
 	return eax;
 }
 
-void sub_000DD0A0(uint32_t arg0)
+/* Writes the NodeFamily's static descriptor at 0x221A60 (0xD4 followed by the code addresses 0x59010,
+   0xDCEF0, 0xDD030 and 0x385E0), clears the words at 0x221A7C and 0x221A80, and stores the descriptor
+   pointer in the family object's field 0x2C. */
+void NodeFamilySetVTable(uint32_t arg0)
 {
 	MEM32(0x221A7Cu) = 0u;
 	MEM32(0x221A80u) = 0u;
@@ -221505,7 +221769,7 @@ void MSONLineNodeDraw(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, ui
 			arg0 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
 			arg2 = MEM32(g_esp + 8u);
-			sub_0011F380(arg0, arg1, arg2);
+			ObjectCacheCopyIndexedEntry(arg0, arg1, arg2);
 			edx_2 = MEM32(edi);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = esi_2 + 0x7Cu;
@@ -221915,7 +222179,7 @@ void PlayerStandInMSONodeReleaseResources(uint32_t eax, uint32_t esi)
 
 /* Clears +0xD4 and calls GameObjectSendMessageWithParams(0, 2) when the old state differs, then applies
    the new state to the object at +0xD0 through MotionListFindFreeSlot (flags 0x50, vcGameTime) or
-   MotionListResetState/sub_001205C0 (0x12C, 0x21, 0xA). */
+   MotionListResetState/ObjectMotionStart (0x12C, 0x21, 0xA). */
 void PlayerStandInMSONodeSetState(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -221993,7 +222257,7 @@ void PlayerStandInMSONodeSetState(uint32_t arg0, uint32_t arg1)
 	arg3 = stack_14;
 	arg4 = stack;
 	arg5 = stack_C;
-	sub_001205C0(arg0_2, arg1_2, arg2, arg3, arg4, arg5);
+	ObjectMotionStart(arg0_2, arg1_2, arg2, arg3, arg4, arg5);
 	MEM32(esi + 0xD4u) = edi;
 }
 
@@ -222060,7 +222324,11 @@ void PlayerStandInMSONodeSetStateOnClassChild(uint32_t esi, uint32_t arg0, uint3
 	g_esp = g_esp + 0xCu;
 }
 
-void sub_000DD930(uint32_t esi, uint32_t arg0, uint32_t arg1)
+/* Follows the handle chain from arg1+0xBC through each object's +0xC0, using GameObjectFromHandle, until
+   it finds the object whose handle type is 0x2800 and whose field 0xC8 is 1, then calls
+   PlayerStandInMSONodeSetState with arg1 and that object's handle, returning early if the chain runs
+   out. */
+void PlayerStandInMSONodeSetChildState(uint32_t esi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -223261,7 +223529,7 @@ uint32_t PlayerStandInMSONode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 			MEM32(g_esp) = ebx_2;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			sub_000DD930(esi_2, arg0_2, arg1_2);
+			PlayerStandInMSONodeSetChildState(esi_2, arg0_2, arg1_2);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp + 4u;
 			eax = ebx_2;
@@ -227741,7 +228009,11 @@ void PlayerActionInit(uint32_t ecx, uint32_t esi, uint32_t arg0)
 	MEM32(saved_arg0 + 0x18u) = 0xFFFFFFFFu;
 }
 
-void sub_000E1EC0(uint32_t edi)
+/* Resolves the target object of the action from its handle at +0x4C, or from +0x48 (through
+   GameObjectGetFieldD0 when the handle type is 0x40000), or from Players(0) following that player's
+   +0x44 chain, sets bit 0x20 in the object's flags at +4 via GameObjectFromHandle, and marks the action
+   done at +0x40. */
+void PlayerActionSetTargetFlag(uint32_t edi)
 {
 	uint32_t arg0 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -227920,7 +228192,7 @@ uint32_t PlayerAction_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	if (eax == 0x2328u)
 	{
 		edi = arg1;
-		sub_000E1EC0(edi);
+		PlayerActionSetTargetFlag(edi);
 		eax = 1u;
 		return eax;
 	}
@@ -231548,8 +231820,8 @@ void ScreenElementTextDraw(uint32_t eax, uint32_t esi)
 }
 
 /* Event handler for the text element: on event 0xFFF9 calls ScreenElementTextSetMessage to set the
-   message, on 0x2EE2 calls ScreenElementTextDraw to draw, on 0xFFFA calls sub_0003CBF0, and returns 1
-   for 0xFFFF/0xFFFE. */
+   message, on 0x2EE2 calls ScreenElementTextDraw to draw, on 0xFFFA calls GameObjectFreeByHandle, and
+   returns 1 for 0xFFFF/0xFFFE. */
 uint32_t ScreenElementTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -231589,7 +231861,7 @@ uint32_t ScreenElementTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -231954,7 +232226,8 @@ void HudDrawHealthBar(uint32_t eax, uint32_t esi, uint32_t edi)
 }
 
 /* Dispatches an interface message whose code is read from arg3, returning 1 for the codes 0xFFFF, 0xFFFE
-   and those handled by ScreenElementTextInitialize, HudDrawHealthBar and sub_0003CBF0, and 0 otherwise. */
+   and those handled by ScreenElementTextInitialize, HudDrawHealthBar and GameObjectFreeByHandle, and 0
+   otherwise. */
 uint32_t HudMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
@@ -231994,7 +232267,7 @@ uint32_t HudMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -233590,7 +233863,7 @@ uint32_t FriendlyReticleElement_StateMachine(uint32_t arg0, uint32_t arg1, uint3
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -234103,7 +234376,7 @@ uint32_t MissileLockElement_StateMachine(uint32_t ebp, uint32_t edi, uint32_t ar
 			return eax;
 		}
 		arg0_2 = ebx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -234950,8 +235223,8 @@ uint32_t MissionMenuScreenElementDraw(uint32_t edx, uint32_t ebx, uint32_t ebp, 
 }
 
 /* Dispatches on the event code in arg2/arg3 and calls MissionMenuScreenElementDraw,
-   MissionMenuScreenElementConstruct, ScreenElementNotifyOwner, GameObjectDeactivate, sub_0003CBF0 and
-   MissionMenuItemUpdateScrollOffsets for the MissionMenu screen element. */
+   MissionMenuScreenElementConstruct, ScreenElementNotifyOwner, GameObjectDeactivate,
+   GameObjectFreeByHandle and MissionMenuItemUpdateScrollOffsets for the MissionMenu screen element. */
 uint32_t MissionMenuScreenElementHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
@@ -235012,7 +235285,7 @@ uint32_t MissionMenuScreenElementHandleMessage(uint32_t ebx, uint32_t ebp, uint3
 		edx = arg1;
 		arg0_2 = eax;
 		MEM32(edx + 0x2Cu) = 0u;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -235932,7 +236205,8 @@ void TargetScreenMarkerDraw(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 }
 
 /* Dispatches a screen-element-family message id, calling ScreenElementSetupFromTemplate for 0xFFF9,
-   TargetScreenMarkerDraw for 0x2EE2 and sub_0003CBF0 for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE. */
+   TargetScreenMarkerDraw for 0x2EE2 and GameObjectFreeByHandle for 0xFFFA, and returning 1 for 0xFFFF
+   and 0xFFFE. */
 uint32_t ScreenElementFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
@@ -235969,7 +236243,7 @@ uint32_t ScreenElementFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t e
 				return eax;
 			}
 			arg0_2 = eax;
-			sub_0003CBF0(edx, arg0_2);
+			GameObjectFreeByHandle(edx, arg0_2);
 			eax = 1u;
 			return eax;
 		}
@@ -236122,7 +236396,7 @@ void ScreenElementDrawPlayerValueText(uint32_t eax, uint32_t esi)
 
 /* Screen element message handler: on message 0x7FFF it switches on the event code in arg3, attaching
    with ScreenElementInitialize and copying the handle at +0x18 into +0x28 for 0xFFF9, detaching with
-   sub_0003CBF0 for 0xFFFA, and calling ScreenElementDrawPlayerValueText for 0x2EE2. */
+   GameObjectFreeByHandle for 0xFFFA, and calling ScreenElementDrawPlayerValueText for 0x2EE2. */
 uint32_t ScreenElementHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -236164,7 +236438,7 @@ uint32_t ScreenElementHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, u
 			return eax;
 		}
 		arg0_2 = ecx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -237499,7 +237773,7 @@ uint32_t sub_000E90A0(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, u
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -237845,8 +238119,8 @@ void GunEffectsTextUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi
 }
 
 /* Dispatches screen element messages (0x7FFF gate, 0xFFFF/0xFFF9/0xFFFE/0x2EE2/0xFFFA) for a
-   PickupReticleElement, calling ScreenElementInitialize, sub_0003CBF0 and GunEffectsTextUpdate and
-   setting the element's handle fields. */
+   PickupReticleElement, calling ScreenElementInitialize, GameObjectFreeByHandle and GunEffectsTextUpdate
+   and setting the element's handle fields. */
 uint32_t PickupReticleElement_HandleMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -237888,7 +238162,7 @@ uint32_t PickupReticleElement_HandleMessage(uint32_t ebx, uint32_t ebp, uint32_t
 			return eax;
 		}
 		arg0_2 = ecx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -238937,7 +239211,7 @@ uint32_t PickupReticleElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t 
 				return eax;
 			}
 			arg0_2 = eax;
-			sub_0003CBF0(edx, arg0_2);
+			GameObjectFreeByHandle(edx, arg0_2);
 			eax = 1u;
 			return eax;
 		}
@@ -239113,7 +239387,7 @@ uint32_t IncomingMissileElement_StateMachine(uint32_t arg0, uint32_t arg1, uint3
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -239200,8 +239474,8 @@ void ScreenElementDrawObjectQuad(uint32_t edi)
 }
 
 /* Screen element vtable message entry that handles 0x7FFF messages: for 0xFFF9 it calls
-   ScreenElementInitialize and stores the new parent handle at +0x28, for 0xFFFA it calls sub_0003CBF0,
-   for 0x2EE2 it calls ScreenElementDrawObjectQuad, and returns 1 when handled. */
+   ScreenElementInitialize and stores the new parent handle at +0x28, for 0xFFFA it calls
+   GameObjectFreeByHandle, for 0x2EE2 it calls ScreenElementDrawObjectQuad, and returns 1 when handled. */
 uint32_t ScreenElementDispatchMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -239243,7 +239517,7 @@ uint32_t ScreenElementDispatchMessage(uint32_t arg0, uint32_t arg1, uint32_t arg
 			return eax;
 		}
 		arg0_2 = ecx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -239814,8 +240088,9 @@ void HudGaugeDraw(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 }
 
 /* Handles an event for the HUD gauge state at arg1 when arg2 is 0x7FFF: dispatches on the code at
-   MEM32(arg3), calling HudGaugeDraw for 0x2EE2, sub_0003CBF0 for 0xFFFA, and ScreenElementInitialize for
-   0xFFF9 (which also clears the gauge fields arg1+0x28..0x34), returning 1 when handled and 0 otherwise. */
+   MEM32(arg3), calling HudGaugeDraw for 0x2EE2, GameObjectFreeByHandle for 0xFFFA, and
+   ScreenElementInitialize for 0xFFF9 (which also clears the gauge fields arg1+0x28..0x34), returning 1
+   when handled and 0 otherwise. */
 uint32_t HudGaugeEventHandle(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -239858,7 +240133,7 @@ uint32_t HudGaugeEventHandle(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -241273,8 +241548,8 @@ void ScreenElementGaugeDraw(uint32_t eax, uint32_t esi, uint32_t edi)
 }
 
 /* When arg2 is 0x7FFF it treats the value at arg3 as a message: returns 1 for 0xFFFF/0xFFFE, calls
-   ScreenElementGaugeSetup for 0xFFF9, sub_0003CBF0 for 0xFFFA and ScreenElementGaugeDraw for 0x2EE2,
-   else returns 0. */
+   ScreenElementGaugeSetup for 0xFFF9, GameObjectFreeByHandle for 0xFFFA and ScreenElementGaugeDraw for
+   0x2EE2, else returns 0. */
 uint32_t HudPiecesElementHandleMessage(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
@@ -241314,7 +241589,7 @@ uint32_t HudPiecesElementHandleMessage(uint32_t edi, uint32_t arg0, uint32_t arg
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -241963,8 +242238,8 @@ void EntityBarsDraw(uint32_t esi, uint32_t edi)
 }
 
 /* Checks arg2 against 0x7FFF and dispatches the message id in arg3 to
-   ScreenElementSetTargetHandleAndSize (0xFFF9), EntityBarsDraw (0x2EE2) or sub_0003CBF0 (0xFFFA),
-   returning 1 when handled and 0 otherwise. */
+   ScreenElementSetTargetHandleAndSize (0xFFF9), EntityBarsDraw (0x2EE2) or GameObjectFreeByHandle
+   (0xFFFA), returning 1 when handled and 0 otherwise. */
 uint32_t MessageIdDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi = 0;
@@ -242010,7 +242285,7 @@ uint32_t MessageIdDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t 
 		return eax;
 	}
 	arg0_2 = eax;
-	sub_0003CBF0(edx, arg0_2);
+	GameObjectFreeByHandle(edx, arg0_2);
 	eax = 1u;
 	return eax;
 }
@@ -242591,7 +242866,7 @@ void HudDrawObjectGauge(uint32_t esi, uint32_t edi)
 }
 
 /* Handles a UI message: when arg2 is 0x7FFF it switches on MEM32(arg3) to call HudPieceSetObject,
-   HudDrawObjectGauge or sub_0003CBF0, returning 1 when the message is handled and 0 otherwise. */
+   HudDrawObjectGauge or GameObjectFreeByHandle, returning 1 when the message is handled and 0 otherwise. */
 uint32_t UiMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi = 0;
@@ -242637,7 +242912,7 @@ uint32_t UiMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t 
 		return eax;
 	}
 	arg0_2 = eax;
-	sub_0003CBF0(edx, arg0_2);
+	GameObjectFreeByHandle(edx, arg0_2);
 	eax = 1u;
 	return eax;
 }
@@ -243038,8 +243313,8 @@ void ItemSelectDraw(uint32_t arg2)
 }
 
 /* Handles the screen element's event codes, calling ScreenElementInitialize and copying arg4's +0x18
-   field on 0xFFF9, ItemSelectDraw on 0x2EE2 and sub_0003CBF0 on 0xFFFA, returning 1 for recognized
-   events. */
+   field on 0xFFF9, ItemSelectDraw on 0x2EE2 and GameObjectFreeByHandle on 0xFFFA, returning 1 for
+   recognized events. */
 uint32_t ScreenElementEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -243081,7 +243356,7 @@ uint32_t ScreenElementEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 			return eax;
 		}
 		arg0_2 = ecx;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = 1u;
 		return eax;
 	}
@@ -243283,7 +243558,7 @@ void HudPieceDirectionDraw(uint32_t edi)
 }
 
 /* Dispatches the element's 0x7FFF/0/1 events, adjusting the +0x30 value and +0x10 flag and calling
-   HudPieceDirectionDraw, GameObjectDeactivate, ScreenElementNotifyOwner, sub_0003CBF0 and
+   HudPieceDirectionDraw, GameObjectDeactivate, ScreenElementNotifyOwner, GameObjectFreeByHandle and
    ScreenElementInitialize, returning 1 for recognized events. */
 uint32_t HudIndicatorEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
@@ -243388,7 +243663,7 @@ uint32_t HudIndicatorEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 			return eax;
 		}
 		arg0_2 = eax;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		eax = ebx;
 		return eax;
 	}
@@ -245395,7 +245670,7 @@ uint32_t RadarElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uin
 			return eax;
 		}
 		arg0_2 = esi;
-		sub_0003CBF0(edx, arg0_2);
+		GameObjectFreeByHandle(edx, arg0_2);
 		esi = saved_arg1 + 0x2Cu;
 		edi_2 = 0xAu;
 		do
@@ -247526,7 +247801,9 @@ uint32_t SceneObjectApplyAngularVelocity(uint32_t eax, uint32_t ebx, uint32_t es
 	return eax_2;
 }
 
-uint32_t sub_000F2290(uint32_t eax)
+/* Returns a pointer to the game object's scene transform data (the object pointer plus 0x14) for
+   GameObjectUpdateSceneTransform. */
+uint32_t GameObjectGetSceneTransform(uint32_t eax)
 {
 	eax += 0x14u;
 	return eax;
@@ -247835,7 +248112,12 @@ void GameObjectBuildRotationMatrix(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	*p_edi = edi_2;
 }
 
-void sub_000F2810(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* From the game object's position it casts up to four SceneRayIntersect rays along the given direction
+   vector and, for each scene object hit whose vcSceneObjectGetFlags lacks 0x20, calls
+   SceneObjectReactToNearbyPlayer and SceneObjectSendUserMessage and sets bit 1 of the hit object's flags
+   word (+0x84) when the hit distance is greater than half of a radius read from the hit object (probably
+   a proximity/touch check driven by GameObjectUpdateSceneTransform). */
+void GameObjectProbeNearbySceneObjects(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t *p_eax, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebp = *p_ebp;
 	uint32_t esi = *p_esi;
@@ -248045,7 +248327,7 @@ void sub_000F2810(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 
 /* Resolves the game object from arg0's handle, rebuilds its transform fields from its matrix and Z
    rotation (MatrixRotateZ, Vector3Clamp, Vector3ResolveAxisLimits), and creates its scene object with
-   SceneObjectCreateAndInit, calling sub_000F2290 when the create reports failure. */
+   SceneObjectCreateAndInit, calling GameObjectGetSceneTransform when the create reports failure. */
 uint32_t GameObjectUpdateSceneTransform(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, arg9 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -248267,7 +248549,7 @@ uint32_t GameObjectUpdateSceneTransform(uint32_t ebx, uint32_t ebp, uint32_t esi
 	arg2 = MEM32(g_esp + 8u);
 	arg3 = MEM32(g_esp + 0xCu);
 	arg4 = MEM32(g_esp + 0x10u);
-	sub_000F2810(ebx_2, arg0_2, arg1, arg2, arg3, arg4, &ignored_3, &ebp_2, &esi_2, &edi_2);
+	GameObjectProbeNearbySceneObjects(ebx_2, arg0_2, arg1, arg2, arg3, arg4, &ignored_3, &ebp_2, &esi_2, &edi_2);
 	g_esp = g_esp + 0x4Cu;
 	if ((MEM8(esi_2 + 0x88u) & 1u) != 0u && fabs(FLOAT_AT(esi_2 + 0x20u)) == 0.0f && fabs(FLOAT_AT(esi_2 + 0x24u)) == 0.0f && fabs(FLOAT_AT(esi_2 + 0x28u)) == 0.0f)
 	{
@@ -248349,7 +248631,7 @@ uint32_t GameObjectUpdateSceneTransform(uint32_t ebx, uint32_t ebp, uint32_t esi
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ebp_2;
 		eax = esi_2;
-		eax = sub_000F2290(eax);
+		eax = GameObjectGetSceneTransform(eax);
 		g_esp = g_esp + 0xCu;
 	}
 	g_esp = g_esp + 4u;
@@ -248938,7 +249220,12 @@ void GameObjectMoveToGridCell(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t
 	g_esp = g_esp + 0xCu;
 }
 
-void sub_000F34C0(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Resolves the game object from the handle with GameObjectFromHandle, computes its attachment entry as
+   base index (+0x20) plus the passed delta (clamped 0..count-1, or wrapped modulo the count at +0x10 ?
+   +8 when flag 0x2000 is set), calls sub_000AC6D0 with the object and entry, and places the object with
+   GameObjectSetPosition, GameObjectSetVector and sub_000D36B0, offsetting along the normalized
+   attachment direction (VectorSubtract, VectorNormalize, VectorScale) when flag 0x10 is set. */
+void GameObjectAttachmentAdvance(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t carry = 0;
 	uint16_t edx_2 = 0;
@@ -249306,7 +249593,7 @@ void GameObjectAttachmentCycleCommand(uint32_t ecx, uint32_t ebx, uint32_t ebp, 
 				MEM32(g_esp) = ecx_2;
 				arg0_2 = MEM32(g_esp);
 				arg1_2 = MEM32(g_esp + 4u);
-				sub_000F34C0(eax, ebx_2, ebp_2, esi, edi_2, arg0_2, arg1_2);
+				GameObjectAttachmentAdvance(eax, ebx_2, ebp_2, esi, edi_2, arg0_2, arg1_2);
 				g_esp = g_esp + 8u;
 				g_esp = g_esp + 4u;
 				g_esp = g_esp + 4u;
@@ -249328,7 +249615,7 @@ void GameObjectAttachmentCycleCommand(uint32_t ecx, uint32_t ebx, uint32_t ebp, 
 			MEM32(g_esp) = ecx_2;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			sub_000F34C0(eax, ebx_2, ebp_2, esi, edi_2, arg0_2, arg1_2);
+			GameObjectAttachmentAdvance(eax, ebx_2, ebp_2, esi, edi_2, arg0_2, arg1_2);
 			g_esp = g_esp + 8u;
 			g_esp = g_esp + 4u;
 			g_esp = g_esp + 4u;
@@ -250663,7 +250950,12 @@ uint32_t TurretCannonHandleEvent(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint
 	return eax;
 }
 
-uint32_t sub_000F44E0(uint32_t edx, uint32_t edi, uint32_t arg1, uint32_t arg2)
+/* Zeroes the output vector arg2, then for each of the three axis inputs at edi+0x20, edi+0x24 and
+   edi+0x28 computes the velocity error against the matching component of edi+0x14 (dot products with the
+   basis matrix at arg1), converts it to a per-frame acceleration using the body gain at edx+0x2C and the
+   constant 30.30303, clamps it with the body limit pairs at edx+0x38/0x3C, edx+0x40/0x44, edx+0x48/0x4C
+   and the scale at edx+0x54, and adds each axis-scaled basis vector back into arg2. */
+uint32_t EntityComputeAxisAcceleration(uint32_t edx, uint32_t edi, uint32_t arg1, uint32_t arg2)
 {
 	uint16_t eax_2 = 0;
 	uint32_t eax = 0, ebp = 0, ebx = 0, ecx = 0, edx_2 = 0, esi = 0;
@@ -251208,7 +251500,11 @@ uint32_t EntityIntegrateMotion(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_
 	return eax;
 }
 
-uint32_t sub_000F4E20(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Casts a ray from a scene object's position along a direction, and for each of up to four hit objects
+   SceneRayIntersect reports whose vcSceneObjectGetFlags lacks flag 0x20, has it
+   SceneObjectReactToNearbyPlayer and SceneObjectSendUserMessage, then rewrites the caller's direction
+   vectors. */
+uint32_t SceneObjectRaycastReactNearbyPlayer(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	bool L_0F4E7D = false;
 	uint32_t arg0_2 = 0, arg10 = 0, arg11 = 0, arg12 = 0, arg13 = 0, arg14 = 0, arg15 = 0, arg16 = 0, arg17 = 0, arg18 = 0, arg19 = 0, arg1_2 = 0, arg20 = 0, arg21 = 0, arg22 = 0, arg23 = 0, arg24 = 0, arg25 = 0, arg26 = 0, arg27 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, arg9 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edx = 0, esi_2 = 0;
@@ -252033,7 +252329,12 @@ void sub_000F5BA0(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 }
 
-void sub_000F5DD0(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Takes the entity group's child at the given index with GameObjectChildListGetByIndex and
+   GameObjectChildListGetFirst, copies the child's fields with GameObjectCopyFieldsToBuffer, builds a
+   direction from its heading and pitch with MatrixGetHeadingPitchRoll and VectorSetFromHeadingPitch,
+   normalizes it with VectorNormalize and adds it to the child's own vector field, so
+   EntityGroupSpreadChildren can spread the group's children apart. */
+void EntityGroupChildComputeSpreadOffset(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -252648,8 +252949,8 @@ uint32_t sub_000F63B0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 /* For the child list of the entity group it is given, sums the children's GameObjectCopyVector
    positions, then for each child from index 1 up uses EntityListSortNearestFirst and
    EntityFindNearestChild to take the direction away from its nearest neighbour, normalises it, scales it
-   by 100.0 and writes the resulting position with sub_000F5EC0, sub_000F5DD0 and sub_000F6070, clearing
-   bit 0x10 of the child's flags; called from EntityGroupUpdate. */
+   by 100.0 and writes the resulting position with sub_000F5EC0, EntityGroupChildComputeSpreadOffset and
+   sub_000F6070, clearing bit 0x10 of the child's flags; called from EntityGroupUpdate. */
 uint32_t EntityGroupSpreadChildren(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_3 = 0;
@@ -252880,7 +253181,7 @@ uint32_t EntityGroupSpreadChildren(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 			MEM32(g_esp) = eax;
 			arg0_2 = MEM32(g_esp);
 			arg1 = MEM32(g_esp + 4u);
-			sub_000F5DD0(arg0_2, arg1, &ebx_2, &ebp_2, &esi_2, &edi_2);
+			EntityGroupChildComputeSpreadOffset(arg0_2, arg1, &ebx_2, &ebp_2, &esi_2, &edi_2);
 			edx = MEM32(ebp_2 + 8u);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ebp_2 - 0x44u;
@@ -253377,7 +253678,7 @@ void SmokeLight02EffectUpdate(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t
 	MEMF(eax_2 + 8u) = (float)x87_round(t2 + FLOAT_AT(ecx + 8u));
 	MEMF(eax_2) = (float)t3;
 	MEMF(eax_2 + 4u) = (float)t4;
-	f0_2 = sub_000C7AD0();
+	f0_2 = LevelTimeGet();
 	if (f0_2 != 0.0f)
 	{
 		f0 = x87_round(FLOAT_AT(g_esp + 0xCu) * FLOAT_AT(g_esp + 0xCu));
@@ -253674,7 +253975,7 @@ uint32_t CyclopsDamageChunkEffectFamilyReleaseObjectType(void)
 }
 
 /* Scales and offsets the effect's position by the fraction of its 1000 ms lifetime that has elapsed
-   (adding the vector at offset 0x70 scaled by that fraction squared when sub_000C7AD0 returns nonzero),
+   (adding the vector at offset 0x70 scaled by that fraction squared when LevelTimeGet returns nonzero),
    sets the euler angles with MatrixSetEulerAngles, creates the scene object with
    SceneObjectCreateAndInit, and destroys the object with GameObjectDestroy once 1000 ms have passed. */
 void CyclopsDamageChunkEffectUpdate(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
@@ -253735,7 +254036,7 @@ void CyclopsDamageChunkEffectUpdate(uint32_t ebx, uint32_t esi, uint32_t edi, ui
 		MEMF(eax + 8u) = (float)x87_round(t2 + FLOAT_AT(ecx + 8u));
 		MEMF(eax) = (float)t3;
 		MEMF(eax + 4u) = (float)t4;
-		f0_2 = sub_000C7AD0();
+		f0_2 = LevelTimeGet();
 		if (f0_2 != 0.0f)
 		{
 			f0 = x87_round(FLOAT_AT(g_esp + 0x38u) * FLOAT_AT(g_esp + 0x38u));
@@ -262099,7 +262400,9 @@ uint32_t sub_000FDCC0(void)
 	return eax;
 }
 
-uint32_t sub_000FDCD0(void)
+/* Creates two ObjectCloneArray instances and takes references to two object types (0x3D and 0x6) as part
+   of an effect family initialization routine. */
+uint32_t EffectFamilyParticleInit(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262126,7 +262429,9 @@ uint32_t sub_000FDCD0(void)
 	return eax;
 }
 
-uint32_t sub_000FDD40(void)
+/* Releases two ObjectCloneArray instances and releases references to two object types (0x3D and 0x6) as
+   part of an effect family cleanup routine. */
+uint32_t EffectFamilyParticleRelease(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262147,7 +262452,9 @@ uint32_t sub_000FDD40(void)
 	return eax;
 }
 
-void sub_000FDD70(uint32_t arg0)
+/* Registers a particle effect type descriptor with an EffectFamily, setting up its initialization and
+   release callbacks. */
+void EffectFamilyParticleRegister(uint32_t arg0)
 {
 	MEM32(0x2269D8u) = 0u;
 	MEM32(0x2269E0u) = 0u;
@@ -262168,7 +262475,9 @@ uint32_t sub_000FDDC0(void)
 	return eax;
 }
 
-uint32_t sub_000FDDD0(void)
+/* Creates two ObjectCloneArray instances and takes references to two object types (0x3C and 0x6) as part
+   of a second effect family initialization routine. */
+uint32_t EffectFamilyParticleInit2(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262195,7 +262504,9 @@ uint32_t sub_000FDDD0(void)
 	return eax;
 }
 
-uint32_t sub_000FDE40(void)
+/* Releases two ObjectCloneArray instances and releases references to two object types (0x3C and 0x6) as
+   part of a second effect family cleanup routine. */
+uint32_t EffectFamilyParticleRelease2(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262216,7 +262527,9 @@ uint32_t sub_000FDE40(void)
 	return eax;
 }
 
-void sub_000FDE70(uint32_t arg0)
+/* Registers a second particle effect type descriptor with an EffectFamily, setting up its initialization
+   and release callbacks. */
+void EffectFamilyParticleRegister2(uint32_t arg0)
 {
 	MEM32(0x226AB8u) = 0u;
 	MEM32(0x226AC0u) = 0u;
@@ -262237,7 +262550,9 @@ uint32_t sub_000FDEC0(void)
 	return eax;
 }
 
-uint32_t sub_000FDED0(void)
+/* Creates two ObjectCloneArray instances and takes references to two object types (0x3B and 0x6) as part
+   of a third effect family initialization routine. */
+uint32_t EffectFamilyParticleInit3(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -263242,7 +263557,11 @@ void SteeringObjectsCheckBounds(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	g_esp = g_esp + 0xCu;
 }
 
-uint32_t sub_000FE9F0(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* Handles a steering-object message: for message 0x7FFF it returns 1 for sub-events 0xFFFF and 0xFFFE,
+   calls SteeringFamilyEventResetDistance for 0xFFF9 and GameObjectDestroy then GameObjectRefClearSlot
+   for 0xFFFA, and for message 0 with sub-events 0xFFFD or 0xFFFB it calls SteeringObjectsCheckBounds,
+   returning 1 when handled and 0 otherwise. */
+uint32_t SteeringObjectsMessageHandler(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -263304,8 +263623,8 @@ uint32_t sub_000FE9F0(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, 
 	return eax;
 }
 
-/* Sets up the global message-handler table at 0x226CF8 with size 0x2C and handler sub_000FE9F0, and
-   assigns it to the SteeringFamily object's field at offset 0x20. */
+/* Sets up the global message-handler table at 0x226CF8 with size 0x2C and handler
+   SteeringObjectsMessageHandler, and assigns it to the SteeringFamily object's field at offset 0x20. */
 void SteeringFamilyRegisterMessageHandler(uint32_t arg0)
 {
 	MEM32(0x226CFCu) = 0u;
@@ -263536,7 +263855,11 @@ void SteeringFamilySetDescriptor(uint32_t arg0)
 	MEM32(arg0 + 0x1Cu) = 0x226D40u;
 }
 
-void sub_000FED50(uint32_t ebx, uint32_t esi, uint32_t edi)
+/* Copies five dwords from the source struct into the destination, resolves the handle in the source to a
+   game object with GameObjectFromHandle (or takes GameObjectLastObject when it is GameObjectLastHandle),
+   zeroes that object's fields at 0x20 through 0x2C, and sets bit 0 at offset 0x10 while clearing the
+   word at offset 0xE of the third argument. */
+void SteeringMessageCopyAndResetEntity(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -263720,8 +264043,8 @@ uint32_t sub_000FEE00(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 }
 
 /* Handles a steering message pair (arg2/arg3): for 0/0xFFFD it installs sub_000FEE00 at ebx+8, for
-   0x7FFF it answers 0xFFFF/0xFFFE, runs sub_000FED50 on 0xFFF9 and clears a slot with
-   GameObjectRefClearSlot on 0xFFFA. */
+   0x7FFF it answers 0xFFFF/0xFFFE, runs SteeringMessageCopyAndResetEntity on 0xFFF9 and clears a slot
+   with GameObjectRefClearSlot on 0xFFFA. */
 uint32_t SteeringMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg2_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0;
@@ -263749,7 +264072,7 @@ uint32_t SteeringMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t arg2, uin
 	{
 		esi = arg4;
 		edi = arg1;
-		sub_000FED50(ebx, esi, edi);
+		SteeringMessageCopyAndResetEntity(ebx, esi, edi);
 		eax = 1u;
 		return eax;
 	}
@@ -263914,7 +264237,10 @@ uint32_t SteeringAdvanceTurnState(uint32_t eax, uint32_t arg0, uint32_t arg1, ui
 	return eax;
 }
 
-void sub_000FF0B0(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_esi, uint32_t *p_edi)
+/* Computes a duration as the larger of the entity's float at +0x68 times 0.033f and its float at +0x30,
+   and when arg1 is at least twice that duration clears the fields at 0x60 and 0x64, copies the dword at
+   *p_esi+0x18 into field 0x20, destroys with GameObjectDestroyAndSendMessage, and sets *p_eax to 1. */
+void SteeringEntityTurnTimeoutExpired(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, edx = 0, ignored = 0;
 	double f0 = 0;
@@ -263979,8 +264305,8 @@ void sub_000FF110(uint32_t ebx, uint32_t esi, uint32_t edi)
 }
 
 /* resolves the target object with GameObjectFromIndex, computes the vector and distance to it with
-   VectorNormalize, calls sub_000FF0B0 to destroy the entity on arrival, and otherwise advances the turn
-   with SteeringAdvanceTurnState and SteeringSetTurnDirection. */
+   VectorNormalize, calls SteeringEntityTurnTimeoutExpired to destroy the entity on arrival, and
+   otherwise advances the turn with SteeringAdvanceTurnState and SteeringSetTurnDirection. */
 uint32_t SteeringEntityAdvanceTurn(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -264068,7 +264394,7 @@ uint32_t SteeringEntityAdvanceTurn(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 		ecx = edi_2;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		sub_000FF0B0(ecx, arg0_2, arg1_2, &eax, &esi_2, &edi_2);
+		SteeringEntityTurnTimeoutExpired(ecx, arg0_2, arg1_2, &eax, &esi_2, &edi_2);
 		g_esp = g_esp + 0xCu;
 		if (eax != 0u)
 		{
@@ -264297,7 +264623,8 @@ uint32_t SteeringFamily_HandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg
 	return eax;
 }
 
-void sub_000FF860(uint32_t arg0)
+/* zero-initializes a global state structure at 0x226DD0 and links it to the SteeringFamily_VA object */
+void SteeringFamilyInitState(uint32_t arg0)
 {
 	MEM32(0x226DD4u) = 0u;
 	MEM32(0x226DD8u) = 0u;
@@ -265354,7 +265681,9 @@ uint32_t SteeringObjectHandleMessage(uint32_t ecx, uint32_t ebx, uint32_t esi, u
 	return eax;
 }
 
-uint32_t sub_00100160(uint32_t arg0)
+/* initializes a global configuration structure at 0x226E18 with size and flag values, and links it to
+   the SteeringFamily_VA object */
+uint32_t SteeringFamilyInitConfig(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
@@ -266360,7 +266689,13 @@ uint32_t SceneObjectHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 	return eax;
 }
 
-uint32_t sub_00100B70(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* Resolves a projectile's impact on the game object for the handle (via GameObjectFromHandle): sends
+   message 0xF001 with the impact position through GameObjectSendMessage, applies EntityApplyRadiusEffect
+   and OrthonormalBasisBuildFromDirection, then plays WaterBulletHitPlaySound and returns 1 when the
+   surface value at offset 0xE of the hit object is 0x13, creates effects 0x36 and 0x38 with
+   EffectCreateInstance when it is 0xE, and otherwise creates the object's own effect id with
+   EffectCreateInstance, returning 0 (also 0 when the handle yields no object). */
+uint32_t ProjectileImpactEffects(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint16_t eax_2 = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -274033,7 +274368,9 @@ void TrainingBeacon_Register(uint32_t arg0)
 	MEM32(0x22729Cu) = 0x1A8710u;
 }
 
-uint32_t sub_00105A90(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Reads the object from arg0, places it with GameObjectPlaceOnLocalGrid (which returns the placed object
+   through edi) and starts it with MotionStart, returning MotionStart's result. */
+uint32_t GameObjectPlaceOnLocalGridStartMotion(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -274048,7 +274385,8 @@ uint32_t sub_00105A90(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, 
 }
 
 /* copies Male01Pilot3Text into the object's +0x5C name buffer, points the object at the 0x2272EC text
-   table and the sub_00105A90 callback, and sets the +0xE flag from the object's +0x4C pointer. */
+   table and the GameObjectPlaceOnLocalGridStartMotion callback, and sets the +0xE flag from the object's
+   +0x4C pointer. */
 void PilotTextSetDefault(uint32_t eax, uint32_t esi, uint32_t edi)
 {
 	uint8_t ecx = 0;
@@ -274508,7 +274846,7 @@ uint32_t ZenCratesMunitionsPickup_Shutdown(void)
 /* Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from
    MEM32(esi+0x4C), gives the scene object at esi+0x54 its user with vcSceneObjectSetUser, computes the
    pickup node offset through SceneObjectGetAttachedTransform with ZenCratesMunitionsPickupPickupNode
-   into esi+0x3C, and installs sub_001067C0 at edi+8 as the update callback. */
+   into esi+0x3C, and installs GameObjectPlaceOnLocalGridFromRef at edi+8 as the update callback. */
 uint32_t ZenCratesMunitionsPickupUpdateState(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx_2 = 0, ecx_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0;
@@ -274858,7 +275196,8 @@ uint32_t ZenCratesPickup_Shutdown(void)
 
 /* Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from
    MEM32(esi+0x4C), computes the pickup node offset through SceneObjectGetAttachedTransform with the node
-   at 0x2273E0 into esi+0x3C, and installs sub_001067C0 at edi+8 as the update callback. */
+   at 0x2273E0 into esi+0x3C, and installs GameObjectPlaceOnLocalGridFromRef at edi+8 as the update
+   callback. */
 uint32_t ZenCratesPickupUpdateState(uint32_t eax, uint32_t ecx, uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx_2 = 0, ecx_2 = 0, edx_2 = 0, esi_2 = 0, ignored = 0;
@@ -275115,7 +275454,9 @@ void ZenCratesPickup_Register(uint32_t arg0)
 	MEM32(0x2273D4u) = 0x1A88D8u;
 }
 
-uint32_t sub_001067C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Reads the handle stored at arg0 and calls GameObjectPlaceOnLocalGrid with that handle plus the
+   incoming arguments, returning the call's out value. */
+uint32_t GameObjectPlaceOnLocalGridFromRef(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, eax = 0;
 
@@ -275124,8 +275465,8 @@ uint32_t sub_001067C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	return eax;
 }
 
-/* Calls GameObjectInitTransform, installs sub_001067C0 as the update callback at esi+8, and sets the
-   pickup's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C). */
+/* Calls GameObjectInitTransform, installs GameObjectPlaceOnLocalGridFromRef as the update callback at
+   esi+8, and sets the pickup's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C). */
 void NoseconePickupUpdateState(uint32_t eax, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg1 = 0, arg2 = 0, eax_2 = 0, ecx = 0;
@@ -275401,8 +275742,8 @@ void NoseconePickup_Register(uint32_t arg0)
 	MEM32(0x227434u) = 0x1A8928u;
 }
 
-/* Calls GameObjectInitTransform, installs sub_001067C0 as the update callback at esi+8, and sets the
-   capsule's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C). */
+/* Calls GameObjectInitTransform, installs GameObjectPlaceOnLocalGridFromRef as the update callback at
+   esi+8, and sets the capsule's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C). */
 void SpyCapsulePickupUpdateState(uint32_t eax, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg1 = 0, arg2 = 0, eax_2 = 0, ecx = 0;
@@ -278413,7 +278754,7 @@ uint32_t ModelUpdateSubObjectTransforms(uint32_t ebx, uint32_t ebp, uint32_t esi
 	if ((int32_t)eax < 0)
 		f0 = x87_round(f0 + 4.2949673e+09f);
 	MEMF(g_esp + 0x10u) = (float)x87_round(f0 * 0.001f);
-	f0_2 = sub_000C7AD0();
+	f0_2 = LevelTimeGet();
 	if (f0_2 != 0.0f)
 	{
 		f0 = x87_round(FLOAT_AT(g_esp + 0x10u) * FLOAT_AT(g_esp + 0x10u));
@@ -278567,7 +278908,7 @@ uint32_t ModelUpdateSubObjectTransforms(uint32_t ebx, uint32_t ebp, uint32_t esi
 		esi = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 	}
-	f0_2 = sub_000C7AD0();
+	f0_2 = LevelTimeGet();
 	if (f0_2 != 0.0f)
 	{
 		f0 = x87_round(FLOAT_AT(g_esp + 0x10u) * FLOAT_AT(g_esp + 0x10u));
@@ -281558,7 +281899,7 @@ uint32_t ChunksEffectUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 		MEMF(eax + 8u) = (float)x87_round(t2 + FLOAT_AT(ecx + 8u));
 		MEMF(eax) = (float)t3;
 		MEMF(eax + 4u) = (float)t4;
-		f0_2 = sub_000C7AD0();
+		f0_2 = LevelTimeGet();
 		if (f0_2 != 0.0f)
 		{
 			f0 = x87_round(FLOAT_AT(g_esp + 0x10u) * FLOAT_AT(g_esp + 0x10u));
@@ -282005,7 +282346,7 @@ void ChunksEffectPiecesSpawn(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 					MEM32(esi_2 + 0x60u) = MEM32(g_esp + 0xC0u);
 					MEMF(esi_2 + 0x5Cu) = (float)f0;
 					MEM32(esi_2 + 0x64u) = MEM32(MEM32(MEM32(edi + 0xD64u) + 0x14u));
-					f0 = sub_000C7AD0();
+					f0 = LevelTimeGet();
 					if (f0 != 0.0f)
 					{
 						MEM32(esi_2 + 0x50u) = MEM32(MEM32(MEM32(edi + 0xD64u) + 0x20u));
@@ -282659,7 +283000,11 @@ void GameObjectCreateByType(uint32_t eax, uint32_t esi)
 	}
 }
 
-void sub_0010BB60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* For each of the object's effect slots it builds a random spread direction with
+   DirectionBuildRandomSpread and a random range with RandomSpreadRange, spawns a particle system with
+   ObjectSpawnParticleSystem, and when the handle's flag mask (0x3F800) equals 0x1B800 reads the primary
+   scene object position with ObjectGetPrimarySceneObjectPosition before calling GameObjectDestroy. */
+void GameObjectSpawnSpreadParticlesAndDestroy(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0, f1 = 0, t1 = 0;
@@ -282677,7 +283022,7 @@ void sub_0010BB60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 	MEM32(g_esp) = esi;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edi;
-	f0 = sub_000C7AD0();
+	f0 = LevelTimeGet();
 	MEM32(g_esp + 0x3Cu) = 1u;
 	if (f0 == 0.0f)
 		MEM32(g_esp + 0x3Cu) = 0u;
@@ -282773,7 +283118,7 @@ void sub_0010BB60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 		ebx = MEM32(g_esp);
 		g_esp = g_esp + 4u;
 	}
-	sub_000C7AD0();
+	LevelTimeGet();
 	ebp_2 = MEM32(ebp_2 + 0x58u);
 	if ((int32_t)MEM32(ebp_2 + 0x44u) <= 0)
 		esi_2 = MEM32(g_esp + 0x40u);
@@ -282830,8 +283175,8 @@ void sub_0010BB60(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32
 }
 
 /* Dispatches the message in arg2 (0x7FFF) on the game object in arg0: 0xFFFF calls
-   GameObjectCreateByType, 0xFFFB calls GameObjectDestroy, 0xFFF9 calls sub_0010BB60, returning 1 when
-   handled and 0 otherwise. */
+   GameObjectCreateByType, 0xFFFB calls GameObjectDestroy, 0xFFF9 calls
+   GameObjectSpawnSpreadParticlesAndDestroy, returning 1 when handled and 0 otherwise. */
 uint32_t GameObjectDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -282868,7 +283213,7 @@ uint32_t GameObjectDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uin
 	arg2_2 = arg1;
 	arg1_2 = eax;
 	arg0_2 = ecx;
-	sub_0010BB60(ebx, ebp, esi, edi, arg0_2, arg1_2, arg2_2, arg3_2);
+	GameObjectSpawnSpreadParticlesAndDestroy(ebx, ebp, esi, edi, arg0_2, arg1_2, arg2_2, arg3_2);
 	eax = 1u;
 	return eax;
 }
@@ -287312,7 +287657,12 @@ void QuadtreeRefreshObjects(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	*p_edx = edx;
 }
 
-void sub_0010EF50(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Looks through the object cache and the spatial tree (SphereIntersectClassify,
+   SpatialTreeCollectNearPoint, vcClassByType) for an already-registered object of the same class within
+   100 units of the given point and returns nonzero if one is found, otherwise appends the object to the
+   fixed 8-entry list, copies the point into its 0x18/0x1C/0x20 fields, sets its time and expiry from the
+   class cache data, and calls vcObjectReleaseLater when the object's low flag bit is clear. */
+void ObjectFindOrCreateNearPoint(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -287568,7 +287918,7 @@ void sub_0010F1B0(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 	arg1_2 = ecx;
 	arg0_2 = eax;
 	*p_eax = eax;
-	sub_0010EF50(arg0_2, arg1_2, arg2, arg3, p_eax, p_ebx, p_ebp, p_esi, p_edi);
+	ObjectFindOrCreateNearPoint(arg0_2, arg1_2, arg2, arg3, p_eax, p_ebx, p_ebp, p_esi, p_edi);
 }
 
 void sub_0010F230(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
@@ -287585,7 +287935,7 @@ void sub_0010F230(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 			arg2 = arg1;
 			arg1_2 = ecx;
 			arg0_2 = eax;
-			sub_0010EF50(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
+			ObjectFindOrCreateNearPoint(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
 		}
 		*p_eax = eax;
 		return;
@@ -287599,7 +287949,7 @@ void sub_0010F230(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 			arg2 = arg1;
 			arg1_2 = ecx;
 			arg0_2 = eax;
-			sub_0010EF50(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
+			ObjectFindOrCreateNearPoint(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
 		}
 		*p_eax = eax;
 		return;
@@ -287614,7 +287964,7 @@ void sub_0010F230(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx
 		arg2 = arg1;
 		arg1_2 = ecx;
 		arg0_2 = eax;
-		sub_0010EF50(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
+		ObjectFindOrCreateNearPoint(arg0_2, arg1_2, arg2, arg3, &eax, p_ebx, p_ebp, p_esi, p_edi);
 	}
 	*p_eax = eax;
 }
@@ -288674,7 +289024,7 @@ uint32_t vcPadUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		{
 			if (MEM32(0x23D258u) != 0u && MEM32(0x23D264u) != 0u && edx < MEM32(0x23D268u))
 			{
-				sub_00112810();
+				VcRandomGet();
 				edx = stack_14;
 			}
 		}
@@ -290252,7 +290602,8 @@ uint32_t VcFileCreateSuccess(uint32_t arg0)
 	return eax;
 }
 
-void sub_00112810(void)
+/* Calls vcRandom with no arguments, a wrapper around the game's random number generator. */
+void VcRandomGet(void)
 {
 	uint32_t ignored = 0;
 
@@ -290932,7 +291283,9 @@ uint32_t ScreenFrameUpdate(uint32_t arg0)
 	return RenderStatesApplyCached();
 }
 
-void sub_001130B0(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
+/* Iterates the two object lists at +0x2E8 and +0x2EC (counts at +0x2D0 and +0x2D4) and calls the virtual
+   method at +0x58 of each element, passing the object and the element. */
+void GameObjectInvokeChildrenVirtual(uint32_t arg0, uint32_t *p_eax, uint32_t *p_ecx)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 
@@ -291323,7 +291676,7 @@ void CameraBuildViewProjectionMatrices(uint32_t arg0, uint32_t arg1, uint32_t ar
 	MEMF(esi_2 + 0x188u) = (float)-x87_round(f0 + f1);
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	sub_00114C10(ecx, arg0_2, arg1_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+	Matrix4x4Invert(ecx, arg0_2, arg1_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2 + 0x1D0u;
 	g_esp = g_esp - 4u;
@@ -292385,7 +292738,7 @@ void Matrix3x3Invert(uint32_t arg0, uint32_t arg1)
 }
 
 /* Copies the elements of a 4x4 matrix into a 3x3 array, skipping row arg2 and column arg3, for use by
-   Matrix4x4Determinant and sub_00114C10. */
+   Matrix4x4Determinant and Matrix4x4Invert. */
 uint32_t Matrix4x4ExtractSubmatrix(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t eax = 0, ebp = 0, ebx = 0, ecx_2 = 0, edi = 0, edx = 0, esi = 0;
@@ -292489,7 +292842,9 @@ void Matrix4x4Determinant(uint32_t ecx, uint32_t arg0, uint32_t *p_esi, uint32_t
 	*p_f0 = f0;
 }
 
-void sub_00114C10(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Inverts a 4x4 matrix, using Matrix4x4Determinant and Matrix4x4ExtractSubmatrix to build the cofactor
+   matrix scaled by 1/determinant, and writing the identity matrix when the determinant is zero. */
+void Matrix4x4Invert(uint32_t ecx, uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t ebx = *p_ebx;
 	uint32_t ebp = *p_ebp;
@@ -299493,7 +299848,7 @@ uint32_t ObjectCacheGetDurationMs(uint32_t arg0)
 
 /* Resolves a handle through vcObjectCacheHandle/vcObjectCacheData and vcClassByType and returns the
    cached object's first field. (Uncertain: whether that field is the object itself or its vtable, since
-   sub_0011F380 treats the cached value as the object.) */
+   ObjectCacheCopyIndexedEntry treats the cached value as the object.) */
 uint32_t ObjectCacheGetObject(uint32_t arg0)
 {
 	uint32_t eax = 0;
@@ -300032,7 +300387,10 @@ uint32_t vcMultiSubObject_Reload(uint32_t arg1, uint32_t arg2, uint32_t arg3)
 	return eax;
 }
 
-uint32_t sub_0011D480(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* When bit 2 of the byte at esi+0x90 is clear, filters the valid objects of the arrays at esi+0xD8 and
+   esi+0xE4 with ObjectArrayFilterValidObjects and collects them with
+   SceneGraphCollectObjectsWithTransform, returning the number collected. */
+uint32_t SceneGraphCollectValidObjects(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg10 = 0, arg11 = 0, arg12 = 0, arg13 = 0, arg14 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, arg9 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0;
 
@@ -302396,7 +302754,10 @@ uint32_t SceneObjectGetAttachSlot(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-void sub_0011F380(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves arg0 through the vcObjectCacheHandle/vcObjectCacheData cache with vcClassByType, then copies
+   the 24-byte entry at index arg1 from the array at offset 0x40 (stride 0x80, count at offset 8) of the
+   object whose handle is the resolved object's +0xBC field into arg2 when arg1 is below that count. */
+void ObjectCacheCopyIndexedEntry(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 
@@ -303743,7 +304104,11 @@ void MotionListResetState(uint32_t arg0)
 	MEM32(eax + 0x128u) = ecx;
 }
 
-uint32_t sub_001205C0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* Resolves arg0 as a game object through vcClassByType and the vcObjectCache, scans its motion list
+   (count at +0xF4, entries at +0x128 stride 0x44) for the first entry whose priority field is not above
+   arg5, calls MotionListInsertAt, then fills the new entry with the motion handle arg1, arg2, vcGameTime
+   as start time, 1.0 speed, arg5 as priority and arg4|8 as flags. */
+uint32_t ObjectMotionStart(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 	uint32_t saved_arg4 = 0, saved_arg3 = 0, saved_arg2 = 0, saved_arg1 = 0;
@@ -303875,7 +304240,9 @@ uint32_t MotionListCreateEntryWithDuration(uint32_t arg0, uint32_t arg1, uint32_
 	return eax;
 }
 
-uint32_t sub_00120790(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* Does the same motion-list insert on the object in arg0, but the new entry's end time is vcGameTime +
+   ObjectCacheGetDurationMs(arg1), arg4 in both time fields and 0x5C as flags. */
+uint32_t ObjectMotionStartForDuration(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, esi = 0;
 	uint32_t saved_arg5 = 0, saved_arg4 = 0, saved_arg3 = 0, saved_arg2 = 0, saved_arg1 = 0;
@@ -304333,7 +304700,8 @@ uint32_t LinkedObjectUnload(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00121270(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Forwards its four arguments straight to ModelNodeGetWorldTransform. */
+uint32_t ModelNodeWorldTransformGet(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	return ModelNodeGetWorldTransform(arg0, arg1, arg2, arg3);
 }
@@ -304637,7 +305005,7 @@ uint32_t ObjectDrawFade(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, 
 		MEM32(g_esp) = esi_2 + 0x60u;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		eax = sub_0011D480(ebx_2, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
+		eax = SceneGraphCollectValidObjects(ebx_2, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp + 4u;
 		g_esp = g_esp + 4u;
@@ -304739,7 +305107,7 @@ uint32_t ObjectDrawFade(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, 
 	MEM32(g_esp) = esi_2 + 0x60u;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	eax = sub_0011D480(ebx_2, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
+	eax = SceneGraphCollectValidObjects(ebx_2, ebp_2, esi_2, edi_2, arg0_2, arg1_2);
 	g_esp = g_esp + 8u;
 	g_esp = g_esp + 4u;
 	g_esp = g_esp + 4u;
@@ -305528,7 +305896,11 @@ uint32_t vcWater_GetSize(uint32_t arg1, uint32_t arg2)
 	return eax;
 }
 
-uint32_t sub_00122040(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves the object from its handle with vcClassByType/vcObjectCacheData, classifies the box against
+   the object's planes with BoxClassifyAgainstPlanes and its corners with BoxGetCornersByDirection, and
+   appends a record holding the box's transform, normal (Vector3Dot) and distance to an array with
+   ArrayAppendSlot. */
+uint32_t BoxPlanesIntersectAppendRecord(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	bool L_1220F3 = false;
 	uint32_t zero = 0;
@@ -305778,7 +306150,10 @@ uint32_t ObjectCollisionSphereTrace(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 	return eax;
 }
 
-void sub_00122300(uint32_t arg0, uint32_t arg1)
+/* Resolves the object handle through vcClassByType and the object cache, then releases the object held
+   at +0xBC, adds a reference to the given object with vcObjectAddRef, stores it there and calls
+   vcObjectMarkChanged. */
+void ObjectSetReferencedObject(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -305814,7 +306189,10 @@ void sub_00122300(uint32_t arg0, uint32_t arg1)
 	ignored = x86_call(vcObjectMarkChanged_entry, 0x00122372u, 1, arg0_2);
 }
 
-void sub_00122380(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves the object handle through vcClassByType and the object cache, releases the object held at
+   +0xF8, adds a reference to the given object with vcObjectAddRef, stores it there and writes the given
+   value at +0x11C. */
+void ObjectSetReferencedObjectAndValue(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg2 = 0, saved_arg1 = 0;
@@ -306311,11 +306689,11 @@ uint32_t vcWater_Load(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3
 	edi = saved_arg0;
 	arg1_2 = ebp;
 	arg0_2 = edi;
-	sub_00122300(arg0_2, arg1_2);
+	ObjectSetReferencedObject(arg0_2, arg1_2);
 	arg2_2 = MEM32(esi + 0x11Cu);
 	arg1_2 = ebx;
 	arg0_2 = edi;
-	sub_00122380(arg0_2, arg1_2, arg2_2);
+	ObjectSetReferencedObjectAndValue(arg0_2, arg1_2, arg2_2);
 	arg0_2 = ebp;
 	x86_call(vcObjectRelease_entry, 0x00122A57u, 1, arg0_2);
 	ignored_2 = g_eax;
@@ -306363,7 +306741,7 @@ uint32_t vcWater_Copy(uint32_t ebp, uint32_t arg0, uint32_t arg1)
 	MEM32(ebx + 0xBCu) = 0u;
 	arg1_2 = MEM32(esi + 0xBCu);
 	arg0_2 = edi;
-	sub_00122300(arg0_2, arg1_2);
+	ObjectSetReferencedObject(arg0_2, arg1_2);
 	arg6 = MEM32(esi + 0xF4u);
 	arg5 = MEM32(esi + 0xF0u);
 	arg4 = MEM32(esi + 0xE4u);
@@ -306557,7 +306935,7 @@ uint32_t vcTerrain_Create(uint32_t edx, uint32_t arg0)
 	arg1 = saved_arg0;
 	arg0_2 = eax;
 	MEM32(esi + 0x2A7ACu) = eax;
-	sub_001306F0(arg0_2, arg1);
+	ObjectCacheSetValue(arg0_2, arg1);
 	arg6 = 0x40900000u;
 	arg5 = 0x2710u;
 	arg4 = 0x32u;
@@ -321376,7 +321754,11 @@ uint32_t vcShadow_GetSize(void)
 	return eax;
 }
 
-uint32_t sub_0012F710(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Tests the box built from the object at arg0 against the collision grid with
+   ObjectLocalGridBoxIsBlocked and, when that reports a block, transforms the box planes with
+   BoxTransformPlanesInverse, classifies them with BoxClassifyAgainstPlanes and appends a corner slot
+   made by BoxGetCornersByDirection through ArrayAppendSlot. */
+uint32_t CollisionGridQueryObjectBox(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	bool L_12F872 = false;
 	uint32_t zero = 0;
@@ -322418,7 +322800,10 @@ uint32_t ObjectCacheReset(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-void sub_001306F0(uint32_t arg0, uint32_t arg1)
+/* Resolves the handle in arg0 through vcClassByType to reach the object's data, stores arg1 in that data
+   at 0x2C and in vcObjectCacheHandle/vcObjectCacheData, and writes arg1 to 0x2C directly when arg0 is
+   not a valid handle. */
+void ObjectCacheSetValue(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0;
 
@@ -325102,7 +325487,12 @@ uint32_t vcParticleSystem_InUse(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	return eax;
 }
 
-uint32_t sub_00132CD0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Resolves the object handle in ebx through vcClassByType, transforms the box at 0x60 with
+   BoxTransformPlanesInverse, classifies it with BoxClassifyAgainstPlanes (returning 0 when it is inside,
+   otherwise taking the 0x60/0x7F classification), gets its corners with BoxGetCornersByDirection and
+   appends a record with ArrayAppendSlot holding the classification, the plane distance and the value
+   from VcObjectCacheResolve. */
+uint32_t ObjectCacheAddCollisionPlane(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t zero = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
@@ -334094,7 +334484,10 @@ uint32_t ObjectAddRefSlot(uint32_t arg0, uint32_t arg3)
 	return eax;
 }
 
-uint32_t sub_0013AFD0(uint32_t arg0, uint32_t arg1)
+/* Resolves a vcObjectCacheHandle to the object it names, reusing vcObjectCacheData when the handle
+   matches and otherwise indexing the table at vcClassByType(handle >> 16) + 0x6Cu by (handle & 0xFFFFu)
+   * 0x4Cu, then writing the object pointer (data + 0x1F4) through arg1 and returning 3. */
+uint32_t ObjectCacheResolve(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0;
 
@@ -347120,13 +347513,13 @@ void GameObjectResetTimersAndPools_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001EDD0_entry(void)
+void EntitySelectTarget_entry(void)
 {
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_0001EDD0(ARG32(0), ARG32(1), &ebx_out, &ebp_out, &esi_out, &edi_out);
+	EntitySelectTarget(ARG32(0), ARG32(1), &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
 	g_esi = esi_out;
@@ -347229,10 +347622,10 @@ void GameObjectsInitializeAndGetResult_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001F700_entry(void)
+void AIDataInvokeEntryTimers_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0001F700(g_eax, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = AIDataInvokeEntryTimers(g_eax, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347251,10 +347644,10 @@ void EntitySetAITarget_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001F7B0_entry(void)
+void EntityInvokeTimersForGameObject_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0001F7B0(ARG32(0), ARG32(1));
+	EntityInvokeTimersForGameObject(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -347374,10 +347767,10 @@ void GameStart_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001FEF0_entry(void)
+void GameSessionShutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi;
-	g_edi = sub_0001FEF0(g_edx, g_ebx, g_esi, g_edi);
+	g_edi = GameSessionShutdown(g_edx, g_ebx, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -351415,14 +351808,14 @@ void GameObjectSetOrToggleState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00037F10_entry(void)
+void GameObjectDrawTransformedBoundingBox_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_00037F10(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	GameObjectDrawTransformedBoundingBox(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -351431,14 +351824,14 @@ void sub_00037F10_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000381A0_entry(void)
+void IndexedLineListDrawScaled_entry(void)
 {
 	uint32_t ebp_kept = g_ebp;
 	uint32_t ecx_out = g_ecx;
 	uint32_t ebx_out = g_ebx;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000381A0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &ecx_out, &ebx_out, &esi_out, &edi_out);
+	IndexedLineListDrawScaled(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &ecx_out, &ebx_out, &esi_out, &edi_out);
 	g_ebp = ebp_kept;
 	g_ecx = ecx_out;
 	g_ebx = ebx_out;
@@ -351688,7 +352081,7 @@ void sub_0003920D_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000393B0_entry(void)
+void GameObjectDrawOrientedOutline_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ecx_out = g_ecx;
@@ -351696,7 +352089,7 @@ void sub_000393B0_entry(void)
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000393B0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), &eax_out, &ecx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	GameObjectDrawOrientedOutline(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), &eax_out, &ecx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ecx = ecx_out;
 	g_ebx = ebx_out;
@@ -351908,9 +352301,9 @@ void NodeFamilyRegisterDescriptor_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003A2F0_entry(void)
+void NodeAdvanceWrappedValue_entry(void)
 {
-	g_eax = sub_0003A2F0(ARG32(1));
+	g_eax = NodeAdvanceWrappedValue(ARG32(1));
 	g_esp += 4u;
 }
 
@@ -351931,15 +352324,15 @@ void GameObjectGetType_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003A3E0_entry(void)
+void NodeResolveHandle_entry(void)
 {
-	g_eax = sub_0003A3E0(ARG32(0));
+	g_eax = NodeResolveHandle(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_0003A410_entry(void)
+void NodeResetWrappedValue_entry(void)
 {
-	sub_0003A410(ARG32(0));
+	NodeResetWrappedValue(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352016,10 +352409,10 @@ void SplineNode_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003AE50_entry(void)
+void GameObjectSplineTransformUpdate_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0003AE50(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	GameObjectSplineTransformUpdate(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352027,10 +352420,10 @@ void sub_0003AE50_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003B0E0_entry(void)
+void GameObjectTargetActionApplyTransform_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0003B0E0(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	GameObjectTargetActionApplyTransform(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352072,9 +352465,9 @@ void GameObjectSetPathPoint_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003B700_entry(void)
+void NodeFamilySavePreviousTransform_entry(void)
 {
-	sub_0003B700(ARG32(0));
+	NodeFamilySavePreviousTransform(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352239,13 +352632,13 @@ void NodeFamilyAddNode_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003C620_entry(void)
+void EntityPathComputeTransform_entry(void)
 {
 	uint32_t esi_kept = g_esi, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
-	sub_0003C620(g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), &eax_out, &ebx_out, &ebp_out);
+	EntityPathComputeTransform(g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), &eax_out, &ebx_out, &ebp_out);
 	g_esi = esi_kept;
 	g_edi = edi_kept;
 	g_eax = eax_out;
@@ -352309,10 +352702,10 @@ void GameObjectDeactivate_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003CBF0_entry(void)
+void GameObjectFreeByHandle_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0003CBF0(g_edx, ARG32(0));
+	g_eax = GameObjectFreeByHandle(g_edx, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352413,10 +352806,10 @@ void ScreenElementHandleCommand_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003D0B0_entry(void)
+void ScreenElementFamilyInit_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0003D0B0(ARG32(0));
+	ScreenElementFamilyInit(ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352474,9 +352867,9 @@ void PadPressedLeftToStats_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003D390_entry(void)
+void GameObjectPadInputSmoothAxis_entry(void)
 {
-	g_eax = sub_0003D390(ARG32(0));
+	g_eax = GameObjectPadInputSmoothAxis(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352622,10 +353015,10 @@ void PlayerFireWeapon_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003F980_entry(void)
+void PlayerFireWeaponWithCooldown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0003F980(g_ebx, g_ebp, ARG32(0));
+	g_eax = PlayerFireWeaponWithCooldown(g_ebx, g_ebp, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353683,10 +354076,10 @@ void sub_0004DD70_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0004E070_entry(void)
+void SceneObjectRaycastReactToNearbyPlayer_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0004E070(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SceneObjectRaycastReactToNearbyPlayer(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353728,10 +354121,10 @@ void sub_0004ED67_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0004ED70_entry(void)
+void WeaponFireAtObjectFromHandle_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0004ED70(g_ebx, g_ebp, g_edi, ARG32(0));
+	g_eax = WeaponFireAtObjectFromHandle(g_ebx, g_ebp, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353751,9 +354144,9 @@ void GameObjectUpdateAimRotation_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0004F740_entry(void)
+void OrientationBuildFromDirectionAndAngle_entry(void)
 {
-	g_eax = sub_0004F740(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), ARG32(6), ARG32(7), ARG32(8), ARG32(9));
+	g_eax = OrientationBuildFromDirectionAndAngle(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5), ARG32(6), ARG32(7), ARG32(8), ARG32(9));
 	g_esp += 4u;
 }
 
@@ -354147,10 +354540,10 @@ void ZenLightMissileTurret_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00054E80_entry(void)
+void ObjectSetNodePositionsFromRaySphereIntersect_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00054E80(g_ebx, g_esi, g_edi, ARG32(0));
+	g_eax = ObjectSetNodePositionsFromRaySphereIntersect(g_ebx, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -354767,10 +355160,10 @@ void sub_0005A40C_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005A410_entry(void)
+void EntityUpdateProjectiles_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0005A410(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = EntityUpdateProjectiles(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356155,10 +356548,10 @@ void FemalePowerArmorDestroyObjects_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000700A0_entry(void)
+void GameObjectFromIndexInvokeHandler_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000700A0(g_esi, ARG32(1));
+	g_eax = GameObjectFromIndexInvokeHandler(g_esi, ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356177,9 +356570,9 @@ void FemalePowerArmorSwitchMode_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00070260_entry(void)
+void GameObjectResetVelocity_entry(void)
 {
-	g_ecx = sub_00070260(g_ecx, ARG32(0));
+	g_ecx = GameObjectResetVelocity(g_ecx, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -356855,10 +357248,10 @@ void ZenReEntryPod_NotifyAndAdvanceState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0007B880_entry(void)
+void StateTimerCountdownAndEnable_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0007B880(ARG32(0), ARG32(1));
+	g_eax = StateTimerCountdownAndEnable(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356866,10 +357259,10 @@ void sub_0007B880_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0007B8D0_entry(void)
+void StateTimerCountdownAndDisable_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0007B8D0(ARG32(0), ARG32(1));
+	g_eax = StateTimerCountdownAndDisable(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356983,10 +357376,10 @@ void SpartanSpecInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0007CDC0_entry(void)
+void GameObjectSpawnVCObjectCloneA_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0007CDC0(g_esi);
+	g_eax = GameObjectSpawnVCObjectCloneA(g_esi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -357022,10 +357415,10 @@ void RaiderXSpecInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0007E210_entry(void)
+void GameObjectSpawnVCObjectCloneB_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0007E210(g_esi);
+	g_eax = GameObjectSpawnVCObjectCloneB(g_esi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -357875,10 +358268,10 @@ void ZenCruiserMissileTurretInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00088470_entry(void)
+void GameObjectInvokeHandlerFromIndex_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00088470(g_esi, ARG32(1));
+	g_eax = GameObjectInvokeHandlerFromIndex(g_esi, ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -358391,10 +358784,10 @@ void ZenShuttleClearCallbacks_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0008E860_entry(void)
+void GameObjectSendMessageAndSetState_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0008E860(g_eax, g_ecx, g_esi, g_edi, ARG32(0));
+	g_eax = GameObjectSendMessageAndSetState(g_eax, g_ecx, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359276,10 +359669,10 @@ void PodStandardWarrior_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00099FA0_entry(void)
+void EntityFireWeaponEffect_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00099FA0(g_ecx, g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
+	g_eax = EntityFireWeaponEffect(g_ecx, g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359354,10 +359747,10 @@ void FighterPod_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009AF00_entry(void)
+void RdfHeavyMissileInitialize_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0009AF00(g_eax, g_ecx, g_ebx, g_ebp, g_esi, g_edi);
+	RdfHeavyMissileInitialize(g_eax, g_ecx, g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359472,9 +359865,9 @@ void GameObjectSetRegistryIndex_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009B750_entry(void)
+void CallbackEntryClear_entry(void)
 {
-	sub_0009B750(ARG32(0));
+	CallbackEntryClear(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359507,9 +359900,9 @@ void FlagsSetMask_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009B980_entry(void)
+void EntitySetTypeIndex_entry(void)
 {
-	sub_0009B980(ARG32(0));
+	EntitySetTypeIndex(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359839,9 +360232,9 @@ void EntityGroupSetChildTargetHandles_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009D6C0_entry(void)
+void EntityListHasEntries_entry(void)
 {
-	g_eax = sub_0009D6C0(ARG32(0));
+	g_eax = EntityListHasEntries(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -359851,9 +360244,9 @@ void sub_0009D6F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009D880_entry(void)
+void EntityChildListAssignChildIndices_entry(void)
 {
-	g_ebx = sub_0009D880(g_ebx, g_esi, g_edi, ARG32(0));
+	g_ebx = EntityChildListAssignChildIndices(g_ebx, g_esi, g_edi, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -360804,9 +361197,9 @@ void sub_000A50B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A50F0_entry(void)
+void ScreenElementSetRect_entry(void)
 {
-	g_eax = sub_000A50F0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ScreenElementSetRect(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_esp += 4u;
 }
 
@@ -361171,15 +361564,15 @@ void EntitySetSecondThresholdReachedFlag_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A68C0_entry(void)
+void EntityMarkThresholdReached_entry(void)
 {
-	g_eax = sub_000A68C0(ARG32(0));
+	g_eax = EntityMarkThresholdReached(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000A68D0_entry(void)
+void EntityMarkSecondThresholdReached_entry(void)
 {
-	g_eax = sub_000A68D0(ARG32(0));
+	g_eax = EntityMarkSecondThresholdReached(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -361746,10 +362139,10 @@ void GameObjectStateCopy_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A8FA0_entry(void)
+void ObjectAttachAtRandomTargetOffset_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000A8FA0(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = ObjectAttachAtRandomTargetOffset(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361828,15 +362221,15 @@ void sub_000A9510_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A95F0_entry(void)
+void ObjectAssignLeastUsedSlot_entry(void)
 {
-	sub_000A95F0(ARG32(0));
+	ObjectAssignLeastUsedSlot(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000A96D0_entry(void)
+void PathNodeReset_entry(void)
 {
-	sub_000A96D0();
+	PathNodeReset();
 	g_esp += 4u;
 }
 
@@ -361908,10 +362301,10 @@ void GameObjectValidateAttachmentSlotIndex_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A9DA0_entry(void)
+void MovementPatternFigureAttachEntity_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000A9DA0(g_eax, g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = MovementPatternFigureAttachEntity(g_eax, g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361941,10 +362334,10 @@ void MovementPatternFigure2WorldPointApply_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A9F20_entry(void)
+void ObjectApplyTargetWorldPoint_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000A9F20(g_eax, ARG32(0));
+	g_eax = ObjectApplyTargetWorldPoint(g_eax, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361974,10 +362367,10 @@ void ObjectTargetMovementPatternFigure2Apply_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AA040_entry(void)
+void ObjectApplyMovementPatternFigure1WorldPoint_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AA040(g_eax, g_ebx, ARG32(0));
+	g_eax = ObjectApplyMovementPatternFigure1WorldPoint(g_eax, g_ebx, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361985,10 +362378,10 @@ void sub_000AA040_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AA090_entry(void)
+void ObjectApplyMovementPatternFigure2WorldPoint_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AA090(g_eax, g_ebx, ARG32(0));
+	g_eax = ObjectApplyMovementPatternFigure2WorldPoint(g_eax, g_ebx, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361996,10 +362389,10 @@ void sub_000AA090_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AA0E0_entry(void)
+void ObjectApplyMovementPatternWorldPoint_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AA0E0(g_eax, g_ebx, ARG32(0));
+	g_eax = ObjectApplyMovementPatternWorldPoint(g_eax, g_ebx, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362144,13 +362537,13 @@ void ObjectMoveTowardTargetHandle_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AACC0_entry(void)
+void ObjectMoveTowardTargetIfBeyondTargetLimit_entry(void)
 {
 	uint32_t esi_kept = g_esi, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
-	sub_000AACC0(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out);
+	ObjectMoveTowardTargetIfBeyondTargetLimit(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out);
 	g_esi = esi_kept;
 	g_edi = edi_kept;
 	g_eax = eax_out;
@@ -362333,10 +362726,10 @@ void EntityAttachToTarget_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AB760_entry(void)
+void EntityMoveTowardTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AB760(g_eax, g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1));
+	g_eax = EntityMoveTowardTarget(g_eax, g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362500,10 +362893,10 @@ void sub_000ABDB0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ABDE0_entry(void)
+void ObjectModeActionBySpawnOrDistance_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000ABDE0(g_eax, g_ebx, g_ebp, g_edi, ARG32(0), ARG32(2));
+	g_eax = ObjectModeActionBySpawnOrDistance(g_eax, g_ebx, g_ebp, g_edi, ARG32(0), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362511,10 +362904,10 @@ void sub_000ABDE0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ABED0_entry(void)
+void ObjectTargetMovementPatternExecute_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000ABED0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = ObjectTargetMovementPatternExecute(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363052,15 +363445,15 @@ void ScreenFamilySetHandler_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000B1B30_entry(void)
+void ScreenFamilyGetChildScreen_entry(void)
 {
-	g_eax = sub_000B1B30(ARG32(0));
+	g_eax = ScreenFamilyGetChildScreen(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000B1B60_entry(void)
+void ScreenFamilyDetachScreen_entry(void)
 {
-	sub_000B1B60(ARG32(0));
+	ScreenFamilyDetachScreen(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363169,9 +363562,9 @@ void ScreenFamilyRegisterCallbacks_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000B3670_entry(void)
+void ScreenFamilyGetParentScreen_entry(void)
 {
-	g_eax = sub_000B3670(ARG32(0));
+	g_eax = ScreenFamilyGetParentScreen(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363805,10 +364198,10 @@ void ScreenCreateWidgets_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000B9BF0_entry(void)
+void ScreenFamilyDestroyWidgets_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000B9BF0(g_eax, g_edx, g_esi);
+	ScreenFamilyDestroyWidgets(g_eax, g_edx, g_esi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363838,10 +364231,10 @@ void ScreenFamily_Update_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BA190_entry(void)
+void ScreenFamilyProcessMessage_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BA190(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ScreenFamilyProcessMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364111,10 +364504,10 @@ void sub_000BB440_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BB540_entry(void)
+void SavedGamesCheckDeviceAndContinue_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BB540();
+	g_eax = SavedGamesCheckDeviceAndContinue();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364858,10 +365251,10 @@ void TextLabelInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000C2280_entry(void)
+void TextLabelDraw_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000C2280(g_eax, g_ebx, g_esi, g_edi);
+	TextLabelDraw(g_eax, g_ebx, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365013,9 +365406,9 @@ void ScreenFamilySetupObjectType_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000C2C10_entry(void)
+void GameObjectClearSelection_entry(void)
 {
-	g_eax = sub_000C2C10(ARG32(0));
+	g_eax = GameObjectClearSelection(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365580,10 +365973,10 @@ void ScreenElementInitializeWithPauseState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000C6BF0_entry(void)
+void ScreenElementDrawString_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000C6BF0(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
+	ScreenElementDrawString(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365624,9 +366017,9 @@ void ScreenElementFamilyCleanup_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000C72E0_entry(void)
+void ScreenElementFamilySetClassDescriptor_entry(void)
 {
-	sub_000C72E0(ARG32(0));
+	ScreenElementFamilySetClassDescriptor(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365739,15 +366132,15 @@ void GameObjectUpdateYawTurn_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000C7AC0_entry(void)
+void LevelTimeSet_entry(void)
 {
-	sub_000C7AC0(ARG32(0));
+	LevelTimeSet(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000C7AD0_entry(void)
+void LevelTimeGet_entry(void)
 {
-	x87_push(sub_000C7AD0());
+	x87_push(LevelTimeGet());
 	g_esp += 4u;
 }
 
@@ -366195,10 +366588,10 @@ void sub_000CB250_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CB2A0_entry(void)
+void ObjectSendMessageToTargetHandles_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CB2A0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
+	g_eax = ObjectSendMessageToTargetHandles(g_ebx, g_ebp, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366256,10 +366649,10 @@ void GameObjectSetSceneObjectsUsed_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CBD10_entry(void)
+void GameObjectSendMessageAlternatingWeaponSlot_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CBD10(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = GameObjectSendMessageAlternatingWeaponSlot(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366267,10 +366660,10 @@ void sub_000CBD10_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CC0A0_entry(void)
+void GameObjectSendHardpointSlotMessage_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CC0A0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = GameObjectSendHardpointSlotMessage(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367364,10 +367757,10 @@ void sub_000D02F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D0350_entry(void)
+void WeaponFamilyFourthTypeManagerRelease_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D0350();
+	g_eax = WeaponFamilyFourthTypeManagerRelease();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367375,9 +367768,9 @@ void sub_000D0350_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D03A0_entry(void)
+void WeaponFamilyRegisterFourthTypeManager_entry(void)
 {
-	sub_000D03A0(ARG32(0));
+	WeaponFamilyRegisterFourthTypeManager(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367387,10 +367780,10 @@ void sub_000D04D0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D04E0_entry(void)
+void WeaponFamilyThirdTypeManagerCreate_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D04E0();
+	g_eax = WeaponFamilyThirdTypeManagerCreate();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367398,10 +367791,10 @@ void sub_000D04E0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D0540_entry(void)
+void WeaponFamilyThirdTypeManagerRelease_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D0540();
+	g_eax = WeaponFamilyThirdTypeManagerRelease();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367409,9 +367802,9 @@ void sub_000D0540_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D0590_entry(void)
+void WeaponFamilyRegisterThirdTypeManager_entry(void)
 {
-	sub_000D0590(ARG32(0));
+	WeaponFamilyRegisterThirdTypeManager(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367732,10 +368125,10 @@ void HudPiecesFamilyRegister_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D24F0_entry(void)
+void SoundStreamFadeUpdate_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D24F0(g_ecx, ARG32(1), ARG32(2));
+	g_eax = SoundStreamFadeUpdate(g_ecx, ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368111,10 +368504,10 @@ void SteeringFamilyHandleFaceTarget_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D4F40_entry(void)
+void SteeringFamilyFaceTargetOrDestroy_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D4F40(g_ebp, ARG32(0), ARG32(1));
+	g_eax = SteeringFamilyFaceTargetOrDestroy(g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368144,10 +368537,10 @@ void GameObjectRefCopyWithRandomCountdown_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D50C0_entry(void)
+void SteeringFamilyApplyCommand_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D50C0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SteeringFamilyApplyCommand(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368300,10 +368693,10 @@ void SteeringFamilySetInputHandler_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D5E40_entry(void)
+void GameObjectReplaceFromReference_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D5E40(ARG32(0), ARG32(1));
+	g_eax = GameObjectReplaceFromReference(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368323,15 +368716,15 @@ void sub_000D61B0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D6230_entry(void)
+void SteeringFamilyHandleEvent_entry(void)
 {
-	g_eax = sub_000D6230(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SteeringFamilyHandleEvent(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_esp += 4u;
 }
 
-void sub_000D62F0_entry(void)
+void SteeringFamilyInstallEventTable_entry(void)
 {
-	sub_000D62F0(ARG32(0));
+	SteeringFamilyInstallEventTable(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369308,10 +369701,10 @@ void NodeFamilyUpdateObjectState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DB960_entry(void)
+void NodeFamilyHandleMessageWithSceneObject_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000DB960(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = NodeFamilyHandleMessageWithSceneObject(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369425,45 +369818,45 @@ void GameObjectGetStateCode_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DC100_entry(void)
+void GameObjectSetSplineKind_entry(void)
 {
-	sub_000DC100(ARG32(0), ARG32(1));
+	GameObjectSetSplineKind(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000DC140_entry(void)
+void GameObjectSetSplineKindWithData_entry(void)
 {
-	sub_000DC140(ARG32(0), ARG32(1), ARG32(2));
+	GameObjectSetSplineKindWithData(ARG32(0), ARG32(1), ARG32(2));
 	g_esp += 4u;
 }
 
-void sub_000DC190_entry(void)
+void GameObjectSetPathKind_entry(void)
 {
-	g_edx = sub_000DC190(g_edx, ARG32(0), ARG32(1));
+	g_edx = GameObjectSetPathKind(g_edx, ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000DC1E0_entry(void)
+void GameObjectSetGenericKind_entry(void)
 {
-	sub_000DC1E0(ARG32(0), ARG32(1));
+	GameObjectSetGenericKind(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000DC230_entry(void)
+void GameObjectSetTextKind_entry(void)
 {
-	sub_000DC230(ARG32(0), ARG32(1));
+	GameObjectSetTextKind(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000DC280_entry(void)
+void GameObjectSetChildKind_entry(void)
 {
-	sub_000DC280(ARG32(0), ARG32(1));
+	GameObjectSetChildKind(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000DC2D0_entry(void)
+void GameObjectSetCivilianKind_entry(void)
 {
-	sub_000DC2D0(ARG32(0), ARG32(1));
+	GameObjectSetCivilianKind(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -369524,9 +369917,9 @@ void NodeDispatchStateMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DCE40_entry(void)
+void SplineNodeFamilyInit_entry(void)
 {
-	sub_000DCE40(ARG32(0));
+	SplineNodeFamilyInit(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369563,9 +369956,9 @@ void NodeLoadVCObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DD0A0_entry(void)
+void NodeFamilySetVTable_entry(void)
 {
-	sub_000DD0A0(ARG32(0));
+	NodeFamilySetVTable(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369730,10 +370123,10 @@ void PlayerStandInMSONodeSetStateOnClassChild_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DD930_entry(void)
+void PlayerStandInMSONodeSetChildState_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000DD930(g_esi, ARG32(0), ARG32(1));
+	PlayerStandInMSONodeSetChildState(g_esi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370615,9 +371008,9 @@ void PlayerActionInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000E1EC0_entry(void)
+void PlayerActionSetTargetFlag_entry(void)
 {
-	sub_000E1EC0(g_edi);
+	PlayerActionSetTargetFlag(g_edi);
 	g_esp += 4u;
 }
 
@@ -372646,9 +373039,9 @@ void SceneObjectApplyAngularVelocity_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F2290_entry(void)
+void GameObjectGetSceneTransform_entry(void)
 {
-	g_eax = sub_000F2290(g_eax);
+	g_eax = GameObjectGetSceneTransform(g_eax);
 	g_esp += 4u;
 }
 
@@ -372672,14 +373065,14 @@ void GameObjectBuildRotationMatrix_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F2810_entry(void)
+void GameObjectProbeNearbySceneObjects_entry(void)
 {
 	uint32_t ebx_kept = g_ebx;
 	uint32_t eax_out = g_eax;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000F2810(g_ebx, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), &eax_out, &ebp_out, &esi_out, &edi_out);
+	GameObjectProbeNearbySceneObjects(g_ebx, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), &eax_out, &ebp_out, &esi_out, &edi_out);
 	g_ebx = ebx_kept;
 	g_eax = eax_out;
 	g_ebp = ebp_out;
@@ -372748,10 +373141,10 @@ void GameObjectMoveToGridCell_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F34C0_entry(void)
+void GameObjectAttachmentAdvance_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000F34C0(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	GameObjectAttachmentAdvance(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372870,9 +373263,9 @@ void TurretCannonHandleEvent_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F44E0_entry(void)
+void EntityComputeAxisAcceleration_entry(void)
 {
-	g_eax = sub_000F44E0(g_edx, g_edi, ARG32(1), ARG32(2));
+	g_eax = EntityComputeAxisAcceleration(g_edx, g_edi, ARG32(1), ARG32(2));
 	g_esp += 4u;
 }
 
@@ -372904,10 +373297,10 @@ void EntityIntegrateMotion_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F4E20_entry(void)
+void SceneObjectRaycastReactNearbyPlayer_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000F4E20(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SceneObjectRaycastReactNearbyPlayer(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372983,13 +373376,13 @@ void sub_000F5BA0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F5DD0_entry(void)
+void EntityGroupChildComputeSpreadOffset_entry(void)
 {
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000F5DD0(ARG32(0), ARG32(1), &ebx_out, &ebp_out, &esi_out, &edi_out);
+	EntityGroupChildComputeSpreadOffset(ARG32(0), ARG32(1), &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
 	g_esi = esi_out;
@@ -375997,10 +376390,10 @@ void sub_000FDCC0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDCD0_entry(void)
+void EffectFamilyParticleInit_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FDCD0();
+	g_eax = EffectFamilyParticleInit();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376008,10 +376401,10 @@ void sub_000FDCD0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDD40_entry(void)
+void EffectFamilyParticleRelease_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FDD40();
+	g_eax = EffectFamilyParticleRelease();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376019,9 +376412,9 @@ void sub_000FDD40_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDD70_entry(void)
+void EffectFamilyParticleRegister_entry(void)
 {
-	sub_000FDD70(ARG32(0));
+	EffectFamilyParticleRegister(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376031,10 +376424,10 @@ void sub_000FDDC0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDDD0_entry(void)
+void EffectFamilyParticleInit2_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FDDD0();
+	g_eax = EffectFamilyParticleInit2();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376042,10 +376435,10 @@ void sub_000FDDD0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDE40_entry(void)
+void EffectFamilyParticleRelease2_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FDE40();
+	g_eax = EffectFamilyParticleRelease2();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376053,9 +376446,9 @@ void sub_000FDE40_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDE70_entry(void)
+void EffectFamilyParticleRegister2_entry(void)
 {
-	sub_000FDE70(ARG32(0));
+	EffectFamilyParticleRegister2(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376065,10 +376458,10 @@ void sub_000FDEC0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDED0_entry(void)
+void EffectFamilyParticleInit3_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FDED0();
+	g_eax = EffectFamilyParticleInit3();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376196,10 +376589,10 @@ void SteeringObjectsCheckBounds_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FE9F0_entry(void)
+void SteeringObjectsMessageHandler_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000FE9F0(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SteeringObjectsMessageHandler(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376253,9 +376646,9 @@ void SteeringFamilySetDescriptor_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FED50_entry(void)
+void SteeringMessageCopyAndResetEntity_entry(void)
 {
-	sub_000FED50(g_ebx, g_esi, g_edi);
+	SteeringMessageCopyAndResetEntity(g_ebx, g_esi, g_edi);
 	g_esp += 4u;
 }
 
@@ -376305,13 +376698,13 @@ void SteeringAdvanceTurnState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FF0B0_entry(void)
+void SteeringEntityTurnTimeoutExpired_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp;
 	uint32_t eax_out = g_eax;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000FF0B0(g_ecx, ARG32(0), ARG32(1), &eax_out, &esi_out, &edi_out);
+	SteeringEntityTurnTimeoutExpired(g_ecx, ARG32(0), ARG32(1), &eax_out, &esi_out, &edi_out);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_eax = eax_out;
@@ -376349,9 +376742,9 @@ void SteeringFamily_HandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FF860_entry(void)
+void SteeringFamilyInitState_entry(void)
 {
-	sub_000FF860(ARG32(0));
+	SteeringFamilyInitState(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376443,9 +376836,9 @@ void SteeringObjectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00100160_entry(void)
+void SteeringFamilyInitConfig_entry(void)
 {
-	g_eax = sub_00100160(ARG32(0));
+	g_eax = SteeringFamilyInitConfig(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376520,10 +376913,10 @@ void SceneObjectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00100B70_entry(void)
+void ProjectileImpactEffects_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00100B70(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ProjectileImpactEffects(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377382,10 +377775,10 @@ void TrainingBeacon_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00105A90_entry(void)
+void GameObjectPlaceOnLocalGridStartMotion_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00105A90(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = GameObjectPlaceOnLocalGridStartMotion(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377563,10 +377956,10 @@ void ZenCratesPickup_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_001067C0_entry(void)
+void GameObjectPlaceOnLocalGridFromRef_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_001067C0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = GameObjectPlaceOnLocalGridFromRef(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -378315,10 +378708,10 @@ void GameObjectCreateByType_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0010BB60_entry(void)
+void GameObjectSpawnSpreadParticlesAndDestroy_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_0010BB60(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	GameObjectSpawnSpreadParticlesAndDestroy(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -379162,14 +379555,14 @@ void QuadtreeRefreshObjects_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0010EF50_entry(void)
+void ObjectFindOrCreateNearPoint_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_0010EF50(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	ObjectFindOrCreateNearPoint(ARG32(0), ARG32(1), ARG32(2), ARG32(3), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -379819,10 +380212,10 @@ void VcFileCreateSuccess_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00112810_entry(void)
+void VcRandomGet_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_00112810();
+	VcRandomGet();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -380093,12 +380486,12 @@ void ScreenFrameUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void sub_001130B0_entry(void)
+void GameObjectInvokeChildrenVirtual_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
 	uint32_t eax_out = g_eax;
 	uint32_t ecx_out = g_ecx;
-	sub_001130B0(ARG32(0), &eax_out, &ecx_out);
+	GameObjectInvokeChildrenVirtual(ARG32(0), &eax_out, &ecx_out);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -380438,14 +380831,14 @@ void Matrix4x4Determinant_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00114C10_entry(void)
+void Matrix4x4Invert_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_00114C10(g_ecx, ARG32(0), ARG32(1), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	Matrix4x4Invert(g_ecx, ARG32(0), ARG32(1), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -381663,10 +382056,10 @@ void vcMultiSubObject_Reload_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0011D480_entry(void)
+void SceneGraphCollectValidObjects_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0011D480(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = SceneGraphCollectValidObjects(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -381896,9 +382289,9 @@ void SceneObjectGetAttachSlot_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0011F380_entry(void)
+void ObjectCacheCopyIndexedEntry_entry(void)
 {
-	sub_0011F380(ARG32(0), ARG32(1), ARG32(2));
+	ObjectCacheCopyIndexedEntry(ARG32(0), ARG32(1), ARG32(2));
 	g_esp += 4u;
 }
 
@@ -381976,10 +382369,10 @@ void MotionListResetState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_001205C0_entry(void)
+void ObjectMotionStart_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_001205C0(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ObjectMotionStart(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -381998,10 +382391,10 @@ void MotionListCreateEntryWithDuration_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00120790_entry(void)
+void ObjectMotionStartForDuration_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00120790(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ObjectMotionStartForDuration(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -382073,9 +382466,9 @@ void LinkedObjectUnload_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00121270_entry(void)
+void ModelNodeWorldTransformGet_entry(void)
 {
-	g_eax = sub_00121270(ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = ModelNodeWorldTransformGet(ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_esp += 4u;
 }
 
@@ -382216,10 +382609,10 @@ void vcWater_GetSize_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00122040_entry(void)
+void BoxPlanesIntersectAppendRecord_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00122040(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = BoxPlanesIntersectAppendRecord(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -382249,10 +382642,10 @@ void ObjectCollisionSphereTrace_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00122300_entry(void)
+void ObjectSetReferencedObject_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_00122300(ARG32(0), ARG32(1));
+	ObjectSetReferencedObject(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -382260,10 +382653,10 @@ void sub_00122300_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00122380_entry(void)
+void ObjectSetReferencedObjectAndValue_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_00122380(ARG32(0), ARG32(1), ARG32(2));
+	ObjectSetReferencedObjectAndValue(ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -384261,10 +384654,10 @@ void vcShadow_GetSize_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0012F710_entry(void)
+void CollisionGridQueryObjectBox_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0012F710(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = CollisionGridQueryObjectBox(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -384393,9 +384786,9 @@ void ObjectCacheReset_entry(void)
 	g_esp += 4u;
 }
 
-void sub_001306F0_entry(void)
+void ObjectCacheSetValue_entry(void)
 {
-	sub_001306F0(ARG32(0), ARG32(1));
+	ObjectCacheSetValue(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -384614,10 +385007,10 @@ void vcParticleSystem_InUse_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00132CD0_entry(void)
+void ObjectCacheAddCollisionPlane_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00132CD0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = ObjectCacheAddCollisionPlane(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -385923,9 +386316,9 @@ void ObjectAddRefSlot_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0013AFD0_entry(void)
+void ObjectCacheResolve_entry(void)
 {
-	g_eax = sub_0013AFD0(ARG32(0), ARG32(1));
+	g_eax = ObjectCacheResolve(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 

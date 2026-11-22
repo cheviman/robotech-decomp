@@ -1342,7 +1342,7 @@ param   GunHit            arg5  weapon
 param   SniperHit         arg5  weapon
 comment EntityTakeDamage An entity's answer to the damage message (0xF001; the message's third word the amount, its second who dealt it): takes the amount off its +0x17C while that is above 0 and the rest off its hit points (+0x174). On an entity a player controls, with one player, the amount is 0 under SUPERMECH's invincibility (Cheats' 1) or while the count of Stats' tally 1 is above 0, and in the play mode 2 (GameModeGet) it is scaled by Difficulty, 0.7 on 0 and 1.1 on 2. Then the effects of its record of damage by how much of its hit points is left.
 comment EntityRecharge Brings an entity's stores back up over an update, each by a rate of its EntitySpec times 0.033 up to its most: with one player its hit points (+0x174, hit_points_refill, 0 for every type); its gun ammo (+0xA8, gun_ammo_refill up to gun_ammo) unless its flag 4, or its flags 8 and 2, are on, full at once on an entity a player controls under SPACEFOLD's cheat (Cheats' 8); its missiles (+0xB0, missiles_refill up to missiles) unless its flag 8 is on, three times as fast on an entity a player controls under MARSBASE's (0x10); and its +0x178 by the words at +0x1C and +0x18 of its EntitySpec.
-comment Player_Update A Player's update, every frame (its GameObjectEntry's update, set by PlayerStateMachineInit): while its entity's flag 0x2000 is on, a sound of the set at 0x1EB398 every 165 ms; with two players, once its +0x3B8's time has passed, its entity's model's scene flag 0x10 off; with one player and DEATHGRIP's cheat (Cheats' 0x4000), once its entity's first target locked on (the entity's +0x1A8) has stayed the same for 250 ms, X on its pad (unless ControllerItemsDisabled has it off) sends that target a damage of 100000. With its entity gone, its +0x3A0 becomes sub_0003F980.
+comment Player_Update A Player's update, every frame (its GameObjectEntry's update, set by PlayerStateMachineInit): while its entity's flag 0x2000 is on, a sound of the set at 0x1EB398 every 165 ms; with two players, once its +0x3B8's time has passed, its entity's model's scene flag 0x10 off; with one player and DEATHGRIP's cheat (Cheats' 0x4000), once its entity's first target locked on (the entity's +0x1A8) has stayed the same for 250 ms, X on its pad (unless ControllerItemsDisabled has it off) sends that target a damage of 100000. With its entity gone, its +0x3A0 becomes PlayerFireWeaponWithCooldown.
 comment GunHit What a shot of a gun (Weapon 0, 1, 23, 24 and 34: ScreenElementCreateSceneObject sets it on the shot's scene object) does to what it hits: sends it the damage (0xF001) of the weapon's WeaponSpec, 100000 under BACKSTABBER's cheat (Cheats' 0x400) when an entity a player controls fired it; then the hit's effects.
 comment SniperHit What a shot of Weapon 2 does to what it hits, the one SNIPER's cheat is read for (its text: one shot sniper kills): sends it the damage (0xF001), the weapon's +0x2C (a fixed one past twice its WeaponSpec's damage with two players and the flag at 0x1BC6B4; times the factor at 0x1A5BE4 on Entity 41 and 55), 100000 under BACKSTABBER's (0x400) or SNIPER's (0x800) when an entity a player controls fired it; then the hit's effects.
 
@@ -3085,7 +3085,7 @@ comment GameObjectCollectNodes Resolves the handle with GameObjectFromHandle and
 0003A3B0  func  GameObjectGetType
 comment GameObjectGetType Resolves arg0 with GameObjectFromHandle and returns the object's 0xD0 field, the value callers compare against type constants such as 0x3800.
 0003A4A0  func  SplineNodeCreateObjects
-comment SplineNodeCreateObjects For each of the spline object's points (count at the object's first word, stride 0x2C) it gets the transform with vcSceneObjectGetTransform, formats a name with vcFormat and crt_strncpy, creates GameObjects with GameObjectCreate, positions them through Matrix3x3MultiplyVector/sub_000396A0 and initializes them with sub_000DC100/sub_000DC140.
+comment SplineNodeCreateObjects For each of the spline object's points (count at the object's first word, stride 0x2C) it gets the transform with vcSceneObjectGetTransform, formats a name with vcFormat and crt_strncpy, creates GameObjects with GameObjectCreate, positions them through Matrix3x3MultiplyVector/sub_000396A0 and initializes them with GameObjectSetSplineKind/GameObjectSetSplineKindWithData.
 0003A8E0  func  SplineNodeSpawn
 comment SplineNodeSpawn Calls GameObjectCopyFromTemplate, then resolves the spline's scene object either by vcObjectAddRef of the handle at edi+0x74 or by vcObjectCreate/vcObjectGet plus SplineObjectSetSpline, stores them in the node's 0xD0/0xD4 fields, sets the node's 0xE0/0xEC/0xF0 defaults and 0x40 flags, and calls SplineNodeCreateObjects; finally flags the scene object with vcSceneObjectChangeFlags.
 0003B5E0  func  ObjectAdvanceWrappedValue
@@ -3133,7 +3133,7 @@ comment ScreenElementReset Resets the screen element's fields (offsets 0x28, 0x2
 0003CF90  func  ScreenElementUpdateViewportRect
 comment ScreenElementUpdateViewportRect Recomputes the screen element rect at 0x1EB2AC from vcViewportRect_VA and the 0x23D2EC/0x23D2F0/0x23D2F4 globals via UiElementSetColor and QuadDrawClipped.
 0003D010  func  ScreenElementHandleCommand
-comment ScreenElementHandleCommand Dispatches on the command id at arg3, returning 1 when handled and calling ScreenElementReset, ScreenElementUpdateViewportRect or sub_0003CBF0 for the commands it knows.
+comment ScreenElementHandleCommand Dispatches on the command id at arg3, returning 1 when handled and calling ScreenElementReset, ScreenElementUpdateViewportRect or GameObjectFreeByHandle for the commands it knows.
 0003D120  func  ScreenElementGetRect
 comment ScreenElementGetRect Returns the result of VcObjectReleaseField on the rect at 0x1EB2AC.
 0003D1D0  func  GunEffectsTextShow
@@ -3303,7 +3303,7 @@ comment MissileReleaseSceneObjects Releases the scene object at ebx+0x194 with v
 00059B60  func  ObjectSteerTowardForwardObject
 comment ObjectSteerTowardForwardObject Scans GameObjectFamilies(2) via GameObjectFromHandle for the nearest handle within the squared radius from ObjectSteerTowardForwardSpeed that is not the object's own handle at offset 0x2AC, stores the chosen handle at 0x270 and its distance at 0x278, clears the old handle (arg0) from the target's 0x1DC/0x1EC lists, and writes into the output vector a velocity toward the target's predicted position from SceneObjectRaySphereIntersect (normalized, scaled by the speed parameter at *(esi+0x274)+4 times 30.30303f), adding a perpendicular avoidance when the target is behind (dot < -0.95).
 0005A120  func  ObjectIntegrateMotion
-comment ObjectIntegrateMotion Advances the object's velocity at esi+0x14 by a vertical term derived from sub_000C7AD0() and the float at +4 of the struct at esi+0x274, moves the position at esi+8 by that velocity times the 0.033 constant, saves the previous position at esi+0x28C, and updates the transform through SceneObjectCreateAndInit.
+comment ObjectIntegrateMotion Advances the object's velocity at esi+0x14 by a vertical term derived from LevelTimeGet() and the float at +4 of the struct at esi+0x274, moves the position at esi+8 by that velocity times the 0.033 constant, saves the previous position at esi+0x28C, and updates the transform through SceneObjectCreateAndInit.
 0005B460  func  Missile_CreateSceneObject
 comment Missile_CreateSceneObject Picks a model through the eight sub_00058xxx constructors selected by the variant field (eax >> 11 & 0x7F) - 0x46, creates the missile's scene object with vcObjectCreate (type 0x1A), sets its bounds with SceneObjectSetBounds, flags 6 and the user handle with vcSceneObjectSetFlags/vcSceneObjectSetUser, and clones the model's child objects into the missile's four part groups at +0x2B4.
 0005B610  func  Missile_ExplodeOnTarget
@@ -3459,7 +3459,7 @@ comment ZenReEntryPodCreateSceneObject Clones the pod's spec with vcObjectClone,
 0007BA10  func  ZenReEntryPodStartCountdown
 comment ZenReEntryPodStartCountdown When the value in eax is 0 or 1 it sets the pod's flags at +0x278/+0x274, and once both are set it calls ZenReEntryPodBeginCountdown and installs 0x7B880 as the state machine's tick callback.
 0007BFA0  func  ZenReEntryPodSelectNearestObject
-comment ZenReEntryPodSelectNearestObject Scans the objects of GameObjectFamilies(2), picks the one nearest to the pod's position at +8 by squared distance, stores its handle at +0x26C, and builds two attachment objects through sub_000D5E40 and GameObjectRecreate.
+comment ZenReEntryPodSelectNearestObject Scans the objects of GameObjectFamilies(2), picks the one nearest to the pod's position at +8 by squared distance, stores its handle at +0x26C, and builds two attachment objects through GameObjectReplaceFromReference and GameObjectRecreate.
 0007CD00  func  SpartanSpecInit
 comment SpartanSpecInit Installs SpartanSpec_VA as the object's vtable, creates its weapon with WeaponCreate (family 5) into +0x26C, and sets the +0x8C/+0x90/+0x94/+0x98 handlers and +4 flags.
 0007E080  func  RaiderXSpecInit
@@ -3473,7 +3473,7 @@ comment EntityPartsEnable Sets the 0x100 bit of the flag word at offset 4 and, o
 00080FC0  func  EntityPartsDisable
 comment EntityPartsDisable Clears the 0x100 bit of the flag word at offset 4 and, only when it was set, disables the four indexed parts (0, 2, 1, 3) of the object at offset 0x194 through EntityPartSetEnabled with value 0.
 00081280  func  ZenReconShipAttachObject
-comment ZenReconShipAttachObject Sets the 0x80 bit of the flag word at offset 4, sends GameObjectSendMessage to the object at offset 0x18C, turns the returned handle into a pointer with ObjectCacheGetDurationMs and stores it at offset 0x294, then attaches it to the model at offset 0x194 through sub_001205C0.
+comment ZenReconShipAttachObject Sets the 0x80 bit of the flag word at offset 4, sends GameObjectSendMessage to the object at offset 0x18C, turns the returned handle into a pointer with ObjectCacheGetDurationMs and stores it at offset 0x294, then attaches it to the model at offset 0x194 through ObjectMotionStart.
 000812F0  func  ZenReconShipSetAttachmentType
 comment ZenReconShipSetAttachmentType Reads the integer at eax; when it is 0 it removes the attachment named by the constant at 0x208C14 (found with MotionListFindByMotion) and creates the one named by 0x208C18 in slot 10 with MotionListCreateEntry, when it is 1 it does the reverse, and in both cases marks the removed attachment with flag 0x50 and a vcGameTime+0x64 timer.
 00081385  func  ZenReconShipCreateAttachment
@@ -3485,7 +3485,7 @@ comment ZenReconShipCreateClone Clones the scene object MEM32(0x208C04) with vcO
 00081860  func  ZenReconShipDestroy
 comment ZenReconShipDestroy Destroys the ship's five effect objects and three weapons with GameObjectDestroy and tears the ship down via GameObjectDestroyChildrenAndHandles.
 00082270  func  ZenReconShipFindNearestObject
-comment ZenReconShipFindNearestObject Iterates GameObjectFamilies(2), resolving each handle with GameObjectFromHandle, and keeps the object whose squared distance to this object's position (ebp+8) is smallest, storing its handle at 0x290 and then building a scene object at that position through sub_000D5E40 and GameObjectRecreate.
+comment ZenReconShipFindNearestObject Iterates GameObjectFamilies(2), resolving each handle with GameObjectFromHandle, and keeps the object whose squared distance to this object's position (ebp+8) is smallest, storing its handle at 0x290 and then building a scene object at that position through GameObjectReplaceFromReference and GameObjectRecreate.
 00082E60  func  FlareInitFromSpawn
 comment FlareInitFromSpawn Copies position, rotation, scale and the owner handle (via GameObjectFromHandle) from the spawn object into the flare instance, builds its transform with MatrixSetEulerAngles, rolls random spread and turn values with vcRandomSpread and vcRandomUnit, and attaches it to its scene object with SceneObjectCreateAndInit using a lifetime from RandomSpreadRange.
 00083010  func  FlareCreateSceneObjects
@@ -3493,7 +3493,7 @@ comment FlareCreateSceneObjects Clones FlareSceneObject and the FlareFxFlareExpl
 000830E0  func  FlareSceneObjectsChangeFlags
 comment FlareSceneObjectsChangeFlags Calls vcSceneObjectChangeFlags on the flare scene objects at 0x194 and 0x270/0x274/0x278, then calls ObjectActivate on the latter two.
 00083280  func  FlareUpdate
-comment FlareUpdate Advances the flare age by sub_000C7AD0 scaled by 0.001089, rebuilds its matrix with MatrixSetEulerAngles, and updates the scene objects at 0x194 and 0x270 with SceneObjectCreateAndInit.
+comment FlareUpdate Advances the flare age by LevelTimeGet scaled by 0.001089, rebuilds its matrix with MatrixSetEulerAngles, and updates the scene objects at 0x194 and 0x270 with SceneObjectCreateAndInit.
 000833B0  func  FlareShrinkUpdate
 comment FlareShrinkUpdate Rebuilds the flare transform and scene objects, scales the vector at 0x14 by 0.95, and zeroes the vector and age fields when its squared length falls below 1.0.
 00083500  func  FlareFinish
@@ -3589,11 +3589,11 @@ comment ZenScoutShipReleaseObjects Releases the object at 0x194 and every non-nu
 0008DF00  func  ZenScoutShipCreateSceneObjects
 comment ZenScoutShipCreateSceneObjects Creates a vcObject with vcObjectCreate(0x1A), stores it at 0x194, then clones each ZenScoutShipScene object from 0x108 into the 0x26C array, sets its user, and attaches it to the created object.
 0008E650  func  ZenShuttleSetCountdown
-comment ZenShuttleSetCountdown Sends GameObjectSendMessage 0x3E8, stores ObjectCacheGetDurationMs's result in 0x278 (later decremented as a countdown), and calls sub_001205C0 with the 0x194 object.
+comment ZenShuttleSetCountdown Sends GameObjectSendMessage 0x3E8, stores ObjectCacheGetDurationMs's result in 0x278 (later decremented as a countdown), and calls ObjectMotionStart with the 0x194 object.
 0008E6C0  func  ZenShuttleSetCallbacks
 comment ZenShuttleSetCallbacks Writes constant callback pointers into the fields at 0x8C, 0xC0 and +8, clears the 0x90..0x9C fields and the 0x84/4 flag bits, and sends GameObjectSendMessage 0x3E8 with 3.
 0008E770  func  ZenShuttleClearCallbacks
-comment ZenShuttleClearCallbacks Clears the 0x8C..0x9C callback fields and flag bits, calls sub_001205C0 with the 0x194 object, sends GameObjectSendMessage 0x3E8 with 3 and 0x3ED with 1, and changes the 0x194 scene flags.
+comment ZenShuttleClearCallbacks Clears the 0x8C..0x9C callback fields and flag bits, calls ObjectMotionStart with the 0x194 object, sends GameObjectSendMessage 0x3E8 with 3 and 0x3ED with 1, and changes the 0x194 scene flags.
 0008E8B0  func  ZenShuttleCountdownUpdate
 comment ZenShuttleCountdownUpdate Decrements the 0x278 counter by 0x21 and, while it stays positive, calls sub_0001A480 with the object at ecx; otherwise clears bit 0x80 and sets the state fields at 0xE and 0x10 to 1.
 0008E950  func  ZenShuttleConstruct
@@ -3603,7 +3603,7 @@ comment ZenShuttleCloneObject clones the vcObjectClone class at 0x20B77C into +0
 0008EAA0  func  ZenShuttleCheckStateFlags
 comment ZenShuttleCheckStateFlags sets +0x280 when the argument is 0 and +0x27C when it is 1, and when both are set calls ZenShuttleSetCountdown and points the state machine's next state at 0x8E8B0.
 0008F0B0  func  ZenShuttleSelectNearestObject
-comment ZenShuttleSelectNearestObject walks GameObjectFamilies(2) via GameObjectFromHandle, finds the object nearest to +8, stores its handle at +0x274, creates the two effects through sub_000D5E40 and GameObjectRecreate, and sets state 2.
+comment ZenShuttleSelectNearestObject walks GameObjectFamilies(2) via GameObjectFromHandle, finds the object nearest to +8, stores its handle at +0x274, creates the two effects through GameObjectReplaceFromReference and GameObjectRecreate, and sets state 2.
 0008FB30  func  TurretEnable
 comment TurretEnable when the turret's +4 bit 0x100 is clear, sets it and calls EntityPartSetEnabled on the object at +0x194 for indices 0 and 1 with value 1.
 0008FB70  func  TurretDisable
@@ -3629,7 +3629,7 @@ comment SeaSergeantCreateModel Clones SeaSergeantModel with vcObjectClone into t
 00091E50  func  SeaSergeantDestroy
 comment SeaSergeantDestroy Destroys the weapon handle with GameObjectDestroy, frees the VcObjectListGetNext object with ObjectRemoveFromQuadtree and runs the base teardown GameObjectDestroyChildrenAndHandles.
 000925E0  func  SeaSergeantFindNearestGameObject
-comment SeaSergeantFindNearestGameObject Iterates the GameObjects of GameObjectFamilies(2), picks the one with the smallest squared distance to this object's position, stores its handle in this+0x270, then creates two objects at the target's position with sub_000D5E40 and GameObjectRecreate (stored in this+0xA4 and this+0xA0) and sets flags on the component at arg.
+comment SeaSergeantFindNearestGameObject Iterates the GameObjects of GameObjectFamilies(2), picks the one with the smallest squared distance to this object's position, stores its handle in this+0x270, then creates two objects at the target's position with GameObjectReplaceFromReference and GameObjectRecreate (stored in this+0xA4 and this+0xA0) and sets flags on the component at arg.
 00093070  func  PodStandardWarriorSpaceEnableParts
 comment PodStandardWarriorSpaceEnableParts Takes this+0x194, gets a record with MotionListCreateEntry (index 0xA), sets its fields (0x20C2E8, +0x38=0x2A, +0x24=0xFA), then calls EntityPartSetEnabled with arg2=1 for slots 0,1,2,4,3 to enable them.
 000930F0  func  PodStandardWarriorSpaceDisableParts
@@ -3695,7 +3695,7 @@ comment GameObjectSetEntryValues Looks up GameObjectGetPath(MEM32(entry + 0xC8))
 0009B950  func  FlagsSetMask
 comment FlagsSetMask Sets or clears the bits of the flags word at arg0 according to mask arg1 and boolean arg2, returning arg0.
 0009BDB0  func  EntityInit
-comment EntityInit Initializes the entity at arg0 with default field values, calling sub_0009B980 to set the state and EntityClearState and TypeIndexSetDifficultyValue to initialize sub-objects.
+comment EntityInit Initializes the entity at arg0 with default field values, calling EntitySetTypeIndex to set the state and EntityClearState and TypeIndexSetDifficultyValue to initialize sub-objects.
 0009BFB0  func  PoolAllocateSlot
 comment PoolAllocateSlot Allocates a free slot in the 38-entry pool at arg0+0x4C, initializes it with EntityInit and EntityCopy, records the slot index in arg1+0x4C and slot index modulo 25 in arg1+0x2F4, increments the pool counter at arg0+0x7204, and calls sub_0001E890 and GameObjectTimerListClearGroup.
 0009C1B0  func  StringTableEntryCopy
@@ -3911,11 +3911,11 @@ comment EntityDetachFromParent Copies the cached transform at +0xA8/+0xAC/+0xB0 
 000AB2D0  func  EntityAttachToGameObject
 comment EntityAttachToGameObject Resolves the GameObject from the entity's handle, calls SteeringDestroy, copies the GameObject's +8/+0xC/+0x10 into the entity's +0x58/+0x5C/+0x60, clears flag bits 0x40004, sets bit 0x10, calls ObjectStateEnterIfAllowed and sets bit 0x100.
 000AB460  func  EntityApplyDamageWithCounter
-comment EntityApplyDamageWithCounter Checks the object at +0x70 through sub_0009C6E0, counts up to 3 in +0x2EC, then computes a damage amount (a quarter of MEM32(esi+0x28), capped by the target's float at +0xAC->+8) and passes it with the pointers at +0x70 and +0x80 to sub_000AACC0.
+comment EntityApplyDamageWithCounter Checks the object at +0x70 through sub_0009C6E0, counts up to 3 in +0x2EC, then computes a damage amount (a quarter of MEM32(esi+0x28), capped by the target's float at +0xAC->+8) and passes it with the pointers at +0x70 and +0x80 to ObjectMoveTowardTargetIfBeyondTargetLimit.
 000AB530  func  ObjectAttachToLinkedGameObject
 comment ObjectAttachToLinkedGameObject When arg1 is nonzero and the game-object handle at +0x70 passes the type check and resolves via GameObjectFromHandle, attaches arg0 to the linked object with GameObjectSetTargetHandle, taking it from ObjectGetTargetHandle or from GameObjectFromIndex's +0xC4 field.
 000AB5F0  func  ObjectValidateGameObjectHandle
-comment ObjectValidateGameObjectHandle Re-resolves the game-object handle at +0x70 through sub_0001EDD0 when +0x84 is non-negative, clears the handle and flag bit 8 at +8 when sub_0009C6E0 reports it invalid, sets state 3 through SlotTableSetValue when EntityGetStateCategory is not 2, and stores the handle at +0xBC.
+comment ObjectValidateGameObjectHandle Re-resolves the game-object handle at +0x70 through EntitySelectTarget when +0x84 is non-negative, clears the handle and flag bit 8 at +8 when sub_0009C6E0 reports it invalid, sets state 3 through SlotTableSetValue when EntityGetStateCategory is not 2, and stores the handle at +0xBC.
 000AB7C0  func  ArrayAppend
 comment ArrayAppend Appends arg1 to the array at +4 while the count at +0x80 is below 0x1E and increments that count.
 000AB7F0  func  ArrayGetByIndex
@@ -4103,7 +4103,7 @@ comment GameObjectMessageDispatch Dispatches a message whose type is 0x7FFF and 
 000C1E01  func  ScreenFamilyInitWithValue
 comment ScreenFamilyInitWithValue Same as ScreenFamilyInit but also stores the first argument at 0x21C648 before installing the method table.
 000C2380  func  TextLabelProcessMessage
-comment TextLabelProcessMessage Dispatches the element's messages by id, returning 1 for the handled create (0xFFF9, TextLabelInit), draw (0x32CA, sub_000C2280), 0x32C8, 0x32C9 and 0xFFFA cases and 0 otherwise.
+comment TextLabelProcessMessage Dispatches the element's messages by id, returning 1 for the handled create (0xFFF9, TextLabelInit), draw (0x32CA, TextLabelDraw), 0x32C8, 0x32C9 and 0xFFFA cases and 0 otherwise.
 000C2460  func  LevelObjectListBuild
 comment LevelObjectListBuild Creates the shared object 0x21C924 with vcObjectGet and fills the per-level object array at 0x21C7F8 by walking LevelCount/LevelGet with vcObjectGet.
 000C2510  func  LevelObjectListRelease
@@ -4157,7 +4157,7 @@ comment ScreenFamilySetCallbacks Points the family's field at arg0+0x14 to the t
 000C6210  func  FriendlyReticleElementSetTargetPosition
 comment FriendlyReticleElementSetTargetPosition Moves the reticle rect at 0x21CDD4 to the sender's screen position, computing it from vcViewportRect_VA and the sender's fields at +0x10/+0x28 with UiElementSetColor and QuadDrawClipped.
 000C62B0  func  FriendlyReticleElementHandleMessage
-comment FriendlyReticleElementHandleMessage The element's message handler: on message 0x7FFF with subcode 0x2EE2 it positions the reticle via FriendlyReticleElementSetTargetPosition, with 0xFFF9 it re-initializes via ScreenElementInitialize and sets +0x28 to 0xFF and +0x18 to -1, with 0xFFFA it calls sub_0003CBF0, and it returns 1 for 0xFFFF and 0xFFFE.
+comment FriendlyReticleElementHandleMessage The element's message handler: on message 0x7FFF with subcode 0x2EE2 it positions the reticle via FriendlyReticleElementSetTargetPosition, with 0xFFF9 it re-initializes via ScreenElementInitialize and sets +0x28 to 0xFF and +0x18 to -1, with 0xFFFA it calls GameObjectFreeByHandle, and it returns 1 for 0xFFFF and 0xFFFE.
 000C6350  func  FriendlyReticleElementInitType
 comment FriendlyReticleElementInitType Fills the element type table at 0x21CD90 (size 0x2C, handler FriendlyReticleElementHandleMessage) and stores it at arg0+0x64, then initializes the reticle rect at 0x21CDD4 to 10x10 with UiElementInit.
 000C63C0  func  FriendlyReticleElementReleaseRect
@@ -4317,7 +4317,7 @@ comment ScreenElementCreateSceneObject Creates a vcObject scene object for a scr
 000D19D0  func  IncomingMissileElementDrawText
 comment IncomingMissileElementDrawText Draws the element's text centered using vcTextGetSize, vcTextSetSize, vcTextWidth and vcTextDraw, with a shadow pass and the element's color at +0x7C.
 000D1A70  func  IncomingMissileElementOnEvent
-comment IncomingMissileElementOnEvent Handles incoming missile element messages: on 0xFFF9 calls ScreenElementInitialize and resets text fields, on 0x2EE2 calls IncomingMissileElementDrawText, and on 0xFFFA calls sub_0003CBF0.
+comment IncomingMissileElementOnEvent Handles incoming missile element messages: on 0xFFF9 calls ScreenElementInitialize and resets text fields, on 0x2EE2 calls IncomingMissileElementDrawText, and on 0xFFFA calls GameObjectFreeByHandle.
 000D1B30  func  IncomingMissileElementSetVtable
 comment IncomingMissileElementSetVtable Sets the incoming missile screen element family's vtable at 0x220A50 with handler IncomingMissileElementOnEvent and assigns it to the family at +0x3C.
 000D1B80  func  ScreenElementSetText
@@ -4435,7 +4435,7 @@ comment SceneObjectChangeFlagsFromBool Resolves the handle in arg0 to a scene ob
 000D93F0  func  SceneObjectUpdateCosmeticUnits
 comment SceneObjectUpdateCosmeticUnits Updates a scene object's sixteen cosmetic-unit slots: resolves the player object through Players and GameObjectFromHandle, sets the object's change flags with vcSceneObjectChangeFlags, then for each slot ages its timer against vcGameTime, switches its state with vcRandomCosmeticUnit, repositions it inside its box with vcBoxCenter and retires expired units.
 000D9A60  func  CiviliansNodeCreateCivilian
-comment CiviliansNodeCreateCivilian Creates a civilian GameObject for the CiviliansNode entry at index ebx when its +0xF0 is set, naming it via vcFormat and initializing it with sub_000DC2D0 and sub_000395F0.
+comment CiviliansNodeCreateCivilian Creates a civilian GameObject for the CiviliansNode entry at index ebx when its +0xF0 is set, naming it via vcFormat and initializing it with GameObjectSetCivilianKind and sub_000395F0.
 000D9B90  func  CiviliansNodeUpdateEntryBounds
 comment CiviliansNodeUpdateEntryBounds Resolves two GameObjects with GameObjectFromHandle and updates the bounds of CiviliansNode entry arg2 and entry arg2+3 using vcBoxCenter of the first object's box and the second object's position.
 000D9CD0  func  CiviliansNodeInitialize
@@ -4447,11 +4447,11 @@ comment NodeFamilyReadGameObject Reads a handle with GameObjectNodeLoad, resolve
 000DA710  func  NodeFamilyCollect
 comment NodeFamilyCollect Returns Node_Collect(arg0, arg1) as the family's collect routine.
 000DA780  func  NodeCreateChildGameObject
-comment NodeCreateChildGameObject Formats a name with vcFormat from arg0/arg1 and the node's position field at edx+0xD0, creates a game object with GameObjectCreate and hands it to sub_000DC280 and sub_000396A0 together with that transform field.
+comment NodeCreateChildGameObject Formats a name with vcFormat from arg0/arg1 and the node's position field at edx+0xD0, creates a game object with GameObjectCreate and hands it to GameObjectSetChildKind and sub_000396A0 together with that transform field.
 000DA880  func  NodeInit
 comment NodeInit Sets the node's flags and state (0x40 |= 0x142, 0xC8 = 1, 0x100 = 0, 0x104 = 0xC8), copies the twelve floats at 0x7C-0xA8 into 0xD0-0xFC and calls NodeCreateChildGameObject to create the attached object.
 000DA970  func  NodeRender
-comment NodeRender Draws the node twice with sub_000393B0 using the constant 0xFF0000FF and the float at edi+0x104 over the position at edi+0xD0.
+comment NodeRender Draws the node twice with GameObjectDrawOrientedOutline using the constant 0xFF0000FF and the float at edi+0x104 over the position at edi+0xD0.
 000DAA00  func  NodeTransformSave
 comment NodeTransformSave Copies the twelve floats at 0x7C-0xA8 into 0xD0-0xFC, saving the node's transform.
 000DAB80  func  NodeRead
@@ -4473,7 +4473,7 @@ comment PointTextLabelsUpdate Places the two child text objects (0xFC, 0x100) at
 000DB330  func  PointTextBoundsHandleMessage
 comment PointTextBoundsHandleMessage Reads the message id at arg3[0] (guarded by arg2 == 0x7FFF) and dispatches, 0xFFF9 calls PointTextBoundsInit to init, 0x2AF8 calls PointTextLabelsUpdate to update, 0xFFFA calls GameObjectDetachAndDestroyChildren and clears the child text pointers 0xFC/0x100, returning 1 when handled.
 000DB6C0  func  NodeFamilyDrawObjectOutline
-comment NodeFamilyDrawObjectOutline Draws lines with sub_000393B0 around the vcObject cached at ebx+0xD0 in two colors, after GameObjectSendMessageToChildren/IndexedLineListDrawTransformed transform setup, only when the object's flag bit is set and ObjectGetRange returns a positive float; probably a marker/selection box.
+comment NodeFamilyDrawObjectOutline Draws lines with GameObjectDrawOrientedOutline around the vcObject cached at ebx+0xD0 in two colors, after GameObjectSendMessageToChildren/IndexedLineListDrawTransformed transform setup, only when the object's flag bit is set and ObjectGetRange returns a positive float; probably a marker/selection box.
 000DB870  func  NodeFamilyUpdateObjectState
 comment NodeFamilyUpdateObjectState Switches on esi+0xC8 (1 or 2) plus the cached vcObject's flag bit and esi+0xD4 to call SoundSlotPlayBuffer, SoundSlotPlayVoice, ObjectStopSoundChannelBuffer, sub_0010F1B0, sub_0010F230 or ObjectRemoveFromQuadtree on the object at esi+0xD0.
 000DBB00  func  NodeFamilyAttachObject
@@ -4481,7 +4481,7 @@ comment NodeFamilyAttachObject Attaches the vcObject returned by GameObjectCopyF
 000DBB50  func  GameObjectSetSceneObject
 comment GameObjectSetSceneObject Replaces the scene object at offset 0xD0 of the game object for arg0 with arg1, releasing the old one with vcObjectRelease and adding a reference with vcObjectAddRef, then notifies via GameObjectSendMessageWithParams.
 000DBBB0  func  GameObjectUpdateBounds
-comment GameObjectUpdateBounds Updates the object's bounding box using vcSceneObjectGetBounds and the cached vcObject dimensions at +0xF4..+0xFC, calling IndexedLineListDrawTransformed and sub_00037F10.
+comment GameObjectUpdateBounds Updates the object's bounding box using vcSceneObjectGetBounds and the cached vcObject dimensions at +0xF4..+0xFC, calling IndexedLineListDrawTransformed and GameObjectDrawTransformedBoundingBox.
 000DBD90  func  GameObjectCloneSceneObject
 comment GameObjectCloneSceneObject Clones the source object's scene object with vcObjectClone and assigns it to the target object at MEM32(edi) via GameObjectSetSceneObject, then releases the clone and calls sub_00039210.
 000DBDD0  func  NodeFamilyDispatchMessage
@@ -4517,7 +4517,7 @@ comment PlayerStandInMSONodeUnloadLinkedObject Probably unloads the node's linke
 000DD790  func  PlayerStandInMSONodeReleaseResources
 comment PlayerStandInMSONodeReleaseResources Releases the linked object at +0xD0 with vcObjectRelease and destroys the game object at +0x100 with SceneObjectClonesSetFlags and GameObjectDestroy.
 000DD7E0  func  PlayerStandInMSONodeSetState
-comment PlayerStandInMSONodeSetState Clears +0xD4 and calls GameObjectSendMessageWithParams(0, 2) when the old state differs, then applies the new state to the object at +0xD0 through MotionListFindFreeSlot (flags 0x50, vcGameTime) or MotionListResetState/sub_001205C0 (0x12C, 0x21, 0xA).
+comment PlayerStandInMSONodeSetState Clears +0xD4 and calls GameObjectSendMessageWithParams(0, 2) when the old state differs, then applies the new state to the object at +0xD0 through MotionListFindFreeSlot (flags 0x50, vcGameTime) or MotionListResetState/ObjectMotionStart (0x12C, 0x21, 0xA).
 000DD9B0  func  PlayerStandInMSONodeInitialize
 comment PlayerStandInMSONodeInitialize Sets up a PlayerStandInMSO node: when the passed name (MEM8 of the register argument) is empty it copies PlayerStandInMSOText_VA into the node and sets its +0x40 flags, otherwise it resolves the name with ObjectCreateInstanceFromName and creates one GameObject per entry through vcFormat, crt_strncpy, GameObjectCreate, ObjectFindEmbeddedChildIndex and PlayerStandInMSONodeSetLinkedObject, then stores the next-state callback 0xDD6F0 at +8 of the caller's struct.
 000DE4D0  func  CyclopsDoorsActionDrawStatusText
@@ -4649,7 +4649,7 @@ comment ScreenElementTextSetMessage Fills the element's text buffer at 0x2C from
 000E4A50  func  ScreenElementTextDraw
 comment ScreenElementTextDraw Draws the element's text with vcTextSetSize, vcFormatClear, vcTextWidth and vcTextDraw, and advances the fade timer at 0x60/0x64 once the given time passes.
 000E4AE0  func  ScreenElementTextHandleEvent
-comment ScreenElementTextHandleEvent Event handler for the text element: on event 0xFFF9 calls ScreenElementTextSetMessage to set the message, on 0x2EE2 calls ScreenElementTextDraw to draw, on 0xFFFA calls sub_0003CBF0, and returns 1 for 0xFFFF/0xFFFE.
+comment ScreenElementTextHandleEvent Event handler for the text element: on event 0xFFF9 calls ScreenElementTextSetMessage to set the message, on 0x2EE2 calls ScreenElementTextDraw to draw, on 0xFFFA calls GameObjectFreeByHandle, and returns 1 for 0xFFFF/0xFFFE.
 000E4B80  func  ScreenElementFamilyRegisterTextElement
 comment ScreenElementFamilyRegisterTextElement Stores the text element descriptor at 0x2225A0 (with handler 0xE4AE0) into the screen element family at offset 0x7C.
 000E4BD0  func  ScreenElementTextInitialize
@@ -4657,7 +4657,7 @@ comment ScreenElementTextInitialize Initializes a text element's fields at 0x28-
 000E4CB0  func  HudDrawHealthBar
 comment HudDrawHealthBar Draws an entity's health bar from the handle at arg2+0x28: it resolves the object with GameObjectFromHandle, reads its current/max health at +0x17C/+0x180, animates the displayed value at arg2+0x2C, and paints the bar and its labels with vcRectSet, UiElementSetBoundsFromObject, UiElementSetColor and QuadDrawClipped.
 000E5120  func  HudMessageDispatch
-comment HudMessageDispatch Dispatches an interface message whose code is read from arg3, returning 1 for the codes 0xFFFF, 0xFFFE and those handled by ScreenElementTextInitialize, HudDrawHealthBar and sub_0003CBF0, and 0 otherwise.
+comment HudMessageDispatch Dispatches an interface message whose code is read from arg3, returning 1 for the codes 0xFFFF, 0xFFFE and those handled by ScreenElementTextInitialize, HudDrawHealthBar and GameObjectFreeByHandle, and 0 otherwise.
 000E51C0  func  HUDPiecesScreenElementCreate
 comment HUDPiecesScreenElementCreate Creates the HUD piece screen elements from HUDPiecesTgaText via vcObjectGet, sizes them with vcRectSet, applies colors and rectangles through UiElementSetBoundsFromObject, UiElementSetColor and VcObjectCopyConstruct, and stores them in the HUD globals.
 000E5530  func  HUDPiecesScreenElementDestroy
@@ -4687,7 +4687,7 @@ comment MissileLockElementMissLockSpriteUpdate Sizes and places MissileLockEleme
 000E67F0  func  MissileLockElementStateTrackTarget
 comment MissileLockElementStateTrackTarget For state 0x2EE2 of MissileLockElement_StateMachine, resolves the object and its target from GameObject handles, projects the target with ObjectScreenRectProject, checks it against the grid bounds in +0x2C8/+0x2CC and its distance with VectorDistance, and updates the lock sprite through PositionInterpolateClamped and MissileLockElementMissLockSpriteUpdate.
 000E7580  func  MissionMenuScreenElementHandleMessage
-comment MissionMenuScreenElementHandleMessage Dispatches on the event code in arg2/arg3 and calls MissionMenuScreenElementDraw, MissionMenuScreenElementConstruct, ScreenElementNotifyOwner, GameObjectDeactivate, sub_0003CBF0 and MissionMenuItemUpdateScrollOffsets for the MissionMenu screen element.
+comment MissionMenuScreenElementHandleMessage Dispatches on the event code in arg2/arg3 and calls MissionMenuScreenElementDraw, MissionMenuScreenElementConstruct, ScreenElementNotifyOwner, GameObjectDeactivate, GameObjectFreeByHandle and MissionMenuItemUpdateScrollOffsets for the MissionMenu screen element.
 000E77C0  func  MissionMenuRelease
 comment MissionMenuRelease Releases the MissionMenu objects stored at 0x222AF8, 0x222ABC and 0x222A80 with vcObjectRelease.
 000E77F0  func  MissionMenuScreenElementFamilyInstall
@@ -4703,11 +4703,11 @@ comment RetTrack2TgaTextCreate creates the RetTrack2TgaText object with vcObject
 000E7B30  func  RetTrack2TgaTextRelease
 comment RetTrack2TgaTextRelease releases the global RetTrack2TgaText object with vcObjectRelease.
 000E7F80  func  ScreenElementFamilyHandleMessage
-comment ScreenElementFamilyHandleMessage Dispatches a screen-element-family message id, calling ScreenElementSetupFromTemplate for 0xFFF9, TargetScreenMarkerDraw for 0x2EE2 and sub_0003CBF0 for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE.
+comment ScreenElementFamilyHandleMessage Dispatches a screen-element-family message id, calling ScreenElementSetupFromTemplate for 0xFFF9, TargetScreenMarkerDraw for 0x2EE2 and GameObjectFreeByHandle for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE.
 000E8070  func  ScreenElementDrawPlayerValueText
 comment ScreenElementDrawPlayerValueText Draws a numeric player stat into the element's rect: picks string id 0x41 or 0x42 for StatsAllocSlot (0x41 when the element's handle at +0x28 is Players(0)), converts the value at +8 with crt_itoa, sizes it with vcTextSetSize(32.0) and draws it black-shadowed via vcRectCopy/vcRectOffset/vcTextDrawInRect (probably the player's score text).
 000E8150  func  ScreenElementHandleEvent
-comment ScreenElementHandleEvent Screen element message handler: on message 0x7FFF it switches on the event code in arg3, attaching with ScreenElementInitialize and copying the handle at +0x18 into +0x28 for 0xFFF9, detaching with sub_0003CBF0 for 0xFFFA, and calling ScreenElementDrawPlayerValueText for 0x2EE2.
+comment ScreenElementHandleEvent Screen element message handler: on message 0x7FFF it switches on the event code in arg3, attaching with ScreenElementInitialize and copying the handle at +0x18 into +0x28 for 0xFFF9, detaching with GameObjectFreeByHandle for 0xFFFA, and calling ScreenElementDrawPlayerValueText for 0x2EE2.
 000E8280  func  ScreenElementInitChildRects
 comment ScreenElementInitChildRects Attaches the passed handle via ScreenElementInitialize, sets the element's handle/flags, then fills the 16-byte default rect slots at 0x222C4C for each child reached by walking GameObjectFromHandle's +0x44 chain up to the count at +0x264, and sets the passed element's +0x18 to -1.
 000E8350  func  ReticleGraphicsInit
@@ -4723,7 +4723,7 @@ comment ScreenElementsRelease Releases the objects at 0x222F28 and 0x222EEC with
 000E9240  func  GunEffectsTextUpdate
 comment GunEffectsTextUpdate Reads a text size with vcTextGetSize, resolves the owner object from edi+0x28 and the object at +0x44 through GameObjectFromHandle, and when the object's type is 0xC looks up its entry in GunEffectsText_VA (ObjectFindEmbeddedChildIndex, SceneObjectGetAttachedTransform) and repositions the elements at 0x222F28 and 0x222EEC with UiElementSetColor/QuadDrawClipped, restoring the size with vcTextSetSize.
 000E9410  func  PickupReticleElement_HandleMessage
-comment PickupReticleElement_HandleMessage Dispatches screen element messages (0x7FFF gate, 0xFFFF/0xFFF9/0xFFFE/0x2EE2/0xFFFA) for a PickupReticleElement, calling ScreenElementInitialize, sub_0003CBF0 and GunEffectsTextUpdate and setting the element's handle fields.
+comment PickupReticleElement_HandleMessage Dispatches screen element messages (0x7FFF gate, 0xFFFF/0xFFF9/0xFFFE/0x2EE2/0xFFFA) for a PickupReticleElement, calling ScreenElementInitialize, GameObjectFreeByHandle and GunEffectsTextUpdate and setting the element's handle fields.
 000E94C0  func  PickupReticleElementFamily_Initialize
 comment PickupReticleElementFamily_Initialize Fills the PickupReticleElement family's static method table at 0x222EA8 (size 0x2C, methods 0xE9190, 0xE9220, 0xE9410) and points the family at it through arg0+0x48.
 000E9670  func  PickupReticleElement_ResetTargets
@@ -4733,7 +4733,7 @@ comment PickupReticleElement_DrawTargetReticle Computes distance and angle from 
 000EA280  func  IncomingMissileElement_Draw
 comment IncomingMissileElement_Draw Draws the incoming missile element's label with vcFormat/vcFormatLast/vcTextWidth/vcTextDraw at the element's position and color, then uses EntityFindSlotWithLowestValue on the target's parent object to set the element's show flag and resets its color and timer when the target is gone.
 000EA560  func  ScreenElementDispatchMessage
-comment ScreenElementDispatchMessage Screen element vtable message entry that handles 0x7FFF messages: for 0xFFF9 it calls ScreenElementInitialize and stores the new parent handle at +0x28, for 0xFFFA it calls sub_0003CBF0, for 0x2EE2 it calls ScreenElementDrawObjectQuad, and returns 1 when handled.
+comment ScreenElementDispatchMessage Screen element vtable message entry that handles 0x7FFF messages: for 0xFFF9 it calls ScreenElementInitialize and stores the new parent handle at +0x28, for 0xFFFA it calls GameObjectFreeByHandle, for 0x2EE2 it calls ScreenElementDrawObjectQuad, and returns 1 when handled.
 000EA610  func  HudLogoPuTgaTextCreate
 comment HudLogoPuTgaTextCreate Creates the vcObject from HudLogoPuTgaText_VA, sets its rect with vcRectSet, and stores it in the global at 0x22348Cu via UiElementSetBoundsFromObject.
 000EA660  func  HudLogoPuTgaTextDestroy
@@ -4743,7 +4743,7 @@ comment ScreenElementFamilyRegisterHudLogoPuTgaText Fills the vtable at 0x223448
 000EA850  func  HudGaugeDraw
 comment HudGaugeDraw Draws the HUD gauge whose state is at the pointer in esi: resolves the game object from the handle at esi+0x28 and its owner at +0x44 with GameObjectFromHandle, clamps the object's field 0x174 and the gauge value at esi+0x2C against esi+0x34 into 0..44, and draws the bar rect with vcRectSet and the labels with UiElementSetBoundsFromObject, UiElementSetColor, QuadDrawClipped and QuadDrawRotated (probably a player status/energy bar).
 000EAD50  func  HudGaugeEventHandle
-comment HudGaugeEventHandle Handles an event for the HUD gauge state at arg1 when arg2 is 0x7FFF: dispatches on the code at MEM32(arg3), calling HudGaugeDraw for 0x2EE2, sub_0003CBF0 for 0xFFFA, and ScreenElementInitialize for 0xFFF9 (which also clears the gauge fields arg1+0x28..0x34), returning 1 when handled and 0 otherwise.
+comment HudGaugeEventHandle Handles an event for the HUD gauge state at arg1 when arg2 is 0x7FFF: dispatches on the code at MEM32(arg3), calling HudGaugeDraw for 0x2EE2, GameObjectFreeByHandle for 0xFFFA, and ScreenElementInitialize for 0xFFF9 (which also clears the gauge fields arg1+0x28..0x34), returning 1 when handled and 0 otherwise.
 000EAE10  func  HUDTexturesInit
 comment HUDTexturesInit Creates each HUD texture object with vcObjectGet, sets its rectangle with vcRectSet, and registers it with UiElementSetBoundsFromObject, giving it a packed color through UiElementSetColor, for the HUD piece and enemy icon TGAs (HUDPiecesTgaText, HUDEnemyDsTgaText and the rest).
 000EB6B0  func  ScreenElementFamilySetDescriptor
@@ -4753,7 +4753,7 @@ comment ScreenElementGaugeSetup Sets the element's tracked object handle from th
 000EB7D0  func  ScreenElementGaugeDraw
 comment ScreenElementGaugeDraw Resolves the element's tracked object (and its parent at +0x44) through GameObjectFromHandle, clamps the object's value to 95-pixel bar segments, and draws the two gauge rectangles with vcRectSet, QuadDrawClipped, UiElementSetBoundsFromObject and UiElementSetColor, using Players(1) to reset the full width.
 000EBC60  func  HudPiecesElementHandleMessage
-comment HudPiecesElementHandleMessage When arg2 is 0x7FFF it treats the value at arg3 as a message: returns 1 for 0xFFFF/0xFFFE, calls ScreenElementGaugeSetup for 0xFFF9, sub_0003CBF0 for 0xFFFA and ScreenElementGaugeDraw for 0x2EE2, else returns 0.
+comment HudPiecesElementHandleMessage When arg2 is 0x7FFF it treats the value at arg3 as a message: returns 1 for 0xFFFF/0xFFFE, calls ScreenElementGaugeSetup for 0xFFF9, GameObjectFreeByHandle for 0xFFFA and ScreenElementGaugeDraw for 0x2EE2, else returns 0.
 000EBD00  func  HudPiecesElementCreate
 comment HudPiecesElementCreate Creates the HUD-piece vcObjects from HUDPiecesTgaText and the 0x1A6160 texture with vcObjectGet, places them with vcRectSet and sets their colors through UiElementSetBoundsFromObject/UiElementSetColor.
 000EC070  func  HudPiecesElementDestroy
@@ -4765,7 +4765,7 @@ comment ScreenElementSetTargetHandleAndSize Stores the handle at arg1+0x18 into 
 000EC1D0  func  EntityBarsDraw
 comment EntityBarsDraw Resolves the game object from the handle at esi+0x28 (then the handle at its 0x44), computes two bar lengths from its 0xA8 and 0x188 values scaled by its vtable+8 scale and esi+0x2C and clamped to 65, and draws them at esi+4/esi+0x10 with vcRectSet, UiElementSetBoundsFromObject/UiElementSetColor and the globals set by QuadDrawClipped.
 000EC5E0  func  MessageIdDispatch
-comment MessageIdDispatch Checks arg2 against 0x7FFF and dispatches the message id in arg3 to ScreenElementSetTargetHandleAndSize (0xFFF9), EntityBarsDraw (0x2EE2) or sub_0003CBF0 (0xFFFA), returning 1 when handled and 0 otherwise.
+comment MessageIdDispatch Checks arg2 against 0x7FFF and dispatches the message id in arg3 to ScreenElementSetTargetHandleAndSize (0xFFF9), EntityBarsDraw (0x2EE2) or GameObjectFreeByHandle (0xFFFA), returning 1 when handled and 0 otherwise.
 000ECA60  func  HudPiecesSetFamilyDescriptor
 comment HudPiecesSetFamilyDescriptor Registers the HUD pieces screen element family on arg0 by storing the class descriptor at 0x223FA0 (size 0x30, create HudPiecesInit, destroy HudPiecesShutdown, MessageIdDispatch) at arg0+0x28.
 000ECAB0  func  HudPieceSetObject
@@ -4773,13 +4773,13 @@ comment HudPieceSetObject Initializes a HUD element with ScreenElementInitialize
 000ECB70  func  HudDrawObjectGauge
 comment HudDrawObjectGauge Resolves the game object from the handle in esi+0x28 with GameObjectFromHandle, scales the object's FLOAT_AT(+0xA8) by FLOAT_AT(esi+0x2C), clamps it to 65, and lays out the gauge rectangles through vcRectSet and QuadDrawClipped (probably the HUD gauge for that object).
 000ECDE0  func  UiMessageDispatch
-comment UiMessageDispatch Handles a UI message: when arg2 is 0x7FFF it switches on MEM32(arg3) to call HudPieceSetObject, HudDrawObjectGauge or sub_0003CBF0, returning 1 when the message is handled and 0 otherwise.
+comment UiMessageDispatch Handles a UI message: when arg2 is 0x7FFF it switches on MEM32(arg3) to call HudPieceSetObject, HudDrawObjectGauge or GameObjectFreeByHandle, returning 1 when the message is handled and 0 otherwise.
 000ED190  func  HudPiecesFamilyInit
 comment HudPiecesFamilyInit Fills the screen-element family descriptor at 0x224190 with size 0x30 and the create/destroy/0xECDE0 handlers and stores its pointer at arg0+0x24, registering the HUD pieces family.
 000ED1E0  func  ItemSelectDraw
 comment ItemSelectDraw Walks the item count at the selected object's +0xB0 and the slot count at +0x1A4, positions each slot with QuadDrawClipped on the 0x224388 and 0x22434C objects, and when the slot is within the selectable range and ControllerItems_b and the vcPad pressed_b/analog state say so, probably highlights it as the chosen one.
 000ED3A0  func  ScreenElementEventDispatch
-comment ScreenElementEventDispatch Handles the screen element's event codes, calling ScreenElementInitialize and copying arg4's +0x18 field on 0xFFF9, ItemSelectDraw on 0x2EE2 and sub_0003CBF0 on 0xFFFA, returning 1 for recognized events.
+comment ScreenElementEventDispatch Handles the screen element's event codes, calling ScreenElementInitialize and copying arg4's +0x18 field on 0xFFF9, ItemSelectDraw on 0x2EE2 and GameObjectFreeByHandle on 0xFFFA, returning 1 for recognized events.
 000ED450  func  HudPiecesTextCreate
 comment HudPiecesTextCreate Builds the element's two HUD text pieces by fetching HUDPiecesTgaText_VA with vcObjectGet, sizing them with vcRectSet and storing them at 0x22434C and 0x224388 via UiElementSetBoundsFromObject.
 000ED4E0  func  HudPiecesTextDestroy
@@ -4787,7 +4787,7 @@ comment HudPiecesTextDestroy Releases the element's two HUD text pieces at 0x224
 000ED550  func  HudPieceDirectionDraw
 comment HudPieceDirectionDraw Draws the HUD piece chosen by the element's +0x28 direction field (0..3) through UiElementSetColor and QuadDrawRotated, offsetting directions 2 and 3 by minus and plus 90 degrees.
 000ED5D0  func  HudIndicatorEventDispatch
-comment HudIndicatorEventDispatch Dispatches the element's 0x7FFF/0/1 events, adjusting the +0x30 value and +0x10 flag and calling HudPieceDirectionDraw, GameObjectDeactivate, ScreenElementNotifyOwner, sub_0003CBF0 and ScreenElementInitialize, returning 1 for recognized events.
+comment HudIndicatorEventDispatch Dispatches the element's 0x7FFF/0/1 events, adjusting the +0x30 value and +0x10 flag and calling HudPieceDirectionDraw, GameObjectDeactivate, ScreenElementNotifyOwner, GameObjectFreeByHandle and ScreenElementInitialize, returning 1 for recognized events.
 000ED760  func  RadarElementCreate
 comment RadarElementCreate Creates the radar element's vcObject with vcObjectGet, sets its rectangle with vcRectSet and fills its four child objects through UiElementSetBoundsFromObject.
 000ED800  func  RadarElementDestroy
@@ -4953,7 +4953,7 @@ comment SteeringFamilyDispatchTetherEvent Handles a steering-family event, retur
 000FE7A0  func  SteeringFamilyInstallTetherEventDispatch
 comment SteeringFamilyInstallTetherEventDispatch Installs the steering-family event dispatch table at 0x226CB0 (size 0x20, function pointer SteeringFamilyDispatchTetherEvent) into arg0+0x30.
 000FEAC0  func  SteeringFamilyRegisterMessageHandler
-comment SteeringFamilyRegisterMessageHandler Sets up the global message-handler table at 0x226CF8 with size 0x2C and handler sub_000FE9F0, and assigns it to the SteeringFamily object's field at offset 0x20.
+comment SteeringFamilyRegisterMessageHandler Sets up the global message-handler table at 0x226CF8 with size 0x2C and handler SteeringObjectsMessageHandler, and assigns it to the SteeringFamily object's field at offset 0x20.
 000FEB50  func  SteeringFamilyFaceTarget
 comment SteeringFamilyFaceTarget Gets two game objects from handles, computes the vector between their positions, converts it to angles with MatrixGetForwardHeading and MatrixGetBasisHeading, and if VectorDiffersBeyondTolerance accepts the angle calls EntityComputeYawTurn to rotate the first object toward the second.
 000FEC50  func  SteeringFamilyFaceTargetFromHandles
@@ -5057,7 +5057,7 @@ comment ObjectGroupHandleMessage Message handler: for class 0x7FFF it dispatches
 00105720  func  GameObjectFamilyInit
 comment GameObjectFamilyInit fills the component family block at 0x227208 (size 0xA48, the ObjectGroupResetCounter and other callback pointers, two count fields) and stores the family at arg0+0x10.
 00105AC0  func  PilotTextSetDefault
-comment PilotTextSetDefault copies Male01Pilot3Text into the object's +0x5C name buffer, points the object at the 0x2272EC text table and the sub_00105A90 callback, and sets the +0xE flag from the object's +0x4C pointer.
+comment PilotTextSetDefault copies Male01Pilot3Text into the object's +0x5C name buffer, points the object at the 0x2272EC text table and the GameObjectPlaceOnLocalGridStartMotion callback, and sets the +0xE flag from the object's +0x4C pointer.
 00105B20  func  PilotTextHandleEvent
 comment PilotTextHandleEvent dispatches on the event id (0x7FFF, 0, 1, 0x14) and code to clone or release the vcObject at +0x54, call vcSceneObjectChangeFlags, call GameObjectSetTransformFrom/GameObjectGetTransformInto/SceneObjectAttach/GameObjectCreateAttachedSceneObject, or GameObjectDestroy.
 00105D40  func  PilotTextCreateObjects
@@ -5071,15 +5071,15 @@ comment PilotTextLoad Item_Load's the item, reads 0x40 bytes into the object's +
 00105EE0  func  ZenCratesMunitionsPickupInitClass
 comment ZenCratesMunitionsPickupInitClass Fills the ZenCratesMunitionsPickup class descriptor at 0x2272A8 (size 0x9C, the callbacks 0x105D40/0x105DA0/0x105B20/0x105E80 and the 0x147480 table) and stores it at arg0+0x20 on the item family that ZenCratesMunitionsPickup_Register set up.
 00106000  func  ZenCratesMunitionsPickupUpdateState
-comment ZenCratesMunitionsPickupUpdateState Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from MEM32(esi+0x4C), gives the scene object at esi+0x54 its user with vcSceneObjectSetUser, computes the pickup node offset through SceneObjectGetAttachedTransform with ZenCratesMunitionsPickupPickupNode into esi+0x3C, and installs sub_001067C0 at edi+8 as the update callback.
+comment ZenCratesMunitionsPickupUpdateState Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from MEM32(esi+0x4C), gives the scene object at esi+0x54 its user with vcSceneObjectSetUser, computes the pickup node offset through SceneObjectGetAttachedTransform with ZenCratesMunitionsPickupPickupNode into esi+0x3C, and installs GameObjectPlaceOnLocalGridFromRef at edi+8 as the update callback.
 00106460  func  ZenCratesPickupUpdateState
-comment ZenCratesPickupUpdateState Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from MEM32(esi+0x4C), computes the pickup node offset through SceneObjectGetAttachedTransform with the node at 0x2273E0 into esi+0x3C, and installs sub_001067C0 at edi+8 as the update callback.
+comment ZenCratesPickupUpdateState Calls GameObjectInitTransform, sets the pickup's visible flag at edi+0xE and edi+0x10 from MEM32(esi+0x4C), computes the pickup node offset through SceneObjectGetAttachedTransform with the node at 0x2273E0 into esi+0x3C, and installs GameObjectPlaceOnLocalGridFromRef at edi+8 as the update callback.
 001067E0  func  NoseconePickupUpdateState
-comment NoseconePickupUpdateState Calls GameObjectInitTransform, installs sub_001067C0 as the update callback at esi+8, and sets the pickup's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C).
+comment NoseconePickupUpdateState Calls GameObjectInitTransform, installs GameObjectPlaceOnLocalGridFromRef as the update callback at esi+8, and sets the pickup's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C).
 00106820  func  NoseconePickupSetOffsetFromBounds
 comment NoseconePickupSetOffsetFromBounds Reads the scene object's bounds with vcSceneObjectGetBounds, stores the bounds' vertical size at esi+0x40 with zero X/Z at esi+0x3C and esi+0x44, calls GameObjectCreateAttachedSceneObject, and sets the flag at ebx+0xE when MEM32(edi+8) is non-zero.
 00106B80  func  SpyCapsulePickupUpdateState
-comment SpyCapsulePickupUpdateState Calls GameObjectInitTransform, installs sub_001067C0 as the update callback at esi+8, and sets the capsule's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C).
+comment SpyCapsulePickupUpdateState Calls GameObjectInitTransform, installs GameObjectPlaceOnLocalGridFromRef as the update callback at esi+8, and sets the capsule's visible flag at esi+0xE and esi+0x10 from MEM32(edi+0x4C).
 00106EB0  func  ObjectListAcquireByName
 comment ObjectListAcquireByName Searches the named-object table at 0x2274E0 for one whose vcObjectGetName matches arg0 (crt_stricmp) and bumps its count at 0x227580, otherwise creates it with vcObjectGet(0xB, arg0), changes its scene flags with vcSceneObjectChangeFlags, runs SceneObjectCreate and ObjectActivate, and stores it in the table.
 00106FB0  func  NamedObjectPoolRelease
@@ -6083,7 +6083,7 @@ comment GameObjectBroadcastToVisibleChildren Same walk of the object's child han
 000206F0  func  GameObjectSendMessageToVisibleChildrenAndGlobal
 comment GameObjectSendMessageToVisibleChildrenAndGlobal Sends message 0x2EE2 with a 4-byte payload to each visible child of the object, then, if the object in global 0x1E61F0 is nonzero, sends messages 0x32CA and 0x32CB to it.
 00020860  func  GameRun
-comment GameRun Stores the given handle in global 0x1E61E0, clears 0x1E61E4/0x1E61E8, calls GameStart when sub_000269D0 is nonzero, runs GameLoopRun with the tables at 0x1FF70/0x20110/0x20120, then calls sub_0001FEF0 and returns the value at 0x1E61E8.
+comment GameRun Stores the given handle in global 0x1E61E0, clears 0x1E61E4/0x1E61E8, calls GameStart when sub_000269D0 is nonzero, runs GameLoopRun with the tables at 0x1FF70/0x20110/0x20120, then calls GameSessionShutdown and returns the value at 0x1E61E8.
 00020C20  func  ScreenShowCenteredMessage
 comment ScreenShowCenteredMessage Clears and shows the screen with vcScreenClear/vcScreenShow after vcScreenGetRect, draws the given message with ScreenDrawCenteredMessage under RenderStatesApplyCached/RenderStatesSetDefault, and repeats the clear/show/draw pair.
 00020EB0  func  SignedTriangularFalloff
@@ -6203,9 +6203,9 @@ comment EntityCreateAttachedObjectIfStateAllowed If the target entity can enter 
 0002CE80  func  EntityCreateAttachedObjectEnteringState
 comment EntityCreateAttachedObjectEnteringState Enters state 0xD on the target entity (ObjectStateEnterIfAllowed) and, when its vtable slot +0xE8 is set, creates the entity's object at +0xA0 via EntityAttachedObjectEnsure and sets bit 4 of the entity.
 0002CEF0  func  EntityUpdateAttachedObjectFlags
-comment EntityUpdateAttachedObjectFlags Sets bit 2 (arg3 zero) or bit 0x10 on the target object's flags at +0x1C and updates the entity's object at +0xA4 via sub_000D5E40.
+comment EntityUpdateAttachedObjectFlags Sets bit 2 (arg3 zero) or bit 0x10 on the target object's flags at +0x1C and updates the entity's object at +0xA4 via GameObjectReplaceFromReference.
 0002CFB0  func  EntityUpdateAttachedObjectWithFlag
-comment EntityUpdateAttachedObjectWithFlag Sets bit 0x10 on the target object's flags at +0x1C when arg3 is nonzero and updates the entity's object at +0xA4 via sub_000D5E40.
+comment EntityUpdateAttachedObjectWithFlag Sets bit 0x10 on the target object's flags at +0x1C when arg3 is nonzero and updates the entity's object at +0xA4 via GameObjectReplaceFromReference.
 0002D870  func  ObjectIsInFrontCone
 comment ObjectIsInFrontCone After sub_0009C6E0 accepts the first object, it takes the positions of the two objects given by *p_esi and *p_edi with ObjectGetPosition, normalizes the offset between them with VectorNormalize, and returns 1 when the dot product of that offset with the object's forward direction is greater than 0.35, otherwise 0.
 0002D960  func  ObjectPairLineOfSightClear
@@ -6297,7 +6297,7 @@ comment GameObjectDetachAndDestroyChildren Gets the object for the handle with G
 00039740  func  GameObjectNodeLoad
 comment GameObjectNodeLoad Reads a game object from the file with GameObjectCreateInFile, fills its fields and matrices through FileReadTriples, FileReadMatrix and vcFileReadU32, then reads a child count and loads and attaches each child with GameObjectLoad and GameObjectAttachChild.
 00039D00  func  EntityPathFollowUpdate
-comment EntityPathFollowUpdate Updates the entity's motion direction at 0xE4/0xE8/0xEC through sub_000395F0 and, for the object handle in 0xD0, advances or wraps the path fraction in 0xD4 using GameObjectWrapPathFraction with GameObjectWrapOffsetInRange, EntityPathFollowUpdatePosition and sub_0003C620.
+comment EntityPathFollowUpdate Updates the entity's motion direction at 0xE4/0xE8/0xEC through sub_000395F0 and, for the object handle in 0xD0, advances or wraps the path fraction in 0xD4 using GameObjectWrapPathFraction with GameObjectWrapOffsetInRange, EntityPathFollowUpdatePosition and EntityPathComputeTransform.
 00039E90  func  NodeInitialize
 comment NodeInitialize Calls GameObjectCopyFromTemplate, copies a type from edi+0x74 into the node's +0xD0, clears the +0xD4/+0xD8/+0xDC/+0xE0/+0xE4/+0xE8/+0xEC fields, stores EntityPathFollowIfActive in arg0+8 and sets flag 0x40 in +0x40.
 00039EF0  func  NodeUpdatePositionFromParent
@@ -6305,7 +6305,7 @@ comment NodeUpdatePositionFromParent If the node's +0xC8 flag is 1, resolves the
 00039F50  func  NodeMessageDispatch
 comment NodeMessageDispatch Dispatches node messages: for message type 0x7FFF it handles codes 0xFFFF, 0xFFF9, 0xFFFE, 0x2AF8, 0x2AF9, 0x2AFA and 0xFFFA by calling GameObjectSendMessageToChildren, NodeInitialize, NodeUpdatePositionFromParent or GameObjectDetachAndDestroyChildren and returning 1, otherwise 0.
 0003A070  func  NodeUpdateTransform
-comment NodeUpdateTransform Updates a node's transform: resolves the handle, reads a type from +0xD0, sets +0xD4 from sub_0003A3E0 or GameObjectGetPath, and if the +0xE4/+0xE8/+0xEC values are non-zero computes a difference from the parent's position and calls sub_000395F0, otherwise calls EntityPathFollowUpdate.
+comment NodeUpdateTransform Updates a node's transform: resolves the handle, reads a type from +0xD0, sets +0xD4 from NodeResolveHandle or GameObjectGetPath, and if the +0xE4/+0xE8/+0xEC values are non-zero computes a difference from the parent's position and calls sub_000395F0, otherwise calls EntityPathFollowUpdate.
 0003A1E0  func  NodeLoad
 comment NodeLoad Loads a node: calls GameObjectLoad to create it, sets its +0xD0, then reads fields with vcFileReadU32 and FileReadTriples and calls NodeUpdateTransform if no fields remain.
 0003A290  func  NodeFamilyRegisterDescriptor
@@ -6493,7 +6493,7 @@ comment PodOfficerSkarredDisabledCreateVCObjectClone Clones a vcObject from a gl
 00078FE0  func  PodOfficerSkarredCreateVCObjectClone
 comment PodOfficerSkarredCreateVCObjectClone Clones a vcObject from a global class pointer, positions it at the entity's coordinates offset by 13.716, and calls GameObjectGetVCObject and sub_0012FC10.
 0007B440  func  ZenReEntryPodBeginCountdown
-comment ZenReEntryPodBeginCountdown Called by ZenReEntryPodStartCountdown and ZenReEntryPod_StateMachine, it sets the +4 flag, sends message 1000 to the pod's object with GameObjectSendMessage, stores the handle from ObjectCacheGetDurationMs at +0x270, and passes the vcObject at +0x194 to sub_001205C0.
+comment ZenReEntryPodBeginCountdown Called by ZenReEntryPodStartCountdown and ZenReEntryPod_StateMachine, it sets the +4 flag, sends message 1000 to the pod's object with GameObjectSendMessage, stores the handle from ObjectCacheGetDurationMs at +0x270, and passes the vcObject at +0x194 to ObjectMotionStart.
 0007B4B0  func  ZenReEntryPodSendRadialMessage
 comment ZenReEntryPodSendRadialMessage Called from ZenReEntryPod_StateMachine, it sends GameObjectsSendRadialMessage once (guarded by the +0x290 flag) from the pod's position at +8 with the 1500/120/200 radii and returns the damage through p_ebx.
 0007B510  func  ZenReEntryPod_PlayRandomEffectsThenDamage
@@ -6553,7 +6553,7 @@ comment MotionListDisableMotions Finds the motion named by 0x20D628 in the list 
 0009B9E0  func  GameObjectPoolReleaseAll
 comment GameObjectPoolReleaseAll Sets the global at 0x20DCE4, calls GameObjectReleaseCurrent on each of 0x26 objects 0x300 bytes apart, then resets the pool's fields at +0x7200/+0x7204/+0x7208.
 0009BA50  func  EntityCopy
-comment EntityCopy Copies the fields of the entity at arg1 into the entity at arg0 and re-runs sub_0009B980, EntityCopyState and TypeIndexSetDifficultyValue on the copy.
+comment EntityCopy Copies the fields of the entity at arg1 into the entity at arg0 and re-runs EntitySetTypeIndex, EntityCopyState and TypeIndexSetDifficultyValue on the copy.
 0009C050  func  EntityApplyControlInput
 comment EntityApplyControlInput Applies the two-field control input in arg2 to the vehicle state record's control flags and status bits, sets steering masks from its input bits, destroys steering and enters state 0 via ObjectStateEnterIfAllowed.
 0009C530  func  EntityApplyTypeData
@@ -6567,7 +6567,7 @@ comment EntryPoolAllocInitializedEntry Allocates a pool entry with EntryPoolAllo
 0009D4C0  func  PoolEntryInitialize
 comment PoolEntryInitialize Initializes the entry allocated by PoolEntryAllocate: sets field 0 to 1, zeroes the fields at 0x60-0x68, 0x78, 0x9C-0xA4 and the eight dwords at 0x7C, stores 5000.0 at 0x70 and 50000.0 at 0x74, sets 0xAC to 1, and clears the child list with GameObjectChildListClear.
 0009D9F0  func  EntityListResetIndexAndInvokeTimers
-comment EntityListResetIndexAndInvokeTimers resets the list's +0x58 index to 0, resolves the entity from the handle at arg1+0x44 with GameObjectFromHandle (or GameObjectLastObject), calls sub_0001F7B0, and invokes GameObjectTimerListInvokeForObject with the list's +0x4C timer list.
+comment EntityListResetIndexAndInvokeTimers resets the list's +0x58 index to 0, resolves the entity from the handle at arg1+0x44 with GameObjectFromHandle (or GameObjectLastObject), calls EntityInvokeTimersForGameObject, and invokes GameObjectTimerListInvokeForObject with the list's +0x4C timer list.
 0009DCB0  func  GameObjectChildListDestroy
 comment GameObjectChildListDestroy Clears the child list at +0x2A4 with GameObjectChildListClear and then releases it with PoolEntryInitialize, zeroing the +0x2A4 pointer.
 0009DD40  func  EntityGroupUpdate
@@ -6585,7 +6585,7 @@ comment EntityListRefreshDispatch For an entity with children, calls EntityGroup
 0009EA70  func  EntityChildListInit
 comment EntityChildListInit Initializes an entity's child-list container in mode 1, installing callbacks at 0x78/0x80/0x88/0x94, marking the entity active and calling EntityChildListAddChild and sub_0009D6F0.
 0009EAD0  func  EntityChildListInitSecondary
-comment EntityChildListInitSecondary Initializes an entity's child-list container in mode 2, installing callbacks at 0x78/0x80/0x98, marking the entity active, calling EntityChildListAddChild and returning the result of sub_0009D880.
+comment EntityChildListInitSecondary Initializes an entity's child-list container in mode 2, installing callbacks at 0x78/0x80/0x98, marking the entity active, calling EntityChildListAddChild and returning the result of EntityChildListAssignChildIndices.
 0009F4C0  func  GameObjectReadFromFile
 comment GameObjectReadFromFile Reads a game object's serialized fields from a file with vcFileReadU32, FileReadTriples and FileReadMatrix, allocates and fills its triple/matrix array, loads version-gated extra fields (with GameObjectLoad and GameObjectCreateObjectsFromList), and initializes its runtime state from vcGameTime and vcRandom.
 000A0620  func  EmitterUpdateFromHandle
@@ -6625,7 +6625,7 @@ comment EntityRollRandomChance Rolls vcRandom modulo 100, adds 20 when the objec
 000A5E60  func  CallbackTableInvokeNextEntry
 comment CallbackTableInvokeNextEntry Invokes CallbackTableInvokeNext on the callback table at 0x273300 with the global index at 0x20F7E0 and the caller's argument.
 000A6000  func  CallbackTableInit
-comment CallbackTableInit Clears each 0x2C-byte entry of the callback table from 0x273300 to 0x2734B8 with sub_0009B750, then installs the two callbacks 0xA68C0 and 0xA68D0 and sets the count at 0x20F7E0 to 2.
+comment CallbackTableInit Clears each 0x2C-byte entry of the callback table from 0x273300 to 0x2734B8 with CallbackEntryClear, then installs the two callbacks 0xA68C0 and 0xA68D0 and sets the count at 0x20F7E0 to 2.
 000A6050  func  EntityEventDispatch
 comment EntityEventDispatch Reads the event type at +0x10 of the event data in arg2 and dispatches event types 2 through 8 to GameObjectUpdateTarget, AIDataEntryExecute, EntityStateEnterOnEvent, EntitySetMoveDestination and ObjectStateEnterIfAllowed, falling through to sub_000A5E80 for any other type.
 000A6340  func  AIObjectInstallHandlers
@@ -6643,7 +6643,7 @@ comment EntityResetAIData Returns 0 when the entity's field at +0x284 is -1, els
 000A6C20  func  AIDataProcessState
 comment AIDataProcessState Runs the AI state of the AIData entry from AIDataGetEntryForObject: it refreshes the game object from the entity's handle, dispatches on the entry's state index to GameObjectSetTarget, ObjectGetTargetHandle, GameObjectSendMessage, GameObjectGetPath and GameObjectDetachAttachment, and clears the entity's 0x98 field and 0x2000 flag before EntityAttachAI.
 000A6DF0  func  AIDataInitStates
-comment AIDataInitStates Resets each of the ten AI state entries from 0x273140 to 0x2732F8 through sub_0009B750 and installs the two default state handlers 0xA68C0 and 0xA68D0 with the count at 0x20F7E4.
+comment AIDataInitStates Resets each of the ten AI state entries from 0x273140 to 0x2732F8 through CallbackEntryClear and installs the two default state handlers 0xA68C0 and 0xA68D0 with the count at 0x20F7E4.
 000A6E90  func  EntityInitAIDataHandlers
 comment EntityInitAIDataHandlers Sets the entity's AI handler pointers at +0x288, +0x28C, +0x294, +0x2D4 and +0x2D8 to 0xA6770, 0xA6C20, 0xA6AF0, 0xA6E40 and 0xA6380 when the entity is non-null.
 000A6E98  func  EntityAssignAIDataHandlers
@@ -6669,7 +6669,7 @@ comment AIDataTypeEntryReset clears the four dwords of the record and sets its f
 000A7B50  func  AIDataTypeTableAdd
 comment AIDataTypeTableAdd copies a record into the global table at 0x26E320 with TableRecordCopy after TableFindFreeEntry, increments the count at 0x20F7E8, and returns the index or -1 when the table already holds 1000 entries.
 000A7C00  func  VehicleCreateGameObjects
-comment VehicleCreateGameObjects Builds a spawn struct from the object's path and target handle and calls VehicleCreateGameObject and sub_000D5E40 to create the vehicle's two game objects, after ObjectStateEnterIfAllowed puts it in state 6.
+comment VehicleCreateGameObjects Builds a spawn struct from the object's path and target handle and calls VehicleCreateGameObject and GameObjectReplaceFromReference to create the vehicle's two game objects, after ObjectStateEnterIfAllowed puts it in state 6.
 000A9720  func  NearestNeighborIndexAdd
 comment NearestNeighborIndexAdd Adds arg1 to the list of up to 10 nearest-neighbor indices (into the 0x54-byte records at 0x259A40) of the record indexed by arg0, measuring distances with VectorDistance and replacing the farthest stored neighbor when the list is full and arg1 is nearer.
 000A9850  func  PathNodeGraphBuild
@@ -6691,7 +6691,7 @@ comment ObjectDetachAttachmentAndResetFlagSetActionState Clears flag 0x40 of the
 000AAED0  func  ObjectTryEnterStateTwo
 comment ObjectTryEnterStateTwo If the object is non-null and does not already have flag bit 1 set, calls ObjectStateEnterIfAllowed with state 2 and returns its result.
 000AAEF0  func  ObjectEnterStateTwoAndApplyTargetLimit
-comment ObjectEnterStateTwoAndApplyTargetLimit Validates the object and target, gets the target handle with ObjectGetTargetHandle, enters state 2 with ObjectStateEnterIfAllowed, and calls sub_000AACC0 with the object's +0x28 value clamped down to the float at the target's +0xAC limit (or unclamped when that limit is absent or zero).
+comment ObjectEnterStateTwoAndApplyTargetLimit Validates the object and target, gets the target handle with ObjectGetTargetHandle, enters state 2 with ObjectStateEnterIfAllowed, and calls ObjectMoveTowardTargetIfBeyondTargetLimit with the object's +0x28 value clamped down to the float at the target's +0xAC limit (or unclamped when that limit is absent or zero).
 000AB170  func  EntityOnTargetAcquired
 comment EntityOnTargetAcquired Resolves the target handle with ObjectGetTargetHandle, calls the entity's +0x2D4 callback, and when HandleIsValidTarget and EntityAssignTarget succeed, calls the +0x2D8 callback if EntityDifficultyChanceRoll passes.
 000AB690  func  EntityAttachToTarget
@@ -6925,7 +6925,7 @@ comment HudGaugeQuadsRender Draws the gauge's textured quads through QuadDrawCli
 000D1FF0  func  HudPiecesCreate
 comment HudPiecesCreate Creates the four HUD piece sprites from HUDPiecesTgaText_VA with vcObjectGet, sets each one's rectangle with vcRectSet and registers it into the globals at 0x220B90, 0x220B54, 0x220B18 and 0x220ADC through UiElementSetBoundsFromObject.
 000D23E0  func  HudPieceHandleMessage
-comment HudPieceHandleMessage Handles a HUD piece message (arg2 0x7FFF) by dispatching on the message code: HudPieceInitialize for 0xFFF9, HudGaugeQuadsRender for 0x2EE2, releasing the object at +0x2C and calling sub_0003CBF0 for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE.
+comment HudPieceHandleMessage Handles a HUD piece message (arg2 0x7FFF) by dispatching on the message code: HudPieceInitialize for 0xFFF9, HudGaugeQuadsRender for 0x2EE2, releasing the object at +0x2C and calling GameObjectFreeByHandle for 0xFFFA, and returning 1 for 0xFFFF and 0xFFFE.
 000D24A0  func  HudPiecesFamilyRegister
 comment HudPiecesFamilyRegister Fills the screen element family's callback table at 0x220A98 with the HUD pieces create, set and message handlers and points the family at arg0+0x6C to it.
 000D26C0  func  HudPieceIsActive
@@ -6977,7 +6977,7 @@ comment LevelLoadFromFile Reads level data from a file with vcFileReadBytes and 
 000D7810  func  SceneObjectAttach
 comment SceneObjectAttach Sets a flag, attaches the pickup's scene object with vcSceneObjectAttach, gets its transform with vcSceneObjectGetTransform, and stores arg3 at +0x58.
 000D7A00  func  MotionStart
-comment MotionStart Finds or creates a free motion slot for the scene object with MotionListFindFreeSlot and MotionListCreateEntry, sets its target from the object's fields, and starts the motion with sub_001205C0 and LinkedObjectUnload.
+comment MotionStart Finds or creates a free motion slot for the scene object with MotionListFindFreeSlot and MotionListCreateEntry, sets its target from the object's fields, and starts the motion with ObjectMotionStart and LinkedObjectUnload.
 000D7AB0  func  GameObjectCreateAttachedSceneObject
 comment GameObjectCreateAttachedSceneObject Resolves the handle stored in arg2 with GameObjectFromHandle (or GameObjectLastObject) and, when arg1's field at 0x4C is zero, stores that handle in arg1+0x50, computes a transform via SceneObjectGetAttachedTransform and vcTransformPoint, creates the scene object with SceneObjectCreateAndInit, attaches it with vcSceneObjectAttach, and sets arg2+8 to 1.
 000D80F0  func  BuildingTypeTableShutdown
@@ -7001,7 +7001,7 @@ comment NodeFamilyLoadObject Resolves a game object from the handle returned by 
 000DC3F0  func  GameObjectDrawDebugOverlay
 comment GameObjectDrawDebugOverlay Draws a debug overlay for a game object, branching on its state at +0xD0 to send message 0x2AF8 to the GameObjectGetStateTarget result, draw formatted handle/state text with vcFormat and vcTextDraw, and project and draw bounding boxes with ObjectScreenRectProject and BoundingBoxTransformByMatrix.
 000DCC60  func  GameObjectDispatchStateTargetAction
-comment GameObjectDispatchStateTargetAction Reads the state index at object+0xD0 and applies the matching action to GameObjectGetStateTarget, calling GameObjectSetPathPoint, GameObjectCopyMatrixToSlot, CiviliansNodeUpdateEntryBounds, sub_0003AE50, sub_0003B0E0 or GameObjectSetBoundsRelativeTo.
+comment GameObjectDispatchStateTargetAction Reads the state index at object+0xD0 and applies the matching action to GameObjectGetStateTarget, calling GameObjectSetPathPoint, GameObjectCopyMatrixToSlot, CiviliansNodeUpdateEntryBounds, GameObjectSplineTransformUpdate, GameObjectTargetActionApplyTransform or GameObjectSetBoundsRelativeTo.
 000DCD40  func  NodeDispatchStateMessage
 comment NodeDispatchStateMessage Dispatches node messages, calling GameObjectDispatchStateTargetAction for 0x2AF9 and GameObjectDrawDebugOverlay for 0x2AF8, and clears the state at +0xD0 after GameObjectCopyFromTemplate on 0xFFF9.
 000DCEA0  func  GameObjectSendMessageToChildrenAndGetBounds
@@ -7087,7 +7087,7 @@ comment GameObjectUpdateMovement Computes a clamped speed and turn value for a g
 000F2550  func  GameObjectBuildRotationMatrix
 comment GameObjectBuildRotationMatrix Copies the object's 3x3 transform, builds a rotation matrix from an angle with x87_sin/x87_cos and VectorNormalize, wraps the angle into [-180, 180], and writes the transposed matrix and wrapped angle out.
 000F2AA0  func  GameObjectUpdateSceneTransform
-comment GameObjectUpdateSceneTransform Resolves the game object from arg0's handle, rebuilds its transform fields from its matrix and Z rotation (MatrixRotateZ, Vector3Clamp, Vector3ResolveAxisLimits), and creates its scene object with SceneObjectCreateAndInit, calling sub_000F2290 when the create reports failure.
+comment GameObjectUpdateSceneTransform Resolves the game object from arg0's handle, rebuilds its transform fields from its matrix and Z rotation (MatrixRotateZ, Vector3Clamp, Vector3ResolveAxisLimits), and creates its scene object with SceneObjectCreateAndInit, calling GameObjectGetSceneTransform when the create reports failure.
 000F2EB0  func  GameObjectRefDestroyObject
 comment GameObjectRefDestroyObject Resolves the game object from the handle in the ref with GameObjectFromHandle/GameObjectFromIndex, destroys the object held in its slot with GameObjectDestroy, then clears the slot with GameObjectRefClearSlot and zeroes the caller's slot.
 000F36E0  func  GameObjectAttachmentCycleCommand
@@ -7147,7 +7147,7 @@ comment SteeringFamilyEventResetDistance Converts the event's two object handles
 000FED10  func  SteeringFamilySetDescriptor
 comment SteeringFamilySetDescriptor Sets the steering family's global descriptor (0x226D40, handler 0xFEC70) and attaches it to the family object at arg0+0x1C, called from SteeringFamilyRegister.
 000FEEA0  func  SteeringMessageHandler
-comment SteeringMessageHandler Handles a steering message pair (arg2/arg3): for 0/0xFFFD it installs sub_000FEE00 at ebx+8, for 0x7FFF it answers 0xFFFF/0xFFFE, runs sub_000FED50 on 0xFFF9 and clears a slot with GameObjectRefClearSlot on 0xFFFA.
+comment SteeringMessageHandler Handles a steering message pair (arg2/arg3): for 0/0xFFFD it installs sub_000FEE00 at ebx+8, for 0x7FFF it answers 0xFFFF/0xFFFE, runs SteeringMessageCopyAndResetEntity on 0xFFF9 and clears a slot with GameObjectRefClearSlot on 0xFFFA.
 000FEF40  func  SteeringFamilySetup
 comment SteeringFamilySetup Fills the steering family descriptor globals (sizes, zeroed slots and the SteeringMessageHandler handler at +0x14) and stores its address at arg0+0x18.
 000FEF80  func  SteeringSetTurnDirection
@@ -7225,7 +7225,7 @@ comment ChunksEffectPiecesSpawn For each piece of the stored effect, computes a 
 0010B850  func  GameObjectActivateSceneObject
 comment GameObjectActivateSceneObject Resolves the scene object handle at the game object's +0x5C through the object cache, attaches it with vcSceneObjectAttach and activates it with ObjectActivate, storing the sum of the object's +0x110 and +0x114 at +0x18; when the handle is invalid it sets the state at +0xE to 3 and sets bit 0 of +0x10.
 0010BD30  func  GameObjectDispatchMessage
-comment GameObjectDispatchMessage Dispatches the message in arg2 (0x7FFF) on the game object in arg0: 0xFFFF calls GameObjectCreateByType, 0xFFFB calls GameObjectDestroy, 0xFFF9 calls sub_0010BB60, returning 1 when handled and 0 otherwise.
+comment GameObjectDispatchMessage Dispatches the message in arg2 (0x7FFF) on the game object in arg0: 0xFFFF calls GameObjectCreateByType, 0xFFFB calls GameObjectDestroy, 0xFFF9 calls GameObjectSpawnSpreadParticlesAndDestroy, returning 1 when handled and 0 otherwise.
 0010BDC0  func  GameObjectCloneTemplateSceneObjects
 comment GameObjectCloneTemplateSceneObjects Picks a scene object template list by the index ((eax >> 11) & 0x7F) - 0x27 through a jump table of unnamed sub_000F... functions, stores it at +0x58 and clones each of its +0x14 entries into the object's +0x5C array with vcObjectClone.
 0010BEB0  func  MuzzleFlashSceneObjectsAttachAndChangeFlags
@@ -7299,7 +7299,7 @@ comment Vector3AddScaled Adds a scaled 3D vector to another 3D vector and stores
 00114510  func  Matrix4x4MultiplyTransposed
 comment Matrix4x4MultiplyTransposed Computes the same 4x4 matrix product as Matrix4x4MultiplyInto but stores the result transposed; called by RenderCachedObjectGeometry and TexturedGridRender.
 00114B00  func  Matrix4x4ExtractSubmatrix
-comment Matrix4x4ExtractSubmatrix Copies the elements of a 4x4 matrix into a 3x3 array, skipping row arg2 and column arg3, for use by Matrix4x4Determinant and sub_00114C10.
+comment Matrix4x4ExtractSubmatrix Copies the elements of a 4x4 matrix into a 3x3 array, skipping row arg2 and column arg3, for use by Matrix4x4Determinant and Matrix4x4Invert.
 00115130  func  QuaternionToMatrix3x3
 comment QuaternionToMatrix3x3 Builds a 3x3 rotation matrix from the quaternion (x,y,z,w) at arg1; called by MeshUpdateSkinning.
 001154A0  func  Vector3Normalize
@@ -7569,7 +7569,7 @@ comment MatrixTransformPoint Transforms the 3D point at arg1 by the matrix at ar
 00016EF0  func  GamePauseSetOwner
 comment GamePauseSetOwner Takes a game object handle, clears and rescans its child list (calling GameObjectResetFlagWord on type 4 entries), stores the handle as the pause owner at 0x1BC760, opens all pads with VcPadOpenAll, disables vibration with VcPadSetVibrationEnabled(0) and refreshes player 0's viewport with PlayerCameraUpdateViewport.
 00017000  func  NodeFamilyUpdateNodes
-comment NodeFamilyUpdateNodes Walks the node list at offset 0xD0 of the object behind the handle, sends message 2 to each node object via GameObjectSendMessageWithParams, dispatches NodeUpdateTransform, sub_0003A410 and sub_0003B700 by node object type, clears the node count at +0xEC and the timer at +0xE0, clears bit 1 of the word at +0xF4, clears the global node-family handle at 0x1BC760 and calls VcPadSetVibrationEnabled.
+comment NodeFamilyUpdateNodes Walks the node list at offset 0xD0 of the object behind the handle, sends message 2 to each node object via GameObjectSendMessageWithParams, dispatches NodeUpdateTransform, NodeResetWrappedValue and NodeFamilySavePreviousTransform by node object type, clears the node count at +0xEC and the timer at +0xE0, clears bit 1 of the word at +0xF4, clears the global node-family handle at 0x1BC760 and calls VcPadSetVibrationEnabled.
 00017110  func  NodeFamilyFromHandle
 comment NodeFamilyFromHandle Resolves the handle to its game object with GameObjectFromHandle (or GameObjectLastObject for GameObjectLastHandle) and returns the address of that object's node family at offset 0xD0.
 00017260  func  GameObjectFamilyAnyObjectFlagSet
@@ -7663,7 +7663,7 @@ comment IndexedEntrySetFromGameObject Stores arg3 at arg0+0x40+index*0x300, wher
 0002CCE0  func  GameObjectCopyVectorInto
 comment GameObjectCopyVectorInto Copies the game object's three dwords at +0x14, +0x18 and +0x1C into the destination arg2, doing nothing when the object is null.
 0002D070  func  EntityAssignTarget
-comment EntityAssignTarget Takes the object from GameObjectFromIndex, writes the given value into its +0xC0 field when its flags allow, and on a change rebuilds the entity's +0xA4 with sub_000D5E40 from a parameter block; the EntityOnTargetAcquired caller suggests +0xC0 is the target.
+comment EntityAssignTarget Takes the object from GameObjectFromIndex, writes the given value into its +0xC0 field when its flags allow, and on a change rebuilds the entity's +0xA4 with GameObjectReplaceFromReference from a parameter block; the EntityOnTargetAcquired caller suggests +0xC0 is the target.
 0002FE10  func  GcAIDataClearGroupRecord
 comment GcAIDataClearGroupRecord Zeroes the group record given in arg0: the 0x1E dwords from +4 and the fields at +0x7C and +0x80, before GcAIDataLoadGroupRecords fills it in.
 00030F40  func  MissionCompleteScreenDrawText
@@ -7697,9 +7697,9 @@ comment GameObjectSendMessageWithValueAndResult Sends message 0x2EE4 with one ar
 0003CEB0  func  AlphaFadeAdvance
 comment AlphaFadeAdvance Advances the value at offset 0x34 toward 255 or 0 according to the direction at 0x38 using the duration at 0x30, clearing the out flag at offset 8 and clamping when the end is reached.
 0003FEA0  func  GameObjectPadInputUpdate
-comment GameObjectPadInputUpdate Reads the pad of the object's controller (vcPads index from +0x4C, unless ControllerItems_left_x/left_y/triggers/a disable it), calls UiControllerInputUpdate and GameObjectPadBButtonUpdate, writes the stick and trigger values into the input object at +0x44 (+0x60, +0x28, +0x24), steps its +0x20 value between 0, 0.5 and 1 with the pad up/down buttons (0x3E8 ms repeat) and the A button, then calls sub_0003D390 and GameObjectUpdatePadDirections and sends indexed message (2,3) when the object's +0xC timer has passed 60 seconds.
+comment GameObjectPadInputUpdate Reads the pad of the object's controller (vcPads index from +0x4C, unless ControllerItems_left_x/left_y/triggers/a disable it), calls UiControllerInputUpdate and GameObjectPadBButtonUpdate, writes the stick and trigger values into the input object at +0x44 (+0x60, +0x28, +0x24), steps its +0x20 value between 0, 0.5 and 1 with the pad up/down buttons (0x3E8 ms repeat) and the A button, then calls GameObjectPadInputSmoothAxis and GameObjectUpdatePadDirections and sends indexed message (2,3) when the object's +0xC timer has passed 60 seconds.
 00040190  func  GameObjectPadInputUpdateWithCombo
-comment GameObjectPadInputUpdateWithCombo Same pad read into the input object at +0x44 (+0x60, +0x64, +0x68, +0x24, +0x20 fixed to 1.0) with UiControllerInputUpdate and GameObjectPadBButtonUpdate, but while the object's +0x3E4 flag is clear it detects stick-up plus both triggers over 0.5 and then sets +0x3E4, negates the input object's +0x54 and sets flag 0x800 in its +4, skipping sub_0003D390 and GameObjectUpdatePadDirections until the combo is released.
+comment GameObjectPadInputUpdateWithCombo Same pad read into the input object at +0x44 (+0x60, +0x64, +0x68, +0x24, +0x20 fixed to 1.0) with UiControllerInputUpdate and GameObjectPadBButtonUpdate, but while the object's +0x3E4 flag is clear it detects stick-up plus both triggers over 0.5 and then sets +0x3E4, negates the input object's +0x54 and sets flag 0x800 in its +4, skipping GameObjectPadInputSmoothAxis and GameObjectUpdatePadDirections until the combo is released.
 00042370  func  GameObjectClearMotionAndDetachObjects
 comment GameObjectClearMotionAndDetachObjects Clears the object's motion list at +0x194 with MotionListClearFirstPriority and removes the objects at +0x2D8 and +0x2E4 from the quadtree with ObjectRemoveFromQuadtree, nulling those fields.
 00042450  func  EntitySendMessageAndRebindPadSlot
@@ -7717,7 +7717,7 @@ comment GameObjectInitializeEffectsAndSlots Initializes the game object by stopp
 0004C530  func  ScreenFamilyRegisterScreen
 comment ScreenFamilyRegisterScreen Fills the static screen descriptor at 0x1EB890 (word 0x1BC and callbacks 0x4AD60, 0x4ADB0, 0x4C420) and stores it at arg0+0x30 for the screen family passed by ScreenFamilyRegisterAll.
 0004CCB0  func  PlayerStandInEntityNodeCreateGameObject
-comment PlayerStandInEntityNodeCreateGameObject Allocates an entity from the node's pool with EntityPoolAllocate, fills it in via EntityFromHandleGet, TypeIndexSetDifficultyValue and sub_0009B980, and initializes its game object with GameObjectInitializeFromObject, storing the handle at the node's 0x198.
+comment PlayerStandInEntityNodeCreateGameObject Allocates an entity from the node's pool with EntityPoolAllocate, fills it in via EntityFromHandleGet, TypeIndexSetDifficultyValue and EntitySetTypeIndex, and initializes its game object with GameObjectInitializeFromObject, storing the handle at the node's 0x198.
 0004ED30  func  WeaponFireAtHandle
 comment WeaponFireAtHandle Fires WeaponFireAtTarget at the game object behind arg0, using GameObjectLastObject when arg0 is GameObjectLastHandle and otherwise GameObjectFromHandle, passing 0 as WeaponFireAtTarget's last argument.
 0004F510  func  GameObjectUpdateAimRotation
@@ -7729,7 +7729,7 @@ comment SceneObjectAdvancePositionAndCreate Adds arg2's direction scaled by 0.03
 0005AB20  func  EntityUpdateMotionAndSceneObjects
 comment EntityUpdateMotionAndSceneObjects Integrates the entity's motion with ObjectIntegrateMotion using the value read from arg0, then creates the entity's scene objects with EntityCreateSceneObjects(4, arg1).
 0005AB50  func  EntityUpdateSteeringTowardForwardObject
-comment EntityUpdateSteeringTowardForwardObject Resolves the handle at +0x270 with GameObjectFromHandle; if no object results it builds a scaled vector from the object's fields at +0x38/+0x44/+0x50 and the parameter block at +0x274, otherwise, while the counter at +0x29C is below the passed limit, it steers toward the forward object with ObjectSteerTowardForwardObject and advances that counter by the period in the block at +0x274, then runs SceneObjectAdvancePositionAndCreate and sub_0005A410.
+comment EntityUpdateSteeringTowardForwardObject Resolves the handle at +0x270 with GameObjectFromHandle; if no object results it builds a scaled vector from the object's fields at +0x38/+0x44/+0x50 and the parameter block at +0x274, otherwise, while the counter at +0x29C is below the passed limit, it steers toward the forward object with ObjectSteerTowardForwardObject and advances that counter by the period in the block at +0x274, then runs SceneObjectAdvancePositionAndCreate and EntityUpdateProjectiles.
 0006EB60  func  GameReleaseObjects
 comment GameReleaseObjects Releases every global vcObject through vcObjectRelease, empties the object lists with VcObjectListRelease and x86_rep_stos32, releases the indexed object arrays, and calls GameObjectTypeRelease for each game object type.
 0006FE90  func  FemalePowerArmorDestroyTwoObjectsSetState
@@ -7757,7 +7757,7 @@ comment ObjectSetNodesFromTarget Resolves the handle in arg0 with GameObjectFrom
 0007B6A0  func  ZenReEntryPod_ResetAndSendMessage
 comment ZenReEntryPod_ResetAndSendMessage Zeroes the pod's fields at +0x8C..+0x9C and clears its flag bits at +4 and +0x84, then sends GameObjectSendMessage 0x3E8 with value 3 from the pod to the given object and sets that object's +8 to 0x69CE0, after resolving Players(0) and Players(1) with GameObjectFromHandle.
 0007B740  func  ZenReEntryPod_ResetAndSendTwoMessages
-comment ZenReEntryPod_ResetAndSendTwoMessages Zeroes the pod's fields at +0x8C..+0x9C and clears its flag bits at +4 and +0x84, calls sub_001205C0 on the pod's scene object with the global at 0x207A54, sends GameObjectSendMessage 0x3E8 with value 3 and 0x3ED with value 1 to the given object, and changes the scene object's flags with vcSceneObjectChangeFlags.
+comment ZenReEntryPod_ResetAndSendTwoMessages Zeroes the pod's fields at +0x8C..+0x9C and clears its flag bits at +4 and +0x84, calls ObjectMotionStart on the pod's scene object with the global at 0x207A54, sends GameObjectSendMessage 0x3E8 with value 3 and 0x3ED with value 1 to the given object, and changes the scene object's flags with vcSceneObjectChangeFlags.
 0007B830  func  ZenReEntryPod_NotifyAndAdvanceState
 comment ZenReEntryPod_NotifyAndAdvanceState When the counter pointed to by eax is zero, sends GameObjectSendMessage 0x3ED with value 0 from the pod's +0x26C to the given object, changes the pod's scene object flags with vcSceneObjectChangeFlags, and sets the state struct's state at +0xE to 3 with flag bit 1 at +0x10.
 0007CB00  func  EntityPartsShow
@@ -7777,7 +7777,7 @@ comment ObjectUpdateTargetNodePositions Resolves an object and its target with G
 000813B0  func  ZenReconShip_StateEnter
 comment ZenReconShip_StateEnter Sets the ship's +0x8C/+0x90/+0x9C fields and +0x69CE0 handler at +8, clears bits 0x60 in +4 and 8 in +0x84, and sends GameObjectSendMessage 0x3E8 with value 3 to the object at +0x18C.
 00081420  func  ZenReconShip_StateActivate
-comment ZenReconShip_StateActivate Clears the ship's +0x8C/+0x90/+0x9C fields and flag bits, calls sub_001205C0 on the node at +0x194, sends GameObjectSendMessage 0x3E8=3 to +0x18C and 0x3ED=1 to +0x290, and sets scene flags 0x10 on the node at +0x194 via vcSceneObjectChangeFlags.
+comment ZenReconShip_StateActivate Clears the ship's +0x8C/+0x90/+0x9C fields and flag bits, calls ObjectMotionStart on the node at +0x194, sends GameObjectSendMessage 0x3E8=3 to +0x18C and 0x3ED=1 to +0x290, and sets scene flags 0x10 on the node at +0x194 via vcSceneObjectChangeFlags.
 000814D0  func  ZenReconShip_StateDeactivate
 comment ZenReconShip_StateDeactivate When *arg0 is zero, sends GameObjectSendMessage 0x3ED=0 to the object at +0x290, clears scene flags 0x14 on the node at +0x194 via vcSceneObjectChangeFlags, and sets the context's state field +0xE to 3 and bit 1 of +0x10.
 00081520  func  ZenReconShip_StateCountdownToState1
@@ -7883,15 +7883,15 @@ comment EntityAttachToVisiblePathNode Finds the nearest path nodes to the entity
 000A9100  func  ObjectSpawnAtTargetOffset
 comment ObjectSpawnAtTargetOffset Resolves the object from GameObjectLastHandle with GameObjectFromHandle and its target handle with ObjectGetTargetHandle, and when sub_0009C6E0 accepts that target, calls EntitySetAttachedObjectWithFlags with the object, the target and a fixed (0, 0, 150) point plus 0.8.
 000A9180  func  ObjectSpawnAtRandomTargetOffsetIfNotFlagged
-comment ObjectSpawnAtRandomTargetOffsetIfNotFlagged When the object's +4 flag bit 4 is clear, gets its target handle with ObjectGetTargetHandle and, if sub_0009C6E0 accepts it, calls sub_000A8FA0 to compute and send a random point toward the target.
+comment ObjectSpawnAtRandomTargetOffsetIfNotFlagged When the object's +4 flag bit 4 is clear, gets its target handle with ObjectGetTargetHandle and, if sub_0009C6E0 accepts it, calls ObjectAttachAtRandomTargetOffset to compute and send a random point toward the target.
 000A91E0  func  ObjectSpawnAtStoredTargetOffset
 comment ObjectSpawnAtStoredTargetOffset Resolves the object with GameObjectFromHandle and, when sub_0009C6E0 accepts the handle held in the object's field 0x70, calls EntitySetAttachedObjectWithFlags with that handle and a fixed (0, 0, 150) point plus 0.8.
 000A9260  func  ObjectSpawnAtStoredTargetOffsetIfNotFlagged
-comment ObjectSpawnAtStoredTargetOffsetIfNotFlagged When the object's +0 flag bit 0x40 and +4 flag bit 4 are clear, calls sub_000A8FA0 with the handle held in the object's field 0x70 if sub_0009C6E0 accepts it.
+comment ObjectSpawnAtStoredTargetOffsetIfNotFlagged When the object's +0 flag bit 0x40 and +4 flag bit 4 are clear, calls ObjectAttachAtRandomTargetOffset with the handle held in the object's field 0x70 if sub_0009C6E0 accepts it.
 000A9E20  func  MovementPatternFigure1WorldPointApply
 comment MovementPatternFigure1WorldPointApply Gets movement figure 1's world point for the object with MovementPatternFigureGetWorldPoint, first adding the figure with sub_000A9510 when ObjectIncrementSlotCounterAndCheckValid finds the movement pattern missing, and passes that point plus a scaled float to EntitySetAttachedObjectWithFlags.
 000A9EA0  func  MovementPatternFigure2WorldPointApply
-comment MovementPatternFigure2WorldPointApply Gets movement figure 2's world point for the object with MovementPatternFigureGetWorldPoint, first adding the figure with sub_000A95F0 when ObjectIncrementSlotCounterAndCheckValid finds the movement pattern missing, and passes that point plus a scaled float to EntitySetAttachedObjectWithFlags.
+comment MovementPatternFigure2WorldPointApply Gets movement figure 2's world point for the object with MovementPatternFigureGetWorldPoint, first adding the figure with ObjectAssignLeastUsedSlot when ObjectIncrementSlotCounterAndCheckValid finds the movement pattern missing, and passes that point plus a scaled float to EntitySetAttachedObjectWithFlags.
 000A9F80  func  ObjectTargetMovementPatternFigure1Apply
 comment ObjectTargetMovementPatternFigure1Apply Returns early when the object is flagged (byte +0 or byte +4), else resolves its owner object from the handle at +0x44, gets its target with ObjectGetTargetHandle and, when sub_0009C6E0 accepts that target, calls MovementPatternFigure1WorldPointApply on the object, target and owner.
 000A9FE0  func  ObjectTargetMovementPatternFigure2Apply
@@ -7915,7 +7915,7 @@ comment VehicleCreateGameObjectsIfNotDestroyed Calls VehicleCreateGameObjects fo
 000ABAE0  func  EntityAttachToTargetEnteringState
 comment EntityAttachToTargetEnteringState For a live entity whose float at +0xB8 is between 0 and 50, enters state 0xF with ObjectStateEnterIfAllowed, attaches it to the target's game object with EntityAttachToGameObject, then calls EntityFollowPathToNearestEntity with 50.0f when bit 3 of its flags is set, otherwise ObjectEnterStateAndCheckTarget.
 000AD040  func  GameObjectDrawIndexedLineList
-comment GameObjectDrawIndexedLineList Forwards the event to the object's children with GameObjectSendMessageToChildren, then draws its indexed line list transformed with color 0xFF00B400 and bounds (-1,-1,-1)..(1,1,1) through IndexedLineListDrawTransformed and sub_00037F10, calling sub_000381A0 with 3.0 when ebp_2 is 0.
+comment GameObjectDrawIndexedLineList Forwards the event to the object's children with GameObjectSendMessageToChildren, then draws its indexed line list transformed with color 0xFF00B400 and bounds (-1,-1,-1)..(1,1,1) through IndexedLineListDrawTransformed and GameObjectDrawTransformedBoundingBox, calling IndexedLineListDrawScaled with 3.0 when ebp_2 is 0.
 000AFF80  func  LevelProgressWidgetCreate
 comment LevelProgressWidgetCreate Creates a screen widget (ScreenElementInit, GameObjectCreate, ScreenElementSetBounds) whose text is picked by the number of finished levels (LevelCountsAsFinished over the level list at 0x1B1D54) via ScreenWidgetSetTextIds, and sets its selection index (GameObjectSetSelectionIndex).
 000B0DE0  func  HudPlayerTextHandleInput
@@ -7945,7 +7945,7 @@ comment ScreenFamilyMessageDestroyChildren Clears the pad and destroys the child
 000BE8A0  func  SavedGameSlotScreenProcessInput
 comment SavedGameSlotScreenProcessInput Handles pad input for the save-game slot screen: A/Start confirms a slot (SavedGamesGetDeviceStatus, SavedGameGetEntry, SavedGameGetNameBuffer, ScreenCreateTextObject, vcStringManagerGetText), X moves the cursor (GameObjectGetSelectionIndex, sub_000BE580), and B/Back cancels, setting MenuConfirmSoundAsked, MenuCursorSoundAsked and MenuCancelSoundAsked.
 000BF9C0  func  ScreenAddWidget
-comment ScreenAddWidget resolves arg0 through GameObjectFromHandle and forwards the other four arguments to sub_000A50F0 on the object's field at +0x360; its callers (ScreenCreateWidget, MenuObjectCreate, ScreenFamilyOnCreate, PauseScreenSetMenu, MenuObjectSetSelection) are widget creation and selection routines, so it probably adds or updates a widget in the screen's widget list.
+comment ScreenAddWidget resolves arg0 through GameObjectFromHandle and forwards the other four arguments to ScreenElementSetRect on the object's field at +0x360; its callers (ScreenCreateWidget, MenuObjectCreate, ScreenFamilyOnCreate, PauseScreenSetMenu, MenuObjectSetSelection) are widget creation and selection routines, so it probably adds or updates a widget in the screen's widget list.
 000BFA50  func  ScreenGetDrawObject
 comment ScreenGetDrawObject resolves arg0 through GameObjectFromHandle and returns the field at +0x3B4, which ScreenFamilyDraw and MenuObjectDraw cache at +0x134 and EntitySendMessageToPart caches at +0x160.
 000BFAE0  func  ScreenGetRect
@@ -7963,13 +7963,13 @@ comment ScreenFamilyBuildList handles the message ScreenFamilyDispatchMessage ro
 000C3650  func  ScreenListProcessMessage
 comment ScreenListProcessMessage Handles the 0x7FFF process message of a screen list: 0xFFF9 creates it with ScreenElementInitAndCreate, 0x32C8/0x32C9 forward to GameObjectSendMessageToVisibleChildren/GameObjectBroadcastToVisibleChildren, 0x32CA draws with ScreenDrawListEntries, 0x32CB takes input with ScreenHandlePadInput and 0xFFFA tears down with GameObjectClearPadAndDestroyChildren, returning 1 for each message it handles.
 000C6800  func  ScreenElementProcessMessage
-comment ScreenElementProcessMessage Handles the 0x7FFF process message of a screen element: 0xFFF9 initializes it with ScreenElementInitFields, 0x2EE2 draws it with ScreenElementDraw and 0xFFFA destroys it with sub_0003CBF0, returning 1 for each message it handles.
+comment ScreenElementProcessMessage Handles the 0x7FFF process message of a screen element: 0xFFF9 initializes it with ScreenElementInitFields, 0x2EE2 draws it with ScreenElementDraw and 0xFFFA destroys it with GameObjectFreeByHandle, returning 1 for each message it handles.
 000C68A0  func  ScreenElementLayoutCreate
 comment ScreenElementLayoutCreate Creates an object with vcObjectGet, gives several UI elements their rectangle with vcRectSet and their bounds with UiElementSetBoundsFromObject, then copy-constructs three elements with VcObjectCopyConstruct and releases the created object with vcObjectRelease.
 000C6B80  func  ScreenElementInitializeWithPauseState
 comment ScreenElementInitializeWithPauseState Initializes a screen element with ScreenElementInitialize, sets its fields, and sets a flag on the element to 1 or 0 from GameIsPaused.
 000C70A0  func  ScreenElementFamilyReceiveMessage
-comment ScreenElementFamilyReceiveMessage Handles a ScreenElement message (arg2 type, arg3 data): on 0xFFFD sets the element's text length from vcStringManagerGetText, on 0x2EE3 calls ScreenElementNotifyOwner, on 0x2EE4 calls GameObjectDeactivate, on 0xFFF9/0x2EE2 calls ScreenElementInitializeWithPauseState/sub_000C6BF0, and on 0xFFFA calls sub_0003CBF0 and clears fields +0x40/+0x44.
+comment ScreenElementFamilyReceiveMessage Handles a ScreenElement message (arg2 type, arg3 data): on 0xFFFD sets the element's text length from vcStringManagerGetText, on 0x2EE3 calls ScreenElementNotifyOwner, on 0x2EE4 calls GameObjectDeactivate, on 0xFFF9/0x2EE2 calls ScreenElementInitializeWithPauseState/ScreenElementDrawString, and on 0xFFFA calls GameObjectFreeByHandle and clears fields +0x40/+0x44.
 000C81A0  func  GameObjectDrawBoundingBox
 comment GameObjectDrawBoundingBox Forwards the message with GameObjectSendMessageToChildren, then draws the object's bounding box with its color (read through vcClassByType) using LineVerticesDrawTransformed, BoundingBoxTransformByMatrix and IndexedLineListDrawTransformed, or the MatrixSetEulerAngles/4-vertex path when the +0x24 flag bit 8 is clear.
 000D06C0  func  WeaponFamilySecondTypeNameListGet
@@ -8077,11 +8077,11 @@ comment SteeringCheckTargetReached Checks the direction from the steering target
 000F5A10  func  SteeringMessageDispatch
 comment SteeringMessageDispatch Handles a steering message (arg2 0x7FFF): code 0xFFF9 calls SteeringInstanceInit with the game object and arg4, 0xFFFA clears the instance slot with GameObjectRefClearSlot, 0xFFFF and 0xFFFE return 1 as handled, and any other code returns 0.
 000F63E0  func  EntityGroupSpreadChildren
-comment EntityGroupSpreadChildren For the child list of the entity group it is given, sums the children's GameObjectCopyVector positions, then for each child from index 1 up uses EntityListSortNearestFirst and EntityFindNearestChild to take the direction away from its nearest neighbour, normalises it, scales it by 100.0 and writes the resulting position with sub_000F5EC0, sub_000F5DD0 and sub_000F6070, clearing bit 0x10 of the child's flags; called from EntityGroupUpdate.
+comment EntityGroupSpreadChildren For the child list of the entity group it is given, sums the children's GameObjectCopyVector positions, then for each child from index 1 up uses EntityListSortNearestFirst and EntityFindNearestChild to take the direction away from its nearest neighbour, normalises it, scales it by 100.0 and writes the resulting position with sub_000F5EC0, EntityGroupChildComputeSpreadOffset and sub_000F6070, clearing bit 0x10 of the child's flags; called from EntityGroupUpdate.
 000F6750  func  EffectFamilySetMethodTable
 comment EffectFamilySetMethodTable Stores a size of 0x70 and the three function pointers 0xF6710, 0xF6740 and 0x10A7C0 into the static table at 0x224620 and points offset 0x16C of the effect family passed in by EffectFamilyRegister at it.
 000F6FB0  func  CyclopsDamageChunkEffectUpdate
-comment CyclopsDamageChunkEffectUpdate Scales and offsets the effect's position by the fraction of its 1000 ms lifetime that has elapsed (adding the vector at offset 0x70 scaled by that fraction squared when sub_000C7AD0 returns nonzero), sets the euler angles with MatrixSetEulerAngles, creates the scene object with SceneObjectCreateAndInit, and destroys the object with GameObjectDestroy once 1000 ms have passed.
+comment CyclopsDamageChunkEffectUpdate Scales and offsets the effect's position by the fraction of its 1000 ms lifetime that has elapsed (adding the vector at offset 0x70 scaled by that fraction squared when LevelTimeGet returns nonzero), sets the euler angles with MatrixSetEulerAngles, creates the scene object with SceneObjectCreateAndInit, and destroys the object with GameObjectDestroy once 1000 ms have passed.
 000FE510  func  SteeringTetherUpdate
 comment SteeringTetherUpdate Resolves the tether's two game objects, computes their normalized offset and distance with VectorNormalize and Vector3DistanceSquared, then either destroys the tether handle or calls SteeringObjectCheckBounds to update the tether's handle and vectors.
 000FE850  func  SteeringObjectsCheckBounds
@@ -8089,7 +8089,7 @@ comment SteeringObjectsCheckBounds Resolves the two game objects from the handle
 000FEC70  func  SteeringObjectFamilyMessageHandler
 comment SteeringObjectFamilyMessageHandler Dispatches the steering family's events for a simpler object: returns 1 for the handled no-op events, calls sub_000FEB00 for 0xFFF9, clears the referenced slot with GameObjectRefClearSlot for 0xFFFA, and stores a callback at +8 for the family-0 event 0xFFFD.
 000FF350  func  SteeringEntityAdvanceTurn
-comment SteeringEntityAdvanceTurn resolves the target object with GameObjectFromIndex, computes the vector and distance to it with VectorNormalize, calls sub_000FF0B0 to destroy the entity on arrival, and otherwise advances the turn with SteeringAdvanceTurnState and SteeringSetTurnDirection.
+comment SteeringEntityAdvanceTurn resolves the target object with GameObjectFromIndex, computes the vector and distance to it with VectorNormalize, calls SteeringEntityTurnTimeoutExpired to destroy the entity on arrival, and otherwise advances the turn with SteeringAdvanceTurnState and SteeringSetTurnDirection.
 00100DC0  func  EffectEmitterSpawnEffectInstance
 comment EffectEmitterSpawnEffectInstance Resolves the emitter's target object and attached transform, spawns a particle, builds an orthonormal basis, creates an effect instance with EffectCreateInstance, and marks the emitter state at offset 0x34 as active.
 00100F30  func  EffectEmitterSpawnParticlesAndEffects
@@ -8117,7 +8117,7 @@ comment SceneBoundsTreeQueryNode Recursively walks a scene bounds tree node, cla
 0011AF30  func  SceneRayIntersect
 comment SceneRayIntersect Casts a ray against the scene hit tree by forwarding its arguments and output registers to SceneHitTreeRayIntersect.
 0011CE80  func  ObjectCacheGetObject
-comment ObjectCacheGetObject Resolves a handle through vcObjectCacheHandle/vcObjectCacheData and vcClassByType and returns the cached object's first field. (Uncertain: whether that field is the object itself or its vtable, since sub_0011F380 treats the cached value as the object.)
+comment ObjectCacheGetObject Resolves a handle through vcObjectCacheHandle/vcObjectCacheData and vcClassByType and returns the cached object's first field. (Uncertain: whether that field is the object itself or its vtable, since ObjectCacheCopyIndexedEntry treats the cached value as the object.)
 00120490  func  MotionListCreateEntry
 comment MotionListCreateEntry Resolves the object handle, finds the first motion slot whose priority at +0x128 is at or below arg1, calls MotionListInsertAt, clears the 0x44-byte entry and sets its start time (+0x20) to vcGameTime, its priority (+0x30) to arg1 and 1.0f at +0x1C and +0x40, returning the entry.
 00120550  func  MotionListResetState
@@ -8176,6 +8176,264 @@ comment EffectPiecesActivate Sets flag bit 0x10 of +0x1E0, records vcGameTime at
 comment EffectPiecesDeactivate Clears flag bit 0x10 of the object's +0x1E0, the counterpart of EffectPiecesActivate.
 00145B70  func  SceneObjectGetChildCount
 comment SceneObjectGetChildCount Returns the value at offset 0x80 of a scene object when bit 2 of its first byte is set, otherwise 0; SceneObjectCopyBoundsAndChildCount stores that result into the destination's 0x200 field.
+
+# ======== functions named from their decompiled C (w4; drafted by deepseek-v4.1-flash, reviewed by the local Qwen3.8-27B) ========
+0001EDD0  func  EntitySelectTarget
+comment EntitySelectTarget Chooses the entity's target by collecting handles of its own family's objects that pass sub_0002CBF0 and HandleIsValidTarget (after resolving them with GameObjectFromHandle) and writing a vcRandom-picked one to the entity's +0x70, or, when the entity has flag 4, first scanning the handle list (count at +0x1A4, entries at +0x1A8) of the object returned by EntitySetTarget for a matching family handle.
+0001F700  func  AIDataInvokeEntryTimers
+comment AIDataInvokeEntryTimers Looks up the AI entry of the object with AIDataGetEntryForObject and, when the second argument is set, invokes sub_0001F600 for slot 4 and, if the entry's field at +4 is zero, for slots 1, 2 and 3.
+0001F7B0  func  EntityInvokeTimersForGameObject
+comment EntityInvokeTimersForGameObject Does nothing unless both the entity and the game object are non-null, then calls AIDataInvokeEntryTimers on the entity with the game object and flag 1.
+0001FEF0  func  GameSessionShutdown
+comment GameSessionShutdown When VibrationOn is set it disables vibration with VcPadSetVibrationEnabled, then destroys the media stream, stops the level music with LevelMusicPlayAction, resets the sound with SoundManagerReset and SoundUpdate, destroys all game objects with GameObjectsDestroyAll and GameObjectClearQueue, and clears the players, ObjectiveListReset and TimerTableReset before GameRun returns.
+00037F10  func  GameObjectDrawTransformedBoundingBox
+comment GameObjectDrawTransformedBoundingBox Resolves the object from its handle with GameObjectFromHandle (falling back to GameObjectLastObject) and draws the edges of its transformed bounding box, built from the min/max fields at offsets 0x0-0x14, through repeated LineVerticesDrawTransformed calls.
+000381A0  func  IndexedLineListDrawScaled
+comment IndexedLineListDrawScaled Builds a uniform scale transform from a float field (at object+0x10) multiplied by a percentage argument and rounded, then passes it to IndexedLineListDrawTransformed to draw the indexed line list given by its arguments.
+000393B0  func  GameObjectDrawOrientedOutline
+comment GameObjectDrawOrientedOutline Reads a game object handle and, unless it equals GameObjectLastHandle, fetches the object with GameObjectFromHandle, takes its pitch/heading with MatrixGetPitchHeading, builds rotation matrices with MatrixSetEulerAngles (one with 15.0f), transforms 24 vertices by those matrices and a position offset, and draws them as a closed loop of LineVerticesDrawTransformed lines in the caller's colour.
+0003A2F0  func  NodeAdvanceWrappedValue
+comment NodeAdvanceWrappedValue Advances the value at +0xE8 by the increment at +0xEC and wraps it back inside the range [+0xDC, +0xE0], doing nothing unless the field at +0xC8 equals 1.
+0003A3E0  func  NodeResolveHandle
+comment NodeResolveHandle Resolves a node handle through GameObjectLastHandle/GameObjectLastObject and GameObjectFromHandle and returns a pointer to the node's +0xD8 field, or 0 when the handle resolves to no object.
+0003A410  func  NodeResetWrappedValue
+comment NodeResetWrappedValue Resolves the handle the same way (GameObjectLastObject or GameObjectFromHandle) and sets the node's +0xE8 value back to the value at +0xE4.
+0003AE50  func  GameObjectSplineTransformUpdate
+comment GameObjectSplineTransformUpdate Using the scene object transform of the game object at field 0xD0 (via vcSceneObjectGetTransform and Matrix3x3Invert) it rewrites the spline control points of the object at field 0xD4 (via Matrix3x3MultiplyVector) for the point indexed by arg2, then calls SplineComputeBounds and vcObjectMarkChanged on both objects.
+0003B0E0  func  GameObjectTargetActionApplyTransform
+comment GameObjectTargetActionApplyTransform Resolves the two GameObjects named by the handles with GameObjectFromHandle, reads the first object's vcObjects at fields 0xD0 and 0xD4 through vcSceneObjectGetTransform, computes the target node's offset with Matrix3x3Invert and Matrix3x3MultiplyVector, and marks both of those vcObjects changed with vcObjectMarkChanged.
+0003B700  func  NodeFamilySavePreviousTransform
+comment NodeFamilySavePreviousTransform Resolves the GameObject for a handle with GameObjectFromHandle and copies its field 0xE4 into field 0xF0; called by NodeFamilyUpdateNodes for each node, so it probably saves the node's previous value before the node is updated.
+0003C620  func  EntityPathComputeTransform
+comment EntityPathComputeTransform Computes the entity's path-follow transform: resolves both handles with GameObjectFromHandle, gets the point at the current fraction with GameObjectGetPathPointAtFraction, optionally samples GameObjectLocalGridValueAtPoint and builds the frame with PathGetDirectionAtDistance and MatrixGetHeadingPitchRoll, subtracts the entity's own position and passes the result to sub_000395F0, writing the transform back through the caller's pointer.
+0003CBF0  func  GameObjectFreeByHandle
+comment GameObjectFreeByHandle Resolves a game object handle with GameObjectFromHandle and, when the resolved object's first field is non-zero, frees it with GameObjectFree, returning that result.
+0003D0B0  func  ScreenElementFamilyInit
+comment ScreenElementFamilyInit Sets up the ScreenElement family's static data and calls UiElementInit for the family's UI element.
+0003D390  func  GameObjectPadInputSmoothAxis
+comment GameObjectPadInputSmoothAxis Updates the pad input object's smoothed float fields from its input value (the -1..1 field and the field clamped to 0..0.3) and calls GameObjectSetLinkedSlotValue on the object linked through its handle.
+0003F980  func  PlayerFireWeaponWithCooldown
+comment PlayerFireWeaponWithCooldown Resolves the game object from arg0, clears the +0x2C, +0x60, +0x68 and +0x64 fields of the object its +0x44 handle points at, and when that object is null and global 0x1E62F0 is zero calls PlayerFireWeapon once vcGameTime is more than 0xBB8 past the timestamp at +0x3B4.
+0004E070  func  SceneObjectRaycastReactToNearbyPlayer
+comment SceneObjectRaycastReactToNearbyPlayer Casts a SceneRayIntersect from the object's position and, for each of up to four hits whose vcSceneObjectGetFlags lacks 0x20, calls SceneObjectReactToNearbyPlayer and then SceneObjectSendUserMessage.
+0004ED70  func  WeaponFireAtObjectFromHandle
+comment WeaponFireAtObjectFromHandle Resolves arg0 to a GameObject via GameObjectFromHandle (or uses GameObjectLastObject when it is GameObjectLastHandle) and passes that object to WeaponFireAtTarget.
+0004F740  func  OrientationBuildFromDirectionAndAngle
+comment OrientationBuildFromDirectionAndAngle Builds a 3x3 orientation matrix and a heading by normalizing a direction vector, rotating a second vector by an angle scaled by pi/180*0.033, taking their cross product with VectorNormalize, and wrapping the resulting angle into [-180, 180].
+00054E80  func  ObjectSetNodePositionsFromRaySphereIntersect
+comment ObjectSetNodePositionsFromRaySphereIntersect Gets the object's target handle with ObjectGetTargetHandle, resolves it with GameObjectFromHandle, intersects the object's transform with the target via SceneObjectRaySphereIntersect, and then sets node positions 0 and 1 with ObjectSetNodePosition from the intersection result.
+0005A410  func  EntityUpdateProjectiles
+comment EntityUpdateProjectiles Moves each active projectile slot of the entity along its velocity, raycasts from the entity with SceneHitTreeRaycast, and on a hit sends GameObjectSendMessage, destroys the slot's scene object with GameObjectDestroy, spawns an EffectCreateInstance, applies EntityApplyRadiusEffect and GameObjectsSendRadialMessage, records EntityAddHit, plays WaterBulletHitPlaySound for water hits, and rebuilds the slot's scene objects with SceneObjectCreateAndInit.
+000700A0  func  GameObjectFromIndexInvokeHandler
+comment GameObjectFromIndexInvokeHandler Gets the game object at index esi with GameObjectFromIndex and, when it exists, invokes its handler with GameObjectInvokeHandler, returning that call's result.
+00070260  func  GameObjectResetVelocity
+comment GameObjectResetVelocity Resolves the game object from the given handle with GameObjectFromHandle (or uses GameObjectLastObject when the handle is GameObjectLastHandle) and, when the structure at field 0x29C has a nonzero field at 0x8D0, zeroes the object's fields 0x14/0x18/0x1C/0x54/0x58/0x5C/0x74 and sets flag 0x2B4, probably resetting its transform.
+0007B880  func  StateTimerCountdownAndEnable
+comment StateTimerCountdownAndEnable Counts the timer at arg1+0x270 down by 0x21, calling sub_0001A480 with MEM32(arg0) while it is still positive, and when it reaches zero clears bit 0x80 of arg1+4 and sets the state context's field at +0xE to 1 and its state-change flag (bit 0 of +0x10), probably enabling that state.
+0007B8D0  func  StateTimerCountdownAndDisable
+comment StateTimerCountdownAndDisable Same countdown (arg1+0x270 minus 0x21, sub_0001A480 while positive), but on expiry sets the state context's field at +0xE to 0 and its state-change flag (bit 0 of +0x10), probably disabling that state.
+0007CDC0  func  GameObjectSpawnVCObjectCloneA
+comment GameObjectSpawnVCObjectCloneA Clones the vcObject template at 0x208034, stores the clone in the object's vcObject slot (arg0+0x194) and calls sub_0012FC10 with the object's position (arg0+8, arg0+0xC minus 5.498, arg0+0x10), the clone, GameObjectGetVCObject() and the constants 220.0, 45.0 and 67.5.
+0007E210  func  GameObjectSpawnVCObjectCloneB
+comment GameObjectSpawnVCObjectCloneB Does the same as GameObjectSpawnVCObjectCloneA but clones the vcObject template at 0x20838C.
+00088470  func  GameObjectInvokeHandlerFromIndex
+comment GameObjectInvokeHandlerFromIndex Looks the game object up with GameObjectFromIndex and, if it exists, calls GameObjectInvokeHandler on it with that object, its index and arg1.
+0008E860  func  GameObjectSendMessageAndSetState
+comment GameObjectSendMessageAndSetState When the object at arg0 has a zero field, sends message 0x3ED to it with the value at edi+0x274, calls vcSceneObjectChangeFlags on the vcSceneObject at edi+0x194, and sets the state context's field at esi+0xE to 3 and its state-change flag (bit 0 of esi+0x10).
+00099FA0  func  EntityFireWeaponEffect
+comment EntityFireWeaponEffect When the handle at +0x198 is valid and PairCheckFlagFromHandles reports the pair flag and the entity's byte at +4 has bit 4, it gets the blended value with EntityGetBlendedValue and passes it with the field at +0x27C and the target handle to WeaponFireCreateEffect
+0009AF00  func  RdfHeavyMissileInitialize
+comment RdfHeavyMissileInitialize Sets the vtable at +0, calls EntityInitialize, marks the object at +0x194 with vcSceneObjectChangeFlags, copies the three dwords at +8/+0xC/+0x10 to +0xB8/+0xBC/+0xC0 and sets the flag dword at +0x10.
+0009B750  func  CallbackEntryClear
+comment CallbackEntryClear Zeroes one 0x2C-byte table entry by clearing 10 dwords with x86_rep_stos32 and the dword at +0x28, as AIDataInitStates and CallbackTableInit do while walking their 0x2C-stride tables.
+0009B980  func  EntitySetTypeIndex
+comment EntitySetTypeIndex Copies the entity's type index at offset 0x34 into the field at offset 0x38 (0 through 4, doing nothing when the index is 5 or greater) and is called by EntityInit, EntityCopy and PlayerStandInEntityNodeCreateGameObject right after the type index is set or copied.
+0009D6C0  func  EntityListHasEntries
+comment EntityListHasEntries Returns nonzero when arg0 is non-null, its fields at offsets 0 and 4 are non-null and its signed field at offset 0x5C is greater than zero; sub_0001FC10 calls it on the same object it hands to EntityListRefreshDispatch.
+0009D880  func  EntityChildListAssignChildIndices
+comment EntityChildListAssignChildIndices Walks the child list at +8, counts each child's +0x2A8 index value into a local 1..7 table, clears values outside 1..7, and then gives every cleared child a new index — the first child 1, the others 7.
+000A50F0  func  ScreenElementSetRect
+comment ScreenElementSetRect Resolves arg0 with GameObjectFromHandle (or GameObjectLastObject) and stores arg1, arg2, arg3 and arg4 into the object's four consecutive fields at 0x40-0x4C, returning the object; the four values are probably a screen element's rectangle.
+000A68C0  func  EntityMarkThresholdReached
+comment EntityMarkThresholdReached Sets the entity's threshold-reached flag by calling EntitySetThresholdReachedFlag.
+000A68D0  func  EntityMarkSecondThresholdReached
+comment EntityMarkSecondThresholdReached Sets the entity's second threshold-reached flag by calling EntitySetSecondThresholdReachedFlag.
+000A8FA0  func  ObjectAttachAtRandomTargetOffset
+comment ObjectAttachAtRandomTargetOffset Copies the object's offset vector out with GameObjectCopyVector, takes the target's position with GameObjectGetVector, builds the direction between them and normalizes it with VectorNormalize, scales it by a vcRandom distance of 600-900, stores the resulting vector at the object's +0x58, and attaches the object to the target with EntitySetAttachedObjectWithFlags.
+000A95F0  func  ObjectAssignLeastUsedSlot
+comment ObjectAssignLeastUsedSlot Resets the object's field at 0x2C0 and chooses the first of the six counters at 0x26E280 that is not positive, otherwise the one with the smallest value, then calls ObjectSetSlotTypeAndIndex with slot type 2, that index, and the object's fields at 0x2C4 and 0x2C8.
+000A96D0  func  PathNodeReset
+comment PathNodeReset Zeroes 0x26E260 and initializes every record of the path node array from 0x259A88 to 0x26E2A8, setting the flag at record-4 to 1 and clearing the record's other fields, as called by PathNodeGraphBuild.
+000A9DA0  func  MovementPatternFigureAttachEntity
+comment MovementPatternFigureAttachEntity When the guard argument is nonzero, increments the object's slot counter with ObjectIncrementSlotCounterAndCheckValid (calling sub_000A9430 when that check fails) and, if the object's index at 0x2C4 is valid, gets the movement pattern figure's world point with MovementPatternFigureGetWorldPoint and calls EntitySetAttachedObjectWithFlags to attach the entity at that point.
+000A9F20  func  ObjectApplyTargetWorldPoint
+comment ObjectApplyTargetWorldPoint Returns eax unchanged when the object at arg0 has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise resolves its own handle at 0x44 with GameObjectFromHandle, reads its target with ObjectGetTargetHandle and applies MovementPatternFigureAttachEntity to the resolved target object.
+000AA040  func  ObjectApplyMovementPatternFigure1WorldPoint
+comment ObjectApplyMovementPatternFigure1WorldPoint Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise resolves its own handle at 0x44 with GameObjectFromHandle and applies MovementPatternFigure1WorldPointApply to the object resolved from the handle at 0x70.
+000AA090  func  ObjectApplyMovementPatternFigure2WorldPoint
+comment ObjectApplyMovementPatternFigure2WorldPoint Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise resolves its own handle at 0x44 with GameObjectFromHandle and applies MovementPatternFigure2WorldPointApply to the object resolved from the handle at 0x70.
+000AA0E0  func  ObjectApplyMovementPatternWorldPoint
+comment ObjectApplyMovementPatternWorldPoint Returns eax unchanged when the object has bit 0x40 at offset 0 or bit 4 at offset 4 set, otherwise resolves its own handle at 0x44 with GameObjectFromHandle and applies MovementPatternFigureAttachEntity to the object resolved from the handle at 0x70.
+000AACC0  func  ObjectMoveTowardTargetIfBeyondTargetLimit
+comment ObjectMoveTowardTargetIfBeyondTargetLimit Resolves the handle in arg2 with sub_0009C6E0 and writes 0 through p_eax and returns when it is null or the float arg3 is less than the float arg1, otherwise sets bits 6 at offset 0x18 of arg0 and calls ObjectMoveTowardTarget on the resolved object and writes 1 through p_eax.
+000AB760  func  EntityMoveTowardTarget
+comment EntityMoveTowardTarget Resolves the entity's target handle with ObjectGetTargetHandle and moves the entity toward that handle with ObjectMoveTowardTargetHandle.
+000ABDE0  func  ObjectModeActionBySpawnOrDistance
+comment ObjectModeActionBySpawnOrDistance Enters state 6 on the object with ObjectStateEnterIfAllowed and then, by the integer mode argument, either spawns through ObjectSpawnAtStoredTargetOffset or ObjectSpawnAtStoredTargetOffsetIfNotFlagged, or, for the last mode, picks an unnamed handler from the object's handle type field and the squared length of the vector at offset 0x14 compared against 22500 and 5625.
+000ABED0  func  ObjectTargetMovementPatternExecute
+comment ObjectTargetMovementPatternExecute Reads the object's target handle with ObjectGetTargetHandle, bails out if the object's flags at +4 have bit 1 or 0x20000 set, enters state 6 with ObjectStateEnterIfAllowed, then by the integer float argument spawns at the target offset (ObjectSpawnAtTargetOffset), at a random target offset (ObjectSpawnAtRandomTargetOffsetIfNotFlagged), or, for a type-2 object, applies ObjectTargetMovementPatternFigure1Apply or ObjectTargetMovementPatternFigure2Apply depending on whether the object's self dot product (Vector3DotProduct) is above 5625.0 or 22500.0.
+000B1B30  func  ScreenFamilyGetChildScreen
+comment ScreenFamilyGetChildScreen Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is GameObjectLastHandle, and returns the object's field 0x148, the child screen handle checked by ScreenFamily_Update.
+000B1B60  func  ScreenFamilyDetachScreen
+comment ScreenFamilyDetachScreen Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is GameObjectLastHandle, and clears the object's screen handles in fields 0x144 and 0x148.
+000B3670  func  ScreenFamilyGetParentScreen
+comment ScreenFamilyGetParentScreen Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is GameObjectLastHandle, and returns the object's field 0x144, the other screen handle checked by ScreenFamily_Update.
+000B9BF0  func  ScreenFamilyDestroyWidgets
+comment ScreenFamilyDestroyWidgets Destroys the screen family's widget handles (the objects in its 0x124-0x148 fields) with GameObjectDestroy and turns pad vibration off through VcPadSetVibrationEnabled when its vibration field is set, after GameObjectClearPadAndDestroyChildren.
+000BA190  func  ScreenFamilyProcessMessage
+comment ScreenFamilyProcessMessage Handles the message read from arg3 for the screen family: 0x32CA goes to EntitySendMessageToPart, 0x32CB to ScreenFamily_Update, 0xFFF9 to ScreenCreateWidgets, 0xFFFA destroys the widgets, returning 1 when the message was handled and 0 otherwise.
+000BB540  func  SavedGamesCheckDeviceAndContinue
+comment SavedGamesCheckDeviceAndContinue Calls SavedGamesGetDeviceStatus(0) and, when it returns 1, calls ScreenFamilyGetFirstHandle and sub_00024580 with that handle and 1.
+000C2280  func  TextLabelDraw
+comment TextLabelDraw Draws the text label object: it forwards a message with GameObjectSendMessageToVisibleChildrenAndGlobal, draws the label's background quads with QuadDrawClipped, and draws the label text with vcTextDrawInRect after sizing it with vcTextSetSize and vcRectSet.
+000C2C10  func  GameObjectClearSelection
+comment GameObjectClearSelection Resolves a game object from a handle with GameObjectFromHandle (or uses GameObjectLastObject), clears its selection field, and passes its selection id to ScreenClearSelection.
+000C6BF0  func  ScreenElementDrawString
+comment ScreenElementDrawString Draws a screen element's string: gets its text with vcStringManagerGetText/StringTableGet, sets the size with vcTextSetSize, draws its background quads with QuadDrawClipped, and lays the string out by its alignment (centering with vcTextGetSize/vcTextWidth, drawing with vcTextDraw/vcTextDrawInRect, clipping with vcRectCopy/vcRectOffset) using the element's rect, alpha and colors.
+000C72E0  func  ScreenElementFamilySetClassDescriptor
+comment ScreenElementFamilySetClassDescriptor Fills the static ScreenElement class descriptor at 0x21D130 (object size 0x4C and three method pointers at 0xC7230/0xC72C0/0xC70A0, zeroing the fields at +0x10..+0x20) and stores its address into the family's field at +0x14.
+000C7AC0  func  LevelTimeSet
+comment LevelTimeSet Stores arg0 into the global float read by LevelTimeGet, which gcLevel_Load resets to 0.
+000C7AD0  func  LevelTimeGet
+comment LevelTimeGet Returns the global float at 0x1B7708 that LevelTimeSet writes and that effect and motion update functions read.
+000CB2A0  func  ObjectSendMessageToTargetHandles
+comment ObjectSendMessageToTargetHandles Resolves its handle argument with GameObjectFromHandle and returns 0 unless the handle's type mask 0x3F800 is 0x6800, then resolves the object's linked handle at offset 4, reads its blended value with EntityGetBlendedValue and that object's targets with ObjectGetTargetHandles, and sends GameObjectSendMessageReserveMemory to the target handles and to its own handle, cycling the index at offset 0x2A4.
+000CBD10  func  GameObjectSendMessageAlternatingWeaponSlot
+comment GameObjectSendMessageAlternatingWeaponSlot Resolves the handle and its +4 object through GameObjectFromHandle, requires the object type mask 0x6000, builds the two muzzle offset vectors (-12,5,0) and (12,5,0) with MatrixRotateZ and Matrix3x3MultiplyVector using EntityGetBlendedValue, and for the incoming action index 1-5 sends message 6 via GameObjectSendMessageReserveMemory to the slot handle while cycling the +0x2A4 index modulo 2, probably the alternating left/right weapon fire.
+000CC0A0  func  GameObjectSendHardpointSlotMessage
+comment GameObjectSendHardpointSlotMessage Takes a handle whose type bits are 0x6000, gets the object and the object it references, blends a value with EntityGetBlendedValue, rotates the referenced object's matrix by its Z angle with MatrixRotateZ, builds two ±10 hardpoint offsets with Matrix3x3MultiplyVector, and sends message 6 through GameObjectSendMessageReserveMemory to one of the object's slot handles, alternating between two slots (probably a weapon/muzzle event).
+000D0350  func  WeaponFamilyFourthTypeManagerRelease
+comment WeaponFamilyFourthTypeManagerRelease Releases the weapon family's fourth type manager's objects: calls vcObjectRelease on the vcObject at 0x220684, VcObjectListRelease on the list at 0x220688, and GameObjectTypeRelease for GameObjectTypes 0x35, 0x36, 0x38 and 0x2E.
+000D03A0  func  WeaponFamilyRegisterFourthTypeManager
+comment WeaponFamilyRegisterFourthTypeManager Initializes the object type manager at 0x2205F0 (size 0x30 with its create 0xD02F0, release WeaponFamilyFourthTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x6C of the weapon family, then fills its object class-pointer tables.
+000D04E0  func  WeaponFamilyThirdTypeManagerCreate
+comment WeaponFamilyThirdTypeManagerCreate Creates the third type manager's objects by calling ObjectCloneArrayCreate for the 8-entry clone array at 0x220768 (200.0f, 1000.0f), vcObjectGet for vcObject 0x1A5938 into 0x220764, and GameObjectTypeUse for GameObjectTypes 0x34, 0x36, 0x38 and 0x27.
+000D0540  func  WeaponFamilyThirdTypeManagerRelease
+comment WeaponFamilyThirdTypeManagerRelease Releases the third type manager's objects: vcObjectRelease on the vcObject at 0x220764, VcObjectListRelease on the list at 0x220768, and GameObjectTypeRelease for GameObjectTypes 0x34, 0x36, 0x38 and 0x27.
+000D0590  func  WeaponFamilyRegisterThirdTypeManager
+comment WeaponFamilyRegisterThirdTypeManager Initializes the object type manager at 0x2206D0 (size 0x30 with its create WeaponFamilyThirdTypeManagerCreate, release WeaponFamilyThirdTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x98 of the weapon family, then fills its object class-pointer tables.
+000D24F0  func  SoundStreamFadeUpdate
+comment SoundStreamFadeUpdate Advances a sound stream's fade against vcGameTime: ramps the volume at +0x38 up to 0x14A while the stream plays, calling SoundStreamQueryIsReadComplete and SoundIsPlayingQuery to start and end it, and ramps it back down to 0 when playback is off.
+000D4F40  func  SteeringFamilyFaceTargetOrDestroy
+comment SteeringFamilyFaceTargetOrDestroy Resolves the game object from the handle in arg1 and, if sub_0009C6E0 on its +0xC field returns nonzero, sets its target from arg1 and calls SteeringFamilyFaceTarget, otherwise destroys it with GameObjectDestroyAndSendMessage.
+000D50C0  func  SteeringFamilyApplyCommand
+comment SteeringFamilyApplyCommand Applies the command in arg2 to the object in arg0: modes 0-4 set the object's behavior function at +8 and timer at +0x18, or set the steering mode global 0x220F74 and call SteeringFamilyAdvanceMode, while command 0x7FFF handles GameObjectRefCopyWithRandomCountdown and GameObjectRefClearSlot for arg1.
+000D5E40  func  GameObjectReplaceFromReference
+comment GameObjectReplaceFromReference Destroys the GameObject whose handle is arg0 and creates a new GameObject from the handle stored at arg1 via GameObjectFromHandle, GameObjectDestroy and GameObjectCreate(0xA, 0xB, arg1, 0x2C), returning the new handle (0 if the referenced object does not exist).
+000D6230  func  SteeringFamilyHandleEvent
+comment SteeringFamilyHandleEvent Handles the steering family's event codes in arg3: on 0xFFF9 it copies a descriptor with sub_000D61B0, on 0xFFFA it clears a GameObjectRef slot with GameObjectRefClearSlot, on 0xFFFB it sets the family's +0x18 from the object's +0xC, and returns 1 when handled and 0 otherwise.
+000D62F0  func  SteeringFamilyInstallEventTable
+comment SteeringFamilyInstallEventTable Initializes the steering family's event table at 0x221010 (size 0x34, handler 0xD6230) and stores its pointer at arg0+0x3C.
+000DB960  func  NodeFamilyHandleMessageWithSceneObject
+comment NodeFamilyHandleMessageWithSceneObject Handles the same node messages as NodeFamilyHandleMessage plus 0x2AF8 NodeFamilyDrawObjectOutline, 0x2AF9 ObjectSetPosition from the object's field 0xD0 and position at +0x7C, 0x2AFB returning field 0xD0 and 0xFFFA GameObjectReleaseSceneObject, and on 0xFFF9 retains the template's object at +0x74 through vcObjectAddRef into +0xD0.
+000DC100  func  GameObjectSetSplineKind
+comment GameObjectSetSplineKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4, sets the kind at +0xD0 to 0 and raises the 0x80000 bit in the flags at +0x40.
+000DC140  func  GameObjectSetSplineKindWithData
+comment GameObjectSetSplineKindWithData Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and arg2 at +0xD8, sets the kind at +0xD0 to 1 and raises the 0x80000 bit in the flags at +0x40.
+000DC190  func  GameObjectSetPathKind
+comment GameObjectSetPathKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 2.
+000DC1E0  func  GameObjectSetGenericKind
+comment GameObjectSetGenericKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 3.
+000DC230  func  GameObjectSetTextKind
+comment GameObjectSetTextKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 4.
+000DC280  func  GameObjectSetChildKind
+comment GameObjectSetChildKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 5.
+000DC2D0  func  GameObjectSetCivilianKind
+comment GameObjectSetCivilianKind Resolves arg0 to a GameObject through GameObjectFromHandle (or GameObjectLastObject when it equals GameObjectLastHandle), stores arg1 at +0xD4 and sets the kind at +0xD0 to 6.
+000DCE40  func  SplineNodeFamilyInit
+comment SplineNodeFamilyInit Fills the static NodeFamily descriptor at 0x221A18 with the object size 0xDC and the four callbacks 0x59010, 0xDCD40, 0xDC050 and 0x385E0, then stores its address at arg0+0x38.
+000DD0A0  func  NodeFamilySetVTable
+comment NodeFamilySetVTable Writes the NodeFamily's static descriptor at 0x221A60 (0xD4 followed by the code addresses 0x59010, 0xDCEF0, 0xDD030 and 0x385E0), clears the words at 0x221A7C and 0x221A80, and stores the descriptor pointer in the family object's field 0x2C.
+000DD930  func  PlayerStandInMSONodeSetChildState
+comment PlayerStandInMSONodeSetChildState Follows the handle chain from arg1+0xBC through each object's +0xC0, using GameObjectFromHandle, until it finds the object whose handle type is 0x2800 and whose field 0xC8 is 1, then calls PlayerStandInMSONodeSetState with arg1 and that object's handle, returning early if the chain runs out.
+000E1EC0  func  PlayerActionSetTargetFlag
+comment PlayerActionSetTargetFlag Resolves the target object of the action from its handle at +0x4C, or from +0x48 (through GameObjectGetFieldD0 when the handle type is 0x40000), or from Players(0) following that player's +0x44 chain, sets bit 0x20 in the object's flags at +4 via GameObjectFromHandle, and marks the action done at +0x40.
+000F2290  func  GameObjectGetSceneTransform
+comment GameObjectGetSceneTransform Returns a pointer to the game object's scene transform data (the object pointer plus 0x14) for GameObjectUpdateSceneTransform.
+000F2810  func  GameObjectProbeNearbySceneObjects
+comment GameObjectProbeNearbySceneObjects From the game object's position it casts up to four SceneRayIntersect rays along the given direction vector and, for each scene object hit whose vcSceneObjectGetFlags lacks 0x20, calls SceneObjectReactToNearbyPlayer and SceneObjectSendUserMessage and sets bit 1 of the hit object's flags word (+0x84) when the hit distance is greater than half of a radius read from the hit object (probably a proximity/touch check driven by GameObjectUpdateSceneTransform).
+000F34C0  func  GameObjectAttachmentAdvance
+comment GameObjectAttachmentAdvance Resolves the game object from the handle with GameObjectFromHandle, computes its attachment entry as base index (+0x20) plus the passed delta (clamped 0..count-1, or wrapped modulo the count at +0x10 → +8 when flag 0x2000 is set), calls sub_000AC6D0 with the object and entry, and places the object with GameObjectSetPosition, GameObjectSetVector and sub_000D36B0, offsetting along the normalized attachment direction (VectorSubtract, VectorNormalize, VectorScale) when flag 0x10 is set.
+000F44E0  func  EntityComputeAxisAcceleration
+comment EntityComputeAxisAcceleration Zeroes the output vector arg2, then for each of the three axis inputs at edi+0x20, edi+0x24 and edi+0x28 computes the velocity error against the matching component of edi+0x14 (dot products with the basis matrix at arg1), converts it to a per-frame acceleration using the body gain at edx+0x2C and the constant 30.30303, clamps it with the body limit pairs at edx+0x38/0x3C, edx+0x40/0x44, edx+0x48/0x4C and the scale at edx+0x54, and adds each axis-scaled basis vector back into arg2.
+000F4E20  func  SceneObjectRaycastReactNearbyPlayer
+comment SceneObjectRaycastReactNearbyPlayer Casts a ray from a scene object's position along a direction, and for each of up to four hit objects SceneRayIntersect reports whose vcSceneObjectGetFlags lacks flag 0x20, has it SceneObjectReactToNearbyPlayer and SceneObjectSendUserMessage, then rewrites the caller's direction vectors.
+000F5DD0  func  EntityGroupChildComputeSpreadOffset
+comment EntityGroupChildComputeSpreadOffset Takes the entity group's child at the given index with GameObjectChildListGetByIndex and GameObjectChildListGetFirst, copies the child's fields with GameObjectCopyFieldsToBuffer, builds a direction from its heading and pitch with MatrixGetHeadingPitchRoll and VectorSetFromHeadingPitch, normalizes it with VectorNormalize and adds it to the child's own vector field, so EntityGroupSpreadChildren can spread the group's children apart.
+000FDCD0  func  EffectFamilyParticleInit
+comment EffectFamilyParticleInit Creates two ObjectCloneArray instances and takes references to two object types (0x3D and 0x6) as part of an effect family initialization routine.
+000FDD40  func  EffectFamilyParticleRelease
+comment EffectFamilyParticleRelease Releases two ObjectCloneArray instances and releases references to two object types (0x3D and 0x6) as part of an effect family cleanup routine.
+000FDD70  func  EffectFamilyParticleRegister
+comment EffectFamilyParticleRegister Registers a particle effect type descriptor with an EffectFamily, setting up its initialization and release callbacks.
+000FDDD0  func  EffectFamilyParticleInit2
+comment EffectFamilyParticleInit2 Creates two ObjectCloneArray instances and takes references to two object types (0x3C and 0x6) as part of a second effect family initialization routine.
+000FDE40  func  EffectFamilyParticleRelease2
+comment EffectFamilyParticleRelease2 Releases two ObjectCloneArray instances and releases references to two object types (0x3C and 0x6) as part of a second effect family cleanup routine.
+000FDE70  func  EffectFamilyParticleRegister2
+comment EffectFamilyParticleRegister2 Registers a second particle effect type descriptor with an EffectFamily, setting up its initialization and release callbacks.
+000FDED0  func  EffectFamilyParticleInit3
+comment EffectFamilyParticleInit3 Creates two ObjectCloneArray instances and takes references to two object types (0x3B and 0x6) as part of a third effect family initialization routine.
+000FE9F0  func  SteeringObjectsMessageHandler
+comment SteeringObjectsMessageHandler Handles a steering-object message: for message 0x7FFF it returns 1 for sub-events 0xFFFF and 0xFFFE, calls SteeringFamilyEventResetDistance for 0xFFF9 and GameObjectDestroy then GameObjectRefClearSlot for 0xFFFA, and for message 0 with sub-events 0xFFFD or 0xFFFB it calls SteeringObjectsCheckBounds, returning 1 when handled and 0 otherwise.
+000FED50  func  SteeringMessageCopyAndResetEntity
+comment SteeringMessageCopyAndResetEntity Copies five dwords from the source struct into the destination, resolves the handle in the source to a game object with GameObjectFromHandle (or takes GameObjectLastObject when it is GameObjectLastHandle), zeroes that object's fields at 0x20 through 0x2C, and sets bit 0 at offset 0x10 while clearing the word at offset 0xE of the third argument.
+000FF0B0  func  SteeringEntityTurnTimeoutExpired
+comment SteeringEntityTurnTimeoutExpired Computes a duration as the larger of the entity's float at +0x68 times 0.033f and its float at +0x30, and when arg1 is at least twice that duration clears the fields at 0x60 and 0x64, copies the dword at *p_esi+0x18 into field 0x20, destroys with GameObjectDestroyAndSendMessage, and sets *p_eax to 1.
+000FF860  func  SteeringFamilyInitState
+comment SteeringFamilyInitState zero-initializes a global state structure at 0x226DD0 and links it to the SteeringFamily_VA object
+00100160  func  SteeringFamilyInitConfig
+comment SteeringFamilyInitConfig initializes a global configuration structure at 0x226E18 with size and flag values, and links it to the SteeringFamily_VA object
+00100B70  func  ProjectileImpactEffects
+comment ProjectileImpactEffects Resolves a projectile's impact on the game object for the handle (via GameObjectFromHandle): sends message 0xF001 with the impact position through GameObjectSendMessage, applies EntityApplyRadiusEffect and OrthonormalBasisBuildFromDirection, then plays WaterBulletHitPlaySound and returns 1 when the surface value at offset 0xE of the hit object is 0x13, creates effects 0x36 and 0x38 with EffectCreateInstance when it is 0xE, and otherwise creates the object's own effect id with EffectCreateInstance, returning 0 (also 0 when the handle yields no object).
+00105A90  func  GameObjectPlaceOnLocalGridStartMotion
+comment GameObjectPlaceOnLocalGridStartMotion Reads the object from arg0, places it with GameObjectPlaceOnLocalGrid (which returns the placed object through edi) and starts it with MotionStart, returning MotionStart's result.
+001067C0  func  GameObjectPlaceOnLocalGridFromRef
+comment GameObjectPlaceOnLocalGridFromRef Reads the handle stored at arg0 and calls GameObjectPlaceOnLocalGrid with that handle plus the incoming arguments, returning the call's out value.
+0010BB60  func  GameObjectSpawnSpreadParticlesAndDestroy
+comment GameObjectSpawnSpreadParticlesAndDestroy For each of the object's effect slots it builds a random spread direction with DirectionBuildRandomSpread and a random range with RandomSpreadRange, spawns a particle system with ObjectSpawnParticleSystem, and when the handle's flag mask (0x3F800) equals 0x1B800 reads the primary scene object position with ObjectGetPrimarySceneObjectPosition before calling GameObjectDestroy.
+0010EF50  func  ObjectFindOrCreateNearPoint
+comment ObjectFindOrCreateNearPoint Looks through the object cache and the spatial tree (SphereIntersectClassify, SpatialTreeCollectNearPoint, vcClassByType) for an already-registered object of the same class within 100 units of the given point and returns nonzero if one is found, otherwise appends the object to the fixed 8-entry list, copies the point into its 0x18/0x1C/0x20 fields, sets its time and expiry from the class cache data, and calls vcObjectReleaseLater when the object's low flag bit is clear.
+00112810  func  VcRandomGet
+comment VcRandomGet Calls vcRandom with no arguments, a wrapper around the game's random number generator.
+001130B0  func  GameObjectInvokeChildrenVirtual
+comment GameObjectInvokeChildrenVirtual Iterates the two object lists at +0x2E8 and +0x2EC (counts at +0x2D0 and +0x2D4) and calls the virtual method at +0x58 of each element, passing the object and the element.
+00114C10  func  Matrix4x4Invert
+comment Matrix4x4Invert Inverts a 4x4 matrix, using Matrix4x4Determinant and Matrix4x4ExtractSubmatrix to build the cofactor matrix scaled by 1/determinant, and writing the identity matrix when the determinant is zero.
+0011D480  func  SceneGraphCollectValidObjects
+comment SceneGraphCollectValidObjects When bit 2 of the byte at esi+0x90 is clear, filters the valid objects of the arrays at esi+0xD8 and esi+0xE4 with ObjectArrayFilterValidObjects and collects them with SceneGraphCollectObjectsWithTransform, returning the number collected.
+0011F380  func  ObjectCacheCopyIndexedEntry
+comment ObjectCacheCopyIndexedEntry Resolves arg0 through the vcObjectCacheHandle/vcObjectCacheData cache with vcClassByType, then copies the 24-byte entry at index arg1 from the array at offset 0x40 (stride 0x80, count at offset 8) of the object whose handle is the resolved object's +0xBC field into arg2 when arg1 is below that count.
+001205C0  func  ObjectMotionStart
+comment ObjectMotionStart Resolves arg0 as a game object through vcClassByType and the vcObjectCache, scans its motion list (count at +0xF4, entries at +0x128 stride 0x44) for the first entry whose priority field is not above arg5, calls MotionListInsertAt, then fills the new entry with the motion handle arg1, arg2, vcGameTime as start time, 1.0 speed, arg5 as priority and arg4|8 as flags.
+00120790  func  ObjectMotionStartForDuration
+comment ObjectMotionStartForDuration Does the same motion-list insert on the object in arg0, but the new entry's end time is vcGameTime + ObjectCacheGetDurationMs(arg1), arg4 in both time fields and 0x5C as flags.
+00121270  func  ModelNodeWorldTransformGet
+comment ModelNodeWorldTransformGet Forwards its four arguments straight to ModelNodeGetWorldTransform.
+00122040  func  BoxPlanesIntersectAppendRecord
+comment BoxPlanesIntersectAppendRecord Resolves the object from its handle with vcClassByType/vcObjectCacheData, classifies the box against the object's planes with BoxClassifyAgainstPlanes and its corners with BoxGetCornersByDirection, and appends a record holding the box's transform, normal (Vector3Dot) and distance to an array with ArrayAppendSlot.
+00122300  func  ObjectSetReferencedObject
+comment ObjectSetReferencedObject Resolves the object handle through vcClassByType and the object cache, then releases the object held at +0xBC, adds a reference to the given object with vcObjectAddRef, stores it there and calls vcObjectMarkChanged.
+00122380  func  ObjectSetReferencedObjectAndValue
+comment ObjectSetReferencedObjectAndValue Resolves the object handle through vcClassByType and the object cache, releases the object held at +0xF8, adds a reference to the given object with vcObjectAddRef, stores it there and writes the given value at +0x11C.
+0012F710  func  CollisionGridQueryObjectBox
+comment CollisionGridQueryObjectBox Tests the box built from the object at arg0 against the collision grid with ObjectLocalGridBoxIsBlocked and, when that reports a block, transforms the box planes with BoxTransformPlanesInverse, classifies them with BoxClassifyAgainstPlanes and appends a corner slot made by BoxGetCornersByDirection through ArrayAppendSlot.
+001306F0  func  ObjectCacheSetValue
+comment ObjectCacheSetValue Resolves the handle in arg0 through vcClassByType to reach the object's data, stores arg1 in that data at 0x2C and in vcObjectCacheHandle/vcObjectCacheData, and writes arg1 to 0x2C directly when arg0 is not a valid handle.
+00132CD0  func  ObjectCacheAddCollisionPlane
+comment ObjectCacheAddCollisionPlane Resolves the object handle in ebx through vcClassByType, transforms the box at 0x60 with BoxTransformPlanesInverse, classifies it with BoxClassifyAgainstPlanes (returning 0 when it is inside, otherwise taking the 0x60/0x7F classification), gets its corners with BoxGetCornersByDirection and appends a record with ArrayAppendSlot holding the classification, the plane distance and the value from VcObjectCacheResolve.
+0013AFD0  func  ObjectCacheResolve
+comment ObjectCacheResolve Resolves a vcObjectCacheHandle to the object it names, reusing vcObjectCacheData when the handle matches and otherwise indexing the table at vcClassByType(handle >> 16) + 0x6Cu by (handle & 0xFFFFu) * 0x4Cu, then writing the object pointer (data + 0x1F4) through arg1 and returning 3.
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
