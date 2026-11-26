@@ -1406,6 +1406,178 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   numbers 6,223 to 6,217; the XBE's untyped bytes 826,543 to 826,135, its unknown bytes 3,859 to 3,883
   (the word after each of the six new types' records, which nothing reaches, as with the veritech's).
   `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios not run.
+- **The types without a name, all at once: `tools/type_makers.py`** (25-11-2026, Sebas: a build of 20
+  minutes for four functions is not worth it; something that covers more, and more before the build). One
+  table of what the code says of every type without a `type` line (113 after the guns): who makes one by
+  its number (`GameObjectCreate` with its family, or a family's own maker, found by what it hands on:
+  `WeaponCreate`, `EffectCreateInstance`), the types that take a use of it and the ones it uses
+  (`GameObjectTypeUse`), and, of the functions only it has and what only they call (three calls down), the
+  strings, the named functions called and the named data read, the rarest first (a screen that calls
+  `SoundOptionsCreate` is the sound options'). The numbers are followed through the arguments and the
+  pushes in a straight line (the calls the decompiler leaves on the guest's stack too); 62 of the first
+  108 had a maker seen. The effect family is 4, so a weapon's uses are its effects, and they agree with
+  the guns' names: the GU-11s use 39 `VeritechMuzzleFlashEffect`, the female power armour's lasers 46
+  `FPAMuzzleFlashEffect`, its autocannons 41 `MuzzleFlashBlueEffect`. **39 types named from the table**
+  (and 24 more from the levels, below), each `type` line with what named it:
+  - Effects: 0 to 4 are one thing by size, an explosion's asset effect with `SmokeLight02Effect` and the
+    sounds explosion4.wav and explosion13.wav (`Explosion01BlastEffect`, `Explosion01MedBlastEffect`,
+    `Explosion01LargeBlastEffect`, `CyclopsExplosionBlastEffect`, `CrateExplosionBlastEffect`, after the
+    effect each uses: 59 to 63; "Blast" is this round's word for the explosion with its sound and smoke);
+    23 to 25 the trails by who uses them (`HeavyMissileContrailEffect`, `FighterContrailEffect`,
+    `LightMissileContrailEffect`); 27 `ThrustBlueEffect` and 30 `PlayerThrustBlueEffect`; 42 and 51
+    `ZenCruiserTurretMuzzleEffect` and `ZenCruiserTurret1MuzzleEffect`; 86 `SparksLoopEffect`
+    (sparksloop_m.wav); 87 `BuildingDebrisEffect`.
+  - Weapon 42 `MalePowerArmorSniperWeapon` (it uses 47 `MPASniperEffect`); Component 0
+    `ObjectGroupComponent`; Item 4 `PilotPickup` (Male01Pilot3, the animations ph idle, cheer and scare).
+  - Screens, by what they call and the texts those ask for: 2 `LevelSelectScreen`, 8
+    `VeritechChoiceScreen` (Armor, Speed), 17 `MenuListScreen` (every menu makes one), 18 `SaveGameScreen`,
+    19 `LoadGameScreen` ("There are no saves to load."), 23 `SettingsScreen` (it makes 31 to 34; `OptionsScreen` at first, see the menus below), 25
+    `VideoModeDialogScreen` ("Switch back to NTSC?"), 31 `ControlSetupScreen` (Invert, Default), 33
+    `SoundSettingsScreen`, 34 `DifficultyScreen`.
+  - Screen elements: 1 `TextLabelElement`, 2 `ScrolledTextElement`, 3 `MenuArrowElement`, 18
+    `MissionMenuElement`, 22 `ButtonPromptElement` (GUI_xbox_buttons.tga); the HUD's by the fields they
+    read: 4 `MissileCountElement` (+0xB0), 5 `GunAmmoGaugeElement` (+0xA8), 26 `HealthBarElement` (+0x17C
+    against +0x180), 8 `EnemyTargetElement` (HUD_enemy_*.tga), 15 `TargetReticleElement`, 17
+    `TargetMarkerElement`, 27 `MissionBoundaryElement` ("MISSION BOUNDARY!").
+  `symbols.py merge` names their functions (object type functions 822 to 958), 136 of the models' names
+  replaced (`GameObjectFamilyInitialize` was effect 0's register, `TrailEffectObjectTypeRegister` effect
+  4's first use, `RadarElementRegisterClass` the menus' arrow's register); the fifth wave's
+  `ScrolledTextElementHandleMessage` is `ScrolledTextElement_StateMachine` now. The names in the callers'
+  names are the models' (`LevelSelectScreenInit`, `HudDrawHealthBar`): where no string, text or field
+  stood behind one, the type was left. **Not built**: `symbols.txt` has them and the decompiled C is the
+  commit's (9db8491), so the tool reads the old names in it until `tools/decompile.py build` (a newly
+  named type shows no uses nor calls); `verify_c.py` and the counts wait for that build.
+  Left, 50: Weapon 0 and 1 (both GU-11s, the same uses, their slots not read by an index); effects 5 and
+  28; nine HUD elements (6 two bars of +0xA8 and +0x188, 7 a gauge of 95 pixels, 16 a player's number,
+  9, 11, 14, 21, 23, 24); thirteen screens (the main menu's own 1, 11, 26 and its 15, a grid; 13 a second
+  loading screen with CHAPTER %d; 24 the level select's chapter switch or scroll bar; 16 a dialog with YES;
+  5, 6, 12, 20, 32, 35); the 16 steering behaviours, whose makers' and callees' names are the models' and
+  say little; the nodes no level places (7, 20, 22, 23); Entity 1, 24 and 64, Trigger 5. The menus get
+  their texts from tables, not by number (of 113 calls of `vcStringManagerGetText` 87 hand a number, few
+  from a screen without a name): the next thing to fish there is those tables.
+- **The levels name the types: `tools/level_names.py`** (25-11-2026, the same round, still not built). A
+  level (`gcLevel/*.lvl`) keeps each node it places as a record with 0xFFFFFFFF, its family (11), its type
+  and, 0x4C bytes on, the name it has in the editor; the 59 levels' names, a type, say what 17 nodes are:
+  0 `FolderNode` ("entities", "global lights"), 2 `LightNode` (omni, direct, sun), 4 `HelperNode` (1,499
+  "Helper - ..."), 5 `AnimationNode` ("vf-1sx guardian hover"), 6 `ModelNode` (6,353: rocks, fences,
+  buildings), 8 `CameraNode`, 10 `PointNode` ("multiplayer spawn point", "control point"), 11
+  `TerrainNode` (one a level, named as it), 12 `EffectNode` (smoldering smoke, fx_fire), 13 `SkyNode`, 14
+  `PathNode` ("new grid", "new waypath"), 15 `SpawnGroupNode`, 17 `CinemaNode`, 18 `LinkNode`, 19
+  `SoundNode` (jetloop_m.wav), 21 `CollisionVolumeNode`, 25 `KeyValCountersNode`. And a Node 1, the
+  stand-in, holds the family and the type of what it stands for 34 and 35 words after its name's 64
+  bytes, its name the editor's for that type: every type already named agrees (Entity.BattlePod is
+  PodStandardWarrior, Entity.LaserTurret ZenCruiserTurret, Item.Nosecone NoseconePickup, 43 types), and
+  the ones without a name get theirs: Entity 31 `ExcaliburHiroBoss`, 35 `FemalePowerArmor`, 54
+  `ExcaliburHiro`, 55 `MalePowerArmorGorian`, 56 `VF1SXRick` and 57 `VF1SXRoy` (the two VF-1SX "the
+  levels' files would tell which is which"), Structure 1 `ObjectSwapStructure`, and Item 4 is
+  Item.PunyHuman: `PunyHumanPickup` (the "ph" of its animations). 63 types named since the commit, object
+  type functions 822 to 1,031 by `symbols.py merge`.
+- **The AI's script: `gcAIData/aidata.spt`, read as the game reads it: `tools/ai_script.py`** (25-11-2026,
+  Sebas: follow the AI script; not built). `GcAIDataReadTypeTable` reads the file as cells of 32 bits
+  behind tags: a rule is 0xC8, its action's number (its function the table's at 0x1B1BB8 + 4 × the number,
+  0 to 0x2F; an empty entry is an action with no function of its own: FindSpline, FollowSpline, FindPath),
+  three words, its name in 50 bytes and a word; then its conditions, each 0xD0, a word, the value asked
+  for, a word, the condition's number (the table's at 0x1B1A48, 0 to 0x24) and 0xD5; 0xCF ends it. (The
+  first try gave each action's number to the rule before it, the 0xC8 coming before its name: that is why
+  FollowPath fell on an empty entry.) 34 rules, and every function the script calls has its rule's name
+  now, 28 functions: the 12 the models skipped and the fifth wave left ("enters AI state N", "an AI
+  condition on +0x54") and 16 that had a model's name, which said what the code moves and not what it is
+  for (`EntityOnTargetAcquired` is `AIActionFireOnTarget`, `VehicleCreateGameObjectsIfNotDestroyed`
+  `AIActionFollowPath`, `ObjectHandleIsValid` `AIConditionHasTarget`, `GameObjectTargetHasPairFlag`
+  `AIConditionTargetVisible`; the fifth wave's `EntityAIApproachTarget` `AIActionMoveTowardsTarget`).
+  The actions: MoveWithinRange, FireOnTarget, LookAround, ReturnToOrigin, FollowPath,
+  FollowMovementPattern, AlertCallStrike, CallStrike, StrafeAttack, GoPreviousState, MaintainDist,
+  DropTarget, FindOverrideTarget, MoveTowardsTarget, FleeReversePath, TurnTowardsSound, and the six that
+  change the state, which give **the AI's states their numbers** (`SlotTableSetValue`'s): 1 Idle
+  (`AIActionGoIdle`), 2 Alert, 3 Attack, 7 Return, 8 Pursue, 9 Search. The conditions: TargetVisible
+  (0x06), TimerElapsed (0x0A), TargetInRange (0x0B), TargetInAttentionRadius (0x11),
+  TargetInActivityRange (0x16), HasReturned (0x17), HasTarget (0x1C), WithinOriginRange (0x1D),
+  WithinBattleRange (0x14 and 0x1E). After the rules, `GcAIDataReadRecords`' part: 27 states by
+  behaviour (Guard_Idle 0 to FLyingPatrol_Return 26, each the rules it runs: Guard_Idle runs GoAlerted
+  and FollowPath) and the behaviours the levels give an entity: Guard, Patrol_WithPause, Patrol_NoPause,
+  Patrol_Flying, StaticGuard, CatsEye, Escort, ScoutPod, TransportVehicle, "Enemy turret (ship)",
+  "Flying Reentry Pod", "Training Target". Left: condition 0x22 (0xA7670, Flee_ReversePath asks for it);
+  the actions and conditions no rule of the file uses (states 4, 5, 6, 10, 11 and 12, of 0xABCE0 to
+  0xABD70 and 0xAB2B0: Pause is one of them, no rule goes to it by a name); the records the two readers
+  fill (0x2510C0, 0xB0 bytes a rule; 0x2A7220, 0xB8 a state), untyped; and the comments of the code that
+  compares a state with 2 or 3, which could say Alert and Attack.
+- **The steering behaviours by the AI's actions, and three screens by their texts** (25-11-2026, not
+  built). With the script's actions named, who reaches each `GameObjectCreate(10, N)` names six of the
+  16 steering behaviours: 5 `StrafeAttackSteering`, 6 `LookAroundSteering`, 9 `MaintainDistSteering` and
+  14 `FollowPathSteering` (each made only under its AI action; 14 also by a vehicle as it loads), 0
+  `LevelBoundsSteering` (made where a point leaves the level's box, `LevelBoundsMin`), 11
+  `TurnToTargetSteering` (the entity's +0xA4, made again when its target at +0xC0 changes,
+  `EntityAssignTarget`; under FireOnTarget and TurnTowardsSound). `type_makers.py` took a function's own
+  `_entry` for another caller of it, so what a type's functions alone call stopped one call down: mended,
+  and the texts showed: Screen 5 `ObjectivesScreen` ("OBJECTIVES", `ObjectiveGetEntry`), 13
+  `ChapterLoadingScreen` ("CHAPTER %d", "LOADING", GUI_loading_titles06.tga), 16 `ConfirmDialogScreen`
+  ("YES"). 72 types named since the commit; 41 left. Two sessions started beside this one (Sebas: one for
+  the weapons and the character, one for the AI), each to leave a proposal in `build/sessions/weapons/` and
+  `build/sessions/ai/` (`proposal.txt` in `symbols.txt`'s syntax, `notes.md`, `left.txt`) for this one to
+  merge before the one build; neither edits `symbols.txt`, `PENDING.md` nor builds.
+  Four more the same evening (Sebas: another batch, go hard, review it all afterwards), each a lane and a
+  folder: the HUD, the screens and the nodes no level places (`build/sessions/hud/`), the levels' file
+  format against its loaders (`levels/`, with a `tools/level_dump.py`), an audit of the models' names by
+  rule (`audit/`, with `tools/audit_names.py`: `rename`, `unname`, `keep`), the loose effects and the
+  battle pod fished whole (`enemy/`). What they bring is a proposal, not a finding: each is checked
+  against the code here before it goes into `symbols.txt`.
+- **The menus by their lists of texts** (25-11-2026, Sebas: the menus; not built). A menu's list is a
+  table of text numbers in `.data`, found by looking for the labels' numbers side by side (NEW GAME 0x352,
+  LOAD GAME 0x354, OPTIONS 0x34E): eight tables, `var` lines now (`GameModeMenuTexts` at 0x1B76C0,
+  `StoryModeMenuTexts`, `PauseMenuTexts`, `OptionsMenuTexts`, `SettingsMenuTexts`,
+  `SettingsMissionMenuTexts`, `MissionCompleteMenuTexts`, `VersusCompleteMenuTexts`), and whose code hands
+  each to a `MenuListScreen` says which screen it is. The tree: the main menu's first list (Screen 26
+  `GameModeMenuScreen`: TRAINING, STORY MODE, VERSUS MODE, SAVE GAME, OPTIONS, QUIT), STORY MODE (11
+  `StoryModeMenuScreen`: NEW GAME, LOAD GAME), OPTIONS (1 `OptionsScreen`: CONTROLLER DIAGRAM, SETTINGS,
+  EXTRAS, CREDITS), SETTINGS (23 `SettingsScreen`, titled "Settings": CONTROL SETUP, SOUND, VIDEO,
+  DIFFICULTY, and only the first two in a mission), with its screens 31 `ControlSetupScreen`, 33
+  `SoundSettingsScreen`, 34 `DifficultyScreen`, 25 `VideoModeDialogScreen`, and 32 `SubtitlesScreen`
+  (Subtitles, On, Off, a player); the pause's list is CONTROLLER DIAGRAM, SETTINGS, RESTART MISSION, QUIT.
+  23, 31 and 33 had this morning's names (`OptionsScreen`, `ControlOptionsScreen`, `SoundOptionsScreen`),
+  set right by the game's own labels. And by the texts each screen's code asks for, followed from the
+  function that holds the number up to the type whose function calls it: 15 `TextEntryScreen` (BACKSPACE,
+  a grid of letters, the profile's heading), 35 `VersusSetupScreen` ("Versus Setup", Sniper Mode, Auto
+  Targeting, Reduced Visibility, Number of Rounds), 24 `ChapterSwitchScreen` (the pad's triggers,
+  chapterswitch.wav, made by the level select). 79 types named since the commit; 34 left. Of the screens:
+  12 (a label over GUI_mission_screens15 and 04, made by the level select and the veritech choice), 20
+  (made by the HUD), 6. Not found: who uses the list at 0x1B2810 (RESUME, QUIT), and the screen of EXTRAS
+  (the codes' entry, `MainMenuEnterCode`). In passing: `FemalePowerArmorInitWeapons`' `(flags & 0x3F800)
+  == 0xC000` is the entity's type, 24 (0xC000 >> 11), and Entity 24's own functions are the female power
+  armour's: the variant with the paired weapons (left to the weapons' session).
+- **Where the round of 25-11-2026 stopped, and what waits to be reviewed** (Sebas stopped the side
+  sessions: six at once burned the limit too fast). In `symbols.txt` and built at the day's end: this
+  session's batch (80 types, the AI script's 28 functions, the menus' 8 tables). NOT in `symbols.txt`:
+  what the six side sessions wrote, each in its folder under `build/sessions/` (not in git), a proposal
+  to check against the code before it goes in:
+  - `weapons/` and `ai/`, finished, two passes each (`proposal.txt`, `notes.md`, `left.txt`). The
+    weapons': 8 `type` lines, 13 functions named and 42 renamed, 10 structures with 95 fields, 30
+    variables; its cheap facts checked here (the six hints it quotes, the string "pfpa", the table at
+    0x1B1530 ending in type 24, the 3.8 after Weapon 0's constants) and its own checker passes. It **sets
+    right names of this session's batch**: the entity's +0x17C and +0x180 are the pack's armour and the
+    pack (`VeritechSetMode` is `VeritechSetPack`), not health and its most, which is +0x174; so
+    ScreenElement 26, `HealthBarElement` here, is the pack's armour bar (`PackArmorBarElement`) and 7 is
+    the health bar; a veritech's mode is its object's state (0 battloid, 1 guardian, 2 fighter, 3 sniper);
+    Weapon 0 is the battloid's and the guardian's gun pod, Weapon 1 the battloid's second trigger, at
+    missiles; Entity 24 is the female power armour a player flies, so Weapon 23 and 24 are the player's
+    (to decide: `FPAPaired...` or `PlayerFPA...`, and whether the six types' record is the gun pod's or
+    the player's kind of gun). The AI's: 6 structures with 59 fields, 17 variables, 65 renames, 14
+    functions named, 3 steering types; the file has four parts (rules, states, behaviours and the AI
+    themes, which a level gives an entity by a number), nobody walks the script each update (each rule is
+    a timed event), `SlotTableSetValue` is `AIRequestState`, Pause is state 13 and nothing asks for it,
+    condition 0x22 is `AIConditionPathLeadsToTarget`.
+  - `hud/`, `levels/`, `audit/`, `enemy/`: stopped mid-work, with working files only (`hud/` has a
+    `proposal.txt` begun, `audit/` its `suspects.txt`, `levels/` a tree of m101, `enemy/` its notes in
+    `_work.md`). Their sessions are open and can be told to write up what they had.
+  Next: review and merge `weapons/` and `ai/` (their renames come by old name and address; the `type`
+  lines through `symbols.py merge` after dropping the hand names of the functions only those types
+  have, as this round's batches did), then the four that stopped, then the nine scenarios, not run
+  since 9db8491.
+  Measured at the day's one build (25-11-2026, this session's batch): functions without a name in the
+  decompiled C 341 to 320, without a description 544 to 523; parameters named by their place 89,051 to
+  88,961; reads at a raw address 8,663 to 8,019; data addresses written as numbers 6,217 to 6,127; the
+  XBE's untyped bytes 826,135 to 820,787, its unknown bytes 3,883 to 4,063 (the word after each newly
+  named type's record, as before). `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios not
+  run.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

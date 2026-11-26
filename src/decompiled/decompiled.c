@@ -1539,11 +1539,8 @@ void ContainerFreeAllEntries(uint32_t eax, uint32_t edx, uint32_t arg1)
 	MEM32(0x1BC760u) = 0u;
 }
 
-/* Reads a record count from a vcFile with vcFileReadU32 (plus vcFileReadBytes and vcFileReadRect), and
-   for each record allocates a node with crt_malloc, loads its game object through GameObjectLoad,
-   resolves handles with GameObjectFromHandle, and for type-2 nodes reads the name via StringTableGet and
-   vcStringManagerGetText or vcFileReadBytes. */
-uint32_t GameObjectListRead(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Reads an object of the CinemaNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t CinemaNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, manager = 0, number = 0;
 	uint32_t t1 = 0;
@@ -1851,9 +1848,8 @@ uint32_t GameObjectListRead(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	return eax;
 }
 
-/* Resolves the passed handle with GameObjectFromHandle and then calls Node_Collect with the handle and
-   the second argument. */
-uint32_t NodeCollectFromHandle(uint32_t arg0, uint32_t arg1)
+/* Collects what an object of the CinemaNode type refers to that has to be saved (GameObjectCollect). */
+uint32_t CinemaNode_Collect(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -2593,11 +2589,9 @@ void ReticleInit(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t arg0)
 	MEM32(esi + 0x40u) = MEM32(esi + 0x40u) | 0x100u;
 }
 
-/* Message handler for a Reticle object: on message 0xFFF9 calls ReticleInit, on 0xFFFA
-   ContainerFreeAllEntries, on 0x2AF8 GameObjectSendMessageToChildren, on 0x2AFA
-   GameObjectSetOrToggleState then NodeFamilyUpdateNodes or GamePauseSetOwner depending on +0xC8, and
-   returns 1 for 0xFFFF/0xFFFE/0x2AF9. */
-uint32_t ReticleHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The CinemaNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t CinemaNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_edi = 0, saved_arg1 = 0;
@@ -2674,20 +2668,19 @@ uint32_t ReticleHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint3
 	return eax;
 }
 
-/* Fills the static NodeFamily descriptor at 0x1BC718 (size 0xF8, handler 0x175A0, callbacks 0x16BF0 and
-   0x16E80, count 5) and stores its address at offset 0x54 of the family passed by the caller of
-   WaterNode_Register. */
-void NodeFamilySetDescriptor(uint32_t arg0)
+/* Registers the CinemaNode type (Node 17), the levels' "new cinema", "opening cine", "closing cine":
+   fills its GameObjectType and stores it in its family. */
+void CinemaNode_Register(uint32_t arg0)
 {
-	MEM32(0x1BC718u) = 0xF8u;
-	MEM32(0x1BC71Cu) = 0x59010u;
-	MEM32(0x1BC720u) = 0x59010u;
-	MEM32(0x1BC724u) = 0x175A0u;
-	MEM32(0x1BC728u) = 0x16BF0u;
-	MEM32(0x1BC730u) = 0x16E80u;
-	MEM32(0x1BC734u) = 5u;
-	MEM32(0x1BC738u) = 0u;
-	MEM32(arg0 + 0x54u) = 0x1BC718u;
+	GameObjectType_size(CinemaNodeType_VA) = 0xF8u;
+	GameObjectType_startup(CinemaNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(CinemaNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(CinemaNodeType_VA) = 0x175A0u;
+	GameObjectType_load(CinemaNodeType_VA) = 0x16BF0u;
+	GameObjectType_collect(CinemaNodeType_VA) = 0x16E80u;
+	GameObjectType_version(CinemaNodeType_VA) = 5u;
+	GameObjectType_flags(CinemaNodeType_VA) = 0u;
+	MEM32(arg0 + 0x54u) = CinemaNodeType_VA;
 }
 
 /* Zeroes the PlayerFamily_VA family struct, sets its name to PlayerText_VA and type count to 1,
@@ -4129,10 +4122,10 @@ void EntityFamilyRegisterAll(void)
 	arg0 = EntityFamily_VA;
 	MalePowerArmor_Register(arg0);
 	arg0 = EntityFamily_VA;
-	MalePowerArmor_RegisterClassTables(arg0);
+	MalePowerArmorGorian_Register(arg0);
 	DoNothing();
 	arg0 = EntityFamily_VA;
-	EntityFamilyInit(arg0);
+	FemalePowerArmor_Register(arg0);
 	arg0 = EntityFamily_VA;
 	EntityFamilyRegisterTypeTable(arg0);
 	arg0 = EntityFamily_VA;
@@ -4147,9 +4140,9 @@ void EntityFamilyRegisterAll(void)
 	arg0 = EntityFamily_VA;
 	Excalibur_Register(arg0);
 	arg0 = EntityFamily_VA;
-	EntityFamilyInitVtable(arg0);
+	ExcaliburHiro_Register(arg0);
 	arg0 = EntityFamily_VA;
-	EntityFamilyInitData(arg0);
+	ExcaliburHiroBoss_Register(arg0);
 	arg0 = EntityFamily_VA;
 	GameObjectTypeManagerRegister(arg0);
 	SkinTextCacheInit();
@@ -4164,9 +4157,9 @@ void EntityFamilyRegisterAll(void)
 	arg0 = EntityFamily_VA;
 	VF1SX_Register(arg0);
 	arg0 = EntityFamily_VA;
-	VF1FamilyRegister(arg0);
+	VF1SXRick_Register(arg0);
 	arg0 = EntityFamily_VA;
-	VeritechFamilyRegister(arg0);
+	VF1SXRoy_Register(arg0);
 	arg0 = EntityFamily_VA;
 	VF1AXIzzy_Register(arg0);
 	arg0 = EntityFamily_VA;
@@ -14406,43 +14399,43 @@ uint32_t ScreenFamilyRegisterAll(void)
 	GameObjectFamily_type_count(ScreenFamily_VA) = 0x25u;
 	MainMenuScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetCallbacks(arg0);
+	OptionsScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetHandlerTable(arg0);
+	LevelSelectScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	SniperScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	PauseScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetup(arg0);
+	ObjectivesScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	ScreenFamilyInstallHandler(arg0);
 	arg0 = ScreenFamily_VA;
 	LoadingScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilyRegisterScreen(arg0);
+	VeritechChoiceScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	HUDScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilyInitHandlers(arg0);
+	StoryModeMenuScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetupObjectType(arg0);
+	GameModeMenuScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	ScreenFamilySetVTable(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetGuiHandlers(arg0);
+	ChapterLoadingScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	SplashScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	MissionMenuScreenFamilyRegister(arg0);
+	TextEntryScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetClassDescriptor(arg0);
+	ConfirmDialogScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetHandlers(arg0);
+	MenuListScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilyInitClass(arg0);
+	SaveGameScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	MissionMenuScreenFamilySet(arg0);
+	LoadGameScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	ScreenFamilySetScreenType(arg0);
 	arg0 = ScreenFamily_VA;
@@ -14450,11 +14443,11 @@ uint32_t ScreenFamilyRegisterAll(void)
 	arg0 = ScreenFamily_VA;
 	ControllerScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamily_Init(arg0);
+	SettingsScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	MissionMenuScreenFamilyInstall(arg0);
+	ChapterSwitchScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilyInstallClassDescriptor(arg0);
+	VideoModeDialogScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	MissionFailedScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
@@ -14464,17 +14457,17 @@ uint32_t ScreenFamilyRegisterAll(void)
 	arg0 = ScreenFamily_VA;
 	MedalsScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	MedalsScreenSetFamily(arg0);
+	ControlSetupScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilyRegisterCallbacks(arg0);
+	SoundSettingsScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	ScreenFamilySetHandler(arg0);
+	SubtitlesScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	DifficultyScreenRegister(arg0);
+	DifficultyScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
 	InterviewsScreen_Register(arg0);
 	arg0 = ScreenFamily_VA;
-	VersusHudScreenRegister(arg0);
+	VersusSetupScreen_Register(arg0);
 	arg1 = ScreenFamily_VA;
 	arg0 = 0xDu;
 	GameObjectRegisterFamily(arg0, arg1, &eax, &ignored);
@@ -19590,12 +19583,9 @@ void ScreenFamilyHandlePadInput(uint32_t esi)
 	}
 }
 
-/* Dispatches on arg2 and on the message id read from arg3 to UiWidgetBuild, GameObjectDestroy,
-   GameObjectSendMessageToVisibleChildren, GameObjectBroadcastToVisibleChildren, ScreenFamilyClearState,
-   ScreenFamilyHandlePadInput, MenuConfirmOnPadPress, MenuConfirmOnStartPress and the
-   HudTextSetText/HudTextSetTextAndExtras/HudTextSetTextAndRefresh calls, returning 1 when it handled the
-   message. */
-uint32_t ScreenFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The ConfirmDialogScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ConfirmDialogScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -19771,20 +19761,19 @@ uint32_t ScreenFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, ui
 	return eax;
 }
 
-/* Fills the static screen family class descriptor at 0x1E6230 with size 0x170, two 0x59010 fields and
-   the message handler ScreenFamilyHandleMessage, zeroes its trailing fields and stores the descriptor's
-   address at arg0+0x50. */
-void ScreenFamilySetClassDescriptor(uint32_t arg0)
+/* Registers the ConfirmDialogScreen type (Screen 16), its text "YES": a message to answer with the pad
+   (ScreenCreateTextObject makes it): fills its GameObjectType and stores it in its family. */
+void ConfirmDialogScreen_Register(uint32_t arg0)
 {
-	MEM32(0x1E6240u) = 0u;
-	MEM32(0x1E6248u) = 0u;
-	MEM32(0x1E624Cu) = 0u;
-	MEM32(0x1E6250u) = 0u;
-	MEM32(0x1E6230u) = 0x170u;
-	MEM32(0x1E6234u) = 0x59010u;
-	MEM32(0x1E6238u) = 0x59010u;
-	MEM32(0x1E623Cu) = 0x23AF0u;
-	MEM32(arg0 + 0x50u) = 0x1E6230u;
+	GameObjectType_load(ConfirmDialogScreenType_VA) = 0u;
+	GameObjectType_collect(ConfirmDialogScreenType_VA) = 0u;
+	GameObjectType_version(ConfirmDialogScreenType_VA) = 0u;
+	GameObjectType_flags(ConfirmDialogScreenType_VA) = 0u;
+	GameObjectType_size(ConfirmDialogScreenType_VA) = 0x170u;
+	GameObjectType_startup(ConfirmDialogScreenType_VA) = 0x59010u;
+	GameObjectType_shutdown(ConfirmDialogScreenType_VA) = 0x59010u;
+	GameObjectType_state_machine(ConfirmDialogScreenType_VA) = 0x23AF0u;
+	MEM32(arg0 + 0x50u) = ConfirmDialogScreenType_VA;
 }
 
 /* Sets the text string at offset 0x154 on the object from handle arg0 (or the last object), measures it,
@@ -26215,7 +26204,7 @@ void WeaponFamilyRegister(void)
 	arg0 = WeaponFamily_VA;
 	PodOfficerHeavyCannonWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	PodOfficerHeavyCannonWeaponFamilyInitialize(arg0);
+	MalePowerArmorSniperWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	PodOfficerSkarredHeavyCannonWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
@@ -33560,7 +33549,7 @@ void EntityUpdateAttachedObjectWithFlag(uint32_t arg0, uint32_t arg1, uint32_t a
 
 /* Takes the object from GameObjectFromIndex, writes the given value into its +0xC0 field when its flags
    allow, and on a change rebuilds the entity's +0xA4 with GameObjectReplaceFromReference from a
-   parameter block; the EntityOnTargetAcquired caller suggests +0xC0 is the target. */
+   parameter block; the AIActionFireOnTarget caller suggests +0xC0 is the target. */
 void EntityAssignTarget(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
@@ -35022,11 +35011,9 @@ void ObjectSetSceneObject(uint32_t ebx, uint32_t esi, uint32_t edi)
 	}
 }
 
-/* Handles object messages (arg2 must be 0x7FFF) by dispatching on the code at arg3: 0x2AF8/0x2AFA call
-   GameObjectSendMessageToChildren/GameObjectSetOrToggleState, 0x2AF9 updates the +0xD0 scene object
-   through SceneObjectCreateAndInit, 0x2AFB/0xF006 return the +0xD0 object, 0xFFF9 assigns it through
-   ObjectSetSceneObject, and 0xFFFA releases it and clears 0x1EA274. */
-uint32_t ObjectSceneObjectMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The TerrainNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TerrainNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -35114,9 +35101,8 @@ uint32_t ObjectSceneObjectMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t 
 	return eax;
 }
 
-/* Resolves or creates a game object, loads its vcObject from the given name into slot 0xD0, creates a
-   SceneObject, and records the handle in global 0x1EA274. */
-uint32_t GameObjectLoadModel(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the TerrainNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t TerrainNode_Load(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -35206,18 +35192,19 @@ uint32_t GameObjectCollectChangedNodes(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-/* Fills the global NodeFamily at 0x1EA230 with constants and stores its address at arg0+0x3C. */
-void NodeFamilyInitialize(uint32_t arg0)
+/* Registers the TerrainNode type (Node 11), one a level, named as it: m101, granite city, training,
+   base: fills its GameObjectType and stores it in its family. */
+void TerrainNode_Register(uint32_t arg0)
 {
-	MEM32(0x1EA24Cu) = 0u;
-	MEM32(0x1EA250u) = 0u;
-	MEM32(0x1EA230u) = 0xD4u;
-	MEM32(0x1EA234u) = 0x59010u;
-	MEM32(0x1EA238u) = 0x59010u;
-	MEM32(0x1EA23Cu) = 0x2DE20u;
-	MEM32(0x1EA240u) = 0x2DF50u;
-	MEM32(0x1EA248u) = 0x2DFE0u;
-	MEM32(arg0 + 0x3Cu) = 0x1EA230u;
+	GameObjectType_version(TerrainNodeType_VA) = 0u;
+	GameObjectType_flags(TerrainNodeType_VA) = 0u;
+	GameObjectType_size(TerrainNodeType_VA) = 0xD4u;
+	GameObjectType_startup(TerrainNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(TerrainNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(TerrainNodeType_VA) = 0x2DE20u;
+	GameObjectType_load(TerrainNodeType_VA) = 0x2DF50u;
+	GameObjectType_collect(TerrainNodeType_VA) = 0x2DFE0u;
+	MEM32(arg0 + 0x3Cu) = TerrainNodeType_VA;
 }
 
 /* Takes the game object recorded in global 0x1EA274, gets its scene object from slot 0xD0, and either
@@ -42736,7 +42723,7 @@ void MissionCompleteScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 3u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1B0A78u;
+			MEM32(g_esp) = MissionCompleteMenuTexts_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax_2;
 		}
@@ -42746,7 +42733,7 @@ void MissionCompleteScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 2u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1B0A84u;
+			MEM32(g_esp) = VersusCompleteMenuTexts_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx_2;
 		}
@@ -43734,9 +43721,8 @@ void PadConfirmFlagSet(uint32_t esi)
 	}
 }
 
-/* Creates five text objects with vcObjectGet from the strings at 0x18FA30 and 0x18F4BC, sets each one's
-   rectangle with vcRectSet and registers it through UiElementSetBoundsFromObject and QuadCenterOrigin. */
-uint32_t GuiTextElementsCreate(uint32_t esi, uint32_t edi)
+/* The ChapterLoadingScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ChapterLoadingScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -43947,9 +43933,9 @@ uint32_t GuiTextElementsCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the five text objects created by GuiTextElementsCreate by calling VcObjectReleaseField on
-   each of their handles. */
-uint32_t GuiTextElementsDestroy(void)
+/* The ChapterLoadingScreen type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t ChapterLoadingScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -44504,11 +44490,9 @@ uint32_t LoadingScreenBuild(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t e
 	return eax_2;
 }
 
-/* Dispatches on the id read from arg3 when arg2 is 0x7FFF, calling LoadingScreenBuild (0xFFF9),
-   GameObjectSendMessageToVisibleChildren (0x32C8), GameObjectBroadcastToVisibleChildren (0x32C9),
-   HudDrawStatus (0x32CA), PadConfirmFlagSet (0x32CB), GameObjectDestroyAndRelease (0xFFFA) and returning
-   1, else 0. */
-uint32_t ScreenFamilyMessageDispatch(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The ChapterLoadingScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ChapterLoadingScreen_StateMachine(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0;
 
@@ -44587,19 +44571,20 @@ uint32_t ScreenFamilyMessageDispatch(uint32_t ebp, uint32_t esi, uint32_t edi, u
 	return eax;
 }
 
-/* Fills the descriptor at 0x1EA810 with 0x198, 0x33E00, 0x33F90 and the handler
-   ScreenFamilyMessageDispatch and stores its pointer in the object's +0x44 field. */
-void ScreenFamilySetGuiHandlers(uint32_t arg0)
+/* Registers the ChapterLoadingScreen type (Screen 13), its texts "CHAPTER %d" and "LOADING", its
+   textures GUI_loading_titles06.tga and GUI_loading_disks.tga, by the level's chapter (LevelGetChapter):
+   fills its GameObjectType and stores it in its family. */
+void ChapterLoadingScreen_Register(uint32_t arg0)
 {
-	MEM32(0x1EA820u) = 0u;
-	MEM32(0x1EA828u) = 0u;
-	MEM32(0x1EA82Cu) = 0u;
-	MEM32(0x1EA830u) = 0u;
-	MEM32(0x1EA810u) = 0x198u;
-	MEM32(0x1EA814u) = 0x33E00u;
-	MEM32(0x1EA818u) = 0x33F90u;
-	MEM32(0x1EA81Cu) = 0x34540u;
-	MEM32(arg0 + 0x44u) = 0x1EA810u;
+	GameObjectType_load(ChapterLoadingScreenType_VA) = 0u;
+	GameObjectType_collect(ChapterLoadingScreenType_VA) = 0u;
+	GameObjectType_version(ChapterLoadingScreenType_VA) = 0u;
+	GameObjectType_flags(ChapterLoadingScreenType_VA) = 0u;
+	GameObjectType_size(ChapterLoadingScreenType_VA) = 0x198u;
+	GameObjectType_startup(ChapterLoadingScreenType_VA) = 0x33E00u;
+	GameObjectType_shutdown(ChapterLoadingScreenType_VA) = 0x33F90u;
+	GameObjectType_state_machine(ChapterLoadingScreenType_VA) = 0x34540u;
+	MEM32(arg0 + 0x44u) = ChapterLoadingScreenType_VA;
 }
 
 /* Follows the code sequence while L and R are held on any pad: a press of the one expected next moves
@@ -46524,49 +46509,49 @@ void NodeFamilyRegister(void)
 	GameObjectFamily_shutdown(NodeFamily_VA) = 0u;
 	GameObjectFamily_version(NodeFamily_VA) = 0u;
 	GameObjectFamily_type_count(NodeFamily_VA) = 0x1Au;
-	CyclopsDoorsActionRegisterFamily(arg0);
+	FolderNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	PlayerStandInEntityNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	PlayerStandInEntityNodeInitVtable(arg0);
+	LightNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	PlayerStandInMSONode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	PlayerStandInMSONodeFamilyInit(arg0);
+	HelperNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyRegisterType(arg0);
+	AnimationNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyObjectInit(arg0);
+	ModelNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	NodeFamilySetVTable(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyInstallTypeDescriptor(arg0);
+	CameraNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	SplineNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	SplineNodeFamilyInit(arg0);
+	PointNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyInitialize(arg0);
+	TerrainNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	sub_000DBFF0(arg0);
+	EffectNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilySetType(arg0);
+	SkyNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyInitType(arg0);
+	PathNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	GameObjectContainerClassRegister(arg0);
+	SpawnGroupNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	WaterNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilySetDescriptor(arg0);
+	CinemaNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyRegisterDescriptor(arg0);
+	LinkNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	sub_000DBAA0(arg0);
+	SoundNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	sub_000DB3F0(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilyRegisterSceneObjectClass(arg0);
+	CollisionVolumeNode_Register(arg0);
 	arg0 = NodeFamily_VA;
 	NodeClassRegister(arg0);
 	arg0 = NodeFamily_VA;
@@ -46574,7 +46559,7 @@ void NodeFamilyRegister(void)
 	arg0 = NodeFamily_VA;
 	CiviliansNode_Register(arg0);
 	arg0 = NodeFamily_VA;
-	NodeFamilySlotInit(arg0);
+	KeyValCountersNode_Register(arg0);
 	arg1 = NodeFamily_VA;
 	arg0 = 0xBu;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &ignored_2);
@@ -49837,10 +49822,9 @@ void NodeUpdatePositionFromParent(uint32_t eax, uint32_t ecx, uint32_t esi)
 	MEM32(esi + 0xE0u) = MEM32(eax_2 + 0xB4u);
 }
 
-/* Dispatches node messages: for message type 0x7FFF it handles codes 0xFFFF, 0xFFF9, 0xFFFE, 0x2AF8,
-   0x2AF9, 0x2AFA and 0xFFFA by calling GameObjectSendMessageToChildren, NodeInitialize,
-   NodeUpdatePositionFromParent or GameObjectDetachAndDestroyChildren and returning 1, otherwise 0. */
-uint32_t NodeMessageDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The LinkNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LinkNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -49908,9 +49892,8 @@ uint32_t NodeMessageDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32
 	return eax;
 }
 
-/* Resolves the handle with GameObjectFromHandle and returns the OR of Node_Collect on the handle and
-   Node_Collect on the object's field 0xD0. */
-uint32_t GameObjectCollectNodes(uint32_t arg0, uint32_t arg1)
+/* Collects what an object of the LinkNode type refers to that has to be saved (GameObjectCollect). */
+uint32_t LinkNode_Collect(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -50065,9 +50048,8 @@ void NodeUpdateTransform(uint32_t arg0, uint32_t *p_ebx, uint32_t *p_ebp, uint32
 	*p_edi = edi_2;
 }
 
-/* Loads a node: calls GameObjectLoad to create it, sets its +0xD0, then reads fields with vcFileReadU32
-   and FileReadTriples and calls NodeUpdateTransform if no fields remain. */
-uint32_t NodeLoad(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the LinkNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t LinkNode_Load(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -50119,19 +50101,19 @@ uint32_t NodeLoad(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint
 	return eax;
 }
 
-/* Registers the node family descriptor at 0x1EAF78 with size 0xF0, handler NodeMessageDispatch, loader
-   NodeLoad and GameObjectCollectNodes, and stores it in arg0+0x58. */
-void NodeFamilyRegisterDescriptor(uint32_t arg0)
+/* Registers the LinkNode type (Node 18), the levels' "link" and "node link": fills its GameObjectType
+   and stores it in its family. */
+void LinkNode_Register(uint32_t arg0)
 {
-	MEM32(0x1EAF78u) = 0xF0u;
-	MEM32(0x1EAF7Cu) = 0x59010u;
-	MEM32(0x1EAF80u) = 0x59010u;
-	MEM32(0x1EAF84u) = 0x39F50u;
-	MEM32(0x1EAF88u) = 0x3A1E0u;
-	MEM32(0x1EAF90u) = 0x3A020u;
-	MEM32(0x1EAF94u) = 3u;
-	MEM32(0x1EAF98u) = 0u;
-	MEM32(arg0 + 0x58u) = 0x1EAF78u;
+	GameObjectType_size(LinkNodeType_VA) = 0xF0u;
+	GameObjectType_startup(LinkNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(LinkNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(LinkNodeType_VA) = 0x39F50u;
+	GameObjectType_load(LinkNodeType_VA) = 0x3A1E0u;
+	GameObjectType_collect(LinkNodeType_VA) = 0x3A020u;
+	GameObjectType_version(LinkNodeType_VA) = 3u;
+	GameObjectType_flags(LinkNodeType_VA) = 0u;
+	MEM32(arg0 + 0x58u) = LinkNodeType_VA;
 }
 
 /* Advances the value at +0xE8 by the increment at +0xEC and wraps it back inside the range [+0xDC,
@@ -52637,11 +52619,9 @@ uint32_t PathNodeBuildSegments(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_
 	return eax_2;
 }
 
-/* Dispatches a path object's message: returns 1 for ids 0xFFFF, 0xFFFE and 0x2AF9, calls PathInitialize
-   for 0xFFF9, frees the esi+0xD8 buffer with crt_free after GameObjectDetachAndDestroyChildren for
-   0xFFFA, calls PathNodeBuildSegments for 0x2AF8, calls GameObjectSetOrToggleState for 0x2AFA, and
-   returns 0 for any other id or when arg2 is not 0x7FFF. */
-uint32_t PathNodeHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The PathNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t PathNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -52725,10 +52705,8 @@ uint32_t sub_0003C235(uint32_t eax)
 	return eax;
 }
 
-/* Reads a path object's node count and per-node triples from a vcFile into its node array, fills the
-   remaining path fields with vcFileReadU32, and calls PathRefreshNodeObjects to rebuild the path's node
-   objects. */
-uint32_t PathLoadFromFile(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Reads an object of the PathNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t PathNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t t1 = 0;
@@ -52989,22 +52967,22 @@ uint32_t PathLoadFromFile(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi
 	return eax;
 }
 
-/* NodeFamilyInitType fills the global NodeFamily class descriptor at 0x1EB008 with size 0x10C, function
-   pointers 0x59010/0x3C160/0x3C240/0x385E0 and count 4, then stores it in arg0+0x48. */
-uint32_t NodeFamilyInitType(uint32_t arg0)
+/* Registers the PathNode type (Node 14), the levels' "new grid", "new waypath", "reentry pod path",
+   "exit path": fills its GameObjectType and stores it in its family. */
+uint32_t PathNode_Register(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
 	eax = arg0;
-	MEM32(0x1EB008u) = 0x10Cu;
-	MEM32(0x1EB00Cu) = 0x59010u;
-	MEM32(0x1EB010u) = 0x59010u;
-	MEM32(0x1EB014u) = 0x3C160u;
-	MEM32(0x1EB018u) = 0x3C240u;
-	MEM32(0x1EB020u) = 0x385E0u;
-	MEM32(0x1EB024u) = 4u;
-	MEM32(0x1EB028u) = 0u;
-	MEM32(eax + 0x48u) = 0x1EB008u;
+	GameObjectType_size(PathNodeType_VA) = 0x10Cu;
+	GameObjectType_startup(PathNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(PathNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(PathNodeType_VA) = 0x3C160u;
+	GameObjectType_load(PathNodeType_VA) = 0x3C240u;
+	GameObjectType_collect(PathNodeType_VA) = 0x385E0u;
+	GameObjectType_version(PathNodeType_VA) = 4u;
+	GameObjectType_flags(PathNodeType_VA) = 0u;
+	MEM32(eax + 0x48u) = PathNodeType_VA;
 	return eax;
 }
 
@@ -53012,14 +52990,14 @@ uint32_t NodeFamilyInitType(uint32_t arg0)
    0x1EB00C..0x1EB028 (without the size) and stores it in eax+0x48. */
 void NodeFamilyInitTypeInfo(uint32_t eax)
 {
-	MEM32(0x1EB00Cu) = 0x59010u;
-	MEM32(0x1EB010u) = 0x59010u;
-	MEM32(0x1EB014u) = 0x3C160u;
-	MEM32(0x1EB018u) = 0x3C240u;
-	MEM32(0x1EB020u) = 0x385E0u;
-	MEM32(0x1EB024u) = 4u;
-	MEM32(0x1EB028u) = 0u;
-	MEM32(eax + 0x48u) = 0x1EB008u;
+	GameObjectType_startup(PathNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(PathNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(PathNodeType_VA) = 0x3C160u;
+	GameObjectType_load(PathNodeType_VA) = 0x3C240u;
+	GameObjectType_collect(PathNodeType_VA) = 0x385E0u;
+	GameObjectType_version(PathNodeType_VA) = 4u;
+	GameObjectType_flags(PathNodeType_VA) = 0u;
+	MEM32(eax + 0x48u) = PathNodeType_VA;
 }
 
 /* NodeFamilyAddNode retrieves the NodeFamily from a handle, grows its 32-byte node array if capacity is
@@ -53311,21 +53289,21 @@ void ScreenElementFamilyRegister(void)
 	GameObjectFamily_type_count(ScreenElementFamily_VA) = 0x1Cu;
 	RadarElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySetClassDescriptor(arg0);
+	TextLabelElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySetVTable(arg0);
+	ScrolledTextElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	RadarElementRegisterClass(arg0);
+	MenuArrowElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySetClass(arg0);
+	MissileCountElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	HudPiecesFamilyInit(arg0);
+	GunAmmoGaugeElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
 	HudPiecesSetFamilyDescriptor(arg0);
 	arg0 = ScreenElementFamily_VA;
 	ScreenElementFamilyRegisterHudPieces(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySetDescriptor(arg0);
+	EnemyTargetElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
 	ScreenElementFamilyRegisterHudLogoPuTgaText(arg0);
 	arg0 = ScreenElementFamily_VA;
@@ -53337,13 +53315,13 @@ void ScreenElementFamilyRegister(void)
 	arg0 = ScreenElementFamily_VA;
 	PickupReticleElementFamily_Initialize(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySetMethods(arg0);
+	TargetReticleElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
 	sub_000E8200(arg0);
 	arg0 = ScreenElementFamily_VA;
-	sub_000E8020(arg0);
+	TargetMarkerElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	MissionMenuScreenElementFamilyInstall(arg0);
+	MissionMenuElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
 	MissileLockElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
@@ -53351,7 +53329,7 @@ void ScreenElementFamilyRegister(void)
 	arg0 = ScreenElementFamily_VA;
 	FriendlyReticleElementInitType(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilySet(arg0);
+	ButtonPromptElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
 	HudPiecesFamilyRegister(arg0);
 	arg0 = ScreenElementFamily_VA;
@@ -53359,9 +53337,9 @@ void ScreenElementFamilyRegister(void)
 	arg0 = ScreenElementFamily_VA;
 	MessageBoxElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	HUDPiecesScreenElementFamilyInit(arg0);
+	HealthBarElement_Register(arg0);
 	arg0 = ScreenElementFamily_VA;
-	ScreenElementFamilyRegisterTextElement(arg0);
+	MissionBoundaryElement_Register(arg0);
 	arg1 = ScreenElementFamily_VA;
 	arg0 = 0xCu;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &ignored_2);
@@ -68378,9 +68356,8 @@ void StatusHudDraw(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x14u;
 }
 
-/* Creates the status HUD object at 0x1EB910 with vcObjectGet, sets its rectangle with vcRectSet, and
-   initializes it through UiElementSetBoundsFromObject. */
-uint32_t StatusHudCreate(uint32_t esi, uint32_t edi)
+/* The VeritechChoiceScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VeritechChoiceScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0;
 
@@ -68425,9 +68402,9 @@ uint32_t StatusHudCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* releases the field of the global object at 0x1EB910 with VcObjectReleaseField and returns the released
-   value. */
-uint32_t GlobalVcObjectReleaseField(void)
+/* The VeritechChoiceScreen type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t VeritechChoiceScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -69898,11 +69875,9 @@ void VeritechPaintSelectUpdate(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_
 	g_esp = g_esp + 0x1Cu;
 }
 
-/* Dispatches a screen-family event when arg2 is 0x7FFF, switching on the id at MEM32(arg3) to call
-   VeritechChoiceScreenInit (0xFFF9), StatusHudDraw (0x32CA), GameObjectSendMessageToVisibleChildren
-   (0x32C8), GameObjectBroadcastToVisibleChildren (0x32C9), VeritechPaintSelectUpdate (0x32CB) and
-   GameObjectDestroyStoredObjects (0xFFFA), returning 1 when handled and 0 otherwise. */
-uint32_t ScreenFamilyHandleEvent(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The VeritechChoiceScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t VeritechChoiceScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0;
 	uint32_t saved_arg5 = 0, saved_arg4 = 0;
@@ -69985,19 +69960,20 @@ uint32_t ScreenFamilyHandleEvent(uint32_t ebx, uint32_t ebp, uint32_t edi, uint3
 	return eax;
 }
 
-/* Fills the static screen descriptor at 0x1EB890 (word 0x1BC and callbacks 0x4AD60, 0x4ADB0, 0x4C420)
-   and stores it at arg0+0x30 for the screen family passed by ScreenFamilyRegisterAll. */
-void ScreenFamilyRegisterScreen(uint32_t arg0)
+/* Registers the VeritechChoiceScreen type (Screen 8), the main menu's choice of a veritech and its
+   paint: VeritechChoiceScreenInit, VeritechPaintSelectUpdate, its texts Armor and Speed: fills its
+   GameObjectType and stores it in its family. */
+void VeritechChoiceScreen_Register(uint32_t arg0)
 {
-	MEM32(0x1EB8A0u) = 0u;
-	MEM32(0x1EB8A8u) = 0u;
-	MEM32(0x1EB8ACu) = 0u;
-	MEM32(0x1EB8B0u) = 0u;
-	MEM32(0x1EB890u) = 0x1BCu;
-	MEM32(0x1EB894u) = 0x4AD60u;
-	MEM32(0x1EB898u) = 0x4ADB0u;
-	MEM32(0x1EB89Cu) = 0x4C420u;
-	MEM32(arg0 + 0x30u) = 0x1EB890u;
+	GameObjectType_load(VeritechChoiceScreenType_VA) = 0u;
+	GameObjectType_collect(VeritechChoiceScreenType_VA) = 0u;
+	GameObjectType_version(VeritechChoiceScreenType_VA) = 0u;
+	GameObjectType_flags(VeritechChoiceScreenType_VA) = 0u;
+	GameObjectType_size(VeritechChoiceScreenType_VA) = 0x1BCu;
+	GameObjectType_startup(VeritechChoiceScreenType_VA) = 0x4AD60u;
+	GameObjectType_shutdown(VeritechChoiceScreenType_VA) = 0x4ADB0u;
+	GameObjectType_state_machine(VeritechChoiceScreenType_VA) = 0x4C420u;
+	MEM32(arg0 + 0x30u) = VeritechChoiceScreenType_VA;
 }
 
 /* Resolves the source game object by handle and copies its transform fields 0x7C-0xA8 into a parameter
@@ -84876,10 +84852,8 @@ uint32_t VeritechConstantsGet(void)
 	return eax;
 }
 
-/* takes the name at 0x193E10 through ObjectCreateInstanceFromName, sets the resulting object's flags
-   with vcSceneObjectChangeFlags (0x14), stores it in the global at 0x1F7C28 and hands that slot to
-   VF1StartupInitHelpTextLabels. */
-uint32_t SceneObjectCreateFromName(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The VF1SXRoy type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VF1SXRoy_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -84897,9 +84871,8 @@ uint32_t SceneObjectCreateFromName(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	return eax;
 }
 
-/* releases the object held in the global at 0x1F7C28 with vcObjectRelease and passes that slot to
-   VF1Shutdown. */
-uint32_t SceneObjectReleaseGlobal(void)
+/* The VF1SXRoy type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t VF1SXRoy_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -84913,28 +84886,27 @@ uint32_t SceneObjectReleaseGlobal(void)
 	return eax;
 }
 
-/* fills the 0x308-byte veritech entity family descriptor (create 0x5C110, destroy 0x5C140, callbacks
-   0x484B0, 0x19500, 0x196A0) into the EntityFamily slot at +0xF4 and calls VeritechConstantsInit on
-   0x1F7C28. */
-void VeritechFamilyRegister(uint32_t arg0)
+/* Registers the VF1SXRoy type (Entity 57), the levels' Entity.Veritech_Roy: the VF-1SX: fills its
+   GameObjectType and stores it in its family. */
+void VF1SXRoy_Register(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0;
 
-	MEM32(0x1F7BE0u) = 0x308u;
-	MEM32(0x1F7BE4u) = 0x5C110u;
-	MEM32(0x1F7BE8u) = 0x5C140u;
-	MEM32(0x1F7BECu) = 0x484B0u;
-	MEM32(0x1F7BF0u) = 0x19500u;
-	MEM32(0x1F7BF8u) = 0x196A0u;
-	MEM32(0x1F7BFCu) = 0u;
-	MEM32(0x1F7C00u) = 1u;
-	MEM32(arg0 + 0xF4u) = 0x1F7BE0u;
+	GameObjectType_size(VF1SXRoyType_VA) = 0x308u;
+	GameObjectType_startup(VF1SXRoyType_VA) = 0x5C110u;
+	GameObjectType_shutdown(VF1SXRoyType_VA) = 0x5C140u;
+	GameObjectType_state_machine(VF1SXRoyType_VA) = 0x484B0u;
+	GameObjectType_load(VF1SXRoyType_VA) = 0x19500u;
+	GameObjectType_collect(VF1SXRoyType_VA) = 0x196A0u;
+	GameObjectType_version(VF1SXRoyType_VA) = 0u;
+	GameObjectType_flags(VF1SXRoyType_VA) = 1u;
+	MEM32(arg0 + 0xF4u) = VF1SXRoyType_VA;
 	arg0_2 = 0x1F7C28u;
 	VeritechConstantsInit(arg0_2);
 }
 
 /* returns 0x1F93D8, the constants block that VeritechConstantsInit fills for the family whose instances
-   are created by VF1Create and call VF1StartupInitHelpTextLabels. */
+   are created by VF1SXRick_Startup and call VF1StartupInitHelpTextLabels. */
 uint32_t VF1ConstantsGet(void)
 {
 	uint32_t eax = 0;
@@ -84943,9 +84915,8 @@ uint32_t VF1ConstantsGet(void)
 	return eax;
 }
 
-/* creates the instance named at 0x193E18 with ObjectCreateInstanceFromName, stores it at 0x1F93D8,
-   changes its scene flags with vcSceneObjectChangeFlags and calls VF1StartupInitHelpTextLabels. */
-uint32_t VF1Create(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The VF1SXRick type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t VF1SXRick_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -84963,8 +84934,8 @@ uint32_t VF1Create(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* releases the object at 0x1F93D8 with vcObjectRelease and then calls VF1Shutdown. */
-uint32_t VF1Destroy(void)
+/* The VF1SXRick type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t VF1SXRick_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -84978,22 +84949,21 @@ uint32_t VF1Destroy(void)
 	return eax;
 }
 
-/* fills the 0x308-byte VF1 entity family descriptor (create VF1Create, destroy VF1Destroy, callbacks
-   0x484B0, 0x19500, 0x196A0) into the EntityFamily slot at +0xF0 and calls VeritechConstantsInit on
-   0x1F93D8. */
-void VF1FamilyRegister(uint32_t arg0)
+/* Registers the VF1SXRick type (Entity 56), the levels' Entity.Veritech_Rick: the VF-1SX: fills its
+   GameObjectType and stores it in its family. */
+void VF1SXRick_Register(uint32_t arg0)
 {
 	uint32_t arg0_2 = 0;
 
-	MEM32(0x1F9390u) = 0x308u;
-	MEM32(0x1F9394u) = 0x5C1E0u;
-	MEM32(0x1F9398u) = 0x5C210u;
-	MEM32(0x1F939Cu) = 0x484B0u;
-	MEM32(0x1F93A0u) = 0x19500u;
-	MEM32(0x1F93A8u) = 0x196A0u;
-	MEM32(0x1F93ACu) = 0u;
-	MEM32(0x1F93B0u) = 1u;
-	MEM32(arg0 + 0xF0u) = 0x1F9390u;
+	GameObjectType_size(VF1SXRickType_VA) = 0x308u;
+	GameObjectType_startup(VF1SXRickType_VA) = 0x5C1E0u;
+	GameObjectType_shutdown(VF1SXRickType_VA) = 0x5C210u;
+	GameObjectType_state_machine(VF1SXRickType_VA) = 0x484B0u;
+	GameObjectType_load(VF1SXRickType_VA) = 0x19500u;
+	GameObjectType_collect(VF1SXRickType_VA) = 0x196A0u;
+	GameObjectType_version(VF1SXRickType_VA) = 0u;
+	GameObjectType_flags(VF1SXRickType_VA) = 1u;
+	MEM32(arg0 + 0xF0u) = VF1SXRickType_VA;
 	arg0_2 = 0x1F93D8u;
 	VeritechConstantsInit(arg0_2);
 }
@@ -91823,9 +91793,8 @@ uint32_t sub_00066C40(void)
 	return eax;
 }
 
-/* Releases each registered global object with vcObjectRelease, empties the two VcObjectLists, and
-   unregisters the game object types with GameObjectTypeRelease. */
-uint32_t GameGlobalsShutdown(void)
+/* The ExcaliburHiroBoss type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t ExcaliburHiroBoss_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -92105,19 +92074,19 @@ uint32_t GameGlobalsShutdown(void)
 	return eax;
 }
 
-/* Fills the EntityFamily's size, handler and object-type table pointers (including GameGlobalsShutdown
-   as a callback) and stores the type table at offset 0x8C of the family. */
-void EntityFamilyInitData(uint32_t arg0)
+/* Registers the ExcaliburHiroBoss type (Entity 31), the levels' Entity.Excaliber_Hiro_Boss: fills its
+   GameObjectType and stores it in its family. */
+void ExcaliburHiroBoss_Register(uint32_t arg0)
 {
-	MEM32(0x202A08u) = 0x280u;
-	MEM32(0x202A0Cu) = 0x66C50u;
-	MEM32(0x202A10u) = 0x675D0u;
-	MEM32(0x202A14u) = 0x6A180u;
-	MEM32(0x202A18u) = 0x19500u;
-	MEM32(0x202A20u) = 0x196A0u;
-	MEM32(0x202A24u) = 0u;
-	MEM32(0x202A28u) = 1u;
-	MEM32(arg0 + 0x8Cu) = 0x202A08u;
+	GameObjectType_size(ExcaliburHiroBossType_VA) = 0x280u;
+	GameObjectType_startup(ExcaliburHiroBossType_VA) = 0x66C50u;
+	GameObjectType_shutdown(ExcaliburHiroBossType_VA) = 0x675D0u;
+	GameObjectType_state_machine(ExcaliburHiroBossType_VA) = 0x6A180u;
+	GameObjectType_load(ExcaliburHiroBossType_VA) = 0x19500u;
+	GameObjectType_collect(ExcaliburHiroBossType_VA) = 0x196A0u;
+	GameObjectType_version(ExcaliburHiroBossType_VA) = 0u;
+	GameObjectType_flags(ExcaliburHiroBossType_VA) = 1u;
+	MEM32(arg0 + 0x8Cu) = ExcaliburHiroBossType_VA;
 	x86_rep_stos32(0x202A54u, 0u, 0x41u);
 	MEM32(0x202A84u) = 0x1989C4u;
 	MEM32(0x202A88u) = 0x203258u;
@@ -92202,11 +92171,8 @@ uint32_t sub_00067B90(void)
 	return eax;
 }
 
-/* Releases the vcObject at each of the globals 0x2032A8-0x203494 and at 0x203A98, clears the tables at
-   0x2033C0 and 0x203498 with VcObjectListRelease and the 0x55-word block at 0x2033B0, then loops over
-   the object arrays at 0x203588 and 0x203598 releasing each element and calls GameObjectTypeRelease for
-   types 3 and 4. */
-uint32_t GameObjectsReleaseAll(void)
+/* The ExcaliburHiro type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t ExcaliburHiro_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -92486,19 +92452,19 @@ uint32_t GameObjectsReleaseAll(void)
 	return eax;
 }
 
-/* Writes the method table at 0x203260 with its function pointers and the tables at 0x2033B0/0x203504,
-   and stores the table pointer at the EntityFamily's 0xE8 slot. */
-void EntityFamilyInitVtable(uint32_t arg0)
+/* Registers the ExcaliburHiro type (Entity 54), the levels' Entity.Excaliber_Hiro: fills its
+   GameObjectType and stores it in its family. */
+void ExcaliburHiro_Register(uint32_t arg0)
 {
-	MEM32(0x203260u) = 0x280u;
-	MEM32(0x203264u) = 0x67BA0u;
-	MEM32(0x203268u) = 0x68530u;
-	MEM32(0x20326Cu) = 0x6A180u;
-	MEM32(0x203270u) = 0x19500u;
-	MEM32(0x203278u) = 0x196A0u;
-	MEM32(0x20327Cu) = 0u;
-	MEM32(0x203280u) = 1u;
-	MEM32(arg0 + 0xE8u) = 0x203260u;
+	GameObjectType_size(ExcaliburHiroType_VA) = 0x280u;
+	GameObjectType_startup(ExcaliburHiroType_VA) = 0x67BA0u;
+	GameObjectType_shutdown(ExcaliburHiroType_VA) = 0x68530u;
+	GameObjectType_state_machine(ExcaliburHiroType_VA) = 0x6A180u;
+	GameObjectType_load(ExcaliburHiroType_VA) = 0x19500u;
+	GameObjectType_collect(ExcaliburHiroType_VA) = 0x196A0u;
+	GameObjectType_version(ExcaliburHiroType_VA) = 0u;
+	GameObjectType_flags(ExcaliburHiroType_VA) = 1u;
+	MEM32(arg0 + 0xE8u) = ExcaliburHiroType_VA;
 	x86_rep_stos32(0x2032ACu, 0u, 0x41u);
 	MEM32(0x2032DCu) = 0x198E40u;
 	MEM32(0x2032E0u) = 0x203AB0u;
@@ -96274,10 +96240,8 @@ uint32_t sub_0006DF40(void)
 	return eax;
 }
 
-/* Releases every global vcObject through vcObjectRelease, empties the object lists with
-   VcObjectListRelease and x86_rep_stos32, releases the indexed object arrays, and calls
-   GameObjectTypeRelease for each game object type. */
-uint32_t GameReleaseObjects(void)
+/* The FemalePowerArmor type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t FemalePowerArmor_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -96626,18 +96590,19 @@ uint32_t GameReleaseObjects(void)
 	return eax;
 }
 
-/* Initializes the Entity family's method table at 0x2051D0 and stores it at EntityFamily+0x9C. */
-void EntityFamilyInit(uint32_t arg0)
+/* Registers the FemalePowerArmor type (Entity 35), the levels' Entity.FemalePowerArmor: fills its
+   GameObjectType and stores it in its family. */
+void FemalePowerArmor_Register(uint32_t arg0)
 {
-	MEM32(0x2051D0u) = 0x2B8u;
-	MEM32(0x2051D4u) = 0x6DF50u;
-	MEM32(0x2051D8u) = 0x6EB60u;
-	MEM32(0x2051DCu) = 0x71170u;
-	MEM32(0x2051E0u) = 0x19500u;
-	MEM32(0x2051E8u) = 0x196A0u;
-	MEM32(0x2051ECu) = 0u;
-	MEM32(0x2051F0u) = 1u;
-	MEM32(arg0 + 0x9Cu) = 0x2051D0u;
+	GameObjectType_size(FemalePowerArmorType_VA) = 0x2B8u;
+	GameObjectType_startup(FemalePowerArmorType_VA) = 0x6DF50u;
+	GameObjectType_shutdown(FemalePowerArmorType_VA) = 0x6EB60u;
+	GameObjectType_state_machine(FemalePowerArmorType_VA) = 0x71170u;
+	GameObjectType_load(FemalePowerArmorType_VA) = 0x19500u;
+	GameObjectType_collect(FemalePowerArmorType_VA) = 0x196A0u;
+	GameObjectType_version(FemalePowerArmorType_VA) = 0u;
+	GameObjectType_flags(FemalePowerArmorType_VA) = 1u;
+	MEM32(arg0 + 0x9Cu) = FemalePowerArmorType_VA;
 	x86_rep_stos32(0x20521Cu, 0u, 0x41u);
 	MEM32(0x20524Cu) = 0x19A50Cu;
 	MEM32(0x205250u) = 0x205B18u;
@@ -99227,9 +99192,9 @@ uint32_t sub_00071880(void)
 	return eax;
 }
 
-/* Releases every globally registered object with vcObjectRelease, empties the object lists and zeroes
-   the region at 0x205C70, then releases the game object types with GameObjectTypeRelease. */
-uint32_t GameObjectsRelease(void)
+/* The MalePowerArmorGorian type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t MalePowerArmorGorian_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -99588,20 +99553,19 @@ uint32_t GameObjectsRelease(void)
 	return eax;
 }
 
-/* Fills the MalePowerArmor family's four static class descriptor tables (0x205B20, 0x205B6C, 0x205E68,
-   0x206010) with pointer arrays and stores the first at arg0+0xEC, linking them into the entity family
-   passed in. */
-void MalePowerArmor_RegisterClassTables(uint32_t arg0)
+/* Registers the MalePowerArmorGorian type (Entity 55), the levels' Entity.MalePowerArmor_Gorian: fills
+   its GameObjectType and stores it in its family. */
+void MalePowerArmorGorian_Register(uint32_t arg0)
 {
-	MEM32(0x205B20u) = 0x2BCu;
-	MEM32(0x205B24u) = 0x71890u;
-	MEM32(0x205B28u) = 0x72360u;
-	MEM32(0x205B2Cu) = 0x75BC0u;
-	MEM32(0x205B30u) = 0x19500u;
-	MEM32(0x205B38u) = 0x196A0u;
-	MEM32(0x205B3Cu) = 0u;
-	MEM32(0x205B40u) = 1u;
-	MEM32(arg0 + 0xECu) = 0x205B20u;
+	GameObjectType_size(MalePowerArmorGorianType_VA) = 0x2BCu;
+	GameObjectType_startup(MalePowerArmorGorianType_VA) = 0x71890u;
+	GameObjectType_shutdown(MalePowerArmorGorianType_VA) = 0x72360u;
+	GameObjectType_state_machine(MalePowerArmorGorianType_VA) = 0x75BC0u;
+	GameObjectType_load(MalePowerArmorGorianType_VA) = 0x19500u;
+	GameObjectType_collect(MalePowerArmorGorianType_VA) = 0x196A0u;
+	GameObjectType_version(MalePowerArmorGorianType_VA) = 0u;
+	GameObjectType_flags(MalePowerArmorGorianType_VA) = 1u;
+	MEM32(arg0 + 0xECu) = MalePowerArmorGorianType_VA;
 	x86_rep_stos32(0x205B6Cu, 0u, 0x41u);
 	MEM32(0x205B9Cu) = 0x19AC88u;
 	MEM32(0x205BA0u) = 0x2061F4u;
@@ -140450,11 +140414,8 @@ void EntityFindNearestObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	g_esp = g_esp + 0x10u;
 }
 
-/* Reads a game object's serialized fields from a file with vcFileReadU32, FileReadTriples and
-   FileReadMatrix, allocates and fills its triple/matrix array, loads version-gated extra fields (with
-   GameObjectLoad and GameObjectCreateObjectsFromList), and initializes its runtime state from vcGameTime
-   and vcRandom. */
-uint32_t GameObjectReadFromFile(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Reads an object of the SpawnGroupNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t SpawnGroupNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t t1 = 0, t2 = 0;
@@ -142252,12 +142213,9 @@ void GameObjectContainerConstruct(uint32_t eax, uint32_t ecx, uint32_t arg0, uin
 	GameObjectCreateObjectsFromList(ebx, arg0_2, &ignored, &ebp, &esi, &edi);
 }
 
-/* Handles messages for the container game object: 0xFFF9 calls GameObjectContainerConstruct to construct
-   it, 0xFFFA frees object+0xD8 with crt_free, 0x2B8E sets object+0xC8 via EmitterUpdate, 0x2AFA calls
-   GameObjectSendStateMessageToArray, 0x2AF8/0x2AF9/0xFFFF/0xFFFE return handled, 0xF003 calls
-   EntityFindNearestObject, and 0x3F1/0x3ED/0xF001 send that message with a 4/0x28 payload to each of the
-   0x64 child handles at object+0xE8 through GameObjectSendMessage. */
-uint32_t GameObjectContainerMessage(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The SpawnGroupNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SpawnGroupNode_StateMachine(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ebp_2 = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -142425,19 +142383,19 @@ uint32_t GameObjectContainerMessage(uint32_t ebp, uint32_t edi, uint32_t arg0, u
 	return eax;
 }
 
-/* Writes the class descriptor at 0x20DCF8 (size 0x4E0, message handler 0xA0820, methods 0x9F4C0 and
-   0x385E0, field 0xE) and stores its address at arg0+0x4C. */
-void GameObjectContainerClassRegister(uint32_t arg0)
+/* Registers the SpawnGroupNode type (Node 15), the levels' "spawn group", "battle pods", "pod spawn":
+   fills its GameObjectType and stores it in its family. */
+void SpawnGroupNode_Register(uint32_t arg0)
 {
-	MEM32(0x20DCF8u) = 0x4E0u;
-	MEM32(0x20DCFCu) = 0x59010u;
-	MEM32(0x20DD00u) = 0x59010u;
-	MEM32(0x20DD04u) = 0xA0820u;
-	MEM32(0x20DD08u) = 0x9F4C0u;
-	MEM32(0x20DD10u) = 0x385E0u;
-	MEM32(0x20DD14u) = 0xEu;
-	MEM32(0x20DD18u) = 0u;
-	MEM32(arg0 + 0x4Cu) = 0x20DCF8u;
+	GameObjectType_size(SpawnGroupNodeType_VA) = 0x4E0u;
+	GameObjectType_startup(SpawnGroupNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(SpawnGroupNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(SpawnGroupNodeType_VA) = 0xA0820u;
+	GameObjectType_load(SpawnGroupNodeType_VA) = 0x9F4C0u;
+	GameObjectType_collect(SpawnGroupNodeType_VA) = 0x385E0u;
+	GameObjectType_version(SpawnGroupNodeType_VA) = 0xEu;
+	GameObjectType_flags(SpawnGroupNodeType_VA) = 0u;
+	MEM32(arg0 + 0x4Cu) = SpawnGroupNodeType_VA;
 }
 
 /* Swaps the target handle at edi+0x40 to the handle at esi+4 or esi+0xC and moves the passed handle
@@ -142906,31 +142864,31 @@ uint32_t EffectFamilyRegister(void)
 	GameObjectFamily_shutdown(EffectFamily_VA) = 0u;
 	GameObjectFamily_version(EffectFamily_VA) = 0u;
 	GameObjectFamily_type_count(EffectFamily_VA) = 0x58u;
-	GameObjectFamilyInitialize(arg0);
+	Explosion01BlastEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyParticleRegister2(arg0);
+	Explosion01MedBlastEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyParticleRegister(arg0);
+	Explosion01LargeBlastEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	sub_000FDC70(arg0);
+	CyclopsExplosionBlastEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	sub_000FDB70(arg0);
+	CrateExplosionBlastEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyRegisterVariantType(arg0);
+	FighterContrailEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyAddNameTableClass(arg0);
+	LightMissileContrailEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyRegisterNameTableClass(arg0);
+	HeavyMissileContrailEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
 	MotionTrailEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyAddSceneFlagClass(arg0);
+	ThrustBlueEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
 	EffectFamilyRegisterSceneFlagClass(arg0);
 	arg0 = EffectFamily_VA;
 	ThrustBPBlueEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyRegisterObjectHandlers(arg0);
+	PlayerThrustBlueEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
 	ThrustRed01Effect_Register(arg0);
 	arg0 = EffectFamily_VA;
@@ -142954,7 +142912,7 @@ uint32_t EffectFamilyRegister(void)
 	arg0 = EffectFamily_VA;
 	MuzzleFlashBlueEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyRegisterHandlers(arg0);
+	ZenCruiserTurretMuzzleEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
 	MakkCannonEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
@@ -142972,7 +142930,7 @@ uint32_t EffectFamilyRegister(void)
 	arg0 = EffectFamily_VA;
 	ZenDestroidMuzzleEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilyVAInstallDescriptor(arg0);
+	ZenCruiserTurret1MuzzleEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
 	HitSpotRedEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
@@ -143078,7 +143036,7 @@ uint32_t EffectFamilyRegister(void)
 	arg0 = EffectFamily_VA;
 	SparksLoopEffect_Register(arg0);
 	arg0 = EffectFamily_VA;
-	EffectFamilySetMethodTable(arg0);
+	BuildingDebrisEffect_Register(arg0);
 	arg1 = EffectFamily_VA;
 	arg0 = 4u;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &edx);
@@ -144788,11 +144746,8 @@ void LevelSelectNodeUpdate(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t ed
 	g_esp = g_esp + 0x14u;
 }
 
-/* For each of the 75 level slots it calls LevelCount and LevelGet, takes the level's object at
-   level+0x30 with vcObjectGet, sets its rect from the table at 0x1B05A8 with vcRectSet, adds it to the
-   slot with UiElementSetBoundsFromObject and UiElementSetColor, releases it with vcObjectRelease, and
-   finally creates the label text with ObjectCloneArrayCreate using ToggleWavText_VA. */
-uint32_t LevelSelectCreateNodes(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
+/* The LevelSelectScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t LevelSelectScreen_Startup(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, level = 0;
 
@@ -144899,10 +144854,8 @@ uint32_t LevelSelectCreateNodes(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 	return eax;
 }
 
-/* Releases the fields of every object in the static array running from 0x20E068 to 0x20F1FC in 0x3C-byte
-   steps via VcObjectReleaseField, releases the object at 0x20DFE4 the same way, and finally releases the
-   VcObjectList at 0x20E020 with VcObjectListRelease. */
-uint32_t VcObjectReleaseRangeFieldsAndList(void)
+/* The LevelSelectScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t LevelSelectScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -146184,10 +146137,9 @@ void MissionSelectMenuUpdate(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t 
 	} while (L_0A2A9D);
 }
 
-/* Dispatches on a message code read from arg3, calling LevelSelectNodeUpdate, LevelSelectDestroy,
-   GameObjectSendMessageToVisibleChildren, GameObjectBroadcastToVisibleChildren, MissionSelectMenuUpdate
-   or LevelSelectScreenInit, and returns 1 when the message was handled and 0 when it was not. */
-uint32_t LevelSelectHandleMessage(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The LevelSelectScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LevelSelectScreen_StateMachine(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, edx = 0, esi_2 = 0, ignored = 0;
 	uint32_t saved_arg1 = 0;
@@ -146267,20 +146219,20 @@ uint32_t LevelSelectHandleMessage(uint32_t ebp, uint32_t esi, uint32_t edi, uint
 	return eax;
 }
 
-/* Fills the static 0x20DFA0 block with the screen family's function pointers (0xA2450, 0xA2500, 0xA34D0)
-   and constants (0x230, 2), zeroing its other fields, and stores the block's address at arg0+0x18 of the
-   ScreenFamily. */
-void ScreenFamilySetHandlerTable(uint32_t arg0)
+/* Registers the LevelSelectScreen type (Screen 2), the main menu's choice of a level:
+   LevelSelectScreenInit, MissionSelectMenuUpdate, by LevelCount: fills its GameObjectType and stores it
+   in its family. */
+void LevelSelectScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20DFB0u) = 0u;
-	MEM32(0x20DFB8u) = 0u;
-	MEM32(0x20DFC0u) = 0u;
-	MEM32(0x20DFA0u) = 0x230u;
-	MEM32(0x20DFA4u) = 0xA2450u;
-	MEM32(0x20DFA8u) = 0xA2500u;
-	MEM32(0x20DFACu) = 0xA34D0u;
-	MEM32(0x20DFBCu) = 2u;
-	MEM32(arg0 + 0x18u) = 0x20DFA0u;
+	GameObjectType_load(LevelSelectScreenType_VA) = 0u;
+	GameObjectType_collect(LevelSelectScreenType_VA) = 0u;
+	GameObjectType_flags(LevelSelectScreenType_VA) = 0u;
+	GameObjectType_size(LevelSelectScreenType_VA) = 0x230u;
+	GameObjectType_startup(LevelSelectScreenType_VA) = 0xA2450u;
+	GameObjectType_shutdown(LevelSelectScreenType_VA) = 0xA2500u;
+	GameObjectType_state_machine(LevelSelectScreenType_VA) = 0xA34D0u;
+	GameObjectType_version(LevelSelectScreenType_VA) = 2u;
+	MEM32(arg0 + 0x18u) = LevelSelectScreenType_VA;
 }
 
 /* Once, creates the three SplashMWavText splash sounds and the BulletHitsWaterMWavText sound through
@@ -148004,11 +147956,9 @@ void ScreenElementDrawScrolledText(uint32_t eax, uint32_t ebx, uint32_t ebp, uin
 	g_esp = g_esp + 8u;
 }
 
-/* A screen element type's messages: on 0xFFF9 ScreenElementInitializeDefaults, on 0x2EE3
-   ScreenElementNotifyOwner, on 0x2EE4 GameObjectDeactivate; it draws (0x2EE2) with
-   ScreenElementDrawScrolledText in state 0 and ScreenElementDrawText in state 1; 0xFFFD sets +0x50 (and
-   +0x3C to 10 in state 0); 0xFFFA frees it with GameObjectFreeByHandle. */
-uint32_t ScrolledTextElementHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ScrolledTextElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ScrolledTextElement_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -148119,10 +148069,8 @@ uint32_t ScrolledTextElementHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t 
 	return eax;
 }
 
-/* Creates each HUD element with vcObjectGet, positions it with vcRectSet, registers it through
-   UiElementSetBoundsFromObject, and lays them out against vcScreenGetRect while scaling by
-   UiElementSetColor and UiElementInit. */
-uint32_t UiElementsInit(uint32_t esi, uint32_t edi)
+/* The ScrolledTextElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ScrolledTextElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
@@ -148719,9 +148667,9 @@ uint32_t UiElementsInit(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the screen element's vcObjects by calling vcObjectRelease and VcObjectReleaseField on globals
-   0x20F784, 0x20F748 through 0x20F5A4, 0x20F788, 0x20F52C through 0x20F3C4 and 0x20F568. */
-uint32_t ScreenElementReleaseVcObjects(void)
+/* The ScrolledTextElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t ScrolledTextElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -148770,19 +148718,20 @@ uint32_t ScreenElementReleaseVcObjects(void)
 	return eax;
 }
 
-/* Sets the vtable pointer at arg0+0x18 to the static ScreenElementFamily descriptor at 0x20F380, which
-   has size 0x58 and function pointers 0xA4B10, 0xA4F40 and 0xA49A0. */
-void ScreenElementFamilySetVTable(uint32_t arg0)
+/* Registers the ScrolledTextElement type (ScreenElement 2), a text drawn plain or scrolled
+   (ScreenElementDrawText, ScreenElementDrawScrolledText): every screen makes it: fills its
+   GameObjectType and stores it in its family. */
+void ScrolledTextElement_Register(uint32_t arg0)
 {
-	MEM32(0x20F390u) = 0u;
-	MEM32(0x20F398u) = 0u;
-	MEM32(0x20F39Cu) = 0u;
-	MEM32(0x20F3A0u) = 0u;
-	MEM32(0x20F380u) = 0x58u;
-	MEM32(0x20F384u) = 0xA4B10u;
-	MEM32(0x20F388u) = 0xA4F40u;
-	MEM32(0x20F38Cu) = 0xA49A0u;
-	MEM32(arg0 + 0x18u) = 0x20F380u;
+	GameObjectType_load(ScrolledTextElementType_VA) = 0u;
+	GameObjectType_collect(ScrolledTextElementType_VA) = 0u;
+	GameObjectType_version(ScrolledTextElementType_VA) = 0u;
+	GameObjectType_flags(ScrolledTextElementType_VA) = 0u;
+	GameObjectType_size(ScrolledTextElementType_VA) = 0x58u;
+	GameObjectType_startup(ScrolledTextElementType_VA) = 0xA4B10u;
+	GameObjectType_shutdown(ScrolledTextElementType_VA) = 0xA4F40u;
+	GameObjectType_state_machine(ScrolledTextElementType_VA) = 0xA49A0u;
+	MEM32(arg0 + 0x18u) = ScrolledTextElementType_VA;
 }
 
 uint32_t sub_000A5050(uint32_t arg0, uint32_t arg1)
@@ -151718,9 +151667,11 @@ uint32_t sub_000A6F50(uint32_t arg0)
 	return eax;
 }
 
-/* Gets the target handle from the object's 0x44 field with ObjectGetTargetHandle, validates it with
-   sub_0009C6E0, and returns whether GameObjectPairCheckFlag reports a flag for the object and target. */
-uint32_t GameObjectTargetHasPairFlag(uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* The AI script's condition 0x06 (aidata.spt, the table at 0x1B1A48): the MoveTowardsTarget_NotVisible
+   rules ask for it false. Gets the target handle from the object's 0x44 field with
+   ObjectGetTargetHandle, validates it with sub_0009C6E0, and returns whether GameObjectPairCheckFlag
+   reports a flag for the object and target. */
+uint32_t AIConditionTargetVisible(uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -151861,9 +151812,10 @@ uint32_t ObjectTargetIsThirdGroup(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-/* Accumulates vcGameTime deltas into the timer at 0x98 and returns true once the total reaches arg2*33,
-   resetting the timer. */
-uint32_t TimerAccumulateElapsedSeconds(uint32_t arg0, uint32_t arg2)
+/* The AI script's condition 0x0A (aidata.spt, the table at 0x1B1A48): GoIdle_TimedOut, CallStrike,
+   FindOverrideTarget and Go_PreviousState_Timer_15 ask for it true. Accumulates vcGameTime deltas into
+   the timer at 0x98 and returns true once the total reaches arg2*33, resetting the timer. */
+uint32_t AIConditionTimerElapsed(uint32_t arg0, uint32_t arg2)
 {
 	uint32_t eax = 0, ecx = 0, esi = 0;
 	uint32_t stack = 0;
@@ -151924,7 +151876,9 @@ uint32_t GameObjectTimerElapsed(uint32_t arg0, uint32_t arg2)
 	return eax;
 }
 
-uint32_t sub_000A7180(uint32_t arg0, uint32_t arg1)
+/* The AI script's conditions 0x14 and 0x1E (the table at 0x1B1A48, by aidata.spt's rules):
+   MoveWithinBattleRange and MoveWithinRange_AttendActivityRad ask for it false. */
+uint32_t AIConditionWithinBattleRange(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 	double f0 = 0;
@@ -151971,7 +151925,9 @@ uint32_t sub_000A7180(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000A71E0(uint32_t arg0, uint32_t arg1)
+/* The AI script's condition 0x0B (the table at 0x1B1A48, by aidata.spt's rules): FireOnTarget and
+   GoAttack_TargetInRange ask for it true, GoSearch_TargetOutOfRange false. */
+uint32_t AIConditionTargetInRange(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0, edx = 0;
 	double f0 = 0;
@@ -152120,9 +152076,10 @@ uint32_t ObjectTypeIsInGroup(uint32_t arg0, uint32_t arg2)
 	return eax;
 }
 
-/* Returns whether sub_0009C6E0 reports the object's handle at +0xBC as valid (non-zero), 0 if the object
-   is null. */
-uint32_t ObjectHandleIsValid(uint32_t arg0)
+/* The AI script's condition 0x1C (aidata.spt, the table at 0x1B1A48): GoAlerted and GoAttacking ask for
+   it true, GoIdle_NoTarget and GoReturn_NoTarget false. Returns whether sub_0009C6E0 reports the
+   object's handle at +0xBC as valid (non-zero), 0 if the object is null. */
+uint32_t AIConditionHasTarget(uint32_t arg0)
 {
 	uint32_t carry = 0;
 	uint32_t arg0_2 = 0, eax = 0, ignored = 0, ignored_2 = 0;
@@ -152141,7 +152098,10 @@ uint32_t ObjectHandleIsValid(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000A7340(uint32_t arg0, uint32_t arg1)
+/* The AI script's condition 0x1D (aidata.spt, the table at 0x1B1A48): GoReturn_HaveGoneTooFar asks for
+   it false. Whether the float at +0xA0 less four times the one the type's record +0x30 points at is
+   under the one at +0xA4. */
+uint32_t AIConditionWithinOriginRange(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0;
 	double f0 = 0;
@@ -152171,7 +152131,9 @@ uint32_t sub_000A7340(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000A7390(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* The AI script's condition 0x17: GoIdle_HaveReturned asks for it true. Whether the float at arg0+0xA0
+   less twice the one the type's record +0x30 points at is under arg2. */
+uint32_t AIConditionHasReturned(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t eax = 0, ecx = 0;
 	double f0 = 0;
@@ -152811,9 +152773,11 @@ uint32_t PositionsAreWithinDistance(uint32_t ebx, uint32_t arg0, uint32_t arg1, 
 	return eax;
 }
 
-/* Returns 1 when the distance between the positions of the two game objects (ObjectGetTargetHandle,
-   GameObjectGetVector), reduced by arg1's +0x30 value times 4, is not greater than arg0's +0x24, else 0. */
-uint32_t GameObjectIsWithinRange(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* The AI script's condition 0x11 (aidata.spt, the table at 0x1B1A48): GoAlerted and
+   GoAttacking_TargetInAttentionRadius ask for it true, GoPursue false. Returns 1 when the distance
+   between the positions of the two game objects (ObjectGetTargetHandle, GameObjectGetVector), reduced by
+   arg1's +0x30 value times 4, is not greater than arg0's +0x24, else 0. */
+uint32_t AIConditionTargetInAttentionRadius(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0;
@@ -152955,10 +152919,11 @@ uint32_t GameObjectIsWithinRange(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	return eax;
 }
 
-/* Returns 1 when the distance from arg0's +0xA8 point to the position of the object found by
-   ObjectGetTargetHandle (sub_0009C6E0, GameObjectGetVector, VectorDistance), reduced by arg1's +0x30
-   value times 4, is less than arg0's +0xA4, else 0. */
-uint32_t GameObjectIsWithinPointRange(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* The AI script's condition 0x16 (aidata.spt, the table at 0x1B1A48): GoAlert_TargetWithinActivityRange
+   asks for it true, GoReturn_HaveGoneTooFar false. Returns 1 when the distance from arg0's +0xA8 point
+   to the position of the object found by ObjectGetTargetHandle (sub_0009C6E0, GameObjectGetVector,
+   VectorDistance), reduced by arg1's +0x30 value times 4, is less than arg0's +0xA4, else 0. */
+uint32_t AIConditionTargetInActivityRange(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, esi_2 = 0, ignored = 0;
 	double f0 = 0;
@@ -158232,11 +158197,12 @@ uint32_t ObjectTryEnterStateTwo(uint32_t arg0)
 	return eax;
 }
 
-/* Validates the object and target, gets the target handle with ObjectGetTargetHandle, enters state 2
-   with ObjectStateEnterIfAllowed, and calls ObjectMoveTowardTargetIfBeyondTargetLimit with the object's
-   +0x28 value clamped down to the float at the target's +0xAC limit (or unclamped when that limit is
-   absent or zero). */
-uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x02 (aidata.spt, the table at 0x1B1BB8), the rules MoveWithinBattleRange and
+   MoveWithinRange_AttendActivityRad. Validates the object and target, gets the target handle with
+   ObjectGetTargetHandle, enters state 2 with ObjectStateEnterIfAllowed, and calls
+   ObjectMoveTowardTargetIfBeyondTargetLimit with the object's +0x28 value clamped down to the float at
+   the target's +0xAC limit (or unclamped when that limit is absent or zero). */
+uint32_t AIActionMoveWithinRange(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0;
@@ -158304,11 +158270,13 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 	return eax_2;
 }
 
-/* Unless bit 0 of +4 is set, takes the target of the AI arg0's object (ObjectGetTargetHandle), enters
-   state 2 (ObjectStateEnterIfAllowed) and moves toward it with
-   ObjectMoveTowardTargetIfBeyondTargetLimit, beyond a distance from the record at arg1+0xAC, or twice
-   the float the type's record +0x30 points at, or a quarter of +0x28. */
-uint32_t EntityAIApproachTarget(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x2B (aidata.spt, the table at 0x1B1BB8), the rules
+   MoveTowardsTarget_NotVisible and MoveTowardTarget_NotVisible_W_ActivityRng. Unless bit 0 of +4 is set,
+   takes the target of the AI arg0's object (ObjectGetTargetHandle), enters state 2
+   (ObjectStateEnterIfAllowed) and moves toward it with ObjectMoveTowardTargetIfBeyondTargetLimit, beyond
+   a distance from the record at arg1+0xAC, or twice the float the type's record +0x30 points at, or a
+   quarter of +0x28. */
+uint32_t AIActionMoveTowardsTarget(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -158390,9 +158358,10 @@ uint32_t EntityAIApproachTarget(uint32_t eax, uint32_t ebp, uint32_t arg0, uint3
 	return eax;
 }
 
-/* When the entity is alive (int16 at +0x1A4 > 1) and its field at +0x1CC is zero, sets the timed field
-   named by +0x1AC to 0x12C plus a vcRandom value mod 0x96 with EntitySetTimedField. */
-uint32_t EntitySetRandomTimedField(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x2A (aidata.spt, the table at 0x1B1BB8), the rule FindOverrideTarget. When the
+   entity is alive (int16 at +0x1A4 > 1) and its field at +0x1CC is zero, sets the timed field named by
+   +0x1AC to 0x12C plus a vcRandom value mod 0x96 with EntitySetTimedField. */
+uint32_t AIActionFindOverrideTarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, esi = 0;
 
@@ -158415,7 +158384,9 @@ uint32_t EntitySetRandomTimedField(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000AB140(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x29 (aidata.spt, the table at 0x1B1BB8), the rule DropTarget. Clears the
+   target at +0xBC where the entity's list at +0x1A4 holds more than one. */
+uint32_t AIActionDropTarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t ecx = 0;
 
@@ -158429,10 +158400,11 @@ uint32_t sub_000AB140(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-/* Resolves the target handle with ObjectGetTargetHandle, calls the entity's +0x2D4 callback, and when
+/* The AI script's action 0x04 (aidata.spt, the table at 0x1B1BB8), the rule FireOnTarget. Resolves the
+   target handle with ObjectGetTargetHandle, calls the entity's +0x2D4 callback, and when
    HandleIsValidTarget and EntityAssignTarget succeed, calls the +0x2D8 callback if
    EntityDifficultyChanceRoll passes. */
-uint32_t EntityOnTargetAcquired(uint32_t eax, uint32_t arg0, uint32_t arg1)
+uint32_t AIActionFireOnTarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, ebx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -158480,7 +158452,9 @@ uint32_t EntityOnTargetAcquired(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000AB1F0(uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x08 (aidata.spt, the table at 0x1B1BB8), the rule LookAround. Calls
+   EntityCreateAttachedObjectEnteringState. */
+uint32_t AIActionLookAround(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0;
 
@@ -158499,8 +158473,9 @@ uint32_t sub_000AB1F0(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-/* Calls VehicleCreateGameObjects for the entity only when its destroyed flag (bit 0 of +4) is clear. */
-uint32_t VehicleCreateGameObjectsIfNotDestroyed(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x1C (aidata.spt, the table at 0x1B1BB8), the rule FollowPath. Calls
+   VehicleCreateGameObjects for the entity only when its destroyed flag (bit 0 of +4) is clear. */
+uint32_t AIActionFollowPath(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, eax = 0;
 
@@ -158513,10 +158488,11 @@ uint32_t VehicleCreateGameObjectsIfNotDestroyed(uint32_t ebx, uint32_t esi, uint
 	return eax;
 }
 
-/* Copies the cached transform at +0xA8/+0xAC/+0xB0 back into the entity's +0x58/+0x5C/+0x60, clears flag
-   bit 0x10, calls EntityUpdateMovement with that transform, and sets bit 4 when the other object's +0xA0
-   is non-zero. */
-uint32_t EntityDetachFromParent(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x0C (aidata.spt, the table at 0x1B1BB8), the rule ReturnToOrigin. Copies the
+   cached transform at +0xA8/+0xAC/+0xB0 back into the entity's +0x58/+0x5C/+0x60, clears flag bit 0x10,
+   calls EntityUpdateMovement with that transform, and sets bit 4 when the other object's +0xA0 is
+   non-zero. */
+uint32_t AIActionReturnToOrigin(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -158845,10 +158821,11 @@ void ObjectValidateGameObjectHandle(uint32_t arg0, uint32_t arg1, uint32_t *p_eb
 	}
 }
 
-/* When sub_000A5D00 succeeds, either calls EntityCreateAttachedObjectIfStateAllowed with the entity's
-   +0xBC value and the controller (with a 1 or 0 last flag), or, for the +8 flag with no +0xA0 on the
-   target, calls EntityAttachToVisiblePathNode and EntityAttachToGameObject. */
-uint32_t EntityAttachToTarget(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x24 (aidata.spt, the table at 0x1B1BB8), the rule StrafeAttack. When
+   sub_000A5D00 succeeds, either calls EntityCreateAttachedObjectIfStateAllowed with the entity's +0xBC
+   value and the controller (with a 1 or 0 last flag), or, for the +8 flag with no +0xA0 on the target,
+   calls EntityAttachToVisiblePathNode and EntityAttachToGameObject. */
+uint32_t AIActionStrafeAttack(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t zero = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax_2 = 0, edi = 0, esi = 0;
@@ -158933,7 +158910,9 @@ uint32_t EntityMoveTowardTarget(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32
 	return eax;
 }
 
-uint32_t sub_000AB790(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x27 (aidata.spt, the table at 0x1B1BB8), the rule Go_PreviousState_Timer_15.
+   SlotTableSetValue and EntityClearFieldsAndStampTime. */
+uint32_t AIActionGoPreviousState(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, eax_2 = 0, esi = 0;
 
@@ -159052,10 +159031,11 @@ uint32_t NameTableClear(void)
 	return eax;
 }
 
-/* For entities with +0x98 at most 0x14A it enters state 0x10 with ObjectStateEnterIfAllowed and calls
+/* The AI script's action 0x2F (aidata.spt, the table at 0x1B1BB8), the rule TurnTowardsSound. For
+   entities with +0x98 at most 0x14A it enters state 0x10 with ObjectStateEnterIfAllowed and calls
    EntityUpdateAttachedObjectFlags, otherwise when sub_0002FB60 returns 0x10 it calls
    EntityAttachToGameObject and SteeringDestroy. */
-uint32_t EntityEnterAttachState(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
+uint32_t AIActionTurnTowardsSound(uint32_t eax, uint32_t ebx, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, edi = 0, esi = 0;
 
@@ -159240,9 +159220,10 @@ uint32_t EntityFindNearestTarget(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	return eax;
 }
 
-/* Attaches the given target entity to the entity and sets the entity's target to the object stored at
-   offset 0xC8 using GameObjectSetTarget with priority -1 or 1 based on flag bit 9. */
-uint32_t EntityAttachAndSetTargetFromStoredHandle(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x2D (aidata.spt, the table at 0x1B1BB8), the rule Flee_ReversePath. Attaches
+   the given target entity to the entity and sets the entity's target to the object stored at offset 0xC8
+   using GameObjectSetTarget with priority -1 or 1 based on flag bit 9. */
+uint32_t AIActionFleeReversePath(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, esi = 0;
 	uint32_t saved_eax = 0;
@@ -159274,11 +159255,12 @@ uint32_t EntityAttachAndSetTargetFromStoredHandle(uint32_t eax, uint32_t arg0, u
 	return eax_2;
 }
 
-/* For a live entity whose float at +0xB8 is between 0 and 50, enters state 0xF with
-   ObjectStateEnterIfAllowed, attaches it to the target's game object with EntityAttachToGameObject, then
-   calls EntityFollowPathToNearestEntity with 50.0f when bit 3 of its flags is set, otherwise
+/* The AI script's action 0x28 (aidata.spt, the table at 0x1B1BB8), the rule MaintainDist. For a live
+   entity whose float at +0xB8 is between 0 and 50, enters state 0xF with ObjectStateEnterIfAllowed,
+   attaches it to the target's game object with EntityAttachToGameObject, then calls
+   EntityFollowPathToNearestEntity with 50.0f when bit 3 of its flags is set, otherwise
    ObjectEnterStateAndCheckTarget. */
-uint32_t EntityAttachToTargetEnteringState(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
+uint32_t AIActionMaintainDist(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx = 0, edi = 0, esi = 0, ignored = 0;
 	double f0 = 0, t1 = 0, t2 = 0;
@@ -159327,7 +159309,10 @@ uint32_t EntityAttachToTargetEnteringState(uint32_t eax, uint32_t ebp, uint32_t 
 	return eax;
 }
 
-uint32_t sub_000ABB80(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x0D (aidata.spt, the table at 0x1B1BB8), the rules GoIdle_NoTarget,
+   GoIdle_TimedOut and GoIdle_HaveReturned. Enters AI state 1, Idle (SlotTableSetValue), with the target
+   at +0xBC cleared, and EntityClearFieldsAndStampTime. */
+uint32_t AIActionGoIdle(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
 
@@ -159344,7 +159329,10 @@ uint32_t sub_000ABB80(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABBB0(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x0E (aidata.spt, the table at 0x1B1BB8), the rules GoAlerted and
+   GoAlert_TargetWithinActivityRange. Enters AI state 2, Alert (SlotTableSetValue), unless
+   EntityGetStateCategory says it is there. */
+uint32_t AIActionGoAlert(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
 
@@ -159363,7 +159351,9 @@ uint32_t sub_000ABBB0(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABBE0(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* The AI script's action 0x0F (aidata.spt, the table at 0x1B1BB8), the GoAttacking rules. Enters AI
+   state 3, Attack (SlotTableSetValue), and EntityClearFieldsAndStampTime with +0x98 kept. */
+uint32_t AIActionGoAttack(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, edi = 0, esi = 0;
 
@@ -159385,7 +159375,9 @@ uint32_t sub_000ABBE0(uint32_t eax, uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-uint32_t sub_000ABC20(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x10 (aidata.spt, the table at 0x1B1BB8), the rule GoPursue. Enters AI state 8,
+   Pursue (SlotTableSetValue), and EntityClearFieldsAndStampTime. */
+uint32_t AIActionGoPursue(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
 
@@ -159405,7 +159397,9 @@ uint32_t sub_000ABC20(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABC50(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x11 (aidata.spt, the table at 0x1B1BB8), the rule GoSearch_TargetOutOfRange.
+   Enters AI state 9, Search (SlotTableSetValue), and EntityClearFieldsAndStampTime. */
+uint32_t AIActionGoSearch(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
 
@@ -159425,7 +159419,10 @@ uint32_t sub_000ABC50(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABC80(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x12 (aidata.spt, the table at 0x1B1BB8), the rules GoReturn_NoTarget and
+   GoReturn_HaveGoneTooFar. Enters AI state 7, Return (SlotTableSetValue), with the target at +0xBC
+   cleared, and EntityClearFieldsAndStampTime. */
+uint32_t AIActionGoReturn(uint32_t eax, uint32_t arg0)
 {
 	uint32_t arg0_2 = 0, arg1 = 0, esi = 0;
 
@@ -159645,13 +159642,14 @@ uint32_t ObjectModeActionBySpawnOrDistance(uint32_t eax, uint32_t ebx, uint32_t 
 	return eax;
 }
 
-/* Reads the object's target handle with ObjectGetTargetHandle, bails out if the object's flags at +4
-   have bit 1 or 0x20000 set, enters state 6 with ObjectStateEnterIfAllowed, then by the integer float
-   argument spawns at the target offset (ObjectSpawnAtTargetOffset), at a random target offset
+/* The AI script's action 0x20 (aidata.spt, the table at 0x1B1BB8), the rule FollowMovementPattern. Reads
+   the object's target handle with ObjectGetTargetHandle, bails out if the object's flags at +4 have bit
+   1 or 0x20000 set, enters state 6 with ObjectStateEnterIfAllowed, then by the integer float argument
+   spawns at the target offset (ObjectSpawnAtTargetOffset), at a random target offset
    (ObjectSpawnAtRandomTargetOffsetIfNotFlagged), or, for a type-2 object, applies
    ObjectTargetMovementPatternFigure1Apply or ObjectTargetMovementPatternFigure2Apply depending on
    whether the object's self dot product (Vector3DotProduct) is above 5625.0 or 22500.0. */
-uint32_t ObjectTargetMovementPatternExecute(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+uint32_t AIActionFollowMovementPattern(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
@@ -159834,7 +159832,7 @@ uint32_t SteeringFamilyRegister(void)
 	GameObjectFamily_shutdown(SteeringFamily_VA) = 0u;
 	GameObjectFamily_version(SteeringFamily_VA) = 0u;
 	GameObjectFamily_type_count(SteeringFamily_VA) = 0x11u;
-	SteeringFamilyInitConfig(arg0);
+	LevelBoundsSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInitState(arg0);
 	arg0 = SteeringFamily_VA;
@@ -159844,23 +159842,23 @@ uint32_t SteeringFamilyRegister(void)
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyRegisterMessageHandler(arg0);
 	arg0 = SteeringFamily_VA;
-	SteeringFamilyRegisterHandlerTable(arg0);
+	StrafeAttackSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
-	SteeringFamilySetBehaviorHandler(arg0);
+	LookAroundSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilySetInputHandler(arg0);
 	arg0 = SteeringFamily_VA;
-	SteeringFamilySetHandler(arg0);
+	MaintainDistSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInstallTetherEventDispatch(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInstallEventHandler(arg0);
 	arg0 = SteeringFamily_VA;
-	SteeringFamilyInstallEventTable(arg0);
+	TurnToTargetSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInitCallbacks(arg0);
 	arg0 = SteeringFamily_VA;
-	SteeringFamilyAttachDescriptor(arg0);
+	FollowPathSteering_Register(arg0);
 	arg0 = SteeringFamily_VA;
 	SteeringFamilyInstallEventDispatch(arg0);
 	arg0 = SteeringFamily_VA;
@@ -160389,10 +160387,9 @@ void NodeFamilyInitObject(uint32_t eax, uint32_t esi, uint32_t edi)
 	MEM32(esi + 0xC8u) = 1u;
 }
 
-/* A node type's messages: on 0xFFF9 NodeFamilyInitObject, on 0x2AF8 hands the message to its children
-   (GameObjectSendMessageToChildren), on 0x2AFB answers its vcObject at +0xD4, on 0xFFFA
-   GameObjectDetachAndDestroyChildren and vcObjectRelease of +0xD4. */
-uint32_t NodeVcObjectHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The SkyNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SkyNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -160456,9 +160453,8 @@ uint32_t NodeVcObjectHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	return eax;
 }
 
-/* Resolves the handle returned by GameObjectNodeLoad with GameObjectFromHandle, then loads the family's
-   fields at +0xD0/+0xD4/+0xD8/+0xDC/+0xE0/+0xE4 using vcFileReadU32 and vcObjectLoad. */
-uint32_t NodeFamilyLoadFromFile(uint32_t ebx, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the SkyNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t SkyNode_Load(uint32_t ebx, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp = 0, ebx_2 = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -160516,19 +160512,19 @@ uint32_t NodeFamilyLoadFromFile(uint32_t ebx, uint32_t esi, uint32_t arg0, uint3
 	return eax;
 }
 
-/* fills the type record at 0x20FA28 with NodeFamily's method pointers (sub_000ACB60,
-   NodeFamilyLoadFromFile, GameObjectCollectAttachedObject) and stores it at arg0+0x44. */
-void NodeFamilySetType(uint32_t arg0)
+/* Registers the SkyNode type (Node 13), the levels' sky_m..., star field, sun_m, space_nebula, clouds:
+   fills its GameObjectType and stores it in its family. */
+void SkyNode_Register(uint32_t arg0)
 {
-	MEM32(0x20FA28u) = 0xE8u;
-	MEM32(0x20FA2Cu) = 0x59010u;
-	MEM32(0x20FA30u) = 0x59010u;
-	MEM32(0x20FA34u) = 0xACB60u;
-	MEM32(0x20FA38u) = 0xACC40u;
-	MEM32(0x20FA40u) = 0xA3720u;
-	MEM32(0x20FA44u) = 2u;
-	MEM32(0x20FA48u) = 0u;
-	MEM32(arg0 + 0x44u) = 0x20FA28u;
+	GameObjectType_size(SkyNodeType_VA) = 0xE8u;
+	GameObjectType_startup(SkyNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(SkyNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(SkyNodeType_VA) = 0xACB60u;
+	GameObjectType_load(SkyNodeType_VA) = 0xACC40u;
+	GameObjectType_collect(SkyNodeType_VA) = 0xA3720u;
+	GameObjectType_version(SkyNodeType_VA) = 2u;
+	GameObjectType_flags(SkyNodeType_VA) = 0u;
+	MEM32(arg0 + 0x44u) = SkyNodeType_VA;
 }
 
 /* resolves the game object from its handle with GameObjectFromHandle and draws the node by its +0xD0
@@ -160984,11 +160980,9 @@ void NodeFamilyUpdateFriendlyReticle(uint32_t eax, uint32_t ebx, uint32_t ebp, u
 	}
 }
 
-/* On a 0x7FFF event it dispatches on the event code at arg3[0], calling GameObjectResetState for 0xFFF9,
-   GameObjectDrawIndexedLineList for 0x2AF8, GameObjectSaveTransformToGlobals for 0x2AF9,
-   NodeFamilyUpdateFriendlyReticle for 0x2AFA and clearing the 0x20FAB4/0x20FAB8 handle on 0xFFFA,
-   returning 1 when handled. */
-uint32_t GameObjectDispatchEventMessage(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The CameraNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t CameraNode_StateMachine(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -161093,10 +161087,8 @@ uint32_t GameObjectDispatchEventMessage(uint32_t ebp, uint32_t edi, uint32_t arg
 	return eax;
 }
 
-/* Reads a node handle from the file via GameObjectNodeLoad, resolves it with GameObjectFromHandle, reads
-   the node's fields at 0xD4, 0xE0 and 0xE4, then calls GameObjectLoad and
-   GameObjectSendMessageWithParams. */
-uint32_t NodeFamilyLoadNode(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the CameraNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t CameraNode_Load(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3_2 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_ebx = 0, saved_arg3 = 0;
@@ -161154,19 +161146,19 @@ uint32_t NodeFamilyLoadNode(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t 
 	return eax;
 }
 
-/* Fills the type descriptor at 0x20FA70 (size 0xE8 and function pointers) and stores it in the object's
-   +0x30 slot. */
-void NodeFamilyInstallTypeDescriptor(uint32_t arg0)
+/* Registers the CameraNode type (Node 8), the levels' "camera shot" and "new camera": fills its
+   GameObjectType and stores it in its family. */
+void CameraNode_Register(uint32_t arg0)
 {
-	MEM32(0x20FA70u) = 0xE8u;
-	MEM32(0x20FA74u) = 0x59010u;
-	MEM32(0x20FA78u) = 0x59010u;
-	MEM32(0x20FA7Cu) = 0xAD270u;
-	MEM32(0x20FA80u) = 0xAD3D0u;
-	MEM32(0x20FA88u) = 0x385E0u;
-	MEM32(0x20FA8Cu) = 2u;
-	MEM32(0x20FA90u) = 0u;
-	MEM32(arg0 + 0x30u) = 0x20FA70u;
+	GameObjectType_size(CameraNodeType_VA) = 0xE8u;
+	GameObjectType_startup(CameraNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(CameraNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(CameraNodeType_VA) = 0xAD270u;
+	GameObjectType_load(CameraNodeType_VA) = 0xAD3D0u;
+	GameObjectType_collect(CameraNodeType_VA) = 0x385E0u;
+	GameObjectType_version(CameraNodeType_VA) = 2u;
+	GameObjectType_flags(CameraNodeType_VA) = 0u;
+	MEM32(arg0 + 0x30u) = CameraNodeType_VA;
 }
 
 /* Builds the global transform at 0x24EC00 from the object's +0x7C position and +0x88 orientation,
@@ -164834,10 +164826,9 @@ void MenuHandleInput(uint32_t arg1, uint32_t arg2, uint32_t arg4)
 	}
 }
 
-/* Handles the versus screen's messages: on 0xFFF9 builds it with VersusHudBuild, on 0xFFFA calls
-   GameObjectDestroyStoredChildren, on 0x32CA sub_000AF1B0 and on 0x32CB MenuHandleInput, returning 1
-   when handled and 0 otherwise. */
-uint32_t VersusHudHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The VersusSetupScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t VersusSetupScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg4_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -164902,19 +164893,20 @@ uint32_t VersusHudHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32
 	return eax;
 }
 
-/* Fills the handler table at 0x20FAC0 (id 0x194, two 0x59010 entries, handler VersusHudHandleMessage)
-   and points arg0+0x9C at it. */
-void VersusHudScreenRegister(uint32_t arg0)
+/* Registers the VersusSetupScreen type (Screen 35), its texts "Versus Setup", Sniper Mode, Auto
+   Targeting, Reduced Visibility, Number of Rounds (3, 5, 7), On and Off: fills its GameObjectType and
+   stores it in its family. */
+void VersusSetupScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20FAD0u) = 0u;
-	MEM32(0x20FAD8u) = 0u;
-	MEM32(0x20FADCu) = 0u;
-	MEM32(0x20FAE0u) = 0u;
-	MEM32(0x20FAC0u) = 0x194u;
-	MEM32(0x20FAC4u) = 0x59010u;
-	MEM32(0x20FAC8u) = 0x59010u;
-	MEM32(0x20FACCu) = 0xAFE50u;
-	MEM32(arg0 + 0x9Cu) = 0x20FAC0u;
+	GameObjectType_load(VersusSetupScreenType_VA) = 0u;
+	GameObjectType_collect(VersusSetupScreenType_VA) = 0u;
+	GameObjectType_version(VersusSetupScreenType_VA) = 0u;
+	GameObjectType_flags(VersusSetupScreenType_VA) = 0u;
+	GameObjectType_size(VersusSetupScreenType_VA) = 0x194u;
+	GameObjectType_startup(VersusSetupScreenType_VA) = 0x59010u;
+	GameObjectType_shutdown(VersusSetupScreenType_VA) = 0x59010u;
+	GameObjectType_state_machine(VersusSetupScreenType_VA) = 0xAFE50u;
+	MEM32(arg0 + 0x9Cu) = VersusSetupScreenType_VA;
 }
 
 /* Creates a screen widget (ScreenElementInit, GameObjectCreate, ScreenElementSetBounds) whose text is
@@ -165400,11 +165392,9 @@ void DifficultyScreenUpdate(uint32_t eax, uint32_t esi)
 	}
 }
 
-/* Handles the difficulty screen's messages: on 0xFFF9 calls DifficultyScreenCreate, on 0xFFFA clears the
-   pad with GameObjectClearPadAndDestroyChildren and destroys the object at +0x124 with
-   GameObjectDestroy, on 0x32CA sends a message to that object and calls
-   GameObjectSendMessageToVisibleChildrenAndGlobal, and on 0x32CB calls DifficultyScreenUpdate. */
-uint32_t DifficultyScreenHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The DifficultyScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t DifficultyScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -165486,19 +165476,19 @@ uint32_t DifficultyScreenHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t esi,
 	return eax;
 }
 
-/* Fills the handler table at 0x20FB50 (id 0x130, two 0x59010 entries, handler
-   DifficultyScreenHandleMessage) and points arg0+0x98 at it. */
-void DifficultyScreenRegister(uint32_t arg0)
+/* Registers the DifficultyScreen type (Screen 34), DifficultyScreenCreate and DifficultyScreenUpdate:
+   fills its GameObjectType and stores it in its family. */
+void DifficultyScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20FB60u) = 0u;
-	MEM32(0x20FB68u) = 0u;
-	MEM32(0x20FB6Cu) = 0u;
-	MEM32(0x20FB70u) = 0u;
-	MEM32(0x20FB50u) = 0x130u;
-	MEM32(0x20FB54u) = 0x59010u;
-	MEM32(0x20FB58u) = 0x59010u;
-	MEM32(0x20FB5Cu) = 0xB0720u;
-	MEM32(arg0 + 0x98u) = 0x20FB50u;
+	GameObjectType_load(DifficultyScreenType_VA) = 0u;
+	GameObjectType_collect(DifficultyScreenType_VA) = 0u;
+	GameObjectType_version(DifficultyScreenType_VA) = 0u;
+	GameObjectType_flags(DifficultyScreenType_VA) = 0u;
+	GameObjectType_size(DifficultyScreenType_VA) = 0x130u;
+	GameObjectType_startup(DifficultyScreenType_VA) = 0x59010u;
+	GameObjectType_shutdown(DifficultyScreenType_VA) = 0x59010u;
+	GameObjectType_state_machine(DifficultyScreenType_VA) = 0xB0720u;
+	MEM32(arg0 + 0x98u) = DifficultyScreenType_VA;
 }
 
 /* Returns the closed flag at +0x128 of the game object for the given handle (via GameObjectFromHandle,
@@ -166806,10 +166796,9 @@ void HudPlayerTextHandleInput(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	sub_000B0910(eax_2, esi, edi, arg2_2);
 }
 
-/* Handles 0x7FFF screen messages by dispatching on the message id, calling HudCreatePlayerTextElements
-   for 0xFFF9, GameObjectDestroyChildObjects for 0xFFFA, GameObjectSendMessageToVisibleChildrenAndGlobal
-   for 0x32CA, and HudPlayerTextHandleInput for 0x32CB. */
-uint32_t HudPlayerTextHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The SubtitlesScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SubtitlesScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0;
 
@@ -166874,9 +166863,8 @@ uint32_t HudPlayerTextHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, ui
 	return eax;
 }
 
-/* Creates the ScreenFamily handler object by calling ObjectCreateFromDefinition with 0x18F9CC and
-   storing the result at 0x20FBDC. */
-uint32_t ScreenFamilyHandlerCreate(void)
+/* The SubtitlesScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t SubtitlesScreen_Startup(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 
@@ -166886,8 +166874,8 @@ uint32_t ScreenFamilyHandlerCreate(void)
 	return eax;
 }
 
-/* Releases the ScreenFamily handler object at 0x20FBDC via vcObjectRelease. */
-uint32_t ScreenFamilyHandlerDestroy(void)
+/* The SubtitlesScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t SubtitlesScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -166903,20 +166891,19 @@ uint32_t ScreenFamilyHandlerDestroy(void)
 	return eax;
 }
 
-/* Initializes the ScreenFamily handler table at 0x20FB98 with size 0x154 and pointers to
-   ScreenFamilyHandlerCreate, ScreenFamilyHandlerDestroy, and ScreenFamilyHandleMessage, then stores it
-   at arg0+0x90. */
-void ScreenFamilySetHandler(uint32_t arg0)
+/* Registers the SubtitlesScreen type (Screen 32), its texts Subtitles, On and Off, a player: fills its
+   GameObjectType and stores it in its family. */
+void SubtitlesScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20FBA8u) = 0u;
-	MEM32(0x20FBB0u) = 0u;
-	MEM32(0x20FBB4u) = 0u;
-	MEM32(0x20FBB8u) = 0u;
-	MEM32(0x20FB98u) = 0x154u;
-	MEM32(0x20FB9Cu) = 0xB1AB0u;
-	MEM32(0x20FBA0u) = 0xB1AD0u;
-	MEM32(0x20FBA4u) = 0xB19E0u;
-	MEM32(arg0 + 0x90u) = 0x20FB98u;
+	GameObjectType_load(SubtitlesScreenType_VA) = 0u;
+	GameObjectType_collect(SubtitlesScreenType_VA) = 0u;
+	GameObjectType_version(SubtitlesScreenType_VA) = 0u;
+	GameObjectType_flags(SubtitlesScreenType_VA) = 0u;
+	GameObjectType_size(SubtitlesScreenType_VA) = 0x154u;
+	GameObjectType_startup(SubtitlesScreenType_VA) = 0xB1AB0u;
+	GameObjectType_shutdown(SubtitlesScreenType_VA) = 0xB1AD0u;
+	GameObjectType_state_machine(SubtitlesScreenType_VA) = 0xB19E0u;
+	MEM32(arg0 + 0x90u) = SubtitlesScreenType_VA;
 }
 
 /* Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is
@@ -168453,9 +168440,9 @@ void MenuProcessPadInput(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	SoundVolumeAdjust(eax_2, esi, edi, arg0, arg1_2, arg2_2);
 }
 
-/* Handles 0x7FFF screen messages by dispatching on the message id, calling SoundOptionsCreate for
-   0xFFF9, SoundOptionsDestroy for 0xFFFA, VolumeBarsDraw for 0x32CA, and MenuProcessPadInput for 0x32CB. */
-uint32_t SoundOptionsHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The SoundSettingsScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SoundSettingsScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, edx = 0, esi = 0;
 
@@ -168516,10 +168503,8 @@ uint32_t SoundOptionsHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uin
 	return eax;
 }
 
-/* Creates a UI object from a definition with ObjectCreateFromDefinition, fetches several objects with
-   vcObjectGet, sets their rects via vcRectSet, and stores them in globals while calling
-   UiElementSetBoundsFromObject. */
-uint32_t SoundOptionsCreateElements(uint32_t esi, uint32_t edi)
+/* The SoundSettingsScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t SoundSettingsScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -168679,9 +168664,9 @@ uint32_t SoundOptionsCreateElements(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the VcObject at each of the fixed addresses 0x20FCE4, 0x20FCA8, 0x20FC6C and 0x20FC30 with
-   VcObjectReleaseField, then calls vcObjectRelease on the object held at 0x20FC2C. */
-uint32_t VcObjectsReleaseAll(void)
+/* The SoundSettingsScreen type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t SoundSettingsScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -168703,20 +168688,19 @@ uint32_t VcObjectsReleaseAll(void)
 	return eax;
 }
 
-/* Clears the screen family state at 0x20FBF8..0x20FC08 and installs the callback table at arg0+0x94
-   holding size 0x150 and the create (SoundOptionsCreateElements), destroy (VcObjectsReleaseAll) and
-   message (SoundOptionsHandleMessage) entries. */
-void ScreenFamilyRegisterCallbacks(uint32_t arg0)
+/* Registers the SoundSettingsScreen type (Screen 33), the settings' SOUND: its texts Music Volume and
+   SFX Volume, its volume bars: fills its GameObjectType and stores it in its family. */
+void SoundSettingsScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20FBF8u) = 0u;
-	MEM32(0x20FC00u) = 0u;
-	MEM32(0x20FC04u) = 0u;
-	MEM32(0x20FC08u) = 0u;
-	MEM32(0x20FBE8u) = 0x150u;
-	MEM32(0x20FBECu) = 0xB34B0u;
-	MEM32(0x20FBF0u) = 0xB35E0u;
-	MEM32(0x20FBF4u) = 0xB33D0u;
-	MEM32(arg0 + 0x94u) = 0x20FBE8u;
+	GameObjectType_load(SoundSettingsScreenType_VA) = 0u;
+	GameObjectType_collect(SoundSettingsScreenType_VA) = 0u;
+	GameObjectType_version(SoundSettingsScreenType_VA) = 0u;
+	GameObjectType_flags(SoundSettingsScreenType_VA) = 0u;
+	GameObjectType_size(SoundSettingsScreenType_VA) = 0x150u;
+	GameObjectType_startup(SoundSettingsScreenType_VA) = 0xB34B0u;
+	GameObjectType_shutdown(SoundSettingsScreenType_VA) = 0xB35E0u;
+	GameObjectType_state_machine(SoundSettingsScreenType_VA) = 0xB33D0u;
+	MEM32(arg0 + 0x94u) = SoundSettingsScreenType_VA;
 }
 
 /* Resolves the handle arg0 with GameObjectFromHandle, or uses GameObjectLastObject when arg0 is
@@ -170928,11 +170912,9 @@ void MenuProcessInput(uint32_t eax, uint32_t arg1, uint32_t arg2)
 	MenuMiddleOptionLeftRightSet(eax_2, esi, edi, arg0, arg1_2, arg2_2);
 }
 
-/* Handles the screen family object message whose id is the first field of arg3 when the type in arg2 is
-   0x7FFF: 0xFFF9 calls GameObjectCreateTextLabels, 0x32CA calls
-   GameObjectSendMessageToVisibleChildrenAndGlobal, 0x32CB calls MenuProcessInput and 0xFFFA calls
-   EntityDestroyChildObjects, returning 1 when handled and 0 when the type is not 0x7FFF. */
-uint32_t ScreenFamilyHandleObjectMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The ControlSetupScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ControlSetupScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0;
 
@@ -170996,8 +170978,8 @@ uint32_t ScreenFamilyHandleObjectMessage(uint32_t ebx, uint32_t ebp, uint32_t ed
 	return eax;
 }
 
-/* Creates an object of type 0x18F9CC via ObjectCreateFromDefinition and stores it at 0x20FD74. */
-uint32_t ScreenFamilyCreateInstance(void)
+/* The ControlSetupScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ControlSetupScreen_Startup(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 
@@ -171007,8 +170989,8 @@ uint32_t ScreenFamilyCreateInstance(void)
 	return eax;
 }
 
-/* Releases the object at 0x20FD74 with vcObjectRelease. */
-uint32_t ScreenFamilyReleaseInstance(void)
+/* The ControlSetupScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t ControlSetupScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -171024,20 +171006,20 @@ uint32_t ScreenFamilyReleaseInstance(void)
 	return eax;
 }
 
-/* Fills the screen family descriptor at 0x20FD30 (leading value 0x16C and callbacks 0xB5260, 0xB5280,
-   0xB5190), clears its remaining fields and stores the descriptor address at arg0+0x8C for the screen
-   family registered by the caller. */
-void MedalsScreenSetFamily(uint32_t arg0)
+/* Registers the ControlSetupScreen type (Screen 31), the settings' CONTROL SETUP: its texts Vibration,
+   Sniper, Movement, Invert, Default, On and Off, a player: fills its GameObjectType and stores it in its
+   family. */
+void ControlSetupScreen_Register(uint32_t arg0)
 {
-	MEM32(0x20FD40u) = 0u;
-	MEM32(0x20FD48u) = 0u;
-	MEM32(0x20FD4Cu) = 0u;
-	MEM32(0x20FD50u) = 0u;
-	MEM32(0x20FD30u) = 0x16Cu;
-	MEM32(0x20FD34u) = 0xB5260u;
-	MEM32(0x20FD38u) = 0xB5280u;
-	MEM32(0x20FD3Cu) = 0xB5190u;
-	MEM32(arg0 + 0x8Cu) = 0x20FD30u;
+	GameObjectType_load(ControlSetupScreenType_VA) = 0u;
+	GameObjectType_collect(ControlSetupScreenType_VA) = 0u;
+	GameObjectType_version(ControlSetupScreenType_VA) = 0u;
+	GameObjectType_flags(ControlSetupScreenType_VA) = 0u;
+	GameObjectType_size(ControlSetupScreenType_VA) = 0x16Cu;
+	GameObjectType_startup(ControlSetupScreenType_VA) = 0xB5260u;
+	GameObjectType_shutdown(ControlSetupScreenType_VA) = 0xB5280u;
+	GameObjectType_state_machine(ControlSetupScreenType_VA) = 0xB5190u;
+	MEM32(arg0 + 0x8Cu) = ControlSetupScreenType_VA;
 }
 
 uint32_t sub_000B52E0(uint32_t arg0)
@@ -175679,11 +175661,9 @@ void ScreenFamilyDialogHandleInput(uint32_t esi, uint32_t arg1)
 	ScreenElementSetStateTextId(ecx);
 }
 
-/* Handles a 0x7FFF screen message by its code in the object at arg3, dispatching to
-   GameObjectSendMessageToVisibleChildren, GameObjectBroadcastToVisibleChildren,
-   GameObjectSendMessageToVisibleChildrenAndGlobal, ScreenFamilyDialogHandleInput,
-   GameObjectClearPadAndDestroyChildren, or ScreenFamilyDialogCreate to build the family dialog. */
-uint32_t ScreenFamilyDialogHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The VideoModeDialogScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t VideoModeDialogScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0;
 
@@ -175760,20 +175740,19 @@ uint32_t ScreenFamilyDialogHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t ed
 	return eax;
 }
 
-/* Called by ScreenFamilyRegisterAll, it fills the static descriptor at 0x219A18 with 0x13C and the code
-   pointers 0x59010 and 0xB8B10, clears the four globals after it, and stores the descriptor's address in
-   ScreenFamily_VA+0x74. */
-void ScreenFamilyInstallClassDescriptor(uint32_t arg0)
+/* Registers the VideoModeDialogScreen type (Screen 25), its texts "Switch back to NTSC?" and "Video Mode
+   switched. Do you wish to keep this setting?": fills its GameObjectType and stores it in its family. */
+void VideoModeDialogScreen_Register(uint32_t arg0)
 {
-	MEM32(0x219A28u) = 0u;
-	MEM32(0x219A30u) = 0u;
-	MEM32(0x219A34u) = 0u;
-	MEM32(0x219A38u) = 0u;
-	MEM32(0x219A18u) = 0x13Cu;
-	MEM32(0x219A1Cu) = 0x59010u;
-	MEM32(0x219A20u) = 0x59010u;
-	MEM32(0x219A24u) = 0xB8B10u;
-	MEM32(arg0 + 0x74u) = 0x219A18u;
+	GameObjectType_load(VideoModeDialogScreenType_VA) = 0u;
+	GameObjectType_collect(VideoModeDialogScreenType_VA) = 0u;
+	GameObjectType_version(VideoModeDialogScreenType_VA) = 0u;
+	GameObjectType_flags(VideoModeDialogScreenType_VA) = 0u;
+	GameObjectType_size(VideoModeDialogScreenType_VA) = 0x13Cu;
+	GameObjectType_startup(VideoModeDialogScreenType_VA) = 0x59010u;
+	GameObjectType_shutdown(VideoModeDialogScreenType_VA) = 0x59010u;
+	GameObjectType_state_machine(VideoModeDialogScreenType_VA) = 0xB8B10u;
+	MEM32(arg0 + 0x74u) = VideoModeDialogScreenType_VA;
 }
 
 /* Initializes a screen element with ScreenElementInit, sets scrollbar flags, creates a GameObject with
@@ -176156,10 +176135,9 @@ void MissionMenuScrollBarHandleInput(uint32_t ecx, uint32_t ebx, uint32_t ebp, u
 	}
 }
 
-/* Handles a mission-menu GUI message read from arg3: for code 0x32CA it calls MissionMenuScrollBarDraw,
-   for 0x32CB it calls MissionMenuScrollBarHandleInput, and for 0xFFFA it destroys the GameObject at
-   arg1+0x148 with GameObjectDestroy. */
-uint32_t MissionMenuHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The ChapterSwitchScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ChapterSwitchScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -176229,10 +176207,8 @@ uint32_t MissionMenuHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint
 	return eax;
 }
 
-/* Builds the mission menu's TGA text UI elements with vcObjectGet(GUIMissionMenuTgaText_VA) and
-   vcRectSet, gives them bounds with UiElementSetBoundsFromObject, and returns the array made by
-   ObjectCloneArrayCreate. */
-uint32_t MissionMenuTgaTextCreate(uint32_t esi, uint32_t edi)
+/* The ChapterSwitchScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ChapterSwitchScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -176500,9 +176476,9 @@ uint32_t MissionMenuTgaTextCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the GUI objects created for the mission menu with VcObjectReleaseField and releases the
-   object list with VcObjectListRelease. */
-uint32_t GUIMissionMenuDestroy(void)
+/* The ChapterSwitchScreen type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t ChapterSwitchScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -176527,19 +176503,20 @@ uint32_t GUIMissionMenuDestroy(void)
 	return eax;
 }
 
-/* Installs the mission menu screen family by filling the descriptor at 0x219A60 (size 0x15C,
-   create/destroy/message callbacks 0xB93A0/0xB9570/0xB92C0) and storing it at arg0+0x70. */
-void MissionMenuScreenFamilyInstall(uint32_t arg0)
+/* Registers the ChapterSwitchScreen type (Screen 24), its sound chapterswitch.wav and its texture
+   GUI_xbox_buttons.tga: it reads the pad's left and right triggers, made by the level select: fills its
+   GameObjectType and stores it in its family. */
+void ChapterSwitchScreen_Register(uint32_t arg0)
 {
-	MEM32(0x219A70u) = 0u;
-	MEM32(0x219A78u) = 0u;
-	MEM32(0x219A80u) = 0u;
-	MEM32(0x219A60u) = 0x15Cu;
-	MEM32(0x219A64u) = 0xB93A0u;
-	MEM32(0x219A68u) = 0xB9570u;
-	MEM32(0x219A6Cu) = 0xB92C0u;
-	MEM32(0x219A7Cu) = 1u;
-	MEM32(arg0 + 0x70u) = 0x219A60u;
+	GameObjectType_load(ChapterSwitchScreenType_VA) = 0u;
+	GameObjectType_collect(ChapterSwitchScreenType_VA) = 0u;
+	GameObjectType_flags(ChapterSwitchScreenType_VA) = 0u;
+	GameObjectType_size(ChapterSwitchScreenType_VA) = 0x15Cu;
+	GameObjectType_startup(ChapterSwitchScreenType_VA) = 0xB93A0u;
+	GameObjectType_shutdown(ChapterSwitchScreenType_VA) = 0xB9570u;
+	GameObjectType_state_machine(ChapterSwitchScreenType_VA) = 0xB92C0u;
+	GameObjectType_version(ChapterSwitchScreenType_VA) = 1u;
+	MEM32(arg0 + 0x70u) = ChapterSwitchScreenType_VA;
 }
 
 uint32_t sub_000B9620(uint32_t arg0)
@@ -177033,7 +177010,7 @@ void ScreenCreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp,
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 4u;
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = 0x1B27F8u;
+				MEM32(g_esp) = SettingsMenuTexts_VA;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = ecx;
 			}
@@ -177043,7 +177020,7 @@ void ScreenCreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp,
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = 3u;
 				g_esp = g_esp - 4u;
-				MEM32(g_esp) = 0x1B27F8u;
+				MEM32(g_esp) = SettingsMenuTexts_VA;
 				g_esp = g_esp - 4u;
 				MEM32(g_esp) = eax_2;
 			}
@@ -177054,7 +177031,7 @@ void ScreenCreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t ebp,
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = 4u;
 			g_esp = g_esp - 4u;
-			MEM32(g_esp) = 0x1B2808u;
+			MEM32(g_esp) = SettingsMissionMenuTexts_VA;
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = edx_2;
 		}
@@ -177606,10 +177583,9 @@ void ScreenFamily_Update(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi,
 	}
 }
 
-/* Handles the message read from arg3 for the screen family: 0x32CA goes to EntitySendMessageToPart,
-   0x32CB to ScreenFamily_Update, 0xFFF9 to ScreenCreateWidgets, 0xFFFA destroys the widgets, returning 1
-   when the message was handled and 0 otherwise. */
-uint32_t ScreenFamilyProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The SettingsScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SettingsScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -177671,9 +177647,8 @@ uint32_t ScreenFamilyProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, u
 	return eax;
 }
 
-/* Loads the menu confirm, cancel and cursor sounds with ObjectCreateFromDefinition and stores them in
-   0x219D1C, 0x219D18 and 0x219D14. */
-uint32_t ScreenFamily_LoadSounds(void)
+/* The SettingsScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t SettingsScreen_Startup(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 
@@ -177689,9 +177664,8 @@ uint32_t ScreenFamily_LoadSounds(void)
 	return eax;
 }
 
-/* Releases the menu confirm, cancel and cursor sound objects at 0x219D1C, 0x219D18 and 0x219D14 with
-   vcObjectRelease. */
-uint32_t ScreenFamily_FreeSounds(void)
+/* The SettingsScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t SettingsScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -177717,20 +177691,20 @@ uint32_t ScreenFamily_FreeSounds(void)
 	return eax;
 }
 
-/* Points the ScreenFamily at arg0+0x6C to the class descriptor 0x219CD0 holding size 0x168 and the
-   ScreenFamily load/free/message functions 0xBA270, 0xBA2B0 and 0xBA190, and clears the state fields
-   0x219CE0/0x219CE8/0x219CEC/0x219CF0. */
-void ScreenFamily_Init(uint32_t arg0)
+/* Registers the SettingsScreen type (Screen 23), its title "Settings" and the list CONTROL SETUP, SOUND,
+   VIDEO, DIFFICULTY (0x1B27F8; CONTROL SETUP, SOUND in a mission, 0x1B2808): it makes those screens,
+   from OPTIONS and from the pause: fills its GameObjectType and stores it in its family. */
+void SettingsScreen_Register(uint32_t arg0)
 {
-	MEM32(0x219CE0u) = 0u;
-	MEM32(0x219CE8u) = 0u;
-	MEM32(0x219CECu) = 0u;
-	MEM32(0x219CF0u) = 0u;
-	MEM32(0x219CD0u) = 0x168u;
-	MEM32(0x219CD4u) = 0xBA270u;
-	MEM32(0x219CD8u) = 0xBA2B0u;
-	MEM32(0x219CDCu) = 0xBA190u;
-	MEM32(arg0 + 0x6Cu) = 0x219CD0u;
+	GameObjectType_load(SettingsScreenType_VA) = 0u;
+	GameObjectType_collect(SettingsScreenType_VA) = 0u;
+	GameObjectType_version(SettingsScreenType_VA) = 0u;
+	GameObjectType_flags(SettingsScreenType_VA) = 0u;
+	GameObjectType_size(SettingsScreenType_VA) = 0x168u;
+	GameObjectType_startup(SettingsScreenType_VA) = 0xBA270u;
+	GameObjectType_shutdown(SettingsScreenType_VA) = 0xBA2B0u;
+	GameObjectType_state_machine(SettingsScreenType_VA) = 0xBA190u;
+	MEM32(arg0 + 0x6Cu) = SettingsScreenType_VA;
 }
 
 uint32_t sub_000BA330(uint32_t arg0)
@@ -180101,11 +180075,9 @@ void MenuUpdateInput(uint32_t eax, uint32_t ecx)
 	}
 }
 
-/* One sentence: dispatches the menu's incoming message (0xFFFF, 0xFFF9, 0xFFFE, 0x32C8, 0x32C9, 0x32CA,
-   0x32CB or 0xFFFA, all only when the first argument is 0x7FFF) to
-   GameObjectSendMessageToVisibleChildren, GameObjectBroadcastToVisibleChildren, MenuUpdateInput,
-   sub_000BC430, sub_000BBD90 or MenuDestroyObjects. */
-uint32_t MenuMessageDispatch(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The LoadGameScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LoadGameScreen_StateMachine(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0;
 
@@ -180190,10 +180162,8 @@ uint32_t MenuMessageDispatch(uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t
 	return eax;
 }
 
-/* Builds the mission menu by walking LevelCount with LevelGet, making a GUIMissionMenuTgaText_VA object
-   per level, sizing it with vcRectSet and UiElementSetBoundsFromObject, releasing it with
-   vcObjectRelease, then creating the remaining menu panes and finishing with ObjectCloneArrayCreate. */
-uint32_t MissionMenuBuild(uint32_t ebx, uint32_t esi, uint32_t edi)
+/* The LoadGameScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t LoadGameScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, level = 0;
 
@@ -180539,9 +180509,8 @@ uint32_t MissionMenuBuild(uint32_t ebx, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases every VcObject field in the static array from 0x219FE8 to 0x21B17C and a series of individual
-   VcObject fields, then calls VcObjectListRelease on the list at 0x219E38. */
-uint32_t VcObjectFieldsRelease(void)
+/* The LoadGameScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t LoadGameScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -180573,19 +180542,19 @@ uint32_t VcObjectFieldsRelease(void)
 	return eax;
 }
 
-/* Fills the mission menu screen-family record at 0x219DB8 with the build pointer MissionMenuBuild,
-   destroy pointer VcObjectFieldsRelease and MenuMessageDispatch, and installs it at arg0+0x5C. */
-void MissionMenuScreenFamilySet(uint32_t arg0)
+/* Registers the LoadGameScreen type (Screen 19), its texture GUI_headings_profile.tga and its text
+   "There are no saves to load.": fills its GameObjectType and stores it in its family. */
+void LoadGameScreen_Register(uint32_t arg0)
 {
-	MEM32(0x219DC8u) = 0u;
-	MEM32(0x219DD0u) = 0u;
-	MEM32(0x219DD8u) = 0u;
-	MEM32(0x219DB8u) = 0x204u;
-	MEM32(0x219DBCu) = 0xBC930u;
-	MEM32(0x219DC0u) = 0xBCBB0u;
-	MEM32(0x219DC4u) = 0xBC810u;
-	MEM32(0x219DD4u) = 1u;
-	MEM32(arg0 + 0x5Cu) = 0x219DB8u;
+	GameObjectType_load(LoadGameScreenType_VA) = 0u;
+	GameObjectType_collect(LoadGameScreenType_VA) = 0u;
+	GameObjectType_flags(LoadGameScreenType_VA) = 0u;
+	GameObjectType_size(LoadGameScreenType_VA) = 0x204u;
+	GameObjectType_startup(LoadGameScreenType_VA) = 0xBC930u;
+	GameObjectType_shutdown(LoadGameScreenType_VA) = 0xBCBB0u;
+	GameObjectType_state_machine(LoadGameScreenType_VA) = 0xBC810u;
+	GameObjectType_version(LoadGameScreenType_VA) = 1u;
+	MEM32(arg0 + 0x5Cu) = LoadGameScreenType_VA;
 }
 
 uint32_t sub_000BCC80(uint32_t arg0)
@@ -181446,11 +181415,8 @@ void ScreenFamilyMessageDestroyChildren(uint32_t eax, uint32_t ecx, uint32_t edx
 	sub_00024570(arg0);
 }
 
-/* Builds the mission menu by looping LevelCount levels, calling LevelGet and vcObjectGet on each,
-   setting each object's rect with vcRectSet, adding it with UiElementSetBoundsFromObject, then creating
-   the mission-menu tga objects from GUIMissionMenuTgaText_VA and returning ObjectCloneArrayCreate of the
-   menu list. */
-uint32_t MissionMenuEntriesCreate(uint32_t ebx, uint32_t esi, uint32_t edi)
+/* The SaveGameScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t SaveGameScreen_Startup(uint32_t ebx, uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, level = 0;
 
@@ -181796,9 +181762,8 @@ uint32_t MissionMenuEntriesCreate(uint32_t ebx, uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases every mission-menu object created by MissionMenuEntriesCreate with VcObjectReleaseField and
-   the menu list with VcObjectListRelease. */
-uint32_t MissionMenuEntriesDestroy(void)
+/* The SaveGameScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t SaveGameScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -182862,11 +182827,9 @@ void SavedGameSlotScreenProcessInput(uint32_t eax, uint32_t ebx, uint32_t ebp, u
 	}
 }
 
-/* Handles ScreenFamily window messages: when arg2 is 0x7FFF it dispatches on the message id in arg3 to
-   GameObjectSendMessageToVisibleChildren, GameObjectBroadcastToVisibleChildren, sub_000BE730,
-   SavedGameSlotScreenProcessInput or ScreenFamilyMessageDestroyChildren, returning 1 if handled and 0
-   otherwise. */
-uint32_t ScreenFamilyMessageProc(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The SaveGameScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SaveGameScreen_StateMachine(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, ignored = 0;
 	uint32_t saved_arg1 = 0;
@@ -182951,20 +182914,20 @@ uint32_t ScreenFamilyMessageProc(uint32_t ebp, uint32_t esi, uint32_t edi, uint3
 	return eax;
 }
 
-/* Initializes the global ScreenFamily class descriptor at 0x21B1C0 with size 0x214 and the function
-   pointers MissionMenuEntriesCreate, MissionMenuEntriesDestroy and ScreenFamilyMessageProc, then stores
-   it at arg0+0x58. */
-void ScreenFamilyInitClass(uint32_t arg0)
+/* Registers the SaveGameScreen type (Screen 18), its texture GUI_headings_profile.tga: the saved games'
+   slots (SavedGameSlotScreenProcessInput), from the main menu and after a mission complete: fills its
+   GameObjectType and stores it in its family. */
+void SaveGameScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21B1D0u) = 0u;
-	MEM32(0x21B1D8u) = 0u;
-	MEM32(0x21B1E0u) = 0u;
-	MEM32(0x21B1C0u) = 0x214u;
-	MEM32(0x21B1C4u) = 0xBDD00u;
-	MEM32(0x21B1C8u) = 0xBDF80u;
-	MEM32(0x21B1CCu) = 0xBEE20u;
-	MEM32(0x21B1DCu) = 1u;
-	MEM32(arg0 + 0x58u) = 0x21B1C0u;
+	GameObjectType_load(SaveGameScreenType_VA) = 0u;
+	GameObjectType_collect(SaveGameScreenType_VA) = 0u;
+	GameObjectType_flags(SaveGameScreenType_VA) = 0u;
+	GameObjectType_size(SaveGameScreenType_VA) = 0x214u;
+	GameObjectType_startup(SaveGameScreenType_VA) = 0xBDD00u;
+	GameObjectType_shutdown(SaveGameScreenType_VA) = 0xBDF80u;
+	GameObjectType_state_machine(SaveGameScreenType_VA) = 0xBEE20u;
+	GameObjectType_version(SaveGameScreenType_VA) = 1u;
+	MEM32(arg0 + 0x58u) = SaveGameScreenType_VA;
 }
 
 /* Builds the ScreenFamily's UI layout by creating child GameObjects with GameObjectCreate, setting
@@ -183359,7 +183322,8 @@ void ScreenFamilyDestroy(uint32_t eax, uint32_t arg1)
 	GameObjectClearPadAndDestroyChildren(arg0, &ignored, &edx);
 }
 
-uint32_t sub_000BF360(void)
+/* The MenuListScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t MenuListScreen_Startup(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 
@@ -183369,7 +183333,8 @@ uint32_t sub_000BF360(void)
 	return eax;
 }
 
-uint32_t sub_000BF380(void)
+/* The MenuListScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t MenuListScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -184248,7 +184213,7 @@ void GameObjectSetIndexedValue(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint
 	*p_eax = eax;
 }
 
-/* handles the message ScreenFamilyDispatchMessage routes on 0x32CA: while the screen's field at +0x3B4
+/* handles the message MenuListScreen_StateMachine routes on 0x32CA: while the screen's field at +0x3B4
    is 0 it checks sub_000A51F0 on the object at +0x360 and, when that succeeds, marks +0x3B4 = 1 and
    calls ScreenListRefresh, calls sub_0003CD10 and returns if the list still could not be built, and
    otherwise forwards the message to visible children with
@@ -184671,11 +184636,9 @@ void ScreenFamilyProcessPadInput(uint32_t esi, uint32_t arg1, uint32_t arg3)
 		MenuCursorSoundAsked = 1u;
 }
 
-/* On a message whose code is 0x7FFF, dispatches on the message's first word: destroys the game object
-   with GameObjectDestroy for 0xFFFB, and calls ScreenFamilyDestroy, ScreenFamilyInitLayout,
-   ScreenFamilyBuildList or ScreenFamilyProcessPadInput for 0xFFFA, 0xFFF9, 0x32CA and 0x32CB, returning
-   1 when handled and 0 otherwise. */
-uint32_t ScreenFamilyDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The MenuListScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MenuListScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg3_2 = 0, eax = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -184745,19 +184708,19 @@ uint32_t ScreenFamilyDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, 
 	return eax;
 }
 
-/* Fills the static handler table at 0x21C5D8 (0x3C0, 0xBF360, 0xBF380, 0xC0510) and stores its address
-   into the ScreenFamily at offset 0x54. */
-void ScreenFamilySetHandlers(uint32_t arg0)
+/* Registers the MenuListScreen type (Screen 17), its sound cursor.wav: the list of choices every menu
+   makes (ScreenFamilyBuildList): fills its GameObjectType and stores it in its family. */
+void MenuListScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21C5E8u) = 0u;
-	MEM32(0x21C5F0u) = 0u;
-	MEM32(0x21C5F4u) = 0u;
-	MEM32(0x21C5F8u) = 0u;
-	MEM32(0x21C5D8u) = 0x3C0u;
-	MEM32(0x21C5DCu) = 0xBF360u;
-	MEM32(0x21C5E0u) = 0xBF380u;
-	MEM32(0x21C5E4u) = 0xC0510u;
-	MEM32(arg0 + 0x54u) = 0x21C5D8u;
+	GameObjectType_load(MenuListScreenType_VA) = 0u;
+	GameObjectType_collect(MenuListScreenType_VA) = 0u;
+	GameObjectType_version(MenuListScreenType_VA) = 0u;
+	GameObjectType_flags(MenuListScreenType_VA) = 0u;
+	GameObjectType_size(MenuListScreenType_VA) = 0x3C0u;
+	GameObjectType_startup(MenuListScreenType_VA) = 0xBF360u;
+	GameObjectType_shutdown(MenuListScreenType_VA) = 0xBF380u;
+	GameObjectType_state_machine(MenuListScreenType_VA) = 0xC0510u;
+	MEM32(arg0 + 0x54u) = MenuListScreenType_VA;
 }
 
 /* Sets a screen widget's item text ids from the arg1 array (stored at +0x140) up to arg2 items, flags
@@ -185691,11 +185654,9 @@ void GameObjectDrawGrid(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, 
 	g_esp = g_esp + 0x10u;
 }
 
-/* Dispatches a message whose type is 0x7FFF and whose ID is read from arg3 to ScreenBuildLayout,
-   GameObjectDrawGrid, ScreenWidgetDestroyChildHandles, sub_000C0F10,
-   GameObjectSendMessageToVisibleChildren, or GameObjectBroadcastToVisibleChildren, returning 1 if
-   handled and 0 otherwise. */
-uint32_t GameObjectMessageDispatch(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The TextEntryScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TextEntryScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0, ignored = 0;
 
@@ -185783,10 +185744,8 @@ uint32_t sub_000C1C85(uint32_t eax)
 	return eax;
 }
 
-/* Builds the mission menu screen: creates objects from definitions with
-   ObjectCreateFromDefinition/vcObjectGet, positions their quads with vcRectSet, QuadCenterOrigin and
-   UiElementSetBoundsFromObject, and stores them in globals 0x21C66C, 0x21C6E8, 0x21C670 and 0x21C6AC. */
-uint32_t MissionMenuScreenCreate(uint32_t esi, uint32_t edi)
+/* The TextEntryScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t TextEntryScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -185914,9 +185873,8 @@ uint32_t MissionMenuScreenCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the mission menu screen's objects with VcObjectReleaseField on 0x21C6E8, 0x21C670 and
-   0x21C6AC and vcObjectRelease on 0x21C66C. */
-uint32_t MissionMenuScreenDestroy(void)
+/* The TextEntryScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t TextEntryScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -185936,19 +185894,20 @@ uint32_t MissionMenuScreenDestroy(void)
 	return eax;
 }
 
-/* Fills the screen family at arg0+0x4C with size 0x35C and the create (0xC1CE0), destroy (0xC1DC0) and
-   0xC1BD0 entry points. */
-void MissionMenuScreenFamilyRegister(uint32_t arg0)
+/* Registers the TextEntryScreen type (Screen 15), its texture GUI_headings_profile.tga and its text
+   BACKSPACE: a grid of letters to write a name with (GameObjectDrawGrid): fills its GameObjectType and
+   stores it in its family. */
+void TextEntryScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21C638u) = 0u;
-	MEM32(0x21C640u) = 0u;
-	MEM32(0x21C644u) = 0u;
-	MEM32(0x21C648u) = 0u;
-	MEM32(0x21C628u) = 0x35Cu;
-	MEM32(0x21C62Cu) = 0xC1CE0u;
-	MEM32(0x21C630u) = 0xC1DC0u;
-	MEM32(0x21C634u) = 0xC1BD0u;
-	MEM32(arg0 + 0x4Cu) = 0x21C628u;
+	GameObjectType_load(TextEntryScreenType_VA) = 0u;
+	GameObjectType_collect(TextEntryScreenType_VA) = 0u;
+	GameObjectType_version(TextEntryScreenType_VA) = 0u;
+	GameObjectType_flags(TextEntryScreenType_VA) = 0u;
+	GameObjectType_size(TextEntryScreenType_VA) = 0x35Cu;
+	GameObjectType_startup(TextEntryScreenType_VA) = 0xC1CE0u;
+	GameObjectType_shutdown(TextEntryScreenType_VA) = 0xC1DC0u;
+	GameObjectType_state_machine(TextEntryScreenType_VA) = 0xC1BD0u;
+	MEM32(arg0 + 0x4Cu) = TextEntryScreenType_VA;
 }
 
 /* Same as ScreenFamilyInit but also stores the first argument at 0x21C648 before installing the method
@@ -185957,13 +185916,13 @@ uint32_t ScreenFamilyInitWithValue(uint32_t eax, uint32_t arg0)
 {
 	uint32_t eax_2 = 0;
 
-	MEM32(0x21C648u) = eax;
+	GameObjectType_flags(TextEntryScreenType_VA) = eax;
 	eax_2 = arg0;
-	MEM32(0x21C628u) = 0x35Cu;
-	MEM32(0x21C62Cu) = 0xC1CE0u;
-	MEM32(0x21C630u) = 0xC1DC0u;
-	MEM32(0x21C634u) = 0xC1BD0u;
-	MEM32(eax_2 + 0x4Cu) = 0x21C628u;
+	GameObjectType_size(TextEntryScreenType_VA) = 0x35Cu;
+	GameObjectType_startup(TextEntryScreenType_VA) = 0xC1CE0u;
+	GameObjectType_shutdown(TextEntryScreenType_VA) = 0xC1DC0u;
+	GameObjectType_state_machine(TextEntryScreenType_VA) = 0xC1BD0u;
+	MEM32(eax_2 + 0x4Cu) = TextEntryScreenType_VA;
 	return eax_2;
 }
 
@@ -187028,7 +186987,7 @@ void ScreenFamilyOnCreate(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	g_esp = g_esp - 4u;
-	MEM32(g_esp) = 0x1B76C0u;
+	MEM32(g_esp) = GameModeMenuTexts_VA;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = ecx;
 	arg0_2 = MEM32(g_esp);
@@ -187116,11 +187075,9 @@ void ScreenFamilyDraw(uint32_t ebx, uint32_t esi, uint32_t edi)
 	GameObjectSendMessageToVisibleChildrenAndGlobal(arg0, arg1, arg2, arg3, &ignored, &ebx, &esi, &edi);
 }
 
-/* Handles ScreenFamily messages: for 0x7FFF it checks the message at arg3, dispatching 0x32C8 to
-   GameObjectSendMessageToVisibleChildren, 0x32C9 to GameObjectBroadcastToVisibleChildren, 0x32CA to
-   ScreenFamilyDraw, 0x32CB to MenuObjectCheckInput, 0xFFFA to GameObjectClearPadAndDestroyChildren and
-   GameObjectDestroy, and 0xFFF9 to ScreenFamilyOnCreate; returns 1 for handled messages. */
-uint32_t ScreenFamilyMessageHandler(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The GameModeMenuScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t GameModeMenuScreen_StateMachine(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -187203,9 +187160,8 @@ uint32_t ScreenFamilyMessageHandler(uint32_t ebp, uint32_t esi, uint32_t edi, ui
 	return eax;
 }
 
-/* Creates the screen family's object by fetching it with vcObjectGet, setting a rect with vcRectSet and
-   building the field at 0x21C9A4 through UiElementSetBoundsFromObject. */
-uint32_t ScreenFamilyCreate(uint32_t esi, uint32_t edi)
+/* The GameModeMenuScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t GameModeMenuScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0;
 
@@ -187250,8 +187206,8 @@ uint32_t ScreenFamilyCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the screen family's object held at 0x21C9A4 with VcObjectReleaseField. */
-uint32_t ScreenFamilyReleaseObject(void)
+/* The GameModeMenuScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t GameModeMenuScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -187262,19 +187218,20 @@ uint32_t ScreenFamilyReleaseObject(void)
 	return eax;
 }
 
-/* Fills the ScreenFamily object-type table at 0x21C960 with size 0x144 and the routines 0xC2B60, 0xC2BB0
-   and 0xC2A40, and stores its pointer in the family's +0x78 slot. */
-void ScreenFamilySetupObjectType(uint32_t arg0)
+/* Registers the GameModeMenuScreen type (Screen 26), the list TRAINING, STORY MODE, VERSUS MODE, SAVE
+   GAME, OPTIONS, QUIT (the text numbers at 0x1B76C0): the main menu's first: fills its GameObjectType
+   and stores it in its family. */
+void GameModeMenuScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21C970u) = 0u;
-	MEM32(0x21C978u) = 0u;
-	MEM32(0x21C97Cu) = 0u;
-	MEM32(0x21C980u) = 0u;
-	MEM32(0x21C960u) = 0x144u;
-	MEM32(0x21C964u) = 0xC2B60u;
-	MEM32(0x21C968u) = 0xC2BB0u;
-	MEM32(0x21C96Cu) = 0xC2A40u;
-	MEM32(arg0 + 0x78u) = 0x21C960u;
+	GameObjectType_load(GameModeMenuScreenType_VA) = 0u;
+	GameObjectType_collect(GameModeMenuScreenType_VA) = 0u;
+	GameObjectType_version(GameModeMenuScreenType_VA) = 0u;
+	GameObjectType_flags(GameModeMenuScreenType_VA) = 0u;
+	GameObjectType_size(GameModeMenuScreenType_VA) = 0x144u;
+	GameObjectType_startup(GameModeMenuScreenType_VA) = 0xC2B60u;
+	GameObjectType_shutdown(GameModeMenuScreenType_VA) = 0xC2BB0u;
+	GameObjectType_state_machine(GameModeMenuScreenType_VA) = 0xC2A40u;
+	MEM32(arg0 + 0x78u) = GameModeMenuScreenType_VA;
 }
 
 /* Resolves a game object from a handle with GameObjectFromHandle (or uses GameObjectLastObject), clears
@@ -187436,7 +187393,7 @@ void MenuObjectCreate(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
 		g_esp = g_esp - 4u;
-		MEM32(g_esp) = 0x1B76D8u;
+		MEM32(g_esp) = StoryModeMenuTexts_VA;
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = ecx;
 		arg0_2 = MEM32(g_esp);
@@ -187575,10 +187532,9 @@ void MenuObjectCheckInput(uint32_t esi, uint32_t edi)
 	}
 }
 
-/* Handles a menu screen family message: on 0xFFF9 calls MenuObjectCreate, on 0x32CA calls
-   MenuObjectDraw, on 0x32CB calls MenuObjectCheckInput, and on 0xFFFA calls
-   GameObjectClearPadAndDestroyChildren and destroys the object at offset 0x13C. */
-uint32_t MenuFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The StoryModeMenuScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t StoryModeMenuScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -187661,9 +187617,8 @@ uint32_t MenuFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint3
 	return eax;
 }
 
-/* Gets the menu's screen object with vcObjectGet, sets its rect with vcRectSet and stores it in the menu
-   screen object global 0x21CA24 through UiElementSetBoundsFromObject. */
-uint32_t MenuScreenObjectSetup(uint32_t esi, uint32_t edi)
+/* The StoryModeMenuScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t StoryModeMenuScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0;
 
@@ -187708,8 +187663,9 @@ uint32_t MenuScreenObjectSetup(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the menu screen object global 0x21CA24 through VcObjectReleaseField. */
-uint32_t MenuScreenObjectDestroy(void)
+/* The StoryModeMenuScreen type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t StoryModeMenuScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -187720,19 +187676,19 @@ uint32_t MenuScreenObjectDestroy(void)
 	return eax;
 }
 
-/* Sets the ScreenFamily at arg0's handler table pointer at +0x3C to the globals holding 0xC2FD0, 0xC3020
-   and 0xC2EB0 and clears 0x21C9F0 through 0x21CA00. */
-void ScreenFamilyInitHandlers(uint32_t arg0)
+/* Registers the StoryModeMenuScreen type (Screen 11), the list NEW GAME, LOAD GAME (the text numbers at
+   0x1B76D8): the main menu's STORY MODE: fills its GameObjectType and stores it in its family. */
+void StoryModeMenuScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21C9F0u) = 0u;
-	MEM32(0x21C9F8u) = 0u;
-	MEM32(0x21C9FCu) = 0u;
-	MEM32(0x21CA00u) = 0u;
-	MEM32(0x21C9E0u) = 0x144u;
-	MEM32(0x21C9E4u) = 0xC2FD0u;
-	MEM32(0x21C9E8u) = 0xC3020u;
-	MEM32(0x21C9ECu) = 0xC2EB0u;
-	MEM32(arg0 + 0x3Cu) = 0x21C9E0u;
+	GameObjectType_load(StoryModeMenuScreenType_VA) = 0u;
+	GameObjectType_collect(StoryModeMenuScreenType_VA) = 0u;
+	GameObjectType_version(StoryModeMenuScreenType_VA) = 0u;
+	GameObjectType_flags(StoryModeMenuScreenType_VA) = 0u;
+	GameObjectType_size(StoryModeMenuScreenType_VA) = 0x144u;
+	GameObjectType_startup(StoryModeMenuScreenType_VA) = 0xC2FD0u;
+	GameObjectType_shutdown(StoryModeMenuScreenType_VA) = 0xC3020u;
+	GameObjectType_state_machine(StoryModeMenuScreenType_VA) = 0xC2EB0u;
+	MEM32(arg0 + 0x3Cu) = StoryModeMenuScreenType_VA;
 }
 
 /* Resolves a game object handle, gets the object at offset 0x13C, and returns its difficulty via
@@ -188242,12 +188198,9 @@ void ScreenHandlePadInput(uint32_t esi, uint32_t edi)
 	GameObjectSetActive(arg0, arg1);
 }
 
-/* Handles the 0x7FFF process message of a screen list: 0xFFF9 creates it with
-   ScreenElementInitAndCreate, 0x32C8/0x32C9 forward to
-   GameObjectSendMessageToVisibleChildren/GameObjectBroadcastToVisibleChildren, 0x32CA draws with
-   ScreenDrawListEntries, 0x32CB takes input with ScreenHandlePadInput and 0xFFFA tears down with
-   GameObjectClearPadAndDestroyChildren, returning 1 for each message it handles. */
-uint32_t ScreenListProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ObjectivesScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ObjectivesScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, ignored = 0;
 
@@ -188322,19 +188275,19 @@ uint32_t ScreenListProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	return eax;
 }
 
-/* Initializes the global screen family descriptor at 0x21CAA8 with handler 0xC3650 and assigns it to the
-   object at arg0+0x24. */
-void ScreenFamilySetup(uint32_t arg0)
+/* Registers the ObjectivesScreen type (Screen 5), its text "OBJECTIVES": the level's objectives
+   (ObjectiveGetEntry), made by the pause's menu: fills its GameObjectType and stores it in its family. */
+void ObjectivesScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21CAB8u) = 0u;
-	MEM32(0x21CAC0u) = 0u;
-	MEM32(0x21CAC4u) = 0u;
-	MEM32(0x21CAC8u) = 0u;
-	MEM32(0x21CAA8u) = 0x134u;
-	MEM32(0x21CAACu) = 0x59010u;
-	MEM32(0x21CAB0u) = 0x59010u;
-	MEM32(0x21CAB4u) = 0xC3650u;
-	MEM32(arg0 + 0x24u) = 0x21CAA8u;
+	GameObjectType_load(ObjectivesScreenType_VA) = 0u;
+	GameObjectType_collect(ObjectivesScreenType_VA) = 0u;
+	GameObjectType_version(ObjectivesScreenType_VA) = 0u;
+	GameObjectType_flags(ObjectivesScreenType_VA) = 0u;
+	GameObjectType_size(ObjectivesScreenType_VA) = 0x134u;
+	GameObjectType_startup(ObjectivesScreenType_VA) = 0x59010u;
+	GameObjectType_shutdown(ObjectivesScreenType_VA) = 0x59010u;
+	GameObjectType_state_machine(ObjectivesScreenType_VA) = 0xC3650u;
+	MEM32(arg0 + 0x24u) = ObjectivesScreenType_VA;
 }
 
 /* Sets the visibility of six game objects at offsets 0x150 through 0x164 via GameObjectSetVisible, using
@@ -188658,7 +188611,7 @@ void PauseScreenSetMenu(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, uint32_t 
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 4u;
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x1B76E4u;
+					MEM32(g_esp) = PauseMenuTexts_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ecx;
 					arg0_2 = MEM32(g_esp);
@@ -191387,7 +191340,7 @@ uint32_t MenuObjectSetSelection(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = 4u;
 					g_esp = g_esp - 4u;
-					MEM32(g_esp) = 0x1B76F4u;
+					MEM32(g_esp) = OptionsMenuTexts_VA;
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = eax;
 					arg0_2 = MEM32(g_esp);
@@ -191790,10 +191743,9 @@ void MenuObjectHandlePadInput(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t
 	}
 }
 
-/* Dispatches an incoming menu object message, calling MenuObjectHandlePadInput for message 0x32CB,
-   GameObjectClearPadAndDestroyChildren and GameObjectDestroy for 0xFFFA, and returning 1 when handled
-   and 0 otherwise. */
-uint32_t MenuObjectHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The OptionsScreen type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t OptionsScreen_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -191893,9 +191845,8 @@ uint32_t MenuObjectHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t esi, uint3
 	return eax;
 }
 
-/* Creates two vcObjectGet quads with vcRectSet rectangles and UiElementSetBoundsFromObject, centers the
-   first with QuadCenterOrigin, and stores 209.0 at 0x21CD14. */
-uint32_t QuadPairCreate(uint32_t esi, uint32_t edi)
+/* The OptionsScreen type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t OptionsScreen_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -191982,8 +191933,8 @@ uint32_t QuadPairCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the two quads at 0x21CD48 and 0x21CD0C with VcObjectReleaseField. */
-uint32_t QuadPairRelease(void)
+/* The OptionsScreen type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t OptionsScreen_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -191994,19 +191945,20 @@ uint32_t QuadPairRelease(void)
 	return eax;
 }
 
-/* Points the family's field at arg0+0x14 to the table at 0x21CCC8, setting the family's size 0x140 and
-   its create (QuadPairCreate), destroy (QuadPairRelease) and update (MenuObjectHandleMessage) callbacks. */
-void ScreenFamilySetCallbacks(uint32_t arg0)
+/* Registers the OptionsScreen type (Screen 1), the list CONTROLLER DIAGRAM, SETTINGS, EXTRAS, CREDITS
+   (the text numbers at 0x1B76F4): the main menu's OPTIONS: fills its GameObjectType and stores it in its
+   family. */
+void OptionsScreen_Register(uint32_t arg0)
 {
-	MEM32(0x21CCD8u) = 0u;
-	MEM32(0x21CCE0u) = 0u;
-	MEM32(0x21CCE4u) = 0u;
-	MEM32(0x21CCE8u) = 0u;
-	MEM32(0x21CCC8u) = 0x140u;
-	MEM32(0x21CCCCu) = 0xC60F0u;
-	MEM32(0x21CCD0u) = 0xC61A0u;
-	MEM32(0x21CCD4u) = 0xC5FA0u;
-	MEM32(arg0 + 0x14u) = 0x21CCC8u;
+	GameObjectType_load(OptionsScreenType_VA) = 0u;
+	GameObjectType_collect(OptionsScreenType_VA) = 0u;
+	GameObjectType_version(OptionsScreenType_VA) = 0u;
+	GameObjectType_flags(OptionsScreenType_VA) = 0u;
+	GameObjectType_size(OptionsScreenType_VA) = 0x140u;
+	GameObjectType_startup(OptionsScreenType_VA) = 0xC60F0u;
+	GameObjectType_shutdown(OptionsScreenType_VA) = 0xC61A0u;
+	GameObjectType_state_machine(OptionsScreenType_VA) = 0xC5FA0u;
+	MEM32(arg0 + 0x14u) = OptionsScreenType_VA;
 }
 
 /* Moves the reticle rect at 0x21CDD4 to the sender's screen position, computing it from
@@ -192594,10 +192546,9 @@ void ScreenElementDraw(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x34u;
 }
 
-/* Handles the 0x7FFF process message of a screen element: 0xFFF9 initializes it with
-   ScreenElementInitFields, 0x2EE2 draws it with ScreenElementDraw and 0xFFFA destroys it with
-   GameObjectFreeByHandle, returning 1 for each message it handles. */
-uint32_t ScreenElementProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ButtonPromptElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ButtonPromptElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 
@@ -192647,10 +192598,8 @@ uint32_t ScreenElementProcessMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, u
 	return eax;
 }
 
-/* Creates an object with vcObjectGet, gives several UI elements their rectangle with vcRectSet and their
-   bounds with UiElementSetBoundsFromObject, then copy-constructs three elements with
-   VcObjectCopyConstruct and releases the created object with vcObjectRelease. */
-uint32_t ScreenElementLayoutCreate(uint32_t esi, uint32_t edi)
+/* The ButtonPromptElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ButtonPromptElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, esi_2 = 0, ignored = 0, ignored_2 = 0;
 
@@ -192960,9 +192909,9 @@ uint32_t ScreenElementLayoutCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases every vcObject held in the family element array from 0x21CE60 to 0x21D130 with
-   vcObjectRelease and clears each slot. */
-uint32_t ScreenElementFamilyDestroyAll(void)
+/* The ButtonPromptElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t ButtonPromptElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -192982,19 +192931,19 @@ uint32_t ScreenElementFamilyDestroyAll(void)
 	return eax;
 }
 
-/* Fills the screen element family descriptor (size 0x54, create 0xC68A0, destroy 0xC6A60, 0xC6800) at
-   0x21CE18 and stores it at arg0+0x68. */
-void ScreenElementFamilySet(uint32_t arg0)
+/* Registers the ButtonPromptElement type (ScreenElement 22), its texture GUI_xbox_buttons.tga: the
+   buttons every menu shows: fills its GameObjectType and stores it in its family. */
+void ButtonPromptElement_Register(uint32_t arg0)
 {
-	MEM32(0x21CE28u) = 0u;
-	MEM32(0x21CE30u) = 0u;
-	MEM32(0x21CE34u) = 0u;
-	MEM32(0x21CE38u) = 0u;
-	MEM32(0x21CE18u) = 0x54u;
-	MEM32(0x21CE1Cu) = 0xC68A0u;
-	MEM32(0x21CE20u) = 0xC6A60u;
-	MEM32(0x21CE24u) = 0xC6800u;
-	MEM32(arg0 + 0x68u) = 0x21CE18u;
+	GameObjectType_load(ButtonPromptElementType_VA) = 0u;
+	GameObjectType_collect(ButtonPromptElementType_VA) = 0u;
+	GameObjectType_version(ButtonPromptElementType_VA) = 0u;
+	GameObjectType_flags(ButtonPromptElementType_VA) = 0u;
+	GameObjectType_size(ButtonPromptElementType_VA) = 0x54u;
+	GameObjectType_startup(ButtonPromptElementType_VA) = 0xC68A0u;
+	GameObjectType_shutdown(ButtonPromptElementType_VA) = 0xC6A60u;
+	GameObjectType_state_machine(ButtonPromptElementType_VA) = 0xC6800u;
+	MEM32(arg0 + 0x68u) = ButtonPromptElementType_VA;
 }
 
 /* Resolves arg0 through GameObjectFromHandle (or GameObjectLastObject for GameObjectLastHandle) and,
@@ -193530,12 +193479,9 @@ void ScreenElementDrawString(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t 
 	g_esp = g_esp + 8u;
 }
 
-/* Handles a ScreenElement message (arg2 type, arg3 data): on 0xFFFD sets the element's text length from
-   vcStringManagerGetText, on 0x2EE3 calls ScreenElementNotifyOwner, on 0x2EE4 calls
-   GameObjectDeactivate, on 0xFFF9/0x2EE2 calls
-   ScreenElementInitializeWithPauseState/ScreenElementDrawString, and on 0xFFFA calls
-   GameObjectFreeByHandle and clears fields +0x40/+0x44. */
-uint32_t ScreenElementFamilyReceiveMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The TextLabelElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TextLabelElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint8_t ecx_2 = 0;
 	uint32_t arg0_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_3 = 0, manager = 0, number = 0;
@@ -193651,9 +193597,8 @@ uint32_t ScreenElementFamilyReceiveMessage(uint32_t ebx, uint32_t ebp, uint32_t 
 	return eax;
 }
 
-/* Builds the family's two screen elements by calling vcObjectGet, vcRectSet and
-   UiElementSetBoundsFromObject, storing them at 0x21D1B0 and 0x21D174. */
-uint32_t ScreenElementFamilyCreate(uint32_t esi, uint32_t edi)
+/* The TextLabelElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t TextLabelElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -193735,9 +193680,8 @@ uint32_t ScreenElementFamilyCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the global fields at 0x21D174 and 0x21D1B0 (offsets 0x44 and 0x80 of the family at 0x21D130)
-   with VcObjectReleaseField. */
-uint32_t ScreenElementFamilyCleanup(void)
+/* The TextLabelElement type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t TextLabelElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -193748,20 +193692,20 @@ uint32_t ScreenElementFamilyCleanup(void)
 	return eax;
 }
 
-/* Fills the static ScreenElement class descriptor at 0x21D130 (object size 0x4C and three method
-   pointers at 0xC7230/0xC72C0/0xC70A0, zeroing the fields at +0x10..+0x20) and stores its address into
-   the family's field at +0x14. */
-void ScreenElementFamilySetClassDescriptor(uint32_t arg0)
+/* Registers the TextLabelElement type (ScreenElement 1), a line of text (ScreenElementDrawString): the
+   controller screen's rows, the options' On and Off: fills its GameObjectType and stores it in its
+   family. */
+void TextLabelElement_Register(uint32_t arg0)
 {
-	MEM32(0x21D140u) = 0u;
-	MEM32(0x21D148u) = 0u;
-	MEM32(0x21D14Cu) = 0u;
-	MEM32(0x21D150u) = 0u;
-	MEM32(0x21D130u) = 0x4Cu;
-	MEM32(0x21D134u) = 0xC7230u;
-	MEM32(0x21D138u) = 0xC72C0u;
-	MEM32(0x21D13Cu) = 0xC70A0u;
-	MEM32(arg0 + 0x14u) = 0x21D130u;
+	GameObjectType_load(TextLabelElementType_VA) = 0u;
+	GameObjectType_collect(TextLabelElementType_VA) = 0u;
+	GameObjectType_version(TextLabelElementType_VA) = 0u;
+	GameObjectType_flags(TextLabelElementType_VA) = 0u;
+	GameObjectType_size(TextLabelElementType_VA) = 0x4Cu;
+	GameObjectType_startup(TextLabelElementType_VA) = 0xC7230u;
+	GameObjectType_shutdown(TextLabelElementType_VA) = 0xC72C0u;
+	GameObjectType_state_machine(TextLabelElementType_VA) = 0xC70A0u;
+	MEM32(arg0 + 0x14u) = TextLabelElementType_VA;
 }
 
 /* Resolves the handle arg0 and stores the string id arg1 at +0x28 and arg2 at +0x3C while clearing the
@@ -195208,11 +195152,9 @@ void PlayerStandInEntityQuadtreeUpdate(uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0xCu;
 }
 
-/* Dispatches PlayerStandInEntityNode messages: on 0xFFF9 calls GameObjectInitModel, on 0x2AF8 calls
-   GameObjectDrawBoundingBox, on 0x2AF9 calls PlayerStandInEntityQuadtreeUpdate, on 0x2AFA calls
-   GameObjectSetOrToggleState, on 0x2AFB writes the 0xD0 handle to arg4, and on 0xFFFA releases the
-   object via QuadtreeObjectSetEnabled and vcObjectRelease. */
-uint32_t PlayerStandInEntityNodeHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The LightNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LightNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -195297,20 +195239,19 @@ uint32_t PlayerStandInEntityNodeHandleMessage(uint32_t ebx, uint32_t ebp, uint32
 	return eax;
 }
 
-/* Fills the PlayerStandInEntityNode vtable at 0x21D1F0 (size 0xD4, destructors 0x59010, message handler
-   PlayerStandInEntityNodeHandleMessage, GameObjectLoadVcObject, GameObjectCollectChangedNodes) and
-   stores it at arg0+0x18. */
-void PlayerStandInEntityNodeInitVtable(uint32_t arg0)
+/* Registers the LightNode type (Node 2), the levels' "omni", "direct", "default directional light",
+   "sun": fills its GameObjectType and stores it in its family. */
+void LightNode_Register(uint32_t arg0)
 {
-	MEM32(0x21D20Cu) = 0u;
-	MEM32(0x21D210u) = 0u;
-	MEM32(0x21D1F0u) = 0xD4u;
-	MEM32(0x21D1F4u) = 0x59010u;
-	MEM32(0x21D1F8u) = 0x59010u;
-	MEM32(0x21D1FCu) = 0xC8590u;
-	MEM32(0x21D200u) = 0xC80A0u;
-	MEM32(0x21D208u) = 0x2DFE0u;
-	MEM32(arg0 + 0x18u) = 0x21D1F0u;
+	GameObjectType_version(LightNodeType_VA) = 0u;
+	GameObjectType_flags(LightNodeType_VA) = 0u;
+	GameObjectType_size(LightNodeType_VA) = 0xD4u;
+	GameObjectType_startup(LightNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(LightNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(LightNodeType_VA) = 0xC8590u;
+	GameObjectType_load(LightNodeType_VA) = 0xC80A0u;
+	GameObjectType_collect(LightNodeType_VA) = 0x2DFE0u;
+	MEM32(arg0 + 0x18u) = LightNodeType_VA;
 }
 
 /* Returns the PodOfficerSledHeavyCannonWeaponSpec_VA global that SceneObjectCreateFromHandle stores into
@@ -195546,8 +195487,8 @@ void PodOfficerSkarredHeavyCannonWeapon_Register(uint32_t arg0)
 	PodOfficerSkarredHeavyCannonWeaponMaterial = 0u;
 }
 
-/* Returns the address of the spec structure at 0x21D450 that PodOfficerHeavyCannonWeaponFamilyInitialize
-   fills in, as the spec for the weapon type dispatched in SceneObjectCreateFromHandle. */
+/* Returns the address of the spec structure at 0x21D450 that MalePowerArmorSniperWeapon_Register fills
+   in, as the spec for the weapon type dispatched in SceneObjectCreateFromHandle. */
 uint32_t PodOfficerHeavyCannonWeaponGetRegisteredSpec(void)
 {
 	uint32_t eax = 0;
@@ -195556,10 +195497,8 @@ uint32_t PodOfficerHeavyCannonWeaponGetRegisteredSpec(void)
 	return eax;
 }
 
-/* Weapon constructor: initializes the muzzle-wave effect at 0x21D49C through ObjectCloneArrayCreate with
-   RailgunMWavText_VA, creates the contrail object from FxMissileContrailAnimText_VA via vcObjectGet into
-   0x21D498, and acquires game object types 0x35, 0x36, 0x38 and 0x2F with GameObjectTypeUse. */
-uint32_t PodOfficerHeavyCannonWeaponConstruct(void)
+/* The MalePowerArmorSniperWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t MalePowerArmorSniperWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -195590,10 +195529,9 @@ uint32_t PodOfficerHeavyCannonWeaponConstruct(void)
 	return eax;
 }
 
-/* Releases the contrail object at 0x21D498 with vcObjectRelease, tears down the effect at 0x21D49C with
-   VcObjectListRelease, and releases game object types 0x35, 0x36, 0x38 and 0x2F with
-   GameObjectTypeRelease. */
-uint32_t PodOfficerHeavyCannonWeaponDestruct(void)
+/* The MalePowerArmorSniperWeapon type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t MalePowerArmorSniperWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -195628,21 +195566,19 @@ uint32_t PodOfficerHeavyCannonWeaponDestruct(void)
 	return eax;
 }
 
-/* Fills the weapon family descriptor at 0x21D408 (count 0x2C, constructor
-   PodOfficerHeavyCannonWeaponConstruct, destructor PodOfficerHeavyCannonWeaponDestruct, update 0x100A10)
-   and points the family's 0xB8 field at it, then sets the spec text-pointer tables at 0x21D46C and
-   0x21D450 and clears 0x21D498. */
-void PodOfficerHeavyCannonWeaponFamilyInitialize(uint32_t arg0)
+/* Registers the MalePowerArmorSniperWeapon type (Weapon 42), it uses MPASniperEffect (fx_mpa_sniper):
+   made by EntityInitializeWeapons: fills its GameObjectType and stores it in its family. */
+void MalePowerArmorSniperWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x21D408u) = 0x2Cu;
-	MEM32(0x21D40Cu) = 0xC8B30u;
-	MEM32(0x21D410u) = 0xC8BA0u;
-	MEM32(0x21D414u) = 0x100A10u;
-	MEM32(0x21D418u) = 0u;
-	MEM32(0x21D420u) = 0u;
-	MEM32(0x21D424u) = 0u;
-	MEM32(0x21D428u) = 0u;
-	MEM32(arg0 + 0xB8u) = 0x21D408u;
+	GameObjectType_size(MalePowerArmorSniperWeaponType_VA) = 0x2Cu;
+	GameObjectType_startup(MalePowerArmorSniperWeaponType_VA) = 0xC8B30u;
+	GameObjectType_shutdown(MalePowerArmorSniperWeaponType_VA) = 0xC8BA0u;
+	GameObjectType_state_machine(MalePowerArmorSniperWeaponType_VA) = 0x100A10u;
+	GameObjectType_load(MalePowerArmorSniperWeaponType_VA) = 0u;
+	GameObjectType_collect(MalePowerArmorSniperWeaponType_VA) = 0u;
+	GameObjectType_version(MalePowerArmorSniperWeaponType_VA) = 0u;
+	GameObjectType_flags(MalePowerArmorSniperWeaponType_VA) = 0u;
+	MEM32(arg0 + 0xB8u) = MalePowerArmorSniperWeaponType_VA;
 	x86_rep_stos32(0x21D46Cu, 0u, 0xBu);
 	MEM32(0x21D46Cu) = 0x1A3AB0u;
 	MEM32(0x21D470u) = 0x1A3AB4u;
@@ -210295,10 +210231,9 @@ void GameObjectRefCopyWithRandomCountdown(uint32_t eax, uint32_t ebx, uint32_t e
 	}
 }
 
-/* Applies the command in arg2 to the object in arg0: modes 0-4 set the object's behavior function at +8
-   and timer at +0x18, or set the steering mode global 0x220F74 and call SteeringFamilyAdvanceMode, while
-   command 0x7FFF handles GameObjectRefCopyWithRandomCountdown and GameObjectRefClearSlot for arg1. */
-uint32_t SteeringFamilyApplyCommand(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The StrafeAttackSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t StrafeAttackSteering_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
@@ -210474,19 +210409,19 @@ uint32_t SteeringFamilyApplyCommand(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 	return eax;
 }
 
-/* Builds the steering family's message-handler table at 0x220F30 (size 0x1C, handler 0xD50C0) and links
-   it into the family object at offset 0x24. */
-void SteeringFamilyRegisterHandlerTable(uint32_t arg0)
+/* Registers the StrafeAttackSteering type (Steering 5), the one the AI script's StrafeAttack makes
+   (AIActionStrafeAttack): fills its GameObjectType and stores it in its family. */
+void StrafeAttackSteering_Register(uint32_t arg0)
 {
-	MEM32(0x220F34u) = 0u;
-	MEM32(0x220F38u) = 0u;
-	MEM32(0x220F40u) = 0u;
-	MEM32(0x220F48u) = 0u;
-	MEM32(0x220F4Cu) = 0u;
-	MEM32(0x220F50u) = 0u;
-	MEM32(0x220F30u) = 0x1Cu;
-	MEM32(0x220F3Cu) = 0xD50C0u;
-	MEM32(arg0 + 0x24u) = 0x220F30u;
+	GameObjectType_startup(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_shutdown(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_load(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_collect(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_version(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_flags(StrafeAttackSteeringType_VA) = 0u;
+	GameObjectType_size(StrafeAttackSteeringType_VA) = 0x1Cu;
+	GameObjectType_state_machine(StrafeAttackSteeringType_VA) = 0xD50C0u;
+	MEM32(arg0 + 0x24u) = StrafeAttackSteeringType_VA;
 }
 
 /* Looks a game object up with GameObjectFromHandle, and unless its handle already carries type 0x2800
@@ -211226,10 +211161,9 @@ void SteeringBehaviorRaycastPath(uint32_t ebx, uint32_t ebp, uint32_t edi, uint3
 	*p_esi = esi_2;
 }
 
-/* Handles a steering behavior's messages: for modes 0, 1 and 2 it stores a per-mode tick callback
-   (0xD5630, 0xD5660, 0xD5690) and a random timer at +0x18, and for mode 0x7FFF it calls
-   SteeringBehaviorBeginTargetMove/GameObjectRefClearSlot. */
-uint32_t SteeringBehaviorHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The LookAroundSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LookAroundSteering_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	double f0 = 0;
@@ -211402,19 +211336,19 @@ uint32_t SteeringBehaviorHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg
 	return eax;
 }
 
-/* Fills the global behavior descriptor at 0x220F78 (size 0x10, message handler
-   SteeringBehaviorHandleMessage) and stores it at SteeringFamily+0x28. */
-void SteeringFamilySetBehaviorHandler(uint32_t arg0)
+/* Registers the LookAroundSteering type (Steering 6), the one the AI script's LookAround makes
+   (AIActionLookAround): fills its GameObjectType and stores it in its family. */
+void LookAroundSteering_Register(uint32_t arg0)
 {
-	MEM32(0x220F7Cu) = 0u;
-	MEM32(0x220F80u) = 0u;
-	MEM32(0x220F88u) = 0u;
-	MEM32(0x220F90u) = 0u;
-	MEM32(0x220F94u) = 0u;
-	MEM32(0x220F98u) = 0u;
-	MEM32(0x220F78u) = 0x10u;
-	MEM32(0x220F84u) = 0xD5960u;
-	MEM32(arg0 + 0x28u) = 0x220F78u;
+	GameObjectType_startup(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_shutdown(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_load(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_collect(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_version(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_flags(LookAroundSteeringType_VA) = 0u;
+	GameObjectType_size(LookAroundSteeringType_VA) = 0x10u;
+	GameObjectType_state_machine(LookAroundSteeringType_VA) = 0xD5960u;
+	MEM32(arg0 + 0x28u) = LookAroundSteeringType_VA;
 }
 
 /* Reads a game object's bitmask at +0x14 (or a vector at +8 via MatrixGetBasisHeading/Vector3BuildBasis)
@@ -211726,10 +211660,9 @@ void sub_000D61B0(uint32_t eax, uint32_t ebx, uint32_t edi)
 	MEM32(ebx + 8u) = eax_2;
 }
 
-/* Handles the steering family's event codes in arg3: on 0xFFF9 it copies a descriptor with sub_000D61B0,
-   on 0xFFFA it clears a GameObjectRef slot with GameObjectRefClearSlot, on 0xFFFB it sets the family's
-   +0x18 from the object's +0xC, and returns 1 when handled and 0 otherwise. */
-uint32_t SteeringFamilyHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The TurnToTargetSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TurnToTargetSteering_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -211790,19 +211723,20 @@ uint32_t SteeringFamilyHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	return eax;
 }
 
-/* Initializes the steering family's event table at 0x221010 (size 0x34, handler 0xD6230) and stores its
-   pointer at arg0+0x3C. */
-void SteeringFamilyInstallEventTable(uint32_t arg0)
+/* Registers the TurnToTargetSteering type (Steering 11), the entity's +0xA4, made again when its target
+   at +0xC0 changes (EntityAssignTarget): FireOnTarget's and TurnTowardsSound's: fills its GameObjectType
+   and stores it in its family. */
+void TurnToTargetSteering_Register(uint32_t arg0)
 {
-	MEM32(0x221014u) = 0u;
-	MEM32(0x221018u) = 0u;
-	MEM32(0x221020u) = 0u;
-	MEM32(0x221028u) = 0u;
-	MEM32(0x22102Cu) = 0u;
-	MEM32(0x221030u) = 0u;
-	MEM32(0x221010u) = 0x34u;
-	MEM32(0x22101Cu) = 0xD6230u;
-	MEM32(arg0 + 0x3Cu) = 0x221010u;
+	GameObjectType_startup(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_shutdown(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_load(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_collect(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_version(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_flags(TurnToTargetSteeringType_VA) = 0u;
+	GameObjectType_size(TurnToTargetSteeringType_VA) = 0x34u;
+	GameObjectType_state_machine(TurnToTargetSteeringType_VA) = 0xD6230u;
+	MEM32(arg0 + 0x3Cu) = TurnToTargetSteeringType_VA;
 }
 
 /* Resolves the object from the handle at arg1, destroys the game object with handle arg0 via
@@ -212967,11 +212901,9 @@ uint32_t SteeringFaceTargetUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint
 	return eax;
 }
 
-/* Message handler for a steering behavior that handles messages 0x7FFF, 0xFFFD, 0xFFFB, 0xFFFF, 0xFFF9,
-   0xFFFE and 0xFFFA, setting the update to SteeringFaceTargetUpdate for 0xFFFD, calling
-   GameObjectPairTestOverlap for 0xFFFB, calling GameObjectCopyStateAndClear for 0xFFF9, and calling
-   GameObjectRefClearSlot for 0xFFFA. */
-uint32_t SteeringFamilyHandleMessage(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The MaintainDistSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MaintainDistSteering_StateMachine(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg2_2 = 0, eax = 0, ebx = 0, edi_2 = 0, esi_2 = 0;
 
@@ -213035,19 +212967,19 @@ uint32_t SteeringFamilyHandleMessage(uint32_t ebp, uint32_t esi, uint32_t edi, u
 	return eax;
 }
 
-/* zeroes the table at 0x2210A0, sets its count field to 0x20 and its handler to
-   SteeringFamilyHandleMessage, then stores that table at SteeringFamily+0x34. */
-void SteeringFamilySetHandler(uint32_t arg0)
+/* Registers the MaintainDistSteering type (Steering 9), the one the AI script's MaintainDist makes
+   (AIActionMaintainDist): fills its GameObjectType and stores it in its family. */
+void MaintainDistSteering_Register(uint32_t arg0)
 {
-	MEM32(0x2210A4u) = 0u;
-	MEM32(0x2210A8u) = 0u;
-	MEM32(0x2210B0u) = 0u;
-	MEM32(0x2210B8u) = 0u;
-	MEM32(0x2210BCu) = 0u;
-	MEM32(0x2210C0u) = 0u;
-	MEM32(0x2210A0u) = 0x20u;
-	MEM32(0x2210ACu) = 0xD6E80u;
-	MEM32(arg0 + 0x34u) = 0x2210A0u;
+	GameObjectType_startup(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_shutdown(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_load(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_collect(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_version(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_flags(MaintainDistSteeringType_VA) = 0u;
+	GameObjectType_size(MaintainDistSteeringType_VA) = 0x20u;
+	GameObjectType_state_machine(MaintainDistSteeringType_VA) = 0xD6E80u;
+	MEM32(arg0 + 0x34u) = MaintainDistSteeringType_VA;
 }
 
 uint32_t gcComponent_Create(uint32_t edx)
@@ -213193,7 +213125,7 @@ void ComponentSlotCompact(uint32_t eax)
 }
 
 /* clears ComponentFamily_VA, sets its name to ComponentText_VA with version 3 and type_count 1, calls
-   GameObjectFamilyInit, and registers it with GameObjectRegisterFamily(7, ComponentFamily_VA). */
+   ObjectGroupComponent_Register, and registers it with GameObjectRegisterFamily(7, ComponentFamily_VA). */
 void ComponentFamilyRegister(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, ignored = 0, ignored_2 = 0;
@@ -213205,7 +213137,7 @@ void ComponentFamilyRegister(void)
 	GameObjectFamily_shutdown(ComponentFamily_VA) = 0u;
 	GameObjectFamily_version(ComponentFamily_VA) = 3u;
 	GameObjectFamily_type_count(ComponentFamily_VA) = 1u;
-	GameObjectFamilyInit(arg0);
+	ObjectGroupComponent_Register(arg0);
 	arg1 = ComponentFamily_VA;
 	arg0 = 7u;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &ignored_2);
@@ -213271,10 +213203,8 @@ void ComponentSlotRemoveHandle(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	}
 }
 
-/* Reads level data from a file with vcFileReadBytes and vcFileReadU32, creates game objects with
-   GameObjectCreateInFile, loads them with GameObjectLoad, sets owners with GameObjectSetOwner, and
-   allocates timer slots with TimerSlotAllocate. */
-uint32_t LevelLoadFromFile(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* Reads an object of the ObjectGroupComponent type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t ObjectGroupComponent_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, arg4 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0, t2 = 0, t3 = 0;
@@ -213517,9 +213447,9 @@ uint32_t LevelLoadFromFile(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t ed
 	return eax;
 }
 
-/* For each of the object's sixteen 0x9C-byte records, collects the sub-object handles of its two
-   ten-entry arrays with GameObjectCollect and ORs the results. */
-uint32_t GameObjectCollectSubObjects(uint32_t arg0, uint32_t arg1)
+/* Collects what an object of the ObjectGroupComponent type refers to that has to be saved
+   (GameObjectCollect). */
+uint32_t ObjectGroupComponent_Collect(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebp = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0, saved_arg1 = 0, stack_200000 = 0;
@@ -213661,8 +213591,8 @@ void GameObjectHandleCleanup(uint32_t arg0)
 }
 
 /* Sets up the Item game object family, naming it ItemText_VA and registering its six types (SpyCapsule,
-   NoseconePickup, ZenCratesPickup, ZenCratesMunitionsPickup, ZenCratesMunitionsPickupInitClass,
-   TrainingBeacon) with GameObjectRegisterFamily. */
+   NoseconePickup, ZenCratesPickup, ZenCratesMunitionsPickup, PunyHumanPickup_Register, TrainingBeacon)
+   with GameObjectRegisterFamily. */
 void ItemFamilyRegister(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, ignored = 0, ignored_2 = 0;
@@ -213682,7 +213612,7 @@ void ItemFamilyRegister(void)
 	arg0 = ItemFamily_VA;
 	ZenCratesMunitionsPickup_Register(arg0);
 	arg0 = ItemFamily_VA;
-	ZenCratesMunitionsPickupInitClass(arg0);
+	PunyHumanPickup_Register(arg0);
 	arg0 = ItemFamily_VA;
 	TrainingBeacon_Register(arg0);
 	arg1 = ItemFamily_VA;
@@ -214598,7 +214528,7 @@ void StructureFamilyRegister(uint32_t edx)
 	GameObjectFamily_type_count(StructureFamily_VA) = 2u;
 	Building_Register(edx, arg0);
 	arg0 = StructureFamily_VA;
-	StructureFamily_InitClass(arg0);
+	ObjectSwapStructure_Register(arg0);
 	arg1 = StructureFamily_VA;
 	arg0 = 5u;
 	GameObjectRegisterFamily(arg0, arg1, &ignored, &ignored_2);
@@ -215267,11 +215197,9 @@ void SceneObjectCloneObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t a
 	MEM32(esi + 0x40u) = MEM32(esi + 0x40u) | 0x142u;
 }
 
-/* Handles a message whose class is 0x7FFF by dispatching the id at *arg3 to GameObjectCopyFromTemplate
-   and SceneObjectCloneObject (0xFFF9), GameObjectSendMessageToChildren (0x2AF8),
-   GameObjectSetOrToggleState (0x2AFA), a field 0xD0 copy (0x2AFB), sub_000D87D0 (0x2AFC), or
-   GameObjectDetachAndDestroyChildren and vcObjectRelease (0xFFFA), returning 1 when handled. */
-uint32_t SceneObjectApplyMessageId(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ModelNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ModelNode_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -215363,11 +215291,8 @@ uint32_t SceneObjectApplyMessageId(uint32_t ebp, uint32_t arg0, uint32_t arg1, u
 	return eax;
 }
 
-/* Loads a scene object node from the file with GameObjectNodeLoad and then, by version (edi), either
-   loads the referenced object with vcObjectLoad and copies the object's name to field 0xD4 or reads a
-   64-byte name and a state value (default 8) into field 0x114, then clones it with
-   SceneObjectCloneObject. */
-uint32_t SceneObjectReadNodeFromFile(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the ModelNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t ModelNode_Load(uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint8_t eax_2 = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -215428,19 +215353,20 @@ uint32_t SceneObjectReadNodeFromFile(uint32_t ebp, uint32_t esi, uint32_t arg0, 
 	return eax;
 }
 
-/* Initializes the node family descriptor at 0x221730 with size 0x118, handlers SceneObjectApplyMessageId
-   and SceneObjectReadNodeFromFile, and assigns it to arg0+0x28. */
-void NodeFamilyObjectInit(uint32_t arg0)
+/* Registers the ModelNode type (Node 6), a model placed in a level, 6,353 of them:
+   small_rock_formations, wasteland_rockform, factory_fence, bldg_...: fills its GameObjectType and
+   stores it in its family. */
+void ModelNode_Register(uint32_t arg0)
 {
-	MEM32(0x221730u) = 0x118u;
-	MEM32(0x221734u) = 0x59010u;
-	MEM32(0x221738u) = 0x59010u;
-	MEM32(0x22173Cu) = 0xD8860u;
-	MEM32(0x221740u) = 0xD89A0u;
-	MEM32(0x221748u) = 0x385E0u;
-	MEM32(0x22174Cu) = 2u;
-	MEM32(0x221750u) = 0u;
-	MEM32(arg0 + 0x28u) = 0x221730u;
+	GameObjectType_size(ModelNodeType_VA) = 0x118u;
+	GameObjectType_startup(ModelNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(ModelNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(ModelNodeType_VA) = 0xD8860u;
+	GameObjectType_load(ModelNodeType_VA) = 0xD89A0u;
+	GameObjectType_collect(ModelNodeType_VA) = 0x385E0u;
+	GameObjectType_version(ModelNodeType_VA) = 2u;
+	GameObjectType_flags(ModelNodeType_VA) = 0u;
+	MEM32(arg0 + 0x28u) = ModelNodeType_VA;
 }
 
 /* Updates the node family's five slots by calling StatsAllocSlot and StatsSetValue, and sets the
@@ -215537,9 +215463,9 @@ void NodeFamilySlotReset(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t arg0
 	MEM32(saved_arg0 + 8u) = ((zero == 0u) - 1u) & 0xD8AE0u;
 }
 
-/* Dispatches node family messages: for 0xFFF9 calls NodeFamilySlotReset, for 0xFFFA calls
-   GameObjectDetachAndDestroyChildren, and returns 1 for 0xFFFE and 0xFFFF. */
-uint32_t NodeFamilySlotMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The KeyValCountersNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t KeyValCountersNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -215581,9 +215507,8 @@ uint32_t NodeFamilySlotMessageHandler(uint32_t arg0, uint32_t arg1, uint32_t arg
 	return eax;
 }
 
-/* Reads five U32 values from the file into the object's array at offset 0xD0, then calls
-   GameObjectSendMessageWithParams with the object's field at 0xC8. */
-uint32_t NodeFamilySlotLoad(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the KeyValCountersNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t KeyValCountersNode_Load(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -215626,19 +215551,19 @@ uint32_t NodeFamilySlotLoad(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t a
 	return eax;
 }
 
-/* Initializes the node family descriptor at 0x221778 with size 0xFC, handlers
-   NodeFamilySlotMessageHandler and NodeFamilySlotLoad, and assigns it to arg0+0x74. */
-void NodeFamilySlotInit(uint32_t arg0)
+/* Registers the KeyValCountersNode type (Node 25), the levels' "level keyval counters", one a level:
+   fills its GameObjectType and stores it in its family. */
+void KeyValCountersNode_Register(uint32_t arg0)
 {
-	MEM32(0x221794u) = 0u;
-	MEM32(0x221798u) = 0u;
-	MEM32(0x221778u) = 0xFCu;
-	MEM32(0x22177Cu) = 0x59010u;
-	MEM32(0x221780u) = 0x59010u;
-	MEM32(0x221784u) = 0xD8C10u;
-	MEM32(0x221788u) = 0xD8C80u;
-	MEM32(0x221790u) = 0x385E0u;
-	MEM32(arg0 + 0x74u) = 0x221778u;
+	GameObjectType_version(KeyValCountersNodeType_VA) = 0u;
+	GameObjectType_flags(KeyValCountersNodeType_VA) = 0u;
+	GameObjectType_size(KeyValCountersNodeType_VA) = 0xFCu;
+	GameObjectType_startup(KeyValCountersNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(KeyValCountersNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(KeyValCountersNodeType_VA) = 0xD8C10u;
+	GameObjectType_load(KeyValCountersNodeType_VA) = 0xD8C80u;
+	GameObjectType_collect(KeyValCountersNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x74u) = KeyValCountersNodeType_VA;
 }
 
 /* Refreshes the three game-object handle slots at ebx+0x34, dropping entries whose object fails
@@ -218280,10 +218205,9 @@ void GameObjectDrawBoundsLines(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_
 	g_esp = g_esp + 0x10u;
 }
 
-/* Dispatches scene-object commands on a game object, creating or releasing its vcObject at +0xD0 and
-   routing GameObjectSceneObjectSetBoundsAndUser, GameObjectDrawBoundsLines, and vector updates at
-   +0x7C/+0x88. */
-uint32_t GameObjectSceneCommandDispatch(uint32_t ebx, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The CollisionVolumeNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t CollisionVolumeNode_StateMachine(uint32_t ebx, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, esi_2 = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -218369,10 +218293,8 @@ uint32_t GameObjectSceneCommandDispatch(uint32_t ebx, uint32_t esi, uint32_t arg
 	return eax;
 }
 
-/* Loads a scene object for the game object with vcObjectLoad, stores it in the object's 0xD0 slot, sets
-   its flags with vcSceneObjectChangeFlags, reads the scene-object flags with vcFileReadU32 (defaulting
-   to 8) and gives it the game object's handle with vcSceneObjectSetUser before SceneObjectCreate. */
-uint32_t GameObjectLoadSceneObject(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the CollisionVolumeNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t CollisionVolumeNode_Load(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebp_2 = 0, ebx = 0, edi_2 = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg3 = 0;
@@ -218445,19 +218367,19 @@ uint32_t GameObjectLoadSceneObject(uint32_t ebp, uint32_t edi, uint32_t arg0, ui
 	return eax;
 }
 
-/* Registers the 0xD8-byte class descriptor at 0x2218F8 with GameObjectSceneCommandDispatch and
-   GameObjectLoadSceneObject as handlers and stores it at NodeFamily+0x64. */
-void NodeFamilyRegisterSceneObjectClass(uint32_t arg0)
+/* Registers the CollisionVolumeNode type (Node 21), the levels' "collsion volume", 521 of them, and
+   "ceiling": fills its GameObjectType and stores it in its family. */
+void CollisionVolumeNode_Register(uint32_t arg0)
 {
-	MEM32(0x2218F8u) = 0xD8u;
-	MEM32(0x2218FCu) = 0x59010u;
-	MEM32(0x221900u) = 0x59010u;
-	MEM32(0x221904u) = 0xDAD80u;
-	MEM32(0x221908u) = 0xDAEB0u;
-	MEM32(0x221910u) = 0x385E0u;
-	MEM32(0x221914u) = 5u;
-	MEM32(0x221918u) = 0u;
-	MEM32(arg0 + 0x64u) = 0x2218F8u;
+	GameObjectType_size(CollisionVolumeNodeType_VA) = 0xD8u;
+	GameObjectType_startup(CollisionVolumeNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(CollisionVolumeNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(CollisionVolumeNodeType_VA) = 0xDAD80u;
+	GameObjectType_load(CollisionVolumeNodeType_VA) = 0xDAEB0u;
+	GameObjectType_collect(CollisionVolumeNodeType_VA) = 0x385E0u;
+	GameObjectType_version(CollisionVolumeNodeType_VA) = 5u;
+	GameObjectType_flags(CollisionVolumeNodeType_VA) = 0u;
+	MEM32(arg0 + 0x64u) = CollisionVolumeNodeType_VA;
 }
 
 /* Sets the object's size fields to 50 (0xEC/0xF0/0xF4), the corner bounds to -25..25 (0xD0..0xE4) and
@@ -218915,10 +218837,8 @@ void GameObjectSetBoundsRelativeTo(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	BoundsSetFromSize(arg0_2);
 }
 
-/* Reads the scene object's range fields (0xD4, 0xD8 and two stack values) with vcFileReadU32, loads the
-   scene object with vcObjectLoad into the object's 0xD0 slot, applies the range with ObjectSetRange, and
-   when the 0xD4 field is set notifies the owner with GameObjectSendMessageWithParams. */
-uint32_t GameObjectLoadSceneObjectRange(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Reads an object of the SoundNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t SoundNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, arg5 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0;
@@ -219377,11 +219297,9 @@ void NodeFamilyUpdateObjectState(uint32_t eax, uint32_t ecx, uint32_t edx, uint3
 	ObjectRemoveFromQuadtree(arg0);
 }
 
-/* Handles the same node messages as NodeFamilyHandleMessage plus 0x2AF8 NodeFamilyDrawObjectOutline,
-   0x2AF9 ObjectSetPosition from the object's field 0xD0 and position at +0x7C, 0x2AFB returning field
-   0xD0 and 0xFFFA GameObjectReleaseSceneObject, and on 0xFFF9 retains the template's object at +0x74
-   through vcObjectAddRef into +0xD0. */
-uint32_t NodeFamilyHandleMessageWithSceneObject(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The SoundNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t SoundNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219474,17 +219392,19 @@ uint32_t NodeFamilyHandleMessageWithSceneObject(uint32_t ebx, uint32_t ebp, uint
 	return eax;
 }
 
-void sub_000DBAA0(uint32_t arg0)
+/* Registers the SoundNode type (Node 19), a sound placed in a level: jetloop_m.wav, jetignite.wav,
+   heavy_missile_launch_m.wav: fills its GameObjectType and stores it in its family. */
+void SoundNode_Register(uint32_t arg0)
 {
-	MEM32(0x2219A4u) = 0u;
-	MEM32(0x2219A8u) = 0u;
-	MEM32(0x221988u) = 0xDCu;
-	MEM32(0x22198Cu) = 0x59010u;
-	MEM32(0x221990u) = 0x59010u;
-	MEM32(0x221994u) = 0xDB960u;
-	MEM32(0x221998u) = 0xDB560u;
-	MEM32(0x2219A0u) = 0x385E0u;
-	MEM32(arg0 + 0x5Cu) = 0x221988u;
+	GameObjectType_version(SoundNodeType_VA) = 0u;
+	GameObjectType_flags(SoundNodeType_VA) = 0u;
+	GameObjectType_size(SoundNodeType_VA) = 0xDCu;
+	GameObjectType_startup(SoundNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(SoundNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(SoundNodeType_VA) = 0xDB960u;
+	GameObjectType_load(SoundNodeType_VA) = 0xDB560u;
+	GameObjectType_collect(SoundNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x5Cu) = SoundNodeType_VA;
 }
 
 /* Attaches the vcObject returned by GameObjectCopyFromTemplate to esi+0xD0 through vcObjectAddRef, then
@@ -219760,11 +219680,9 @@ void GameObjectCloneSceneObject(uint32_t eax, uint32_t edi, uint32_t arg1)
 	x86_call(sub_00039210, 0x000DBDC5u, 2, arg0, arg1_2);
 }
 
-/* Dispatches on the message id in arg3 (0x2AF8..0x2AFC, 0xF006, 0xFFF9, 0xFFFA, 0xFFFF) to
-   GameObjectUpdateBounds, SceneObjectCreateAndInit, NodeFamilyApplyObjectActiveState,
-   GameObjectCloneSceneObject, NodeFamilyAttachObject, GameObjectDetachAndDestroyChildren, or returns the
-   scene object at +0xD0. */
-uint32_t NodeFamilyDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The EffectNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t EffectNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -219864,10 +219782,8 @@ uint32_t NodeFamilyDispatchMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, ui
 	return eax;
 }
 
-/* Resolves a game object from the handle returned by GameObjectNodeLoad, loads its vcObject with
-   vcObjectLoad, resolves it with VcObjectCacheResolve, sets flags with vcSceneObjectChangeFlags,
-   deactivates it with ObjectDeactivate and sets its element count from the object's +0x178. */
-uint32_t NodeFamilyLoadObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the EffectNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t EffectNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebx_2 = 0, edi = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -219912,22 +219828,23 @@ uint32_t NodeFamilyLoadObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t
 	return eax;
 }
 
-void sub_000DBFF0(uint32_t arg0)
+/* Registers the EffectNode type (Node 12), an effect placed in a level: smoldering smoke, blast mark
+   smolder, crater smoke, fx_fire: fills its GameObjectType and stores it in its family. */
+void EffectNode_Register(uint32_t arg0)
 {
-	MEM32(0x2219ECu) = 0u;
-	MEM32(0x2219F0u) = 0u;
-	MEM32(0x2219D0u) = 0xD4u;
-	MEM32(0x2219D4u) = 0x59010u;
-	MEM32(0x2219D8u) = 0x59010u;
-	MEM32(0x2219DCu) = 0xDBDD0u;
-	MEM32(0x2219E0u) = 0xDBF50u;
-	MEM32(0x2219E8u) = 0x2DFE0u;
-	MEM32(arg0 + 0x40u) = 0x2219D0u;
+	GameObjectType_version(EffectNodeType_VA) = 0u;
+	GameObjectType_flags(EffectNodeType_VA) = 0u;
+	GameObjectType_size(EffectNodeType_VA) = 0xD4u;
+	GameObjectType_startup(EffectNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(EffectNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(EffectNodeType_VA) = 0xDBDD0u;
+	GameObjectType_load(EffectNodeType_VA) = 0xDBF50u;
+	GameObjectType_collect(EffectNodeType_VA) = 0x2DFE0u;
+	MEM32(arg0 + 0x40u) = EffectNodeType_VA;
 }
 
-/* Reads the object's handle and its three state words at 0xD0, 0xD4 and 0xD8 from the file through
-   vcFileReadU32, returning the handle. */
-uint32_t GameObjectReadStateFromFile(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the PointNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t PointNode_Load(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -221264,10 +221181,9 @@ void GameObjectDispatchStateTargetAction(uint32_t eax, uint32_t ecx, uint32_t eb
 	}
 }
 
-/* Dispatches node messages, calling GameObjectDispatchStateTargetAction for 0x2AF9 and
-   GameObjectDrawDebugOverlay for 0x2AF8, and clears the state at +0xD0 after GameObjectCopyFromTemplate
-   on 0xFFF9. */
-uint32_t NodeDispatchStateMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The PointNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t PointNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -221345,19 +221261,20 @@ uint32_t NodeDispatchStateMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint
 	return eax;
 }
 
-/* Fills the static NodeFamily descriptor at 0x221A18 with the object size 0xDC and the four callbacks
-   0x59010, 0xDCD40, 0xDC050 and 0x385E0, then stores its address at arg0+0x38. */
-void SplineNodeFamilyInit(uint32_t arg0)
+/* Registers the PointNode type (Node 10), the levels' "multiplayer spawn point" and "control point"; a
+   spline, a path and the civilians make them for their points: fills its GameObjectType and stores it in
+   its family. */
+void PointNode_Register(uint32_t arg0)
 {
-	MEM32(0x221A34u) = 0u;
-	MEM32(0x221A38u) = 0u;
-	MEM32(0x221A18u) = 0xDCu;
-	MEM32(0x221A1Cu) = 0x59010u;
-	MEM32(0x221A20u) = 0x59010u;
-	MEM32(0x221A24u) = 0xDCD40u;
-	MEM32(0x221A28u) = 0xDC050u;
-	MEM32(0x221A30u) = 0x385E0u;
-	MEM32(arg0 + 0x38u) = 0x221A18u;
+	GameObjectType_version(PointNodeType_VA) = 0u;
+	GameObjectType_flags(PointNodeType_VA) = 0u;
+	GameObjectType_size(PointNodeType_VA) = 0xDCu;
+	GameObjectType_startup(PointNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(PointNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(PointNodeType_VA) = 0xDCD40u;
+	GameObjectType_load(PointNodeType_VA) = 0xDC050u;
+	GameObjectType_collect(PointNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x38u) = PointNodeType_VA;
 }
 
 /* Sends arg1 and arg2 through GameObjectSendMessageToChildren, reads the scene object bounds with
@@ -221674,12 +221591,9 @@ void MSONNodeApplySetStateMessage(uint32_t eax, uint32_t ecx, uint32_t esi, uint
 	g_esp = g_esp + 4u;
 }
 
-/* Handles a node message (arg2 0x7FFF): forwards 0x2AF8 to children with
-   GameObjectSendMessageToChildren, applies the 0x2AFA set-state through MSONNodeApplySetStateMessage,
-   returns the node's 0xD0 object for 0x2AFB, sets the VCObject from a name with NodeSetVCObjectFromName
-   for 0xFFF9, and for 0xFFFA detaches and destroys children with GameObjectDetachAndDestroyChildren and
-   releases the node's 0xD0 object with vcObjectRelease. */
-uint32_t MSONNodeHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The AnimationNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t AnimationNode_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -221751,19 +221665,20 @@ uint32_t MSONNodeHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint
 	return eax;
 }
 
-/* Fills the static type descriptor at 0x221AA8 (size 0xD4, handler MSONNodeHandleMessage, constructor
-   0x385E0) and links it into the NodeFamily at arg0+0x24. */
-void NodeFamilyRegisterType(uint32_t arg0)
+/* Registers the AnimationNode type (Node 5), the levels name them by an animation: "vf-1sx fighter cine
+   idle", "vf-1sx guardian hover", "male01 average 1 idle": fills its GameObjectType and stores it in its
+   family. */
+void AnimationNode_Register(uint32_t arg0)
 {
-	MEM32(0x221AC4u) = 0u;
-	MEM32(0x221AC8u) = 0u;
-	MEM32(0x221AA8u) = 0xD4u;
-	MEM32(0x221AACu) = 0x59010u;
-	MEM32(0x221AB0u) = 0x59010u;
-	MEM32(0x221AB4u) = 0xDD210u;
-	MEM32(0x221AB8u) = 0xC80A0u;
-	MEM32(0x221AC0u) = 0x385E0u;
-	MEM32(arg0 + 0x24u) = 0x221AA8u;
+	GameObjectType_version(AnimationNodeType_VA) = 0u;
+	GameObjectType_flags(AnimationNodeType_VA) = 0u;
+	GameObjectType_size(AnimationNodeType_VA) = 0xD4u;
+	GameObjectType_startup(AnimationNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(AnimationNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(AnimationNodeType_VA) = 0xDD210u;
+	GameObjectType_load(AnimationNodeType_VA) = 0xC80A0u;
+	GameObjectType_collect(AnimationNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x24u) = AnimationNodeType_VA;
 }
 
 /* Forwards the message to children with GameObjectSendMessageToChildren and, when the node has an object
@@ -221908,12 +221823,9 @@ void MSONLineNodeUpdateChildTransforms(uint32_t eax, uint32_t ebx, uint32_t ebp,
 	g_esp = g_esp + 0xCu;
 }
 
-/* Handles a node message (arg2 0x7FFF): draws the line list for 0x2AF8 through MSONLineNodeDraw, updates
-   transforms for 0x2AF9 through MSONLineNodeUpdateChildTransforms, sets or toggles state with
-   GameObjectSetOrToggleState for 0x2AFA, initialises from a template with GameObjectCopyFromTemplate for
-   0xFFF9, and for 0xFFFA detaches and destroys children with GameObjectDetachAndDestroyChildren and
-   releases the node's 0xD0 object with vcObjectRelease. */
-uint32_t MSONLineNodeHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The HelperNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t HelperNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -221991,9 +221903,8 @@ uint32_t MSONLineNodeHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uin
 	return eax;
 }
 
-/* Resolves the node with GameObjectNodeLoad, then reads a u32 into its +0xD4 field with vcFileReadU32
-   and loads the object into +0xD0 with vcObjectLoad. */
-uint32_t PlayerStandInMSONodeLoadLinkedObject(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the HelperNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t HelperNode_Load(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, edi_2 = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -222053,19 +221964,19 @@ uint32_t MSONLineNodeLoad(uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg
 	return eax;
 }
 
-/* Fills the node family descriptor at 0x221AF0 (size 0xD8, constructor/destructor 0x59010, slots
-   0xDD460, 0xDD580, 0x385E0) and stores its address at arg0+0x20. */
-void PlayerStandInMSONodeFamilyInit(uint32_t arg0)
+/* Registers the HelperNode type (Node 4), the levels' "Helper - ...", 1,499 of them: fills its
+   GameObjectType and stores it in its family. */
+void HelperNode_Register(uint32_t arg0)
 {
-	MEM32(0x221B0Cu) = 0u;
-	MEM32(0x221B10u) = 0u;
-	MEM32(0x221AF0u) = 0xD8u;
-	MEM32(0x221AF4u) = 0x59010u;
-	MEM32(0x221AF8u) = 0x59010u;
-	MEM32(0x221AFCu) = 0xDD460u;
-	MEM32(0x221B00u) = 0xDD580u;
-	MEM32(0x221B08u) = 0x385E0u;
-	MEM32(arg0 + 0x20u) = 0x221AF0u;
+	GameObjectType_version(HelperNodeType_VA) = 0u;
+	GameObjectType_flags(HelperNodeType_VA) = 0u;
+	GameObjectType_size(HelperNodeType_VA) = 0xD8u;
+	GameObjectType_startup(HelperNodeType_VA) = 0x59010u;
+	GameObjectType_shutdown(HelperNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(HelperNodeType_VA) = 0xDD460u;
+	GameObjectType_load(HelperNodeType_VA) = 0xDD580u;
+	GameObjectType_collect(HelperNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x20u) = HelperNodeType_VA;
 }
 
 /* Add-refs arg1 with vcObjectAddRef, releases the old object at +0xD0 with vcObjectRelease, stores arg1
@@ -223721,11 +223632,9 @@ void CyclopsDoorsActionDrawStatusText(uint32_t eax, uint32_t ecx, uint32_t edx, 
 	g_esp = g_esp + 0xCu;
 }
 
-/* Family message handler that dispatches on the message id from arg3 (0xFFF9 ->
-   GameObjectCopyFromTemplate plus setting the object's flags at 0x40/0xD0, 0xFFFA ->
-   GameObjectDetachAndDestroyChildren, 0xFFFE/0xFFFF -> true, 0x2AF8 -> CyclopsDoorsActionDrawStatusText,
-   0x2AFA -> GameObjectSetOrToggleState). */
-uint32_t CyclopsDoorsActionHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The FolderNode type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t FolderNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -223791,9 +223700,8 @@ uint32_t CyclopsDoorsActionHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t ar
 	return eax;
 }
 
-/* Reads a U32 from the file into the state field at offset 0xD0 of the object found by
-   GameObjectFromHandle (or the last object) using vcFileReadU32. */
-uint32_t CyclopsDoorsActionLoadState(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1)
+/* Reads an object of the FolderNode type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t FolderNode_Load(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -223822,9 +223730,8 @@ uint32_t CyclopsDoorsActionLoadState(uint32_t ebx, uint32_t ebp, uint32_t esi, u
 	return eax;
 }
 
-/* Sets up the global text layout at 0x24EBA0 with UiElementInit and UiElementSetColor and the color
-   0x80282850. */
-uint32_t CyclopsDoorsActionInitTextLayout(void)
+/* The FolderNode type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FolderNode_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, eax = 0;
 
@@ -223839,19 +223746,20 @@ uint32_t CyclopsDoorsActionInitTextLayout(void)
 	return eax;
 }
 
-/* Fills the GameObjectFamily at 0x221B80 (size 0xD4, shutdown 0, version 0, function pointers
-   0xDE740/0x59010/0xDE5F0/0xDE6D0/0x385E0) and stores it at arg0+0x10. */
-void CyclopsDoorsActionRegisterFamily(uint32_t arg0)
+/* Registers the FolderNode type (Node 0), the levels' folders: "entities", "terrain and environment",
+   "global lights", "camera shot" (tools/level_names.py): fills its GameObjectType and stores it in its
+   family. */
+void FolderNode_Register(uint32_t arg0)
 {
-	MEM32(0x221B9Cu) = 0u;
-	MEM32(0x221BA0u) = 0u;
-	MEM32(0x221B80u) = 0xD4u;
-	MEM32(0x221B84u) = 0xDE740u;
-	MEM32(0x221B88u) = 0x59010u;
-	MEM32(0x221B8Cu) = 0xDE5F0u;
-	MEM32(0x221B90u) = 0xDE6D0u;
-	MEM32(0x221B98u) = 0x385E0u;
-	MEM32(arg0 + 0x10u) = 0x221B80u;
+	GameObjectType_version(FolderNodeType_VA) = 0u;
+	GameObjectType_flags(FolderNodeType_VA) = 0u;
+	GameObjectType_size(FolderNodeType_VA) = 0xD4u;
+	GameObjectType_startup(FolderNodeType_VA) = 0xDE740u;
+	GameObjectType_shutdown(FolderNodeType_VA) = 0x59010u;
+	GameObjectType_state_machine(FolderNodeType_VA) = 0xDE5F0u;
+	GameObjectType_load(FolderNodeType_VA) = 0xDE6D0u;
+	GameObjectType_collect(FolderNodeType_VA) = 0x385E0u;
+	MEM32(arg0 + 0x10u) = FolderNodeType_VA;
 }
 
 /* Copies the template at 0x1A5E24 into the object, clears fields 0x40/0x48/0x4C, sets 0x50 to 1 and
@@ -231853,10 +231761,9 @@ void ScreenElementTextDraw(uint32_t eax, uint32_t esi)
 	}
 }
 
-/* Event handler for the text element: on event 0xFFF9 calls ScreenElementTextSetMessage to set the
-   message, on 0x2EE2 calls ScreenElementTextDraw to draw, on 0xFFFA calls GameObjectFreeByHandle, and
-   returns 1 for 0xFFFF/0xFFFE. */
-uint32_t ScreenElementTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The MissionBoundaryElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MissionBoundaryElement_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -231908,19 +231815,19 @@ uint32_t ScreenElementTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg
 	return eax;
 }
 
-/* Stores the text element descriptor at 0x2225A0 (with handler 0xE4AE0) into the screen element family
-   at offset 0x7C. */
-void ScreenElementFamilyRegisterTextElement(uint32_t arg0)
+/* Registers the MissionBoundaryElement type (ScreenElement 27), its text "MISSION BOUNDARY!": fills its
+   GameObjectType and stores it in its family. */
+void MissionBoundaryElement_Register(uint32_t arg0)
 {
-	MEM32(0x2225B0u) = 0u;
-	MEM32(0x2225B8u) = 0u;
-	MEM32(0x2225BCu) = 0u;
-	MEM32(0x2225C0u) = 0u;
-	MEM32(0x2225A0u) = 0x70u;
-	MEM32(0x2225A4u) = 0x59010u;
-	MEM32(0x2225A8u) = 0x59010u;
-	MEM32(0x2225ACu) = 0xE4AE0u;
-	MEM32(arg0 + 0x7Cu) = 0x2225A0u;
+	GameObjectType_load(MissionBoundaryElementType_VA) = 0u;
+	GameObjectType_collect(MissionBoundaryElementType_VA) = 0u;
+	GameObjectType_version(MissionBoundaryElementType_VA) = 0u;
+	GameObjectType_flags(MissionBoundaryElementType_VA) = 0u;
+	GameObjectType_size(MissionBoundaryElementType_VA) = 0x70u;
+	GameObjectType_startup(MissionBoundaryElementType_VA) = 0x59010u;
+	GameObjectType_shutdown(MissionBoundaryElementType_VA) = 0x59010u;
+	GameObjectType_state_machine(MissionBoundaryElementType_VA) = 0xE4AE0u;
+	MEM32(arg0 + 0x7Cu) = MissionBoundaryElementType_VA;
 }
 
 /* Initializes a text element's fields at 0x28-0x34 (y position from FLOAT_AT(0x2226B0), parent object
@@ -232259,10 +232166,9 @@ void HudDrawHealthBar(uint32_t eax, uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x24u;
 }
 
-/* Dispatches an interface message whose code is read from arg3, returning 1 for the codes 0xFFFF, 0xFFFE
-   and those handled by ScreenElementTextInitialize, HudDrawHealthBar and GameObjectFreeByHandle, and 0
-   otherwise. */
-uint32_t HudMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The HealthBarElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t HealthBarElement_StateMachine(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -232313,10 +232219,8 @@ uint32_t HudMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t
 	return eax;
 }
 
-/* Creates the HUD piece screen elements from HUDPiecesTgaText via vcObjectGet, sizes them with
-   vcRectSet, applies colors and rectangles through UiElementSetBoundsFromObject, UiElementSetColor and
-   VcObjectCopyConstruct, and stores them in the HUD globals. */
-uint32_t HUDPiecesScreenElementCreate(uint32_t esi, uint32_t edi)
+/* The HealthBarElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t HealthBarElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint8_t edx_2 = 0;
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -232595,9 +232499,8 @@ uint32_t HUDPiecesScreenElementCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases each of the HUD piece screen elements by calling VcObjectReleaseField on the globals created
-   by HUDPiecesScreenElementCreate. */
-uint32_t HUDPiecesScreenElementDestroy(void)
+/* The HealthBarElement type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t HealthBarElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -232618,19 +232521,19 @@ uint32_t HUDPiecesScreenElementDestroy(void)
 	return eax;
 }
 
-/* Fills the screen element family at arg0+0x78 with size 0x38 and the HUDPiecesScreenElementCreate,
-   HUDPiecesScreenElementDestroy and HudMessageDispatch callbacks, the family registered by the caller. */
-void HUDPiecesScreenElementFamilyInit(uint32_t arg0)
+/* Registers the HealthBarElement type (ScreenElement 26), its object's health against its most, +0x17C
+   and +0x180 (HudDrawHealthBar): fills its GameObjectType and stores it in its family. */
+void HealthBarElement_Register(uint32_t arg0)
 {
-	MEM32(0x2225F8u) = 0u;
-	MEM32(0x222600u) = 0u;
-	MEM32(0x222604u) = 0u;
-	MEM32(0x222608u) = 0u;
-	MEM32(0x2225E8u) = 0x38u;
-	MEM32(0x2225ECu) = 0xE51C0u;
-	MEM32(0x2225F0u) = 0xE5530u;
-	MEM32(0x2225F4u) = 0xE5120u;
-	MEM32(arg0 + 0x78u) = 0x2225E8u;
+	GameObjectType_load(HealthBarElementType_VA) = 0u;
+	GameObjectType_collect(HealthBarElementType_VA) = 0u;
+	GameObjectType_version(HealthBarElementType_VA) = 0u;
+	GameObjectType_flags(HealthBarElementType_VA) = 0u;
+	GameObjectType_size(HealthBarElementType_VA) = 0x38u;
+	GameObjectType_startup(HealthBarElementType_VA) = 0xE51C0u;
+	GameObjectType_shutdown(HealthBarElementType_VA) = 0xE5530u;
+	GameObjectType_state_machine(HealthBarElementType_VA) = 0xE5120u;
+	MEM32(arg0 + 0x78u) = HealthBarElementType_VA;
 }
 
 /* Scans GameObjectFamilies(2) and GameObjectFamilies(5) via GameObjectFromHandle and
@@ -235256,10 +235159,9 @@ uint32_t MissionMenuScreenElementDraw(uint32_t edx, uint32_t ebx, uint32_t ebp, 
 	return eax;
 }
 
-/* Dispatches on the event code in arg2/arg3 and calls MissionMenuScreenElementDraw,
-   MissionMenuScreenElementConstruct, ScreenElementNotifyOwner, GameObjectDeactivate,
-   GameObjectFreeByHandle and MissionMenuItemUpdateScrollOffsets for the MissionMenu screen element. */
-uint32_t MissionMenuScreenElementHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The MissionMenuElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MissionMenuElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -235332,10 +235234,8 @@ uint32_t MissionMenuScreenElementHandleMessage(uint32_t ebx, uint32_t ebp, uint3
 	return eax;
 }
 
-/* Creates the mission menu's screen elements with vcObjectGet from GUIMissionMenuTgaText_VA and
-   GUIMissionScreens16TgaText_VA, sets each one's rect with vcRectSet and bounds with
-   UiElementSetBoundsFromObject, stores them in globals and sets the color with UiElementSetColor. */
-uint32_t GuiMissionMenuSetup(uint32_t esi, uint32_t edi)
+/* The MissionMenuElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t MissionMenuElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint8_t edx_2 = 0;
 	uint16_t eax_2 = 0;
@@ -235473,8 +235373,8 @@ uint32_t GuiMissionMenuSetup(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the MissionMenu objects stored at 0x222AF8, 0x222ABC and 0x222A80 with vcObjectRelease. */
-uint32_t MissionMenuRelease(void)
+/* The MissionMenuElement type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t MissionMenuElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -235500,18 +235400,20 @@ uint32_t MissionMenuRelease(void)
 	return eax;
 }
 
-/* Installs the MissionMenu screen-element callbacks and size 0x84 into the family at arg0+0x58. */
-void MissionMenuScreenElementFamilyInstall(uint32_t arg0)
+/* Registers the MissionMenuElement type (ScreenElement 18), its textures GUI_mission_menu and
+   GUI_mission_screens16: the level select's list, made by LevelSelectScreenInit: fills its
+   GameObjectType and stores it in its family. */
+void MissionMenuElement_Register(uint32_t arg0)
 {
-	MEM32(0x222A40u) = 0u;
-	MEM32(0x222A48u) = 0u;
-	MEM32(0x222A4Cu) = 0u;
-	MEM32(0x222A50u) = 0u;
-	MEM32(0x222A30u) = 0x84u;
-	MEM32(0x222A34u) = 0xE7660u;
-	MEM32(0x222A38u) = 0xE77C0u;
-	MEM32(0x222A3Cu) = 0xE7580u;
-	MEM32(arg0 + 0x58u) = 0x222A30u;
+	GameObjectType_load(MissionMenuElementType_VA) = 0u;
+	GameObjectType_collect(MissionMenuElementType_VA) = 0u;
+	GameObjectType_version(MissionMenuElementType_VA) = 0u;
+	GameObjectType_flags(MissionMenuElementType_VA) = 0u;
+	GameObjectType_size(MissionMenuElementType_VA) = 0x84u;
+	GameObjectType_startup(MissionMenuElementType_VA) = 0xE7660u;
+	GameObjectType_shutdown(MissionMenuElementType_VA) = 0xE77C0u;
+	GameObjectType_state_machine(MissionMenuElementType_VA) = 0xE7580u;
+	MEM32(arg0 + 0x58u) = MissionMenuElementType_VA;
 }
 
 void sub_000E7840(uint32_t arg0, uint32_t arg1, uint32_t arg2)
@@ -235759,9 +235661,8 @@ void ScreenElementSetupFromTemplate(uint32_t eax, uint32_t esi, uint32_t edi, ui
 	MEM32(saved_arg0 + 0x18u) = 0xFFFFFFFFu;
 }
 
-/* creates the RetTrack2TgaText object with vcObjectGet, sets its rect with vcRectSet, and calls
-   UiElementSetBoundsFromObject and QuadCenterOrigin. */
-uint32_t RetTrack2TgaTextCreate(uint32_t esi, uint32_t edi)
+/* The TargetMarkerElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t TargetMarkerElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -235810,8 +235711,9 @@ uint32_t RetTrack2TgaTextCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* releases the global RetTrack2TgaText object with vcObjectRelease. */
-uint32_t RetTrack2TgaTextRelease(void)
+/* The TargetMarkerElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t TargetMarkerElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_eax = 0;
@@ -236238,10 +236140,9 @@ void TargetScreenMarkerDraw(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	g_esp = g_esp + 0x1Cu;
 }
 
-/* Dispatches a screen-element-family message id, calling ScreenElementSetupFromTemplate for 0xFFF9,
-   TargetScreenMarkerDraw for 0x2EE2 and GameObjectFreeByHandle for 0xFFFA, and returning 1 for 0xFFFF
-   and 0xFFFE. */
-uint32_t ScreenElementFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The TargetMarkerElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TargetMarkerElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, arg5_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 	uint32_t saved_arg4 = 0;
@@ -236300,17 +236201,19 @@ uint32_t ScreenElementFamilyHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t e
 	return eax;
 }
 
-void sub_000E8020(uint32_t arg0)
+/* Registers the TargetMarkerElement type (ScreenElement 17), its texture ret_track2:
+   TargetScreenMarkerDraw: fills its GameObjectType and stores it in its family. */
+void TargetMarkerElement_Register(uint32_t arg0)
 {
-	MEM32(0x222B48u) = 0u;
-	MEM32(0x222B50u) = 0u;
-	MEM32(0x222B54u) = 0u;
-	MEM32(0x222B58u) = 0u;
-	MEM32(0x222B38u) = 0x198u;
-	MEM32(0x222B3Cu) = 0xE7AE0u;
-	MEM32(0x222B40u) = 0xE7B30u;
-	MEM32(0x222B44u) = 0xE7F80u;
-	MEM32(arg0 + 0x54u) = 0x222B38u;
+	GameObjectType_load(TargetMarkerElementType_VA) = 0u;
+	GameObjectType_collect(TargetMarkerElementType_VA) = 0u;
+	GameObjectType_version(TargetMarkerElementType_VA) = 0u;
+	GameObjectType_flags(TargetMarkerElementType_VA) = 0u;
+	GameObjectType_size(TargetMarkerElementType_VA) = 0x198u;
+	GameObjectType_startup(TargetMarkerElementType_VA) = 0xE7AE0u;
+	GameObjectType_shutdown(TargetMarkerElementType_VA) = 0xE7B30u;
+	GameObjectType_state_machine(TargetMarkerElementType_VA) = 0xE7F80u;
+	MEM32(arg0 + 0x54u) = TargetMarkerElementType_VA;
 }
 
 /* Draws a numeric player stat into the element's rect: picks string id 0x41 or 0x42 for StatsAllocSlot
@@ -236576,10 +236479,8 @@ void ScreenElementInitChildRects(uint32_t eax, uint32_t ecx, uint32_t edi, uint3
 	MEM32(saved_arg0 + 0x18u) = 0xFFFFFFFFu;
 }
 
-/* Creates the reticle's vcObjectGet objects from the Ret textures (circle dot, locked solid, piece1-4,
-   track2), sets their rects with vcRectSet, registers them via
-   UiElementSetBoundsFromObject/QuadCenterOrigin and stores them in the 0x222CC8..0x222E6C globals. */
-uint32_t ReticleGraphicsInit(uint32_t esi, uint32_t edi)
+/* The TargetReticleElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t TargetReticleElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -236900,9 +236801,9 @@ uint32_t ReticleGraphicsInit(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Calls vcObjectRelease on each of the reticle graphics globals (0x222CC8 through 0x222E6C) to free
-   them. */
-uint32_t ReticleGraphicsRelease(void)
+/* The TargetReticleElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t TargetReticleElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -237769,7 +237670,9 @@ void TargetLockUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x34u;
 }
 
-uint32_t sub_000E90A0(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The TargetReticleElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t TargetReticleElement_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 
@@ -237819,19 +237722,20 @@ uint32_t sub_000E90A0(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, u
 	return eax;
 }
 
-/* Writes the size 0x44 and the method pointers 0xE8350, 0xE85A0 and sub_000E90A0 into the family
-   descriptor at 0x222C00 and attaches it at arg0+0x4C. */
-void ScreenElementFamilySetMethods(uint32_t arg0)
+/* Registers the TargetReticleElement type (ScreenElement 15), its textures ret2_locked_solid,
+   ret2_piece1 to 4b and ret_circle_active_dot: TargetLockUpdate: fills its GameObjectType and stores it
+   in its family. */
+void TargetReticleElement_Register(uint32_t arg0)
 {
-	MEM32(0x222C10u) = 0u;
-	MEM32(0x222C18u) = 0u;
-	MEM32(0x222C1Cu) = 0u;
-	MEM32(0x222C20u) = 0u;
-	MEM32(0x222C00u) = 0x44u;
-	MEM32(0x222C04u) = 0xE8350u;
-	MEM32(0x222C08u) = 0xE85A0u;
-	MEM32(0x222C0Cu) = 0xE90A0u;
-	MEM32(arg0 + 0x4Cu) = 0x222C00u;
+	GameObjectType_load(TargetReticleElementType_VA) = 0u;
+	GameObjectType_collect(TargetReticleElementType_VA) = 0u;
+	GameObjectType_version(TargetReticleElementType_VA) = 0u;
+	GameObjectType_flags(TargetReticleElementType_VA) = 0u;
+	GameObjectType_size(TargetReticleElementType_VA) = 0x44u;
+	GameObjectType_startup(TargetReticleElementType_VA) = 0xE8350u;
+	GameObjectType_shutdown(TargetReticleElementType_VA) = 0xE85A0u;
+	GameObjectType_state_machine(TargetReticleElementType_VA) = 0xE90A0u;
+	MEM32(arg0 + 0x4Cu) = TargetReticleElementType_VA;
 }
 
 /* Creates two objects from the class at 0x1A62C0 with vcObjectGet, gives each a rect with vcRectSet, and
@@ -240121,11 +240025,9 @@ void HudGaugeDraw(uint32_t eax, uint32_t ebx, uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x20u;
 }
 
-/* Handles an event for the HUD gauge state at arg1 when arg2 is 0x7FFF: dispatches on the code at
-   MEM32(arg3), calling HudGaugeDraw for 0x2EE2, GameObjectFreeByHandle for 0xFFFA, and
-   ScreenElementInitialize for 0xFFF9 (which also clears the gauge fields arg1+0x28..0x34), returning 1
-   when handled and 0 otherwise. */
-uint32_t HudGaugeEventHandle(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The EnemyTargetElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t EnemyTargetElement_StateMachine(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -240186,10 +240088,8 @@ uint32_t HudGaugeEventHandle(uint32_t ebx, uint32_t arg0, uint32_t arg1, uint32_
 	return eax;
 }
 
-/* Creates each HUD texture object with vcObjectGet, sets its rectangle with vcRectSet, and registers it
-   with UiElementSetBoundsFromObject, giving it a packed color through UiElementSetColor, for the HUD
-   piece and enemy icon TGAs (HUDPiecesTgaText, HUDEnemyDsTgaText and the rest). */
-uint32_t HUDTexturesInit(uint32_t esi, uint32_t edi)
+/* The EnemyTargetElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t EnemyTargetElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint8_t edx_2 = 0;
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -241185,9 +241085,8 @@ uint32_t HUDTexturesInit(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the fields of the static VcObjects at the known global addresses and of every 0x3C-byte
-   object from 0x223730 to 0x223D84 using VcObjectReleaseField. */
-uint32_t VcGlobalObjectsReleaseFields(void)
+/* The EnemyTargetElement type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t EnemyTargetElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -241219,19 +241118,19 @@ uint32_t VcGlobalObjectsReleaseFields(void)
 	return eax;
 }
 
-/* Stores the ScreenElement family's static descriptor (size 0x38 and the function pointers
-   HUDTexturesInit, VcGlobalObjectsReleaseFields, HudGaugeEventHandle) and writes it to arg0+0x30. */
-void ScreenElementFamilySetDescriptor(uint32_t arg0)
+/* Registers the EnemyTargetElement type (ScreenElement 8), its textures HUD_enemy_*.tga, an icon a kind
+   of enemy, with its gauge (HudGaugeDraw): fills its GameObjectType and stores it in its family. */
+void EnemyTargetElement_Register(uint32_t arg0)
 {
-	MEM32(0x2234D8u) = 0u;
-	MEM32(0x2234E0u) = 0u;
-	MEM32(0x2234E4u) = 0u;
-	MEM32(0x2234E8u) = 0u;
-	MEM32(0x2234C8u) = 0x38u;
-	MEM32(0x2234CCu) = 0xEAE10u;
-	MEM32(0x2234D0u) = 0xEB630u;
-	MEM32(0x2234D4u) = 0xEAD50u;
-	MEM32(arg0 + 0x30u) = 0x2234C8u;
+	GameObjectType_load(EnemyTargetElementType_VA) = 0u;
+	GameObjectType_collect(EnemyTargetElementType_VA) = 0u;
+	GameObjectType_version(EnemyTargetElementType_VA) = 0u;
+	GameObjectType_flags(EnemyTargetElementType_VA) = 0u;
+	GameObjectType_size(EnemyTargetElementType_VA) = 0x38u;
+	GameObjectType_startup(EnemyTargetElementType_VA) = 0xEAE10u;
+	GameObjectType_shutdown(EnemyTargetElementType_VA) = 0xEB630u;
+	GameObjectType_state_machine(EnemyTargetElementType_VA) = 0xEAD50u;
+	MEM32(arg0 + 0x30u) = EnemyTargetElementType_VA;
 }
 
 /* Sets the element's tracked object handle from the object at ecx+0x18, zeroes its displayed value and
@@ -242899,9 +242798,9 @@ void HudDrawObjectGauge(uint32_t esi, uint32_t edi)
 	g_esp = g_esp + 0x1Cu;
 }
 
-/* Handles a UI message: when arg2 is 0x7FFF it switches on MEM32(arg3) to call HudPieceSetObject,
-   HudDrawObjectGauge or GameObjectFreeByHandle, returning 1 when the message is handled and 0 otherwise. */
-uint32_t UiMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The GunAmmoGaugeElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t GunAmmoGaugeElement_StateMachine(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi = 0;
 
@@ -242951,11 +242850,8 @@ uint32_t UiMessageDispatch(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t 
 	return eax;
 }
 
-/* Creates the five HUD piece objects with vcObjectGet from HUDPiecesTgaText_VA and the texture at
-   0x1A6160, sizes each with vcRectSet, hands each to UiElementSetBoundsFromObject and UiElementSetColor
-   (with the color packed from globals 0x1B77D4/0x1B77D8/0x1B77DC), and stores them in globals 0x224254,
-   0x224218, 0x2241DC, 0x2242CC and 0x224290. */
-uint32_t HUDPiecesCreate(uint32_t esi, uint32_t edi)
+/* The GunAmmoGaugeElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t GunAmmoGaugeElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint8_t edx_2 = 0;
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
@@ -243206,9 +243102,9 @@ uint32_t HUDPiecesCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the five HUD piece objects held at 0x2242CC, 0x224290, 0x224254, 0x224218 and 0x2241DC with
-   VcObjectReleaseField. */
-uint32_t HUDPiecesDestroy(void)
+/* The GunAmmoGaugeElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t GunAmmoGaugeElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -243225,19 +243121,19 @@ uint32_t HUDPiecesDestroy(void)
 	return eax;
 }
 
-/* Fills the screen-element family descriptor at 0x224190 with size 0x30 and the create/destroy/0xECDE0
-   handlers and stores its pointer at arg0+0x24, registering the HUD pieces family. */
-void HudPiecesFamilyInit(uint32_t arg0)
+/* Registers the GunAmmoGaugeElement type (ScreenElement 5), a gauge of its object's gun ammo at +0xA8
+   (HudDrawObjectGauge): fills its GameObjectType and stores it in its family. */
+void GunAmmoGaugeElement_Register(uint32_t arg0)
 {
-	MEM32(0x2241A0u) = 0u;
-	MEM32(0x2241A8u) = 0u;
-	MEM32(0x2241ACu) = 0u;
-	MEM32(0x2241B0u) = 0u;
-	MEM32(0x224190u) = 0x30u;
-	MEM32(0x224194u) = 0xECE80u;
-	MEM32(0x224198u) = 0xED150u;
-	MEM32(0x22419Cu) = 0xECDE0u;
-	MEM32(arg0 + 0x24u) = 0x224190u;
+	GameObjectType_load(GunAmmoGaugeElementType_VA) = 0u;
+	GameObjectType_collect(GunAmmoGaugeElementType_VA) = 0u;
+	GameObjectType_version(GunAmmoGaugeElementType_VA) = 0u;
+	GameObjectType_flags(GunAmmoGaugeElementType_VA) = 0u;
+	GameObjectType_size(GunAmmoGaugeElementType_VA) = 0x30u;
+	GameObjectType_startup(GunAmmoGaugeElementType_VA) = 0xECE80u;
+	GameObjectType_shutdown(GunAmmoGaugeElementType_VA) = 0xED150u;
+	GameObjectType_state_machine(GunAmmoGaugeElementType_VA) = 0xECDE0u;
+	MEM32(arg0 + 0x24u) = GunAmmoGaugeElementType_VA;
 }
 
 /* Walks the item count at the selected object's +0xB0 and the slot count at +0x1A4, positions each slot
@@ -243346,10 +243242,9 @@ void ItemSelectDraw(uint32_t arg2)
 	}
 }
 
-/* Handles the screen element's event codes, calling ScreenElementInitialize and copying arg4's +0x18
-   field on 0xFFF9, ItemSelectDraw on 0x2EE2 and GameObjectFreeByHandle on 0xFFFA, returning 1 for
-   recognized events. */
-uint32_t ScreenElementEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The MissileCountElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MissileCountElement_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -243405,9 +243300,8 @@ uint32_t ScreenElementEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2,
 	return eax;
 }
 
-/* Builds the element's two HUD text pieces by fetching HUDPiecesTgaText_VA with vcObjectGet, sizing them
-   with vcRectSet and storing them at 0x22434C and 0x224388 via UiElementSetBoundsFromObject. */
-uint32_t HudPiecesTextCreate(uint32_t esi, uint32_t edi)
+/* The MissileCountElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t MissileCountElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -243489,8 +243383,9 @@ uint32_t HudPiecesTextCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the element's two HUD text pieces at 0x224388 and 0x22434C through VcObjectReleaseField. */
-uint32_t HudPiecesTextDestroy(void)
+/* The MissileCountElement type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t MissileCountElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -243501,19 +243396,19 @@ uint32_t HudPiecesTextDestroy(void)
 	return eax;
 }
 
-/* Fills the screen element class at 0x224308 with size 0x2Cu and the three method slots 0xED450, 0xED4E0
-   and 0xED3A0 and stores it at offset 0x20 of the family passed in arg0. */
-void ScreenElementFamilySetClass(uint32_t arg0)
+/* Registers the MissileCountElement type (ScreenElement 4), a slot a missile, from its object's missiles
+   at +0xB0 (ItemSelectDraw): fills its GameObjectType and stores it in its family. */
+void MissileCountElement_Register(uint32_t arg0)
 {
-	MEM32(0x224318u) = 0u;
-	MEM32(0x224320u) = 0u;
-	MEM32(0x224324u) = 0u;
-	MEM32(0x224328u) = 0u;
-	MEM32(0x224308u) = 0x2Cu;
-	MEM32(0x22430Cu) = 0xED450u;
-	MEM32(0x224310u) = 0xED4E0u;
-	MEM32(0x224314u) = 0xED3A0u;
-	MEM32(arg0 + 0x20u) = 0x224308u;
+	GameObjectType_load(MissileCountElementType_VA) = 0u;
+	GameObjectType_collect(MissileCountElementType_VA) = 0u;
+	GameObjectType_version(MissileCountElementType_VA) = 0u;
+	GameObjectType_flags(MissileCountElementType_VA) = 0u;
+	GameObjectType_size(MissileCountElementType_VA) = 0x2Cu;
+	GameObjectType_startup(MissileCountElementType_VA) = 0xED450u;
+	GameObjectType_shutdown(MissileCountElementType_VA) = 0xED4E0u;
+	GameObjectType_state_machine(MissileCountElementType_VA) = 0xED3A0u;
+	MEM32(arg0 + 0x20u) = MissileCountElementType_VA;
 }
 
 /* Draws the HUD piece chosen by the element's +0x28 direction field (0..3) through UiElementSetColor and
@@ -243591,10 +243486,9 @@ void HudPieceDirectionDraw(uint32_t edi)
 	QuadDrawRotated(arg0, arg1, arg2, arg3, &ignored, &ignored_2);
 }
 
-/* Dispatches the element's 0x7FFF/0/1 events, adjusting the +0x30 value and +0x10 flag and calling
-   HudPieceDirectionDraw, GameObjectDeactivate, ScreenElementNotifyOwner, GameObjectFreeByHandle and
-   ScreenElementInitialize, returning 1 for recognized events. */
-uint32_t HudIndicatorEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The MenuArrowElement type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t MenuArrowElement_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint16_t edi_2 = 0;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
@@ -243715,9 +243609,8 @@ uint32_t HudIndicatorEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	return eax;
 }
 
-/* Creates the radar element's vcObject with vcObjectGet, sets its rectangle with vcRectSet and fills its
-   four child objects through UiElementSetBoundsFromObject. */
-uint32_t RadarElementCreate(uint32_t esi, uint32_t edi)
+/* The MenuArrowElement type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t MenuArrowElement_Startup(uint32_t esi, uint32_t edi)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0, ecx = 0, edx = 0, ignored = 0, ignored_2 = 0;
 
@@ -243817,9 +243710,8 @@ uint32_t RadarElementCreate(uint32_t esi, uint32_t edi)
 	return eax;
 }
 
-/* Releases the radar element's four child objects at 0x2244C0, 0x224484, 0x224448 and 0x22440C with
-   VcObjectReleaseField. */
-uint32_t RadarElementDestroy(void)
+/* The MenuArrowElement type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t MenuArrowElement_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -243834,19 +243726,20 @@ uint32_t RadarElementDestroy(void)
 	return eax;
 }
 
-/* Fills the class descriptor at 0x2243C8 with the create, destroy and third entry (0xED760, 0xED800,
-   0xED5D0) and stores it at arg0+0x1C of the ScreenElementFamily object. */
-void RadarElementRegisterClass(uint32_t arg0)
+/* Registers the MenuArrowElement type (ScreenElement 3), a piece drawn turned by its direction, 0 to 3
+   (HudPieceDirectionDraw): the lists' and the veritech choice's arrows: fills its GameObjectType and
+   stores it in its family. */
+void MenuArrowElement_Register(uint32_t arg0)
 {
-	MEM32(0x2243D8u) = 0u;
-	MEM32(0x2243E0u) = 0u;
-	MEM32(0x2243E4u) = 0u;
-	MEM32(0x2243E8u) = 0u;
-	MEM32(0x2243C8u) = 0x34u;
-	MEM32(0x2243CCu) = 0xED760u;
-	MEM32(0x2243D0u) = 0xED800u;
-	MEM32(0x2243D4u) = 0xED5D0u;
-	MEM32(arg0 + 0x1Cu) = 0x2243C8u;
+	GameObjectType_load(MenuArrowElementType_VA) = 0u;
+	GameObjectType_collect(MenuArrowElementType_VA) = 0u;
+	GameObjectType_version(MenuArrowElementType_VA) = 0u;
+	GameObjectType_flags(MenuArrowElementType_VA) = 0u;
+	GameObjectType_size(MenuArrowElementType_VA) = 0x34u;
+	GameObjectType_startup(MenuArrowElementType_VA) = 0xED760u;
+	GameObjectType_shutdown(MenuArrowElementType_VA) = 0xED800u;
+	GameObjectType_state_machine(MenuArrowElementType_VA) = 0xED5D0u;
+	MEM32(arg0 + 0x1Cu) = MenuArrowElementType_VA;
 }
 
 double sub_000ED880(void)
@@ -249490,10 +249383,10 @@ void GameObjectAttachmentAdvance(uint32_t eax, uint32_t ebx, uint32_t ebp, uint3
 	g_esp = g_esp + 0xCu;
 }
 
-/* Called from GameObjectCommandDispatch, it resolves the object in esi, wraps an attachment index with
-   x86_srem64, sends GameObjectSendMessage(0xF007) with that index and calls GameObjectDetachAttachment
-   on the GameObjectFromIndex result, then updates the object's attachment fields and runs
-   GameObjectDestroyAndSendMessage. */
+/* Called from FollowPathSteering_StateMachine, it resolves the object in esi, wraps an attachment index
+   with x86_srem64, sends GameObjectSendMessage(0xF007) with that index and calls
+   GameObjectDetachAttachment on the GameObjectFromIndex result, then updates the object's attachment
+   fields and runs GameObjectDestroyAndSendMessage. */
 void GameObjectAttachmentCycleCommand(uint32_t ecx, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx_2 = 0, edi_2 = 0, edx = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -250121,10 +250014,9 @@ void SteeringPathFollowUpdate(uint32_t eax, uint32_t ecx, uint32_t ebx, uint32_t
 	}
 }
 
-/* Returns 0 unless arg2 is 0x7FFF, then dispatches on the command word at arg3 and returns 1, calling
-   SteeringPathFollowUpdate for 0xFFF9, GameObjectAttachmentCycleCommand for 0xF005 and
-   GameObjectRefDestroyObject for 0xFFFA. */
-uint32_t GameObjectCommandDispatch(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The FollowPathSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t FollowPathSteering_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4_2 = 0, eax = 0, ecx = 0, edi = 0, edx = 0, esi_2 = 0;
 	uint32_t saved_arg4 = 0;
@@ -250185,19 +250077,20 @@ uint32_t GameObjectCommandDispatch(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 	return eax;
 }
 
-/* Clears the steering family's descriptor globals, sets its size to 0x54 and its callback to 0xF3C20,
-   and stores the descriptor pointer at arg0 + 0x48. */
-void SteeringFamilyAttachDescriptor(uint32_t arg0)
+/* Registers the FollowPathSteering type (Steering 14), the one the AI script's FollowPath makes, and a
+   vehicle's as it loads: MilitaryTransport's and ZenRetrieval's: fills its GameObjectType and stores it
+   in its family. */
+void FollowPathSteering_Register(uint32_t arg0)
 {
-	MEM32(0x22458Cu) = 0u;
-	MEM32(0x224590u) = 0u;
-	MEM32(0x224598u) = 0u;
-	MEM32(0x2245A0u) = 0u;
-	MEM32(0x2245A4u) = 0u;
-	MEM32(0x2245A8u) = 0u;
-	MEM32(0x224588u) = 0x54u;
-	MEM32(0x224594u) = 0xF3C20u;
-	MEM32(arg0 + 0x48u) = 0x224588u;
+	GameObjectType_startup(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_shutdown(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_load(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_collect(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_version(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_flags(FollowPathSteeringType_VA) = 0u;
+	GameObjectType_size(FollowPathSteeringType_VA) = 0x54u;
+	GameObjectType_state_machine(FollowPathSteeringType_VA) = 0xF3C20u;
+	MEM32(arg0 + 0x48u) = FollowPathSteeringType_VA;
 }
 
 /* Resolves the game object from its handle, sends message 0xF001 with a transform through
@@ -253318,8 +253211,8 @@ uint32_t SceneAttachmentGetType(void)
 	return eax;
 }
 
-/* creates an array of 10 clones of the object at 0x224668 with ObjectCloneArrayCreate. */
-uint32_t SceneAttachmentCloneArrayCreate(void)
+/* The BuildingDebrisEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t BuildingDebrisEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -253332,8 +253225,9 @@ uint32_t SceneAttachmentCloneArrayCreate(void)
 	return eax;
 }
 
-/* releases the object at 0x224668 with VcObjectListRelease. */
-uint32_t SceneAttachmentListRelease(void)
+/* The BuildingDebrisEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t BuildingDebrisEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 	uint32_t stack = 0;
@@ -253344,24 +253238,23 @@ uint32_t SceneAttachmentListRelease(void)
 	return eax;
 }
 
-/* Stores a size of 0x70 and the three function pointers 0xF6710, 0xF6740 and 0x10A7C0 into the static
-   table at 0x224620 and points offset 0x16C of the effect family passed in by EffectFamilyRegister at
-   it. */
-void EffectFamilySetMethodTable(uint32_t arg0)
+/* Registers the BuildingDebrisEffect type (Effect 87), its sound metaldebris2_m.wav: what
+   BuildingStateDestroy makes as a building goes: fills its GameObjectType and stores it in its family. */
+void BuildingDebrisEffect_Register(uint32_t arg0)
 {
-	MEM32(0x224630u) = 0u;
-	MEM32(0x224638u) = 0u;
-	MEM32(0x22463Cu) = 0u;
-	MEM32(0x224640u) = 0u;
-	MEM32(0x224620u) = 0x70u;
-	MEM32(0x224624u) = 0xF6710u;
-	MEM32(0x224628u) = 0xF6740u;
-	MEM32(0x22462Cu) = 0x10A7C0u;
-	MEM32(arg0 + 0x16Cu) = 0x224620u;
+	GameObjectType_load(BuildingDebrisEffectType_VA) = 0u;
+	GameObjectType_collect(BuildingDebrisEffectType_VA) = 0u;
+	GameObjectType_version(BuildingDebrisEffectType_VA) = 0u;
+	GameObjectType_flags(BuildingDebrisEffectType_VA) = 0u;
+	GameObjectType_size(BuildingDebrisEffectType_VA) = 0x70u;
+	GameObjectType_startup(BuildingDebrisEffectType_VA) = 0xF6710u;
+	GameObjectType_shutdown(BuildingDebrisEffectType_VA) = 0xF6740u;
+	GameObjectType_state_machine(BuildingDebrisEffectType_VA) = 0x10A7C0u;
+	MEM32(arg0 + 0x16Cu) = BuildingDebrisEffectType_VA;
 }
 
-/* returns the address of the global SparksLoop wav object at 0x2246F8 that SparksLoopWavCreate
-   constructs and SparksLoopWavDestroy destroys. */
+/* returns the address of the global SparksLoop wav object at 0x2246F8 that SparksLoopEffect_Startup
+   constructs and SparksLoopEffect_Shutdown destroys. */
 uint32_t SparksLoopWavGetInstance(void)
 {
 	uint32_t eax = 0;
@@ -253370,9 +253263,8 @@ uint32_t SparksLoopWavGetInstance(void)
 	return eax;
 }
 
-/* constructs the global object at 0x2246F8 by calling ObjectCloneArrayCreate with 0xA and
-   SparksloopMWavText_VA and the globals at 0x1A687C/0x1A6880. */
-uint32_t SparksLoopWavCreate(void)
+/* The SparksLoopEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t SparksLoopEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -253385,8 +253277,8 @@ uint32_t SparksLoopWavCreate(void)
 	return eax;
 }
 
-/* destroys the global object at 0x2246F8 by calling VcObjectListRelease. */
-uint32_t SparksLoopWavDestroy(void)
+/* The SparksLoopEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t SparksLoopEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0;
 	uint32_t stack = 0;
@@ -253397,19 +253289,19 @@ uint32_t SparksLoopWavDestroy(void)
 	return eax;
 }
 
-/* stores the static class descriptor at 0x2246B0 (size 0x70, ctor SparksLoopWavCreate, dtor
-   SparksLoopWavDestroy) at offset 0x168 of the effect family passed by EffectFamilyRegister. */
+/* Registers the SparksLoopEffect type (Effect 86), its sound sparksloop_m.wav: CatsEye's, Centipede's,
+   Gladiator's, MacII's and six more entities': fills its GameObjectType and stores it in its family. */
 void SparksLoopEffect_Register(uint32_t arg0)
 {
-	MEM32(0x2246C0u) = 0u;
-	MEM32(0x2246C8u) = 0u;
-	MEM32(0x2246CCu) = 0u;
-	MEM32(0x2246D0u) = 0u;
-	MEM32(0x2246B0u) = 0x70u;
-	MEM32(0x2246B4u) = 0xF67B0u;
-	MEM32(0x2246B8u) = 0xF67E0u;
-	MEM32(0x2246BCu) = 0x10A7C0u;
-	MEM32(arg0 + 0x168u) = 0x2246B0u;
+	GameObjectType_load(SparksLoopEffectType_VA) = 0u;
+	GameObjectType_collect(SparksLoopEffectType_VA) = 0u;
+	GameObjectType_version(SparksLoopEffectType_VA) = 0u;
+	GameObjectType_flags(SparksLoopEffectType_VA) = 0u;
+	GameObjectType_size(SparksLoopEffectType_VA) = 0x70u;
+	GameObjectType_startup(SparksLoopEffectType_VA) = 0xF67B0u;
+	GameObjectType_shutdown(SparksLoopEffectType_VA) = 0xF67E0u;
+	GameObjectType_state_machine(SparksLoopEffectType_VA) = 0x10A7C0u;
+	MEM32(arg0 + 0x168u) = SparksLoopEffectType_VA;
 }
 
 /* The ReconLightEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
@@ -259237,9 +259129,9 @@ uint32_t sub_000FB400(void)
 	return eax;
 }
 
-/* Releases each non-null object in the effect family's five object slots with vcObjectRelease and clears
-   the slots. */
-uint32_t EffectFamilyVAReleaseObjectSlots(void)
+/* The ZenCruiserTurret1MuzzleEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t ZenCruiserTurret1MuzzleEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -259262,9 +259154,8 @@ uint32_t EffectFamilyVAReleaseObjectSlots(void)
 	return eax;
 }
 
-/* Gets object type 8 with vcObjectGet, addrefs up to five objects from its 0x108 list into the 0x225E4C
-   slots, sets their flags to 0x16 with vcSceneObjectSetFlags, and releases the source object. */
-uint32_t EffectFamilyVALoadObjectSlots(void)
+/* The ZenCruiserTurret1MuzzleEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ZenCruiserTurret1MuzzleEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -259325,19 +259216,19 @@ uint32_t EffectFamilyVALoadObjectSlots(void)
 	return eax;
 }
 
-/* Installs the effect family descriptor at 0x225E08 with size 0x70, init 0xFB440, shutdown 0xFB410 and
-   update 0x10C020, attaches it at arg0+0xDC, and clears the five object slots. */
-void EffectFamilyVAInstallDescriptor(uint32_t arg0)
+/* Registers the ZenCruiserTurret1MuzzleEffect type (Effect 51), its asset FX_zenturretmuzzle01:
+   ZenCruiserTurret1CannonWeapon's: fills its GameObjectType and stores it in its family. */
+void ZenCruiserTurret1MuzzleEffect_Register(uint32_t arg0)
 {
-	MEM32(0x225E18u) = 0u;
-	MEM32(0x225E20u) = 0u;
-	MEM32(0x225E24u) = 0u;
-	MEM32(0x225E28u) = 0u;
-	MEM32(0x225E08u) = 0x70u;
-	MEM32(0x225E0Cu) = 0xFB440u;
-	MEM32(0x225E10u) = 0xFB410u;
-	MEM32(0x225E14u) = 0x10C020u;
-	MEM32(arg0 + 0xDCu) = 0x225E08u;
+	GameObjectType_load(ZenCruiserTurret1MuzzleEffectType_VA) = 0u;
+	GameObjectType_collect(ZenCruiserTurret1MuzzleEffectType_VA) = 0u;
+	GameObjectType_version(ZenCruiserTurret1MuzzleEffectType_VA) = 0u;
+	GameObjectType_flags(ZenCruiserTurret1MuzzleEffectType_VA) = 0u;
+	GameObjectType_size(ZenCruiserTurret1MuzzleEffectType_VA) = 0x70u;
+	GameObjectType_startup(ZenCruiserTurret1MuzzleEffectType_VA) = 0xFB440u;
+	GameObjectType_shutdown(ZenCruiserTurret1MuzzleEffectType_VA) = 0xFB410u;
+	GameObjectType_state_machine(ZenCruiserTurret1MuzzleEffectType_VA) = 0x10C020u;
+	MEM32(arg0 + 0xDCu) = ZenCruiserTurret1MuzzleEffectType_VA;
 	MEM32(0x225E4Cu) = 0u;
 	MEM32(0x225E50u) = 0u;
 	MEM32(0x225E54u) = 0u;
@@ -260270,8 +260161,9 @@ uint32_t sub_000FC210(void)
 	return eax;
 }
 
-/* Walks the five pointers at 0x2261AC, passes each non-null one to vcObjectRelease and zeroes its slot. */
-uint32_t GlobalObjectReferencesRelease(void)
+/* The ZenCruiserTurretMuzzleEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t ZenCruiserTurretMuzzleEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, esi = 0, ignored = 0, ignored_2 = 0;
 
@@ -260294,10 +260186,8 @@ uint32_t GlobalObjectReferencesRelease(void)
 	return eax;
 }
 
-/* Looks up the effect family object, takes up to five of its scene objects (count at +0x104, array at
-   +0x108), adds a reference to each, stores them in the global array at 0x2261AC and sets flags 0x16 on
-   each with vcSceneObjectSetFlags. */
-uint32_t EffectFamilyActivateSceneObjects(void)
+/* The ZenCruiserTurretMuzzleEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ZenCruiserTurretMuzzleEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ebp = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -260358,20 +260248,19 @@ uint32_t EffectFamilyActivateSceneObjects(void)
 	return eax;
 }
 
-/* Sets up the handler block at 0x226168 (size 0x70, pointers to EffectFamilyActivateSceneObjects,
-   GlobalObjectReferencesRelease and MuzzleFlashEffect_StateMachine), attaches it at arg0+0xB8 and clears
-   the global scene-object array at 0x2261AC. */
-void EffectFamilyRegisterHandlers(uint32_t arg0)
+/* Registers the ZenCruiserTurretMuzzleEffect type (Effect 42), its asset FX_zenturretmuzzle01:
+   ZenCruiserTurretCannonWeapon's: fills its GameObjectType and stores it in its family. */
+void ZenCruiserTurretMuzzleEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226178u) = 0u;
-	MEM32(0x226180u) = 0u;
-	MEM32(0x226184u) = 0u;
-	MEM32(0x226188u) = 0u;
-	MEM32(0x226168u) = 0x70u;
-	MEM32(0x22616Cu) = 0xFC250u;
-	MEM32(0x226170u) = 0xFC220u;
-	MEM32(0x226174u) = 0x10C020u;
-	MEM32(arg0 + 0xB8u) = 0x226168u;
+	GameObjectType_load(ZenCruiserTurretMuzzleEffectType_VA) = 0u;
+	GameObjectType_collect(ZenCruiserTurretMuzzleEffectType_VA) = 0u;
+	GameObjectType_version(ZenCruiserTurretMuzzleEffectType_VA) = 0u;
+	GameObjectType_flags(ZenCruiserTurretMuzzleEffectType_VA) = 0u;
+	GameObjectType_size(ZenCruiserTurretMuzzleEffectType_VA) = 0x70u;
+	GameObjectType_startup(ZenCruiserTurretMuzzleEffectType_VA) = 0xFC250u;
+	GameObjectType_shutdown(ZenCruiserTurretMuzzleEffectType_VA) = 0xFC220u;
+	GameObjectType_state_machine(ZenCruiserTurretMuzzleEffectType_VA) = 0x10C020u;
+	MEM32(arg0 + 0xB8u) = ZenCruiserTurretMuzzleEffectType_VA;
 	MEM32(0x2261ACu) = 0u;
 	MEM32(0x2261B0u) = 0u;
 	MEM32(0x2261B4u) = 0u;
@@ -261586,8 +261475,9 @@ void ThrustRed01Effect_Register(uint32_t arg0)
 	MEM32(0x226524u) = 0u;
 }
 
-/* Releases the cached object at 0x22656C with vcObjectRelease and clears the slot. */
-uint32_t EffectFamilyReleaseCachedObject(void)
+/* The PlayerThrustBlueEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t PlayerThrustBlueEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -261611,9 +261501,8 @@ uint32_t EffectFamilyGetCachedObject(void)
 	return eax;
 }
 
-/* Looks up the object by name 0x1A8068 with vcObjectGet, caches it at 0x22656C and sets flags 0x10016 on
-   each of its scene objects with vcSceneObjectSetFlags. */
-uint32_t EffectFamilySetSceneObjectFlags(void)
+/* The PlayerThrustBlueEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t PlayerThrustBlueEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -261679,20 +261568,19 @@ uint32_t EffectFamilySetSceneObjectFlags(void)
 	return eax;
 }
 
-/* Sets up the handler block at 0x226528 (size 0x70, pointers to EffectFamilySetSceneObjectFlags,
-   EffectFamilyReleaseCachedObject and ThrustEffect_StateMachine), attaches it at arg0+0x88 and clears
-   the cached-object slot at 0x22656C. */
-void EffectFamilyRegisterObjectHandlers(uint32_t arg0)
+/* Registers the PlayerThrustBlueEffect type (Effect 30), its asset FX_thrust_blue_anim: the one
+   PlayerEffectsCreate makes: fills its GameObjectType and stores it in its family. */
+void PlayerThrustBlueEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226528u) = 0x70u;
-	MEM32(0x22652Cu) = 0xFD200u;
-	MEM32(0x226530u) = 0xFD1D0u;
-	MEM32(0x226534u) = 0xEF220u;
-	MEM32(0x226538u) = 0u;
-	MEM32(0x226540u) = 0u;
-	MEM32(0x226544u) = 0u;
-	MEM32(0x226548u) = 0u;
-	MEM32(arg0 + 0x88u) = 0x226528u;
+	GameObjectType_size(PlayerThrustBlueEffectType_VA) = 0x70u;
+	GameObjectType_startup(PlayerThrustBlueEffectType_VA) = 0xFD200u;
+	GameObjectType_shutdown(PlayerThrustBlueEffectType_VA) = 0xFD1D0u;
+	GameObjectType_state_machine(PlayerThrustBlueEffectType_VA) = 0xEF220u;
+	GameObjectType_load(PlayerThrustBlueEffectType_VA) = 0u;
+	GameObjectType_collect(PlayerThrustBlueEffectType_VA) = 0u;
+	GameObjectType_version(PlayerThrustBlueEffectType_VA) = 0u;
+	GameObjectType_flags(PlayerThrustBlueEffectType_VA) = 0u;
+	MEM32(arg0 + 0x88u) = PlayerThrustBlueEffectType_VA;
 	MEM32(0x22656Cu) = 0u;
 }
 
@@ -261912,8 +261800,8 @@ void EffectFamilyRegisterSceneFlagClass(uint32_t arg0)
 	MEM32(0x2265FCu) = 0u;
 }
 
-/* Releases the object cached at 0x226644 with vcObjectRelease and clears the cache. */
-uint32_t EffectSceneFlagObjectRelease(void)
+/* The ThrustBlueEffect type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t ThrustBlueEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -261937,9 +261825,8 @@ uint32_t EffectSceneFlagHandleGet(void)
 	return eax;
 }
 
-/* Gets the object for resource 0x1A8128 with vcObjectGet and sets flag 0x10016 on each of its scene
-   objects with vcSceneObjectSetFlags. */
-uint32_t EffectObjectGetFlagSceneObjects(void)
+/* The ThrustBlueEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t ThrustBlueEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 
@@ -262005,19 +261892,20 @@ uint32_t EffectObjectGetFlagSceneObjects(void)
 	return eax;
 }
 
-/* Fills the descriptor at 0x226600 with size 0x70, get EffectObjectGetFlagSceneObjects and release
-   EffectSceneFlagObjectRelease, and stores it at offset 0x7C of the EffectFamily. */
-void EffectFamilyAddSceneFlagClass(uint32_t arg0)
+/* Registers the ThrustBlueEffect type (Effect 27), its asset FX_thrust_blue_anim: the two an object
+   makes at its attachment nodes (GameObjectCreateAttachedEffects), VF1AXFighter's and VF1SXFighter's
+   exhausts: fills its GameObjectType and stores it in its family. */
+void ThrustBlueEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226600u) = 0x70u;
-	MEM32(0x226604u) = 0xFD590u;
-	MEM32(0x226608u) = 0xFD560u;
-	MEM32(0x22660Cu) = 0xEF220u;
-	MEM32(0x226610u) = 0u;
-	MEM32(0x226618u) = 0u;
-	MEM32(0x22661Cu) = 0u;
-	MEM32(0x226620u) = 0u;
-	MEM32(arg0 + 0x7Cu) = 0x226600u;
+	GameObjectType_size(ThrustBlueEffectType_VA) = 0x70u;
+	GameObjectType_startup(ThrustBlueEffectType_VA) = 0xFD590u;
+	GameObjectType_shutdown(ThrustBlueEffectType_VA) = 0xFD560u;
+	GameObjectType_state_machine(ThrustBlueEffectType_VA) = 0xEF220u;
+	GameObjectType_load(ThrustBlueEffectType_VA) = 0u;
+	GameObjectType_collect(ThrustBlueEffectType_VA) = 0u;
+	GameObjectType_version(ThrustBlueEffectType_VA) = 0u;
+	GameObjectType_flags(ThrustBlueEffectType_VA) = 0u;
+	MEM32(arg0 + 0x7Cu) = ThrustBlueEffectType_VA;
 	MEM32(0x226644u) = 0u;
 }
 
@@ -262083,7 +261971,7 @@ void MotionTrailEffect_Register(uint32_t arg0)
 	MEM32(0x2266B0u) = 0u;
 }
 
-/* Returns the address 0x2266FC of the nine-entry name table that EffectFamilyRegisterNameTableClass
+/* Returns the address 0x2266FC of the nine-entry name table that HeavyMissileContrailEffect_Register
    fills. */
 uint32_t EffectNameTableGet(void)
 {
@@ -262093,8 +261981,8 @@ uint32_t EffectNameTableGet(void)
 	return eax;
 }
 
-/* Gets the object for resource 0x1A81D0 with vcObjectGet and caches it at 0x226720. */
-uint32_t EffectNameTableObjectGet(void)
+/* The HeavyMissileContrailEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t HeavyMissileContrailEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -262105,8 +261993,9 @@ uint32_t EffectNameTableObjectGet(void)
 	return eax;
 }
 
-/* Releases the object cached at 0x226720 with vcObjectRelease and clears the cache. */
-uint32_t EffectNameTableObjectRelease(void)
+/* The HeavyMissileContrailEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t HeavyMissileContrailEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262121,20 +262010,20 @@ uint32_t EffectNameTableObjectRelease(void)
 	return eax;
 }
 
-/* Fills the descriptor at 0x2266B8 with size 0x60, get EffectNameTableObjectGet and release
-   EffectNameTableObjectRelease, stores it at offset 0x6C of the EffectFamily, and fills the nine name
-   pointers at 0x2266FC. */
-void EffectFamilyRegisterNameTableClass(uint32_t arg0)
+/* Registers the HeavyMissileContrailEffect type (Effect 23), its asset FX_Missile_contrail_anim:
+   RDFHeavyMissile's, PlayerRDFHeavyMissile's and ZenHeavyMissile's: fills its GameObjectType and stores
+   it in its family. */
+void HeavyMissileContrailEffect_Register(uint32_t arg0)
 {
-	MEM32(0x2266B8u) = 0x60u;
-	MEM32(0x2266BCu) = 0xFD7A0u;
-	MEM32(0x2266C0u) = 0xFD7C0u;
-	MEM32(0x2266C4u) = 0x10C340u;
-	MEM32(0x2266C8u) = 0u;
-	MEM32(0x2266D0u) = 0u;
-	MEM32(0x2266D4u) = 0u;
-	MEM32(0x2266D8u) = 0u;
-	MEM32(arg0 + 0x6Cu) = 0x2266B8u;
+	GameObjectType_size(HeavyMissileContrailEffectType_VA) = 0x60u;
+	GameObjectType_startup(HeavyMissileContrailEffectType_VA) = 0xFD7A0u;
+	GameObjectType_shutdown(HeavyMissileContrailEffectType_VA) = 0xFD7C0u;
+	GameObjectType_state_machine(HeavyMissileContrailEffectType_VA) = 0x10C340u;
+	GameObjectType_load(HeavyMissileContrailEffectType_VA) = 0u;
+	GameObjectType_collect(HeavyMissileContrailEffectType_VA) = 0u;
+	GameObjectType_version(HeavyMissileContrailEffectType_VA) = 0u;
+	GameObjectType_flags(HeavyMissileContrailEffectType_VA) = 0u;
+	MEM32(arg0 + 0x6Cu) = HeavyMissileContrailEffectType_VA;
 	x86_rep_stos32(0x2266FCu, 0u, 9u);
 	MEM32(0x2266FCu) = 0x1A8210u;
 	MEM32(0x226700u) = 0x1A8214u;
@@ -262148,7 +262037,8 @@ void EffectFamilyRegisterNameTableClass(uint32_t arg0)
 	MEM32(0x226720u) = 0u;
 }
 
-/* Returns the address 0x22676C of the nine-entry name table that EffectFamilyAddNameTableClass fills. */
+/* Returns the address 0x22676C of the nine-entry name table that LightMissileContrailEffect_Register
+   fills. */
 uint32_t EffectVariantNameTableGet(void)
 {
 	uint32_t eax = 0;
@@ -262157,8 +262047,8 @@ uint32_t EffectVariantNameTableGet(void)
 	return eax;
 }
 
-/* Gets the object for resource 0x1A8238 with vcObjectGet and caches it at 0x226790. */
-uint32_t EffectVariantNameTableObjectGet(void)
+/* The LightMissileContrailEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t LightMissileContrailEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -262169,8 +262059,9 @@ uint32_t EffectVariantNameTableObjectGet(void)
 	return eax;
 }
 
-/* Releases the object cached at 0x226790 with vcObjectRelease and clears the cache. */
-uint32_t EffectVariantNameTableObjectRelease(void)
+/* The LightMissileContrailEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t LightMissileContrailEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262185,20 +262076,20 @@ uint32_t EffectVariantNameTableObjectRelease(void)
 	return eax;
 }
 
-/* Fills the descriptor at 0x226728 with size 0x60, get EffectVariantNameTableObjectGet and release
-   EffectVariantNameTableObjectRelease, stores it at offset 0x74 of the EffectFamily, and fills the nine
-   name pointers at 0x22676C. */
-void EffectFamilyAddNameTableClass(uint32_t arg0)
+/* Registers the LightMissileContrailEffect type (Effect 25), its asset FX_Missile_contrail_anim: the
+   light missiles' (RDF, the player's, Zen, FPA, PodOfficerSled): fills its GameObjectType and stores it
+   in its family. */
+void LightMissileContrailEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226728u) = 0x60u;
-	MEM32(0x22672Cu) = 0xFD8B0u;
-	MEM32(0x226730u) = 0xFD8D0u;
-	MEM32(0x226734u) = 0x10C340u;
-	MEM32(0x226738u) = 0u;
-	MEM32(0x226740u) = 0u;
-	MEM32(0x226744u) = 0u;
-	MEM32(0x226748u) = 0u;
-	MEM32(arg0 + 0x74u) = 0x226728u;
+	GameObjectType_size(LightMissileContrailEffectType_VA) = 0x60u;
+	GameObjectType_startup(LightMissileContrailEffectType_VA) = 0xFD8B0u;
+	GameObjectType_shutdown(LightMissileContrailEffectType_VA) = 0xFD8D0u;
+	GameObjectType_state_machine(LightMissileContrailEffectType_VA) = 0x10C340u;
+	GameObjectType_load(LightMissileContrailEffectType_VA) = 0u;
+	GameObjectType_collect(LightMissileContrailEffectType_VA) = 0u;
+	GameObjectType_version(LightMissileContrailEffectType_VA) = 0u;
+	GameObjectType_flags(LightMissileContrailEffectType_VA) = 0u;
+	MEM32(arg0 + 0x74u) = LightMissileContrailEffectType_VA;
 	x86_rep_stos32(0x22676Cu, 0u, 9u);
 	MEM32(0x22676Cu) = 0x1A8278u;
 	MEM32(0x226770u) = 0x1A827Cu;
@@ -262212,7 +262103,7 @@ void EffectFamilyAddNameTableClass(uint32_t arg0)
 	MEM32(0x226790u) = 0u;
 }
 
-/* returns the address 0x2267DC of the effect variant name table that EffectFamilyRegisterVariantType
+/* returns the address 0x2267DC of the effect variant name table that FighterContrailEffect_Register
    fills with nine name pointers. */
 uint32_t EffectVariantNameTableDataGet(void)
 {
@@ -262222,8 +262113,8 @@ uint32_t EffectVariantNameTableDataGet(void)
 	return eax;
 }
 
-/* Gets the object for resource 0x1A82A0 with vcObjectGet and caches it at 0x226800. */
-uint32_t EffectObjectGet(void)
+/* The FighterContrailEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FighterContrailEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0;
 
@@ -262234,8 +262125,9 @@ uint32_t EffectObjectGet(void)
 	return eax;
 }
 
-/* Releases the object cached at 0x226800 with vcObjectRelease and clears the cache. */
-uint32_t EffectObjectRelease(void)
+/* The FighterContrailEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t FighterContrailEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262250,19 +262142,19 @@ uint32_t EffectObjectRelease(void)
 	return eax;
 }
 
-/* registers the variant type descriptor (size 0x60, ctor 0xFD9C0, dtor 0xFD9E0, name 0x10C340) at
-   arg0+0x70 and fills the variant name table at 0x2267DC with nine name pointers. */
-void EffectFamilyRegisterVariantType(uint32_t arg0)
+/* Registers the FighterContrailEffect type (Effect 24), its asset FX_Missile_contrail_anim:
+   VF1AXFighter's and VF1SXFighter's: fills its GameObjectType and stores it in its family. */
+void FighterContrailEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226798u) = 0x60u;
-	MEM32(0x22679Cu) = 0xFD9C0u;
-	MEM32(0x2267A0u) = 0xFD9E0u;
-	MEM32(0x2267A4u) = 0x10C340u;
-	MEM32(0x2267A8u) = 0u;
-	MEM32(0x2267B0u) = 0u;
-	MEM32(0x2267B4u) = 0u;
-	MEM32(0x2267B8u) = 0u;
-	MEM32(arg0 + 0x70u) = 0x226798u;
+	GameObjectType_size(FighterContrailEffectType_VA) = 0x60u;
+	GameObjectType_startup(FighterContrailEffectType_VA) = 0xFD9C0u;
+	GameObjectType_shutdown(FighterContrailEffectType_VA) = 0xFD9E0u;
+	GameObjectType_state_machine(FighterContrailEffectType_VA) = 0x10C340u;
+	GameObjectType_load(FighterContrailEffectType_VA) = 0u;
+	GameObjectType_collect(FighterContrailEffectType_VA) = 0u;
+	GameObjectType_version(FighterContrailEffectType_VA) = 0u;
+	GameObjectType_flags(FighterContrailEffectType_VA) = 0u;
+	MEM32(arg0 + 0x70u) = FighterContrailEffectType_VA;
 	x86_rep_stos32(0x2267DCu, 0u, 9u);
 	MEM32(0x2267DCu) = 0x1A82E0u;
 	MEM32(0x2267E0u) = 0x1A82E4u;
@@ -262277,7 +262169,7 @@ void EffectFamilyRegisterVariantType(uint32_t arg0)
 }
 
 /* returns the address 0x226850 of the game object type descriptor (type 0x3F) that
-   TrailEffectObjectTypeRegister registers. */
+   CrateExplosionBlastEffect_Startup registers. */
 uint32_t TrailEffectObjectTypeGet(void)
 {
 	uint32_t eax = 0;
@@ -262286,9 +262178,8 @@ uint32_t TrailEffectObjectTypeGet(void)
 	return eax;
 }
 
-/* registers game object type 0x3F at 0x226850, creating its two ObjectCloneArrayCreate clone arrays and
-   calling GameObjectTypeUse for types 6 and 0x3F. */
-uint32_t TrailEffectObjectTypeRegister(void)
+/* The CrateExplosionBlastEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t CrateExplosionBlastEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262315,9 +262206,9 @@ uint32_t TrailEffectObjectTypeRegister(void)
 	return eax;
 }
 
-/* releases the two clone arrays at 0x226858 and 0x2268A0 with VcObjectListRelease and calls
-   GameObjectTypeRelease for types 6 and 0x3F. */
-uint32_t TrailEffectObjectTypeRelease(void)
+/* The CrateExplosionBlastEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t CrateExplosionBlastEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262338,21 +262229,24 @@ uint32_t TrailEffectObjectTypeRelease(void)
 	return eax;
 }
 
-void sub_000FDB70(uint32_t arg0)
+/* Registers the CrateExplosionBlastEffect type (Effect 4), CrateExplosionEffect with SmokeLight02Effect
+   and the sounds explosion4.wav and explosion13.wav: ZenCratesMunitionsPickup's: fills its
+   GameObjectType and stores it in its family. */
+void CrateExplosionBlastEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226818u) = 0u;
-	MEM32(0x226820u) = 0u;
-	MEM32(0x226824u) = 0u;
-	MEM32(0x226828u) = 0u;
-	MEM32(0x226808u) = 0x5Cu;
-	MEM32(0x22680Cu) = 0xFDAD0u;
-	MEM32(0x226810u) = 0xFDB40u;
-	MEM32(0x226814u) = 0x10C5E0u;
-	MEM32(arg0 + 0x20u) = 0x226808u;
+	GameObjectType_load(CrateExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_collect(CrateExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_version(CrateExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_flags(CrateExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_size(CrateExplosionBlastEffectType_VA) = 0x5Cu;
+	GameObjectType_startup(CrateExplosionBlastEffectType_VA) = 0xFDAD0u;
+	GameObjectType_shutdown(CrateExplosionBlastEffectType_VA) = 0xFDB40u;
+	GameObjectType_state_machine(CrateExplosionBlastEffectType_VA) = 0x10C5E0u;
+	MEM32(arg0 + 0x20u) = CrateExplosionBlastEffectType_VA;
 }
 
 /* returns the address 0x226930 of the game object type descriptor (type 0x3E) that
-   TrailEffectVariantObjectTypeRegister registers. */
+   CyclopsExplosionBlastEffect_Startup registers. */
 uint32_t TrailEffectVariantObjectTypeGet(void)
 {
 	uint32_t eax = 0;
@@ -262361,9 +262255,8 @@ uint32_t TrailEffectVariantObjectTypeGet(void)
 	return eax;
 }
 
-/* registers game object type 0x3E at 0x226930, creating its two ObjectCloneArrayCreate clone arrays and
-   calling GameObjectTypeUse for types 6 and 0x3E. */
-uint32_t TrailEffectVariantObjectTypeRegister(void)
+/* The CyclopsExplosionBlastEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t CyclopsExplosionBlastEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262390,9 +262283,9 @@ uint32_t TrailEffectVariantObjectTypeRegister(void)
 	return eax;
 }
 
-/* releases the two clone arrays at 0x226938 and 0x226980 with VcObjectListRelease and calls
-   GameObjectTypeRelease for types 6 and 0x3E. */
-uint32_t TrailEffectVariantObjectTypeRelease(void)
+/* The CyclopsExplosionBlastEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t CyclopsExplosionBlastEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262413,17 +262306,20 @@ uint32_t TrailEffectVariantObjectTypeRelease(void)
 	return eax;
 }
 
-void sub_000FDC70(uint32_t arg0)
+/* Registers the CyclopsExplosionBlastEffect type (Effect 3), CyclopsExplosionEffect with
+   SmokeLight02Effect and the sounds explosion4.wav and explosion13.wav: fills its GameObjectType and
+   stores it in its family. */
+void CyclopsExplosionBlastEffect_Register(uint32_t arg0)
 {
-	MEM32(0x2268F8u) = 0u;
-	MEM32(0x226900u) = 0u;
-	MEM32(0x226904u) = 0u;
-	MEM32(0x226908u) = 0u;
-	MEM32(0x2268E8u) = 0x5Cu;
-	MEM32(0x2268ECu) = 0xFDBD0u;
-	MEM32(0x2268F0u) = 0xFDC40u;
-	MEM32(0x2268F4u) = 0x10C5E0u;
-	MEM32(arg0 + 0x1Cu) = 0x2268E8u;
+	GameObjectType_load(CyclopsExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_collect(CyclopsExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_version(CyclopsExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_flags(CyclopsExplosionBlastEffectType_VA) = 0u;
+	GameObjectType_size(CyclopsExplosionBlastEffectType_VA) = 0x5Cu;
+	GameObjectType_startup(CyclopsExplosionBlastEffectType_VA) = 0xFDBD0u;
+	GameObjectType_shutdown(CyclopsExplosionBlastEffectType_VA) = 0xFDC40u;
+	GameObjectType_state_machine(CyclopsExplosionBlastEffectType_VA) = 0x10C5E0u;
+	MEM32(arg0 + 0x1Cu) = CyclopsExplosionBlastEffectType_VA;
 }
 
 uint32_t sub_000FDCC0(void)
@@ -262434,9 +262330,8 @@ uint32_t sub_000FDCC0(void)
 	return eax;
 }
 
-/* Creates two ObjectCloneArray instances and takes references to two object types (0x3D and 0x6) as part
-   of an effect family initialization routine. */
-uint32_t EffectFamilyParticleInit(void)
+/* The Explosion01LargeBlastEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t Explosion01LargeBlastEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262463,9 +262358,9 @@ uint32_t EffectFamilyParticleInit(void)
 	return eax;
 }
 
-/* Releases two ObjectCloneArray instances and releases references to two object types (0x3D and 0x6) as
-   part of an effect family cleanup routine. */
-uint32_t EffectFamilyParticleRelease(void)
+/* The Explosion01LargeBlastEffect type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t Explosion01LargeBlastEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262486,19 +262381,20 @@ uint32_t EffectFamilyParticleRelease(void)
 	return eax;
 }
 
-/* Registers a particle effect type descriptor with an EffectFamily, setting up its initialization and
-   release callbacks. */
-void EffectFamilyParticleRegister(uint32_t arg0)
+/* Registers the Explosion01LargeBlastEffect type (Effect 2), Explosion01LargeEffect with
+   SmokeLight02Effect and the sounds explosion4.wav and explosion13.wav: Building's, the recon ship's
+   (ZenReconShipExplode): fills its GameObjectType and stores it in its family. */
+void Explosion01LargeBlastEffect_Register(uint32_t arg0)
 {
-	MEM32(0x2269D8u) = 0u;
-	MEM32(0x2269E0u) = 0u;
-	MEM32(0x2269E4u) = 0u;
-	MEM32(0x2269E8u) = 0u;
-	MEM32(0x2269C8u) = 0x5Cu;
-	MEM32(0x2269CCu) = 0xFDCD0u;
-	MEM32(0x2269D0u) = 0xFDD40u;
-	MEM32(0x2269D4u) = 0x10C5E0u;
-	MEM32(arg0 + 0x18u) = 0x2269C8u;
+	GameObjectType_load(Explosion01LargeBlastEffectType_VA) = 0u;
+	GameObjectType_collect(Explosion01LargeBlastEffectType_VA) = 0u;
+	GameObjectType_version(Explosion01LargeBlastEffectType_VA) = 0u;
+	GameObjectType_flags(Explosion01LargeBlastEffectType_VA) = 0u;
+	GameObjectType_size(Explosion01LargeBlastEffectType_VA) = 0x5Cu;
+	GameObjectType_startup(Explosion01LargeBlastEffectType_VA) = 0xFDCD0u;
+	GameObjectType_shutdown(Explosion01LargeBlastEffectType_VA) = 0xFDD40u;
+	GameObjectType_state_machine(Explosion01LargeBlastEffectType_VA) = 0x10C5E0u;
+	MEM32(arg0 + 0x18u) = Explosion01LargeBlastEffectType_VA;
 }
 
 uint32_t sub_000FDDC0(void)
@@ -262509,9 +262405,8 @@ uint32_t sub_000FDDC0(void)
 	return eax;
 }
 
-/* Creates two ObjectCloneArray instances and takes references to two object types (0x3C and 0x6) as part
-   of a second effect family initialization routine. */
-uint32_t EffectFamilyParticleInit2(void)
+/* The Explosion01MedBlastEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t Explosion01MedBlastEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262538,9 +262433,9 @@ uint32_t EffectFamilyParticleInit2(void)
 	return eax;
 }
 
-/* Releases two ObjectCloneArray instances and releases references to two object types (0x3C and 0x6) as
-   part of a second effect family cleanup routine. */
-uint32_t EffectFamilyParticleRelease2(void)
+/* The Explosion01MedBlastEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t Explosion01MedBlastEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262561,19 +262456,20 @@ uint32_t EffectFamilyParticleRelease2(void)
 	return eax;
 }
 
-/* Registers a second particle effect type descriptor with an EffectFamily, setting up its initialization
-   and release callbacks. */
-void EffectFamilyParticleRegister2(uint32_t arg0)
+/* Registers the Explosion01MedBlastEffect type (Effect 1), Explosion01MedEffect with SmokeLight02Effect
+   and the sounds explosion4.wav and explosion13.wav: ARMDTurret's, Building's, MacIICannonWeapon's:
+   fills its GameObjectType and stores it in its family. */
+void Explosion01MedBlastEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226AB8u) = 0u;
-	MEM32(0x226AC0u) = 0u;
-	MEM32(0x226AC4u) = 0u;
-	MEM32(0x226AC8u) = 0u;
-	MEM32(0x226AA8u) = 0x5Cu;
-	MEM32(0x226AACu) = 0xFDDD0u;
-	MEM32(0x226AB0u) = 0xFDE40u;
-	MEM32(0x226AB4u) = 0x10C5E0u;
-	MEM32(arg0 + 0x14u) = 0x226AA8u;
+	GameObjectType_load(Explosion01MedBlastEffectType_VA) = 0u;
+	GameObjectType_collect(Explosion01MedBlastEffectType_VA) = 0u;
+	GameObjectType_version(Explosion01MedBlastEffectType_VA) = 0u;
+	GameObjectType_flags(Explosion01MedBlastEffectType_VA) = 0u;
+	GameObjectType_size(Explosion01MedBlastEffectType_VA) = 0x5Cu;
+	GameObjectType_startup(Explosion01MedBlastEffectType_VA) = 0xFDDD0u;
+	GameObjectType_shutdown(Explosion01MedBlastEffectType_VA) = 0xFDE40u;
+	GameObjectType_state_machine(Explosion01MedBlastEffectType_VA) = 0x10C5E0u;
+	MEM32(arg0 + 0x14u) = Explosion01MedBlastEffectType_VA;
 }
 
 uint32_t sub_000FDEC0(void)
@@ -262584,9 +262480,8 @@ uint32_t sub_000FDEC0(void)
 	return eax;
 }
 
-/* Creates two ObjectCloneArray instances and takes references to two object types (0x3B and 0x6) as part
-   of a third effect family initialization routine. */
-uint32_t EffectFamilyParticleInit3(void)
+/* The Explosion01BlastEffect type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t Explosion01BlastEffect_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -262613,9 +262508,9 @@ uint32_t EffectFamilyParticleInit3(void)
 	return eax;
 }
 
-/* Releases the game object types 6 and 0x3B with GameObjectTypeRelease and frees two globals through
-   VcObjectListRelease. */
-uint32_t GameObjectFamilyRelease(void)
+/* The Explosion01BlastEffect type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t Explosion01BlastEffect_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 
@@ -262636,19 +262531,20 @@ uint32_t GameObjectFamilyRelease(void)
 	return eax;
 }
 
-/* Fills the static GameObjectFamily descriptor at 0x226B88 (version 0x5C, callbacks 0xFDED0 and 0xFDF40)
-   and links it into the family at arg0+0x10. */
-void GameObjectFamilyInitialize(uint32_t arg0)
+/* Registers the Explosion01BlastEffect type (Effect 0), Explosion01Effect with SmokeLight02Effect and
+   the sounds explosion4.wav and explosion13.wav: a missile's (Missile_ExplodeOnTarget), a projectile's,
+   a vehicle's: fills its GameObjectType and stores it in its family. */
+void Explosion01BlastEffect_Register(uint32_t arg0)
 {
-	MEM32(0x226B98u) = 0u;
-	MEM32(0x226BA0u) = 0u;
-	MEM32(0x226BA4u) = 0u;
-	MEM32(0x226BA8u) = 0u;
-	MEM32(0x226B88u) = 0x5Cu;
-	MEM32(0x226B8Cu) = 0xFDED0u;
-	MEM32(0x226B90u) = 0xFDF40u;
-	MEM32(0x226B94u) = 0x10C5E0u;
-	MEM32(arg0 + 0x10u) = 0x226B88u;
+	GameObjectType_load(Explosion01BlastEffectType_VA) = 0u;
+	GameObjectType_collect(Explosion01BlastEffectType_VA) = 0u;
+	GameObjectType_version(Explosion01BlastEffectType_VA) = 0u;
+	GameObjectType_flags(Explosion01BlastEffectType_VA) = 0u;
+	GameObjectType_size(Explosion01BlastEffectType_VA) = 0x5Cu;
+	GameObjectType_startup(Explosion01BlastEffectType_VA) = 0xFDED0u;
+	GameObjectType_shutdown(Explosion01BlastEffectType_VA) = 0xFDF40u;
+	GameObjectType_state_machine(Explosion01BlastEffectType_VA) = 0x10C5E0u;
+	MEM32(arg0 + 0x10u) = Explosion01BlastEffectType_VA;
 }
 
 /* Creates ebx game objects of type 0x54 with GameObjectCreate at positions chosen at random by
@@ -265452,12 +265348,9 @@ uint32_t SteeringCommandComputeSpeedByDistance(uint32_t ebx, uint32_t esi, uint3
 	return ebx;
 }
 
-/* Dispatches on the command type and id, setting the steering command's update function pointer
-   (SteeringCommandTurnTowardTargetInRange, SteeringCommandTurnTowardTarget,
-   SteeringCommandUpdateFollowTarget), calling SteeringCommandComputeSpeedByDistance for the follow
-   command, or running SteeringCommandCopyAndReset and GameObjectRefClearSlot, returning 1 on success and
-   0 otherwise. */
-uint32_t SteeringCommandSetupFromType(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The LevelBoundsSteering type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t LevelBoundsSteering_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, esi = 0;
 
@@ -265715,22 +265608,22 @@ uint32_t SteeringObjectHandleMessage(uint32_t ecx, uint32_t ebx, uint32_t esi, u
 	return eax;
 }
 
-/* initializes a global configuration structure at 0x226E18 with size and flag values, and links it to
-   the SteeringFamily_VA object */
-uint32_t SteeringFamilyInitConfig(uint32_t arg0)
+/* Registers the LevelBoundsSteering type (Steering 0), made where an object's point leaves the level's
+   box (LevelBoundsMin, BoxClampPointToInsetBox): fills its GameObjectType and stores it in its family. */
+uint32_t LevelBoundsSteering_Register(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
-	MEM32(0x226E1Cu) = 0u;
-	MEM32(0x226E20u) = 0u;
-	MEM32(0x226E28u) = 0u;
-	MEM32(0x226E30u) = 0u;
-	MEM32(0x226E34u) = 0u;
-	MEM32(0x226E38u) = 0u;
+	GameObjectType_startup(LevelBoundsSteeringType_VA) = 0u;
+	GameObjectType_shutdown(LevelBoundsSteeringType_VA) = 0u;
+	GameObjectType_load(LevelBoundsSteeringType_VA) = 0u;
+	GameObjectType_collect(LevelBoundsSteeringType_VA) = 0u;
+	GameObjectType_version(LevelBoundsSteeringType_VA) = 0u;
+	GameObjectType_flags(LevelBoundsSteeringType_VA) = 0u;
 	eax = arg0;
-	MEM32(0x226E18u) = 0x2Cu;
-	MEM32(0x226E24u) = 0x100040u;
-	MEM32(eax + 0x10u) = 0x226E18u;
+	GameObjectType_size(LevelBoundsSteeringType_VA) = 0x2Cu;
+	GameObjectType_state_machine(LevelBoundsSteeringType_VA) = 0x100040u;
+	MEM32(eax + 0x10u) = LevelBoundsSteeringType_VA;
 	return eax;
 }
 
@@ -274074,11 +273967,9 @@ void ObjectGroupSendMessageToAllObjects(uint32_t ecx, uint32_t ebx, uint32_t arg
 	} while (t3 != 1u);
 }
 
-/* Message handler: for class 0x7FFF it dispatches message 0xFFFA to ObjectGroupDestroyAllObjects
-   (destroy all), 0xFFFB to ObjectGroupCheckObjectFlagUniform, 0x2AFA to ObjectGroupSetFlagFromMessage,
-   0xF009 to ObjectGroupSendMessageToAllObjects and 0xFFF9 to ObjectGroupInitialize, and returns 1 for
-   0xFFFF/0xFFFE, 0 otherwise. */
-uint32_t ObjectGroupHandleMessage(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ObjectGroupComponent type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ObjectGroupComponent_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -274157,19 +274048,20 @@ void ObjectGroupResetCounter(void)
 	MEM32(0x22724Cu) = 0u;
 }
 
-/* fills the component family block at 0x227208 (size 0xA48, the ObjectGroupResetCounter and other
-   callback pointers, two count fields) and stores the family at arg0+0x10. */
-void GameObjectFamilyInit(uint32_t arg0)
+/* Registers the ObjectGroupComponent type (Component 0), a group of objects: it sends them a message,
+   sets a flag in all, destroys them (ObjectGroup...): fills its GameObjectType and stores it in its
+   family. */
+void ObjectGroupComponent_Register(uint32_t arg0)
 {
-	MEM32(0x227224u) = 1u;
-	MEM32(0x227228u) = 1u;
-	MEM32(0x227208u) = 0xA48u;
-	MEM32(0x22720Cu) = 0x105710u;
-	MEM32(0x227210u) = 0x105710u;
-	MEM32(0x227214u) = 0x105600u;
-	MEM32(0x227218u) = 0xD7330u;
-	MEM32(0x227220u) = 0xD7530u;
-	MEM32(arg0 + 0x10u) = 0x227208u;
+	GameObjectType_version(ObjectGroupComponentType_VA) = 1u;
+	GameObjectType_flags(ObjectGroupComponentType_VA) = 1u;
+	GameObjectType_size(ObjectGroupComponentType_VA) = 0xA48u;
+	GameObjectType_startup(ObjectGroupComponentType_VA) = 0x105710u;
+	GameObjectType_shutdown(ObjectGroupComponentType_VA) = 0x105710u;
+	GameObjectType_state_machine(ObjectGroupComponentType_VA) = 0x105600u;
+	GameObjectType_load(ObjectGroupComponentType_VA) = 0xD7330u;
+	GameObjectType_collect(ObjectGroupComponentType_VA) = 0xD7530u;
+	MEM32(arg0 + 0x10u) = ObjectGroupComponentType_VA;
 }
 
 /* The TrainingBeacon type's state machine: how its objects answer each message in each state
@@ -274452,11 +274344,9 @@ void PilotTextSetDefault(uint32_t eax, uint32_t esi, uint32_t edi)
 	MEM32(edi + 0x10u) = eax_2;
 }
 
-/* dispatches on the event id (0x7FFF, 0, 1, 0x14) and code to clone or release the vcObject at +0x54,
-   call vcSceneObjectChangeFlags, call
-   GameObjectSetTransformFrom/GameObjectGetTransformInto/SceneObjectAttach/GameObjectCreateAttachedSceneObject,
-   or GameObjectDestroy. */
-uint32_t PilotTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The PunyHumanPickup type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t PunyHumanPickup_StateMachine(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -274631,10 +274521,8 @@ uint32_t PilotTextHandleEvent(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint3
 	return eax;
 }
 
-/* builds the shared text objects (a clone source made from Male01Pilot3Text with
-   ObjectCreateInstanceFromName and vcObjectGet lookups named PhCheerText, PhScareText and 0x1A87A8) and
-   stores them in globals 0x227314/0x2272EC/0x2272F0/0x2272F4. */
-uint32_t PilotTextCreateObjects(uint32_t ebx, uint32_t ebp)
+/* The PunyHumanPickup type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t PunyHumanPickup_Startup(uint32_t ebx, uint32_t ebp)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, arg7 = 0, arg8 = 0, arg9 = 0, eax = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0, stack_8 = 0, stack_C = 0, saved_eax = 0, stack_14 = 0, stack_18 = 0, stack_1C = 0, stack_20 = 0;
@@ -274680,8 +274568,8 @@ uint32_t PilotTextCreateObjects(uint32_t ebx, uint32_t ebp)
 	return eax;
 }
 
-/* vcObjectRelease's the four text-object globals and clears 0x227314. */
-uint32_t PilotTextReleaseObjects(void)
+/* The PunyHumanPickup type's last release (GameObjectTypeRelease): lets go of what its objects share. */
+uint32_t PunyHumanPickup_Shutdown(void)
 {
 	uint32_t arg0 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -274771,9 +274659,8 @@ void PilotTextSetText(uint32_t ebx, uint32_t arg0, uint32_t arg1)
 	SceneObjectCreate(arg0_2, arg1_2);
 }
 
-/* Item_Load's the item, reads 0x40 bytes into the object's +0x5C name buffer and calls PilotTextSetText
-   to attach the text. */
-uint32_t PilotTextLoad(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
+/* Reads an object of the PunyHumanPickup type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t PunyHumanPickup_Load(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, eax = 0, ebx = 0, edi = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -274806,20 +274693,19 @@ uint32_t PilotTextLoad(uint32_t esi, uint32_t arg0, uint32_t arg1, uint32_t arg3
 	return eax;
 }
 
-/* Fills the ZenCratesMunitionsPickup class descriptor at 0x2272A8 (size 0x9C, the callbacks
-   0x105D40/0x105DA0/0x105B20/0x105E80 and the 0x147480 table) and stores it at arg0+0x20 on the item
-   family that ZenCratesMunitionsPickup_Register set up. */
-void ZenCratesMunitionsPickupInitClass(uint32_t arg0)
+/* Registers the PunyHumanPickup type (Item 4), the levels' Item.PunyHuman: a pilot, Male01Pilot3, with
+   the animations ph idle, ph cheer and ph scare: fills its GameObjectType and stores it in its family. */
+void PunyHumanPickup_Register(uint32_t arg0)
 {
-	MEM32(0x2272C4u) = 1u;
-	MEM32(0x2272C8u) = 1u;
-	MEM32(0x2272A8u) = 0x9Cu;
-	MEM32(0x2272ACu) = 0x105D40u;
-	MEM32(0x2272B0u) = 0x105DA0u;
-	MEM32(0x2272B4u) = 0x105B20u;
-	MEM32(0x2272B8u) = 0x105E80u;
-	MEM32(0x2272C0u) = 0x147480u;
-	MEM32(arg0 + 0x20u) = 0x2272A8u;
+	GameObjectType_version(PunyHumanPickupType_VA) = 1u;
+	GameObjectType_flags(PunyHumanPickupType_VA) = 1u;
+	GameObjectType_size(PunyHumanPickupType_VA) = 0x9Cu;
+	GameObjectType_startup(PunyHumanPickupType_VA) = 0x105D40u;
+	GameObjectType_shutdown(PunyHumanPickupType_VA) = 0x105DA0u;
+	GameObjectType_state_machine(PunyHumanPickupType_VA) = 0x105B20u;
+	GameObjectType_load(PunyHumanPickupType_VA) = 0x105E80u;
+	GameObjectType_collect(PunyHumanPickupType_VA) = 0x147480u;
+	MEM32(arg0 + 0x20u) = PunyHumanPickupType_VA;
 	MEM32(0x227304u) = 0u;
 	MEM32(0x227308u) = 0u;
 	MEM32(0x22730Cu) = 0u;
@@ -276947,11 +276833,9 @@ void StructureFamilyHandleCreateMessage(uint32_t esi, uint32_t edi, uint32_t arg
 	MEM32(ebp + 0x18u) = MEM32(esi + 0x154u);
 }
 
-/* Dispatches event codes (0, 1, 0x7FFF and subcodes 0xFFFD, 0xFFFB, 0xFFFF, 0xFFF9, 0xFFFE, 0xF001,
-   0xF000, 0xFFFA, 0xF004, 0xF006) for a StructureFamily object, calling
-   StructureFamilyHandleCreateMessage, SceneObjectAttachByName, TimerCountdownTick,
-   SceneObjectModelsAttach, SceneObjectModelClear, GameObjectClone and SceneObjectModelInit. */
-uint32_t StructureFamily_HandleEvent(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The ObjectSwapStructure type's state machine: how its objects answer each message in each state
+   (GameObjectDeliver). Hands back whether one was answered. */
+uint32_t ObjectSwapStructure_StateMachine(uint32_t ebp, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, ebx = 0, ecx = 0, edi_2 = 0, edx = 0, esi = 0;
 	uint32_t saved_arg1 = 0;
@@ -277075,10 +276959,8 @@ uint32_t StructureFamily_HandleEvent(uint32_t ebp, uint32_t edi, uint32_t arg0, 
 	return eax;
 }
 
-/* Reads a StructureFamily object's fields and buffers from a file with vcFileReadU32 and
-   vcFileReadBytes, then applies them through PrimaryModelSet, SecondaryModelSet, PooledObjectNameSet and
-   GameObjectSetName. */
-uint32_t StructureFamily_Read(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Reads an object of the ObjectSwapStructure type from a file (GameObjectLoad). Hands back its handle. */
+uint32_t ObjectSwapStructure_Load(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t t1 = 0;
@@ -277218,19 +277100,19 @@ uint32_t StructureFamily_Read(uint32_t ebx, uint32_t esi, uint32_t edi, uint32_t
 	return eax;
 }
 
-/* Initializes the StructureFamily class descriptor at 0x227498 with size 0x160, function pointers
-   0x1077A0 and 0x107970, and zeroes the following class arrays. */
-void StructureFamily_InitClass(uint32_t arg0)
+/* Registers the ObjectSwapStructure type (Structure 1), the levels' Structure.ObjectSwap: fills its
+   GameObjectType and stores it in its family. */
+void ObjectSwapStructure_Register(uint32_t arg0)
 {
-	MEM32(0x227498u) = 0x160u;
-	MEM32(0x22749Cu) = 0x59010u;
-	MEM32(0x2274A0u) = 0x59010u;
-	MEM32(0x2274A4u) = 0x1077A0u;
-	MEM32(0x2274A8u) = 0x107970u;
-	MEM32(0x2274B0u) = 0x147480u;
-	MEM32(0x2274B4u) = 0u;
-	MEM32(0x2274B8u) = 1u;
-	MEM32(arg0 + 0x14u) = 0x227498u;
+	GameObjectType_size(ObjectSwapStructureType_VA) = 0x160u;
+	GameObjectType_startup(ObjectSwapStructureType_VA) = 0x59010u;
+	GameObjectType_shutdown(ObjectSwapStructureType_VA) = 0x59010u;
+	GameObjectType_state_machine(ObjectSwapStructureType_VA) = 0x1077A0u;
+	GameObjectType_load(ObjectSwapStructureType_VA) = 0x107970u;
+	GameObjectType_collect(ObjectSwapStructureType_VA) = 0x147480u;
+	GameObjectType_version(ObjectSwapStructureType_VA) = 0u;
+	GameObjectType_flags(ObjectSwapStructureType_VA) = 1u;
+	MEM32(arg0 + 0x14u) = ObjectSwapStructureType_VA;
 	x86_rep_stos32(0x2274E0u, 0u, 0x28u);
 	x86_rep_stos32(0x227580u, 0u, 0x14u);
 }
@@ -346192,10 +346074,10 @@ void ContainerFreeAllEntries_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectListRead_entry(void)
+void CinemaNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectListRead(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = CinemaNode_Load(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -346203,10 +346085,10 @@ void GameObjectListRead_entry(void)
 	g_esp += 4u;
 }
 
-void NodeCollectFromHandle_entry(void)
+void CinemaNode_Collect_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeCollectFromHandle(ARG32(0), ARG32(1));
+	g_eax = CinemaNode_Collect(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -346287,10 +346169,10 @@ void ReticleInit_entry(void)
 	g_esp += 4u;
 }
 
-void ReticleHandleMessage_entry(void)
+void CinemaNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ReticleHandleMessage(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = CinemaNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -346298,9 +346180,9 @@ void ReticleHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilySetDescriptor_entry(void)
+void CinemaNode_Register_entry(void)
 {
-	NodeFamilySetDescriptor(ARG32(0));
+	CinemaNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -348331,10 +348213,10 @@ void ScreenFamilyHandlePadInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyHandleMessage_entry(void)
+void ConfirmDialogScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyHandleMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ConfirmDialogScreen_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348342,9 +348224,9 @@ void ScreenFamilyHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetClassDescriptor_entry(void)
+void ConfirmDialogScreen_Register_entry(void)
 {
-	ScreenFamilySetClassDescriptor(ARG32(0));
+	ConfirmDialogScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -350314,10 +350196,10 @@ void ObjectSetSceneObject_entry(void)
 	g_esp += 4u;
 }
 
-void ObjectSceneObjectMessageHandler_entry(void)
+void TerrainNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ObjectSceneObjectMessageHandler(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = TerrainNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -350325,10 +350207,10 @@ void ObjectSceneObjectMessageHandler_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectLoadModel_entry(void)
+void TerrainNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectLoadModel(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = TerrainNode_Load(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -350347,9 +350229,9 @@ void GameObjectCollectChangedNodes_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyInitialize_entry(void)
+void TerrainNode_Register_entry(void)
 {
-	NodeFamilyInitialize(ARG32(0));
+	TerrainNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -351409,10 +351291,10 @@ void PadConfirmFlagSet_entry(void)
 	g_esp += 4u;
 }
 
-void GuiTextElementsCreate_entry(void)
+void ChapterLoadingScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GuiTextElementsCreate(g_esi, g_edi);
+	g_eax = ChapterLoadingScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -351420,10 +351302,10 @@ void GuiTextElementsCreate_entry(void)
 	g_esp += 4u;
 }
 
-void GuiTextElementsDestroy_entry(void)
+void ChapterLoadingScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GuiTextElementsDestroy();
+	g_eax = ChapterLoadingScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -351504,10 +351386,10 @@ void LoadingScreenBuild_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyMessageDispatch_entry(void)
+void ChapterLoadingScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyMessageDispatch(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ChapterLoadingScreen_StateMachine(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -351515,9 +351397,9 @@ void ScreenFamilyMessageDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetGuiHandlers_entry(void)
+void ChapterLoadingScreen_Register_entry(void)
 {
-	ScreenFamilySetGuiHandlers(ARG32(0));
+	ChapterLoadingScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352284,10 +352166,10 @@ void NodeUpdatePositionFromParent_entry(void)
 	g_esp += 4u;
 }
 
-void NodeMessageDispatch_entry(void)
+void LinkNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeMessageDispatch(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = LinkNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352295,10 +352177,10 @@ void NodeMessageDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectCollectNodes_entry(void)
+void LinkNode_Collect_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectCollectNodes(ARG32(0), ARG32(1));
+	g_eax = LinkNode_Collect(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352320,10 +352202,10 @@ void NodeUpdateTransform_entry(void)
 	g_esp += 4u;
 }
 
-void NodeLoad_entry(void)
+void LinkNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeLoad(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = LinkNode_Load(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352331,9 +352213,9 @@ void NodeLoad_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyRegisterDescriptor_entry(void)
+void LinkNode_Register_entry(void)
 {
-	NodeFamilyRegisterDescriptor(ARG32(0));
+	LinkNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352609,10 +352491,10 @@ void PathNodeBuildSegments_entry(void)
 	g_esp += 4u;
 }
 
-void PathNodeHandleMessage_entry(void)
+void PathNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PathNodeHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = PathNode_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352631,10 +352513,10 @@ void sub_0003C235_entry(void)
 	g_esp += 4u;
 }
 
-void PathLoadFromFile_entry(void)
+void PathNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PathLoadFromFile(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = PathNode_Load(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -352642,9 +352524,9 @@ void PathLoadFromFile_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyInitType_entry(void)
+void PathNode_Register_entry(void)
 {
-	g_eax = NodeFamilyInitType(ARG32(0));
+	g_eax = PathNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -353807,10 +353689,10 @@ void StatusHudDraw_entry(void)
 	g_esp += 4u;
 }
 
-void StatusHudCreate_entry(void)
+void VeritechChoiceScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = StatusHudCreate(g_esi, g_edi);
+	g_eax = VeritechChoiceScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353818,10 +353700,10 @@ void StatusHudCreate_entry(void)
 	g_esp += 4u;
 }
 
-void GlobalVcObjectReleaseField_entry(void)
+void VeritechChoiceScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GlobalVcObjectReleaseField();
+	g_eax = VeritechChoiceScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353863,10 +353745,10 @@ void VeritechPaintSelectUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyHandleEvent_entry(void)
+void VeritechChoiceScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyHandleEvent(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = VeritechChoiceScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353874,9 +353756,9 @@ void ScreenFamilyHandleEvent_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyRegisterScreen_entry(void)
+void VeritechChoiceScreen_Register_entry(void)
 {
-	ScreenFamilyRegisterScreen(ARG32(0));
+	VeritechChoiceScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -355533,10 +355415,10 @@ void VeritechConstantsGet_entry(void)
 	g_esp += 4u;
 }
 
-void SceneObjectCreateFromName_entry(void)
+void VF1SXRoy_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneObjectCreateFromName(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = VF1SXRoy_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355544,10 +355426,10 @@ void SceneObjectCreateFromName_entry(void)
 	g_esp += 4u;
 }
 
-void SceneObjectReleaseGlobal_entry(void)
+void VF1SXRoy_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneObjectReleaseGlobal();
+	g_eax = VF1SXRoy_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355555,9 +355437,9 @@ void SceneObjectReleaseGlobal_entry(void)
 	g_esp += 4u;
 }
 
-void VeritechFamilyRegister_entry(void)
+void VF1SXRoy_Register_entry(void)
 {
-	VeritechFamilyRegister(ARG32(0));
+	VF1SXRoy_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -355567,10 +355449,10 @@ void VF1ConstantsGet_entry(void)
 	g_esp += 4u;
 }
 
-void VF1Create_entry(void)
+void VF1SXRick_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VF1Create(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = VF1SXRick_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355578,10 +355460,10 @@ void VF1Create_entry(void)
 	g_esp += 4u;
 }
 
-void VF1Destroy_entry(void)
+void VF1SXRick_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VF1Destroy();
+	g_eax = VF1SXRick_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355589,9 +355471,9 @@ void VF1Destroy_entry(void)
 	g_esp += 4u;
 }
 
-void VF1FamilyRegister_entry(void)
+void VF1SXRick_Register_entry(void)
 {
-	VF1FamilyRegister(ARG32(0));
+	VF1SXRick_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -355879,10 +355761,10 @@ void sub_00066C40_entry(void)
 	g_esp += 4u;
 }
 
-void GameGlobalsShutdown_entry(void)
+void ExcaliburHiroBoss_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameGlobalsShutdown();
+	g_eax = ExcaliburHiroBoss_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355890,9 +355772,9 @@ void GameGlobalsShutdown_entry(void)
 	g_esp += 4u;
 }
 
-void EntityFamilyInitData_entry(void)
+void ExcaliburHiroBoss_Register_entry(void)
 {
-	EntityFamilyInitData(ARG32(0));
+	ExcaliburHiroBoss_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -355908,10 +355790,10 @@ void sub_00067B90_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectsReleaseAll_entry(void)
+void ExcaliburHiro_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectsReleaseAll();
+	g_eax = ExcaliburHiro_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -355919,9 +355801,9 @@ void GameObjectsReleaseAll_entry(void)
 	g_esp += 4u;
 }
 
-void EntityFamilyInitVtable_entry(void)
+void ExcaliburHiro_Register_entry(void)
 {
-	EntityFamilyInitVtable(ARG32(0));
+	ExcaliburHiro_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -356421,10 +356303,10 @@ void sub_0006DF40_entry(void)
 	g_esp += 4u;
 }
 
-void GameReleaseObjects_entry(void)
+void FemalePowerArmor_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameReleaseObjects();
+	g_eax = FemalePowerArmor_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356432,9 +356314,9 @@ void GameReleaseObjects_entry(void)
 	g_esp += 4u;
 }
 
-void EntityFamilyInit_entry(void)
+void FemalePowerArmor_Register_entry(void)
 {
-	EntityFamilyInit(ARG32(0));
+	FemalePowerArmor_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -356700,10 +356582,10 @@ void sub_00071880_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectsRelease_entry(void)
+void MalePowerArmorGorian_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectsRelease();
+	g_eax = MalePowerArmorGorian_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -356711,9 +356593,9 @@ void GameObjectsRelease_entry(void)
 	g_esp += 4u;
 }
 
-void MalePowerArmor_RegisterClassTables_entry(void)
+void MalePowerArmorGorian_Register_entry(void)
 {
-	MalePowerArmor_RegisterClassTables(ARG32(0));
+	MalePowerArmorGorian_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -360576,10 +360458,10 @@ void EntityFindNearestObject_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectReadFromFile_entry(void)
+void SpawnGroupNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectReadFromFile(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = SpawnGroupNode_Load(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360638,10 +360520,10 @@ void GameObjectContainerConstruct_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectContainerMessage_entry(void)
+void SpawnGroupNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectContainerMessage(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SpawnGroupNode_StateMachine(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360649,9 +360531,9 @@ void GameObjectContainerMessage_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectContainerClassRegister_entry(void)
+void SpawnGroupNode_Register_entry(void)
 {
-	GameObjectContainerClassRegister(ARG32(0));
+	SpawnGroupNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -360828,10 +360710,10 @@ void LevelSelectNodeUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void LevelSelectCreateNodes_entry(void)
+void LevelSelectScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = LevelSelectCreateNodes(g_ebx, g_ebp, g_esi, g_edi);
+	g_eax = LevelSelectScreen_Startup(g_ebx, g_ebp, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360839,10 +360721,10 @@ void LevelSelectCreateNodes_entry(void)
 	g_esp += 4u;
 }
 
-void VcObjectReleaseRangeFieldsAndList_entry(void)
+void LevelSelectScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VcObjectReleaseRangeFieldsAndList();
+	g_eax = LevelSelectScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360915,10 +360797,10 @@ void MissionSelectMenuUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void LevelSelectHandleMessage_entry(void)
+void LevelSelectScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = LevelSelectHandleMessage(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = LevelSelectScreen_StateMachine(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -360926,9 +360808,9 @@ void LevelSelectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetHandlerTable_entry(void)
+void LevelSelectScreen_Register_entry(void)
 {
-	ScreenFamilySetHandlerTable(ARG32(0));
+	LevelSelectScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -361176,10 +361058,10 @@ void ScreenElementDrawScrolledText_entry(void)
 	g_esp += 4u;
 }
 
-void ScrolledTextElementHandleMessage_entry(void)
+void ScrolledTextElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScrolledTextElementHandleMessage(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ScrolledTextElement_StateMachine(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361187,10 +361069,10 @@ void ScrolledTextElementHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void UiElementsInit_entry(void)
+void ScrolledTextElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = UiElementsInit(g_esi, g_edi);
+	g_eax = ScrolledTextElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361198,10 +361080,10 @@ void UiElementsInit_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementReleaseVcObjects_entry(void)
+void ScrolledTextElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementReleaseVcObjects();
+	g_eax = ScrolledTextElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361209,9 +361091,9 @@ void ScreenElementReleaseVcObjects_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySetVTable_entry(void)
+void ScrolledTextElement_Register_entry(void)
 {
-	ScreenElementFamilySetVTable(ARG32(0));
+	ScrolledTextElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -361712,10 +361594,10 @@ void sub_000A6F50_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectTargetHasPairFlag_entry(void)
+void AIConditionTargetVisible_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectTargetHasPairFlag(g_ebp, ARG32(0), ARG32(1));
+	g_eax = AIConditionTargetVisible(g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361756,9 +361638,9 @@ void ObjectTargetIsThirdGroup_entry(void)
 	g_esp += 4u;
 }
 
-void TimerAccumulateElapsedSeconds_entry(void)
+void AIConditionTimerElapsed_entry(void)
 {
-	g_eax = TimerAccumulateElapsedSeconds(ARG32(0), ARG32(2));
+	g_eax = AIConditionTimerElapsed(ARG32(0), ARG32(2));
 	g_esp += 4u;
 }
 
@@ -361768,15 +361650,15 @@ void GameObjectTimerElapsed_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A7180_entry(void)
+void AIConditionWithinBattleRange_entry(void)
 {
-	g_eax = sub_000A7180(ARG32(0), ARG32(1));
+	g_eax = AIConditionWithinBattleRange(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000A71E0_entry(void)
+void AIConditionTargetInRange_entry(void)
 {
-	g_eax = sub_000A71E0(ARG32(0), ARG32(1));
+	g_eax = AIConditionTargetInRange(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -361804,10 +361686,10 @@ void ObjectTypeIsInGroup_entry(void)
 	g_esp += 4u;
 }
 
-void ObjectHandleIsValid_entry(void)
+void AIConditionHasTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ObjectHandleIsValid(ARG32(0));
+	g_eax = AIConditionHasTarget(ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361815,15 +361697,15 @@ void ObjectHandleIsValid_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A7340_entry(void)
+void AIConditionWithinOriginRange_entry(void)
 {
-	g_eax = sub_000A7340(ARG32(0), ARG32(1));
+	g_eax = AIConditionWithinOriginRange(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000A7390_entry(void)
+void AIConditionHasReturned_entry(void)
 {
-	g_eax = sub_000A7390(ARG32(0), ARG32(1), ARG32(2));
+	g_eax = AIConditionHasReturned(ARG32(0), ARG32(1), ARG32(2));
 	g_esp += 4u;
 }
 
@@ -361940,10 +361822,10 @@ void PositionsAreWithinDistance_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectIsWithinRange_entry(void)
+void AIConditionTargetInAttentionRadius_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectIsWithinRange(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = AIConditionTargetInAttentionRadius(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361951,10 +361833,10 @@ void GameObjectIsWithinRange_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectIsWithinPointRange_entry(void)
+void AIConditionTargetInActivityRange_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectIsWithinPointRange(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = AIConditionTargetInActivityRange(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362614,10 +362496,10 @@ void ObjectTryEnterStateTwo_entry(void)
 	g_esp += 4u;
 }
 
-void ObjectEnterStateTwoAndApplyTargetLimit_entry(void)
+void AIActionMoveWithinRange_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ObjectEnterStateTwoAndApplyTargetLimit(g_eax, g_ebp, ARG32(0), ARG32(1));
+	g_eax = AIActionMoveWithinRange(g_eax, g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362625,10 +362507,10 @@ void ObjectEnterStateTwoAndApplyTargetLimit_entry(void)
 	g_esp += 4u;
 }
 
-void EntityAIApproachTarget_entry(void)
+void AIActionMoveTowardsTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityAIApproachTarget(g_eax, g_ebp, ARG32(0), ARG32(1));
+	g_eax = AIActionMoveTowardsTarget(g_eax, g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362636,10 +362518,10 @@ void EntityAIApproachTarget_entry(void)
 	g_esp += 4u;
 }
 
-void EntitySetRandomTimedField_entry(void)
+void AIActionFindOverrideTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntitySetRandomTimedField(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionFindOverrideTarget(g_eax, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362647,16 +362529,16 @@ void EntitySetRandomTimedField_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AB140_entry(void)
+void AIActionDropTarget_entry(void)
 {
-	g_eax = sub_000AB140(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionDropTarget(g_eax, ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void EntityOnTargetAcquired_entry(void)
+void AIActionFireOnTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityOnTargetAcquired(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionFireOnTarget(g_eax, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362664,10 +362546,10 @@ void EntityOnTargetAcquired_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AB1F0_entry(void)
+void AIActionLookAround_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AB1F0(ARG32(0), ARG32(1));
+	g_eax = AIActionLookAround(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362675,10 +362557,10 @@ void sub_000AB1F0_entry(void)
 	g_esp += 4u;
 }
 
-void VehicleCreateGameObjectsIfNotDestroyed_entry(void)
+void AIActionFollowPath_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VehicleCreateGameObjectsIfNotDestroyed(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = AIActionFollowPath(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362686,10 +362568,10 @@ void VehicleCreateGameObjectsIfNotDestroyed_entry(void)
 	g_esp += 4u;
 }
 
-void EntityDetachFromParent_entry(void)
+void AIActionReturnToOrigin_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityDetachFromParent(g_eax, g_ebp, ARG32(0), ARG32(1));
+	g_eax = AIActionReturnToOrigin(g_eax, g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362751,10 +362633,10 @@ void ObjectValidateGameObjectHandle_entry(void)
 	g_esp += 4u;
 }
 
-void EntityAttachToTarget_entry(void)
+void AIActionStrafeAttack_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityAttachToTarget(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionStrafeAttack(g_eax, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362773,9 +362655,9 @@ void EntityMoveTowardTarget_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AB790_entry(void)
+void AIActionGoPreviousState_entry(void)
 {
-	g_eax = sub_000AB790(g_eax, ARG32(0));
+	g_eax = AIActionGoPreviousState(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -362808,10 +362690,10 @@ void NameTableClear_entry(void)
 	g_esp += 4u;
 }
 
-void EntityEnterAttachState_entry(void)
+void AIActionTurnTowardsSound_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityEnterAttachState(g_eax, g_ebx, ARG32(0), ARG32(1));
+	g_eax = AIActionTurnTowardsSound(g_eax, g_ebx, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362830,10 +362712,10 @@ void EntityFindNearestTarget_entry(void)
 	g_esp += 4u;
 }
 
-void EntityAttachAndSetTargetFromStoredHandle_entry(void)
+void AIActionFleeReversePath_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityAttachAndSetTargetFromStoredHandle(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionFleeReversePath(g_eax, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362841,10 +362723,10 @@ void EntityAttachAndSetTargetFromStoredHandle_entry(void)
 	g_esp += 4u;
 }
 
-void EntityAttachToTargetEnteringState_entry(void)
+void AIActionMaintainDist_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EntityAttachToTargetEnteringState(g_eax, g_ebp, ARG32(0), ARG32(1));
+	g_eax = AIActionMaintainDist(g_eax, g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362852,39 +362734,39 @@ void EntityAttachToTargetEnteringState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ABB80_entry(void)
+void AIActionGoIdle_entry(void)
 {
-	g_eax = sub_000ABB80(g_eax, ARG32(0));
+	g_eax = AIActionGoIdle(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABBB0_entry(void)
+void AIActionGoAlert_entry(void)
 {
-	g_eax = sub_000ABBB0(g_eax, ARG32(0));
+	g_eax = AIActionGoAlert(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABBE0_entry(void)
+void AIActionGoAttack_entry(void)
 {
-	g_eax = sub_000ABBE0(g_eax, ARG32(0), ARG32(1));
+	g_eax = AIActionGoAttack(g_eax, ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
-void sub_000ABC20_entry(void)
+void AIActionGoPursue_entry(void)
 {
-	g_eax = sub_000ABC20(g_eax, ARG32(0));
+	g_eax = AIActionGoPursue(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABC50_entry(void)
+void AIActionGoSearch_entry(void)
 {
-	g_eax = sub_000ABC50(g_eax, ARG32(0));
+	g_eax = AIActionGoSearch(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABC80_entry(void)
+void AIActionGoReturn_entry(void)
 {
-	g_eax = sub_000ABC80(g_eax, ARG32(0));
+	g_eax = AIActionGoReturn(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -362940,10 +362822,10 @@ void ObjectModeActionBySpawnOrDistance_entry(void)
 	g_esp += 4u;
 }
 
-void ObjectTargetMovementPatternExecute_entry(void)
+void AIActionFollowMovementPattern_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ObjectTargetMovementPatternExecute(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = AIActionFollowMovementPattern(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363044,10 +362926,10 @@ void NodeFamilyInitObject_entry(void)
 	g_esp += 4u;
 }
 
-void NodeVcObjectHandleMessage_entry(void)
+void SkyNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeVcObjectHandleMessage(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = SkyNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363055,10 +362937,10 @@ void NodeVcObjectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyLoadFromFile_entry(void)
+void SkyNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilyLoadFromFile(g_ebx, g_esi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = SkyNode_Load(g_ebx, g_esi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363066,9 +362948,9 @@ void NodeFamilyLoadFromFile_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilySetType_entry(void)
+void SkyNode_Register_entry(void)
 {
-	NodeFamilySetType(ARG32(0));
+	SkyNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363133,10 +363015,10 @@ void NodeFamilyUpdateFriendlyReticle_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectDispatchEventMessage_entry(void)
+void CameraNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectDispatchEventMessage(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = CameraNode_StateMachine(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363144,10 +363026,10 @@ void GameObjectDispatchEventMessage_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyLoadNode_entry(void)
+void CameraNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilyLoadNode(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = CameraNode_Load(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363155,9 +363037,9 @@ void NodeFamilyLoadNode_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyInstallTypeDescriptor_entry(void)
+void CameraNode_Register_entry(void)
 {
-	NodeFamilyInstallTypeDescriptor(ARG32(0));
+	CameraNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363307,10 +363189,10 @@ void MenuHandleInput_entry(void)
 	g_esp += 4u;
 }
 
-void VersusHudHandleMessage_entry(void)
+void VersusSetupScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VersusHudHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = VersusSetupScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363318,9 +363200,9 @@ void VersusHudHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void VersusHudScreenRegister_entry(void)
+void VersusSetupScreen_Register_entry(void)
 {
-	VersusHudScreenRegister(ARG32(0));
+	VersusSetupScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363363,10 +363245,10 @@ void DifficultyScreenUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void DifficultyScreenHandleMessage_entry(void)
+void DifficultyScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = DifficultyScreenHandleMessage(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = DifficultyScreen_StateMachine(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363374,9 +363256,9 @@ void DifficultyScreenHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void DifficultyScreenRegister_entry(void)
+void DifficultyScreen_Register_entry(void)
 {
-	DifficultyScreenRegister(ARG32(0));
+	DifficultyScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363442,10 +363324,10 @@ void HudPlayerTextHandleInput_entry(void)
 	g_esp += 4u;
 }
 
-void HudPlayerTextHandleMessage_entry(void)
+void SubtitlesScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudPlayerTextHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SubtitlesScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363453,10 +363335,10 @@ void HudPlayerTextHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyHandlerCreate_entry(void)
+void SubtitlesScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyHandlerCreate();
+	g_eax = SubtitlesScreen_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363464,10 +363346,10 @@ void ScreenFamilyHandlerCreate_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyHandlerDestroy_entry(void)
+void SubtitlesScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyHandlerDestroy();
+	g_eax = SubtitlesScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363475,9 +363357,9 @@ void ScreenFamilyHandlerDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetHandler_entry(void)
+void SubtitlesScreen_Register_entry(void)
 {
-	ScreenFamilySetHandler(ARG32(0));
+	SubtitlesScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363559,10 +363441,10 @@ void MenuProcessPadInput_entry(void)
 	g_esp += 4u;
 }
 
-void SoundOptionsHandleMessage_entry(void)
+void SoundSettingsScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SoundOptionsHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SoundSettingsScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363570,10 +363452,10 @@ void SoundOptionsHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void SoundOptionsCreateElements_entry(void)
+void SoundSettingsScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SoundOptionsCreateElements(g_esi, g_edi);
+	g_eax = SoundSettingsScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363581,10 +363463,10 @@ void SoundOptionsCreateElements_entry(void)
 	g_esp += 4u;
 }
 
-void VcObjectsReleaseAll_entry(void)
+void SoundSettingsScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VcObjectsReleaseAll();
+	g_eax = SoundSettingsScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363592,9 +363474,9 @@ void VcObjectsReleaseAll_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyRegisterCallbacks_entry(void)
+void SoundSettingsScreen_Register_entry(void)
 {
-	ScreenFamilyRegisterCallbacks(ARG32(0));
+	SoundSettingsScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363721,10 +363603,10 @@ void MenuProcessInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyHandleObjectMessage_entry(void)
+void ControlSetupScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyHandleObjectMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ControlSetupScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363732,10 +363614,10 @@ void ScreenFamilyHandleObjectMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyCreateInstance_entry(void)
+void ControlSetupScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyCreateInstance();
+	g_eax = ControlSetupScreen_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363743,10 +363625,10 @@ void ScreenFamilyCreateInstance_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyReleaseInstance_entry(void)
+void ControlSetupScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyReleaseInstance();
+	g_eax = ControlSetupScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363754,9 +363636,9 @@ void ScreenFamilyReleaseInstance_entry(void)
 	g_esp += 4u;
 }
 
-void MedalsScreenSetFamily_entry(void)
+void ControlSetupScreen_Register_entry(void)
 {
-	MedalsScreenSetFamily(ARG32(0));
+	ControlSetupScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364093,10 +363975,10 @@ void ScreenFamilyDialogHandleInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyDialogHandleMessage_entry(void)
+void VideoModeDialogScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyDialogHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = VideoModeDialogScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364104,9 +363986,9 @@ void ScreenFamilyDialogHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyInstallClassDescriptor_entry(void)
+void VideoModeDialogScreen_Register_entry(void)
 {
-	ScreenFamilyInstallClassDescriptor(ARG32(0));
+	VideoModeDialogScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364143,10 +364025,10 @@ void MissionMenuScrollBarHandleInput_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuHandleMessage_entry(void)
+void ChapterSwitchScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = ChapterSwitchScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364154,10 +364036,10 @@ void MissionMenuHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuTgaTextCreate_entry(void)
+void ChapterSwitchScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuTgaTextCreate(g_esi, g_edi);
+	g_eax = ChapterSwitchScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364165,10 +364047,10 @@ void MissionMenuTgaTextCreate_entry(void)
 	g_esp += 4u;
 }
 
-void GUIMissionMenuDestroy_entry(void)
+void ChapterSwitchScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GUIMissionMenuDestroy();
+	g_eax = ChapterSwitchScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364176,9 +364058,9 @@ void GUIMissionMenuDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenFamilyInstall_entry(void)
+void ChapterSwitchScreen_Register_entry(void)
 {
-	MissionMenuScreenFamilyInstall(ARG32(0));
+	ChapterSwitchScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364267,10 +364149,10 @@ void ScreenFamily_Update_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyProcessMessage_entry(void)
+void SettingsScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyProcessMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SettingsScreen_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364278,10 +364160,10 @@ void ScreenFamilyProcessMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamily_LoadSounds_entry(void)
+void SettingsScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamily_LoadSounds();
+	g_eax = SettingsScreen_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364289,10 +364171,10 @@ void ScreenFamily_LoadSounds_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamily_FreeSounds_entry(void)
+void SettingsScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamily_FreeSounds();
+	g_eax = SettingsScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364300,9 +364182,9 @@ void ScreenFamily_FreeSounds_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamily_Init_entry(void)
+void SettingsScreen_Register_entry(void)
 {
-	ScreenFamily_Init(ARG32(0));
+	SettingsScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364612,10 +364494,10 @@ void MenuUpdateInput_entry(void)
 	g_esp += 4u;
 }
 
-void MenuMessageDispatch_entry(void)
+void LoadGameScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MenuMessageDispatch(g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = LoadGameScreen_StateMachine(g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364623,10 +364505,10 @@ void MenuMessageDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuBuild_entry(void)
+void LoadGameScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuBuild(g_ebx, g_esi, g_edi);
+	g_eax = LoadGameScreen_Startup(g_ebx, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364634,10 +364516,10 @@ void MissionMenuBuild_entry(void)
 	g_esp += 4u;
 }
 
-void VcObjectFieldsRelease_entry(void)
+void LoadGameScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VcObjectFieldsRelease();
+	g_eax = LoadGameScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364645,9 +364527,9 @@ void VcObjectFieldsRelease_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenFamilySet_entry(void)
+void LoadGameScreen_Register_entry(void)
 {
-	MissionMenuScreenFamilySet(ARG32(0));
+	LoadGameScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364752,10 +364634,10 @@ void ScreenFamilyMessageDestroyChildren_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuEntriesCreate_entry(void)
+void SaveGameScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuEntriesCreate(g_ebx, g_esi, g_edi);
+	g_eax = SaveGameScreen_Startup(g_ebx, g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364763,10 +364645,10 @@ void MissionMenuEntriesCreate_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuEntriesDestroy_entry(void)
+void SaveGameScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuEntriesDestroy();
+	g_eax = SaveGameScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364852,10 +364734,10 @@ void SavedGameSlotScreenProcessInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyMessageProc_entry(void)
+void SaveGameScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyMessageProc(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SaveGameScreen_StateMachine(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364863,9 +364745,9 @@ void ScreenFamilyMessageProc_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyInitClass_entry(void)
+void SaveGameScreen_Register_entry(void)
 {
-	ScreenFamilyInitClass(ARG32(0));
+	SaveGameScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -364891,10 +364773,10 @@ void ScreenFamilyDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BF360_entry(void)
+void MenuListScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BF360();
+	g_eax = MenuListScreen_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -364902,10 +364784,10 @@ void sub_000BF360_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BF380_entry(void)
+void MenuListScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BF380();
+	g_eax = MenuListScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365086,10 +364968,10 @@ void ScreenFamilyProcessPadInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyDispatchMessage_entry(void)
+void MenuListScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyDispatchMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = MenuListScreen_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365097,9 +364979,9 @@ void ScreenFamilyDispatchMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetHandlers_entry(void)
+void MenuListScreen_Register_entry(void)
 {
-	ScreenFamilySetHandlers(ARG32(0));
+	MenuListScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365151,10 +365033,10 @@ void GameObjectDrawGrid_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectMessageDispatch_entry(void)
+void TextEntryScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectMessageDispatch(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = TextEntryScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365173,10 +365055,10 @@ void sub_000C1C85_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenCreate_entry(void)
+void TextEntryScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuScreenCreate(g_esi, g_edi);
+	g_eax = TextEntryScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365184,10 +365066,10 @@ void MissionMenuScreenCreate_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenDestroy_entry(void)
+void TextEntryScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuScreenDestroy();
+	g_eax = TextEntryScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365195,9 +365077,9 @@ void MissionMenuScreenDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenFamilyRegister_entry(void)
+void TextEntryScreen_Register_entry(void)
 {
-	MissionMenuScreenFamilyRegister(ARG32(0));
+	TextEntryScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365403,10 +365285,10 @@ void ScreenFamilyDraw_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyMessageHandler_entry(void)
+void GameModeMenuScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyMessageHandler(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = GameModeMenuScreen_StateMachine(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365414,10 +365296,10 @@ void ScreenFamilyMessageHandler_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyCreate_entry(void)
+void GameModeMenuScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyCreate(g_esi, g_edi);
+	g_eax = GameModeMenuScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365425,10 +365307,10 @@ void ScreenFamilyCreate_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyReleaseObject_entry(void)
+void GameModeMenuScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenFamilyReleaseObject();
+	g_eax = GameModeMenuScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365436,9 +365318,9 @@ void ScreenFamilyReleaseObject_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetupObjectType_entry(void)
+void GameModeMenuScreen_Register_entry(void)
 {
-	ScreenFamilySetupObjectType(ARG32(0));
+	GameModeMenuScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365481,10 +365363,10 @@ void MenuObjectCheckInput_entry(void)
 	g_esp += 4u;
 }
 
-void MenuFamilyHandleMessage_entry(void)
+void StoryModeMenuScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MenuFamilyHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = StoryModeMenuScreen_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365492,10 +365374,10 @@ void MenuFamilyHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void MenuScreenObjectSetup_entry(void)
+void StoryModeMenuScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MenuScreenObjectSetup(g_esi, g_edi);
+	g_eax = StoryModeMenuScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365503,10 +365385,10 @@ void MenuScreenObjectSetup_entry(void)
 	g_esp += 4u;
 }
 
-void MenuScreenObjectDestroy_entry(void)
+void StoryModeMenuScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MenuScreenObjectDestroy();
+	g_eax = StoryModeMenuScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365514,9 +365396,9 @@ void MenuScreenObjectDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilyInitHandlers_entry(void)
+void StoryModeMenuScreen_Register_entry(void)
 {
-	ScreenFamilyInitHandlers(ARG32(0));
+	StoryModeMenuScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365576,10 +365458,10 @@ void ScreenHandlePadInput_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenListProcessMessage_entry(void)
+void ObjectivesScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenListProcessMessage(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ObjectivesScreen_StateMachine(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365587,9 +365469,9 @@ void ScreenListProcessMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetup_entry(void)
+void ObjectivesScreen_Register_entry(void)
 {
-	ScreenFamilySetup(ARG32(0));
+	ObjectivesScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365806,10 +365688,10 @@ void MenuObjectHandlePadInput_entry(void)
 	g_esp += 4u;
 }
 
-void MenuObjectHandleMessage_entry(void)
+void OptionsScreen_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MenuObjectHandleMessage(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = OptionsScreen_StateMachine(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365817,10 +365699,10 @@ void MenuObjectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void QuadPairCreate_entry(void)
+void OptionsScreen_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = QuadPairCreate(g_esi, g_edi);
+	g_eax = OptionsScreen_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365828,10 +365710,10 @@ void QuadPairCreate_entry(void)
 	g_esp += 4u;
 }
 
-void QuadPairRelease_entry(void)
+void OptionsScreen_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = QuadPairRelease();
+	g_eax = OptionsScreen_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365839,9 +365721,9 @@ void QuadPairRelease_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenFamilySetCallbacks_entry(void)
+void OptionsScreen_Register_entry(void)
 {
-	ScreenFamilySetCallbacks(ARG32(0));
+	OptionsScreen_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365947,10 +365829,10 @@ void ScreenElementDraw_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementProcessMessage_entry(void)
+void ButtonPromptElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementProcessMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ButtonPromptElement_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365958,10 +365840,10 @@ void ScreenElementProcessMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementLayoutCreate_entry(void)
+void ButtonPromptElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementLayoutCreate(g_esi, g_edi);
+	g_eax = ButtonPromptElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365969,10 +365851,10 @@ void ScreenElementLayoutCreate_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyDestroyAll_entry(void)
+void ButtonPromptElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementFamilyDestroyAll();
+	g_eax = ButtonPromptElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365980,9 +365862,9 @@ void ScreenElementFamilyDestroyAll_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySet_entry(void)
+void ButtonPromptElement_Register_entry(void)
 {
-	ScreenElementFamilySet(ARG32(0));
+	ButtonPromptElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -366020,10 +365902,10 @@ void ScreenElementDrawString_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyReceiveMessage_entry(void)
+void TextLabelElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementFamilyReceiveMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = TextLabelElement_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366031,10 +365913,10 @@ void ScreenElementFamilyReceiveMessage_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyCreate_entry(void)
+void TextLabelElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementFamilyCreate(g_esi, g_edi);
+	g_eax = TextLabelElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366042,10 +365924,10 @@ void ScreenElementFamilyCreate_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyCleanup_entry(void)
+void TextLabelElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementFamilyCleanup();
+	g_eax = TextLabelElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366053,9 +365935,9 @@ void ScreenElementFamilyCleanup_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySetClassDescriptor_entry(void)
+void TextLabelElement_Register_entry(void)
 {
-	ScreenElementFamilySetClassDescriptor(ARG32(0));
+	TextLabelElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -366246,10 +366128,10 @@ void PlayerStandInEntityQuadtreeUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void PlayerStandInEntityNodeHandleMessage_entry(void)
+void LightNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PlayerStandInEntityNodeHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = LightNode_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366257,9 +366139,9 @@ void PlayerStandInEntityNodeHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void PlayerStandInEntityNodeInitVtable_entry(void)
+void LightNode_Register_entry(void)
 {
-	PlayerStandInEntityNodeInitVtable(ARG32(0));
+	LightNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -366337,10 +366219,10 @@ void PodOfficerHeavyCannonWeaponGetRegisteredSpec_entry(void)
 	g_esp += 4u;
 }
 
-void PodOfficerHeavyCannonWeaponConstruct_entry(void)
+void MalePowerArmorSniperWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PodOfficerHeavyCannonWeaponConstruct();
+	g_eax = MalePowerArmorSniperWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366348,10 +366230,10 @@ void PodOfficerHeavyCannonWeaponConstruct_entry(void)
 	g_esp += 4u;
 }
 
-void PodOfficerHeavyCannonWeaponDestruct_entry(void)
+void MalePowerArmorSniperWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PodOfficerHeavyCannonWeaponDestruct();
+	g_eax = MalePowerArmorSniperWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366359,9 +366241,9 @@ void PodOfficerHeavyCannonWeaponDestruct_entry(void)
 	g_esp += 4u;
 }
 
-void PodOfficerHeavyCannonWeaponFamilyInitialize_entry(void)
+void MalePowerArmorSniperWeapon_Register_entry(void)
 {
-	PodOfficerHeavyCannonWeaponFamilyInitialize(ARG32(0));
+	MalePowerArmorSniperWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -368573,10 +368455,10 @@ void GameObjectRefCopyWithRandomCountdown_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyApplyCommand_entry(void)
+void StrafeAttackSteering_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SteeringFamilyApplyCommand(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = StrafeAttackSteering_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368584,9 +368466,9 @@ void SteeringFamilyApplyCommand_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyRegisterHandlerTable_entry(void)
+void StrafeAttackSteering_Register_entry(void)
 {
-	SteeringFamilyRegisterHandlerTable(ARG32(0));
+	StrafeAttackSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -368683,10 +368565,10 @@ void SteeringBehaviorRaycastPath_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringBehaviorHandleMessage_entry(void)
+void LookAroundSteering_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SteeringBehaviorHandleMessage(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = LookAroundSteering_StateMachine(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368694,9 +368576,9 @@ void SteeringBehaviorHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilySetBehaviorHandler_entry(void)
+void LookAroundSteering_Register_entry(void)
 {
-	SteeringFamilySetBehaviorHandler(ARG32(0));
+	LookAroundSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -368752,15 +368634,15 @@ void sub_000D61B0_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyHandleEvent_entry(void)
+void TurnToTargetSteering_StateMachine_entry(void)
 {
-	g_eax = SteeringFamilyHandleEvent(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = TurnToTargetSteering_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_esp += 4u;
 }
 
-void SteeringFamilyInstallEventTable_entry(void)
+void TurnToTargetSteering_Register_entry(void)
 {
-	SteeringFamilyInstallEventTable(ARG32(0));
+	TurnToTargetSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -368886,10 +368768,10 @@ void SteeringFaceTargetUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyHandleMessage_entry(void)
+void MaintainDistSteering_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SteeringFamilyHandleMessage(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = MaintainDistSteering_StateMachine(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -368897,9 +368779,9 @@ void SteeringFamilyHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilySetHandler_entry(void)
+void MaintainDistSteering_Register_entry(void)
 {
-	SteeringFamilySetHandler(ARG32(0));
+	MaintainDistSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -368992,10 +368874,10 @@ void ComponentSlotRemoveHandle_entry(void)
 	g_esp += 4u;
 }
 
-void LevelLoadFromFile_entry(void)
+void ObjectGroupComponent_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = LevelLoadFromFile(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
+	g_eax = ObjectGroupComponent_Load(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369003,10 +368885,10 @@ void LevelLoadFromFile_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectCollectSubObjects_entry(void)
+void ObjectGroupComponent_Collect_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectCollectSubObjects(ARG32(0), ARG32(1));
+	g_eax = ObjectGroupComponent_Collect(ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369255,10 +369137,10 @@ void SceneObjectCloneObject_entry(void)
 	g_esp += 4u;
 }
 
-void SceneObjectApplyMessageId_entry(void)
+void ModelNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneObjectApplyMessageId(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ModelNode_StateMachine(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369266,10 +369148,10 @@ void SceneObjectApplyMessageId_entry(void)
 	g_esp += 4u;
 }
 
-void SceneObjectReadNodeFromFile_entry(void)
+void ModelNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneObjectReadNodeFromFile(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = ModelNode_Load(g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369277,9 +369159,9 @@ void SceneObjectReadNodeFromFile_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyObjectInit_entry(void)
+void ModelNode_Register_entry(void)
 {
-	NodeFamilyObjectInit(ARG32(0));
+	ModelNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369295,10 +369177,10 @@ void NodeFamilySlotReset_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilySlotMessageHandler_entry(void)
+void KeyValCountersNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilySlotMessageHandler(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = KeyValCountersNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369306,10 +369188,10 @@ void NodeFamilySlotMessageHandler_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilySlotLoad_entry(void)
+void KeyValCountersNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilySlotLoad(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = KeyValCountersNode_Load(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369317,9 +369199,9 @@ void NodeFamilySlotLoad_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilySlotInit_entry(void)
+void KeyValCountersNode_Register_entry(void)
 {
-	NodeFamilySlotInit(ARG32(0));
+	KeyValCountersNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369614,10 +369496,10 @@ void GameObjectDrawBoundsLines_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectSceneCommandDispatch_entry(void)
+void CollisionVolumeNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectSceneCommandDispatch(g_ebx, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = CollisionVolumeNode_StateMachine(g_ebx, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369625,10 +369507,10 @@ void GameObjectSceneCommandDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectLoadSceneObject_entry(void)
+void CollisionVolumeNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectLoadSceneObject(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = CollisionVolumeNode_Load(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369636,9 +369518,9 @@ void GameObjectLoadSceneObject_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyRegisterSceneObjectClass_entry(void)
+void CollisionVolumeNode_Register_entry(void)
 {
-	NodeFamilyRegisterSceneObjectClass(ARG32(0));
+	CollisionVolumeNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369693,10 +369575,10 @@ void GameObjectSetBoundsRelativeTo_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectLoadSceneObjectRange_entry(void)
+void SoundNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectLoadSceneObjectRange(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = SoundNode_Load(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369737,10 +369619,10 @@ void NodeFamilyUpdateObjectState_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyHandleMessageWithSceneObject_entry(void)
+void SoundNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilyHandleMessageWithSceneObject(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = SoundNode_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369748,9 +369630,9 @@ void NodeFamilyHandleMessageWithSceneObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DBAA0_entry(void)
+void SoundNode_Register_entry(void)
 {
-	sub_000DBAA0(ARG32(0));
+	SoundNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -369809,10 +369691,10 @@ void GameObjectCloneSceneObject_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyDispatchMessage_entry(void)
+void EffectNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilyDispatchMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = EffectNode_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369820,10 +369702,10 @@ void NodeFamilyDispatchMessage_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyLoadObject_entry(void)
+void EffectNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeFamilyLoadObject(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1));
+	g_eax = EffectNode_Load(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369831,16 +369713,16 @@ void NodeFamilyLoadObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000DBFF0_entry(void)
+void EffectNode_Register_entry(void)
 {
-	sub_000DBFF0(ARG32(0));
+	EffectNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
-void GameObjectReadStateFromFile_entry(void)
+void PointNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectReadStateFromFile(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = PointNode_Load(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369942,10 +369824,10 @@ void GameObjectDispatchStateTargetAction_entry(void)
 	g_esp += 4u;
 }
 
-void NodeDispatchStateMessage_entry(void)
+void PointNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = NodeDispatchStateMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = PointNode_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369953,9 +369835,9 @@ void NodeDispatchStateMessage_entry(void)
 	g_esp += 4u;
 }
 
-void SplineNodeFamilyInit_entry(void)
+void PointNode_Register_entry(void)
 {
-	SplineNodeFamilyInit(ARG32(0));
+	PointNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -370020,10 +369902,10 @@ void MSONNodeApplySetStateMessage_entry(void)
 	g_esp += 4u;
 }
 
-void MSONNodeHandleMessage_entry(void)
+void AnimationNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MSONNodeHandleMessage(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = AnimationNode_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370031,9 +369913,9 @@ void MSONNodeHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void NodeFamilyRegisterType_entry(void)
+void AnimationNode_Register_entry(void)
 {
-	NodeFamilyRegisterType(ARG32(0));
+	AnimationNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -370059,10 +369941,10 @@ void MSONLineNodeUpdateChildTransforms_entry(void)
 	g_esp += 4u;
 }
 
-void MSONLineNodeHandleMessage_entry(void)
+void HelperNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MSONLineNodeHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = HelperNode_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370070,10 +369952,10 @@ void MSONLineNodeHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void PlayerStandInMSONodeLoadLinkedObject_entry(void)
+void HelperNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PlayerStandInMSONodeLoadLinkedObject(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_eax = HelperNode_Load(g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370092,9 +369974,9 @@ void MSONLineNodeLoad_entry(void)
 	g_esp += 4u;
 }
 
-void PlayerStandInMSONodeFamilyInit_entry(void)
+void HelperNode_Register_entry(void)
 {
-	PlayerStandInMSONodeFamilyInit(ARG32(0));
+	HelperNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -370242,10 +370124,10 @@ void CyclopsDoorsActionDrawStatusText_entry(void)
 	g_esp += 4u;
 }
 
-void CyclopsDoorsActionHandleMessage_entry(void)
+void FolderNode_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = CyclopsDoorsActionHandleMessage(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = FolderNode_StateMachine(g_ebx, g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370253,10 +370135,10 @@ void CyclopsDoorsActionHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void CyclopsDoorsActionLoadState_entry(void)
+void FolderNode_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = CyclopsDoorsActionLoadState(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1));
+	g_eax = FolderNode_Load(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370264,10 +370146,10 @@ void CyclopsDoorsActionLoadState_entry(void)
 	g_esp += 4u;
 }
 
-void CyclopsDoorsActionInitTextLayout_entry(void)
+void FolderNode_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = CyclopsDoorsActionInitTextLayout();
+	g_eax = FolderNode_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -370275,9 +370157,9 @@ void CyclopsDoorsActionInitTextLayout_entry(void)
 	g_esp += 4u;
 }
 
-void CyclopsDoorsActionRegisterFamily_entry(void)
+void FolderNode_Register_entry(void)
 {
-	CyclopsDoorsActionRegisterFamily(ARG32(0));
+	FolderNode_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -371590,10 +371472,10 @@ void ScreenElementTextDraw_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementTextHandleEvent_entry(void)
+void MissionBoundaryElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementTextHandleEvent(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = MissionBoundaryElement_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371601,9 +371483,9 @@ void ScreenElementTextHandleEvent_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyRegisterTextElement_entry(void)
+void MissionBoundaryElement_Register_entry(void)
 {
-	ScreenElementFamilyRegisterTextElement(ARG32(0));
+	MissionBoundaryElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -371629,10 +371511,10 @@ void HudDrawHealthBar_entry(void)
 	g_esp += 4u;
 }
 
-void HudMessageDispatch_entry(void)
+void HealthBarElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudMessageDispatch(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = HealthBarElement_StateMachine(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371640,10 +371522,10 @@ void HudMessageDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void HUDPiecesScreenElementCreate_entry(void)
+void HealthBarElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HUDPiecesScreenElementCreate(g_esi, g_edi);
+	g_eax = HealthBarElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371651,10 +371533,10 @@ void HUDPiecesScreenElementCreate_entry(void)
 	g_esp += 4u;
 }
 
-void HUDPiecesScreenElementDestroy_entry(void)
+void HealthBarElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HUDPiecesScreenElementDestroy();
+	g_eax = HealthBarElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371662,9 +371544,9 @@ void HUDPiecesScreenElementDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void HUDPiecesScreenElementFamilyInit_entry(void)
+void HealthBarElement_Register_entry(void)
 {
-	HUDPiecesScreenElementFamilyInit(ARG32(0));
+	HealthBarElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -371910,10 +371792,10 @@ void MissionMenuScreenElementDraw_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenElementHandleMessage_entry(void)
+void MissionMenuElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuScreenElementHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = MissionMenuElement_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371921,10 +371803,10 @@ void MissionMenuScreenElementHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void GuiMissionMenuSetup_entry(void)
+void MissionMenuElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GuiMissionMenuSetup(g_esi, g_edi);
+	g_eax = MissionMenuElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371932,10 +371814,10 @@ void GuiMissionMenuSetup_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuRelease_entry(void)
+void MissionMenuElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = MissionMenuRelease();
+	g_eax = MissionMenuElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -371943,9 +371825,9 @@ void MissionMenuRelease_entry(void)
 	g_esp += 4u;
 }
 
-void MissionMenuScreenElementFamilyInstall_entry(void)
+void MissionMenuElement_Register_entry(void)
 {
-	MissionMenuScreenElementFamilyInstall(ARG32(0));
+	MissionMenuElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372019,10 +371901,10 @@ void ScreenElementSetupFromTemplate_entry(void)
 	g_esp += 4u;
 }
 
-void RetTrack2TgaTextCreate_entry(void)
+void TargetMarkerElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = RetTrack2TgaTextCreate(g_esi, g_edi);
+	g_eax = TargetMarkerElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372030,10 +371912,10 @@ void RetTrack2TgaTextCreate_entry(void)
 	g_esp += 4u;
 }
 
-void RetTrack2TgaTextRelease_entry(void)
+void TargetMarkerElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = RetTrack2TgaTextRelease();
+	g_eax = TargetMarkerElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372075,10 +371957,10 @@ void TargetScreenMarkerDraw_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilyHandleMessage_entry(void)
+void TargetMarkerElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementFamilyHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = TargetMarkerElement_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372086,9 +371968,9 @@ void ScreenElementFamilyHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000E8020_entry(void)
+void TargetMarkerElement_Register_entry(void)
 {
-	sub_000E8020(ARG32(0));
+	TargetMarkerElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372137,10 +372019,10 @@ void ScreenElementInitChildRects_entry(void)
 	g_esp += 4u;
 }
 
-void ReticleGraphicsInit_entry(void)
+void TargetReticleElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ReticleGraphicsInit(g_esi, g_edi);
+	g_eax = TargetReticleElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372148,10 +372030,10 @@ void ReticleGraphicsInit_entry(void)
 	g_esp += 4u;
 }
 
-void ReticleGraphicsRelease_entry(void)
+void TargetReticleElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ReticleGraphicsRelease();
+	g_eax = TargetReticleElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372192,10 +372074,10 @@ void TargetLockUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000E90A0_entry(void)
+void TargetReticleElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000E90A0(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = TargetReticleElement_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372203,9 +372085,9 @@ void sub_000E90A0_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySetMethods_entry(void)
+void TargetReticleElement_Register_entry(void)
 {
-	ScreenElementFamilySetMethods(ARG32(0));
+	TargetReticleElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372437,10 +372319,10 @@ void HudGaugeDraw_entry(void)
 	g_esp += 4u;
 }
 
-void HudGaugeEventHandle_entry(void)
+void EnemyTargetElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudGaugeEventHandle(g_ebx, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = EnemyTargetElement_StateMachine(g_ebx, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372448,10 +372330,10 @@ void HudGaugeEventHandle_entry(void)
 	g_esp += 4u;
 }
 
-void HUDTexturesInit_entry(void)
+void EnemyTargetElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HUDTexturesInit(g_esi, g_edi);
+	g_eax = EnemyTargetElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372459,10 +372341,10 @@ void HUDTexturesInit_entry(void)
 	g_esp += 4u;
 }
 
-void VcGlobalObjectsReleaseFields_entry(void)
+void EnemyTargetElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = VcGlobalObjectsReleaseFields();
+	g_eax = EnemyTargetElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372470,9 +372352,9 @@ void VcGlobalObjectsReleaseFields_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySetDescriptor_entry(void)
+void EnemyTargetElement_Register_entry(void)
 {
-	ScreenElementFamilySetDescriptor(ARG32(0));
+	EnemyTargetElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372620,10 +372502,10 @@ void HudDrawObjectGauge_entry(void)
 	g_esp += 4u;
 }
 
-void UiMessageDispatch_entry(void)
+void GunAmmoGaugeElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = UiMessageDispatch(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = GunAmmoGaugeElement_StateMachine(g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372631,10 +372513,10 @@ void UiMessageDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void HUDPiecesCreate_entry(void)
+void GunAmmoGaugeElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HUDPiecesCreate(g_esi, g_edi);
+	g_eax = GunAmmoGaugeElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372642,10 +372524,10 @@ void HUDPiecesCreate_entry(void)
 	g_esp += 4u;
 }
 
-void HUDPiecesDestroy_entry(void)
+void GunAmmoGaugeElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HUDPiecesDestroy();
+	g_eax = GunAmmoGaugeElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372653,9 +372535,9 @@ void HUDPiecesDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void HudPiecesFamilyInit_entry(void)
+void GunAmmoGaugeElement_Register_entry(void)
 {
-	HudPiecesFamilyInit(ARG32(0));
+	GunAmmoGaugeElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372670,10 +372552,10 @@ void ItemSelectDraw_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementEventDispatch_entry(void)
+void MissileCountElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ScreenElementEventDispatch(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = MissileCountElement_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372681,10 +372563,10 @@ void ScreenElementEventDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void HudPiecesTextCreate_entry(void)
+void MissileCountElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudPiecesTextCreate(g_esi, g_edi);
+	g_eax = MissileCountElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372692,10 +372574,10 @@ void HudPiecesTextCreate_entry(void)
 	g_esp += 4u;
 }
 
-void HudPiecesTextDestroy_entry(void)
+void MissileCountElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudPiecesTextDestroy();
+	g_eax = MissileCountElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372703,9 +372585,9 @@ void HudPiecesTextDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void ScreenElementFamilySetClass_entry(void)
+void MissileCountElement_Register_entry(void)
 {
-	ScreenElementFamilySetClass(ARG32(0));
+	MissileCountElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -372720,10 +372602,10 @@ void HudPieceDirectionDraw_entry(void)
 	g_esp += 4u;
 }
 
-void HudIndicatorEventDispatch_entry(void)
+void MenuArrowElement_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = HudIndicatorEventDispatch(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = MenuArrowElement_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372731,10 +372613,10 @@ void HudIndicatorEventDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void RadarElementCreate_entry(void)
+void MenuArrowElement_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = RadarElementCreate(g_esi, g_edi);
+	g_eax = MenuArrowElement_Startup(g_esi, g_edi);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372742,10 +372624,10 @@ void RadarElementCreate_entry(void)
 	g_esp += 4u;
 }
 
-void RadarElementDestroy_entry(void)
+void MenuArrowElement_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = RadarElementDestroy();
+	g_eax = MenuArrowElement_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -372753,9 +372635,9 @@ void RadarElementDestroy_entry(void)
 	g_esp += 4u;
 }
 
-void RadarElementRegisterClass_entry(void)
+void MenuArrowElement_Register_entry(void)
 {
-	RadarElementRegisterClass(ARG32(0));
+	MenuArrowElement_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -373210,10 +373092,10 @@ void SteeringPathFollowUpdate_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectCommandDispatch_entry(void)
+void FollowPathSteering_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectCommandDispatch(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = FollowPathSteering_StateMachine(g_ebx, g_ebp, g_esi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -373221,9 +373103,9 @@ void GameObjectCommandDispatch_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyAttachDescriptor_entry(void)
+void FollowPathSteering_Register_entry(void)
 {
-	SteeringFamilyAttachDescriptor(ARG32(0));
+	FollowPathSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -373496,10 +373378,10 @@ void SceneAttachmentGetType_entry(void)
 	g_esp += 4u;
 }
 
-void SceneAttachmentCloneArrayCreate_entry(void)
+void BuildingDebrisEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneAttachmentCloneArrayCreate();
+	g_eax = BuildingDebrisEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -373507,10 +373389,10 @@ void SceneAttachmentCloneArrayCreate_entry(void)
 	g_esp += 4u;
 }
 
-void SceneAttachmentListRelease_entry(void)
+void BuildingDebrisEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SceneAttachmentListRelease();
+	g_eax = BuildingDebrisEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -373518,9 +373400,9 @@ void SceneAttachmentListRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilySetMethodTable_entry(void)
+void BuildingDebrisEffect_Register_entry(void)
 {
-	EffectFamilySetMethodTable(ARG32(0));
+	BuildingDebrisEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -373530,10 +373412,10 @@ void SparksLoopWavGetInstance_entry(void)
 	g_esp += 4u;
 }
 
-void SparksLoopWavCreate_entry(void)
+void SparksLoopEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SparksLoopWavCreate();
+	g_eax = SparksLoopEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -373541,10 +373423,10 @@ void SparksLoopWavCreate_entry(void)
 	g_esp += 4u;
 }
 
-void SparksLoopWavDestroy_entry(void)
+void SparksLoopEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = SparksLoopWavDestroy();
+	g_eax = SparksLoopEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -375372,10 +375254,10 @@ void sub_000FB400_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyVAReleaseObjectSlots_entry(void)
+void ZenCruiserTurret1MuzzleEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyVAReleaseObjectSlots();
+	g_eax = ZenCruiserTurret1MuzzleEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -375383,10 +375265,10 @@ void EffectFamilyVAReleaseObjectSlots_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyVALoadObjectSlots_entry(void)
+void ZenCruiserTurret1MuzzleEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyVALoadObjectSlots();
+	g_eax = ZenCruiserTurret1MuzzleEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -375394,9 +375276,9 @@ void EffectFamilyVALoadObjectSlots_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyVAInstallDescriptor_entry(void)
+void ZenCruiserTurret1MuzzleEffect_Register_entry(void)
 {
-	EffectFamilyVAInstallDescriptor(ARG32(0));
+	ZenCruiserTurret1MuzzleEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -375678,10 +375560,10 @@ void sub_000FC210_entry(void)
 	g_esp += 4u;
 }
 
-void GlobalObjectReferencesRelease_entry(void)
+void ZenCruiserTurretMuzzleEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GlobalObjectReferencesRelease();
+	g_eax = ZenCruiserTurretMuzzleEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -375689,10 +375571,10 @@ void GlobalObjectReferencesRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyActivateSceneObjects_entry(void)
+void ZenCruiserTurretMuzzleEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyActivateSceneObjects();
+	g_eax = ZenCruiserTurretMuzzleEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -375700,9 +375582,9 @@ void EffectFamilyActivateSceneObjects_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyRegisterHandlers_entry(void)
+void ZenCruiserTurretMuzzleEffect_Register_entry(void)
 {
-	EffectFamilyRegisterHandlers(ARG32(0));
+	ZenCruiserTurretMuzzleEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376080,10 +375962,10 @@ void ThrustRed01Effect_Register_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyReleaseCachedObject_entry(void)
+void PlayerThrustBlueEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyReleaseCachedObject();
+	g_eax = PlayerThrustBlueEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376097,10 +375979,10 @@ void EffectFamilyGetCachedObject_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilySetSceneObjectFlags_entry(void)
+void PlayerThrustBlueEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilySetSceneObjectFlags();
+	g_eax = PlayerThrustBlueEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376108,9 +375990,9 @@ void EffectFamilySetSceneObjectFlags_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyRegisterObjectHandlers_entry(void)
+void PlayerThrustBlueEffect_Register_entry(void)
 {
-	EffectFamilyRegisterObjectHandlers(ARG32(0));
+	PlayerThrustBlueEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376182,10 +376064,10 @@ void EffectFamilyRegisterSceneFlagClass_entry(void)
 	g_esp += 4u;
 }
 
-void EffectSceneFlagObjectRelease_entry(void)
+void ThrustBlueEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectSceneFlagObjectRelease();
+	g_eax = ThrustBlueEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376199,10 +376081,10 @@ void EffectSceneFlagHandleGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectObjectGetFlagSceneObjects_entry(void)
+void ThrustBlueEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectObjectGetFlagSceneObjects();
+	g_eax = ThrustBlueEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376210,9 +376092,9 @@ void EffectObjectGetFlagSceneObjects_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyAddSceneFlagClass_entry(void)
+void ThrustBlueEffect_Register_entry(void)
 {
-	EffectFamilyAddSceneFlagClass(ARG32(0));
+	ThrustBlueEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376256,10 +376138,10 @@ void EffectNameTableGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectNameTableObjectGet_entry(void)
+void HeavyMissileContrailEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectNameTableObjectGet();
+	g_eax = HeavyMissileContrailEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376267,10 +376149,10 @@ void EffectNameTableObjectGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectNameTableObjectRelease_entry(void)
+void HeavyMissileContrailEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectNameTableObjectRelease();
+	g_eax = HeavyMissileContrailEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376278,9 +376160,9 @@ void EffectNameTableObjectRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyRegisterNameTableClass_entry(void)
+void HeavyMissileContrailEffect_Register_entry(void)
 {
-	EffectFamilyRegisterNameTableClass(ARG32(0));
+	HeavyMissileContrailEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376290,10 +376172,10 @@ void EffectVariantNameTableGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectVariantNameTableObjectGet_entry(void)
+void LightMissileContrailEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectVariantNameTableObjectGet();
+	g_eax = LightMissileContrailEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376301,10 +376183,10 @@ void EffectVariantNameTableObjectGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectVariantNameTableObjectRelease_entry(void)
+void LightMissileContrailEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectVariantNameTableObjectRelease();
+	g_eax = LightMissileContrailEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376312,9 +376194,9 @@ void EffectVariantNameTableObjectRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyAddNameTableClass_entry(void)
+void LightMissileContrailEffect_Register_entry(void)
 {
-	EffectFamilyAddNameTableClass(ARG32(0));
+	LightMissileContrailEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376324,10 +376206,10 @@ void EffectVariantNameTableDataGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectObjectGet_entry(void)
+void FighterContrailEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectObjectGet();
+	g_eax = FighterContrailEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376335,10 +376217,10 @@ void EffectObjectGet_entry(void)
 	g_esp += 4u;
 }
 
-void EffectObjectRelease_entry(void)
+void FighterContrailEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectObjectRelease();
+	g_eax = FighterContrailEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376346,9 +376228,9 @@ void EffectObjectRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyRegisterVariantType_entry(void)
+void FighterContrailEffect_Register_entry(void)
 {
-	EffectFamilyRegisterVariantType(ARG32(0));
+	FighterContrailEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376358,10 +376240,10 @@ void TrailEffectObjectTypeGet_entry(void)
 	g_esp += 4u;
 }
 
-void TrailEffectObjectTypeRegister_entry(void)
+void CrateExplosionBlastEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = TrailEffectObjectTypeRegister();
+	g_eax = CrateExplosionBlastEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376369,10 +376251,10 @@ void TrailEffectObjectTypeRegister_entry(void)
 	g_esp += 4u;
 }
 
-void TrailEffectObjectTypeRelease_entry(void)
+void CrateExplosionBlastEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = TrailEffectObjectTypeRelease();
+	g_eax = CrateExplosionBlastEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376380,9 +376262,9 @@ void TrailEffectObjectTypeRelease_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDB70_entry(void)
+void CrateExplosionBlastEffect_Register_entry(void)
 {
-	sub_000FDB70(ARG32(0));
+	CrateExplosionBlastEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376392,10 +376274,10 @@ void TrailEffectVariantObjectTypeGet_entry(void)
 	g_esp += 4u;
 }
 
-void TrailEffectVariantObjectTypeRegister_entry(void)
+void CyclopsExplosionBlastEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = TrailEffectVariantObjectTypeRegister();
+	g_eax = CyclopsExplosionBlastEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376403,10 +376285,10 @@ void TrailEffectVariantObjectTypeRegister_entry(void)
 	g_esp += 4u;
 }
 
-void TrailEffectVariantObjectTypeRelease_entry(void)
+void CyclopsExplosionBlastEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = TrailEffectVariantObjectTypeRelease();
+	g_eax = CyclopsExplosionBlastEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376414,9 +376296,9 @@ void TrailEffectVariantObjectTypeRelease_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000FDC70_entry(void)
+void CyclopsExplosionBlastEffect_Register_entry(void)
 {
-	sub_000FDC70(ARG32(0));
+	CyclopsExplosionBlastEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376426,10 +376308,10 @@ void sub_000FDCC0_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleInit_entry(void)
+void Explosion01LargeBlastEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyParticleInit();
+	g_eax = Explosion01LargeBlastEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376437,10 +376319,10 @@ void EffectFamilyParticleInit_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleRelease_entry(void)
+void Explosion01LargeBlastEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyParticleRelease();
+	g_eax = Explosion01LargeBlastEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376448,9 +376330,9 @@ void EffectFamilyParticleRelease_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleRegister_entry(void)
+void Explosion01LargeBlastEffect_Register_entry(void)
 {
-	EffectFamilyParticleRegister(ARG32(0));
+	Explosion01LargeBlastEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376460,10 +376342,10 @@ void sub_000FDDC0_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleInit2_entry(void)
+void Explosion01MedBlastEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyParticleInit2();
+	g_eax = Explosion01MedBlastEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376471,10 +376353,10 @@ void EffectFamilyParticleInit2_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleRelease2_entry(void)
+void Explosion01MedBlastEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyParticleRelease2();
+	g_eax = Explosion01MedBlastEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376482,9 +376364,9 @@ void EffectFamilyParticleRelease2_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleRegister2_entry(void)
+void Explosion01MedBlastEffect_Register_entry(void)
 {
-	EffectFamilyParticleRegister2(ARG32(0));
+	Explosion01MedBlastEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376494,10 +376376,10 @@ void sub_000FDEC0_entry(void)
 	g_esp += 4u;
 }
 
-void EffectFamilyParticleInit3_entry(void)
+void Explosion01BlastEffect_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = EffectFamilyParticleInit3();
+	g_eax = Explosion01BlastEffect_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376505,10 +376387,10 @@ void EffectFamilyParticleInit3_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectFamilyRelease_entry(void)
+void Explosion01BlastEffect_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = GameObjectFamilyRelease();
+	g_eax = Explosion01BlastEffect_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -376516,9 +376398,9 @@ void GameObjectFamilyRelease_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectFamilyInitialize_entry(void)
+void Explosion01BlastEffect_Register_entry(void)
 {
-	GameObjectFamilyInitialize(ARG32(0));
+	Explosion01BlastEffect_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -376860,9 +376742,9 @@ void SteeringCommandComputeSpeedByDistance_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringCommandSetupFromType_entry(void)
+void LevelBoundsSteering_StateMachine_entry(void)
 {
-	g_eax = SteeringCommandSetupFromType(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = LevelBoundsSteering_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_esp += 4u;
 }
 
@@ -376872,9 +376754,9 @@ void SteeringObjectHandleMessage_entry(void)
 	g_esp += 4u;
 }
 
-void SteeringFamilyInitConfig_entry(void)
+void LevelBoundsSteering_Register_entry(void)
 {
-	g_eax = SteeringFamilyInitConfig(ARG32(0));
+	g_eax = LevelBoundsSteering_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -377749,10 +377631,10 @@ void ObjectGroupSendMessageToAllObjects_entry(void)
 	g_esp += 4u;
 }
 
-void ObjectGroupHandleMessage_entry(void)
+void ObjectGroupComponent_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = ObjectGroupHandleMessage(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ObjectGroupComponent_StateMachine(g_ebx, g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377766,9 +377648,9 @@ void ObjectGroupResetCounter_entry(void)
 	g_esp += 4u;
 }
 
-void GameObjectFamilyInit_entry(void)
+void ObjectGroupComponent_Register_entry(void)
 {
-	GameObjectFamilyInit(ARG32(0));
+	ObjectGroupComponent_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -377833,10 +377715,10 @@ void PilotTextSetDefault_entry(void)
 	g_esp += 4u;
 }
 
-void PilotTextHandleEvent_entry(void)
+void PunyHumanPickup_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PilotTextHandleEvent(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = PunyHumanPickup_StateMachine(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377844,10 +377726,10 @@ void PilotTextHandleEvent_entry(void)
 	g_esp += 4u;
 }
 
-void PilotTextCreateObjects_entry(void)
+void PunyHumanPickup_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PilotTextCreateObjects(g_ebx, g_ebp);
+	g_eax = PunyHumanPickup_Startup(g_ebx, g_ebp);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377855,10 +377737,10 @@ void PilotTextCreateObjects_entry(void)
 	g_esp += 4u;
 }
 
-void PilotTextReleaseObjects_entry(void)
+void PunyHumanPickup_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PilotTextReleaseObjects();
+	g_eax = PunyHumanPickup_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377877,10 +377759,10 @@ void PilotTextSetText_entry(void)
 	g_esp += 4u;
 }
 
-void PilotTextLoad_entry(void)
+void PunyHumanPickup_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = PilotTextLoad(g_esi, ARG32(0), ARG32(1), ARG32(3));
+	g_eax = PunyHumanPickup_Load(g_esi, ARG32(0), ARG32(1), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -377888,9 +377770,9 @@ void PilotTextLoad_entry(void)
 	g_esp += 4u;
 }
 
-void ZenCratesMunitionsPickupInitClass_entry(void)
+void PunyHumanPickup_Register_entry(void)
 {
-	ZenCratesMunitionsPickupInitClass(ARG32(0));
+	PunyHumanPickup_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -378263,10 +378145,10 @@ void StructureFamilyHandleCreateMessage_entry(void)
 	g_esp += 4u;
 }
 
-void StructureFamily_HandleEvent_entry(void)
+void ObjectSwapStructure_StateMachine_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = StructureFamily_HandleEvent(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ObjectSwapStructure_StateMachine(g_ebp, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -378274,10 +378156,10 @@ void StructureFamily_HandleEvent_entry(void)
 	g_esp += 4u;
 }
 
-void StructureFamily_Read_entry(void)
+void ObjectSwapStructure_Load_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = StructureFamily_Read(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	g_eax = ObjectSwapStructure_Load(g_ebx, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -378285,9 +378167,9 @@ void StructureFamily_Read_entry(void)
 	g_esp += 4u;
 }
 
-void StructureFamily_InitClass_entry(void)
+void ObjectSwapStructure_Register_entry(void)
 {
-	StructureFamily_InitClass(ARG32(0));
+	ObjectSwapStructure_Register(ARG32(0));
 	g_esp += 4u;
 }
 
