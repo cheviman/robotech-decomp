@@ -1286,7 +1286,10 @@ void MatrixTransformPoint(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	MEMF(eax + 8u) = (float)t4;
 }
 
-double sub_000123F0(uint32_t arg0)
+/* Returns the length of the three floats at arg0 (the square root of x*x + y*y + z*z), rounded to a
+   float; GameObjectFollowLinkedObject, GameObjectFindNearestPathSegment and ObjectScreenQuadListDraw use
+   it. */
+double VectorLength(uint32_t arg0)
 {
 	uint32_t ebx = 0;
 	uint32_t stack = 0;
@@ -14240,7 +14243,7 @@ uint32_t GameFrameUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 					arg0 = MEM32(g_esp);
 					arg1 = MEM32(g_esp + 4u);
 					arg2 = MEM32(g_esp + 8u);
-					sub_000395F0(arg0, arg1, arg2, &ignored, &ebx, &ebp, &esi_2, &edi);
+					GameObjectSetPlacement(arg0, arg1, arg2, &ignored, &ebx, &ebp, &esi_2, &edi);
 					g_esp = g_esp + 0x28u;
 				}
 			}
@@ -25478,7 +25481,7 @@ uint32_t gcLevel_Load(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2_2 = MEM32(g_esp + 8u);
-		sub_000395F0(arg0_2, arg1_2, arg2_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+		GameObjectSetPlacement(arg0_2, arg1_2, arg2_2, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
 		g_esp = g_esp + 0xCu;
 	}
 	if (MEM32(0x23D35Cu) == 0u)
@@ -26135,13 +26138,13 @@ void WeaponFamilyRegister(void)
 	arg0 = WeaponFamily_VA;
 	WeaponFamilyRegisterFirstTypeManager(arg0);
 	arg0 = WeaponFamily_VA;
-	WeaponFamilyRegisterSecondTypeManager(arg0);
+	GU11SniperGunPodWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	WeaponFamilyRegisterThirdTypeManager(arg0);
+	GU11FighterGunPodWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	WeaponFamilyRegisterFourthTypeManager(arg0);
+	FPAPairedTriBarrelLaserWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	WeaponFamilyClassInit(arg0);
+	FPAPairedAutoCannonWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	ZenCruiserTurretCannonWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
@@ -26187,9 +26190,9 @@ void WeaponFamilyRegister(void)
 	arg0 = WeaponFamily_VA;
 	MalePowerArmorPulseRifleWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	sub_000CD9C0(arg0);
+	FPAAutoCannonWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
-	WeaponFamilyRegisterGameObjectType(arg0);
+	FPATriBarrelLaserWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
 	ExcaliburMachineGunWeapon_Register(arg0);
 	arg0 = WeaponFamily_VA;
@@ -48872,7 +48875,10 @@ void GameObjectDrawOrientedOutline(uint32_t arg0, uint32_t arg1, uint32_t arg2, 
 	*p_edi = edi_2;
 }
 
-void sub_000395F0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Places the object of handle arg0 and its children: GameObjectUpdateHierarchyTransforms with the
+   rotation vector arg1 and the move from its position (+0x7C) to the one arg2 points at (none when arg2
+   is null), then message 0x2AF9 over them with GameObjectSendMessageRecursive. */
+void GameObjectSetPlacement(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
@@ -48956,7 +48962,10 @@ void sub_000395F0(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t *p_eax, 
 	*p_esi = esi_2;
 }
 
-void sub_000396A0(uint32_t arg0, uint32_t arg1, uint32_t *p_edx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
+/* Moves the object of handle arg0 and its children to the position arg1 points at:
+   GameObjectUpdateHierarchyTransforms with no rotation and the move from its position (+0x7C), then
+   message 0x2AF9 over them with GameObjectSendMessageRecursive. */
+void GameObjectMoveTo(uint32_t arg0, uint32_t arg1, uint32_t *p_edx, uint32_t *p_ebx, uint32_t *p_ebp, uint32_t *p_esi, uint32_t *p_edi)
 {
 	uint32_t esi = *p_esi;
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0;
@@ -49703,7 +49712,7 @@ void EntityPathFollowUpdate(uint32_t esi, uint32_t edi, uint32_t *p_eax, uint32_
 		arg2 = 0u;
 		arg1 = ecx;
 		arg0 = MEM32(esi + 0xB8u);
-		sub_000395F0(arg0, arg1, arg2, p_eax, p_ebx, p_ebp, &esi, &edi);
+		GameObjectSetPlacement(arg0, arg1, arg2, p_eax, p_ebx, p_ebp, &esi, &edi);
 	}
 	else
 	{
@@ -49715,7 +49724,7 @@ void EntityPathFollowUpdate(uint32_t esi, uint32_t edi, uint32_t *p_eax, uint32_
 			arg2 = 0u;
 			arg1 = ecx;
 			arg0 = MEM32(esi + 0xB8u);
-			sub_000395F0(arg0, arg1, arg2, p_eax, p_ebx, p_ebp, &esi, &edi);
+			GameObjectSetPlacement(arg0, arg1, arg2, p_eax, p_ebx, p_ebp, &esi, &edi);
 		}
 	}
 	edi_2 = MEM32(esi + 0xD0u);
@@ -50028,7 +50037,7 @@ void NodeUpdateTransform(uint32_t arg0, uint32_t *p_ebx, uint32_t *p_ebp, uint32
 		arg0_2 = MEM32(g_esp);
 		arg1 = MEM32(g_esp + 4u);
 		arg2 = MEM32(g_esp + 8u);
-		sub_000395F0(arg0_2, arg1, arg2, &ignored_3, &ebx, p_ebp, &esi_2, &edi_2);
+		GameObjectSetPlacement(arg0_2, arg1, arg2, &ignored_3, &ebx, p_ebp, &esi_2, &edi_2);
 		g_esp = g_esp + 0xCu;
 		*p_ebx = MEM32(g_esp);
 		g_esp = g_esp + 4u;
@@ -50435,7 +50444,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 							MEM32(g_esp) = esi_2;
 							arg0_2 = MEM32(g_esp);
 							arg1 = MEM32(g_esp + 4u);
-							sub_000396A0(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+							GameObjectMoveTo(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
 							x86_rep_stos32(g_esp + 0x48u, 0u, 0x20u);
 							g_esp = g_esp - 4u;
 							MEM32(g_esp) = 0x40u;
@@ -50512,7 +50521,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 							MEM32(g_esp) = edi_2;
 							arg0_2 = MEM32(g_esp);
 							arg1 = MEM32(g_esp + 4u);
-							sub_000396A0(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+							GameObjectMoveTo(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
 							edi_2 = g_esp + 0x48u;
 							x86_rep_stos32(edi_2, 0u, 0x20u);
 							MEM32(g_esp + 0x88u) = esi_2;
@@ -50591,7 +50600,7 @@ void SplineNodeCreateObjects(uint32_t edx, uint32_t ebx, uint32_t ebp, uint32_t 
 							MEM32(g_esp) = esi_2;
 							arg0_2 = MEM32(g_esp);
 							arg1 = MEM32(g_esp + 4u);
-							sub_000396A0(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
+							GameObjectMoveTo(arg0_2, arg1, &ignored, &ebx_2, &ebp_2, &esi_2, &edi_2);
 							g_esp = g_esp + 8u;
 						}
 						esi_2 = MEM32(g_esp + 0x28u);
@@ -51612,7 +51621,7 @@ void EntityPathFollowUpdatePosition(uint32_t ecx, uint32_t edi, uint32_t arg0, u
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
 		arg2_2 = MEM32(g_esp + 8u);
-		sub_000395F0(arg0_2, arg1_2, arg2_2, &eax, &ebx_2, &ebp_2, &esi_2, &edi_2);
+		GameObjectSetPlacement(arg0_2, arg1_2, arg2_2, &eax, &ebx_2, &ebp_2, &esi_2, &edi_2);
 		g_esp = g_esp + 0xCu;
 	}
 	g_esp = g_esp + 4u;
@@ -52260,7 +52269,7 @@ void PathNodeCreateObject(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t 
 			MEM32(g_esp) = edi_2;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			sub_000396A0(arg0_2, arg1_2, &edx, &ebx_2, &ebp_2, &esi_2, &edi_2);
+			GameObjectMoveTo(arg0_2, arg1_2, &edx, &ebx_2, &ebp_2, &esi_2, &edi_2);
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = ebx_2;
 			g_esp = g_esp - 4u;
@@ -53270,7 +53279,7 @@ void EntityPathComputeTransform(uint32_t esi, uint32_t edi, uint32_t arg0, uint3
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
 			arg2_2 = MEM32(g_esp + 8u);
-			sub_000395F0(arg0_2, arg1_2, arg2_2, &eax, &ebx, &ebp_2, &esi_2, &edi_2);
+			GameObjectSetPlacement(arg0_2, arg1_2, arg2_2, &eax, &ebx, &ebp_2, &esi_2, &edi_2);
 			g_esp = g_esp + 0xCu;
 			*p_ebx = MEM32(g_esp);
 			g_esp = g_esp + 4u;
@@ -70178,7 +70187,7 @@ void GameObjectCreatePlacedAtSourceTransform(uint32_t ebx, uint32_t arg0, uint32
 				MEM32(g_esp) = ebp_2;
 				arg0_2 = MEM32(g_esp);
 				arg1_2 = MEM32(g_esp + 4u);
-				sub_000396A0(arg0_2, arg1_2, &ignored_2, &ebx, &ebp_2, &esi_2, &edi_2);
+				GameObjectMoveTo(arg0_2, arg1_2, &ignored_2, &ebx, &ebp_2, &esi_2, &edi_2);
 				g_esp = g_esp + 8u;
 			}
 		}
@@ -71031,7 +71040,7 @@ uint32_t PlayerStandInEntityNode_Update(uint32_t ebx, uint32_t ebp, uint32_t esi
 						arg0_2 = MEM32(g_esp);
 						arg1_2 = MEM32(g_esp + 4u);
 						arg2 = MEM32(g_esp + 8u);
-						sub_000395F0(arg0_2, arg1_2, arg2, &eax, &ebx_2, &ebp_2, &esi_2, &edi_2);
+						GameObjectSetPlacement(arg0_2, arg1_2, arg2, &eax, &ebx_2, &ebp_2, &esi_2, &edi_2);
 						MEM32(0x1B16B8u) = 1u;
 						g_esp = g_esp + 0xCu;
 					}
@@ -140330,7 +140339,7 @@ void GameObjectCreateObjectsFromList(uint32_t ebx, uint32_t arg0, uint32_t *p_ea
 				arg0_2 = MEM32(g_esp);
 				arg1 = MEM32(g_esp + 4u);
 				arg2 = MEM32(g_esp + 8u);
-				sub_000395F0(arg0_2, arg1, arg2, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
+				GameObjectSetPlacement(arg0_2, arg1, arg2, &ignored, &ebx_2, &ebp_2, &esi, &edi_2);
 				g_esp = g_esp + 0x28u;
 			}
 			ebx_2 = MEM32(g_esp + 0x18u);
@@ -142077,7 +142086,7 @@ void OrientSpawnActionOffsetSpawnPositions(uint32_t ebx, uint32_t esi, uint32_t 
 		MEM32(g_esp) = ebp;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		sub_000396A0(arg0_2, arg1_2, &ignored_2, &ebx_2, &ebp, &esi, &edi_2);
+		GameObjectMoveTo(arg0_2, arg1_2, &ignored_2, &ebx_2, &ebp, &esi, &edi_2);
 		g_esp = g_esp + 8u;
 		g_esp = g_esp + 4u;
 		*p_ebp = MEM32(g_esp);
@@ -142119,7 +142128,7 @@ void OrientSpawnActionOffsetSpawnPositions(uint32_t ebx, uint32_t esi, uint32_t 
 	MEM32(g_esp) = ebp;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	sub_000396A0(arg0_2, arg1_2, &ignored_2, &ebx_2, &ebp, &esi, &edi_2);
+	GameObjectMoveTo(arg0_2, arg1_2, &ignored_2, &ebx_2, &ebp, &esi, &edi_2);
 	g_esp = g_esp + 8u;
 	g_esp = g_esp + 4u;
 	*p_ebp = MEM32(g_esp);
@@ -147995,7 +148004,11 @@ void ScreenElementDrawScrolledText(uint32_t eax, uint32_t ebx, uint32_t ebp, uin
 	g_esp = g_esp + 8u;
 }
 
-uint32_t sub_000A49A0(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* A screen element type's messages: on 0xFFF9 ScreenElementInitializeDefaults, on 0x2EE3
+   ScreenElementNotifyOwner, on 0x2EE4 GameObjectDeactivate; it draws (0x2EE2) with
+   ScreenElementDrawScrolledText in state 0 and ScreenElementDrawText in state 1; 0xFFFD sets +0x50 (and
+   +0x3C to 10 in state 0); 0xFFFA frees it with GameObjectFreeByHandle. */
+uint32_t ScrolledTextElementHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 
@@ -149999,7 +150012,12 @@ uint32_t CallbackTableInvokeNextEntry(uint32_t arg0)
 	return eax;
 }
 
-void sub_000A5E80(uint32_t arg0, uint32_t arg1, uint32_t arg2)
+/* For the AI arg0 of entity arg1, answers the object of handle arg2 that an event came from
+   (EntityEventDispatch): checks it with GameObjectIsInViewCone when it is already the target (+0xBC or
+   ObjectGetTargetHandle); otherwise, when sub_0002CBF0 accepts their +0x184, takes it as the target
+   (GameObjectSetTargetHandle, or EntitySetTimedField for 300 to 449 when the current one is alive),
+   waits 1 to 2 s (EntityDelayTimer) and goes to state 3 or 2 with SlotTableSetValue. */
+void EntityAIReactToEventSource(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3 = 0, eax = 0, ebp = 0, ebx = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t stack = 0;
@@ -150229,7 +150247,7 @@ uint32_t EntityEventDispatch(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	arg2_2 = MEM32(esi + 0x14u);
 	arg1_2 = ebx;
 	arg0_2 = edi;
-	sub_000A5E80(arg0_2, arg1_2, arg2_2);
+	EntityAIReactToEventSource(arg0_2, arg1_2, arg2_2);
 	eax = 1u;
 	return eax;
 }
@@ -158286,7 +158304,11 @@ uint32_t ObjectEnterStateTwoAndApplyTargetLimit(uint32_t eax, uint32_t ebp, uint
 	return eax_2;
 }
 
-uint32_t sub_000AAFD0(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
+/* Unless bit 0 of +4 is set, takes the target of the AI arg0's object (ObjectGetTargetHandle), enters
+   state 2 (ObjectStateEnterIfAllowed) and moves toward it with
+   ObjectMoveTowardTargetIfBeyondTargetLimit, beyond a distance from the record at arg1+0xAC, or twice
+   the float the type's record +0x30 points at, or a quarter of +0x28. */
+uint32_t EntityAIApproachTarget(uint32_t eax, uint32_t ebp, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, eax_2 = 0, ebx = 0, ecx = 0, edi = 0, esi = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -160367,7 +160389,10 @@ void NodeFamilyInitObject(uint32_t eax, uint32_t esi, uint32_t edi)
 	MEM32(esi + 0xC8u) = 1u;
 }
 
-uint32_t sub_000ACB60(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* A node type's messages: on 0xFFF9 NodeFamilyInitObject, on 0x2AF8 hands the message to its children
+   (GameObjectSendMessageToChildren), on 0x2AFB answers its vcObject at +0xD4, on 0xFFFA
+   GameObjectDetachAndDestroyChildren and vcObjectRelease of +0xD4. */
+uint32_t NodeVcObjectHandleMessage(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ecx = 0, edi = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	uint32_t saved_arg1 = 0;
@@ -161385,7 +161410,7 @@ void GameObjectBuildWorldTransform(uint32_t eax, uint32_t esi, uint32_t arg0, ui
 		arg0_2 = MEM32(g_esp);
 		arg1 = MEM32(g_esp + 4u);
 		arg2 = MEM32(g_esp + 8u);
-		sub_000395F0(arg0_2, arg1, arg2, &ignored_3, &ebx_2, p_ebp, &esi_2, &edi_2);
+		GameObjectSetPlacement(arg0_2, arg1, arg2, &ignored_3, &ebx_2, p_ebp, &esi_2, &edi_2);
 		g_esp = g_esp + 0xCu;
 		edi_2 = MEM32(g_esp);
 		g_esp = g_esp + 4u;
@@ -161561,7 +161586,7 @@ void GameObjectBuildWorldTransform(uint32_t eax, uint32_t esi, uint32_t arg0, ui
 	arg0_2 = MEM32(g_esp);
 	arg1 = MEM32(g_esp + 4u);
 	arg2 = MEM32(g_esp + 8u);
-	sub_000395F0(arg0_2, arg1, arg2, &ignored_3, &ebx_2, p_ebp, &esi_2, &edi);
+	GameObjectSetPlacement(arg0_2, arg1, arg2, &ignored_3, &ebx_2, p_ebp, &esi_2, &edi);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi_2;
 	arg0_2 = MEM32(g_esp);
@@ -200732,9 +200757,8 @@ uint32_t SceneObjectTypeGetDescriptor(void)
 	return eax;
 }
 
-/* Creates the weapon's game object type: builds the clone array with ObjectCloneArrayCreate, gets an
-   object with vcObjectGet, and registers GameObjectTypeUse for types 0x35, 0x36, 0x38 and 0x2E. */
-uint32_t WeaponGameObjectTypeCreate(void)
+/* The FPATriBarrelLaserWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FPATriBarrelLaserWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -200765,9 +200789,9 @@ uint32_t WeaponGameObjectTypeCreate(void)
 	return eax;
 }
 
-/* Releases the weapon's game object type with vcObjectRelease and VcObjectListRelease, and calls
-   GameObjectTypeRelease for types 0x35, 0x36, 0x38 and 0x2E. */
-uint32_t WeaponGameObjectTypeRelease(void)
+/* The FPATriBarrelLaserWeapon type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t FPATriBarrelLaserWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -200802,20 +200826,20 @@ uint32_t WeaponGameObjectTypeRelease(void)
 	return eax;
 }
 
-/* Fills the game object type descriptor at 0x21F298 (create WeaponGameObjectTypeCreate, release
-   WeaponGameObjectTypeRelease) and the scene object type data at 0x21F2E0 with its string pointers, then
-   stores the descriptor at arg0+0x78. */
-void WeaponFamilyRegisterGameObjectType(uint32_t arg0)
+/* Registers the FPATriBarrelLaserWeapon type (Weapon 26), its sound tri-barrellaser_m.wav: one on every
+   other female power armour (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its
+   family. */
+void FPATriBarrelLaserWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x21F298u) = 0xA8u;
-	MEM32(0x21F29Cu) = 0xCD6B0u;
-	MEM32(0x21F2A0u) = 0xCD720u;
-	MEM32(0x21F2A4u) = 0x101DD0u;
-	MEM32(0x21F2A8u) = 0u;
-	MEM32(0x21F2B0u) = 0u;
-	MEM32(0x21F2B4u) = 0u;
-	MEM32(0x21F2B8u) = 0u;
-	MEM32(arg0 + 0x78u) = 0x21F298u;
+	GameObjectType_size(FPATriBarrelLaserWeaponType_VA) = 0xA8u;
+	GameObjectType_startup(FPATriBarrelLaserWeaponType_VA) = 0xCD6B0u;
+	GameObjectType_shutdown(FPATriBarrelLaserWeaponType_VA) = 0xCD720u;
+	GameObjectType_state_machine(FPATriBarrelLaserWeaponType_VA) = 0x101DD0u;
+	GameObjectType_load(FPATriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_collect(FPATriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_version(FPATriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_flags(FPATriBarrelLaserWeaponType_VA) = 0u;
+	MEM32(arg0 + 0x78u) = FPATriBarrelLaserWeaponType_VA;
 	x86_rep_stos32(0x21F2FCu, 0u, 0x13u);
 	MEM32(0x21F2FCu) = 0x1A4A58u;
 	MEM32(0x21F300u) = 0x1A4A5Cu;
@@ -200855,7 +200879,8 @@ uint32_t sub_000CD8F0(void)
 	return eax;
 }
 
-uint32_t sub_000CD900(void)
+/* The FPAAutoCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FPAAutoCannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -200886,7 +200911,9 @@ uint32_t sub_000CD900(void)
 	return eax;
 }
 
-uint32_t sub_000CD970(void)
+/* The FPAAutoCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t FPAAutoCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -200921,17 +200948,20 @@ uint32_t sub_000CD970(void)
 	return eax;
 }
 
-void sub_000CD9C0(uint32_t arg0)
+/* Registers the FPAAutoCannonWeapon type (Weapon 25), its sound autocannonloop_m.wav: one on every other
+   female power armour (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its
+   family. */
+void FPAAutoCannonWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x21F3A0u) = 0xA8u;
-	MEM32(0x21F3A4u) = 0xCD900u;
-	MEM32(0x21F3A8u) = 0xCD970u;
-	MEM32(0x21F3ACu) = 0x101DD0u;
-	MEM32(0x21F3B0u) = 0u;
-	MEM32(0x21F3B8u) = 0u;
-	MEM32(0x21F3BCu) = 0u;
-	MEM32(0x21F3C0u) = 0u;
-	MEM32(arg0 + 0x74u) = 0x21F3A0u;
+	GameObjectType_size(FPAAutoCannonWeaponType_VA) = 0xA8u;
+	GameObjectType_startup(FPAAutoCannonWeaponType_VA) = 0xCD900u;
+	GameObjectType_shutdown(FPAAutoCannonWeaponType_VA) = 0xCD970u;
+	GameObjectType_state_machine(FPAAutoCannonWeaponType_VA) = 0x101DD0u;
+	GameObjectType_load(FPAAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_collect(FPAAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_version(FPAAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_flags(FPAAutoCannonWeaponType_VA) = 0u;
+	MEM32(arg0 + 0x74u) = FPAAutoCannonWeaponType_VA;
 	x86_rep_stos32(0x21F404u, 0u, 0x13u);
 	MEM32(0x21F404u) = 0x1A4B30u;
 	MEM32(0x21F408u) = 0x1A4B34u;
@@ -203197,10 +203227,8 @@ uint32_t sub_000D00F0(void)
 	return eax;
 }
 
-/* Creates the weapon family vcObject through vcObjectGet, initializes the string at 0x2205A8 with
-   ObjectCloneArrayCreate and registers GameObjectTypes 0x29, 0x35, 0x36 and 0x38 for type 4 with
-   GameObjectTypeUse. */
-uint32_t WeaponFamilyInit(void)
+/* The FPAPairedAutoCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FPAPairedAutoCannonWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -203229,7 +203257,9 @@ uint32_t WeaponFamilyInit(void)
 	return eax;
 }
 
-uint32_t sub_000D0160(void)
+/* The FPAPairedAutoCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t FPAPairedAutoCannonWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203264,19 +203294,20 @@ uint32_t sub_000D0160(void)
 	return eax;
 }
 
-/* Fills the WeaponFamily class descriptor with the method table at 0x220510 and the name pointer tables
-   at 0x220574 and 0x220558. */
-void WeaponFamilyClassInit(uint32_t arg0)
+/* Registers the FPAPairedAutoCannonWeapon type (Weapon 24), its sound autocannonloop_m.wav: two of it on
+   a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons): fills its
+   GameObjectType and stores it in its family. */
+void FPAPairedAutoCannonWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x220520u) = 0u;
-	MEM32(0x220528u) = 0u;
-	MEM32(0x22052Cu) = 0u;
-	MEM32(0x220530u) = 0u;
-	MEM32(0x220510u) = 0x30u;
-	MEM32(0x220514u) = 0xD0100u;
-	MEM32(0x220518u) = 0xD0160u;
-	MEM32(0x22051Cu) = 0xD1900u;
-	MEM32(arg0 + 0x70u) = 0x220510u;
+	GameObjectType_load(FPAPairedAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_collect(FPAPairedAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_version(FPAPairedAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_flags(FPAPairedAutoCannonWeaponType_VA) = 0u;
+	GameObjectType_size(FPAPairedAutoCannonWeaponType_VA) = 0x30u;
+	GameObjectType_startup(FPAPairedAutoCannonWeaponType_VA) = 0xD0100u;
+	GameObjectType_shutdown(FPAPairedAutoCannonWeaponType_VA) = 0xD0160u;
+	GameObjectType_state_machine(FPAPairedAutoCannonWeaponType_VA) = 0xD1900u;
+	MEM32(arg0 + 0x70u) = FPAPairedAutoCannonWeaponType_VA;
 	x86_rep_stos32(0x220574u, 0u, 0xCu);
 	MEM32(0x220574u) = 0x1A5798u;
 	MEM32(0x220578u) = 0x1A579Cu;
@@ -203308,7 +203339,8 @@ uint32_t sub_000D02E0(void)
 	return eax;
 }
 
-uint32_t sub_000D02F0(void)
+/* The FPAPairedTriBarrelLaserWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t FPAPairedTriBarrelLaserWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -203337,10 +203369,9 @@ uint32_t sub_000D02F0(void)
 	return eax;
 }
 
-/* Releases the weapon family's fourth type manager's objects: calls vcObjectRelease on the vcObject at
-   0x220684, VcObjectListRelease on the list at 0x220688, and GameObjectTypeRelease for GameObjectTypes
-   0x35, 0x36, 0x38 and 0x2E. */
-uint32_t WeaponFamilyFourthTypeManagerRelease(void)
+/* The FPAPairedTriBarrelLaserWeapon type's last release (GameObjectTypeRelease): lets go of what its
+   objects share. */
+uint32_t FPAPairedTriBarrelLaserWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203375,20 +203406,20 @@ uint32_t WeaponFamilyFourthTypeManagerRelease(void)
 	return eax;
 }
 
-/* Initializes the object type manager at 0x2205F0 (size 0x30 with its create 0xD02F0, release
-   WeaponFamilyFourthTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x6C of the weapon
-   family, then fills its object class-pointer tables. */
-void WeaponFamilyRegisterFourthTypeManager(uint32_t arg0)
+/* Registers the FPAPairedTriBarrelLaserWeapon type (Weapon 23), its sound tri-barrellaser_m.wav: two of
+   it on a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons): fills its
+   GameObjectType and stores it in its family. */
+void FPAPairedTriBarrelLaserWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x220600u) = 0u;
-	MEM32(0x220608u) = 0u;
-	MEM32(0x22060Cu) = 0u;
-	MEM32(0x220610u) = 0u;
-	MEM32(0x2205F0u) = 0x30u;
-	MEM32(0x2205F4u) = 0xD02F0u;
-	MEM32(0x2205F8u) = 0xD0350u;
-	MEM32(0x2205FCu) = 0xD1900u;
-	MEM32(arg0 + 0x6Cu) = 0x2205F0u;
+	GameObjectType_load(FPAPairedTriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_collect(FPAPairedTriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_version(FPAPairedTriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_flags(FPAPairedTriBarrelLaserWeaponType_VA) = 0u;
+	GameObjectType_size(FPAPairedTriBarrelLaserWeaponType_VA) = 0x30u;
+	GameObjectType_startup(FPAPairedTriBarrelLaserWeaponType_VA) = 0xD02F0u;
+	GameObjectType_shutdown(FPAPairedTriBarrelLaserWeaponType_VA) = 0xD0350u;
+	GameObjectType_state_machine(FPAPairedTriBarrelLaserWeaponType_VA) = 0xD1900u;
+	MEM32(arg0 + 0x6Cu) = FPAPairedTriBarrelLaserWeaponType_VA;
 	x86_rep_stos32(0x220654u, 0u, 0xCu);
 	MEM32(0x220654u) = 0x1A5850u;
 	MEM32(0x220658u) = 0x1A5854u;
@@ -203420,10 +203451,8 @@ uint32_t sub_000D04D0(void)
 	return eax;
 }
 
-/* Creates the third type manager's objects by calling ObjectCloneArrayCreate for the 8-entry clone array
-   at 0x220768 (200.0f, 1000.0f), vcObjectGet for vcObject 0x1A5938 into 0x220764, and GameObjectTypeUse
-   for GameObjectTypes 0x34, 0x36, 0x38 and 0x27. */
-uint32_t WeaponFamilyThirdTypeManagerCreate(void)
+/* The GU11FighterGunPodWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t GU11FighterGunPodWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -203452,10 +203481,9 @@ uint32_t WeaponFamilyThirdTypeManagerCreate(void)
 	return eax;
 }
 
-/* Releases the third type manager's objects: vcObjectRelease on the vcObject at 0x220764,
-   VcObjectListRelease on the list at 0x220768, and GameObjectTypeRelease for GameObjectTypes 0x34, 0x36,
-   0x38 and 0x27. */
-uint32_t WeaponFamilyThirdTypeManagerRelease(void)
+/* The GU11FighterGunPodWeapon type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t GU11FighterGunPodWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203490,20 +203518,20 @@ uint32_t WeaponFamilyThirdTypeManagerRelease(void)
 	return eax;
 }
 
-/* Initializes the object type manager at 0x2206D0 (size 0x30 with its create
-   WeaponFamilyThirdTypeManagerCreate, release WeaponFamilyThirdTypeManagerRelease and 0xD1900 callbacks)
-   and stores it at offset 0x98 of the weapon family, then fills its object class-pointer tables. */
-void WeaponFamilyRegisterThirdTypeManager(uint32_t arg0)
+/* Registers the GU11FighterGunPodWeapon type (Weapon 34), its sound gu11_long.wav: every veritech's
+   GU-11 as a fighter, the only gun of VF1AXFighter and VF1SXFighter: fills its GameObjectType and stores
+   it in its family. */
+void GU11FighterGunPodWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x2206E0u) = 0u;
-	MEM32(0x2206E8u) = 0u;
-	MEM32(0x2206ECu) = 0u;
-	MEM32(0x2206F0u) = 0u;
-	MEM32(0x2206D0u) = 0x30u;
-	MEM32(0x2206D4u) = 0xD04E0u;
-	MEM32(0x2206D8u) = 0xD0540u;
-	MEM32(0x2206DCu) = 0xD1900u;
-	MEM32(arg0 + 0x98u) = 0x2206D0u;
+	GameObjectType_load(GU11FighterGunPodWeaponType_VA) = 0u;
+	GameObjectType_collect(GU11FighterGunPodWeaponType_VA) = 0u;
+	GameObjectType_version(GU11FighterGunPodWeaponType_VA) = 0u;
+	GameObjectType_flags(GU11FighterGunPodWeaponType_VA) = 0u;
+	GameObjectType_size(GU11FighterGunPodWeaponType_VA) = 0x30u;
+	GameObjectType_startup(GU11FighterGunPodWeaponType_VA) = 0xD04E0u;
+	GameObjectType_shutdown(GU11FighterGunPodWeaponType_VA) = 0xD0540u;
+	GameObjectType_state_machine(GU11FighterGunPodWeaponType_VA) = 0xD1900u;
+	MEM32(arg0 + 0x98u) = GU11FighterGunPodWeaponType_VA;
 	x86_rep_stos32(0x220734u, 0u, 0xCu);
 	MEM32(0x220734u) = 0x1A5908u;
 	MEM32(0x220738u) = 0x1A590Cu;
@@ -203537,10 +203565,8 @@ uint32_t WeaponFamilySecondTypeNameListGet(void)
 	return eax;
 }
 
-/* Creates the object of the second weapon-family type with ObjectCloneArrayCreate over 8 entries,
-   vcObjectGet for object 2 and GameObjectTypeUse on four GameObjectTypes; it is the create function that
-   WeaponFamilyRegisterSecondTypeManager installs in that type manager. */
-uint32_t WeaponFamilySecondTypeCreate(void)
+/* The GU11SniperGunPodWeapon type's first use (GameObjectTypeUse): gets what its objects share. */
+uint32_t GU11SniperGunPodWeapon_Startup(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0, eax = 0;
 
@@ -203569,10 +203595,9 @@ uint32_t WeaponFamilySecondTypeCreate(void)
 	return eax;
 }
 
-/* Releases that object with vcObjectRelease, VcObjectListRelease of its clone array and
-   GameObjectTypeRelease for the four GameObjectTypes; it is the release function that
-   WeaponFamilyRegisterSecondTypeManager installs. */
-uint32_t WeaponFamilySecondTypeRelease(void)
+/* The GU11SniperGunPodWeapon type's last release (GameObjectTypeRelease): lets go of what its objects
+   share. */
+uint32_t GU11SniperGunPodWeapon_Shutdown(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -203607,20 +203632,20 @@ uint32_t WeaponFamilySecondTypeRelease(void)
 	return eax;
 }
 
-/* Fills the second weapon-family type manager (size 0x30, create WeaponFamilySecondTypeCreate, release
-   WeaponFamilySecondTypeRelease) and its two name tables, and stores the manager pointer in the
-   WeaponFamily object it is given. */
-void WeaponFamilyRegisterSecondTypeManager(uint32_t arg0)
+/* Registers the GU11SniperGunPodWeapon type (Weapon 2), its sound gu11_long.wav: every veritech's GU-11
+   at its sniper shot (SniperHit; 500 damage, 12000 range): fills its GameObjectType and stores it in its
+   family. */
+void GU11SniperGunPodWeapon_Register(uint32_t arg0)
 {
-	MEM32(0x2207C0u) = 0u;
-	MEM32(0x2207C8u) = 0u;
-	MEM32(0x2207CCu) = 0u;
-	MEM32(0x2207D0u) = 0u;
-	MEM32(0x2207B0u) = 0x30u;
-	MEM32(0x2207B4u) = 0xD06D0u;
-	MEM32(0x2207B8u) = 0xD0730u;
-	MEM32(0x2207BCu) = 0xD1900u;
-	MEM32(arg0 + 0x18u) = 0x2207B0u;
+	GameObjectType_load(GU11SniperGunPodWeaponType_VA) = 0u;
+	GameObjectType_collect(GU11SniperGunPodWeaponType_VA) = 0u;
+	GameObjectType_version(GU11SniperGunPodWeaponType_VA) = 0u;
+	GameObjectType_flags(GU11SniperGunPodWeaponType_VA) = 0u;
+	GameObjectType_size(GU11SniperGunPodWeaponType_VA) = 0x30u;
+	GameObjectType_startup(GU11SniperGunPodWeaponType_VA) = 0xD06D0u;
+	GameObjectType_shutdown(GU11SniperGunPodWeaponType_VA) = 0xD0730u;
+	GameObjectType_state_machine(GU11SniperGunPodWeaponType_VA) = 0xD1900u;
+	MEM32(arg0 + 0x18u) = GU11SniperGunPodWeaponType_VA;
 	x86_rep_stos32(0x220814u, 0u, 0xCu);
 	MEM32(0x220814u) = 0x1A59C0u;
 	MEM32(0x220818u) = 0x1A59C4u;
@@ -205226,7 +205251,12 @@ void ScreenElementCreateSceneObject(uint32_t esi, uint32_t arg1)
 	}
 }
 
-uint32_t sub_000D1900(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
+/* The state machine six weapon types share, the four GU-11s (Weapon 0, 1, GU11SniperGunPodWeapon,
+   GU11FighterGunPodWeapon) and FPAPairedTriBarrelLaserWeapon and FPAPairedAutoCannonWeapon: on 0xFFFF
+   creates its scene object (ScreenElementCreateSceneObject), on 0xFFF9 sets it up
+   (ScreenElementSetupSceneObject), on 0xFFFE releases the vcObject at +0x24, on 0x3E8 calls the function
+   at +0x28 with the object and the message's two arguments. */
+uint32_t WeaponSceneObjectHandleMessage(uint32_t ebp, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, eax = 0, ebx = 0, ecx = 0, edi = 0, edx = 0, esi = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 
@@ -208241,7 +208271,7 @@ uint32_t GameObjectFollowLinkedObject(uint32_t ebx, uint32_t ebp, uint32_t esi, 
 			g_esp = g_esp - 4u;
 			MEM32(g_esp) = eax;
 			arg0_2 = MEM32(g_esp);
-			f0 = sub_000123F0(arg0_2);
+			f0 = VectorLength(arg0_2);
 			g_esp = g_esp + 4u;
 			if (f0 > 0.0001f)
 			{
@@ -216781,7 +216811,7 @@ void CiviliansNodeCreateCivilian(uint32_t eax, uint32_t arg0, uint32_t *p_ebx, u
 				arg0_2 = MEM32(g_esp);
 				arg1 = MEM32(g_esp + 4u);
 				arg2 = MEM32(g_esp + 8u);
-				sub_000395F0(arg0_2, arg1, arg2, &ignored, &ebx, &ebp_2, &esi_2, &edi_2);
+				GameObjectSetPlacement(arg0_2, arg1, arg2, &ignored, &ebx, &ebp_2, &esi_2, &edi_2);
 				g_esp = g_esp + 0xCu;
 			}
 		}
@@ -217089,7 +217119,11 @@ void CiviliansNodeInitialize(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t 
 	MEM32(saved_arg0 + 8u) = 0xD93F0u;
 }
 
-void sub_000D9F70(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
+/* Hands the message to its children (GameObjectSendMessageToChildren), then draws two outlines with
+   GameObjectDrawOrientedOutline: at the object of +0xD0 when there is one (colour 0xFF004080), otherwise
+   at the first object of family 11 whose kind is 0x40000 (yellow, its direction swinging with the
+   counter at 0x221864, which counts up when +0xC8 is 1). */
+void CiviliansNodeDrawOutlines(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2_2 = 0, arg3_2 = 0, arg4 = 0, arg5 = 0, eax_2 = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, handle = 0, ignored = 0, ignored_2 = 0, ignored_3 = 0;
 	double f0 = 0, f1 = 0, f3 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0;
@@ -217416,7 +217450,7 @@ uint32_t CiviliansNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t esi, ui
 		arg2_2 = arg1;
 		arg1_2 = ecx;
 		arg0_2 = edi;
-		sub_000D9F70(eax, ebx, ebp, esi, edi, arg0_2, arg1_2, arg2_2, arg3_2);
+		CiviliansNodeDrawOutlines(eax, ebx, ebp, esi, edi, arg0_2, arg1_2, arg2_2, arg3_2);
 		eax = 1u;
 		return eax;
 	}
@@ -217816,7 +217850,7 @@ uint32_t NodeCreateChildGameObject(uint32_t ebx, uint32_t ebp, uint32_t esi, uin
 			MEM32(g_esp) = esi_2;
 			arg0_2 = MEM32(g_esp);
 			arg1_2 = MEM32(g_esp + 4u);
-			sub_000396A0(arg0_2, arg1_2, &ignored, &ebx, &ebp_2, &esi_2, &edi_2);
+			GameObjectMoveTo(arg0_2, arg1_2, &ignored, &ebx, &ebp_2, &esi_2, &edi_2);
 			g_esp = g_esp + 8u;
 		}
 	}
@@ -218645,7 +218679,7 @@ void PointTextLabelsUpdate(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp) = ecx;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	sub_000396A0(arg0_2, arg1_2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi);
+	GameObjectMoveTo(arg0_2, arg1_2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2 + 0x100u);
 	arg0_2 = MEM32(g_esp);
@@ -218673,7 +218707,7 @@ void PointTextLabelsUpdate(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t es
 	MEM32(g_esp) = edx;
 	arg0_2 = MEM32(g_esp);
 	arg1_2 = MEM32(g_esp + 4u);
-	sub_000396A0(arg0_2, arg1_2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi);
+	GameObjectMoveTo(arg0_2, arg1_2, &ignored_3, &ebx_2, &ebp_2, &esi_2, &edi);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(esi_2 + 0xFCu);
 	arg0_2 = MEM32(g_esp);
@@ -221863,7 +221897,7 @@ void MSONLineNodeUpdateChildTransforms(uint32_t eax, uint32_t ebx, uint32_t ebp,
 				arg0 = MEM32(g_esp);
 				arg1 = MEM32(g_esp + 4u);
 				arg2 = MEM32(g_esp + 8u);
-				sub_000395F0(arg0, arg1, arg2, &ignored, &ebx, &ebp, &esi_2, &edi_2);
+				GameObjectSetPlacement(arg0, arg1, arg2, &ignored, &ebx, &ebp, &esi_2, &edi_2);
 				esi_2 = MEM32(edi_2 + 0xC0u);
 				g_esp = g_esp + 0xCu;
 			} while (esi_2 != 0u);
@@ -248923,7 +248957,7 @@ void GameObjectFindNearestPathSegment(uint32_t esi, uint32_t arg0, uint32_t arg1
 					g_esp = g_esp - 4u;
 					MEM32(g_esp) = ecx;
 					arg0_2 = MEM32(g_esp);
-					f0_2 = sub_000123F0(arg0_2);
+					f0_2 = VectorLength(arg0_2);
 					f0_2 = x87_round(f0_2 * FLOAT_AT(g_esp + 0x34u));
 					g_esp = g_esp + 0x10u;
 				}
@@ -293540,7 +293574,9 @@ void Vector3DistanceSquared(uint32_t arg0, uint32_t arg1, uint32_t *p_ebx, doubl
 	*p_ebx = ebx_2;
 }
 
-double sub_001156B0(uint32_t arg0)
+/* Returns the square root of the three floats at arg0 dotted with themselves, the dot rounded to a float
+   first; GridRegionDrawFaded uses it. */
+double Vector3Length(uint32_t arg0)
 {
 	uint32_t ebx = 0, ecx = 0;
 	uint32_t stack = 0;
@@ -310956,7 +310992,7 @@ void ObjectScreenQuadListDraw(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	arg0_2 = MEM32(g_esp);
-	f0_2 = sub_000123F0(arg0_2);
+	f0_2 = VectorLength(arg0_2);
 	MEMF(g_esp + 0x28u) = (float)f0_2;
 	ecx = g_esp + 0x4Cu;
 	g_esp = g_esp - 4u;
@@ -338024,7 +338060,7 @@ uint32_t GridRegionDrawFaded(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t 
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = edx;
 	arg0_2 = MEM32(g_esp);
-	f0_2 = sub_001156B0(arg0_2);
+	f0_2 = Vector3Length(arg0_2);
 	ebp_2 = MEM32(g_esp + 0x14Cu);
 	f0_2 = x87_round(f0_2 * FLOAT_AT(ebp_2 + 0x2B4u));
 	g_esp = g_esp + 4u;
@@ -346105,9 +346141,9 @@ void MatrixTransformPoint_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000123F0_entry(void)
+void VectorLength_entry(void)
 {
-	x87_push(sub_000123F0(ARG32(0)));
+	x87_push(VectorLength(ARG32(0)));
 	g_esp += 4u;
 }
 
@@ -352099,14 +352135,14 @@ void GameObjectDrawOrientedOutline_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000395F0_entry(void)
+void GameObjectSetPlacement_entry(void)
 {
 	uint32_t eax_out = g_eax;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000395F0(ARG32(0), ARG32(1), ARG32(2), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	GameObjectSetPlacement(ARG32(0), ARG32(1), ARG32(2), &eax_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_eax = eax_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -352115,14 +352151,14 @@ void sub_000395F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000396A0_entry(void)
+void GameObjectMoveTo_entry(void)
 {
 	uint32_t edx_out = g_edx;
 	uint32_t ebx_out = g_ebx;
 	uint32_t ebp_out = g_ebp;
 	uint32_t esi_out = g_esi;
 	uint32_t edi_out = g_edi;
-	sub_000396A0(ARG32(0), ARG32(1), &edx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
+	GameObjectMoveTo(ARG32(0), ARG32(1), &edx_out, &ebx_out, &ebp_out, &esi_out, &edi_out);
 	g_edx = edx_out;
 	g_ebx = ebx_out;
 	g_ebp = ebp_out;
@@ -361140,10 +361176,10 @@ void ScreenElementDrawScrolledText_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A49A0_entry(void)
+void ScrolledTextElementHandleMessage_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000A49A0(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = ScrolledTextElementHandleMessage(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361440,10 +361476,10 @@ void CallbackTableInvokeNextEntry_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A5E80_entry(void)
+void EntityAIReactToEventSource_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000A5E80(ARG32(0), ARG32(1), ARG32(2));
+	EntityAIReactToEventSource(ARG32(0), ARG32(1), ARG32(2));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -362589,10 +362625,10 @@ void ObjectEnterStateTwoAndApplyTargetLimit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AAFD0_entry(void)
+void EntityAIApproachTarget_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000AAFD0(g_eax, g_ebp, ARG32(0), ARG32(1));
+	g_eax = EntityAIApproachTarget(g_eax, g_ebp, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -363008,10 +363044,10 @@ void NodeFamilyInitObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ACB60_entry(void)
+void NodeVcObjectHandleMessage_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000ACB60(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = NodeVcObjectHandleMessage(ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366880,10 +366916,10 @@ void SceneObjectTypeGetDescriptor_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponGameObjectTypeCreate_entry(void)
+void FPATriBarrelLaserWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponGameObjectTypeCreate();
+	g_eax = FPATriBarrelLaserWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366891,10 +366927,10 @@ void WeaponGameObjectTypeCreate_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponGameObjectTypeRelease_entry(void)
+void FPATriBarrelLaserWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponGameObjectTypeRelease();
+	g_eax = FPATriBarrelLaserWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366902,9 +366938,9 @@ void WeaponGameObjectTypeRelease_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyRegisterGameObjectType_entry(void)
+void FPATriBarrelLaserWeapon_Register_entry(void)
 {
-	WeaponFamilyRegisterGameObjectType(ARG32(0));
+	FPATriBarrelLaserWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -366914,10 +366950,10 @@ void sub_000CD8F0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CD900_entry(void)
+void FPAAutoCannonWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CD900();
+	g_eax = FPAAutoCannonWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366925,10 +366961,10 @@ void sub_000CD900_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CD970_entry(void)
+void FPAAutoCannonWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000CD970();
+	g_eax = FPAAutoCannonWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -366936,9 +366972,9 @@ void sub_000CD970_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CD9C0_entry(void)
+void FPAAutoCannonWeapon_Register_entry(void)
 {
-	sub_000CD9C0(ARG32(0));
+	FPAAutoCannonWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367712,10 +367748,10 @@ void sub_000D00F0_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyInit_entry(void)
+void FPAPairedAutoCannonWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilyInit();
+	g_eax = FPAPairedAutoCannonWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367723,10 +367759,10 @@ void WeaponFamilyInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D0160_entry(void)
+void FPAPairedAutoCannonWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D0160();
+	g_eax = FPAPairedAutoCannonWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367734,9 +367770,9 @@ void sub_000D0160_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyClassInit_entry(void)
+void FPAPairedAutoCannonWeapon_Register_entry(void)
 {
-	WeaponFamilyClassInit(ARG32(0));
+	FPAPairedAutoCannonWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367746,10 +367782,10 @@ void sub_000D02E0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D02F0_entry(void)
+void FPAPairedTriBarrelLaserWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D02F0();
+	g_eax = FPAPairedTriBarrelLaserWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367757,10 +367793,10 @@ void sub_000D02F0_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyFourthTypeManagerRelease_entry(void)
+void FPAPairedTriBarrelLaserWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilyFourthTypeManagerRelease();
+	g_eax = FPAPairedTriBarrelLaserWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367768,9 +367804,9 @@ void WeaponFamilyFourthTypeManagerRelease_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyRegisterFourthTypeManager_entry(void)
+void FPAPairedTriBarrelLaserWeapon_Register_entry(void)
 {
-	WeaponFamilyRegisterFourthTypeManager(ARG32(0));
+	FPAPairedTriBarrelLaserWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367780,10 +367816,10 @@ void sub_000D04D0_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyThirdTypeManagerCreate_entry(void)
+void GU11FighterGunPodWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilyThirdTypeManagerCreate();
+	g_eax = GU11FighterGunPodWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367791,10 +367827,10 @@ void WeaponFamilyThirdTypeManagerCreate_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyThirdTypeManagerRelease_entry(void)
+void GU11FighterGunPodWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilyThirdTypeManagerRelease();
+	g_eax = GU11FighterGunPodWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367802,9 +367838,9 @@ void WeaponFamilyThirdTypeManagerRelease_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyRegisterThirdTypeManager_entry(void)
+void GU11FighterGunPodWeapon_Register_entry(void)
 {
-	WeaponFamilyRegisterThirdTypeManager(ARG32(0));
+	GU11FighterGunPodWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367814,10 +367850,10 @@ void WeaponFamilySecondTypeNameListGet_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilySecondTypeCreate_entry(void)
+void GU11SniperGunPodWeapon_Startup_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilySecondTypeCreate();
+	g_eax = GU11SniperGunPodWeapon_Startup();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367825,10 +367861,10 @@ void WeaponFamilySecondTypeCreate_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilySecondTypeRelease_entry(void)
+void GU11SniperGunPodWeapon_Shutdown_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = WeaponFamilySecondTypeRelease();
+	g_eax = GU11SniperGunPodWeapon_Shutdown();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367836,9 +367872,9 @@ void WeaponFamilySecondTypeRelease_entry(void)
 	g_esp += 4u;
 }
 
-void WeaponFamilyRegisterSecondTypeManager_entry(void)
+void GU11SniperGunPodWeapon_Register_entry(void)
 {
-	WeaponFamilyRegisterSecondTypeManager(ARG32(0));
+	GU11SniperGunPodWeapon_Register(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -367976,10 +368012,10 @@ void ScreenElementCreateSceneObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D1900_entry(void)
+void WeaponSceneObjectHandleMessage_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000D1900(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
+	g_eax = WeaponSceneObjectHandleMessage(g_ebp, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4), ARG32(5));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -369395,10 +369431,10 @@ void CiviliansNodeInitialize_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000D9F70_entry(void)
+void CiviliansNodeDrawOutlines_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	sub_000D9F70(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
+	CiviliansNodeDrawOutlines(g_eax, g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -381069,9 +381105,9 @@ void Vector3DistanceSquared_entry(void)
 	g_esp += 4u;
 }
 
-void sub_001156B0_entry(void)
+void Vector3Length_entry(void)
 {
-	x87_push(sub_001156B0(ARG32(0)));
+	x87_push(Vector3Length(ARG32(0)));
 	g_esp += 4u;
 }
 

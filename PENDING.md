@@ -161,8 +161,15 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
     "functions named from their decompiled C" (one a wave), a `func` and a `comment` each; the `sub_` names in the
     comments then rewritten to the names they got. Not read by a person: a name may say less than the
     function does, or a little more; treat them as a reading to correct, not as a finding.
-    Left: 356 the models skipped (their code says nothing yet: raw memory and other unnamed calls), and
-    the 948 recompiled functions without a name. The descriptions write `arg0`, `MEM32(0x...)` and
+    A fifth wave (25-11-2026, Sebas: Claude alone, without cranker): of the 356 the models skipped, the 40
+    that call the most named functions for their length were read by Claude Opus 5.5, 12 named, 28 left
+    with the reason (the AI states and conditions with their fields unnamed, callbacks of types not known);
+    no other model reviewed them (`merge_names.py w5 merge --unreviewed "read by ..."`, its section's
+    heading says so). Two of them were weapon types' first uses, which led to "The veritech's and the
+    female power armour's guns" below (they are `_Startup`s now); and `WeaponSceneObjectHandleMessage`
+    (0xD1900) shows that `ScreenElementCreateSceneObject` and `ScreenElementSetupSceneObject` are not a
+    screen element's only. Left: 344 (their code says nothing yet: raw memory and other unnamed calls),
+    and the 948 recompiled functions without a name. The descriptions write `arg0`, `MEM32(0x...)` and
     register names, which `noise_report` counts in the decompiled_ kinds (arguments 87,504 to 88,954).
     Not understood yet: the recompiled C's counts went down with this round (registers 341,760 to
     319,971, labels 40,015 to 33,537, gotos 17,847 to 14,902) with its function count the same.
@@ -1369,6 +1376,36 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   was worked out again (829 s). `tools/verify_c.py` 209 vectors, 0 different, three times (one run in
   between stopped at "the harness could not map the XBE's code in 12 runs", right after the build). The
   nine scenarios frame for frame as their references, at the first run.
+- **The veritech's and the female power armour's guns, fished** (25-11-2026, Sebas: follow a thing, as
+  the ship; Claude alone). From two first uses of the fifth naming wave to their types: a type's
+  `_Register` stores its `GameObjectType` at the family + 0x10 + 4 × its number (PodAutoCannonWeapon, 16,
+  at +0x50), and the models' "type managers" of the weapon family were types without a name:
+  `WeaponFamilyRegisterTypeManager` is Weapon 0's register, `...FirstTypeManager` 1's, `...Second...` 2's,
+  `...Third...` 34's, `...Fourth...` 23's, `WeaponFamilyClassInit` 24's (and `WeaponFamilyInit` its first
+  use), `WeaponFamilyRegisterGameObjectType` 26's. What each is, from its sound and who makes it: Weapon 0,
+  1, 2 and 34 load gu11_long.wav, the VF-1's GU-11 gun pod, and `VeritechInitialize` makes all four for
+  every veritech, a player's or not (slots +0x288 to +0x294); 2 is the sniper shot (`SniperHit`, 500
+  damage, 12,000 range): `GU11SniperGunPodWeapon`; 34 is also the only gun of VF1AXFighter and
+  VF1SXFighter, which only fly: `GU11FighterGunPodWeapon`. 23 to 26 are `FemalePowerArmorInitWeapons`'
+  (the Queadluun-Rau's tri-barrel lasers and autocannons): two of 23 and two of 24 where its start flags
+  (`& 0x3F800`) are 0xC000, else one of 26 and one of 25: `FPAPairedTriBarrelLaserWeapon`,
+  `FPAPairedAutoCannonWeapon`, `FPATriBarrelLaserWeapon`, `FPAAutoCannonWeapon`. Their constants pair them
+  (23 as 26, 24 near 25) in two layouts: 25 and 26 are `GunConstants` with the guns' state machine
+  (0x101DD0), 0, 1, 2, 23, 24 and 34 another record (the sound at +0x70, not +0x78) with
+  `WeaponSceneObjectHandleMessage` (0xD1900). Six `type` lines, their 18 functions named by
+  `symbols.py merge`. Left: Weapon 0 and 1 (GU-11s both; 0 the guardian's by the agent's report, not
+  checked; 1 has half the damage, twice the shots, short streaks), 3, 32, 41 and 42 (a male power armour's,
+  by the report; its register is `PodOfficerHeavyCannonWeaponFamilyInitialize`, a model's name), what
+  0xC000 is in the female power armour's start flags, and the record of 0xD1900's types, untyped. The
+  same mistake runs through the other families: of the ~100 registers that store a type at a raw address
+  (`MEM32(arg0 + 0x..u) = 0x2.....u`, the types without a `type` line), the models named nearly all
+  "XFamilyY" (`ScreenFamilySetHandler`, `NodeFamilySlotInit`, `EffectFamilyRegisterHandlers`...): each is
+  one type's `_Register`, its `_Startup` and `_Shutdown` beside it, a type to name by its strings.
+  Measured (with the fifth wave before it): functions without a name in the decompiled C 344 to 341,
+  without a description 547 to 544; reads at a raw address 8,711 to 8,663; data addresses written as
+  numbers 6,223 to 6,217; the XBE's untyped bytes 826,543 to 826,135, its unknown bytes 3,859 to 3,883
+  (the word after each of the six new types' records, which nothing reaches, as with the veritech's).
+  `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios not run.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

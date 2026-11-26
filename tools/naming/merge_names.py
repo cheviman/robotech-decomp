@@ -3,12 +3,16 @@
     py -3 tools/naming/merge_names.py WAVE review    writes names/WAVE/review.jsonl for the drafts that name something
     py -3 tools/naming/merge_names.py WAVE merge     puts the reviewed names into symbols.txt (OK as drafted,
                                                  BETTER with the reviewer's name, WRONG left out)
+    py -3 tools/naming/merge_names.py WAVE merge --unreviewed "read by WHO"
+                                                 the drafts no other model reviewed, taken as they are,
+                                                 with WHO in their section's heading
 A name given to two functions, or already another symbol's, is left out for the next wave.
 """
 import json, os, re, sys, collections
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 wave, what = sys.argv[1], sys.argv[2]
+unreviewed = sys.argv[4] if len(sys.argv) > 4 and sys.argv[3] == "--unreviewed" else None
 D = os.path.join(REPO, "build", "cr", "names", wave)
 SYM = os.path.join(REPO, "symbols", "symbols.txt")
 LINE = re.compile(r"^\s*`?(?:0x)?([0-9A-Fa-f]{8})\s+(\S+)\s+(.*?)`?\s*$")
@@ -56,7 +60,7 @@ for t, p in drafts():
         if nm == "skip":
             stats["skipped"] += 1
             continue
-        v = verdict.get(a)
+        v = verdict.get(a) or (("OK", "") if unreviewed else None)
         if not v:
             stats["not reviewed"] += 1
             continue
@@ -76,7 +80,8 @@ if not keep:
     sys.exit("nothing to merge: %s" % dict(stats))
 ren = {"sub_" + a: v[0] for a, v in keep.items()}
 sub = re.compile(r"\bsub_[0-9A-F]{8}\b")
-out = ["# ======== functions named from their decompiled C (%s; drafted by deepseek-v4.1-flash, reviewed by gpt-6-luna) ========" % wave]
+by = unreviewed + ", not reviewed by another model" if unreviewed else "drafted by deepseek-v4.1-flash, reviewed by gpt-6-luna"
+out = ["# ======== functions named from their decompiled C (%s; %s) ========" % (wave, by)]
 for a in sorted(keep, key=lambda x: int(x, 16)):
     nm, d = keep[a]
     d = sub.sub(lambda m: ren.get(m.group(0), m.group(0)), d).replace("_entry", "")

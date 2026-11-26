@@ -788,6 +788,7 @@ type  Entity         75  ZenHeavyMissile                   # its asset zen_heavy
 type  Entity         76  FPAMissile                        # its asset zen_light_missile: what FPAMissileLauncherWeapon fires
 type  Entity         77  PodOfficerSledMissile             # its asset zen_heavy_missile: what PodOfficerSledMissileLauncherWeapon fires
 type  Structure       0  Building                          # its asset building_explosion.wav
+type  Weapon          2  GU11SniperGunPodWeapon            # its sound gu11_long.wav: every veritech's GU-11 at its sniper shot (SniperHit; 500 damage, 12000 range)
 type  Weapon          4  FlareWeapon                       # it creates the Flare entities; the VF-1s'
 type  Weapon      5  RDFLightMissileLauncherWeapon     # it fires RDFLightMissile: a veritech's no player controls, and its packs'
 type  Weapon      6  RDFHeavyMissileLauncherWeapon     # it fires RDFHeavyMissile: a veritech's no player controls, and its super veritech pack's
@@ -807,12 +808,17 @@ type  Weapon         19  ZenWarriorScavengerPulseRifleWeapon  # its sound pulser
 type  Weapon         20  ZenWarriorNoArmourPulseRifleWeapon  # its sound pulserifle_m.wav: ZenWarriorNoArmour's
 type  Weapon         21  FighterPodGunWeapon               # its sound fighterpodgun.wav: FighterPod's
 type  Weapon         22  MalePowerArmorImpactCannonWeapon  # its sound impactcannon_m.wav: the male power armours'
+type  Weapon         23  FPAPairedTriBarrelLaserWeapon     # its sound tri-barrellaser_m.wav: two of it on a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons)
+type  Weapon         24  FPAPairedAutoCannonWeapon         # its sound autocannonloop_m.wav: two of it on a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons)
+type  Weapon         25  FPAAutoCannonWeapon               # its sound autocannonloop_m.wav: one on every other female power armour (FemalePowerArmorInitWeapons)
+type  Weapon         26  FPATriBarrelLaserWeapon           # its sound tri-barrellaser_m.wav: one on every other female power armour (FemalePowerArmorInitWeapons)
 type  Weapon         27  ExcaliburMachineGunWeapon         # its sound MachineGunLoop_M.wav: the Excaliburs'
 type  Weapon         28  GladiatorMachineGunWeapon         # its sound MachineGunLoop_M.wav: Gladiator's
 type  Weapon         29  MacIIArmWeapon                    # its sound MAC2_FireArmWeapon_M.wav: MacII's
 type  Weapon         30  RaiderXMachineGunWeapon           # its sound MachineGunBurst_M.wav: RaiderX's
 type  Weapon         31  PodOfficerArmCannonWeapon         # its sound OfficerPod_ArmCannon_M.wav: every Pod Officer's
 type  Weapon         33  MacIICannonWeapon                 # its sound MAC2_FireCannon_M.wav: MacII's
+type  Weapon         34  GU11FighterGunPodWeapon           # its sound gu11_long.wav: every veritech's GU-11 as a fighter, the only gun of VF1AXFighter and VF1SXFighter
 type  Weapon         35  MalePowerArmorPulseRifleWeapon    # its sound pulserifle_m.wav: the male power armours'
 type  Weapon         36  ZenCruiserTurretCannonWeapon      # its sound turret_cannon1.wav: ZenCruiserTurret's
 type  Weapon         37  ZenCruiserTurret1CannonWeapon     # its sound turret_cannon1.wav: ZenCruiserTurret1's
@@ -4298,10 +4304,6 @@ comment ZenReconShipCannonWeaponSpecGet Returns the address of the Zen recon shi
 comment ZenCruiserTurret1CannonWeaponSpecGet Returns the address of the Zen cruiser turret 1 cannon weapon spec.
 000CFEF0  func  ZenCruiserTurretCannonWeaponSpecGet
 comment ZenCruiserTurretCannonWeaponSpecGet Returns the address of the Zen cruiser turret cannon weapon spec.
-000D0100  func  WeaponFamilyInit
-comment WeaponFamilyInit Creates the weapon family vcObject through vcObjectGet, initializes the string at 0x2205A8 with ObjectCloneArrayCreate and registers GameObjectTypes 0x29, 0x35, 0x36 and 0x38 for type 4 with GameObjectTypeUse.
-000D01B0  func  WeaponFamilyClassInit
-comment WeaponFamilyClassInit Fills the WeaponFamily class descriptor with the method table at 0x220510 and the name pointer tables at 0x220574 and 0x220558.
 000D0AA0  func  WeaponFamilyGetTypeList
 comment WeaponFamilyGetTypeList returns the address of the weapon family's static list of type/name pointers at 0x2209B8.
 000D0AB0  func  WeaponFamilyTypeManagerCreate
@@ -6910,12 +6912,6 @@ comment GameObjectUpdateSceneObjectClones Resolves the object from the handle at
 comment GameObjectSceneObjectClonesHandleMessage Handles the scene object clone message given by arg2/arg3, calling SceneObjectClonesBuild, SceneObjectClonesClear, GameObjectAttachSceneObjects or vcObjectRelease, and on message 1/0xFFFD installs GameObjectUpdateSceneObjectClones as the object's update function.
 000CD6A0  func  SceneObjectTypeGetDescriptor
 comment SceneObjectTypeGetDescriptor Returns the address of the scene object type data at 0x21F2E0, which SceneObjectCreateFromType stores as the created object's type.
-000CD6B0  func  WeaponGameObjectTypeCreate
-comment WeaponGameObjectTypeCreate Creates the weapon's game object type: builds the clone array with ObjectCloneArrayCreate, gets an object with vcObjectGet, and registers GameObjectTypeUse for types 0x35, 0x36, 0x38 and 0x2E.
-000CD720  func  WeaponGameObjectTypeRelease
-comment WeaponGameObjectTypeRelease Releases the weapon's game object type with vcObjectRelease and VcObjectListRelease, and calls GameObjectTypeRelease for types 0x35, 0x36, 0x38 and 0x2E.
-000CD770  func  WeaponFamilyRegisterGameObjectType
-comment WeaponFamilyRegisterGameObjectType Fills the game object type descriptor at 0x21F298 (create WeaponGameObjectTypeCreate, release WeaponGameObjectTypeRelease) and the scene object type data at 0x21F2E0 with its string pointers, then stores the descriptor at arg0+0x78.
 000D1580  func  ScreenElementSetupSceneObject
 comment ScreenElementSetupSceneObject Copies five fields from ecx into the screen element, then looks up its cached vcObject by handle and sets render flags (0x40 or 0x80, 0x8000 or 0x10000, 0x4F01) and field 0x19C from ebx before calling SceneObjectRebuildBounds.
 000D1C20  func  GaugeUpdate
@@ -7974,12 +7970,6 @@ comment ScreenElementFamilyReceiveMessage Handles a ScreenElement message (arg2 
 comment GameObjectDrawBoundingBox Forwards the message with GameObjectSendMessageToChildren, then draws the object's bounding box with its color (read through vcClassByType) using LineVerticesDrawTransformed, BoundingBoxTransformByMatrix and IndexedLineListDrawTransformed, or the MatrixSetEulerAngles/4-vertex path when the +0x24 flag bit 8 is clear.
 000D06C0  func  WeaponFamilySecondTypeNameListGet
 comment WeaponFamilySecondTypeNameListGet Returns the address of the static name table that the second WeaponFamilyRegister type-manager setup fills; ScreenElementCreateSceneObject stores the returned pointer on the element it creates.
-000D06D0  func  WeaponFamilySecondTypeCreate
-comment WeaponFamilySecondTypeCreate Creates the object of the second weapon-family type with ObjectCloneArrayCreate over 8 entries, vcObjectGet for object 2 and GameObjectTypeUse on four GameObjectTypes; it is the create function that WeaponFamilyRegisterSecondTypeManager installs in that type manager.
-000D0730  func  WeaponFamilySecondTypeRelease
-comment WeaponFamilySecondTypeRelease Releases that object with vcObjectRelease, VcObjectListRelease of its clone array and GameObjectTypeRelease for the four GameObjectTypes; it is the release function that WeaponFamilyRegisterSecondTypeManager installs.
-000D0780  func  WeaponFamilyRegisterSecondTypeManager
-comment WeaponFamilyRegisterSecondTypeManager Fills the second weapon-family type manager (size 0x30, create WeaponFamilySecondTypeCreate, release WeaponFamilySecondTypeRelease) and its two name tables, and stores the manager pointer in the WeaponFamily object it is given.
 000D08B0  func  WeaponFamilyFirstTypeNameListGet
 comment WeaponFamilyFirstTypeNameListGet Returns the address of the static name table that the first WeaponFamilyRegister type-manager setup fills; ScreenElementCreateSceneObject stores the returned pointer on the element it creates.
 000D08C0  func  WeaponFamilyFirstTypeCreate
@@ -8312,16 +8302,6 @@ comment ObjectSendMessageToTargetHandles Resolves its handle argument with GameO
 comment GameObjectSendMessageAlternatingWeaponSlot Resolves the handle and its +4 object through GameObjectFromHandle, requires the object type mask 0x6000, builds the two muzzle offset vectors (-12,5,0) and (12,5,0) with MatrixRotateZ and Matrix3x3MultiplyVector using EntityGetBlendedValue, and for the incoming action index 1-5 sends message 6 via GameObjectSendMessageReserveMemory to the slot handle while cycling the +0x2A4 index modulo 2, probably the alternating left/right weapon fire.
 000CC0A0  func  GameObjectSendHardpointSlotMessage
 comment GameObjectSendHardpointSlotMessage Takes a handle whose type bits are 0x6000, gets the object and the object it references, blends a value with EntityGetBlendedValue, rotates the referenced object's matrix by its Z angle with MatrixRotateZ, builds two ±10 hardpoint offsets with Matrix3x3MultiplyVector, and sends message 6 through GameObjectSendMessageReserveMemory to one of the object's slot handles, alternating between two slots (probably a weapon/muzzle event).
-000D0350  func  WeaponFamilyFourthTypeManagerRelease
-comment WeaponFamilyFourthTypeManagerRelease Releases the weapon family's fourth type manager's objects: calls vcObjectRelease on the vcObject at 0x220684, VcObjectListRelease on the list at 0x220688, and GameObjectTypeRelease for GameObjectTypes 0x35, 0x36, 0x38 and 0x2E.
-000D03A0  func  WeaponFamilyRegisterFourthTypeManager
-comment WeaponFamilyRegisterFourthTypeManager Initializes the object type manager at 0x2205F0 (size 0x30 with its create 0xD02F0, release WeaponFamilyFourthTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x6C of the weapon family, then fills its object class-pointer tables.
-000D04E0  func  WeaponFamilyThirdTypeManagerCreate
-comment WeaponFamilyThirdTypeManagerCreate Creates the third type manager's objects by calling ObjectCloneArrayCreate for the 8-entry clone array at 0x220768 (200.0f, 1000.0f), vcObjectGet for vcObject 0x1A5938 into 0x220764, and GameObjectTypeUse for GameObjectTypes 0x34, 0x36, 0x38 and 0x27.
-000D0540  func  WeaponFamilyThirdTypeManagerRelease
-comment WeaponFamilyThirdTypeManagerRelease Releases the third type manager's objects: vcObjectRelease on the vcObject at 0x220764, VcObjectListRelease on the list at 0x220768, and GameObjectTypeRelease for GameObjectTypes 0x34, 0x36, 0x38 and 0x27.
-000D0590  func  WeaponFamilyRegisterThirdTypeManager
-comment WeaponFamilyRegisterThirdTypeManager Initializes the object type manager at 0x2206D0 (size 0x30 with its create WeaponFamilyThirdTypeManagerCreate, release WeaponFamilyThirdTypeManagerRelease and 0xD1900 callbacks) and stores it at offset 0x98 of the weapon family, then fills its object class-pointer tables.
 000D24F0  func  SoundStreamFadeUpdate
 comment SoundStreamFadeUpdate Advances a sound stream's fade against vcGameTime: ramps the volume at +0x38 up to 0x14A while the stream plays, calling SoundStreamQueryIsReadComplete and SoundIsPlayingQuery to start and end it, and ramps it back down to 0 when playback is off.
 000D4F40  func  SteeringFamilyFaceTargetOrDestroy
@@ -8434,6 +8414,28 @@ comment ObjectCacheSetValue Resolves the handle in arg0 through vcClassByType to
 comment ObjectCacheAddCollisionPlane Resolves the object handle in ebx through vcClassByType, transforms the box at 0x60 with BoxTransformPlanesInverse, classifies it with BoxClassifyAgainstPlanes (returning 0 when it is inside, otherwise taking the 0x60/0x7F classification), gets its corners with BoxGetCornersByDirection and appends a record with ArrayAppendSlot holding the classification, the plane distance and the value from VcObjectCacheResolve.
 0013AFD0  func  ObjectCacheResolve
 comment ObjectCacheResolve Resolves a vcObjectCacheHandle to the object it names, reusing vcObjectCacheData when the handle matches and otherwise indexing the table at vcClassByType(handle >> 16) + 0x6Cu by (handle & 0xFFFFu) * 0x4Cu, then writing the object pointer (data + 0x1F4) through arg1 and returning 3.
+
+# ======== functions named from their decompiled C (w5; read by Claude Opus 5.5, not reviewed by another model) ========
+000123F0  func  VectorLength
+comment VectorLength Returns the length of the three floats at arg0 (the square root of x*x + y*y + z*z), rounded to a float; GameObjectFollowLinkedObject, GameObjectFindNearestPathSegment and ObjectScreenQuadListDraw use it.
+000395F0  func  GameObjectSetPlacement
+comment GameObjectSetPlacement Places the object of handle arg0 and its children: GameObjectUpdateHierarchyTransforms with the rotation vector arg1 and the move from its position (+0x7C) to the one arg2 points at (none when arg2 is null), then message 0x2AF9 over them with GameObjectSendMessageRecursive.
+000396A0  func  GameObjectMoveTo
+comment GameObjectMoveTo Moves the object of handle arg0 and its children to the position arg1 points at: GameObjectUpdateHierarchyTransforms with no rotation and the move from its position (+0x7C), then message 0x2AF9 over them with GameObjectSendMessageRecursive.
+000A49A0  func  ScrolledTextElementHandleMessage
+comment ScrolledTextElementHandleMessage A screen element type's messages: on 0xFFF9 ScreenElementInitializeDefaults, on 0x2EE3 ScreenElementNotifyOwner, on 0x2EE4 GameObjectDeactivate; it draws (0x2EE2) with ScreenElementDrawScrolledText in state 0 and ScreenElementDrawText in state 1; 0xFFFD sets +0x50 (and +0x3C to 10 in state 0); 0xFFFA frees it with GameObjectFreeByHandle.
+000A5E80  func  EntityAIReactToEventSource
+comment EntityAIReactToEventSource For the AI arg0 of entity arg1, answers the object of handle arg2 that an event came from (EntityEventDispatch): checks it with GameObjectIsInViewCone when it is already the target (+0xBC or ObjectGetTargetHandle); otherwise, when sub_0002CBF0 accepts their +0x184, takes it as the target (GameObjectSetTargetHandle, or EntitySetTimedField for 300 to 449 when the current one is alive), waits 1 to 2 s (EntityDelayTimer) and goes to state 3 or 2 with SlotTableSetValue.
+000AAFD0  func  EntityAIApproachTarget
+comment EntityAIApproachTarget Unless bit 0 of +4 is set, takes the target of the AI arg0's object (ObjectGetTargetHandle), enters state 2 (ObjectStateEnterIfAllowed) and moves toward it with ObjectMoveTowardTargetIfBeyondTargetLimit, beyond a distance from the record at arg1+0xAC, or twice the float the type's record +0x30 points at, or a quarter of +0x28.
+000ACB60  func  NodeVcObjectHandleMessage
+comment NodeVcObjectHandleMessage A node type's messages: on 0xFFF9 NodeFamilyInitObject, on 0x2AF8 hands the message to its children (GameObjectSendMessageToChildren), on 0x2AFB answers its vcObject at +0xD4, on 0xFFFA GameObjectDetachAndDestroyChildren and vcObjectRelease of +0xD4.
+000D1900  func  WeaponSceneObjectHandleMessage
+comment WeaponSceneObjectHandleMessage The state machine six weapon types share, the four GU-11s (Weapon 0, 1, GU11SniperGunPodWeapon, GU11FighterGunPodWeapon) and FPAPairedTriBarrelLaserWeapon and FPAPairedAutoCannonWeapon: on 0xFFFF creates its scene object (ScreenElementCreateSceneObject), on 0xFFF9 sets it up (ScreenElementSetupSceneObject), on 0xFFFE releases the vcObject at +0x24, on 0x3E8 calls the function at +0x28 with the object and the message's two arguments.
+000D9F70  func  CiviliansNodeDrawOutlines
+comment CiviliansNodeDrawOutlines Hands the message to its children (GameObjectSendMessageToChildren), then draws two outlines with GameObjectDrawOrientedOutline: at the object of +0xD0 when there is one (colour 0xFF004080), otherwise at the first object of family 11 whose kind is 0x40000 (yellow, its direction swinging with the counter at 0x221864, which counts up when +0xC8 is 1).
+001156B0  func  Vector3Length
+comment Vector3Length Returns the square root of the three floats at arg0 dotted with themselves, the dot rounded to a float first; GridRegionDrawFaded uses it.
 
 # ======== the engine's classes (generated by tools/symbols.py merge from symbols/classes.json) ========
 00026D60  func  gcLevel_Create                      # gcLevel's slot +34
@@ -10564,6 +10566,18 @@ comment ExcaliburMachineGunWeapon_Startup The ExcaliburMachineGunWeapon type's f
 comment ExcaliburMachineGunWeapon_Shutdown The ExcaliburMachineGunWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
 000CD520  func  ExcaliburMachineGunWeapon_Register
 comment ExcaliburMachineGunWeapon_Register Registers the ExcaliburMachineGunWeapon type (Weapon 27), its sound MachineGunLoop_M.wav: the Excaliburs': fills its GameObjectType and stores it in its family.
+000CD6B0  func  FPATriBarrelLaserWeapon_Startup
+comment FPATriBarrelLaserWeapon_Startup The FPATriBarrelLaserWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CD720  func  FPATriBarrelLaserWeapon_Shutdown
+comment FPATriBarrelLaserWeapon_Shutdown The FPATriBarrelLaserWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CD770  func  FPATriBarrelLaserWeapon_Register
+comment FPATriBarrelLaserWeapon_Register Registers the FPATriBarrelLaserWeapon type (Weapon 26), its sound tri-barrellaser_m.wav: one on every other female power armour (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its family.
+000CD900  func  FPAAutoCannonWeapon_Startup
+comment FPAAutoCannonWeapon_Startup The FPAAutoCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000CD970  func  FPAAutoCannonWeapon_Shutdown
+comment FPAAutoCannonWeapon_Shutdown The FPAAutoCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000CD9C0  func  FPAAutoCannonWeapon_Register
+comment FPAAutoCannonWeapon_Register Registers the FPAAutoCannonWeapon type (Weapon 25), its sound autocannonloop_m.wav: one on every other female power armour (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its family.
 000CDB50  func  MalePowerArmorPulseRifleWeapon_Startup
 comment MalePowerArmorPulseRifleWeapon_Startup The MalePowerArmorPulseRifleWeapon type's first use (GameObjectTypeUse): gets what its objects share.
 000CDBC0  func  MalePowerArmorPulseRifleWeapon_Shutdown
@@ -10698,6 +10712,30 @@ comment ZenCruiserTurretCannonWeapon_Startup The ZenCruiserTurretCannonWeapon ty
 comment ZenCruiserTurretCannonWeapon_Shutdown The ZenCruiserTurretCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
 000CFFC0  func  ZenCruiserTurretCannonWeapon_Register
 comment ZenCruiserTurretCannonWeapon_Register Registers the ZenCruiserTurretCannonWeapon type (Weapon 36), its sound turret_cannon1.wav: ZenCruiserTurret's: fills its GameObjectType and stores it in its family.
+000D0100  func  FPAPairedAutoCannonWeapon_Startup
+comment FPAPairedAutoCannonWeapon_Startup The FPAPairedAutoCannonWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000D0160  func  FPAPairedAutoCannonWeapon_Shutdown
+comment FPAPairedAutoCannonWeapon_Shutdown The FPAPairedAutoCannonWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000D01B0  func  FPAPairedAutoCannonWeapon_Register
+comment FPAPairedAutoCannonWeapon_Register Registers the FPAPairedAutoCannonWeapon type (Weapon 24), its sound autocannonloop_m.wav: two of it on a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its family.
+000D02F0  func  FPAPairedTriBarrelLaserWeapon_Startup
+comment FPAPairedTriBarrelLaserWeapon_Startup The FPAPairedTriBarrelLaserWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000D0350  func  FPAPairedTriBarrelLaserWeapon_Shutdown
+comment FPAPairedTriBarrelLaserWeapon_Shutdown The FPAPairedTriBarrelLaserWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000D03A0  func  FPAPairedTriBarrelLaserWeapon_Register
+comment FPAPairedTriBarrelLaserWeapon_Register Registers the FPAPairedTriBarrelLaserWeapon type (Weapon 23), its sound tri-barrellaser_m.wav: two of it on a female power armour whose start flags are 0xC000 (FemalePowerArmorInitWeapons): fills its GameObjectType and stores it in its family.
+000D04E0  func  GU11FighterGunPodWeapon_Startup
+comment GU11FighterGunPodWeapon_Startup The GU11FighterGunPodWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000D0540  func  GU11FighterGunPodWeapon_Shutdown
+comment GU11FighterGunPodWeapon_Shutdown The GU11FighterGunPodWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000D0590  func  GU11FighterGunPodWeapon_Register
+comment GU11FighterGunPodWeapon_Register Registers the GU11FighterGunPodWeapon type (Weapon 34), its sound gu11_long.wav: every veritech's GU-11 as a fighter, the only gun of VF1AXFighter and VF1SXFighter: fills its GameObjectType and stores it in its family.
+000D06D0  func  GU11SniperGunPodWeapon_Startup
+comment GU11SniperGunPodWeapon_Startup The GU11SniperGunPodWeapon type's first use (GameObjectTypeUse): gets what its objects share.
+000D0730  func  GU11SniperGunPodWeapon_Shutdown
+comment GU11SniperGunPodWeapon_Shutdown The GU11SniperGunPodWeapon type's last release (GameObjectTypeRelease): lets go of what its objects share.
+000D0780  func  GU11SniperGunPodWeapon_Register
+comment GU11SniperGunPodWeapon_Register Registers the GU11SniperGunPodWeapon type (Weapon 2), its sound gu11_long.wav: every veritech's GU-11 at its sniper shot (SniperHit; 500 damage, 12000 range): fills its GameObjectType and stores it in its family.
 000D25C0  func  MessageBoxElement_Startup
 comment MessageBoxElement_Startup The MessageBoxElement type's first use (GameObjectTypeUse): gets what its objects share.
 000D2690  func  MessageBoxElement_Shutdown
@@ -11590,6 +11628,8 @@ comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine:
 0021EF80  var   MacIIArmWeaponType                   GameObjectType   # the MacIIArmWeapon type (Weapon 29): what its registering function fills in, and its pool
 0021F088  var   GladiatorMachineGunWeaponType        GameObjectType   # the GladiatorMachineGunWeapon type (Weapon 28): what its registering function fills in, and its pool
 0021F190  var   ExcaliburMachineGunWeaponType        GameObjectType   # the ExcaliburMachineGunWeapon type (Weapon 27): what its registering function fills in, and its pool
+0021F298  var   FPATriBarrelLaserWeaponType          GameObjectType   # the FPATriBarrelLaserWeapon type (Weapon 26): what its registering function fills in, and its pool
+0021F3A0  var   FPAAutoCannonWeaponType              GameObjectType   # the FPAAutoCannonWeapon type (Weapon 25): what its registering function fills in, and its pool
 0021F4A8  var   MalePowerArmorPulseRifleWeaponType   GameObjectType   # the MalePowerArmorPulseRifleWeapon type (Weapon 35): what its registering function fills in, and its pool
 0021F5B0  var   MalePowerArmorImpactCannonWeaponType GameObjectType   # the MalePowerArmorImpactCannonWeapon type (Weapon 22): what its registering function fills in, and its pool
 0021F6B8  var   FighterPodGunWeaponType              GameObjectType   # the FighterPodGunWeapon type (Weapon 21): what its registering function fills in, and its pool
@@ -11612,6 +11652,10 @@ comment ReconLightEffect_StateMachine The ReconLightEffect type's state machine:
 00220240  var   ZenReconShipCannonWeaponType         GameObjectType   # the ZenReconShipCannonWeapon type (Weapon 38): what its registering function fills in, and its pool
 00220330  var   ZenCruiserTurret1CannonWeaponType    GameObjectType   # the ZenCruiserTurret1CannonWeapon type (Weapon 37): what its registering function fills in, and its pool
 00220420  var   ZenCruiserTurretCannonWeaponType     GameObjectType   # the ZenCruiserTurretCannonWeapon type (Weapon 36): what its registering function fills in, and its pool
+00220510  var   FPAPairedAutoCannonWeaponType        GameObjectType   # the FPAPairedAutoCannonWeapon type (Weapon 24): what its registering function fills in, and its pool
+002205F0  var   FPAPairedTriBarrelLaserWeaponType    GameObjectType   # the FPAPairedTriBarrelLaserWeapon type (Weapon 23): what its registering function fills in, and its pool
+002206D0  var   GU11FighterGunPodWeaponType          GameObjectType   # the GU11FighterGunPodWeapon type (Weapon 34): what its registering function fills in, and its pool
+002207B0  var   GU11SniperGunPodWeaponType           GameObjectType   # the GU11SniperGunPodWeapon type (Weapon 2): what its registering function fills in, and its pool
 00220BD0  var   MessageBoxElementType                GameObjectType   # the MessageBoxElement type (ScreenElement 25): what its registering function fills in, and its pool
 00220CC8  var   TriggerFamily                        GameObjectFamily # the Trigger family: its types by number, and how it is used
 002210E8  var   ComponentFamily                      GameObjectFamily # the Component family: its types by number, and how it is used
