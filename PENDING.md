@@ -1803,21 +1803,30 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
     (its second parameter is `enabled`); `CinemaNodeInit`'s description says Reticle; `ReticleDrawElements`
     walks the CinemaNodes; the `Player...` functions that take an entity (`hud/notes.md`,
     `screens/notes.md`, `nodes/notes.md`, `entities_a/notes.md`).
-- **Before the next build** (26-11-2026: the last one was 19:35, f535473 plus the four first proposals).
-  Since then, in `symbols.txt` and unbuilt: functions with a name 5,369 to 5,687 (of the 300 `sub_` of
-  the decompiled C, 79 left), 546 renames, structures 64 to 283, fields 744 to 1,874, variables 2,067 to
-  4,169, `param` lines 55 to 4,308, the layout's rules (88 files, 11 new folders; game/unsorted 1,244 to
-  623). `tools/check_symbols.py` tells nothing. What the build has to prove, and where it can fail:
-  (1) the decompiler takes 219 new structures, 2,100 variables and 4,253 parameter names (a name that
-  clashes in the generated C or in `symbols.h`'s accessors is the likely failure; the analysis is worked
-  out again, some 10 minutes); (2) `tools/x86/emit.py` names a field or a variable only where the
-  access is as wide as its type (`GuestNames.field`, `place`) and writes `MEM<bits>` otherwise, so a
-  wrong type costs a name and does not change what the C does: `verify_c.py`'s 209 vectors and the nine
-  scenarios are still the proof; (3) `pipeline.py names`, not `hand`: the recompiled-only functions got
-  names; (4) every generated file moves (the new folders): a full compile; (5) after it,
-  `build/symbols.before_types.txt` goes. If it fails and the cause is not plain, each round's
-  `symbols.txt` is kept (`build/symbols.before_sessions2.txt`, `3`, `5`, `6`, `7`) to cut the search by
-  halves. Nothing is committed.
+- **The build of the day's rounds** (26-11-2026, 22:43 to 23:10, on 6009c1f). Everything of the day in
+  one build: the decompiler took the 219 new structures, 2,100 variables, 4,253 parameters and 546 renames
+  at once (4,374 functions written, the analysis worked out again in 19 minutes; `pipeline.py names`,
+  a full compile) and it linked at the first try. `tools/verify_c.py` 209 vectors, 0 different. The nine
+  scenarios every frame as the reference: eight in the run of all, Goodbye Graystone 4 of 30 dumps its
+  own way from frame 3120 in that run and its reference twice run alone after it, the race this file
+  already has (the game's thread and the sound mixer's: "Load brings it out", Besieged and Force of Arms
+  at frame 2880 on 05-11-2026): `verify_c.py`, `noise_report.py`, `coverage.py` and an agent ran beside
+  it. A third sighting: the scenarios are to run alone.
+  Measured against the build of 19:35: functions without a name in the decompiled C 300 to 79, without a
+  description 506 to 285; parameters named by their place 88,928 to 58,535; CPU registers as variables
+  211,971 to 202,880; reads at a raw address 7,463 to 1,312; data addresses written as numbers 5,721 to
+  727; the XBE's untyped bytes 622,609 to 314,190; the functions in no subject's file 204 to 124. Up:
+  memory at a named place no field names 2,185 to 3,869 (the new variables' records, whose words nobody
+  named: the next thing to name); flags as variables 1,402 to 1,405; the XBE's unknown bytes 4,191 to
+  17,443: 583 runs after a variable that ends where its type says, most of them zeros (two of 4,440
+  bytes at 0x21A024 and 0x21B42C, 720 at 0x24EC30, 632 at 0x21DFF8), which counted as referenced data
+  "up to the next known thing" before: each says a variable is longer than its line, or a neighbour has
+  none (`analysis/coverage.txt` lists them, largest first).
+  Next (Sebas): the 79 functions left without a name: 30 are pieces the disassembler cut off the
+  function before them (26 named after it, `build/sessions8/pieces/`; two are bytes of data read as
+  code, 0xA85C3 and 0xC1C85), 49 are functions (`build/sessions8/last/`, an agent). The mend at the
+  root, not done: the decompiler should not write what is no function (`symbols/coalesce.json`, which
+  the recompiler takes, is empty).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the
