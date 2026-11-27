@@ -4,7 +4,7 @@ unnamed 830
 placeholder 0
 uncommented 1903
 numbered_files 0
-unsorted 124
+unsorted 122
 registers 319971
 flags 199619
 fpu_stack 16614
@@ -15,9 +15,9 @@ gotos 14902
 stack_returns 2865
 indirect_calls 816
 decompiled_functions 4374
-decompiled_unnamed 79
-decompiled_uncommented 285
-decompiled_registers 202880
+decompiled_unnamed 30
+decompiled_uncommented 236
+decompiled_registers 202881
 decompiled_flags 1405
 decompiled_arguments 58535
 decompiled_slots 11942

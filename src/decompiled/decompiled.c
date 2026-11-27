@@ -772,7 +772,7 @@ uint32_t GameSessionRun(uint32_t ebx, uint32_t ebp, uint32_t edi)
 	vcPadOpenAll(&ignored, &edx);
 	MediaStreamDestroy(&ignored, &edx);
 	arg0 = esi;
-	sub_000269C0(arg0);
+	GameplayLevelSetOn(arg0);
 	MissionTime = vcGameTime;
 	ControllerItemsDisabledClear();
 	MusicStreamClose(&ignored, &edx);
@@ -884,7 +884,9 @@ uint32_t VectorScale(uint32_t out, uint32_t vector, uint32_t scale)
 	return eax;
 }
 
-void sub_000119E8(void)
+/* Not a function: the return of VectorScale, which the disassembler cut off as a function of its own: a
+   lone ret. Nothing calls it. */
+void VectorScaleReturn(void)
 {
 }
 
@@ -3122,7 +3124,9 @@ uint32_t LevelHasTwoPlayerStandIns(void)
 	return eax;
 }
 
-void sub_00017AD4(void)
+/* Not a function: the return of LevelHasTwoPlayerStandIns, which the disassembler cut off as a function
+   of its own: a lone ret. Nothing calls it. */
+void LevelHasTwoPlayerStandInsReturn(void)
 {
 }
 
@@ -3425,7 +3429,7 @@ void PlayerSetupUnit(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t *p_
 			if (x87_round(FLOAT_AT(edi + 0xCu) - f0_2) < FLOAT_AT(g_esp + 0x14u))
 				MEMF(edi + 0xCu) = (float)x87_round(f0_2 + FLOAT_AT(g_esp + 0x14u));
 		}
-		eax = sub_000269D0();
+		eax = GameplayLevelIsOn();
 		if (eax == 0u)
 		{
 			ecx = Players(ebx_2);
@@ -5375,12 +5379,16 @@ void ObjectPairIsVisibleByHandle(uint32_t handle_a, uint32_t object_a, uint32_t 
 	ObjectPairIsVisible(handle_a, object_a, handle_b, object_b, remaining_ms, p_eax, p_ebp);
 }
 
-uint32_t sub_0001974B(uint32_t eax)
+/* Not a function: the end of ObjectPairIsVisibleByHandle: it hands back what eax holds. Nothing calls
+   it. */
+uint32_t ObjectPairIsVisibleByHandleTail(uint32_t eax)
 {
 	return eax;
 }
 
-void sub_00019751(void)
+/* Not a function: the return of ObjectPairIsVisibleByHandle, which the disassembler cut off as a
+   function of its own: a lone ret. Nothing calls it. */
+void ObjectPairIsVisibleByHandleReturn(void)
 {
 }
 
@@ -5712,7 +5720,9 @@ void ControllerItemsDisabledSet(uint32_t disabled)
 	PlayerControlsOn = disabled;
 }
 
-void sub_00019A29(void)
+/* Not a function: the return of ControllerItemsDisabledSet, which the disassembler cut off as a function
+   of its own: a lone ret. Nothing calls it. */
+void ControllerItemsDisabledSetReturn(void)
 {
 }
 
@@ -6840,7 +6850,7 @@ void EntityTakeDamage(uint32_t handle, uint32_t entity, uint32_t damage, uint32_
 		MEM32(g_esp) = ecx;
 		arg0 = MEM32(g_esp);
 		arg1 = MEM32(g_esp + 4u);
-		edi_2 = sub_0009D230(ebx_2, ebp_2, esi_2, edi_2, arg0, arg1);
+		edi_2 = EntityNoticeDamageDealer(ebx_2, ebp_2, esi_2, edi_2, arg0, arg1);
 		esi_2 = MEM32(g_esp + 0x68u);
 		ebx_2 = MEM32(g_esp + 0x70u);
 		g_esp = g_esp + 8u;
@@ -9481,7 +9491,9 @@ uint32_t SlotPoolFindFirstUsedSlot(uint32_t row)
 	return eax;
 }
 
-void sub_0001CAB1(void)
+/* Not a function: the return of SlotPoolFindFirstUsedSlot, which the disassembler cut off as a function
+   of its own: a lone ret. Nothing calls it. */
+void SlotPoolFindFirstUsedSlotReturn(void)
 {
 }
 
@@ -9544,7 +9556,8 @@ void TimedEventCopy(uint32_t destination, uint32_t event)
 	}
 }
 
-void sub_0001CB42(uint32_t eax, uint32_t ecx)
+/* Not a function: the end of TimedEventCopy: the last two words copied (+0x10, +0x1C). Nothing calls it. */
+void TimedEventCopyTail(uint32_t eax, uint32_t ecx)
 {
 	MEM32(eax + 0x10u) = MEM32(ecx + 0x10u);
 	MEM32(eax + 0x1Cu) = MEM32(ecx + 0x1Cu);
@@ -9725,7 +9738,9 @@ uint32_t SlotPoolRowFindFreeSlot(uint32_t row)
 	return eax;
 }
 
-uint32_t sub_0001CDEE(void)
+/* Not a function: the end of SlotPoolRowFindFreeSlot where no slot is free: it hands back -1. Nothing
+   calls it. */
+uint32_t SlotPoolRowFindFreeSlotTail(void)
 {
 	uint32_t eax = 0;
 
@@ -11924,7 +11939,9 @@ void AICallResetBehaviour(uint32_t ai)
 	x86_icall(MEM32(esi + 0x288u), 0x0001EABBu, 0x0001EAC1u, 2, arg0, arg1);
 }
 
-uint32_t sub_0001EAAF(uint32_t eax)
+/* Not a function: the return of AICallResetBehaviour, which the disassembler cut off as a function of
+   its own: a lone ret. Nothing calls it. */
+uint32_t AICallResetBehaviourReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -14072,7 +14089,7 @@ uint32_t GameSessionShutdown(uint32_t edx, uint32_t ebx, uint32_t esi, uint32_t 
 	}
 	MediaStreamDestroy(&ignored, &edx);
 	arg0 = 0u;
-	sub_000269C0(arg0);
+	GameplayLevelSetOn(arg0);
 	action = 0xFFFFFFFEu;
 	level_handle = LevelInPlay;
 	LevelMusicPlayAction(level_handle, action, &ignored, &edx, &edi);
@@ -14110,7 +14127,7 @@ uint32_t GameFrameUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 		GameObjectsUpdate(&ignored, &ignored_2, &ignored_3, &ebx, &ebp, &esi, &edi);
 	else
 	{
-		eax = sub_000269D0();
+		eax = GameplayLevelIsOn();
 		if (eax == 0u)
 			GameObjectsUpdate(&ignored, &ignored_2, &ignored_3, &ebx, &ebp, &esi, &edi);
 		else
@@ -14162,7 +14179,7 @@ uint32_t GameFrameUpdate(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi)
 	x86_call(vcObjectReleaseQueued_entry, 0x0002000Cu, 0);
 	if (Players(0) != 0u)
 	{
-		eax = sub_000269D0();
+		eax = GameplayLevelIsOn();
 		if (eax != 0u)
 		{
 			g_esp = g_esp - 4u;
@@ -14935,7 +14952,7 @@ uint32_t GameRun(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 	GameRunResult = 0u;
 	GameRootScreen = esi;
 	OpeningCameraNode = 0u;
-	eax = sub_000269D0();
+	eax = GameplayLevelIsOn();
 	if (eax != 0u)
 		GameStart(&ebx, &ebp, &edi);
 	arg2 = 0x20120u;
@@ -14943,7 +14960,7 @@ uint32_t GameRun(uint32_t ebx, uint32_t ebp, uint32_t arg0)
 	arg0_2 = 0x1FF70u;
 	GameLoopExit = edi;
 	GameLoopRun(ebp, arg0_2, arg1, arg2, &ignored, &edx, &ebx, &esi, &edi);
-	eax = sub_000269D0();
+	eax = GameplayLevelIsOn();
 	if (eax != 0u)
 		edi = GameSessionShutdown(edx, ebx, esi, edi);
 	eax = GameRunResult;
@@ -18764,7 +18781,7 @@ void ConfirmDialogScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t 
 		MEM32(g_esp) = edx_2;
 		arg0_2 = MEM32(g_esp);
 		arg1_2 = MEM32(g_esp + 4u);
-		sub_000A5290(arg0_2, arg1_2);
+		ScrolledTextElementSetBackground(arg0_2, arg1_2);
 		eax_2 = MEM32(esi + 0x124u);
 		g_esp = g_esp + 0x10u;
 		if (eax_2 != GameObjectLastHandle)
@@ -19247,7 +19264,7 @@ void ConfirmDialogScreenSetTextAndExtras(uint32_t screen, uint32_t screen_handle
 	if (MEM32(edi + 0x150u) == 0u)
 	{
 		arg0 = MEM32(edi + 0x124u);
-		eax = sub_000A51F0(arg0);
+		eax = ScrolledTextElementIsChosen(arg0);
 		MEM32(edi + 0x150u) = eax;
 		return;
 	}
@@ -19286,7 +19303,7 @@ void ConfirmDialogScreenSetText(uint32_t screen, uint32_t time, uint32_t screen_
 	if (MEM32(edi + 0x150u) == 0u)
 	{
 		arg0 = MEM32(edi + 0x124u);
-		eax = sub_000A51F0(arg0);
+		eax = ScrolledTextElementIsChosen(arg0);
 		MEM32(edi + 0x150u) = eax;
 		return;
 	}
@@ -19318,7 +19335,7 @@ void ConfirmDialogScreenSetTextAndRefresh(uint32_t screen, uint32_t time, uint32
 	arg2 = saved_edi;
 	x86_call(ScreenElementSendDraw, 0x000237D0u, 3, arg0, screen_handle, arg2);
 	arg0 = MEM32(edi_2 + 0x124u);
-	eax = sub_000A51F0(arg0);
+	eax = ScrolledTextElementIsChosen(arg0);
 	MEM32(edi_2 + 0x150u) = eax;
 	if (eax != 0u)
 		ConfirmDialogScreenDrawText(edi_2);
@@ -20623,7 +20640,9 @@ uint32_t ScreenSetModalResult(uint32_t arg0, uint32_t arg1)
 	return eax;
 }
 
-void sub_000245AF(void)
+/* Not a function: the return of ScreenSetModalResult, which the disassembler cut off as a function of
+   its own: a lone ret. Nothing calls it. */
+void ScreenSetModalResultReturn(void)
 {
 }
 
@@ -24088,7 +24107,10 @@ void MissionFailedScreen_Register(uint32_t family)
 	MEM32(family + 0x7Cu) = MissionFailedScreenType_VA;
 }
 
-uint32_t sub_000269C0(uint32_t arg0)
+/* Stores its argument in GameplayLevelOn, the word that says a level is being played: GameMain starts a
+   session with it set, GameSessionRun and GameSessionShutdown clear it (every caller found but
+   GameMain's passes 0). */
+uint32_t GameplayLevelSetOn(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
@@ -24097,7 +24119,11 @@ uint32_t sub_000269C0(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000269D0(void)
+/* Returns GameplayLevelOn: whether a level is being played. GameRun starts a session only when it is
+   set; GameFrameUpdate runs the players and the AI only then; gcLevel_Load hides the OpeningCamera while
+   it is 0; the main menu shows its 3D background while it is 0; targeting skips the on-screen test when
+   it is set. */
+uint32_t GameplayLevelIsOn(void)
 {
 	uint32_t eax = 0;
 
@@ -26722,7 +26748,9 @@ uint32_t VersusResultGetScores(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint
 	return eax;
 }
 
-uint32_t sub_000284BE(uint32_t eax)
+/* Not a function: the return of VersusResultGetScores, which the disassembler cut off as a function of
+   its own: a lone ret. Nothing calls it. */
+uint32_t VersusResultGetScoresReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -28000,7 +28028,7 @@ void HUDScreen_CreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t 
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	arg0_2 = MEM32(g_esp);
-	sub_000A5350(arg0_2);
+	ScrolledTextSetOpeningAnimated(arg0_2);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x1Cu;
 	edx_2 = g_esp + 0x58u;
@@ -28053,7 +28081,7 @@ void HUDScreen_CreateWidgets(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t 
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	arg0_2 = MEM32(g_esp);
-	sub_000A5350(arg0_2);
+	ScrolledTextSetOpeningAnimated(arg0_2);
 	eax_2 = g_esp + 0x14u;
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = esi;
@@ -30919,7 +30947,7 @@ void EntityAcquireTarget(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t
 			*p_edi = edi_2;
 			return;
 		}
-		eax = sub_000269D0();
+		eax = GameplayLevelIsOn();
 		if (eax != 0u)
 		{
 			MEM32(g_esp + 0x54u) = 0xFFFFFFFFu;
@@ -31069,7 +31097,7 @@ void EntityAcquireTarget(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uint32_t
 						}
 						if (L_02B0A1)
 						{
-							eax = sub_000269D0();
+							eax = GameplayLevelIsOn();
 							L_02B161 = eax != 0u;
 							if (!L_02B161)
 							{
@@ -31397,7 +31425,7 @@ void AimTargetSelectNearest(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_
 				ebx_2 = GameObjectLastObject;
 			if (ebx_2 != ebp_2)
 			{
-				eax = sub_000269D0();
+				eax = GameplayLevelIsOn();
 				if (eax != 0u)
 				{
 					MEM32(g_esp + 0x14u) = 0xFFFFFFFFu;
@@ -31559,7 +31587,7 @@ void AimTargetSelectNearest(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_
 							g_esp = g_esp + 0x18u;
 							if (eax != 0u)
 							{
-								eax = sub_000269D0();
+								eax = GameplayLevelIsOn();
 								L_02B67D = eax != 0u;
 								if (!L_02B67D)
 								{
@@ -32072,7 +32100,7 @@ void PlayerUpdateLockOnTarget(uint32_t arg0, uint32_t arg1, uint32_t *p_eax, uin
 							esi_2 = GameObjectLastObject;
 						if (esi_2 != 0u)
 						{
-							eax = sub_000269D0();
+							eax = GameplayLevelIsOn();
 							if (eax != 0u)
 							{
 								MEM32(g_esp + 0x24u) = 0xFFFFFFFFu;
@@ -33186,7 +33214,10 @@ uint32_t IndexedEntrySetFromGameObject(uint32_t eax, uint32_t table, uint32_t en
 	return eax;
 }
 
-uint32_t sub_0002CCC0(uint32_t arg1)
+/* Zeroes an entity's controls: control_forward, control_sideways, control_jetpack, control_boost, turn
+   and the two words after it (+0x64, +0x68). EntityStartDeath calls it so that a dying entity stops
+   steering and thrusting. */
+uint32_t EntityClearControls(uint32_t arg1)
 {
 	uint32_t eax = 0, ecx = 0;
 
@@ -45404,7 +45435,7 @@ void MainMenuScreenSetup(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t ar
 		switch (jump_target)
 		{
 		case 0x035107u:
-			eax_2 = sub_000269D0();
+			eax_2 = GameplayLevelIsOn();
 			index = MainMenuVeritechSlot;
 			if (eax_2 == 0u)
 				selected = 1u;
@@ -45444,7 +45475,7 @@ void MainMenuScreenSetup(uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t ar
 		case 0x035165u:
 			visible = 1u;
 			GuiBkgdTextsSetFlag(visible);
-			eax_2 = sub_000269D0();
+			eax_2 = GameplayLevelIsOn();
 			index = MainMenuVeritechSlot;
 			if (eax_2 == 0u)
 				selected = 1u;
@@ -47243,7 +47274,10 @@ uint32_t GameObjectSendSetOrToggleState(uint32_t object_handle, uint32_t arg1, u
 	return eax;
 }
 
-uint32_t sub_00038370(uint32_t arg0)
+/* The state of the node of a handle (Node.state, +0xC8: 1 on, 2 off, 0 until set), 0 when there is no
+   node. SpawnActionApply, OrientSpawnActionSpawn and SpawnStateTriggerUpdate read the spawned node's
+   with it. */
+uint32_t NodeGetState(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -48730,7 +48764,9 @@ void NodeDestroySubtree(uint32_t node_handle, uint32_t *p_eax, uint32_t *p_edx)
 	MEM32(esi + 0xBCu) = edi;
 }
 
-void sub_0003920D(void)
+/* Not a function: the return of NodeDestroySubtree, which the disassembler cut off as a function of its
+   own: a lone ret. Nothing calls it. */
+void NodeDestroySubtreeReturn(void)
 {
 }
 
@@ -51892,7 +51928,9 @@ uint32_t PathNodeFormatMessage(uint32_t edx, uint32_t esi, uint32_t handle, uint
 	return edx;
 }
 
-void sub_0003B7FC(void)
+/* Not a function: the return of PathNodeFormatMessage, which the disassembler cut off as a function of
+   its own: a lone ret. Nothing calls it. */
+void PathNodeFormatMessageReturn(void)
 {
 }
 
@@ -52789,7 +52827,8 @@ uint32_t PathNode_StateMachine(uint32_t ebx, uint32_t ebp, uint32_t edi, uint32_
 	return eax;
 }
 
-uint32_t sub_0003C235(uint32_t eax)
+/* Not a function: the end of PathNode_StateMachine's switch: a return. Nothing calls it. */
+uint32_t PathNode_StateMachineTail(uint32_t eax)
 {
 	return eax;
 }
@@ -55524,7 +55563,7 @@ uint32_t PlayerSniperControls(uint32_t ebx, uint32_t arg0)
 			eax = GameIsPaused();
 			if (eax == 0u)
 			{
-				eax = sub_000269D0();
+				eax = GameplayLevelIsOn();
 				if (eax == 0u)
 				{
 					max_players = eax;
@@ -55607,7 +55646,7 @@ uint32_t Player_Load(uint32_t esi, uint32_t file, uint32_t arg1, uint32_t versio
 		x86_call(vcFileReadU32_entry, 0x0003E72Du, 2, arg0, arg1_2);
 		ignored_2 = g_edx;
 	}
-	eax = sub_000269D0();
+	eax = GameplayLevelIsOn();
 	if (eax != 0u)
 		MEM32(esi_2 + 0x4Cu) = MEM32(esi_2 + 0x4Cu) + 4u;
 	if ((int32_t)ebx > 2)
@@ -55686,7 +55725,9 @@ uint32_t Player_Shutdown(void)
 	return eax;
 }
 
-uint32_t sub_0003E868(uint32_t eax)
+/* Not a function: the return of Player_Shutdown, which the disassembler cut off as a function of its
+   own: a lone ret. Nothing calls it. */
+uint32_t Player_ShutdownReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -55712,7 +55753,7 @@ uint32_t PlayerGetStartingUnit(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	esi = saved_arg1;
 	MEM32(esi) = MEM32(eax + 0x3ECu);
 	MEM32(saved_arg2) = MEM32(eax + 0x3F0u);
-	eax = sub_000269D0();
+	eax = GameplayLevelIsOn();
 	if (eax == 0u)
 	{
 		eax = DemoPlaybackIsActive();
@@ -56510,7 +56551,7 @@ uint32_t PlayerControlsReadButtons(uint32_t eax, uint32_t ecx, uint32_t arg0)
 		eax = GameIsPaused();
 		if (eax == 0u)
 		{
-			eax = sub_000269D0();
+			eax = GameplayLevelIsOn();
 			if (eax == 0u && (uint32_t)MissionEndTimerOn == ebp)
 			{
 				max_players = ebp;
@@ -56798,7 +56839,7 @@ uint32_t PlayerRespawnUnit(uint32_t eax, uint32_t ebx, uint32_t ebp, uint32_t es
 			g_esp = g_esp + 0xCu;
 			if (eax_2 != 0xFFFFFFFFu)
 				MEM32(g_esp + 0x10u) = eax_2;
-			eax_2 = sub_000269D0();
+			eax_2 = GameplayLevelIsOn();
 			if (eax_2 != 0u)
 				MEM32(g_esp + 0x10u) = 0x1Cu;
 			else
@@ -67594,11 +67635,11 @@ void VeritechChoiceScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t
 	{
 		MEM32(g_esp + 0xCu) = MEM32(g_esp + 0x3Cu) - MEM32(g_esp + 0x34u);
 		MEMF(g_esp + 0xCu) = (float)x87_round((double)(int32_t)MEM32(g_esp + 0xCu) * 0.5);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		eax_2 = x87_ftol(x87_round(FLOAT_AT(g_esp + 0xCu) - x87_round(f0_2 * 0.5)));
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		f0_2 = sub_000ED890();
+		f0_2 = MenuArrowGetWidth();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0xFFFFFFFBu - x87_ftol(f0_2);
 		eax_2 = g_esp + 0x1Cu;
@@ -67637,7 +67678,7 @@ void VeritechChoiceScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t
 		x86_call(vcRectCopy_entry, 0x0004A4FAu, 0);
 		MEM32(g_esp + 0x14u) = MEM32(g_esp + 0x44u) - MEM32(g_esp + 0x3Cu);
 		MEMF(g_esp + 0x14u) = (float)x87_round((double)(int32_t)MEM32(g_esp + 0x14u) * 0.5);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		eax_2 = x87_ftol(x87_round(FLOAT_AT(g_esp + 0x14u) - x87_round(f0_2 * 0.5)));
 		edx_2 = MEM32(g_esp + 0x40u);
 		g_esp = g_esp - 4u;
@@ -67817,11 +67858,11 @@ void VeritechChoiceScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t
 	{
 		MEM32(g_esp + 0xCu) = MEM32(g_esp + 0x3Cu) - MEM32(g_esp + 0x34u);
 		MEMF(g_esp + 0xCu) = (float)x87_round((double)(int32_t)MEM32(g_esp + 0xCu) * 0.5);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		eax_2 = x87_ftol(x87_round(FLOAT_AT(g_esp + 0xCu) - x87_round(f0_2 * 0.5)));
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax_2;
-		f0_2 = sub_000ED890();
+		f0_2 = MenuArrowGetWidth();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0xFFFFFFFBu - x87_ftol(f0_2);
 		edx_2 = g_esp + 0x1Cu;
@@ -67860,7 +67901,7 @@ void VeritechChoiceScreenInit(uint32_t eax, uint32_t edx, uint32_t ebx, uint32_t
 		x86_call(vcRectCopy_entry, 0x0004A70Cu, 0);
 		MEM32(g_esp + 0x14u) = MEM32(g_esp + 0x44u) - MEM32(g_esp + 0x3Cu);
 		MEMF(g_esp + 0x14u) = (float)x87_round((double)(int32_t)MEM32(g_esp + 0x14u) * 0.5);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		eax_2 = x87_ftol(x87_round(FLOAT_AT(g_esp + 0x14u) - x87_round(f0_2 * 0.5)));
 		ecx = MEM32(g_esp + 0x40u);
 		g_esp = g_esp - 4u;
@@ -72849,7 +72890,9 @@ uint32_t EntityUpdateWalkerDustAndSplash(uint32_t ebx, uint32_t ebp, uint32_t ed
 	return eax;
 }
 
-uint32_t sub_0004ED67(uint32_t eax)
+/* Not a function: the return of EntityUpdateWalkerDustAndSplash, which the disassembler cut off as a
+   function of its own: a lone ret. Nothing calls it. */
+uint32_t EntityUpdateWalkerDustAndSplashReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -74678,7 +74721,9 @@ void MilitaryTransport_Register(uint32_t arg0)
 	EntitySpec_death_motions(MilitaryTransportSpec_VA) = MilitaryTransportDeathRecord_VA;
 }
 
-void sub_00052407(void)
+/* Not a function: the return of MilitaryTransport_Register, which the disassembler cut off as a function
+   of its own: a lone ret. Nothing calls it. */
+void MilitaryTransport_RegisterReturn(void)
 {
 }
 
@@ -82753,7 +82798,9 @@ void MissileAdvance(uint32_t arg0, uint32_t arg1, uint32_t thrust, uint32_t dire
 	*p_edi = edi_2;
 }
 
-void sub_0005A40C(void)
+/* Not a function: the return of MissileAdvance, which the disassembler cut off as a function of its own:
+   a lone ret. Nothing calls it. */
+void MissileAdvanceReturn(void)
 {
 }
 
@@ -112976,7 +113023,9 @@ void Flare_Register(uint32_t family)
 	MEM32(0x208CC8u) = 0x19E36Cu;
 }
 
-void sub_00083A68(void)
+/* Not a function: the second half of Flare_Register: the stores into the type's block from 0x208CBC on.
+   Nothing calls it. */
+void Flare_RegisterTail(void)
 {
 	MEM32(0x208CBCu) = 0x19E358u;
 	MEM32(0x208CC0u) = 0x19E364u;
@@ -125944,7 +125993,8 @@ uint32_t ZenCruiserTurret_StateMachine(uint32_t esi, uint32_t arg0, uint32_t arg
 	return eax;
 }
 
-uint32_t sub_00090FB0(uint32_t eax)
+/* Not a function: the end of ZenCruiserTurret_StateMachine's switch: a return. Nothing calls it. */
+uint32_t ZenCruiserTurret_StateMachineTail(uint32_t eax)
 {
 	return eax;
 }
@@ -126585,7 +126635,11 @@ uint32_t SeaSergeantResetState(uint32_t entity, uint32_t edi, uint32_t entry)
 	return eax;
 }
 
-uint32_t sub_00091BF0(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi, uint32_t arg0)
+/* The Sea Sergeant's answer to the mode request (message 0x3ED) in state 1, the twin of
+   ZenShuttleEnterMode: when the request's word is 0 it forwards 0x3ED (0) to the object at +0x270,
+   changes the flags of its scene object (+0x194) and goes to state 3 (entry +0xE) setting flag bit 1 of
+   the entry. */
+uint32_t SeaSergeantEnterMode(uint32_t eax, uint32_t ecx, uint32_t esi, uint32_t edi, uint32_t arg0)
 {
 	uint32_t eax_2 = 0, ecx_2 = 0, edx = 0;
 
@@ -127876,7 +127930,7 @@ uint32_t SeaSergeant_StateMachine(uint32_t ebp, uint32_t arg0, uint32_t arg1, ui
 			arg0_2 = edi;
 			edi = arg1;
 			esi = ebx;
-			sub_00091BF0(eax, ecx, esi, edi, arg0_2);
+			SeaSergeantEnterMode(eax, ecx, esi, edi, arg0_2);
 			eax = 1u;
 			return eax;
 		}
@@ -128922,7 +128976,9 @@ uint32_t PodStandardWarriorSpace_Shutdown(void)
 	return eax;
 }
 
-uint32_t sub_00094000(uint32_t eax)
+/* Not a function: the return of PodStandardWarriorSpace_Shutdown, which the disassembler cut off as a
+   function of its own: a lone ret. Nothing calls it. */
+uint32_t PodStandardWarriorSpace_ShutdownReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -136531,7 +136587,9 @@ uint32_t GameObjectHandleGetSide(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_0009C9D0(uint32_t eax)
+/* Not a function: the return of GameObjectHandleGetSide, which the disassembler cut off as a function of
+   its own: a lone ret. Nothing calls it. */
+uint32_t GameObjectHandleGetSideReturn(uint32_t eax)
 {
 	return eax;
 }
@@ -137179,7 +137237,9 @@ uint32_t EntryPoolClearEntry(uint32_t pool_entry)
 	return eax;
 }
 
-void sub_0009D0F4(uint32_t eax, uint32_t ecx)
+/* Not a function: the end of EntryPoolClearEntry: the same word stored at +4, +8 and +0xC. Nothing calls
+   it. */
+void EntryPoolClearEntryTail(uint32_t eax, uint32_t ecx)
 {
 	MEM32(eax + 4u) = ecx;
 	MEM32(eax + 8u) = ecx;
@@ -137303,7 +137363,11 @@ uint32_t TimedEventSendNow(uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t
 	return eax;
 }
 
-uint32_t sub_0009D230(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
+/* An entity that was hit and lives (EntityTakeDamage calls it when it does not die): delivers to it at
+   once (TimedEventDeliverNow) an AI event of kind 4, an object that made itself noticed, with the damage
+   message's second word (who dealt it) as the object, so AIOnEvent makes its AI engage the one that hit
+   it (EntityEngageTarget). Nothing when the handle is dead or the object is gone. */
+uint32_t EntityNoticeDamageDealer(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, arg2 = 0, arg3 = 0, arg4 = 0, arg5 = 0, arg6 = 0, eax = 0, ebp_2 = 0, ebx_2 = 0, ecx = 0, edi_2 = 0, edx = 0, esi_2 = 0, event = 0, handle = 0, ignored = 0, ignored_2 = 0, row = 0;
 	uint32_t t1 = 0;
@@ -142931,7 +142995,8 @@ uint32_t OnWeaponHitTrigger_StateMachine(uint32_t entry, uint32_t object, uint32
 	return eax;
 }
 
-uint32_t sub_000A0E60(uint32_t eax)
+/* Not a function: the end of OnWeaponHitTrigger_StateMachine's switch: a return. Nothing calls it. */
+uint32_t OnWeaponHitTrigger_StateMachineTail(uint32_t eax)
 {
 	return eax;
 }
@@ -144717,7 +144782,7 @@ void LevelSelectScreenUpdateElements(uint32_t eax, uint32_t ebx, uint32_t esi, u
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(esi_2 + 0x130u);
 		arg0 = MEM32(g_esp);
-		eax_2 = sub_000A51F0(arg0);
+		eax_2 = ScrolledTextElementIsChosen(arg0);
 		g_esp = g_esp + 4u;
 		if (eax_2 != 0u)
 		{
@@ -148038,7 +148103,7 @@ void ScrolledTextElementStart(uint32_t eax, uint32_t esi, uint32_t edi, uint32_t
 	MEM32(esi + 0x4Cu) = 1u;
 	MEM32(esi + 0x54u) = 0u;
 	MEM32(esi + 0x50u) = 0u;
-	if (MEM32(ebp + 0x18u) == 1u || (uint32_t)ScrolledTextOpenAtOnce == eax_2)
+	if (MEM32(ebp + 0x18u) == 1u || (uint32_t)ScrolledTextOpeningAnimated == eax_2)
 	{
 		MEM32(esi + 0x3Cu) = MEM32(esi + 0x10u) - MEM32(esi + 8u);
 		eax_2 = MEM32(edi + 0x10u) | ebx;
@@ -149092,7 +149157,10 @@ void GameObjectSetRectWidth(uint32_t object_handle, uint32_t width)
 	MEM32(esi + 0xCu) = x87_ftol(x87_float(width)) + MEM32(esi + 4u);
 }
 
-uint32_t sub_000A51F0(uint32_t arg0)
+/* Returns the chosen word (+0x50) of the ScrolledTextElement of a handle: the backdrop or text element
+   the screens keep (MenuListScreen's +0x360, the confirm dialog's and the controller screen's text, the
+   level select's) is asked before it is drawn on. */
+uint32_t ScrolledTextElementIsChosen(uint32_t arg0)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 
@@ -149138,7 +149206,11 @@ uint32_t GameObjectMoveRect(uint32_t object_handle, uint32_t point)
 	return eax;
 }
 
-void sub_000A5290(uint32_t arg0, uint32_t arg1)
+/* Sets the background word (+0x54) of the ScrolledTextElement of a handle: 1 makes it draw the
+   whole-screen sprite behind its box. ConfirmDialogScreenInit and ObjectivesScreenBuildElements set it
+   to 1 on their box; ScreenSetMenu and ControllerScreenSetBackdropShown pass the pause menu's choice on
+   to the list's backdrop and the controller screen's text. */
+void ScrolledTextElementSetBackground(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -149220,12 +149292,16 @@ void PauseScreenDrawQuad(void)
 	QuadDrawClipped(arg0, arg1, arg2, &ignored, &ignored_2, &ignored_3);
 }
 
-uint32_t sub_000A5350(uint32_t arg0)
+/* Stores its argument in ScrolledTextOpeningAnimated, which ScrolledTextElementStart reads: 0 makes the
+   boxes made from now open at once, 1 makes them scroll open (and play the open sound).
+   HUDScreen_CreateWidgets and MissionLogScreenStart call it with 0 before they make their boxes and with
+   1 after. */
+uint32_t ScrolledTextSetOpeningAnimated(uint32_t arg0)
 {
 	uint32_t eax = 0;
 
 	eax = arg0;
-	ScrolledTextOpenAtOnce = eax;
+	ScrolledTextOpeningAnimated = eax;
 	return eax;
 }
 
@@ -149287,7 +149363,7 @@ void MissionLogScreenStart(uint32_t start, uint32_t edx, uint32_t screen_handle,
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0u;
 	arg0 = MEM32(g_esp);
-	sub_000A5350(arg0);
+	ScrolledTextSetOpeningAnimated(arg0);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 0x24u;
 	ecx = g_esp + 0x4Cu;
@@ -149372,7 +149448,7 @@ void MissionLogScreenStart(uint32_t start, uint32_t edx, uint32_t screen_handle,
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = 1u;
 	arg0 = MEM32(g_esp);
-	sub_000A5350(arg0);
+	ScrolledTextSetOpeningAnimated(arg0);
 	g_esp = g_esp + 0x3Cu;
 }
 
@@ -150307,7 +150383,9 @@ void CallbackTableInit(void)
 	CallbackTableRowCount = 2u;
 }
 
-void sub_000A6048(void)
+/* Not a function: the return of CallbackTableInit, which the disassembler cut off as a function of its
+   own: a lone ret. Nothing calls it. */
+void CallbackTableInitReturn(void)
 {
 }
 
@@ -158766,7 +158844,10 @@ uint32_t AIActionReturnToOrigin(uint32_t eax, uint32_t ebp, uint32_t ai, uint32_
 	return eax;
 }
 
-uint32_t sub_000AB2B0(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x1E (table slot 0x1B1C30), which no rule of aidata.spt uses: the Go actions'
+   way into the behaviour state 11, one no behaviour of the file has (AIGetStateCategory puts it with
+   Idle, Return and Pause): AIRequestState(ai, 11) and AIRestartTimers. Does nothing without an AI. */
+uint32_t AIActionGoState11(uint32_t eax, uint32_t arg0)
 {
 	uint32_t ai = 0, esi = 0, next_state = 0;
 
@@ -159690,7 +159771,11 @@ uint32_t AIActionGoReturn(uint32_t eax, uint32_t ai)
 	return eax;
 }
 
-uint32_t sub_000ABCE0(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x13 (table slot 0x1B1C04), which no rule of aidata.spt uses:
+   AIRequestState(ai, 4), AIRestartTimers, then clears bit 0 of state_flags (the bit that keeps GoPursue,
+   GoSearch and GoReturn from running). State 4 is one no behaviour of the file has (AIGetStateCategory
+   puts it in 3). */
+uint32_t AIActionGoState4(uint32_t eax, uint32_t arg0)
 {
 	uint32_t ai = 0, esi = 0, next_state = 0;
 
@@ -159708,7 +159793,10 @@ uint32_t sub_000ABCE0(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABD10(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x14 (table slot 0x1B1C08), which no rule of aidata.spt uses: the Go actions'
+   way into the behaviour state 5, one no behaviour of the file has (category 3): AIRequestState(ai, 5)
+   and AIRestartTimers. */
+uint32_t AIActionGoState5(uint32_t eax, uint32_t arg0)
 {
 	uint32_t ai = 0, esi = 0, next_state = 0;
 
@@ -159724,7 +159812,10 @@ uint32_t sub_000ABD10(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABD30(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x15 (table slot 0x1B1C0C), which no rule of aidata.spt uses: the Go actions'
+   way into the behaviour state 10, one no behaviour of the file has (category 1, with Idle, Return and
+   Pause): AIRequestState(ai, 10) and AIRestartTimers. */
+uint32_t AIActionGoState10(uint32_t eax, uint32_t arg0)
 {
 	uint32_t ai = 0, esi = 0, next_state = 0;
 
@@ -159740,7 +159831,10 @@ uint32_t sub_000ABD30(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABD50(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x16 (table slot 0x1B1C10), which no rule of aidata.spt uses: the Go actions'
+   way into the behaviour state 12, one no behaviour of the file has (category 3): AIRequestState(ai, 12)
+   and AIRestartTimers. */
+uint32_t AIActionGoState12(uint32_t eax, uint32_t arg0)
 {
 	uint32_t ai = 0, esi = 0, next_state = 0;
 
@@ -159756,7 +159850,10 @@ uint32_t sub_000ABD50(uint32_t eax, uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000ABD70(uint32_t eax, uint32_t arg0)
+/* The AI script's action 0x17 (table slot 0x1B1C14), which no rule of aidata.spt uses: starts activity
+   6, the one AIActionFollowMovementPattern starts, and when it is taken steps path_node by one if the AI
+   holds a path (+0xC8), then AIRestartTimers. */
+uint32_t AIActionStartMovementPatternNextNode(uint32_t eax, uint32_t arg0)
 {
 	uint32_t activity = 0, ai = 0, esi = 0;
 
@@ -164320,7 +164417,7 @@ void VersusSetupScreenDraw(uint32_t ebx, uint32_t esi, uint32_t edi)
 	if (MEM32(esi + 0x124u) == 0u)
 	{
 		arg0 = MEM32(esi + 0x128u);
-		eax = sub_000A51F0(arg0);
+		eax = ScrolledTextElementIsChosen(arg0);
 		MEM32(esi + 0x124u) = eax;
 	}
 	arg1 = edi;
@@ -179333,7 +179430,7 @@ void ControllerScreenCreateTextLabel(uint32_t ebx, uint32_t screen, uint32_t scr
 	if (MEM32(screen + 0x124u) == 0u)
 	{
 		arg0 = MEM32(screen + 0x128u);
-		eax = sub_000A51F0(arg0);
+		eax = ScrolledTextElementIsChosen(arg0);
 		MEM32(screen + 0x124u) = eax;
 	}
 	arg1 = screen_handle;
@@ -179464,11 +179561,11 @@ void ControllerScreenSetBackdropShown(uint32_t arg0, uint32_t arg1)
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
 		arg0_2 = MEM32(eax + 0x128u);
 		arg1_2 = saved_arg1;
-		sub_000A5290(arg0_2, arg1_2);
+		ScrolledTextElementSetBackground(arg0_2, arg1_2);
 		return;
 	}
 	arg0_2 = MEM32(GameObjectLastObject + 0x128u);
-	sub_000A5290(arg0_2, arg1);
+	ScrolledTextElementSetBackground(arg0_2, arg1);
 }
 
 /* Calls SavedGamesGetDeviceStatus(0) and, when it returns 1, calls ConfirmDialogScreenGetOpenHandle and
@@ -180867,7 +180964,11 @@ uint32_t LoadGameScreenIsCancelled(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_000BCCE0(void)
+/* The after-present function SaveGameScreenReadPad sets (GameFrameSetAfterPresentCallback) while its
+   message for a device with too little room (status 3) is shown: runs SavedGamesTaskUpdate each frame
+   and, once the status of the screen's device (SaveGameScreenDevice) is no longer 3, gives the open
+   confirm dialog its answer (ScreenSetModalResult) so the message goes away. */
+uint32_t SaveGameScreenNoRoomMessageAfterPresent(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, device_index = 0, eax = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -180886,7 +180987,11 @@ uint32_t sub_000BCCE0(void)
 	return eax;
 }
 
-uint32_t sub_000BCD10(void)
+/* The after-present function SaveGameScreenReadPad and SaveGameScreenSave set while their No Memory Unit
+   message (0x4D3, the device status 1) is shown: runs SavedGamesTaskUpdate each frame and, when
+   SavedGamesEventSeen is 0, gives the open confirm dialog its answer (ScreenSetModalResult). That flag
+   is 1 from the start and set to 1 by every storage event, so as built the message waits for the player. */
+uint32_t SaveGameScreenNoMemoryUnitMessageAfterPresent(void)
 {
 	uint32_t arg0 = 0, arg1 = 0, eax = 0, ignored = 0;
 	uint32_t stack = 0;
@@ -183340,10 +183445,10 @@ void MenuListScreenInitLayout(uint32_t start, uint32_t edx, uint32_t ebx, uint32
 			g_esp = g_esp + 8u;
 		}
 	}
-	f0 = sub_000ED880();
+	f0 = MenuArrowGetHeight();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = x87_ftol(f0);
-	f0 = sub_000ED890();
+	f0 = MenuArrowGetWidth();
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = x87_ftol(f0);
 	g_esp = g_esp - 4u;
@@ -183405,7 +183510,7 @@ void MenuListScreenInitLayout(uint32_t start, uint32_t edx, uint32_t ebx, uint32
 	}
 	MEM32(g_esp + 0xCu) = MEM32(esi + 0x134u) - 0x10u;
 	MEMF(g_esp + 0xCu) = (float)(double)(int32_t)MEM32(g_esp + 0xCu);
-	f0 = sub_000ED880();
+	f0 = MenuArrowGetHeight();
 	eax = x87_ftol(x87_round(FLOAT_AT(g_esp + 0xCu) - f0));
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
@@ -183468,7 +183573,7 @@ void MenuListScreenInitLayout(uint32_t start, uint32_t edx, uint32_t ebx, uint32
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = eax;
 	x86_call(vcRectSet_entry, 0x000BF212u, 0);
-	f0 = sub_000ED880();
+	f0 = MenuArrowGetHeight();
 	eax = MEM32(esi + 0x128u);
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = x87_ftol(f0) + MEM32(esi + 0x12Cu) + 0x10u;
@@ -183783,7 +183888,7 @@ void MenuListScreenSetBounds(uint32_t list, uint32_t position, uint32_t place, u
 		object_handle = MEM32(g_esp);
 		point = MEM32(g_esp + 4u);
 		GameObjectMoveRect(object_handle, point);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = x87_ftol(f0_2) + ebp_2;
 		g_esp = g_esp - 4u;
@@ -183828,7 +183933,7 @@ void MenuListScreenSetBounds(uint32_t list, uint32_t position, uint32_t place, u
 			MEM32(g_esp + 0x40u) = ecx + 4u;
 			MEM32(g_esp + 0x44u) = t1 - 1u;
 		} while (t1 != 1u);
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = 0u - x87_ftol(f0_2);
 		g_esp = g_esp - 4u;
@@ -183838,10 +183943,10 @@ void MenuListScreenSetBounds(uint32_t list, uint32_t position, uint32_t place, u
 		MEM32(g_esp) = edi_2;
 		x86_call(vcRectOffset_entry, 0x000BF60Eu, 0);
 		g_esp = g_esp + 0xCu;
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = x87_ftol(f0_2);
-		f0_2 = sub_000ED890();
+		f0_2 = MenuArrowGetWidth();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = x87_ftol(f0_2);
 		g_esp = g_esp - 4u;
@@ -183884,11 +183989,11 @@ void MenuListScreenSetBounds(uint32_t list, uint32_t position, uint32_t place, u
 		f0 = (double)(int32_t)MEM32(g_esp + 0x48u);
 		g_esp = g_esp + 8u;
 		MEMF(g_esp + 0x40u) = (float)f0;
-		f0_2 = sub_000ED880();
+		f0_2 = MenuArrowGetHeight();
 		eax = x87_ftol(x87_round(FLOAT_AT(g_esp + 0x40u) - f0_2));
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = eax;
-		f0_2 = sub_000ED890();
+		f0_2 = MenuArrowGetWidth();
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = x87_ftol(-f0_2);
 		eax = g_esp + 0x28u;
@@ -184274,11 +184379,11 @@ void ScreenSetMenu(uint32_t list, uint32_t arg1)
 		GameObjectFromHandle(handle, &eax, &ignored, &ignored_2);
 		arg0 = MEM32(eax + 0x360u);
 		arg1_2 = saved_arg1;
-		sub_000A5290(arg0, arg1_2);
+		ScrolledTextElementSetBackground(arg0, arg1_2);
 		return;
 	}
 	arg0 = MEM32(GameObjectLastObject + 0x360u);
-	sub_000A5290(arg0, arg1);
+	ScrolledTextElementSetBackground(arg0, arg1);
 }
 
 /* resolves list through GameObjectFromHandle and copies count dwords of the array icons into the
@@ -184401,7 +184506,7 @@ uint32_t MenuListRowSpacing(uint32_t arg0, uint32_t arg1, uint32_t arg2)
 	stack = stack - 0x20u;
 	stack_1FFFFC = float_to_bits((float)(double)(int32_t)stack_1FFFFC);
 	stack = float_to_bits((float)(double)(int32_t)stack);
-	f0 = sub_000ED880();
+	f0 = MenuArrowGetHeight();
 	eax = x87_ftol(x87_round(x87_round(x87_round(x87_float(stack) - x87_round(f0 + f0)) - x87_round(x87_round((double)(int32_t)saved_arg2 * 0.75) * x87_float(stack_1FFFFC))) / x87_float(stack_1FFFFC)));
 	return eax;
 }
@@ -184504,7 +184609,7 @@ void MenuListScreenDraw(uint32_t ebx, uint32_t list, uint32_t list_handle)
 	if (MEM32(list + 0x3B4u) == 0u)
 	{
 		arg0 = MEM32(list + 0x360u);
-		eax = sub_000A51F0(arg0);
+		eax = ScrolledTextElementIsChosen(arg0);
 		if (eax != 0u)
 		{
 			arg1 = list;
@@ -185707,7 +185812,7 @@ void TextEntryScreenDraw(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi,
 		g_esp = g_esp - 4u;
 		MEM32(g_esp) = MEM32(edi_2 + 0x258u);
 		arg0_2 = MEM32(g_esp);
-		eax = sub_000A51F0(arg0_2);
+		eax = ScrolledTextElementIsChosen(arg0_2);
 		g_esp = g_esp + 4u;
 		if (eax != 0u)
 		{
@@ -188152,7 +188257,7 @@ void ObjectivesScreenBuildElements(uint32_t start, uint32_t edx, uint32_t ebx, u
 		MEM32(g_esp) = esi_2;
 		arg0_2 = MEM32(g_esp);
 		arg1 = MEM32(g_esp + 4u);
-		sub_000A5290(arg0_2, arg1);
+		ScrolledTextElementSetBackground(arg0_2, arg1);
 		g_esp = g_esp + 0x18u;
 	}
 	esi_2 = ebx + 0x124u;
@@ -198143,7 +198248,10 @@ uint32_t GameObjectDestroyReferencedObjects(uint32_t object_handle)
 	return eax;
 }
 
-uint32_t sub_000CB250(uint32_t arg0, uint32_t arg1)
+/* Gives the two thrust effects an armour pack weapon holds (+0x20 and +0x24) the boost
+   ThrustEffectSetBoost takes; VeritechUpdate calls it for the pack the veritech wears
+   (Veritech.pack_weapon, +0x2A4) with the same value it gives its own two thrusts. */
+uint32_t ArmourPackWeaponSetThrustBoost(uint32_t arg0, uint32_t arg1)
 {
 	uint32_t arg0_2 = 0, arg1_2 = 0, eax = 0, edi = 0, esi = 0, handle = 0, ignored = 0, ignored_2 = 0;
 	uint32_t saved_arg1 = 0;
@@ -227175,7 +227283,7 @@ void SpawnActionApply(uint32_t ebp, uint32_t action)
 	ebx = eax;
 	MEM32(ebx + 0x3CCu) = 1u;
 	arg0 = MEM32(action + 0x48u);
-	eax = sub_00038370(arg0);
+	eax = NodeGetState(arg0);
 	edi = eax;
 	if (edi != 0u)
 	{
@@ -230449,7 +230557,7 @@ void OrientSpawnActionSpawn(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t e
 	g_esp = g_esp - 4u;
 	MEM32(g_esp) = MEM32(edi + 0x48u);
 	arg0 = MEM32(g_esp);
-	eax = sub_00038370(arg0);
+	eax = NodeGetState(arg0);
 	esi_2 = eax;
 	g_esp = g_esp + 0x10u;
 	if (esi_2 != 0u)
@@ -244048,7 +244156,11 @@ void MenuArrowElement_Register(uint32_t family)
 	MEM32(family + 0x1Cu) = MenuArrowElementType_VA;
 }
 
-double sub_000ED880(void)
+/* The height of the menus' arrow picture, the float at 0x2244CC: the +0xC of MenuArrowDirection0Sprite,
+   which MenuArrowElement_Startup fills from the 0xB5,0x54..0xBF,0x60 rectangle of GUI_main_menu (12.0).
+   The lists add it to their arrows' and rows' places (MenuListScreenSetBounds, MenuListScreenInitLayout,
+   MenuListRowSpacing). */
+double MenuArrowGetHeight(void)
 {
 	double f0 = 0;
 
@@ -244056,7 +244168,10 @@ double sub_000ED880(void)
 	return f0;
 }
 
-double sub_000ED890(void)
+/* The width of the menus' arrow picture, the float at 0x2244C8: the +8 of MenuArrowDirection0Sprite,
+   which MenuArrowElement_Startup fills from the 0xB5,0x54..0xBF,0x60 rectangle of GUI_main_menu (10.0).
+   The lists size their arrow rectangles with it. */
+double MenuArrowGetWidth(void)
 {
 	double f0 = 0;
 
@@ -247296,7 +247411,12 @@ uint32_t AngularVelocityIntegrateOrientation(uint32_t eax, uint32_t ebx, uint32_
 	return eax_2;
 }
 
-uint32_t sub_000F02C0(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
+/* The scene collision of EntityMoveFlying, after the movement is integrated: sweeps the entity's sphere
+   along the velocity it was given times 0.033 through the scene's hit tree (SceneHitTreeRayIntersect, up
+   to four hits), reacts to every scene object hit that has not flag 0x20
+   (SceneObjectReactToNearbyPlayer, SceneObjectSendUserMessage), writes the place it ends at to its
+   fourth argument and works the velocity out again from what the entity really moved. */
+uint32_t EntityFlyingCollideWithScene(uint32_t ebx, uint32_t ebp, uint32_t esi, uint32_t edi, uint32_t arg0, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4)
 {
 	bool L_0F031D = false;
 	uint32_t carry = 0;
@@ -280342,7 +280462,9 @@ void FormationUnitSetNodeTransform(uint32_t esi, uint32_t building_handle, uint3
 	g_esp = g_esp + 0xCu;
 }
 
-void sub_00109782(void)
+/* Not a function: the return of FormationUnitSetNodeTransform, which the disassembler cut off as a
+   function of its own: a lone ret. Nothing calls it. */
+void FormationUnitSetNodeTransformReturn(void)
 {
 }
 
@@ -291541,7 +291663,7 @@ void CameraCopy(uint32_t arg0, uint32_t arg1)
 	x86_rep_movs32(edx + 0x1D0u, eax + 0x1D0u, 0x10u);
 	arg1_2 = eax + 0x30u;
 	arg0_2 = edx + 0x30u;
-	sub_0012A390(arg0_2, arg1_2);
+	ProjectionFrustumCopy(arg0_2, arg1_2);
 }
 
 /* Zeroes the two fields at offsets 0x2D0 and 0x2D4 and stores vcGameTime at offset 0x2B8. */
@@ -304974,7 +305096,11 @@ uint32_t MotionListClearFirstPriority(uint32_t arg0)
 	return eax;
 }
 
-uint32_t sub_00120BF0(uint32_t eax, uint32_t arg0, uint32_t arg1)
+/* Gives a motion entry of an object's motion list a new motion: the one it had (+4) and its time (+0xC)
+   go to +0 and +8, the new handle goes to +4, and the entry's time at +0xC and +0x14 is the new motion's
+   length times how far the old one had got (+8 over its length), so the new motion goes on from the same
+   fraction. The ground movement update (0x4E2C0 and 0x4FB50) calls it when its motion changes. */
+uint32_t MotionEntrySwitchMotion(uint32_t eax, uint32_t arg0, uint32_t arg1)
 {
 	uint32_t eax_2 = 0, ecx = 0, edi = 0, edx = 0, esi = 0;
 	double f0 = 0;
@@ -316274,7 +316400,9 @@ uint32_t BoxTransform(uint32_t arg0, uint32_t arg1)
 	return edx;
 }
 
-void sub_0012A390(uint32_t arg0, uint32_t arg1)
+/* Copies the 0x60 bytes of a frustum, the block ProjectionFrustumBuild fills at a camera's +0x30.
+   CameraCopy ends with a jump to it with the two cameras' +0x30, so nothing calls it by name. */
+void ProjectionFrustumCopy(uint32_t arg0, uint32_t arg1)
 {
 	x86_rep_movs32(arg0, arg1, 0x18u);
 }
@@ -346440,9 +346568,9 @@ void VectorScale_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000119E8_entry(void)
+void VectorScaleReturn_entry(void)
 {
-	sub_000119E8();
+	VectorScaleReturn();
 	g_esp += 4u;
 }
 
@@ -346800,9 +346928,9 @@ void LevelHasTwoPlayerStandIns_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00017AD4_entry(void)
+void LevelHasTwoPlayerStandInsReturn_entry(void)
 {
-	sub_00017AD4();
+	LevelHasTwoPlayerStandInsReturn();
 	g_esp += 4u;
 }
 
@@ -346995,15 +347123,15 @@ void ObjectPairIsVisibleByHandle_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001974B_entry(void)
+void ObjectPairIsVisibleByHandleTail_entry(void)
 {
-	g_eax = sub_0001974B(g_eax);
+	g_eax = ObjectPairIsVisibleByHandleTail(g_eax);
 	g_esp += 4u;
 }
 
-void sub_00019751_entry(void)
+void ObjectPairIsVisibleByHandleReturn_entry(void)
 {
-	sub_00019751();
+	ObjectPairIsVisibleByHandleReturn();
 	g_esp += 4u;
 }
 
@@ -347072,9 +347200,9 @@ void ControllerItemsDisabledSet_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00019A29_entry(void)
+void ControllerItemsDisabledSetReturn_entry(void)
 {
-	sub_00019A29();
+	ControllerItemsDisabledSetReturn();
 	g_esp += 4u;
 }
 
@@ -347303,9 +347431,9 @@ void SlotPoolFindFirstUsedSlot_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001CAB1_entry(void)
+void SlotPoolFindFirstUsedSlotReturn_entry(void)
 {
-	sub_0001CAB1();
+	SlotPoolFindFirstUsedSlotReturn();
 	g_esp += 4u;
 }
 
@@ -347325,9 +347453,9 @@ void TimedEventCopy_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001CB42_entry(void)
+void TimedEventCopyTail_entry(void)
 {
-	sub_0001CB42(g_eax, g_ecx);
+	TimedEventCopyTail(g_eax, g_ecx);
 	g_esp += 4u;
 }
 
@@ -347365,9 +347493,9 @@ void SlotPoolRowFindFreeSlot_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001CDEE_entry(void)
+void SlotPoolRowFindFreeSlotTail_entry(void)
 {
-	g_eax = sub_0001CDEE();
+	g_eax = SlotPoolRowFindFreeSlotTail();
 	g_esp += 4u;
 }
 
@@ -347859,10 +347987,10 @@ void AICallResetBehaviour_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0001EAAF_entry(void)
+void AICallResetBehaviourReturn_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0001EAAF(g_eax);
+	g_eax = AICallResetBehaviourReturn(g_eax);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -348848,9 +348976,9 @@ void ScreenSetModalResult_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000245AF_entry(void)
+void ScreenSetModalResultReturn_entry(void)
 {
-	sub_000245AF();
+	ScreenSetModalResultReturn();
 	g_esp += 4u;
 }
 
@@ -349346,15 +349474,15 @@ void MissionFailedScreen_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000269C0_entry(void)
+void GameplayLevelSetOn_entry(void)
 {
-	g_eax = sub_000269C0(ARG32(0));
+	g_eax = GameplayLevelSetOn(ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000269D0_entry(void)
+void GameplayLevelIsOn_entry(void)
 {
-	g_eax = sub_000269D0();
+	g_eax = GameplayLevelIsOn();
 	g_esp += 4u;
 }
 
@@ -349758,9 +349886,9 @@ void VersusResultGetScores_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000284BE_entry(void)
+void VersusResultGetScoresReturn_entry(void)
 {
-	g_eax = sub_000284BE(g_eax);
+	g_eax = VersusResultGetScoresReturn(g_eax);
 	g_esp += 4u;
 }
 
@@ -350386,9 +350514,9 @@ void IndexedEntrySetFromGameObject_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0002CCC0_entry(void)
+void EntityClearControls_entry(void)
 {
-	g_eax = sub_0002CCC0(ARG32(1));
+	g_eax = EntityClearControls(ARG32(1));
 	g_esp += 4u;
 }
 
@@ -352333,9 +352461,9 @@ void GameObjectSendSetOrToggleState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00038370_entry(void)
+void NodeGetState_entry(void)
 {
-	g_eax = sub_00038370(ARG32(0));
+	g_eax = NodeGetState(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -352504,9 +352632,9 @@ void NodeDestroySubtree_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003920D_entry(void)
+void NodeDestroySubtreeReturn_entry(void)
 {
-	sub_0003920D();
+	NodeDestroySubtreeReturn();
 	g_esp += 4u;
 }
 
@@ -352917,9 +353045,9 @@ void PathNodeFormatMessage_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003B7FC_entry(void)
+void PathNodeFormatMessageReturn_entry(void)
 {
-	sub_0003B7FC();
+	PathNodeFormatMessageReturn();
 	g_esp += 4u;
 }
 
@@ -353013,10 +353141,10 @@ void PathNode_StateMachine_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003C235_entry(void)
+void PathNode_StateMachineTail_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0003C235(g_eax);
+	g_eax = PathNode_StateMachineTail(g_eax);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -353372,9 +353500,9 @@ void Player_Shutdown_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0003E868_entry(void)
+void Player_ShutdownReturn_entry(void)
 {
-	g_eax = sub_0003E868(g_eax);
+	g_eax = Player_ShutdownReturn(g_eax);
 	g_esp += 4u;
 }
 
@@ -354539,10 +354667,10 @@ void EntityUpdateWalkerDustAndSplash_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0004ED67_entry(void)
+void EntityUpdateWalkerDustAndSplashReturn_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_0004ED67(g_eax);
+	g_eax = EntityUpdateWalkerDustAndSplashReturn(g_eax);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -354692,9 +354820,9 @@ void MilitaryTransport_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00052407_entry(void)
+void MilitaryTransport_RegisterReturn_entry(void)
 {
-	sub_00052407();
+	MilitaryTransport_RegisterReturn();
 	g_esp += 4u;
 }
 
@@ -355583,9 +355711,9 @@ void MissileAdvance_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0005A40C_entry(void)
+void MissileAdvanceReturn_entry(void)
 {
-	sub_0005A40C();
+	MissileAdvanceReturn();
 	g_esp += 4u;
 }
 
@@ -358329,9 +358457,9 @@ void Flare_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00083A68_entry(void)
+void Flare_RegisterTail_entry(void)
 {
-	sub_00083A68();
+	Flare_RegisterTail();
 	g_esp += 4u;
 }
 
@@ -359432,10 +359560,10 @@ void ZenCruiserTurret_StateMachine_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00090FB0_entry(void)
+void ZenCruiserTurret_StateMachineTail_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00090FB0(g_eax);
+	g_eax = ZenCruiserTurret_StateMachineTail(g_eax);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359518,10 +359646,10 @@ void SeaSergeantResetState_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00091BF0_entry(void)
+void SeaSergeantEnterMode_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_00091BF0(g_eax, g_ecx, g_esi, g_edi, ARG32(0));
+	g_eax = SeaSergeantEnterMode(g_eax, g_ecx, g_esi, g_edi, ARG32(0));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -359712,9 +359840,9 @@ void PodStandardWarriorSpace_Shutdown_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00094000_entry(void)
+void PodStandardWarriorSpace_ShutdownReturn_entry(void)
 {
-	g_eax = sub_00094000(g_eax);
+	g_eax = PodStandardWarriorSpace_ShutdownReturn(g_eax);
 	g_esp += 4u;
 }
 
@@ -360449,9 +360577,9 @@ void GameObjectHandleGetSide_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009C9D0_entry(void)
+void GameObjectHandleGetSideReturn_entry(void)
 {
-	g_eax = sub_0009C9D0(g_eax);
+	g_eax = GameObjectHandleGetSideReturn(g_eax);
 	g_esp += 4u;
 }
 
@@ -360543,9 +360671,9 @@ void EntryPoolClearEntry_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009D0F4_entry(void)
+void EntryPoolClearEntryTail_entry(void)
 {
-	sub_0009D0F4(g_eax, g_ecx);
+	EntryPoolClearEntryTail(g_eax, g_ecx);
 	g_esp += 4u;
 }
 
@@ -360577,10 +360705,10 @@ void TimedEventSendNow_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0009D230_entry(void)
+void EntityNoticeDamageDealer_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi;
-	g_edi = sub_0009D230(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
+	g_edi = EntityNoticeDamageDealer(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361077,10 +361205,10 @@ void OnWeaponHitTrigger_StateMachine_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A0E60_entry(void)
+void OnWeaponHitTrigger_StateMachineTail_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000A0E60(g_eax);
+	g_eax = OnWeaponHitTrigger_StateMachineTail(g_eax);
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -361655,9 +361783,9 @@ void GameObjectSetRectWidth_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A51F0_entry(void)
+void ScrolledTextElementIsChosen_entry(void)
 {
-	g_eax = sub_000A51F0(ARG32(0));
+	g_eax = ScrolledTextElementIsChosen(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -361667,9 +361795,9 @@ void GameObjectMoveRect_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A5290_entry(void)
+void ScrolledTextElementSetBackground_entry(void)
 {
-	sub_000A5290(ARG32(0), ARG32(1));
+	ScrolledTextElementSetBackground(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -361712,9 +361840,9 @@ void PauseScreenDrawQuad_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A5350_entry(void)
+void ScrolledTextSetOpeningAnimated_entry(void)
 {
-	g_eax = sub_000A5350(ARG32(0));
+	g_eax = ScrolledTextSetOpeningAnimated(ARG32(0));
 	g_esp += 4u;
 }
 
@@ -361886,9 +362014,9 @@ void CallbackTableInit_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000A6048_entry(void)
+void CallbackTableInitReturn_entry(void)
 {
-	sub_000A6048();
+	CallbackTableInitReturn();
 	g_esp += 4u;
 }
 
@@ -363090,9 +363218,9 @@ void AIActionReturnToOrigin_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000AB2B0_entry(void)
+void AIActionGoState11_entry(void)
 {
-	g_eax = sub_000AB2B0(g_eax, ARG32(0));
+	g_eax = AIActionGoState11(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -363281,33 +363409,33 @@ void AIActionGoReturn_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ABCE0_entry(void)
+void AIActionGoState4_entry(void)
 {
-	g_eax = sub_000ABCE0(g_eax, ARG32(0));
+	g_eax = AIActionGoState4(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABD10_entry(void)
+void AIActionGoState5_entry(void)
 {
-	g_eax = sub_000ABD10(g_eax, ARG32(0));
+	g_eax = AIActionGoState5(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABD30_entry(void)
+void AIActionGoState10_entry(void)
 {
-	g_eax = sub_000ABD30(g_eax, ARG32(0));
+	g_eax = AIActionGoState10(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABD50_entry(void)
+void AIActionGoState12_entry(void)
 {
-	g_eax = sub_000ABD50(g_eax, ARG32(0));
+	g_eax = AIActionGoState12(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
-void sub_000ABD70_entry(void)
+void AIActionStartMovementPatternNextNode_entry(void)
 {
-	g_eax = sub_000ABD70(g_eax, ARG32(0));
+	g_eax = AIActionStartMovementPatternNextNode(g_eax, ARG32(0));
 	g_esp += 4u;
 }
 
@@ -365056,10 +365184,10 @@ void LoadGameScreenIsCancelled_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BCCE0_entry(void)
+void SaveGameScreenNoRoomMessageAfterPresent_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BCCE0();
+	g_eax = SaveGameScreenNoRoomMessageAfterPresent();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -365067,10 +365195,10 @@ void sub_000BCCE0_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000BCD10_entry(void)
+void SaveGameScreenNoMemoryUnitMessageAfterPresent_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000BCD10();
+	g_eax = SaveGameScreenNoMemoryUnitMessageAfterPresent();
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -367011,9 +367139,9 @@ void GameObjectDestroyReferencedObjects_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000CB250_entry(void)
+void ArmourPackWeaponSetThrustBoost_entry(void)
 {
-	g_eax = sub_000CB250(ARG32(0), ARG32(1));
+	g_eax = ArmourPackWeaponSetThrustBoost(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -373152,15 +373280,15 @@ void MenuArrowElement_Register_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000ED880_entry(void)
+void MenuArrowGetHeight_entry(void)
 {
-	x87_push(sub_000ED880());
+	x87_push(MenuArrowGetHeight());
 	g_esp += 4u;
 }
 
-void sub_000ED890_entry(void)
+void MenuArrowGetWidth_entry(void)
 {
-	x87_push(sub_000ED890());
+	x87_push(MenuArrowGetWidth());
 	g_esp += 4u;
 }
 
@@ -373439,10 +373567,10 @@ void AngularVelocityIntegrateOrientation_entry(void)
 	g_esp += 4u;
 }
 
-void sub_000F02C0_entry(void)
+void EntityFlyingCollideWithScene_entry(void)
 {
 	uint32_t ebx_kept = g_ebx, ebp_kept = g_ebp, esi_kept = g_esi, edi_kept = g_edi;
-	g_eax = sub_000F02C0(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
+	g_eax = EntityFlyingCollideWithScene(g_ebx, g_ebp, g_esi, g_edi, ARG32(0), ARG32(1), ARG32(2), ARG32(3), ARG32(4));
 	g_ebx = ebx_kept;
 	g_ebp = ebp_kept;
 	g_esi = esi_kept;
@@ -378861,9 +378989,9 @@ void FormationUnitSetNodeTransform_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00109782_entry(void)
+void FormationUnitSetNodeTransformReturn_entry(void)
 {
-	sub_00109782();
+	FormationUnitSetNodeTransformReturn();
 	g_esp += 4u;
 }
 
@@ -382872,9 +383000,9 @@ void MotionListClearFirstPriority_entry(void)
 	g_esp += 4u;
 }
 
-void sub_00120BF0_entry(void)
+void MotionEntrySwitchMotion_entry(void)
 {
-	g_eax = sub_00120BF0(g_eax, ARG32(0), ARG32(1));
+	g_eax = MotionEntrySwitchMotion(g_eax, ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 
@@ -384321,9 +384449,9 @@ void BoxTransform_entry(void)
 	g_esp += 4u;
 }
 
-void sub_0012A390_entry(void)
+void ProjectionFrustumCopy_entry(void)
 {
-	sub_0012A390(ARG32(0), ARG32(1));
+	ProjectionFrustumCopy(ARG32(0), ARG32(1));
 	g_esp += 4u;
 }
 

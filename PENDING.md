@@ -1822,11 +1822,30 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   bytes at 0x21A024 and 0x21B42C, 720 at 0x24EC30, 632 at 0x21DFF8), which counted as referenced data
   "up to the next known thing" before: each says a variable is longer than its line, or a neighbour has
   none (`analysis/coverage.txt` lists them, largest first).
-  Next (Sebas): the 79 functions left without a name: 30 are pieces the disassembler cut off the
-  function before them (26 named after it, `build/sessions8/pieces/`; two are bytes of data read as
-  code, 0xA85C3 and 0xC1C85), 49 are functions (`build/sessions8/last/`, an agent). The mend at the
-  root, not done: the decompiler should not write what is no function (`symbols/coalesce.json`, which
-  the recompiler takes, is empty).
+- **The 79 functions left without a name: 30 now** (26-11-2026, Sebas: the 79 as the aim after the
+  build; built 23:28 to 00:05, on eff85c7). 30 of them were pieces the disassembler cut off the function
+  before them (`tail_jump_alias`, no caller): 26 named after it here, read in the built C, `XReturn` a
+  lone ret and `XTail` a longer end (`build/sessions8/pieces/`; each kept in `symbols/audit_kept.txt`
+  under rule 8). 49 were functions, read again by an agent with the day's structures
+  (`build/sessions8/last/`): 23 named. The floats "nobody writes" of the menus' arrows are the width
+  and height of `MenuArrowDirection0Sprite` (`MenuArrowGetWidth`, `MenuArrowGetHeight`); 0x269C0 and
+  0x269D0 set and read `GameplayLevelOn`; the six AI actions no rule uses by their place in the table
+  at 0x1B1BB8 (`AIActionGoState4`, `5`, `10`, `11`, `12`: the state's number is all they have, no
+  behaviour of aidata.spt has those states; checked: 0xABCE0 is `AIRequestState(ai, 4)`);
+  `ScrolledTextOpenAtOnce` said the opposite of its value (0 opens at once): `ScrolledTextOpeningAnimated`.
+  Measured: functions without a name in the decompiled C 79 to 30, without a description 285 to 236;
+  `verify_c.py` 209 vectors, 0 different; the nine scenarios, run alone, every frame as the reference.
+  The 30 left, each with its reason in `build/sessions8/last/left.txt`: 9 of the engine that write
+  fields nothing reads (0x12FEC0, 0x13B570, 0x13B5E0, 0x13B650, 0x13EF40, 0x13EFC0, 0x140680, 0xD36B0,
+  0xE6560); 5 that wait for `LevelSelectScreen`'s and `MissionMenuElement`'s records (0xB9620, 0xB9650,
+  0xB9720, 0xB9750, 0xE7A70); 4 that several types share at offsets each reads its own way (0xA3830,
+  0xA50B0, 0xBE000, 0xBE030); Node 23's two (0xDA610, 0xDA720); 0x25390 (1 whichever way), 0x4DD70
+  (reached only from a function nothing calls), 0x4FA20 (not read to its end), 0x9CE70 (`EntitySpec`
+  +0xE8 has no name), 0x113110 (a wrapper of `DoNothing`), 0x10FA40 (it sorts the rumble effects 1, 5,
+  10 and 11 from the rest; what that class is, not shown) with its two ways out (0x10FA58, 0x10FA5E);
+  and two that are bytes of data read as code (0xA85C3, 0xC1C85). The mend at the root, not done: the
+  decompiler should not write what is no function (`symbols/coalesce.json`, which the recompiler
+  takes, is empty).
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

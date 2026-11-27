@@ -49,7 +49,6 @@
 000179E0  file  game/players
 00017A50  file  game/objects
 00017AB0  file  game/level                          # the level: loading it, its settings, its bounds and what a mission needs of it
-00017AD4  file  game/unsorted
 00017AE0  file  game/players
 00017F80  file  game/unsorted
 00018530  file  game/entities
@@ -60,7 +59,7 @@
 00019090  file  game/objects
 00019220  file  game/entities
 000196E0  file  game/ai                             # the AI: its script's reader (gcAIData), each entity's AI record, its rules' conditions and actions
-00019728  file  game/unsorted
+00019760  file  game/unsorted
 000197D0  file  game/objects
 0001988F  file  game/unsorted
 00019A30  file  game/entities
@@ -176,6 +175,9 @@
 0002C400  file  game/triggers
 0002CBF0  file  game/unsorted
 0002CC20  file  game/objects
+0002CC90  file  game/unsorted
+0002CCC0  file  game/entities
+0002CCE0  file  game/objects
 0002CD00  file  game/entities
 0002D2F0  file  game/objects
 0002D380  file  game/entities
@@ -226,12 +228,14 @@
 00037C50  file  game/objects
 00037CD0  file  game/nodes
 00037F10  file  game/objects
+00038370  file  game/nodes
+000383A0  file  game/objects
 000385E0  file  game/nodes
 00038650  file  game/objects
 00038780  file  game/nodes
 00038860  file  game/objects
 000391A0  file  game/nodes
-0003920D  file  game/unsorted
+00039210  file  game/unsorted
 000393B0  file  game/objects
 00039740  file  game/nodes
 000398B0  file  game/actions                        # the game's actions, by type
@@ -249,7 +253,6 @@
 0003B700  file  game/nodes
 0003B740  file  game/objects
 0003B790  file  game/nodes
-0003B7FC  file  game/unsorted
 0003B800  file  game/objects
 0003BA10  file  game/unsorted
 0003BBD0  file  game/nodes
@@ -294,7 +297,6 @@
 0004DBD0  file  game/objects
 0004DBD9  file  game/unsorted
 0004ED30  file  game/entities
-0004ED67  file  game/unsorted
 0004ED70  file  game/weapons
 0004EDB0  file  game/entities
 0004F510  file  game/objects
@@ -331,10 +333,10 @@
 0009C200  file  game/ai
 0009C6E0  file  game/unsorted
 0009C7A0  file  game/objects
-0009C9D0  file  game/unsorted
 0009C9F0  file  game/entities
 0009CBA0  file  game/objects
 0009D071  file  game/unsorted
+0009D230  file  game/entities
 0009D300  file  game/ai
 0009D6C0  file  game/entities
 0009D6F0  file  game/ai
@@ -384,7 +386,9 @@
 000A4230  file  game/unsorted
 000A4810  file  game/screen_elements
 000A5130  file  game/objects
-000A5290  file  game/unsorted
+000A51F0  file  game/screen_elements
+000A5220  file  game/objects
+000A5290  file  game/screen_elements
 000A52C0  file  game/screens
 000A5300  file  game/screen_elements
 000A5330  file  game/screens
@@ -457,7 +461,6 @@
 000BB750  file  game/screens
 000BB840  file  game/saves
 000BBD50  file  game/screens
-000BCCE0  file  game/unsorted
 000BCD30  file  engine/storage
 000BCD90  file  game/screens
 000BE000  file  game/unsorted
@@ -568,13 +571,15 @@
 000EA6C0  file  game/entities
 000EA850  file  game/unsorted
 000EAD50  file  game/screen_elements
+000ED880  file  game/screens
+000ED8A0  file  game/screen_elements
 000EE200  file  game/objects
 000EE580  file  game/screen_elements
 000EF0B0  file  game/effects
 000EF0F0  file  game/unsorted
 000EF880  file  game/objects
 000EFAC0  file  game/unsorted
-000F0760  file  game/entities
+000F02C0  file  game/entities
 000F0AC0  file  game/objects
 000F0D10  file  game/entities
 000F11E0  file  game/unsorted
@@ -6302,7 +6307,7 @@ field   UnlockEntry  08  level         s32          # the level it opened; -1 no
 0020F788  var   ScrolledTextOverlayFillTexture                       u32                # the same for the overlay set's middle (rect 0x43,0x62..0x4D,0x6F)
 0020F78C  var   MenuCursorSound                                      u32                # the "Text_Info_Box_S.wav" sound a box opens with: MenuCursorSoundGet makes it once, MenuCursorSoundRelease frees it; ScrolledTextElementStart plays it
 0020F790  var   ScrolledTextOpenSoundPlayed                          s32                # ScrolledTextElementStart sets it to 1 when it plays the opening sound, ScrolledTextElementDrawChosen clears it: one sound a time
-001B1A40  var   ScrolledTextOpenAtOnce                               s32                # FUN_000A5350 sets it (HUDScreen_CreateWidgets, MissionLogScreenStart); 0 or an element's own word 1 make ScrolledTextElementStart open the box at once; initially 0
+001B1A40  var   ScrolledTextOpeningAnimated  s32   # whether the boxes made from now scroll open with their sound (1) or open at once (0, as it starts): ScrolledTextSetOpeningAnimated sets it (HUDScreen_CreateWidgets and MissionLogScreenStart, 0 before they make their boxes and 1 after) and ScrolledTextElementStart reads it, with the element's own word
 00223DDC  var   HealthBarFrameCapSprite                              vcSprite           # HUD_pieces rect 8,4..0x16,7: the frame's top, drawn over the stretch piece (HealthBarDraw)
 00223E18  var   HealthBarFrameStretchSprite                          vcSprite           # HUD_pieces rect 8,0x10..0x16,0x18: the frame's middle; HealthBarElement_Startup sets its height (75.0), HealthBarDraw to bar_height - 1
 00223E54  var   HealthBarFrameBodySprite                             vcSprite           # HUD_pieces rect 8,0x28..0x1A,0x87: the frame's lower part, drawn first at y - 95
@@ -11934,6 +11939,108 @@ param  AIActionGoIdle                               arg0  ai   # AIRequestState(
 param  SteeringObjectCheckBounds                    arg0  steering_handle   # the entity current move steering, replaced when it leaves the level box
 param  SteeringObjectCheckBounds                    arg1  entity_handle   # resolved with GameObjectFromHandle, its radius clamps the point
 param  SteeringObjectCheckBounds                    arg3  point   # pointer to the three floats clamped into the level box
+
+# ======== the pieces the disassembler cut off the function before them, named after it (26-11-2026, read in the decompiled C) ========
+000119E8  func  VectorScaleReturn
+comment VectorScaleReturn Not a function: the return of VectorScale, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+00017AD4  func  LevelHasTwoPlayerStandInsReturn
+comment LevelHasTwoPlayerStandInsReturn Not a function: the return of LevelHasTwoPlayerStandIns, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0001974B  func  ObjectPairIsVisibleByHandleTail
+comment ObjectPairIsVisibleByHandleTail Not a function: the end of ObjectPairIsVisibleByHandle: it hands back what eax holds. Nothing calls it.
+00019751  func  ObjectPairIsVisibleByHandleReturn
+comment ObjectPairIsVisibleByHandleReturn Not a function: the return of ObjectPairIsVisibleByHandle, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+00019A29  func  ControllerItemsDisabledSetReturn
+comment ControllerItemsDisabledSetReturn Not a function: the return of ControllerItemsDisabledSet, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0001CAB1  func  SlotPoolFindFirstUsedSlotReturn
+comment SlotPoolFindFirstUsedSlotReturn Not a function: the return of SlotPoolFindFirstUsedSlot, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0001CB42  func  TimedEventCopyTail
+comment TimedEventCopyTail Not a function: the end of TimedEventCopy: the last two words copied (+0x10, +0x1C). Nothing calls it.
+0001CDEE  func  SlotPoolRowFindFreeSlotTail
+comment SlotPoolRowFindFreeSlotTail Not a function: the end of SlotPoolRowFindFreeSlot where no slot is free: it hands back -1. Nothing calls it.
+0001EAAF  func  AICallResetBehaviourReturn
+comment AICallResetBehaviourReturn Not a function: the return of AICallResetBehaviour, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+000245AF  func  ScreenSetModalResultReturn
+comment ScreenSetModalResultReturn Not a function: the return of ScreenSetModalResult, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+000284BE  func  VersusResultGetScoresReturn
+comment VersusResultGetScoresReturn Not a function: the return of VersusResultGetScores, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0003920D  func  NodeDestroySubtreeReturn
+comment NodeDestroySubtreeReturn Not a function: the return of NodeDestroySubtree, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0003B7FC  func  PathNodeFormatMessageReturn
+comment PathNodeFormatMessageReturn Not a function: the return of PathNodeFormatMessage, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0003C235  func  PathNode_StateMachineTail
+comment PathNode_StateMachineTail Not a function: the end of PathNode_StateMachine's switch: a return. Nothing calls it.
+0003E868  func  Player_ShutdownReturn
+comment Player_ShutdownReturn Not a function: the return of Player_Shutdown, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0004ED67  func  EntityUpdateWalkerDustAndSplashReturn
+comment EntityUpdateWalkerDustAndSplashReturn Not a function: the return of EntityUpdateWalkerDustAndSplash, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+00052407  func  MilitaryTransport_RegisterReturn
+comment MilitaryTransport_RegisterReturn Not a function: the return of MilitaryTransport_Register, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0005A40C  func  MissileAdvanceReturn
+comment MissileAdvanceReturn Not a function: the return of MissileAdvance, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+00083A68  func  Flare_RegisterTail
+comment Flare_RegisterTail Not a function: the second half of Flare_Register: the stores into the type's block from 0x208CBC on. Nothing calls it.
+00090FB0  func  ZenCruiserTurret_StateMachineTail
+comment ZenCruiserTurret_StateMachineTail Not a function: the end of ZenCruiserTurret_StateMachine's switch: a return. Nothing calls it.
+00094000  func  PodStandardWarriorSpace_ShutdownReturn
+comment PodStandardWarriorSpace_ShutdownReturn Not a function: the return of PodStandardWarriorSpace_Shutdown, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0009C9D0  func  GameObjectHandleGetSideReturn
+comment GameObjectHandleGetSideReturn Not a function: the return of GameObjectHandleGetSide, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+0009D0F4  func  EntryPoolClearEntryTail
+comment EntryPoolClearEntryTail Not a function: the end of EntryPoolClearEntry: the same word stored at +4, +8 and +0xC. Nothing calls it.
+000A0E60  func  OnWeaponHitTrigger_StateMachineTail
+comment OnWeaponHitTrigger_StateMachineTail Not a function: the end of OnWeaponHitTrigger_StateMachine's switch: a return. Nothing calls it.
+000A6048  func  CallbackTableInitReturn
+comment CallbackTableInitReturn Not a function: the return of CallbackTableInit, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+00109782  func  FormationUnitSetNodeTransformReturn
+comment FormationUnitSetNodeTransformReturn Not a function: the return of FormationUnitSetNodeTransform, which the disassembler cut off as a function of its own: a lone ret. Nothing calls it.
+
+# ======== the last functions without a name (build/sessions8/last/: a Claude Sonnet agent 26-11-2026, reviewed) ========
+000AB2B0  func  AIActionGoState11
+comment AIActionGoState11 The AI script's action 0x1E (table slot 0x1B1C30), which no rule of aidata.spt uses: the Go actions' way into the behaviour state 11, one no behaviour of the file has (AIGetStateCategory puts it with Idle, Return and Pause): AIRequestState(ai, 11) and AIRestartTimers. Does nothing without an AI.
+000ABCE0  func  AIActionGoState4
+comment AIActionGoState4 The AI script's action 0x13 (table slot 0x1B1C04), which no rule of aidata.spt uses: AIRequestState(ai, 4), AIRestartTimers, then clears bit 0 of state_flags (the bit that keeps GoPursue, GoSearch and GoReturn from running). State 4 is one no behaviour of the file has (AIGetStateCategory puts it in 3).
+000ABD10  func  AIActionGoState5
+comment AIActionGoState5 The AI script's action 0x14 (table slot 0x1B1C08), which no rule of aidata.spt uses: the Go actions' way into the behaviour state 5, one no behaviour of the file has (category 3): AIRequestState(ai, 5) and AIRestartTimers.
+000ABD30  func  AIActionGoState10
+comment AIActionGoState10 The AI script's action 0x15 (table slot 0x1B1C0C), which no rule of aidata.spt uses: the Go actions' way into the behaviour state 10, one no behaviour of the file has (category 1, with Idle, Return and Pause): AIRequestState(ai, 10) and AIRestartTimers.
+000ABD50  func  AIActionGoState12
+comment AIActionGoState12 The AI script's action 0x16 (table slot 0x1B1C10), which no rule of aidata.spt uses: the Go actions' way into the behaviour state 12, one no behaviour of the file has (category 3): AIRequestState(ai, 12) and AIRestartTimers.
+000ABD70  func  AIActionStartMovementPatternNextNode
+comment AIActionStartMovementPatternNextNode The AI script's action 0x17 (table slot 0x1B1C14), which no rule of aidata.spt uses: starts activity 6, the one AIActionFollowMovementPattern starts, and when it is taken steps path_node by one if the AI holds a path (+0xC8), then AIRestartTimers.
+000269C0  func  GameplayLevelSetOn
+comment GameplayLevelSetOn Stores its argument in GameplayLevelOn, the word that says a level is being played: GameMain starts a session with it set, GameSessionRun and GameSessionShutdown clear it (every caller found but GameMain's passes 0).
+000269D0  func  GameplayLevelIsOn
+comment GameplayLevelIsOn Returns GameplayLevelOn: whether a level is being played. GameRun starts a session only when it is set; GameFrameUpdate runs the players and the AI only then; gcLevel_Load hides the OpeningCamera while it is 0; the main menu shows its 3D background while it is 0; targeting skips the on-screen test when it is set.
+0002CCC0  func  EntityClearControls
+comment EntityClearControls Zeroes an entity's controls: control_forward, control_sideways, control_jetpack, control_boost, turn and the two words after it (+0x64, +0x68). EntityStartDeath calls it so that a dying entity stops steering and thrusting.
+00038370  func  NodeGetState
+comment NodeGetState The state of the node of a handle (Node.state, +0xC8: 1 on, 2 off, 0 until set), 0 when there is no node. SpawnActionApply, OrientSpawnActionSpawn and SpawnStateTriggerUpdate read the spawned node's with it.
+0009D230  func  EntityNoticeDamageDealer
+comment EntityNoticeDamageDealer An entity that was hit and lives (EntityTakeDamage calls it when it does not die): delivers to it at once (TimedEventDeliverNow) an AI event of kind 4, an object that made itself noticed, with the damage message's second word (who dealt it) as the object, so AIOnEvent makes its AI engage the one that hit it (EntityEngageTarget). Nothing when the handle is dead or the object is gone.
+00091BF0  func  SeaSergeantEnterMode
+comment SeaSergeantEnterMode The Sea Sergeant's answer to the mode request (message 0x3ED) in state 1, the twin of ZenShuttleEnterMode: when the request's word is 0 it forwards 0x3ED (0) to the object at +0x270, changes the flags of its scene object (+0x194) and goes to state 3 (entry +0xE) setting flag bit 1 of the entry.
+000CB250  func  ArmourPackWeaponSetThrustBoost
+comment ArmourPackWeaponSetThrustBoost Gives the two thrust effects an armour pack weapon holds (+0x20 and +0x24) the boost ThrustEffectSetBoost takes; VeritechUpdate calls it for the pack the veritech wears (Veritech.pack_weapon, +0x2A4) with the same value it gives its own two thrusts.
+000F02C0  func  EntityFlyingCollideWithScene
+comment EntityFlyingCollideWithScene The scene collision of EntityMoveFlying, after the movement is integrated: sweeps the entity's sphere along the velocity it was given times 0.033 through the scene's hit tree (SceneHitTreeRayIntersect, up to four hits), reacts to every scene object hit that has not flag 0x20 (SceneObjectReactToNearbyPlayer, SceneObjectSendUserMessage), writes the place it ends at to its fourth argument and works the velocity out again from what the entity really moved.
+00120BF0  func  MotionEntrySwitchMotion
+comment MotionEntrySwitchMotion Gives a motion entry of an object's motion list a new motion: the one it had (+4) and its time (+0xC) go to +0 and +8, the new handle goes to +4, and the entry's time at +0xC and +0x14 is the new motion's length times how far the old one had got (+8 over its length), so the new motion goes on from the same fraction. The ground movement update (0x4E2C0 and 0x4FB50) calls it when its motion changes.
+0012A390  func  ProjectionFrustumCopy
+comment ProjectionFrustumCopy Copies the 0x60 bytes of a frustum, the block ProjectionFrustumBuild fills at a camera's +0x30. CameraCopy ends with a jump to it with the two cameras' +0x30, so nothing calls it by name.
+000ED880  func  MenuArrowGetHeight
+comment MenuArrowGetHeight The height of the menus' arrow picture, the float at 0x2244CC: the +0xC of MenuArrowDirection0Sprite, which MenuArrowElement_Startup fills from the 0xB5,0x54..0xBF,0x60 rectangle of GUI_main_menu (12.0). The lists add it to their arrows' and rows' places (MenuListScreenSetBounds, MenuListScreenInitLayout, MenuListRowSpacing).
+000ED890  func  MenuArrowGetWidth
+comment MenuArrowGetWidth The width of the menus' arrow picture, the float at 0x2244C8: the +8 of MenuArrowDirection0Sprite, which MenuArrowElement_Startup fills from the 0xB5,0x54..0xBF,0x60 rectangle of GUI_main_menu (10.0). The lists size their arrow rectangles with it.
+000A51F0  func  ScrolledTextElementIsChosen
+comment ScrolledTextElementIsChosen Returns the chosen word (+0x50) of the ScrolledTextElement of a handle: the backdrop or text element the screens keep (MenuListScreen's +0x360, the confirm dialog's and the controller screen's text, the level select's) is asked before it is drawn on.
+000A5290  func  ScrolledTextElementSetBackground
+comment ScrolledTextElementSetBackground Sets the background word (+0x54) of the ScrolledTextElement of a handle: 1 makes it draw the whole-screen sprite behind its box. ConfirmDialogScreenInit and ObjectivesScreenBuildElements set it to 1 on their box; ScreenSetMenu and ControllerScreenSetBackdropShown pass the pause menu's choice on to the list's backdrop and the controller screen's text.
+000A5350  func  ScrolledTextSetOpeningAnimated
+comment ScrolledTextSetOpeningAnimated Stores its argument in ScrolledTextOpeningAnimated, which ScrolledTextElementStart reads: 0 makes the boxes made from now open at once, 1 makes them scroll open (and play the open sound). HUDScreen_CreateWidgets and MissionLogScreenStart call it with 0 before they make their boxes and with 1 after.
+000BCCE0  func  SaveGameScreenNoRoomMessageAfterPresent
+comment SaveGameScreenNoRoomMessageAfterPresent The after-present function SaveGameScreenReadPad sets (GameFrameSetAfterPresentCallback) while its message for a device with too little room (status 3) is shown: runs SavedGamesTaskUpdate each frame and, once the status of the screen's device (SaveGameScreenDevice) is no longer 3, gives the open confirm dialog its answer (ScreenSetModalResult) so the message goes away.
+000BCD10  func  SaveGameScreenNoMemoryUnitMessageAfterPresent
+comment SaveGameScreenNoMemoryUnitMessageAfterPresent The after-present function SaveGameScreenReadPad and SaveGameScreenSave set while their No Memory Unit message (0x4D3, the device status 1) is shown: runs SavedGamesTaskUpdate each frame and, when SavedGamesEventSeen is 0, gives the open confirm dialog its answer (ScreenSetModalResult). That flag is 1 from the start and set to 1 by every storage event, so as built the message waits for the player.
 
 # ======== functions named from their decompiled C (w1; drafted by deepseek-v4.1-flash, reviewed by gpt-6-luna) ========
 00011000  func  CinemaSkipSet
