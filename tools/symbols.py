@@ -88,6 +88,26 @@ NAME_SUBJECTS = [("vcRegisterClass", "engine/objects"), ("vcObject", "engine/obj
                  ("vcSceneShutdown", "engine/scene"), ("vcQuadtree", "engine/quadtree"),
                  ("vcBoxCenter", "engine/scene"), ("vcTransformPoint", "engine/vector"),
                  ("vcPad", "engine/pad"), ("GameObject", "game/objects")]
+# Words a name starts with that say its subject where no type, family or class does: the AI (its script's
+# reader, its records' pool, what its conditions measure), and the vector maths the models named without vc.
+GAME_WORDS = [("AI", "game/ai"), ("EntityAI", "game/ai"), ("gcAIData", "game/ai"), ("TargetList", "game/ai"),
+              ("ObjectPair", "game/ai"), ("TeamCount", "game/ai"),
+              ("Vector", "engine/vector"), ("Vector2", "engine/vector"), ("Vector3", "engine/vector"),
+              ("Vector4", "engine/vector"), ("Matrix", "engine/vector"), ("Matrix3x3", "engine/vector"),
+              ("Matrix4x4", "engine/vector"),
+              # the game's own subjects that are no object type's
+              ("Level", "game/level"), ("Mission", "game/mission"), ("Objective", "game/mission"),
+              ("SavedGames", "game/saves"), ("Stats", "game/stats"), ("Timer", "game/timers"),
+              ("Versus", "game/versus"), ("Veritech", "game/entities"), ("Menu", "game/screens"),
+              ("Game", "game/loop"),
+              # the engine's, by its own prefix or the models' word for it
+              ("vcFile", "engine/files"), ("vcMovie", "engine/movie"), ("vcRandom", "engine/random"),
+              ("Storage", "engine/storage"), ("Vertex", "engine/render"), ("Render", "engine/render")]
+# where the engine's code starts (the first run of vc names): from here a name's first word may be an
+# engine class's without its vc
+ENGINE_START = 0x10C670
+# class names too plain to stand for their class without the vc: the models wrote them for anything
+PLAIN_WORDS = ("Object", "Sound")
 FAMILY_FOLDER = {"Player": "players", "Entity": "entities", "Structure": "structures", "Effect": "effects",
                  "Weapon": "weapons", "Screen": "screens", "Action": "actions", "Component": "components",
                  "ScreenElement": "screen_elements", "Node": "nodes", "Steering": "steering",
@@ -489,12 +509,41 @@ def subjects():
     # Names that say their subject: the prefix is a whole word of the name, so
     # that vcText is not vcTexture; a class's callback (vcObject_Create, the
     # vcObject class's) is its class's, below, not the subject of its prefix.
+    # After those, the names that start with what is known by evidence, the longest first. In the game's
+    # code: a type's name (ConfirmDialogScreenReadPad, the type line's) or its family's (EntityTakeDamage)
+    # is that family's folder. In the engine's (from ENGINE_START): an engine class's without its vc (the
+    # models' TerrainGetHeight), but for PLAIN_WORDS. In both: a class's name as it is, and GAME_WORDS.
+    sym = load()
+    game, engine, both = {}, {}, dict(GAME_WORDS)
+    for (family, _), (type_name, _) in sym["types"].items():
+        game[type_name] = "game/" + FAMILY_FOLDER.get(family, family.lower())
+    for family, folder in FAMILY_FOLDER.items():
+        game.setdefault(family, "game/" + folder)
+    if os.path.exists(CLASSES):
+        for c in json.load(open(CLASSES))["classes"]:
+            both.setdefault(c["class"], "engine/" + c["class"])
+            if c["class"].startswith("vc") and c["class"][2:] not in PLAIN_WORDS:
+                engine[c["class"][2:]] = "engine/" + c["class"]
+    longest = lambda d: sorted(d.items(), key=lambda kv: -len(kv[0]))
+    in_game, in_engine = longest({**both, **game}), longest({**both, **engine})
+
+    def starts(n, prefix):
+        rest = n[len(prefix):]
+        return n.startswith(prefix) and (prefix.endswith("_") or not rest or rest[0].isupper() or rest[0] == "_")
+
     for a, n in names.items():
         for prefix, path in NAME_SUBJECTS:
             rest = n[len(prefix):]
             if n.startswith(prefix) and (prefix.endswith("_") or not rest or rest[0].isupper()):
                 out.setdefault(a, path)
                 break
+        else:
+            if a in out or n.startswith("sub_"):
+                continue
+            for prefix, path in (in_engine if a >= ENGINE_START else in_game):
+                if starts(n, prefix):
+                    out[a] = path
+                    break
     # A function of a class or of a registry type belongs to it; one that two
     # classes or types share (a default callback) belongs to neither.
     owners = collections.defaultdict(set)
@@ -561,6 +610,18 @@ def layout():
         "engine/quadtree": "the engine's quadtrees: objects kept by the square their sphere falls in",
         "engine/vector": "the engine's vector maths: points turned and moved",
         "engine/pad": "the engine's pads: each port's pad read once a frame, and what was pressed and released in it",
+        "game/ai": "the AI: its script's reader (gcAIData), each entity's AI record, its rules' conditions and actions",
+        "game/level": "the level: loading it, its settings, its bounds and what a mission needs of it",
+        "game/mission": "the mission: its objectives, its messages and how it ends",
+        "game/saves": "the saved games: the profiles, the devices and what a save holds",
+        "game/stats": "the statistics a mission and a profile keep: kills, shots, medals",
+        "game/timers": "the game's timers: the countdowns a mission shows",
+        "game/versus": "the versus mode: its rounds, its kills and its end",
+        "game/loop": "the game's loop: its start, its modes, a frame's update and its end",
+        "engine/files": "the engine's files: opening, reading and the paths of the game's media",
+        "engine/movie": "the engine's movies: Bink played on the screen",
+        "engine/random": "the engine's random numbers",
+        "engine/storage": "the engine's storage: the hard disk and the memory units",
     }
     lines = []
     seen = set()

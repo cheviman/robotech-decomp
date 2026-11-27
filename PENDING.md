@@ -1544,40 +1544,280 @@ seconds (the game skips movies it cannot open); `ROBOTECH_PAD_SCRIPT="<ms>:<butt
   (the codes' entry, `MainMenuEnterCode`). In passing: `FemalePowerArmorInitWeapons`' `(flags & 0x3F800)
   == 0xC000` is the entity's type, 24 (0xC000 >> 11), and Entity 24's own functions are the female power
   armour's: the variant with the paired weapons (left to the weapons' session).
-- **Where the round of 25-11-2026 stopped, and what waits to be reviewed** (Sebas stopped the side
-  sessions: six at once burned the limit too fast). In `symbols.txt` and built at the day's end: this
-  session's batch (80 types, the AI script's 28 functions, the menus' 8 tables). NOT in `symbols.txt`:
-  what the six side sessions wrote, each in its folder under `build/sessions/` (not in git), a proposal
-  to check against the code before it goes in:
-  - `weapons/` and `ai/`, finished, two passes each (`proposal.txt`, `notes.md`, `left.txt`). The
-    weapons': 8 `type` lines, 13 functions named and 42 renamed, 10 structures with 95 fields, 30
-    variables; its cheap facts checked here (the six hints it quotes, the string "pfpa", the table at
-    0x1B1530 ending in type 24, the 3.8 after Weapon 0's constants) and its own checker passes. It **sets
-    right names of this session's batch**: the entity's +0x17C and +0x180 are the pack's armour and the
-    pack (`VeritechSetMode` is `VeritechSetPack`), not health and its most, which is +0x174; so
-    ScreenElement 26, `HealthBarElement` here, is the pack's armour bar (`PackArmorBarElement`) and 7 is
-    the health bar; a veritech's mode is its object's state (0 battloid, 1 guardian, 2 fighter, 3 sniper);
-    Weapon 0 is the battloid's and the guardian's gun pod, Weapon 1 the battloid's second trigger, at
-    missiles; Entity 24 is the female power armour a player flies, so Weapon 23 and 24 are the player's
-    (to decide: `FPAPaired...` or `PlayerFPA...`, and whether the six types' record is the gun pod's or
-    the player's kind of gun). The AI's: 6 structures with 59 fields, 17 variables, 65 renames, 14
-    functions named, 3 steering types; the file has four parts (rules, states, behaviours and the AI
-    themes, which a level gives an entity by a number), nobody walks the script each update (each rule is
-    a timed event), `SlotTableSetValue` is `AIRequestState`, Pause is state 13 and nothing asks for it,
-    condition 0x22 is `AIConditionPathLeadsToTarget`.
-  - `hud/`, `levels/`, `audit/`, `enemy/`: stopped mid-work, with working files only (`hud/` has a
-    `proposal.txt` begun, `audit/` its `suspects.txt`, `levels/` a tree of m101, `enemy/` its notes in
-    `_work.md`). Their sessions are open and can be told to write up what they had.
-  Next: review and merge `weapons/` and `ai/` (their renames come by old name and address; the `type`
-  lines through `symbols.py merge` after dropping the hand names of the functions only those types
-  have, as this round's batches did), then the four that stopped, then the nine scenarios, not run
-  since 9db8491.
-  Measured at the day's one build (25-11-2026, this session's batch): functions without a name in the
-  decompiled C 341 to 320, without a description 544 to 523; parameters named by their place 89,051 to
-  88,961; reads at a raw address 8,663 to 8,019; data addresses written as numbers 6,217 to 6,127; the
-  XBE's untyped bytes 826,135 to 820,787, its unknown bytes 3,883 to 4,063 (the word after each newly
-  named type's record, as before). `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios not
-  run.
+- **The side sessions' proposals of 25-11-2026, merged** (26-11-2026, Sebas: take up yesterday's work,
+  Claude alone, no local worker). The six sessions' folders under `build/sessions/` (not in git) were each a
+  proposal, checked here before it went in, and `tools/apply_proposal.py` (new) puts one into `symbols.txt`:
+  a `rename OLD NEW  # ADDRESS` everywhere OLD is (its `func` line, every comment, `param` and `local` line,
+  the C written by hand), a `type` or `var` line that meets one in place of it (a type's or variable's new
+  name renamed the same way, all at once, so a swap is one step), a `comment` of a function that has one by
+  hand in place of it; the rest a section of its own before the naming waves'. Then the functions only a
+  newly named type has lose the waves' model names, so that `symbols.py merge` gives them the type's (66
+  of them in this round, as yesterday's batches did by hand).
+  - `weapons/` (43 renames, 168 lines): checked in Ghidra's C the claims that change yesterday's names:
+    0xE4CB0 draws +0x17C against `VeritechPackArmor[+0x180]` and only while it is not 0, 0xEB7D0 draws
+    +0x174 against the EntitySpec's hit points only once +0x17C is 0 (ScreenElement 26
+    `PackArmorBarElement`, 7 `HealthBarElement`), the sniper's fire reads +0x290 and the charge +0x188,
+    `VeritechFindMissile` compares the missile's +0x2AC with the entity's +0x184. Left as it proposed:
+    `FPAPaired...` and the six types' record as `GunPodSpec` (its `left.txt` asks both).
+  - `ai/` (65 renames, 113 lines): every renamed function's callers read (`audit_names.py show`): all of
+    them the AI's (the script's reader, the entities' state machines, the action table at 0x1B1C3C), so
+    the generic names the models gave (`ArrayAppend`, `StringTableAdd`, `FixedListAppend`) become the
+    AI's own. `AITheme.ai`, an `EntityAI` in place, is `u8[768]`: a field cannot have a structure's type.
+  - `hud/` (stopped mid-work; 59 renames, 104 lines, 10 types): callers read the same way, and two types
+    in the C (ScreenElement 11 `TimerElement` draws at x 320, y 40 with a black shadow; 21
+    `LetterboxElement` two quads the viewport's width). Its `MissionMessageShow` taken as a rename of the
+    weapons' `MessageShow`; `SettingsMissionMenuTexts` is `VersusPauseMenuTexts`.
+  - `enemy/` (stopped mid-work): its `partA.md`'s proposed lines (`proposal.txt` drawn from it; 12
+    renames, 4 types: Entity 1 `BuildingTarget`, 64 `ExcaliburHiroDisabled`, Effect 28
+    `GuardianThrustBlueEffect`, 5 `ThrownObjectEffect`, which nothing makes; `LevelGravity` at
+    0x1B7708, the `BlastEffect` functions). Its `_work.md` (the battle pod fished whole, Entity 4 and its
+    kin) has no proposal yet.
+  - `levels/`: `tools/level_dump.py` (new), which reads the 59 levels to their end (29,208 records, 0
+    short); nothing to merge.
+  - `audit/`: its `suspects.txt` is `tools/audit_names.py` (new), run again after the merge: 809 flagged
+    to 757 (rule 1, a type's function under another name, 106 to 40). Its batches for review were not
+    done. `build/symbols.before_types.txt`, the symbols the C was written from, must go once the C is
+    built again (it was yesterday's, and made rule 8 count 394).
+  Measured (26-11-2026, two builds; the first linked without `pipeline.py names` and failed on the two
+  recompiled-only functions the proposals named, `AIRunRulesOfClass` and `MessageShow`: the recompiled C
+  takes its names in `names`, not `hand`): functions without a name in the decompiled C 320 to 300,
+  without a description 523 to 506; reads at a raw address 8,019 to 7,463; data addresses written as
+  numbers 6,127 to 5,721; the XBE's untyped bytes 820,787 to 622,609; up, as each new structure and type
+  brings them: unnamed fields at a named place 2,085 to 2,185, unknown bytes 4,063 to 4,191.
+  `tools/verify_c.py` 209 vectors, 0 different. The nine scenarios, the first time since 9db8491: every
+  frame and file as the reference (8 minutes).
+  Next: the audit's suspects by rule (`audit_names.py RULE`), the battle pod from `enemy/_work.md`, and
+  what each session's `left.txt` asks.
+- **The 300 functions without a name, dug by four agents** (26-11-2026, Sebas: go hard with names, Claude
+  Sonnet 5.5 agents, no local worker, no build). The 300 `sub_` of the decompiled C cut into four lanes by
+  their files (`build/sessions2/<lane>/todo.txt`, a brief they share in `build/sessions2/BRIEF.md`), each a
+  proposal reviewed here and put in with `tools/apply_proposal.py`. **204 of the 300 named in
+  `symbols.txt`; not built.**
+  - `types/`: Trigger 5 `SpawnStateTrigger` (486 in the levels as "Spawn State", each with a
+    SpawnGroupNode; three of its functions had the OnTime trigger's names); Steering 1, 2, 3, 4, 7, 8, 15
+    by their callbacks alone (`TurnToPointSteering`, `TurnToHeadingSteering`, `FaceObjectSteering`,
+    `StayAtOffsetSteering`, `HoldInputSteering`, `FollowWithinRangeSteering`, `AttachToObjectSteering`):
+    nothing makes them by their number and no level places one, which each type line says; 22 functions,
+    26 renames (the steering types' and the trigger's functions the waves had given family names).
+    Node 22 and 23 left: neither made nor placed, and nothing in their code names them.
+  - `effects/`: 89, most of them a type's one-line getter that a switch on the handle's type calls
+    (`<Type>SceneGet`, `<Type>SceneObjectsGet`, `<Type>RecordGet`, `<Type>ConstantsGet`), each address
+    checked against that type's Startup; sampled here (0xFB290 is the slot HitSpotRedEffect's Startup
+    fills). 7 renames of family names that were one type's.
+  - `objects/`: 47 (the families' shutdowns, `AIUpdate`, the handles' getters by family, the versus
+    setup's rows); `SceneObjectGetFlags` is `SceneObjectGetModel` (message 0xF006 answered with the
+    entity's +0x194 or a node's +0xD0), `SceneObjectTypeGetDescriptor` is `FPATriBarrelLaserWeaponSpecGet`.
+  - `screens/`: 47 (screens' fields by who writes them, the formations by their tables at 0x1B77F0,
+    `GameLoopSetMaxTicksPerFrame`, pad playback and recording, engine loose ends with `vc`);
+    `ScreenElementFamilyGetElement` is `ButtonPromptElementSetButton` (it stores the button 0 to 11).
+  - Left, each lane's `left.txt`: some 25 not functions at all (a bare `ret`, a tail in padding, bytes
+    inside a table: the decompiler's function starts to look at, `symbols/seed_functions.json`), AI
+    actions and conditions no rule uses, accessors shared by types that give the field opposite meanings,
+    engine fields written and never read.
+  - The comments that named functions by their `sub_` names rewritten (`audit_names.py comments`, 71
+    lines in the round); the audit 757 flagged to 744. `build/symbols.before_types.txt` is now the
+    symbols.txt the last build's C came from (`build/symbols.before_sessions2.txt`): it goes after the
+    next build.
+  Next: the build (`decompile.py build`, `pipeline.py names`, cmake, `verify_c.py`, the nine scenarios),
+  then the audit's rules 2, 3 and 5 by hand.
+- **The names the audit suspects, set right or kept** (26-11-2026, Sebas: go hard; Claude Sonnet 5.5
+  agents, not built). `tools/audit_names.py`'s rules 2, 3 and 5 (563 names the models gave) read by four
+  agents (`build/sessions3/<lane>/`), each name renamed with its evidence, kept, or left: 210 renamed (36
+  rule 2, 35 rule 3, 139 rule 5), 305 kept, 33 left. Checked here: the renames that clashed between lanes
+  (`SceneObjectCreateAndInit` is `SceneObjectSetTransform`: it fetches the object by its handle and gives
+  it a matrix and a place, it makes nothing; `GameObjectDestroyAndSendMessage` is
+  `SteeringSendControlInput`: message 0xF005, which `EntityApplyControlInput` answers;
+  `ScreenFamilyHandlePadInput` is `ConfirmDialogScreenReadPad`, its one caller), the most called
+  (`GameObjectFromIndex`, 87 callers, is `EntityGetAI`: the entity's +0x198 into `EntityAIs`), the
+  screens' pad readers made one pattern (`XxxScreenReadPad`). Rule 9's engine prefixes by hand here (58:
+  `VcObject...` to `vcObject...`, `GcAIData...` to `gcAIData...`). What a review kept is
+  `symbols/audit_kept.txt` (`RULE  NAME  why`, new), which the audit skips while the name stays. Flagged
+  744 to 242. A second pass, three agents (`build/sessions4/`): rules 1 and 6 (36 renamed: the Node pools
+  by their place in the family's record, 0x10 + 4 x the type, checked on CinemaNode and
+  PlayerStandInEntityNode; the shared Collect and Load by the types that share them; 16 weapons' one state
+  machine `DirectFireWeaponStateMachine`), rule 8 (11: four AI action slots by their number and the rules
+  that use them, five decompiler splits as `...Tail`; 68 kept: the AI tables' slots and the splits), the
+  rest (22: `vcRandomGet` is `vcRandomAdvance`, it hands nothing back; StrafeAttack's and MaintainDist's
+  own functions; the target lists by side). In all the audit's round: 337 renamed, 497 kept, the flagged
+  757 to 29. Not built.
+  Left: each lane's `left.txt` (the +0xD0 of the nodes, which means a thing per type; Male power armour's
+  states 0 and 1; the Settings screen's two sub-screens); the build.
+- **The files by what the names now say** (26-11-2026, not built). `symbols.py layout` knew one name of
+  the game's, `GameObject` (game/objects), which the models had written on anything: once the audit gave
+  those functions their own names it left 1,400 in game/unsorted (1,244 at f535473). Its rules now read
+  what the round settled (`subjects`): in the game's code a name that starts with a type's name
+  (`ConfirmDialogScreenReadPad`) or its family's (`EntityTakeDamage`) goes to that family's folder; in
+  the engine's (from 0x10C670, `ENGINE_START`: the first function after the last type's) one that starts
+  with an engine class's name without its vc (`TerrainGetHeight`, vcTerrain), but for `Object` and
+  `Sound`, which the models wrote for anything; in both a class's name as it is and `GAME_WORDS`: the AI
+  (game/ai, new: `AI`, `EntityAI`, `gcAIData`, `TargetList`, `ObjectPair`), the vector maths, and the
+  subjects that are no type's (game/level, mission, saves, stats, timers, versus, loop; engine/files,
+  movie, random, storage, new folders each). **game/unsorted 1,400 to 658**, 88 files (77), 866
+  stretches (414: a name's subject is not always its neighbours' file). What was game/objects by the old
+  fill and is honest now: 211 functions between two `GameObject` names that were no objects' (the
+  timers, the game's loop). Left in unsorted: 203 without a name, and the models' `Object...` (76) and
+  `Scene...` (43) names, which say no subject. The next build writes src/recomp/gen by these files
+  (CMake globs the folders).
+- **The game's part by subject, seven agents** (26-11-2026, Sebas: another batch, the game's part, cut as
+  yesterday's sessions were; Claude Sonnet 5.5 agents; not built). Seven lanes, each following its subject
+  through the code (`build/sessions5/<lane>/`: proposal, notes, left; the brief in
+  `build/sessions5/BRIEF.md`), structures first. `tools/cross_proposals.py` (new) reads the proposals
+  against each other before the merge (a function or a variable named two ways, a name for two things, a
+  chain of renames, a structure with two sizes, a field's offset two ways); `apply_proposal.py` now puts
+  a field in the place of the one its struct has at that offset. **Structures 64 to 240, fields 744 to
+  1,595, variables 2,067 to 2,267; 112 of the game's 478 functions and pieces without a name named (102
+  of its 159 functions), 173 renames.** What each brought, and what was checked here:
+  - `player/`: `PlayerView` (the camera record in the Player's +0x50, its modes), `VeritechModel` (each
+    VF-1's block: mode records, transformation motions, nodes), the veritech's states 4 to 11 by their
+    functions, the entity's boost energy (+0x178; `EntitySpec` +0x18 its most). `PlayerFireWeapon` is
+    `PlayerRespawnUnit` (checked: `GameObjectCreate(2, ..., 0x5C)` and message 0x3EE, no weapon;
+    `vcGameTime + 3000`), `GameObjectUpdatePadDirections` is `PlayerKeepInsideBounds`.
+  - `enemies/`: a structure a type for 31 entity types (the weapons' handles their Init stores, a mode
+    or reload word), `EntityDeathRecord` and a `var` for each of 41, the shared code that had no name
+    (`EntityUpdate` 0x1A480, `EntityStartDeath` 0x18DF0 with 86 callers, `EntityMoveOnGround`,
+    `EntityMoveFlying`, `EntityMoveShip`, `EntityControlForce`), 28 fire functions by type.
+    `WeaponFireAtTarget` made dust and splashes (`EntityUpdateDustAndSplash`); the Cat's Eye's and the MAC
+    II's names were swapped.
+  - `weapons/`: `MissileVolley` (message 0x3E9), `MissileLauncher`, `Missile` (up to four warheads,
+    each its contrail and hit test), `Flare`, `EffectStart`, the trails' and blasts' records, the
+    entity's list of the missiles chasing it (+0x1DC, what the HUD and the radar read). Seven names the
+    audit had kept, set right by the deeper reading (checked: `MissileDetonate` makes the contrails,
+    plays the launch sound and adds the missile to its target's list: `MissileIgnite`).
+  - `level/`: `gcLevel` (fog, planes, colours, the types it uses, its music), `Objective`,
+    `MissionMessage`, `MissionTimer`, `TimedEvent` and `EventData` (the AI's events: the models' slot and
+    entry pools), `SavedGame`, `SavedGameSlot`, `DeviceSavedGames`; `GameMain`, `GameLaunch`, the logos.
+    `GamePauseSet` is `CinemaSkipSet` (A or START half a second into a cinema; it calls
+    `GameLoopSetPendingTicks` with what is left of it), the `GamePause...` timers are the mission's end's.
+  - `ai/`: `AIGroup`, `FormationTemplate` (the tables at 0x1B77F0 decoded: wedges, a column, blocks),
+    `PathGraphNode` (a point of the route finder's graph; `PathNode` is the level's path, Node 14),
+    `EntityRoute`, thirteen steering types' records, `EntityAI`'s flags, skill, route and group words.
+    **The AI's groups are dead in this build**: the group works with `group_mode` 1 or 2, every theme
+    has 0 and so has every entity record of the 59 levels (three AIs of m1102 have a formation and a
+    group id, with mode 0), so the `AIGroup...` names (the models' `GameObjectChildList`,
+    `EntityChildList`, `EntityGroup`) rest on the code alone.
+  - `hud/`: `MenuListScreen` whole (four arrays of 32: texts, icons, overlays, enabled), eleven more
+    screens' records and fourteen elements', `ButtonPromptSprites` (12 sprites at 0x21CE60). The
+    sub-screens' accepted and cancelled flags sit at offsets that differ by type (+0x140/+0x144,
+    +0x144/+0x148, +0x184/+0x188 one way or the other), which is why their shared getters have no true
+    name. `HUDScreen` +0x12C is the health bar and +0x130 the pack's armour bar.
+  - `logic/`: `Node` (0xD0: name, flags, place and rotation in its parent and in the world, parent,
+    children, state) and 21 node types' own parts, `Trigger` and 14 trigger types', `Action` and 27
+    action types', `ObjectGroupComponent` and its 16 `ObjectGroupEntry`. **A level's script**: 1,211
+    components, each an entry's up to 10 triggers asked every 250 ms (message 8000; a trigger's flag 2
+    inverts its answer) and, all true, its actions sent 9000; 820 of the 2,379 entries used repeat. The
+    +0xD0 word is the PlayerStandInEntityNode's object (`PlayerStandInEntityNodeGetObject`).
+    `tools/level_dump.py`'s labels of the node's transform words set right by
+    `GameObjectUpdateHierarchyTransforms` (checked: +0xAC angles, +0x58 the matrix in the parent, +0x88
+    the world's; its reads were right).
+  Clashes settled here: `Entity` +0x24 is `control_sideways` (the player's lane read it as lift;
+  `EntityControlForce` multiplies it by `EntitySpec.speed_sideways`), the controls as `control_...`, the
+  slot at +0x90 `move_effects` (dust for the walkers, thrusts for the veritech), +0x260 `launch_speed`;
+  `EntityStart` +0x3C `owner` (a unit's Player, a missile's weapon's owner); two functions both called
+  `VF1FighterFire` (the mode picks: `VF1FighterFireGun`, `VF1FighterFireGunAndMissiles`).
+  Left for a pass of its own: the `Player...` names the audit kept that take an entity, not a Player
+  (`PlayerListEntryEnable` and its three kin are the veritech's guns out and away; `PlayerDeactivate`,
+  `PlayerInitialize`, `PlayerEffectsCreate`: `player/left.txt` has a name for each);
+  `WeaponFireAtTargetFromHandle` and `...ObjectFromHandle`; `EntityListHasEntries` (`AIGroupHasMembers`)
+  and `TypeIndexGet` (`AIGetSkill`); two existing vars' types (`StorageDeviceSavedGames`, `Stats`); the
+  319 pieces (10 named: most are a state machine's cases); 24 screens' and 14 elements' records; the
+  buildings' record (0x494 bytes, described in `weapons/left.txt`), the items. game/unsorted 658 to 624;
+  the audit flags 40.
+- **The game's data by its types' blocks, eight agents** (26-11-2026, Sebas: another batch; Claude Sonnet
+  5.5 agents; not built). The decompiled C of the game read or wrote 6,142 addresses of data as numbers
+  (9,204 places; counted from the last build's C against the `var` lines, `build/raw_reads_1126.json`),
+  4,003 of them in the entities: a type's `_Register` and `_Startup` fill the type's block in `.data` with
+  pointers to its constants in `.rdata`. Eight lanes by the kind of type (`build/sessions6/<lane>/`, the
+  brief in `build/sessions6/BRIEF.md`): armours, veritech, rdf, zentraedi, weapons, screens, effects,
+  misc. **Variables 2,266 to 4,169, structures 240 to 283, fields 1,595 to 1,874; the game's addresses
+  without a name 6,142 to 384** (the places that read them 9,204 to 769, by the same count: the build
+  will say how many become a field's name and how many `Var + 0x..`).
+  - The lanes found the blocks are made of records that exist: a type's block is its model, an
+    `EntitySpec`, a `MechMotions`, an `EntityDeathRecord`, then its own tail (nodes, launchers), so most
+    of it is a `var` a record (`PlayerFemalePowerArmorSpec EntitySpec`), not a structure a block: the C
+    names a record's fields only where the record has a var of its own. New shapes shared by many types,
+    one name each after the lanes' several: `MissileLauncherData` (0x278, what `MissileLauncherSetData`
+    copies to a launcher's +0x20; some 40 vars), `MechMotionsConstants` (walk, run, blend, run back),
+    `AimNodeLimits` (six floats for a node's record: which is which not proved), `vcObjectList` (0x48: 16
+    clones of a sound, a count, the next; `ObjectCloneArrayCreate` is `vcObjectListCreate`),
+    `ShipConstants` (the four ships' constants, their own order), `BurstRecord`, `AttachedRecord`,
+    `MuzzleFlashRecord`, `TrailConstants`, `BlastConstants`, `Building`, `Item`.
+  - The texts. `symbols.py texts` names a text by its words and, where the same words are in several
+    places, by the one type that uses each; run again with the types named since, it names 1,073 (952).
+    It cannot tell apart the same text twice in one type (a mech's motions), which the lanes named by the
+    field each fills: their 1,056 `char[N]` lines were set aside, the ones the tool still left without a
+    name (1,001) checked against the XBE's bytes (a string of that length at that address) and put in a
+    section of their own. Five "empty names" that point at padding left out.
+  - The pilots' heads were not heads: five functions (`VF1SSkinTexturesGet` and its kin, the models'
+    `PilotHeadTextSetup`...) hand `SkinTextApplyToObject` the textures of one of eleven skins of a VF-1
+    model (map1, map2, eye, cockpit glass: 44 names a function).
+  - Clashes settled here (17 between misc and the screens' and effects' lanes, the same variables
+    twice): by the evidence each line had (`TargetAcquiredSound` and `TargetSwitchSound` by their wavs;
+    `CameraNodeCurrent` the handle and `CameraNodeActive` the flag; the confirm dialogs' handles, the
+    main menu's veritech slot, `MissionUnlocks` and the medals' layout as the screens' lane had them).
+  **Three faults of the round before, found by this one's checks and mended**: (1) `VeritechModel` was
+  0x17B0 and covered the next type's `GameObjectType`, which has its var: 0x1768; (2) `SavedGameLoaded`
+  (a `SavedGameSlot`) covered `Cheats`, `AwardRanks` and `PaintDesignsEarned`: no var line for it while
+  those have theirs; (3) `tools/symbols.py` reads an array's size in decimal and skips the line
+  otherwise, without a word: five fields written `u8[2C]`, `u8[34C]`, `u8[2E4]` were not read at all,
+  and `DeviceSavedGames.slots`, `u8[3700]` for 0x3700, was read as 3,700 bytes: all six in decimal now.
+  `tools/check_symbols.py` (new) tells all of that and more of `symbols.txt` against itself (a line read
+  as nothing, a size that fits only as hexadecimal, variables or fields that overlap, a field past its
+  structure, two lines for an address, a name for two things): 0 told now; `tools/cross_proposals.py`
+  tells the proposals' variables that overlap each other or the ones there are.
+  Left: the 384 addresses (floats every draw function shares at 0x18Exxx to 0x190048, the layouts'
+  floats, single words); the engine's 281 addresses, not this round's; names the audit kept that these
+  lanes' reading contradicts, with the earlier ones a pass of its own: `InputRepeatStateClear`,
+  `InputRepeatAdvance` and `InputRepeatFlagGet` are the credits' (clear, scroll, finished),
+  `SoundPlayTargetLost` plays the slot made from "TargetAcquiredM.wav" and `SoundPlayTargetAcquired` the
+  one from "TargetSwitch.wav", `ControllerItemsDisabledSet` writes `PlayerControlsOn`; `vcScreenRect`, a
+  `data` line some 60 functions use, as a `vcRect` var; `SavedGameSlot.record` hides the `SavedGame`'s
+  fields; the launcher record's two tables (+0x2C, +0xEC) the Excaliburs fill and nothing reads.
+- **The parameters' names, eight agents** (26-11-2026, Sebas: another batch; Claude Sonnet 5.5 agents;
+  not built). The decompiled C calls a parameter by its place (`arg0`, a register) some 45,000 times in
+  the game's code, and `symbols.txt` had 55 `param` lines for 41 functions. Of the game's 2,718 named
+  functions with parameters (8,482 of them, 7.2 MB of C), the densest 2,117 went to eight lanes
+  (`build/sessions7/<lane>/`: `functions.c`, the lane's functions as the last build wrote them with
+  today's names put in; the brief in `build/sessions7/BRIEF.md`). **4,253 parameters named in 1,892
+  functions; `param` lines 55 to 4,308.** `tools/check_params.py` (new) reads a proposal of `param` lines
+  against the functions' signatures in the decompiled C: a register the function does not take, a
+  (function, register) named twice or already, a name that is not snake_case, a keyword or a register's
+  own, two parameters of a function with one name, a name the function's C already uses (which would
+  not compile): every lane ran it to nothing told, and so does the whole. Its first version counted the
+  words of the next function's description as names of the C (mended while the lanes ran; the AI lane's
+  `owner` for an entity went back to `entity` where the mended check takes it).
+  - Shapes made one across the lanes: a state machine is `entry`, `object`, `state`, `message`, `data`
+    (190 of them; settled here against `GameObjectDeliver` before the lanes started) and, in the 55 with
+    a sixth, `time` (`GameObjectDeliver` hands `GameObjectTime`); an update `entry`, `object`, `time`; a
+    `_Register` `family` (it stores the type at the family's +0x2C: 236); a `_Load` `file`, `type`,
+    `family_version`, `version`, as `GameObjectType.load` says.
+  - 358 descriptions that named a parameter by its place say its name now (601 `argN` in them).
+  - Left by the lanes (their `left.txt`, 2,327 lines): 1,818 registers the function never reads as an
+    input (`ebx`, `ebp`, `esi`, `edi`: what the decompiler could not prove preserved, a matter for its
+    signatures, not for names), 418 `argN` (by-value blocks whose stack layout the C lost, words only
+    handed on to a callee without names), 91 others. The parameters that come in a register are the
+    least sure (entities_a: Ghidra's C and the build's call sites do not always agree on what a
+    register holds). Not in the round: the 601 functions past the lanes' budget (1,549 parameters), the
+    engine's (5,760 uses), `GameObjectSendMessage` (message, sender, receiver, data, size) and
+    `GameObjectCreate` (family, type, data, size), which only the recompiled C has.
+  - Names the lanes saw wrong, for the pass of its own: `EntitySetTargetHandle` sets `Entity.lock_on`
+    (its second parameter is `enabled`); `CinemaNodeInit`'s description says Reticle; `ReticleDrawElements`
+    walks the CinemaNodes; the `Player...` functions that take an entity (`hud/notes.md`,
+    `screens/notes.md`, `nodes/notes.md`, `entities_a/notes.md`).
+- **Before the next build** (26-11-2026: the last one was 19:35, f535473 plus the four first proposals).
+  Since then, in `symbols.txt` and unbuilt: functions with a name 5,369 to 5,687 (of the 300 `sub_` of
+  the decompiled C, 79 left), 546 renames, structures 64 to 283, fields 744 to 1,874, variables 2,067 to
+  4,169, `param` lines 55 to 4,308, the layout's rules (88 files, 11 new folders; game/unsorted 1,244 to
+  623). `tools/check_symbols.py` tells nothing. What the build has to prove, and where it can fail:
+  (1) the decompiler takes 219 new structures, 2,100 variables and 4,253 parameter names (a name that
+  clashes in the generated C or in `symbols.h`'s accessors is the likely failure; the analysis is worked
+  out again, some 10 minutes); (2) `tools/x86/emit.py` names a field or a variable only where the
+  access is as wide as its type (`GuestNames.field`, `place`) and writes `MEM<bits>` otherwise, so a
+  wrong type costs a name and does not change what the C does: `verify_c.py`'s 209 vectors and the nine
+  scenarios are still the proof; (3) `pipeline.py names`, not `hand`: the recompiled-only functions got
+  names; (4) every generated file moves (the new folders): a full compile; (5) after it,
+  `build/symbols.before_types.txt` goes. If it fails and the cause is not plain, each round's
+  `symbols.txt` is kept (`build/symbols.before_sessions2.txt`, `3`, `5`, `6`, `7`) to cut the search by
+  halves. Nothing is committed.
 - **The Xbox's memory left behind as the functions are decompiled** (28-10-2026, Sebas): the game keeps
   its state in a copy of the Xbox's 64 MB, its pointers 32-bit addresses into it and its variables at
   fixed places, read through `MEM32` and `symbols.h`'s accessors; in readable C that is noise like the

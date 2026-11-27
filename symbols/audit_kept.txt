@@ -1,0 +1,497 @@
+# Names a review read and kept under an audit rule (tools/audit_names.py skips them): RULE  NAME  why.
+# The audit round of 26-11-2026 (build/sessions3/<lane>/kept.txt, Claude Sonnet agents, reviewed).
+2  GameObjectWrapOffsetInRange  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectTargetActionApplyTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectGetPathPointAtFraction  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PathGetDirectionAtDistance  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerListEntrySetEnabled  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerListEntrySetDisabled  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerGameObjectViewReset  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectTimedEffectEnable  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectStopTimedEffect  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectTimedEffectDisable  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponFireAtTargetFromHandle  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerDeactivate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerInitialize  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerEffectsCreate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerMotionClear  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PlayerDestroy  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectUpdateTargetAngleTimedEffect  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCreateAtSourceTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCreatePlacedAtSourceTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponFireAtObjectFromHandle  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityAimModelAtTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectAimModelNodeAtTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectSetNodePositionsFromRaySphereIntersect  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityCreateSceneObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityFindSlotWithLowestValue  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectAdvancePositionAndCreate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityUpdateMotionAndSceneObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityUpdateSteeringTowardForwardObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CollisionSceneObjectsClearFlags  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CollisionSceneObjectsRelease  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CollisionHullSceneObjectsSetFlags  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CollisionHullSceneObjectsClearFlags  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponFireAtTargetWithEffects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectAimNodeUpdate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectUpdateNodeTowardsTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  UnitDisableWeaponSlots  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  UnitAimWeaponsAtTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCreateNodeFromClone  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityPartsAimAtTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CatsEyeCreateModel  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectUpdateTargetNodePositions  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectSetNodePositionFromTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  TurretWeaponSlotsActivate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  TurretWeaponSlotsDeactivate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  TurretWeaponSlotsDeactivateIfActive  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityFireWeaponEffect  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityGetPosition  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EmitterGetAttachedEntity  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityAverageChildMaxHealth  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityAverageChildHealth  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityFindNearestObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponHitTriggerRetarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponHitTriggerInit  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  WeaponHitTriggerTargetListAdd  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectSetRangeCount  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityListFindByPair  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityListContainsPair  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  DifficultyScreenIsClosed  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  DifficultyScreenIsConfirmed  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  InputRepeatStateClear  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  InputRepeatFlagGet  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  InputRepeatAdvance  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  LetterboxDestroy  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  LetterboxCreate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectClonesBuild  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectSetSceneObjectsUsed  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectUpdateSceneObjectClones  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityUpdateAvoidanceSteering  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectCheckProximityTrigger  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityLineOfSightCheck  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectAttach  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCreateAttachedSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectCopyTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectUpdateCosmeticUnits  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  CiviliansNodeUpdateEntryBounds  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectSceneObjectSetBoundsAndUser  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  BoxVolumeNodeCornerMoved  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectReleaseSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  NodeFamilyAttachObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectSetSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCloneSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PointNodeSetBoxCorner  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  PointNodeSetControlPoint  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectDispatchStateTargetAction  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ScreenMarkerDrawByDistance  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  TargetScreenMarkerDraw  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectAttachSceneObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectGetSceneTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectUpdateSceneTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityCreateEffects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityTestCollisionWithObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneAttachmentGetType  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SmokeLight02EffectCreateBurst  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectSpawnEffectInstance  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneRaycastSpawnEffects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectClearAndReset  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectCreateFromHandle  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectEmitterSpawnEffectInstance  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectEmitterSpawnParticlesAndEffects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectCreateAtTarget  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityCreateHandlePointEffects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectEmitterEmitAtNodes  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectEmitterUpdate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectEmitterStart  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectSetTransformAndRebuildBounds  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectCreateFromType  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EntityOrChildrenTestAgainstObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  AITargetTriggerContainsEntity  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectModelInit  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectModelClear  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectModelsAttach  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectFindByName  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectAttachByName  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  Building_SpawnModelNodeObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  FormationUnitSetNodeTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectSyncCachedTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectAttachToSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneAttachmentCreate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectCreateSceneObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectSceneObjectsCloneFromTemplate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectAttachChild  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectActivateSceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  GameObjectCloneTemplateSceneObjects  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneAttachmentCreateFromTemplate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneAttachmentGetTemplate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectGetRange  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  RandomSpreadRange  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ModelNodeSetTransform  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectSetSecondarySceneObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectGetBounds  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  RdfTpTestTextIconSetup  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectSetRefCountedObject  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectRebuildBounds  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  ObjectRefArraySetElement  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectGetCosmeticUnitCount  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectPiecesActivate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  EffectPiecesDeactivate  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneObjectResetPointList  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+2  SceneDrawIndexedGeometry  the word names what the code does or a shared engine thing (at, scene, input, range, attach, Player as player-controlled), not another type
+3  Matrix3x3Multiply  a 3x3 product; Matrix4x4Multiply is the 4x4 one, two real things
+3  Matrix4x4Multiply  a 4x4 product, not the 3x3 one
+3  HudTextSetTextAndExtras  one of three answers of ConfirmDialogScreen to message 0x32CA, by the dialog's mode: this one sets the text on three linked handles (0x124, 0x138, 0x13C), HudTextSetText on two, AndRefresh on one and rebuilds it; no better word for the extras found
+3  HudTextSetTextAndRefresh  see HudTextSetTextAndExtras: one handle, and it always rebuilds the text object (sub_000A51F0)
+3  GameObjectSetTextAndLayout  sets the text at +0x154 and then lays the rect out (centres it, shifts the two linked objects at +0x138/+0x13C): both are what the code does; callers ScreenCreateTextObject*
+3  SoundPlayTargetLost  two real sound slots (0x1E6BC8 lost, 0x1E6BCC acquired); their callers agree with the names
+3  SoundPlayTargetAcquired  see SoundPlayTargetLost
+3  GameObjectCopyFieldsToBufferWithValue  a different copy from GameObjectCopyFieldsToBuffer (7 dwords from +0x38 into +8, a value in +4), no caller in the C; the name states what it does
+3  EntityUpdateAttachedObjectWithFlag  the variant of EntityUpdateAttachedObject that also sets bit 0x10 on the target when arg3 is nonzero; the callers use both forms
+3  SavedGameSetName  copies to 0x1EA31C, the saved-game name buffer (SavedGameGetNameBuffer): a buffer of its own; its callers LoadGameScreen and GameProgressReset use it as that
+3  StatsAllocSlotForIndex  the copy of StatsAllocSlot (0x30490) that takes the index in eax, at 0x304C7, no caller in the C; the name says which one
+3  MainMenuScreenSetupForObject  resolves the handle then MainMenuScreenSetup with per-screen-id arguments: a wrapper whose name says it
+3  PlayerFireWeaponWithCooldown  fires PlayerFireWeapon only after 3000 ms of vcGameTime since +0x3B4 was first stamped, with no target and the global 0x1E62F0 zero: the cooldown is the point
+3  GameObjectTimedEffectEnableUnchecked  entered after the 0x100 check of GameObjectTimedEffectEnable (0x41750): sets the bit and starts the effect without testing; Unchecked tells the reader more than Tail would
+3  GameObjectCreateWithString  the type 7 creator of the six PlayerStandInEntityNode creators (a name copied from a handle's string); which type 7 is not shown, so it keeps its sibling-style name
+3  ZenCruiserTurret1Init  ZenCruiserTurret1 is its own type (Entity 44), the 1 is part of its name, as ZenCruiserTurretInit is the other type's
+3  VF1SXFighterSetMode  the SX's own; its twin was the AX's (renamed VF1AXFighterSetMode)
+3  ZenReconCollisionSceneObjectsSetFlags  the same code in three types' collisions (ZenRecon, ZenShuttle, SeaSergeant), each named for its type
+3  ZenShuttleCollisionChangeChildFlags  see ZenReconCollisionSceneObjectsSetFlags
+3  SeaSergeantCollisionChangeChildFlags  see ZenReconCollisionSceneObjectsSetFlags
+3  FemalePowerArmorStopMotionAndClearPriority  stops the 0x8D0 motion entry (fades it over 0xFA) then FemalePowerArmorStopMotion and MotionListClearFirstPriority: the steps are what it is
+3  FemalePowerArmorDestroyObjectsForState  sibling of DestroyTwoObjectsSetState / DestroyThreeObjectsSetState: it chooses by the type code which of the two to do; ForState is that choice
+3  FemalePowerArmorInitMotionAndEffectsForState  the variant of InitMotionAndEffects that takes the state in eax and sets +0x2B0 to 0 (see its comment)
+3  ZenReconShip_StateCountdownToState1  the number is the state the function sets in the machine's context (+0xE) when the counter ends: 1 after TryAttachObject's attach, 0 after the attach in the state machine's message case; the states are not named yet
+3  ZenReconShip_StateCountdownToState0  see ZenReconShip_StateCountdownToState1
+3  PodHeavyArtillerySpaceActivate  type's own (the Space variant); the non-Space type's copy is now PodHeavyArtilleryActivate
+3  PodHeavyArtillerySpaceDeactivate  type's own
+3  PodLightArtillerySpaceCloneObject  type's own; PodHeavyArtillerySpaceCloneObject and ZenShuttleCloneObject use the same word, and PodStandardWarriorSpaceCloneObject now too
+3  ZenWarriorNoArmourAttachWeapon  type's own; the Zen warriors' activate and deactivate pairs are the same code in different types
+3  ZenWarriorNoArmourDetachWeapon  see ZenWarriorNoArmourAttachWeapon
+3  ZenWarriorHeavyActivateWeapons  type's own (the word order next to ZenWarriorHeavyWeaponDeactivate differs, not the sense)
+3  ZenWarriorHeavyWeaponDeactivate  see ZenWarriorHeavyActivateWeapons
+3  ZenWarriorLiteActivateWeapons  type's own
+3  ZenWarriorLiteDeactivateWeapons  type's own
+3  ZenShuttleSetCallbacks  type's own; same body as SeaSergeantInit because the two types share the code; each named for what its own state machine uses it as
+3  GameObjectSendMessageAndSetState  only ZenShuttle_StateMachine calls it: sends 0x3ED to the ship's part when its field is zero, changes the scene object's flags and sets the machine to state 3; no cleaner name without the shuttle's states named
+3  SeaSergeantInit  see ZenShuttleSetCallbacks
+3  PodStandardWarriorSpaceEnableParts  type's own; PodStandardWarriorEnableParts is the non-Space type's copy
+3  PodStandardWarriorSpaceDisableParts  type's own
+3  ZenWarriorScavengerAttackMotionsEnable  type's own; enables its two attack motions
+3  ZenWarriorScavengerAttackMotionsDisable  type's own
+3  FighterPodSetWeaponMode  the pod's own: mode 0 restores both guns, mode 1 keeps the front one; same shape as the fighters' but with gun handles of its own
+3  CallbackTableInvokeNextEntry  two real tables: this one calls the next handler of 0x273300 (index 0x20F7E0), CallbackTableForwardNext that of 0x273140 (index 0x20F7E4)
+3  AIObjectInstallHandlers  installs the AI's first set of five handlers in the object; AIInstallFunctions installs the other set (their handler addresses differ): two things
+3  CallbackTableForwardNext  see CallbackTableInvokeNextEntry
+3  EntitySetSecondThresholdReachedFlag  the second of two thresholds on the entity (+0xB0/+0xB4, flag bit 8; the first is +0xA8/+0xAC, bit 4): a real pair with EntitySetThresholdReachedFlag
+3  EntityMarkSecondThresholdReached  the second threshold's wrapper, as EntityMarkThresholdReached for the first
+3  AIInstallFunctions  see AIObjectInstallHandlers
+3  AIConditionSecondTimerElapsed  the second of the AI's two timers (counter +0x9C against +0x98): a real pair with AIConditionTimerElapsed
+3  ObjectReleaseType2SlotAndSetSlotTypeAndIndex  the 2 is the slot type (counters at 0x26E280; type 1 at 0x26E2C0, type 0 at 0x26E300); an entry of ObjectSetSlotTypeAndIndex (0xA8570) that releases the old slot first, no caller in the C
+3  MovementPatternFigure1WorldPointApply  figure 1 and figure 2 are the two figures of the movement pattern (MovementPatternFiguresCreate makes two); each function of the six works on one of them
+3  MovementPatternFigure2WorldPointApply  see MovementPatternFigure1WorldPointApply
+3  ObjectTargetMovementPatternFigure1Apply  see MovementPatternFigure1WorldPointApply
+3  ObjectTargetMovementPatternFigure2Apply  see MovementPatternFigure1WorldPointApply
+3  ObjectApplyMovementPatternFigure1WorldPoint  see MovementPatternFigure1WorldPointApply
+3  ObjectApplyMovementPatternFigure2WorldPoint  see MovementPatternFigure1WorldPointApply
+3  SavedGamesCheckDeviceAndContinue  SavedGamesTaskUpdate, then if the device status is 1 sets the first screen's modal result: it checks and continues; callers are the load and save screens
+3  SavedGamesListRefreshWithDeviceState  a per-frame update slot (stored by FUN_000bbd90 at +8): refreshes the list and records whether the device is not ready in 0x21B1BC; its two steps are named
+3  ScreenWidgetGetTextBufferDirect  takes the object pointer itself (+0x14C), no handle lookup, as ScreenWidgetGetTextBuffer does: the pair is the handle form and the direct form
+3  ZenCruiserTurret1CannonWeaponSpecGet  ZenCruiserTurret1CannonWeapon is its own type (Weapon 37)
+3  GameObjectDestroyAndCreate  destroys the object and creates a type 10 subtype 0xD in its slot when the slot has an object: both steps are the point; callers sub_0002D130/4 are not named
+3  GameObjectSetSplineKindWithData  sets the kind to 1 with two values (+0xD4, +0xD8); GameObjectSetSplineKind sets kind 0 with one: two kinds, one caller each (SplineNodeCreateObjects)
+3  GameObjectSendMessageToChildrenAndGetBounds  sends to the children and then draws the scene object's bounds as a red line list (0xFFFF0000): both steps are SceneObjectNode's, its one caller
+3  CyclopsDoorsActionStateReset  type's own; the four actions' resets (Cyclops, SetVisibility, AISetGridNav, FreezePlayer) are one pattern (+0x18 = -1) with different templates: each is its action's
+3  SetVisibilityAction_Init  type's own; see CyclopsDoorsActionStateReset
+3  AISetGridNavActionReset  type's own; see CyclopsDoorsActionStateReset
+3  FreezePlayerActionInit  type's own; see CyclopsDoorsActionStateReset
+3  SniperChargeGaugeInit  type's own (SniperChargeGaugeElement)
+3  AngularVelocityIntegrateOrientation  two versions of the angular-velocity step: this one (sub_000F0760, the update the fighters, the recon ship and the officer sled install at +0x8C) honours the inverted flag; SceneObjectApplyAngularVelocity (sub_000F1810, VeritechEnterFighter only) the free pitch
+3  SceneObjectApplyAngularVelocity  see AngularVelocityIntegrateOrientation
+3  CharacterDamageChunksLargeBGetEffectPieces  B is the type's own suffix (CharacterDamageChunksLargeBEffect, asset chunks_large_b), as G and W; its comment's blue is a guess and could lose the word
+3  Vector3Copy  copies 3 floats; Vector2Copy is the 2-float one
+3  Vector3Set  12-byte vector; Vector4Set is the 16-byte one
+3  Vector4Set  16-byte vector
+3  Vector2Copy  copies 2 floats
+3  Vector3Add  3D add with a destination; VectorAdd (0x11960) is another form (the number is the dimension)
+3  Vector3Subtract  as Vector3Add
+3  Vector3Scale  as Vector3Add
+3  Matrix3x3Identity  3x3 identity (and w to 1.0); the 4x4 is another function
+3  Matrix4x4Identity  4x4 identity
+3  Matrix3x3Invert  3x3 inverse with the identity fallback; the 4x4 one uses cofactors
+3  Matrix4x4Invert  4x4 inverse by determinant and submatrices
+3  Vector3Normalize  in place, with the 0.0001 guard; VectorNormalize is another form
+3  Vector3Distance  distance of two vectors passed in registers; VectorDistance is another form
+3  Vector3Length  sqrt of the dot of a 3-float vector; VectorLength (0x123F0) is another form
+3  RenderDeviceStateClearAndReleaseVertexBuffers  two calls, both the point: the render state shutdown; callers are the main-loop pieces
+3  SceneObjectCreateWithFlags  creates, optionally initialises in place (sub_0011CA40 with its own transform) and passes the flags on; the parts are what the optional arguments pick
+3  ObjectSetReferencedObjectAndValue  its one caller is vcWater_Load; the variant of ObjectSetReferencedObject that also stores a value at +0x11C
+3  Matrix3x3IdentityAndZeroVector  identity then zero three floats, used once by vcTerrain_Register: what it does
+3  TerrainCellToWorld  two terrain structures: this one (row stride +0xD4, scale 0x1BA310) is TerrainCellMeshRayTest's, TerrainGetWorldPosition (height byte at +0xE8, scales 0x1BA460) TerrainCellComputeTriangleNormal's
+3  ColorSetObjectColor  writes the global 0x1BA440 (ColorGetObjectColor reads it); ColorSetVertexColor writes 0x1BA44C (ColorGetPackedVertexColor reads it): two colours, two functions; gcLevel_Create and gcLevel_Load set both
+3  ColorSetVertexColor  see ColorSetObjectColor
+3  SceneGraphCollectObjectsWithTransform  builds the transform record then calls SceneGraphCollectObjects; 5 callers pass a transform
+3  TerrainGetWorldPosition  see TerrainCellToWorld
+3  VcObjectDrawWithTrail  VcObjectDraw plus the trail strip; the engine's own name
+3  BoundingSphereSetFromBox  the model's copy (ModelSetReference); the two terrain copies are renamed after it
+5  EntityInitialize  right: builds an Entity from its EntityStart (the field comments say so)
+5  GameObjectSendMessageToChildren  exact: message 0x2AF8 down the child chain at +0xBC/+0xC0; sibling of GameObjectAttachChild
+5  GameObjectSendMessageWithParams  exact: GameObjectSendMessage 0x2AFA with four parameters; the nodes use it
+5  GameObjectAttachChild  exact: appends the second to the first's child list (+0xBC)
+5  GameObjectGetType  exact and generic: the +0xD0 field every game object has, which callers compare with type constants
+5  GameObjectHandleIsValid  exact: the handle resolves and its +4 bit 0 is clear
+5  GameObjectMoveTo  exact: moves the object and its children (GameObjectUpdateHierarchyTransforms), its callers are nodes, entities and boxes
+5  GameObjectResetFlagWord  exact: clears the flag word at +0x40 of any game object
+5  GameObjectListAdd  exact: appends a handle to the list at +0x34 and sets its owner; used by the triggers and by GameObjectSetOwner
+5  GameObjectChildListGetFirst  exact and generic: the 20-slot child list GameObjectChildList* share with EntityChildList*
+5  GameObjectChildListGetNext  same list as GetFirst
+5  GameObjectChildListGetByIndex  same list as GetFirst
+5  GameObjectChildListRemove  same list as GetFirst
+5  GameObjectChildListClear  same list as GetFirst
+5  EntityChildListAddChild  right: adds an entity to an EntityChildList (EntityChildListRebuild/Refresh siblings)
+5  GameObjectGetAttachedObject  exact: returns the vc object at +0xD4 of any game object (DisplaySlotRender, the animation nodes)
+5  NodeFamilyFromHandle  right: the node list at +0xD0 of the game root object; sibling of NodeFamilyUpdateNodes
+5  NodeFamilyUpdateNodes  right: walks the node list (NodeFamily*), CinemaNode's
+5  NodeCreateChildGameObject  right: a node makes a child game object (vcFormat name, GameObjectCreate)
+5  ObjectSetNodeArray  right enough: sets the model's array of 0x3C-byte node records at +0x294 (count at +0x290), as the Startups build them; ObjectFindChildIndex/ObjectFindEmbeddedChildIndex are its siblings
+5  ObjectFindChildIndex  exact: the index of the child named so in the model's child list, sibling of ObjectFindEmbeddedChildIndex
+5  ListGetFirst  exact: the generic linked list's iterator (current node at +8), with ListGetNext
+5  ListGetNext  exact: see ListGetFirst
+5  FlagsSetMask  exact: sets or clears a mask of bits in a flags word
+5  TwoSlotListClear  exact: the two-slot list of scene objects (SceneObjectPairChangeFlags), with TwoSlotListAdd and TwoSlotListRemove
+5  TwoSlotListAdd  exact: see TwoSlotListClear
+5  ArrayAppendSlot  exact enough: appends a zeroed 0x5C-byte element to the per-index array of an object's instance records (Box, collision grid and effect instances all use it)
+5  PairTableAddObject  right: sibling of PairTableRemoveObject and PairTableGetValue (the 58-entry pair table)
+5  CallbackEntryClear  exact: clears one 0x2C-byte entry of the callback tables
+5  CallbackTableInvokeNext  exact: the next function of a callback table entry; CallbackTableInit, CallbackTableForwardNext siblings
+5  GameModeGet  exact: one global, mode 0 to 4 from the main menu (2 and 4 change damage and the choice screens)
+5  GameModeSet  exact: see GameModeGet
+5  GameStart  right: a game session's start (GameRun calls it, then the loop)
+5  GameRun  right: the whole game session (GameStart, GameLoopRun, GameSessionShutdown)
+5  GameUpdate  right: the update GameSessionRun hands GameLoopRun, one frame's
+5  GameFrameProcess  right enough: one frame of GameRun, with GameFrameUpdate and GameFrameRender as siblings
+5  EntityFamilyRegisterAll  exact: registers every type of the Entity family
+5  VcStringManagerGetTextById  right: the engine's vcStringManager is a class, "Manager" is its own name (vcStringManagerGetText); this is the global manager's
+5  StringManagerInit  right: the vcStringManager class's own initializer (vcStringManager_Copy, vcStringManager_Load call it)
+5  CallbackTableInit  clears the AI callback table at 0x273300 and installs its two threshold callbacks; the name says it
+5  CallbackTableInvokeNextEntry  invokes the next entry of that one table with its global index; AIObjectInstallHandlers stores it; a thin wrapper that says what it does
+5  EntityAddObjectSlot  adds an object to one of the four slots at +0x1DC (with a time at +0x1EC) of the entity whose handle MissileDetonate has at +0x270; accurate, the slots' meaning is not known yet
+5  EntityChildListInit  the GameObjectChildList*/EntityChildList* group is the AI group's member list (formations Wedge, Column, Block); consistent with r5a's most-called members, so a rename of the whole family is for the main session, not of three members alone
+5  EntityChildListRemoveByHandle  same family: removes a member by its handle from the 20 slots
+5  EntityChildListSetKind  same family: picks the formation (Wedge, Column, Block, InvertedWedge) from the entity's +0x2B4; sits beside EntityChildListPlaceWedge and the others
+5  EntityEventDispatch  the AI object's event handler (slot +0x294): sends events 2 to 8 to the AI's reactions; the name says it
+5  EntityListHasEntries  true when the group list has members (count at +0x5C above zero); AIUpdate asks it of the same list it hands to EntityListRefreshDispatch
+5  FloatCompare  the comparator EntityListSortNearestFirst hands to the sort: compares two floats through pointers; it says what it is
+5  GameObjectChildListAdd  same family: stores a member in the first free of 20 slots and counts it
+5  GameObjectChildListDestroy  same family: clears the list at +0x2A4 and gives its pool entry back
+5  GameObjectChildListInitialize  same family: AIInitialize's allocation and set-up of the group list (kind, spacing at +0x70)
+5  GameObjectGetFlagState  returns 1, 2 or 0 from bits 0 and 1 of the object's flags at +0x10 for the pickup reticle; accurate, what the two bits mean is not known
+5  GameObjectListRemove  the counterpart of GameObjectListAdd (GameObjectSetOwner uses both): unlinks an object from its owner's list
+5  ItemFamilyRegister  as WeaponFamilyRegister, TriggerFamilyRegister, ActionFamilyRegister and the rest: registers the family and its six types
+5  ListAppend  a plain linked list's append (a 12-byte node); CinemaNode's own use; generic because it is generic
+5  ListInit  zeroes the four words of that list; the pair of ListAppend
+5  NodeCompare  the comparator GameObjectSortLinkedHandlesByKey gives qsort: compares the nodes' keys (unset last, then the flag, then the float); accurate
+5  NodeFamilyRegister  as ItemFamilyRegister: registers the Node family and its 26 types
+5  ObjectAddRefSlot  a slot of the vcObject class registered by vcObject_Register (type 7): takes a reference into the three-entry array at +0x1E8; its pair ObjectGetRefSlotArray names the same array
+5  ObjectBuildElementFreeList  builds the free list over an object's elements (0x48 bytes each, linked at +0x40); ObjectSetElementCount's only call; accurate
+5  ObjectGetRefSlotArray  the pair of ObjectAddRefSlot: hands back the address of the three-entry reference array at +0x1E8 and its length
+5  ObjectGetSlotIndex  index (0 to 4) of a handle among the entity's five handles at +0x68, +0x5C, +0x6C, +0x78, +0x7C, -1 when none; accurate, the caller sub_0004FA20 is not named yet
+5  ObjectRefArraySetElement  CiviliansNode's: sets a reference of an object's array (addref the new, release the old), sibling of ObjectSetIndexedRef; accurate
+5  ObjectSetFlags  vcMultiSubObject's class slot (vcSceneObjectRegisterType 0xC, slot 1): sets bit 4 of the flags at +0xC0; it does just that
+5  ObjectSetReference  vcSkyScene_Load's: puts a reference in the object's first word (release the old, addref the new) and marks it changed; accurate
+5  PairTableGetValue  reads the global pair table (two objects' slot indices at +0x21C, the smaller first); sub_000286B0's; accurate and it pairs with PairTableAddObject and PairTableRemoveObject
+5  PairTableRemoveObject  clears the object's row of the pair table; the counterpart of PairTableAddObject (EntityInitialize); accurate
+5  RefObjectInitFields  vcRefObject_Create's: sets +0x13C to -1 and +0x140 to 0; accurate
+5  SlotGetCurrentEntry  the pair of SlotSelectCurrent (VeritechChoiceScreen selects the slot, then asks for its entry to apply the skin text to); accurate
+5  TypeIndexGet  returns the object's type index at +0x34 (0 for no object); AIInitialize copies it into the AI; accurate
+8  GameMainLoopStep  a split of the decompiler, the middle or tail of the function before it (0x00011085): nothing calls it, no table holds it; the name says what that piece does
+8  LevelAIInitializeTail  a split of the decompiler, the middle or tail of the function before it (0x0001F6F4): nothing calls it, no table holds it; the name says what that piece does
+8  ScreenIsActiveTail  a split of the decompiler, the middle or tail of the function before it (0x00020994): nothing calls it, no table holds it; the name says what that piece does
+8  GameObjectLastSetTimer  a split of the decompiler, the middle or tail of the function before it (0x00024000): nothing calls it, no table holds it; the name says what that piece does
+8  LevelGetFilePath  a split of the decompiler, the middle or tail of the function before it (0x0002504F): nothing calls it, no table holds it; the name says what that piece does
+8  MusicResumeObject  a split of the decompiler, the middle or tail of the function before it (0x00026F75): nothing calls it, no table holds it; the name says what that piece does
+8  LevelStoreFileBounds  a split of the decompiler, the middle or tail of the function before it (0x000270B0): nothing calls it, no table holds it; the name says what that piece does
+8  TwoSlotListAddTail  a split of the decompiler, the middle or tail of the function before it (0x00027B19): nothing calls it, no table holds it; the name says what that piece does
+8  GameObjectScreenElementSetVisible  a split of the decompiler, the middle or tail of the function before it (0x00029AC1): nothing calls it, no table holds it; the name says what that piece does
+8  EntityLockOnGetEnabled  a split of the decompiler, the middle or tail of the function before it (0x0002A484): nothing calls it, no table holds it; the name says what that piece does
+8  GameObjectCopyFieldsToBufferTail  a split of the decompiler, the middle or tail of the function before it (0x0002CC54): nothing calls it, no table holds it; the name says what that piece does
+8  StatsAllocSlotForIndex  a split of the decompiler, the middle or tail of the function before it (0x000304C7): nothing calls it, no table holds it; the name says what that piece does
+8  MainMenuScreenTypeRegister  a split of the decompiler, the middle or tail of the function before it (0x00037BF2): nothing calls it, no table holds it; the name says what that piece does
+8  ObjectRemoveAction  a split of the decompiler, the middle or tail of the function before it (0x00039CE0): nothing calls it, no table holds it; the name says what that piece does
+8  PathNodeRegisterTail  a split of the decompiler, the middle or tail of the function before it (0x0003C49E): nothing calls it, no table holds it; the name says what that piece does
+8  GameObjectLastGetName  a split of the decompiler, the middle or tail of the function before it (0x0003E8FC): nothing calls it, no table holds it; the name says what that piece does
+8  PlayerTypeRegister  a split of the decompiler, the middle or tail of the function before it (0x00041024): nothing calls it, no table holds it; the name says what that piece does
+8  GameObjectTimedEffectEnableUnchecked  a split of the decompiler, the middle or tail of the function before it (0x0004175C): nothing calls it, no table holds it; the name says what that piece does
+8  Missile_ResetCounter  a split of the decompiler, the middle or tail of the function before it (0x0005BAAE): nothing calls it, no table holds it; the name says what that piece does
+8  ZenReconShipCreateAttachment  a split of the decompiler, the middle or tail of the function before it (0x00081385): nothing calls it, no table holds it; the name says what that piece does
+8  EntityAssignAIDataHandlers  a split of the decompiler, the middle or tail of the function before it (0x000A6E98): nothing calls it, no table holds it; the name says what that piece does
+8  AIConditionHasPath  the AI script table holds it (condition 0x03, condition 0x0F) and the name says what the function does for it
+8  AIConditionTargetVisible  the AI script table holds it (condition 0x06) and the name says what the function does for it
+8  AIConditionTargetIsBattloid  the AI script table holds it (condition 0x07) and the name says what the function does for it
+8  AIConditionTargetIsGuardian  the AI script table holds it (condition 0x08) and the name says what the function does for it
+8  AIConditionTargetIsFighter  the AI script table holds it (condition 0x09) and the name says what the function does for it
+8  AIConditionTimerElapsed  the AI script table holds it (condition 0x0A) and the name says what the function does for it
+8  AIConditionSecondTimerElapsed  the AI script table holds it (condition 0x13) and the name says what the function does for it
+8  AIConditionWithinBattleRange  the AI script table holds it (condition 0x14, condition 0x1E) and the name says what the function does for it
+8  AIConditionTargetInRange  the AI script table holds it (condition 0x0B) and the name says what the function does for it
+8  AIConditionOwnerModeIs  the AI script table holds it (condition 0x18) and the name says what the function does for it
+8  AIConditionHasTarget  the AI script table holds it (condition 0x1C) and the name says what the function does for it
+8  AIConditionWithinOriginRange  the AI script table holds it (condition 0x1D) and the name says what the function does for it
+8  AIConditionHasReturned  the AI script table holds it (condition 0x17) and the name says what the function does for it
+8  AIConditionNoTeammateNearby  the AI script table holds it (condition 0x23) and the name says what the function does for it
+8  AIConditionOutnumbered  the AI script table holds it (condition 0x24) and the name says what the function does for it
+8  AIConditionAssignedTargetWithin  the AI script table holds it (condition 0x20) and the name says what the function does for it
+8  AIConditionNearDestination  the AI script table holds it (condition 0x0E) and the name says what the function does for it
+8  AIConditionTargetInAttentionRadius  the AI script table holds it (condition 0x11) and the name says what the function does for it
+8  AIConditionTargetInActivityRange  the AI script table holds it (condition 0x16) and the name says what the function does for it
+8  AIPathActionSetTargetSignFromFlags  a split of the decompiler, the middle or tail of the function before it (0x000A8D38): nothing calls it, no table holds it; the name says what that piece does
+8  AIActionMoveWithinRange  the AI script table holds it (action 0x02) and the name says what the function does for it
+8  AIActionMoveTowardsTarget  the AI script table holds it (action 0x2B) and the name says what the function does for it
+8  AIActionFindOverrideTarget  the AI script table holds it (action 0x2A) and the name says what the function does for it
+8  AIActionDropTarget  the AI script table holds it (action 0x29) and the name says what the function does for it
+8  AIActionFireOnTarget  the AI script table holds it (action 0x04) and the name says what the function does for it
+8  AIActionLookAround  the AI script table holds it (action 0x08) and the name says what the function does for it
+8  AIActionFollowPath  the AI script table holds it (action 0x1C) and the name says what the function does for it
+8  AIActionReturnToOrigin  the AI script table holds it (action 0x0C) and the name says what the function does for it
+8  AIActionAlertCallStrike  the AI script table holds it (action 0x22) and the name says what the function does for it
+8  AIActionCallStrike  the AI script table holds it (action 0x23) and the name says what the function does for it
+8  AIActionStrafeAttack  the AI script table holds it (action 0x24) and the name says what the function does for it
+8  AIActionGoPreviousState  the AI script table holds it (action 0x27) and the name says what the function does for it
+8  AIActionTurnTowardsSound  the AI script table holds it (action 0x2F) and the name says what the function does for it
+8  AIActionFleeReversePath  the AI script table holds it (action 0x2D) and the name says what the function does for it
+8  AIActionMaintainDist  the AI script table holds it (action 0x28) and the name says what the function does for it
+8  AIActionGoIdle  the AI script table holds it (action 0x0D) and the name says what the function does for it
+8  AIActionGoAlert  the AI script table holds it (action 0x0E) and the name says what the function does for it
+8  AIActionGoAttack  the AI script table holds it (action 0x0F) and the name says what the function does for it
+8  AIActionGoPursue  the AI script table holds it (action 0x10) and the name says what the function does for it
+8  AIActionGoSearch  the AI script table holds it (action 0x11) and the name says what the function does for it
+8  AIActionGoReturn  the AI script table holds it (action 0x12) and the name says what the function does for it
+8  AIActionFollowMovementPattern  the AI script table holds it (action 0x20) and the name says what the function does for it
+8  ScreenWidgetGetTextBufferFromHandle  a split of the decompiler, the middle or tail of the function before it (0x000C1E87): nothing calls it, no table holds it; the name says what that piece does
+8  ScreenWidgetGetTextBufferDirect  a split of the decompiler, the middle or tail of the function before it (0x000C1E90): nothing calls it, no table holds it; the name says what that piece does
+8  HelperNode_LoadTail  a split of the decompiler, the middle or tail of the function before it (0x000DD584): nothing calls it, no table holds it; the name says what that piece does
+8  AISetThemeActionApplyReturn  a split of the decompiler, the middle or tail of the function before it (0x000E0A03): nothing calls it, no table holds it; the name says what that piece does
+8  TrailEffectUpdateSceneObjectTransform  a split of the decompiler, the middle or tail of the function before it (0x0010C25E): nothing calls it, no table holds it; the name says what that piece does
+8  AIActionStartMovingToTarget  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  AIActionApproachTarget  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  AIActionFindNearestTarget  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  AIActionMovementPatternByMode  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  SavedGamesFreeTail  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  AIConditionCopyTail  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  EntityAISetSlotTail  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  LevelBoundsSteering_StateMachineTail  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  LoadGameScreenRefreshList  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  SaveGameScreenRefreshList  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+8  TextEntryScreenRegisterTail  renamed by the rule 8 review (build/sessions4/r8/): a table slot or the decompiler's split, nothing calls it
+2  PathNodeFindByObjectAndIndex  the path nodes it looks in (0x259A40, 0x54 bytes each, built by PathNodeGraphBuild) are the path graph's, not a PointNode's; PointNode's debug overlay only uses it
+2  SoundStreamFadeUpdate  it ramps a sound stream's volume against the stream's read state (SoundStreamQueryIsReadComplete, SoundIsPlayingQuery): sound word is what it does; MessageBoxElement only owns the record
+2  EntityHandleGetCategory  the handle it classifies is any Entity family handle (family bits 0x80000), not EnemyTargetElement's; the gauge is the one caller
+2  EffectCloneSceneByType  scene = the effect's scene object (the EffectSceneGet getters it calls); shared by all 18 Effect types that call it
+2  EffectCreateSceneByType  scene = the effect's scene object (the EffectSceneGet getters it calls); shared by the 14 Effect types that call it
+2  SoundObjectGetRange  reads the min and max range of a sound object (class bit +4); SoundNode is only the caller that draws its outline
+3  ConfirmDialogScreenSetTextAndExtras  the three setters of ConfirmDialogScreen's text messages differ by which text elements they fill (+0x124; +0x124 and +0x138; +0x124, +0x138 and +0x13C): the clause says that; the elements are not named yet
+3  ConfirmDialogScreenSetTextAndRefresh  fills +0x124 only and always remakes +0x150 (the others only when it is not there): the clause says that
+3  MissionCompleteScreenSection4CountItems  4 is the section's index in MissionCompleteScreenSectionCounts/Cursors, which it fills; it counts that section's items
+3  MacIIActivateArmGuns  same shape as ZenWarriorNoArmourAttachWeapon and ZenWarriorLiteActivateWeapons but another motion table (0x208720), another type: each is its type's own
+3  HelperNode_LoadTail  the decompiler's split of HelperNode_Load (0xDD580) four bytes in; nothing calls it (0xDD584 is in the middle of it); the name keeps the Load's
+3  GunAmmoGaugeElementInit  same body as SniperChargeGaugeInit but the constant at 0x224260 and the type: each gauge's own Init
+3  SoundsPathSet  three string copies into three buffers (0x23A150 sounds, 0x23D3A0 textures, 0x1EA31C the saved game): the same code, three different things
+3  TexturesPathSet  three string copies into three buffers (0x23A150 sounds, 0x23D3A0 textures, 0x1EA31C the saved game): the same code, three different things
+3  TerrainMeshBoundingSphereSetFromBox  the same code compiled in three places (TerrainMesh, Terrain, the model's BoundingSphereSetFromBox), each with its own caller: the prefix says whose
+3  TerrainBoundingSphereSetFromBox  the same code compiled in three places (TerrainMesh, Terrain, the model's BoundingSphereSetFromBox), each with its own caller: the prefix says whose
+3  vcObjectDrawWithTrail  a draw of its own (it also draws the trail with TrailDrawStrip), not vcObjectDraw's twin; one caller, GameObjectModelSetColor
+4  SoundStreamQueryIsReadComplete  a wrapper that passes its two out-pointers to SoundStreamIsReadComplete: Query says it, the comment says what it passes
+4  SlotPoolRowFindFreeSlot  the slot whose +0x1C is zero is the free one; the comment says it in fields
+4  EntryPoolRowFindFreeSlot  the entry whose +0x2C is zero is the free one; the comment says it in fields
+4  WeaponFireMissiles  26 callers (Veritech and Guardian fire, the hardpoint messages): it sends the fire message with its 0x3C-byte block and counts the shots; the comment says how
+4  PlayerTimerSetVisible  Shows or hides is Set Visible
+4  GuiBkgdTextsSetFlag  it sets the visible flag of the two background texts through SceneObjectSetChildrenVisibleFlag: a change, said as what it passes on
+4  AIDataCreateInstance  a wrapper that returns AIDataCreate's result: the creation is the callee's
+4  GameObjectSendSetOrToggleState  sends 0x2AFA, the message NodeSetOrToggleState answers in the nodes: the name says what the message does
+4  ScreenElementSendSelect  Tells an element it is chosen is a send of 0x2EE3
+4  ScreenElementSendDeselect  Tells an element it is not chosen is a send of 0x2EE4
+4  ScreenFadeSpriteRelease  Lets go is Release
+4  VehicleStateSetByType  it clones the state descriptor of its type into +0x194: it sets it
+4  ZenReconShipSetAttachmentType  it swaps the two attachments by the integer it reads: it sets the type
+4  GameObjectSetNodePositionFromTarget  it sets the node position (ObjectSetNodePosition) from the target's intercept point; the comment lists the steps
+4  ZenWarriorScavengerSetWeaponMotionPositions  it passes the muzzle points to ObjectSetNodePosition for motions 0 and 1: it sets them
+4  PodScoutSetActive  state 0 and state 1 of the pod's weapon and its node: it sets it active or not
+4  EntitySetOriginFromPathPoint  it makes point N of the path the AI's origin (+0xA8): it sets it
+4  GameObjectSetRect  vcRectSet on the object's rect: it sets it
+4  AIConditionsFindFree  the record whose +0xC is zero is the free one
+4  LevelPictureScreenSetLevel  Gives a level picture its level is Set Level
+4  LetterboxSpriteRelease  Lets go is Release
+4  ModelNodeCreateSceneNodes  it makes a SceneObjectNode or a LightNode for each object of the scene: it creates
+4  ModelNodeSetScene  Gives a model node the scene is Set Scene
+4  SetKeyValAction_FormatText  it formats the action's text: the comment names the call
+4  BuildingLoadFinalize  the end of Building_Load, its only caller: it finishes the load
+4  SceneAttachmentCreateFromTemplate  it copies the template and makes the attachment's scene objects: it creates from the template
+4  SoundStreamIsReadComplete  it answers whether the read is complete (*p_eax = 1 when the sound system is off, else SoundStreamReadCompleted): an Is by out-pointer
+4  SceneObjectCreate  30 callers: it makes the scene object through its type's method (0x23D4C8) and keeps arg1 in +0x94: it creates
+4  BoxGetCorners  Expands the box into its 8 corners is Get Corners (the out is the box at eax)
+4  PlaneSetClassifySphere  a plane set is the six planes (a noun) and it classifies a sphere against them; it changes nothing
+5  NodeLoad  the common part of every node's Load (25 callers): reads the game object, its matrices and its children; Node and Load say it
+5  NodeSetOrToggleState  sets the node's state (+0xC8) to the message's value, or toggles it between 1 and 2 when there is none: the name says both
+5  vcStringManagerGetTextById  vcStringManager is the engine's own class name (vc prefix); this one gets the text by its number from the one manager at 0x23D284
+5  GameObjectSendSetOrToggleState  the sender of 0x2AFA, the message NodeSetOrToggleState answers: the pair is named alike
+5  GameObjectDestroyChildren  destroys the objects at +0xBC until none is left: the node's children (GameObjectAttachChild links them)
+5  TwoSlotListRemove  clears the entry equal to arg1 in a two-slot array: the name says exactly that; PlayerDeactivate is the caller
+5  LinkNodeInitialize  the LinkNode's start, as SkyNodeInitialize and CameraNodeInitialize are theirs
+5  IndexListRemoveValue  removes a value from an index list with a count at +0xFAC: a list operation, what it says
+5  PathNodeFindByObjectAndIndex  finds the path node of a PointNode's handle and point index in the table at 0x259A40: what the name says
+5  NodeFamilyReadGameObject  Node 23 has no name yet (it may stay so: nothing makes it nor places it); this is its Load
+5  NodeInit  Node 22 has no name yet (nothing makes it nor places it); this is its start
+5  NodeHandleMessage  Node 22 has no name yet (nothing makes it nor places it); this is its message handler
+5  NodeRead  Node 22 has no name yet (nothing makes it nor places it); this is its Load
+5  NodeClassRegister  Node 22 has no name yet (nothing makes it nor places it); this is its Register
+5  SceneObjectClearAndReset  clears the scene object's flags, resets its point list and its component's vtable and id: five heavy shot weapons' reset; the name lists what it does and nothing more specific is known
+5  ObjectReleaseType2SlotAndSetSlotTypeAndIndex  the first pass already renamed it: it is EntityAISetSlotTail today (the decompiler's split of EntityAISetSlot); the suspect line is the old name
+5  HelperNode_LoadTail  the decompiler's split of HelperNode_Load four bytes in; Helper is HelperNode's, a type
+5  SteeringObjectHandleMessage  the first pass already renamed it: it is LevelBoundsSteering_StateMachineTail today (the decompiler's split of its state machine); the suspect line is the old name
+7  ObjectSetNearFarPlanes  it does store: it calls sub_00113310 with the level's near and far planes and arg1 (6 lines, one call)
+7  ControllerItemsDisabledClear  it stores: x86_rep_stos32 zeroes the 12 words
+7  AIShutdown  the AI's shutdown at LevelShutdown, which releases the AI's data: one call is all it does; the name is the subsystem's
+7  GameObjectGetTransformInto  it hands the transform back through arg1 (and arg1+0x24): the Into says it
+7  MissileCountElementDrawSlots  a Draw: it draws the slots (QuadDrawClipped), hands nothing back
+7  SceneObjectSetTransform  it stores: through the class's hook and sub_0011CA40 (placing the object, its bounds and its children), 70 callers
+7  PlaneSetClassifySphere  it changes nothing and says so: a classification of a sphere against a plane set, returning the mask
+7  LightStateArrayClear  it stores: x86_rep_stos32 zeroes the eight entries at 0x248D98
+9  AIEnabledActionLoadValue  keeps its name; the other, which reads the value only when the count is at least 1, is now AIEnabledActionLoadOptionalValue
+1  ArmourPackWeaponStateMachine  the one state machine of the two armour pack weapons (SuperVeritech, Sumo): named for the kind they are
+1  GunPodWeapon_StateMachine  the one state machine of the six gun pod weapons: named for the kind they are
+1  HoldInputSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  HoldInputSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  NodeHandleMessage  Node 22 is untyped (nothing makes it nor places it): its StateMachine keeps its name
+1  NodeRead  Node 22 is untyped (nothing makes it nor places it): its Load keeps its name
+1  NodeClassRegister  Node 22 is untyped (nothing makes it nor places it): its Register keeps its name
+1  AIEnabledAction_LoadTarget  AILandAction and AITakeOffAction both read the action's target (GameObjectLoad into +0x50): the name says what it does for both
+1  MissileLauncherWeaponStateMachine  the one state machine of the eight missile launcher weapons: named for the kind they are
+1  TurretCannonWeaponStateMachine  the one state machine of the four turret cannon weapons: named for the kind they are
+1  AttachToObjectSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  AttachToObjectSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  FollowWithinRangeSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  FollowWithinRangeSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  StayAtOffsetSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  StayAtOffsetSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  FaceObjectSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  FaceObjectSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  TurnToHeadingSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  TurnToHeadingSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  TurnToPointSteering_StateMachine  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  TurnToPointSteering_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  HeavyShotWeaponStateMachine  the one state machine of the five heavy shot weapons (the shot is an effect instance): named for the kind they are
+1  SpawnStateTrigger_Load  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  SpawnStateTrigger_Register  its name is the one symbols.py merge builds from the type line; the hand line only repeats it (the main session may drop the hand line)
+1  ObjectGroupResetCounter  ObjectGroupComponent has one counter reset that serves both its Startup and its Shutdown: the name says what it does for both
+1  SceneAttachmentEffectStateMachine  the one state machine of the two effects that attach to a scene object (SparksLoop, BuildingDebris): named for what they do
+1  AttachedEffectStateMachine  the one state machine of the 18 effects that clone a scene and attach it: named for what they do
+1  BurstEffectStateMachine  the one state machine of the 14 burst effects (create a scene, spread particles, destroy): named for what they do
+1  BlastEffect_StateMachine  the one state machine of the five blast effects (BlastEffectSetRecord, BlastEffectStart): named for the kind they are
+6  ScreenFamilyClearEntries  the screen family's own table (23 entries of 0x118 at 0x1BCC00) cleared when a game or session starts: a family function
+6  NodeFamilyShutdown  the Node family's own shutdown (GameSystemsShutdown calls it; a row of DoNothing for its types): a family function
+6  ScreenElementFamilyShutdown  the ScreenElement family's own shutdown (GameSystemsShutdown calls it; releases the letterbox and fade sprites): a family function
+1  TextEntryScreenRegisterTail  already renamed in symbols.txt (the suspect line carries the name of the decompiled C): a decompiler split of TextEntryScreen_Register, nobody calls it
+6  TriggerFamilyShutdown  the Trigger family's own shutdown (GameSystemsShutdown calls it; a row of DoNothing for its 16 types): a family function
+1  AIEnabledActionLoadOptionalValue  (suspect AIEnabledAction_LoadValue, 0xDF500) renamed by the first pass already: reads the u32 only from version 1, the name says it
+1  StrafeAttackSteeringUpdateTurnPositive  (suspect SteeringFamilyFaceTargetOrDestroy, 0xD4F40) renamed by the first pass already, as the StrafeAttackSteering's own
